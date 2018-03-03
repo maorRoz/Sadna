@@ -8,5 +8,10 @@ namespace SadnaSrc
 {
     class Slave
     {
+        public void speak()
+        {
+            Console.WriteLine("I'm a slave...");
+            ;
+        }
     }
 }
