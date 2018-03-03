@@ -11,6 +11,7 @@ namespace SadnaSrc
         public void speak()
         {
             Console.WriteLine("I'm a slave...");
+            ;
         }
     }
 }
