@@ -15,6 +15,8 @@ namespace SadnaSrc
             Console.WriteLine("added another update");
             Console.WriteLine("added another junk");
             Console.WriteLine("I love choclate");
+			int i = 42;
+			Console.WriteLine("This is the best number: " + i);
         }
     }
 }
