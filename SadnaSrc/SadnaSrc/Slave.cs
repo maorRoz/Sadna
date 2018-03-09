@@ -15,8 +15,8 @@ namespace SadnaSrc
             Console.WriteLine("added another update");
             Console.WriteLine("added another junk");
             Console.WriteLine("I love choclate");
-            Console.WriteLine("we all love mtg (don't ask)");
-            Console.WriteLine("sdfsdfsdfc");
+            Console.WriteLine("we all love mtg (don't ask) lkjhgfd");
+            Console.WriteLine("but why??");
         }
     }
 }
