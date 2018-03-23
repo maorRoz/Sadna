@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SadnaSrc
+namespace SadnaSrc.Main
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("hello world!");
+            MarketYard lobby = new MarketYard();
         }
     }
 }

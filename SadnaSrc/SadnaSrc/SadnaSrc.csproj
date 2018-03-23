@@ -43,15 +43,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MarketYard\MarketYard.cs" />
-    <Compile Include="MarketYard\Program.cs" />
+    <Compile Include="Main\MarketException.cs" />
+    <Compile Include="Main\MarketYard.cs" />
+    <Compile Include="Main\Program.cs" />
+    <Compile Include="OrderPool\Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreCenter\Store.cs" />
+    <Compile Include="SupplyPoint\SupplyPoint.cs" />
+    <Compile Include="UserSpot\Cart.cs" />
+    <Compile Include="UserSpot\CartItem.cs" />
+    <Compile Include="UserSpot\Guest.cs" />
+    <Compile Include="UserSpot\RegisteredUser.cs" />
+    <Compile Include="UserSpot\User.cs" />
+    <Compile Include="UserSpot\UserException.cs" />
     <Compile Include="UserSpot\UserPolicy.cs" />
+    <Compile Include="Walleter\Walleter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Blackbox Tests\" />
