@@ -11,9 +11,9 @@ namespace SadnaSrc.MarketYard
         private static object dbConnection = null; 
         private MarketException(string Message)
         {
-            dbConnection.       
+         //   dbConnection.       
         }
-        public static void insertDbConnector(SQLiteConnection dbConnection)
+        public static void insertDbConnector(object dbConnection)
         {
             MarketException.dbConnection = dbConnection;
         }

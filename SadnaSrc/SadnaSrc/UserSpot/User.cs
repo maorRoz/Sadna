@@ -8,7 +8,7 @@ namespace SadnaSrc.UserSpot
 {
     interface User
     {
-        bool addUserPolicy();
-        bool removeUserPolicy();
+        bool addUserPolicy(UserPolicy policy);
+        bool removeUserPolicy(UserPolicy policy);
     }
 }
