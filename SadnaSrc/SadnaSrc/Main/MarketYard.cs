@@ -10,6 +10,7 @@ namespace SadnaSrc.Main
 {
     class MarketYard
     {
+        private SQLiteConnection _dbConnection;
         public MarketYard()
         {
             initiateDb();
@@ -19,14 +20,20 @@ namespace SadnaSrc.Main
         {
             var programPath = System.AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug", "");
             var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
-            var dbConnection = new SQLiteConnection(dbPath);
-            dbConnection.Open();
-            MarketException.InsertDbConnector(dbConnection);
+            _dbConnection = new SQLiteConnection(dbPath);
+            _dbConnection.Open();
+            MarketException.InsertDbConnector(_dbConnection);
+            MarketLog.InsertDbConnector(_dbConnection);
         }
 
-        public IUserService getUserService()
+        public IUserService GetUserService()
         {
-            return new UserService();
+            return new UserService(_dbConnection);
+        }
+
+        public ISystemAdminService GetSystemAdminService()
+        {
+            return new UserService(_dbConnection);
         }
     }
 }

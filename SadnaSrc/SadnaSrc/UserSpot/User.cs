@@ -10,10 +10,10 @@ namespace SadnaSrc.UserSpot
     {
         protected readonly UserPolicyService PolicyService;
         protected int systemID;
-        protected Cart shoppingCart;
+        protected CartService shoppingCart;
         public User(int systemID)
         {
-            PolicyService = new UserPolicyService(systemID);
+            PolicyService = new UserPolicyService();
             this.systemID = systemID;
         }
 

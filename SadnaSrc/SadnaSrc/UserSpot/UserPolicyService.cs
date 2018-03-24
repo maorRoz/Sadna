@@ -9,23 +9,27 @@ namespace SadnaSrc.UserSpot
     class UserPolicyService
     {
         private List<UserPolicy> policies;
-        private int _systemID;
+        private static UserServiceDL _userDL;
         public List<UserPolicy> Policies
         {
             get{ return policies;}
         }
 
-        public UserPolicyService(int systemID)
+        public UserPolicyService()
         {
             policies = new List<UserPolicy>();
-            _systemID = systemID;
+        }
+
+        public static void EstablishServiceDL(UserServiceDL userDL)
+        {
+            _userDL = userDL;
         }
 
         public void AddStorePolicy(string store, StoreAdminPolicy.StoreAction storeAction)
         {
             StoreAdminPolicy toAdd = new StoreAdminPolicy(store,storeAction); 
             policies.Add(toAdd);
-            // add in db
+            _userDL.SaveUserPolicy(toAdd);
         }
 
         public void UpdateStorePolicies(string store,List<StoreAdminPolicy.StoreAction> actionsToAdd)
@@ -45,7 +49,7 @@ namespace SadnaSrc.UserSpot
             StoreAdminPolicy toRemove = new StoreAdminPolicy(store,storeAction);
             if (policies.Remove(toRemove))
             {
-                // remove from db
+                _userDL.DeleteUserPolicy(toRemove);
             }
         }
 
@@ -56,7 +60,7 @@ namespace SadnaSrc.UserSpot
                 throw new UserException(
                     "Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
             }
-            // save in db
+            _userDL.SaveUserPolicy(new UserPolicy(state));
         }
 
     }

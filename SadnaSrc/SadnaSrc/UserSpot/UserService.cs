@@ -1,36 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class UserService : IUserService
+    class UserService : IUserService,ISystemAdminService
     {
         private User user;
+        private UserServiceDL _userDL;
 
-        public void AddUserPolicy()
+        public UserService(SQLiteConnection dbConnection)
         {
-            throw new NotImplementedException();
+            _userDL = new UserServiceDL(dbConnection,0);
+            UserPolicyService.EstablishServiceDL(_userDL);
+            CartService.EstablishServiceDL(_userDL);
         }
-
         public void EnterSystem()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveUserPolicy()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SignIn()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SignUp()
         {
             throw new NotImplementedException();
         }

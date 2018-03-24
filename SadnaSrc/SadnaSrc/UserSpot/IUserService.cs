@@ -11,8 +11,6 @@ namespace SadnaSrc.UserSpot
         void EnterSystem();
      //   void SignUp();
      //   void SignIn();
-     //   void AddUserPolicy();
-     //   void RemoveUserPolicy();
 
     }
 }

@@ -12,7 +12,7 @@ namespace SadnaSrc.Main
         static void Main(string[] args)
         {
             var marketSystem = new MarketYard();
-            IUserService service = marketSystem.getUserService();
+            IUserService service = marketSystem.GetUserService();
            // service.EnterSystem();
         }
     }

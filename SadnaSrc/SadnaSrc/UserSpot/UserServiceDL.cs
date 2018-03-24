@@ -4,12 +4,17 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class UserServiceDL
+    class UserServiceDL : systemDL
     {
-        private SQLiteConnection _dbConnection;
+        private int _systemID;
+        public UserServiceDL(SQLiteConnection dbConnection,int systemID) : base(dbConnection)
+        {
+            _systemID = systemID;
+        }
         public void SaveUserPolicy(UserPolicy policy)
         {
 
@@ -20,11 +25,20 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        public void SaveUser(User user)
+        public void DeleteUserPolicy(UserPolicy policy)
         {
 
         }
 
+        public void DeleteUserPolicy(StoreAdminPolicy policy)
+        {
+
+        }
+
+        private UserPolicy LoadUserPolicy()
+        {
+            return null;
+        }
         private void EncryptPassword()
         {
 
@@ -34,13 +48,20 @@ namespace SadnaSrc.UserSpot
         {
 
         }
+        public void SaveUser(User user)
+        {
 
+        }
         public User LoadUser()
         {
             return null;
         }
 
-        private UserPolicy LoadUserPolicy()
+        private void SaveCartItem()
+        {
+
+        }
+        private CartItem LoadCartItem()
         {
             return null;
         }

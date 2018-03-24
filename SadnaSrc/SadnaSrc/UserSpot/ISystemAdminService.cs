@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    class Cart
+    interface ISystemAdminService
     {
+       // void RemoveUser();
+      //  void ViewPurchaseHistoryUserReport();
+      //  void ViewPurchaseHistoryStoreReport();
     }
 }

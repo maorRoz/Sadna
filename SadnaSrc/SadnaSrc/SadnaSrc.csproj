@@ -69,12 +69,15 @@
     <Compile Include="Main\MarketLog.cs" />
     <Compile Include="Main\MarketYard.cs" />
     <Compile Include="Main\Program.cs" />
+    <Compile Include="Main\systemDL.cs" />
     <Compile Include="OrderPool\Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreCenter\Store.cs" />
     <Compile Include="SupplyPoint\SupplyPoint.cs" />
-    <Compile Include="UserSpot\Cart.cs" />
+    <Compile Include="UserSpot\CartService.cs" />
     <Compile Include="UserSpot\CartItem.cs" />
+    <Compile Include="UserSpot\ISystemAdminService.cs" />
+    <Compile Include="UserSpot\SystemAdminDL.cs" />
     <Compile Include="UserSpot\User.cs" />
     <Compile Include="UserSpot\IUserService.cs" />
     <Compile Include="UserSpot\RegisteredUser.cs" />
