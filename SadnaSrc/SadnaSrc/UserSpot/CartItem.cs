@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    class CartItem
+    public class CartItem
     {
         private string _store;
         private string _name;

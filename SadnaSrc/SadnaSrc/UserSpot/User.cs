@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    class User
+    public class User
     {
         protected readonly UserPolicyService PolicyService;
         private int systemID;
+
+        public int SystemID
+        {
+            get { return systemID; }
+        }
         public User(int systemID)
         {
             PolicyService = new UserPolicyService();

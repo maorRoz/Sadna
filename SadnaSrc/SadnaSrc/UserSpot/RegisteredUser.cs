@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    class RegisteredUser : User
+    public class RegisteredUser : User
     {
         private string name;
         private string address;

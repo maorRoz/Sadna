@@ -29,5 +29,15 @@ namespace SadnaSrc.UserSpot
               user = new User(systemID);
               cart = new CartService(false);
         }
+
+        public User GetUser()
+        {
+            return user;
+        }
+
+        public void ExitSystem()
+        {
+            _userDL.DeleteUser();
+        }
     }
 }

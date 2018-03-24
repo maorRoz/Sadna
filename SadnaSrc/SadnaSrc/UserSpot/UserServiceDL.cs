@@ -8,7 +8,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class UserServiceDL : systemDL
+    public class UserServiceDL : systemDL
     {
         private int _systemID;
         public UserServiceDL(SQLiteConnection dbConnection) : base(dbConnection)
@@ -90,6 +90,11 @@ namespace SadnaSrc.UserSpot
         public User LoadUser()
         {
             return null;
+        }
+
+        public void DeleteUser()
+        {
+            DeleteFromTable("User", "SystemID = "+_systemID);
         }
 
         public void SaveCartItem(CartItem item)

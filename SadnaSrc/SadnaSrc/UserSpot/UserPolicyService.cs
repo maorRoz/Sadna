@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    class UserPolicyService
+    public class UserPolicyService
     {
         private List<UserPolicy> policies;
         private static UserServiceDL _userDL;
