@@ -11,9 +11,40 @@ namespace SadnaSrc.UserSpot
     class UserServiceDL : systemDL
     {
         private int _systemID;
-        public UserServiceDL(SQLiteConnection dbConnection,int systemID) : base(dbConnection)
+        public UserServiceDL(SQLiteConnection dbConnection) : base(dbConnection)
         {
-            _systemID = systemID;
+        }
+
+        private List<int> GetAllSystemIDs()
+        {
+            var ids = new List<int>();
+            var dbReader = SelectFromTable("User", "SystemID");
+            while (dbReader.Read())
+            {
+                if (dbReader.GetValue(0) != null)
+                {
+                    ids.Add(dbReader.GetInt32(0));
+                }
+            }
+            return ids;
+        }
+        private void GenerateSystemID()
+        {
+            int newID = new Random().Next(1000, 10000);
+            List<int> savedIDs = GetAllSystemIDs();
+            while (savedIDs.Contains(newID))
+            {
+                newID = new Random().Next(1000, 10000);
+            }
+
+            _systemID = newID;
+        }
+
+        public int getSystemID()
+        {
+            GenerateSystemID();
+            SaveUser(new User(_systemID));
+            return _systemID;
         }
         public void SaveUserPolicy(UserPolicy policy)
         {
@@ -52,7 +83,9 @@ namespace SadnaSrc.UserSpot
         }
         public void SaveUser(User user)
         {
-
+            string[] valuesNames = { "@idParam", "@nameParam", "@addressParam", "@passParam" };
+            object[] values = user.ToData();
+            InsertTable("User", "SystemID,Name,Address,Password", valuesNames,values);
         }
         public User LoadUser()
         {

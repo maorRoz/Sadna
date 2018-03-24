@@ -9,7 +9,7 @@ namespace SadnaSrc.UserSpot
     class User
     {
         protected readonly UserPolicyService PolicyService;
-        protected int systemID;
+        private int systemID;
         public User(int systemID)
         {
             PolicyService = new UserPolicyService();
@@ -19,6 +19,12 @@ namespace SadnaSrc.UserSpot
         public UserPolicy[] GetPolicies()
         {
             return PolicyService.Policies.ToArray();
+        }
+
+        public object[] ToData()
+        {
+            object[] ret = {systemID, null, null, null};
+            return ret;
         }
     }
 }

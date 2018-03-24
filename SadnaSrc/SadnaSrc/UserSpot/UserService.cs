@@ -18,8 +18,8 @@ namespace SadnaSrc.UserSpot
         public UserService(SQLiteConnection dbConnection)
         {
             var random = new Random();
-            systemID = random.Next(1000, 10000);
-            _userDL = new UserServiceDL(dbConnection,systemID);
+            _userDL = new UserServiceDL(dbConnection);
+            systemID = _userDL.getSystemID();
             UserException.SetUser(systemID);
             UserPolicyService.EstablishServiceDL(_userDL);
             CartService.EstablishServiceDL(_userDL);

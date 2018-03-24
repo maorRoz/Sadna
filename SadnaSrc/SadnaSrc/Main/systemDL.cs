@@ -36,10 +36,12 @@ namespace SadnaSrc.Main
             }
         }
 
-        protected void SelectFromTable(string table, string fields)
+        protected SQLiteDataReader SelectFromTable(string table, string toSelect)
         {
-
+            var selectRequest = "SELECT " + toSelect + " FROM " + table;
+            return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
         }
+
         protected void RemoveFromTable(string table)
         {
 
