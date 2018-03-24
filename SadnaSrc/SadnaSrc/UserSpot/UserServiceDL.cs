@@ -17,7 +17,9 @@ namespace SadnaSrc.UserSpot
         }
         public void SaveUserPolicy(UserPolicy policy)
         {
-
+            string [] valuesNames = {"@idParam","@stateParam","@actionParam","@storeParam"};
+            object[] values = { _systemID, policy.GetStateString(), null, null};
+            InsertTable("UserPolicy", "SystemID,state,action,store",valuesNames,values);
         }
 
         public void SaveUserPolicy(StoreAdminPolicy policy)
@@ -57,13 +59,23 @@ namespace SadnaSrc.UserSpot
             return null;
         }
 
-        private void SaveCartItem()
+        public void SaveCartItem(CartItem item)
         {
 
         }
-        private CartItem LoadCartItem()
+
+        public void RemoveCartItem(CartItem item)
+        {
+
+        }
+        private List<CartItem> LoadCartItems()
         {
             return null;
+        }
+
+        public void UpdateCartItemQuantity(int quantity)
+        {
+
         }
     }
 }

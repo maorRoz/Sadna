@@ -12,15 +12,22 @@ namespace SadnaSrc.UserSpot
     {
         private User user;
         private UserServiceDL _userDL;
+        private CartService cart;
+        private int systemID;
 
         public UserService(SQLiteConnection dbConnection)
         {
-            _userDL = new UserServiceDL(dbConnection,0);
+            var random = new Random();
+            systemID = random.Next(1000, 10000);
+            _userDL = new UserServiceDL(dbConnection,systemID);
+            UserException.SetUser(systemID);
             UserPolicyService.EstablishServiceDL(_userDL);
             CartService.EstablishServiceDL(_userDL);
         }
         public void EnterSystem()
         {
+            //  user = new User(systemID);
+            //    cart = new CartService();
             throw new NotImplementedException();
         }
     }

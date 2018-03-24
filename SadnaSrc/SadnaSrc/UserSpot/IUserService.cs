@@ -9,8 +9,9 @@ namespace SadnaSrc.UserSpot
     interface IUserService
     {
         void EnterSystem();
-     //   void SignUp();
-     //   void SignIn();
+
+        //   void SignUp();
+        //   void SignIn();
 
     }
 }

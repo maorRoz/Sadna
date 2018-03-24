@@ -22,5 +22,18 @@ namespace SadnaSrc.UserSpot
             return _state;
         }
 
+        public string GetStateString()
+        {
+            switch (_state)
+            {
+                case State.StoreAdmin:
+                    return "StoreAdmin";
+                case State.SystemAdmin:
+                    return "SystemAdmin";
+                default:
+                    return "RegisteredUser";
+            }
+        }
+
     }
 }

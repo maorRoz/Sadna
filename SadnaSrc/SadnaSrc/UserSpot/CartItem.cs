@@ -32,5 +32,20 @@ namespace SadnaSrc.UserSpot
         {
             _quantity--;
         }
+
+        public int GetQuantity()
+        {
+            return _quantity;
+        }
+
+        public string GetStore()
+        {
+            return _store;
+        }
+
+        public string GetName()
+        {
+            return _name;
+        }
     }
 }

@@ -10,10 +10,17 @@ namespace SadnaSrc.UserSpot
     {
         private List<CartItem> cartStorage;
         private static UserServiceDL _userDL;
+        private bool _toSave;
 
-        public CartService()
+        public CartService(bool toSave)
         {
             cartStorage = new List<CartItem>();
+            _toSave = toSave;
+        }
+
+        public void EnableCartSave()
+        {
+            _toSave = true;
         }
         public static void EstablishServiceDL(UserServiceDL userDL)
         {
@@ -27,14 +34,69 @@ namespace SadnaSrc.UserSpot
 
         public void AddToCart(string store,string product,double finalPrice,string sale,int quantity)
         {
-            cartStorage.Add(new CartItem(store,product,finalPrice,sale,quantity));
+            CartItem toAdd = new CartItem(store, product, finalPrice, sale, quantity);
+            if (cartStorage.Contains(toAdd))
+            {
+                IncreaseCartItem(store,product);
+            }
+            else
+            {
+                cartStorage.Add(toAdd);
+                if (_toSave)
+                {
+                    _userDL.SaveCartItem(toAdd);
+                }
+            }            
         }
-        public void IncreaseCartItem(string store, string product) { }
-        public void DecreaseCartItem(string store, string product) { }
+
+        public void IncreaseCartItem(string store, string product)
+        {
+            CartItem found = searchInCart(store, product);
+            found.IncreaseQuantity();
+            cartStorage.Add(found);
+            if (_toSave)
+            {
+                _userDL.UpdateCartItemQuantity(found.GetQuantity());
+            }
+        }
+
+        public void DecreaseCartItem(string store, string product)
+        {
+            CartItem found = searchInCart(store, product);
+            found.DecreaseQuantity();
+            cartStorage.Add(found);
+            if (_toSave)
+            {
+                _userDL.UpdateCartItemQuantity(found.GetQuantity());
+            }
+        }
 
         public void RemoveFromCart(string store,string product)
         {
+            CartItem found = searchInCart(store, product);
+            if (_toSave)
+            {
+                _userDL.RemoveCartItem(found);
+            }
+        }
 
+        private CartItem searchInCart(string store, string product)
+        {
+            CartItem ret = null;
+            foreach (CartItem item in cartStorage)
+            {
+                if (item.GetStore() == store && item.GetName() == product)
+                {
+                    ret = item;
+                    break;
+                }
+            }
+            if (ret == null)
+            {
+                throw new UserException("There is no cart item to be modified");
+            }
+            cartStorage.Remove(ret);
+            return ret;
         }
     }
 }

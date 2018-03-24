@@ -19,7 +19,7 @@ namespace SadnaSrc.Main
             var commandDb = new SQLiteCommand(insertRequest, _dbConnection);
             commandDb.Parameters.AddWithValue("@idParam",_id);
             commandDb.Parameters.AddWithValue("@moduleParam", GetModuleName());
-            commandDb.Parameters.AddWithValue("@descriptionParam",message);
+            commandDb.Parameters.AddWithValue("@descriptionParam", GetErrorMessage(message));
             try
             {
                 commandDb.ExecuteNonQuery();
@@ -35,6 +35,11 @@ namespace SadnaSrc.Main
         protected virtual string GetModuleName()
         {
             return "MarketYard";
+        }
+
+        protected virtual string GetErrorMessage(string message)
+        {
+            return "General Error: " + message;
         }
         public static void InsertDbConnector(SQLiteConnection dbConnection)
         {
