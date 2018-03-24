@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.Main
 {
@@ -10,7 +11,9 @@ namespace SadnaSrc.Main
     {
         static void Main(string[] args)
         {
-            MarketYard lobby = new MarketYard();
+            var marketSystem = new MarketYard();
+            IUserService service = marketSystem.getUserService();
+           // service.EnterSystem();
         }
     }
 }

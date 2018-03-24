@@ -6,9 +6,20 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    interface User
+    class User
     {
-        bool addUserPolicy(UserPolicy policy);
-        bool removeUserPolicy(UserPolicy policy);
+        protected readonly UserPolicyService PolicyService;
+        protected int systemID;
+        protected Cart shoppingCart;
+        public User(int systemID)
+        {
+            PolicyService = new UserPolicyService(systemID);
+            this.systemID = systemID;
+        }
+
+        public UserPolicy[] GetPolicies()
+        {
+            return PolicyService.Policies.ToArray();
+        }
     }
 }
