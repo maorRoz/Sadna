@@ -26,9 +26,8 @@ namespace SadnaSrc.UserSpot
         }
         public void EnterSystem()
         {
-            //  user = new User(systemID);
-            //    cart = new CartService();
-            throw new NotImplementedException();
+              user = new User(systemID);
+              cart = new CartService(false);
         }
     }
 }
