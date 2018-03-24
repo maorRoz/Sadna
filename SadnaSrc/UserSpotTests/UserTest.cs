@@ -1,27 +1,28 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SadnaSrc.Main;
 
 namespace UserSpotTests
 {
     [TestClass]
     public class UserTest
     {
-        private int stam = 0;
+        private MarketYard marketSession;
         [TestInitialize]
-        public void stamNo()
+        public void MarketBuilder()
         {
-            stam = 2;
+            marketSession = new MarketYard();
         }
         [TestMethod]
         public void TestMethod1()
         {
-            Assert.AreEqual(1,stam);
+            Assert.AreEqual(1,1);
         }
 
         [TestMethod]
         public void fuckyou()
         {
-            Assert.AreEqual(2,stam);
+            Assert.AreEqual(2,1);
         }
     }
 }

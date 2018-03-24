@@ -8,7 +8,7 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.Main
 {
-    class MarketYard
+    public class MarketYard
     {
         private SQLiteConnection _dbConnection;
         public MarketYard()
