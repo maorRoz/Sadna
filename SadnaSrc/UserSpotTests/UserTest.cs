@@ -1,17 +1,19 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.UserSpot;
 
 namespace UserSpotTests
 {
     [TestClass]
     public class UserTest
     {
-        private MarketYard marketSession;
+        private UserService userServiceSession;
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketSession = new MarketYard();
+            var marketSession = new MarketYard();
+            userServiceSession = (UserService)marketSession.GetUserService();
         }
         [TestMethod]
         public void TestMethod1()
@@ -20,9 +22,9 @@ namespace UserSpotTests
         }
 
         [TestMethod]
-        public void fuckyou()
+        public void UserUniqueSystemIDTest()
         {
-            Assert.AreEqual(2,1);
+            Assert.AreEqual(1,3);
         }
     }
 }

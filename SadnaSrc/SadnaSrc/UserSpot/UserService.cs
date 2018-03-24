@@ -8,7 +8,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class UserService : IUserService,ISystemAdminService
+    public class UserService : IUserService,ISystemAdminService
     {
         private User user;
         private UserServiceDL _userDL;
