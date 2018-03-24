@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    interface ISystemAdminService
+    public interface ISystemAdminService
     {
        // void RemoveUser();
       //  void ViewPurchaseHistoryUserReport();

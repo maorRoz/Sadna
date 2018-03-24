@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    interface IUserService
+    public interface IUserService
     {
         void EnterSystem();
 

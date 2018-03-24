@@ -18,7 +18,11 @@ namespace SadnaSrc.Main
 
         private void initiateDb()
         {
-            var programPath = System.AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug", "");
+            var programPath = System.AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
+            programPath = programPath.Replace("\\bin\\Debug", "");
+            string[] programPathParts = programPath.Split('\\');
+            programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
+            programPath = String.Join("\\", programPathParts);
             var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
             _dbConnection = new SQLiteConnection(dbPath);
             _dbConnection.Open();
