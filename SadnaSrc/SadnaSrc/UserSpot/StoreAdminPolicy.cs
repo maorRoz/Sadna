@@ -11,7 +11,7 @@ namespace SadnaSrc.UserSpot
         public enum StoreAction { StoreOwner,PromoteStoreAdmin, ManageProducts, DeclarePurchasePolicy, DeclareDiscountPolicy, ViewPurchaseHistory}
         private string _store;
         private StoreAction _storeAction;
-        public StoreAdminPolicy(string store, StoreAction storeAction) : base(State.StoreAdmin)
+        public StoreAdminPolicy(string store, StoreAction storeAction) : base(State.StoreManager)
         {
             _store = store;
             _storeAction = storeAction;

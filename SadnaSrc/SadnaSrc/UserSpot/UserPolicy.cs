@@ -8,7 +8,7 @@ namespace SadnaSrc.UserSpot
 {
     class UserPolicy
     {
-        public enum State { RegisteredUser,SystemAdmin,StoreAdmin}
+        public enum State { RegisteredUser,SystemAdmin, StoreManager }
         private readonly State _state;
 
 
@@ -26,8 +26,8 @@ namespace SadnaSrc.UserSpot
         {
             switch (_state)
             {
-                case State.StoreAdmin:
-                    return "StoreAdmin";
+                case State.StoreManager:
+                    return "StoreManager";
                 case State.SystemAdmin:
                     return "SystemAdmin";
                 default:

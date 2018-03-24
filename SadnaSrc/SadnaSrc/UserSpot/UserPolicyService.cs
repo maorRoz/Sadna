@@ -55,7 +55,7 @@ namespace SadnaSrc.UserSpot
 
         public void AddStatePolicy(UserPolicy.State state)
         {
-            if (state == UserPolicy.State.StoreAdmin)
+            if (state == UserPolicy.State.StoreManager)
             {
                 throw new UserException(
                     "Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
