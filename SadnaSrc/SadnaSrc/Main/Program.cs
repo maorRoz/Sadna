@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.UserSpot;
 
-namespace SadnaSrc
+namespace SadnaSrc.Main
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("hello world!");
+            var marketSystem = new MarketYard();
+            IUserService service = marketSystem.GetUserService();
+            service.EnterSystem();
         }
     }
 }
