@@ -46,6 +46,14 @@ namespace SadnaSrc.UserSpot
             SaveUser(new User(_systemID));
             return _systemID;
         }
+
+        public void RegisterUser(string name, string address, string password)
+        {
+            string[] columnNames = { "Name" , "Address" , "Password" };
+            string[] valuesNames = {"@name", "@address", "@password"};
+            object[] values = {name, address, password};
+            UpdateTable("User","SystemID = "+_systemID, columnNames ,valuesNames,values);
+        }
         public void SaveUserPolicy(UserPolicy policy)
         {
             string [] valuesNames = {"@idParam","@stateParam","@actionParam","@storeParam"};

@@ -34,6 +34,14 @@ namespace SadnaSrc.UserSpot
             return user;
         }
 
+        public void SignUp(string name, string address, string password)
+        {
+            // do encryption
+            //search user in DB
+            userDL.RegisterUser(name, address, password);
+            user = new RegisteredUser(systemID,name, address,password);
+        }
+
         public void CleanSession()
         {
             userDL.DeleteUser();

@@ -19,7 +19,7 @@ namespace SadnaSrc.UserSpot
             PolicyService.AddStatePolicy(UserPolicy.State.RegisteredUser);
         }
 
-        public object[] ToData()
+        public override object[] ToData()
         {
             object[] ret = { systemID, name, address, password };
             return ret;

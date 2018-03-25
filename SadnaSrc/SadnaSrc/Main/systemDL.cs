@@ -18,8 +18,8 @@ namespace SadnaSrc.Main
 
         protected void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
         {
-            string valuesNamesJoin = String.Join(",", valuesNames);
-            var insertRequest = "INSERT INTO "+table+" ("+ tableColumns + ") VALUES ("+ valuesNamesJoin + ")";
+            var insertRequest = "INSERT INTO "+table+" ("+ tableColumns + ") VALUES ("+ string.Join(",", valuesNames)
+                                + ")";
             var commandDb = new SQLiteCommand(insertRequest, _dbConnection);
             for (int i = 0; i < values.Length;i++)
             {
@@ -42,6 +42,31 @@ namespace SadnaSrc.Main
             return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
         }
 
+        protected void UpdateTable(string table,string updateCondition,string[] columnNames, string[] valuesNames, object[] values)
+        {
+            string [] setString = new string[values.Length];
+            for (int i = 0; i < setString.Length; i++)
+            {
+                setString[i] = columnNames[i] + " = " + valuesNames[i];
+            }
+
+            var updateCommand = "UPDATE " + table + " SET " + string.Join(", ", setString) + " WHERE " + updateCondition;
+            var commandDb = new SQLiteCommand(updateCommand, _dbConnection);
+            for (int i = 0; i < values.Length; i++)
+            {
+                commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
+            }
+
+            try
+            {
+                commandDb.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Problem occured in the attempt to update system data in DB, returned error message :" + e.Message);
+            }
+        }
+
         protected void DeleteFromTable(string table,string deleteCondition)
         {
             var deleteCommand = "DELETE FROM " + table + " WHERE " + deleteCondition;
@@ -52,12 +77,8 @@ namespace SadnaSrc.Main
             }
             catch (Exception e)
             {
-                Console.WriteLine("Problem occured in the attempt to save system data in DB, returned error message :" + e.Message);
+                Console.WriteLine("Problem occured in the attempt to delete system data in DB, returned error message :" + e.Message);
             }
-
-        }
-        protected void CleanTable(string table)
-        {
 
         }
 
