@@ -26,8 +26,9 @@ namespace SadnaSrc.UserSpot
         }
         public void EnterSystem()
         {
-              user = new User(systemID);
-              cart = new CartService(false);
+            user = new User(systemID);
+            cart = new CartService(false);
+            MarketLog.Log("UserSpot","User "+systemID+" has entered the system");
         }
 
         public User GetUser()

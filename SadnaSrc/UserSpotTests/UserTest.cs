@@ -64,6 +64,7 @@ namespace UserSpotTests
         public void UserTestCleanUp()
         {
             userServiceSession.ExitSystem();
+            MarketLog.RemoveLogs();
         }
     }
 }
