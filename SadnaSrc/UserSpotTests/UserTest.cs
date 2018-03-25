@@ -44,7 +44,7 @@ namespace UserSpotTests
         }
 
         [TestMethod]
-        public void RegisteredDataTest()
+        public void RegisteredUserDataTest()
         {
             object[] expectedData = {registeredID, "Maor", "Here 3", "123"};
             Assert.IsTrue(expectedData.SequenceEqual(registeredUser.ToData()));

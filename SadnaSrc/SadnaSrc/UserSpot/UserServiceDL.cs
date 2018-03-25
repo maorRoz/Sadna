@@ -40,7 +40,7 @@ namespace SadnaSrc.UserSpot
             _systemID = newID;
         }
 
-        public int getSystemID()
+        public int GetSystemID()
         {
             GenerateSystemID();
             SaveUser(new User(_systemID));

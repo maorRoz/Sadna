@@ -11,18 +11,18 @@ namespace SadnaSrc.UserSpot
     public class UserService : IUserService,ISystemAdminService
     {
         private User user;
-        private UserServiceDL _userDL;
+        private readonly UserServiceDL userDL;
         private CartService cart;
         private int systemID;
 
         public UserService(SQLiteConnection dbConnection)
         {
             var random = new Random();
-            _userDL = new UserServiceDL(dbConnection);
-            systemID = _userDL.getSystemID();
+            userDL = new UserServiceDL(dbConnection);
+            systemID = userDL.GetSystemID();
             UserException.SetUser(systemID);
-            UserPolicyService.EstablishServiceDL(_userDL);
-            CartService.EstablishServiceDL(_userDL);
+            UserPolicyService.EstablishServiceDL(userDL);
+            CartService.EstablishServiceDL(userDL);
         }
         public void EnterSystem()
         {
@@ -37,7 +37,7 @@ namespace SadnaSrc.UserSpot
 
         public void ExitSystem()
         {
-            _userDL.DeleteUser();
+            userDL.DeleteUser();
         }
     }
 }
