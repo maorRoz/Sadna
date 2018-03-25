@@ -36,9 +36,10 @@ namespace SadnaSrc.UserSpot
             return user;
         }
 
-        public void ExitSystem()
+        public void CleanSession()
         {
             userDL.DeleteUser();
+            //TODO: add delete on cascade or something on policy when deleting user
         }
     }
 }

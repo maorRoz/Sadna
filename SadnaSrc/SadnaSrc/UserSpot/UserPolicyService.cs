@@ -34,6 +34,7 @@ namespace SadnaSrc.UserSpot
 
         public void UpdateStorePolicies(string store,List<StoreAdminPolicy.StoreAction> actionsToAdd)
         {
+            //TODO: check if store exist here on in DB query(with WHERE or something)
             foreach (StoreAdminPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreAdminPolicy.StoreAction)))
             {
                 RemoveStorePolicy(store, oldAction);
@@ -60,7 +61,7 @@ namespace SadnaSrc.UserSpot
                 throw new UserException(
                     "Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
             }
-        //    _userDL.SaveUserPolicy(new UserPolicy(state));
+            _userDL.SaveUserPolicy(new UserPolicy(state));
             policies.Add(new UserPolicy(state));
         }
 

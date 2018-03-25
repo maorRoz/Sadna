@@ -60,10 +60,16 @@ namespace UserSpotTests
 
         }
 
+        [TestMethod]
+        public void AqcuireStoreControlTest()
+        {
+            //TODO: when StoreCenter will be ready, add this test!!
+        }
+
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            userServiceSession.ExitSystem();
+            userServiceSession.CleanSession();
             MarketLog.RemoveLogs();
         }
     }

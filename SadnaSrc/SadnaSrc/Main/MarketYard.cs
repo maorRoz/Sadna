@@ -26,8 +26,11 @@ namespace SadnaSrc.Main
             var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
             _dbConnection = new SQLiteConnection(dbPath);
             _dbConnection.Open();
+            var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON",_dbConnection);
+            makeFK.ExecuteNonQuery();
             MarketException.InsertDbConnector(_dbConnection);
             MarketLog.InsertDbConnector(_dbConnection);
+
         }
 
         public IUserService GetUserService()
