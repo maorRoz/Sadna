@@ -6,13 +6,20 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    class User
+    public class User
     {
         protected readonly UserPolicyService PolicyService;
-        private int systemID;
+        protected int systemID;
+        private readonly CartService cart;
+
+        public int SystemID
+        {
+            get { return systemID; }
+        }
         public User(int systemID)
         {
             PolicyService = new UserPolicyService();
+            cart = new CartService(false);
             this.systemID = systemID;
         }
 
@@ -21,6 +28,10 @@ namespace SadnaSrc.UserSpot
             return PolicyService.Policies.ToArray();
         }
 
+        public CartItem[] GetCart()
+        {
+            return cart.GetCartStorage();
+        }
         public object[] ToData()
         {
             object[] ret = {systemID, null, null, null};

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
-    class systemDL
+    public class systemDL
     {
         private SQLiteConnection _dbConnection;
 
@@ -42,8 +42,18 @@ namespace SadnaSrc.Main
             return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
         }
 
-        protected void RemoveFromTable(string table)
+        protected void DeleteFromTable(string table,string deleteCondition)
         {
+            var deleteCommand = "DELETE FROM " + table + " WHERE " + deleteCondition;
+            var commandDb = new SQLiteCommand(deleteCommand, _dbConnection);
+            try
+            {
+                commandDb.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Problem occured in the attempt to save system data in DB, returned error message :" + e.Message);
+            }
 
         }
         protected void CleanTable(string table)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    class RegisteredUser : User
+    public class RegisteredUser : User
     {
         private string name;
         private string address;
@@ -17,6 +17,12 @@ namespace SadnaSrc.UserSpot
             this.address = address;
             this.password = password;
             PolicyService.AddStatePolicy(UserPolicy.State.RegisteredUser);
+        }
+
+        public object[] ToData()
+        {
+            object[] ret = { systemID, name, address, password };
+            return ret;
         }
 
         public void PromoteToAdmin()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    class UserPolicy
+    public class UserPolicy
     {
         public enum State { RegisteredUser,SystemAdmin, StoreManager }
         private readonly State _state;
