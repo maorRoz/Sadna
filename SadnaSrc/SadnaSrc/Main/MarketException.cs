@@ -12,14 +12,16 @@ namespace SadnaSrc.Main
     {
         private static SQLiteConnection _dbConnection;
         private static List<string> publishedErrorIDs;
+        private string errorMessage;
         public MarketException(string message)
         {
             var insertRequest = "INSERT INTO System_Errors (ErrorID,ModuleName,Description) VALUES (@idParam,@moduleParam,@descriptionParam)";
             var commandDb = new SQLiteCommand(insertRequest, _dbConnection);
             string errorID = GenerateErrorID();
+            errorMessage = GetErrorMessage(message);
             commandDb.Parameters.AddWithValue("@idParam", errorID);
             commandDb.Parameters.AddWithValue("@moduleParam", GetModuleName());
-            commandDb.Parameters.AddWithValue("@descriptionParam", GetErrorMessage(message));
+            commandDb.Parameters.AddWithValue("@descriptionParam", errorMessage);
             try
             {
                 commandDb.ExecuteNonQuery();
@@ -42,6 +44,11 @@ namespace SadnaSrc.Main
         {
             var random = new Random();
             return random.Next(1000, 10000) + "" + ((char)random.Next(97, 123)) + "" + ((char)random.Next(97, 123));
+        }
+
+        public string GetErrorMessage()
+        {
+            return errorMessage;
         }
 
         protected virtual string GetModuleName()
