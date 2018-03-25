@@ -11,7 +11,8 @@ namespace UserSpotTests
     {
         private UserService userServiceSession;
         private User guest;
-        private int guestID = 9777;
+        private int guestID = 10000;
+        private int registeredID = 10001;
         private RegisteredUser registeredUser;
         [TestInitialize]
         public void MarketBuilder()
@@ -20,6 +21,7 @@ namespace UserSpotTests
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
             guest = new User(guestID);
+            registeredUser = new RegisteredUser(registeredID,"Maor", "Here 3","123");
         }
 
         [TestMethod]
@@ -39,6 +41,23 @@ namespace UserSpotTests
             User generatedGuest = userServiceSession.GetUser();
             expectedData[0] = generatedGuest.SystemID;
             Assert.IsTrue(expectedData.SequenceEqual(generatedGuest.ToData()));
+        }
+
+        [TestMethod]
+        public void RegisteredDataTest()
+        {
+            object[] expectedData = {registeredID, "Maor", "Here 3", "123"};
+            Assert.IsTrue(expectedData.SequenceEqual(registeredUser.ToData()));
+            registeredUser.PromoteToAdmin();
+            Assert.IsTrue(expectedData.SequenceEqual(registeredUser.ToData()));
+        }
+
+        [TestMethod]
+        public void PromoteToAdminTest()
+        {
+            registeredUser.PromoteToAdmin();
+            Assert.AreEqual(2, registeredUser.GetPolicies().Length);
+
         }
 
         [TestCleanup]

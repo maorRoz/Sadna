@@ -19,6 +19,12 @@ namespace SadnaSrc.UserSpot
             PolicyService.AddStatePolicy(UserPolicy.State.RegisteredUser);
         }
 
+        public object[] ToData()
+        {
+            object[] ret = { systemID, name, address, password };
+            return ret;
+        }
+
         public void PromoteToAdmin()
         {
             PolicyService.AddStatePolicy(UserPolicy.State.SystemAdmin);

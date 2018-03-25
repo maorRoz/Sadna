@@ -60,7 +60,8 @@ namespace SadnaSrc.UserSpot
                 throw new UserException(
                     "Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
             }
-            _userDL.SaveUserPolicy(new UserPolicy(state));
+        //    _userDL.SaveUserPolicy(new UserPolicy(state));
+            policies.Add(new UserPolicy(state));
         }
 
     }

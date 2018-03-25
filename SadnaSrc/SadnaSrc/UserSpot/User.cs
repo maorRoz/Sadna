@@ -9,7 +9,7 @@ namespace SadnaSrc.UserSpot
     public class User
     {
         protected readonly UserPolicyService PolicyService;
-        private int systemID;
+        protected int systemID;
 
         public int SystemID
         {
