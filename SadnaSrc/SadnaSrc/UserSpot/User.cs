@@ -10,6 +10,7 @@ namespace SadnaSrc.UserSpot
     {
         protected readonly UserPolicyService PolicyService;
         protected int systemID;
+        private readonly CartService cart;
 
         public int SystemID
         {
@@ -18,6 +19,7 @@ namespace SadnaSrc.UserSpot
         public User(int systemID)
         {
             PolicyService = new UserPolicyService();
+            cart = new CartService(false);
             this.systemID = systemID;
         }
 
@@ -26,6 +28,10 @@ namespace SadnaSrc.UserSpot
             return PolicyService.Policies.ToArray();
         }
 
+        public CartItem[] GetCart()
+        {
+            return cart.GetCartStorage();
+        }
         public object[] ToData()
         {
             object[] ret = {systemID, null, null, null};

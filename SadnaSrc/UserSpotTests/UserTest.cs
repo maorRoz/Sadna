@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
@@ -44,6 +45,14 @@ namespace UserSpotTests
         }
 
         [TestMethod]
+        public void NewGuestCartEmptyTest()
+        {
+            Assert.AreEqual(0, guest.GetCart().Length);
+            User generatedGuest = userServiceSession.GetUser();
+            Assert.AreEqual(0, generatedGuest.GetCart().Length);
+        }
+
+        [TestMethod]
         public void RegisteredUserDataTest()
         {
             object[] expectedData = {registeredID, "Maor", "Here 3", "123"};
@@ -57,13 +66,13 @@ namespace UserSpotTests
         {
             registeredUser.PromoteToAdmin();
             Assert.AreEqual(2, registeredUser.GetPolicies().Length);
-
         }
 
         [TestMethod]
         public void AqcuireStoreControlTest()
         {
-            //TODO: when StoreCenter will be ready, add this test!!
+            List<StoreAdminPolicy.StoreAction> newPolicies = new List<StoreAdminPolicy.StoreAction>();
+            registeredUser.AddUserPolicy("UserSpotTest",newPolicies);
         }
 
         [TestCleanup]

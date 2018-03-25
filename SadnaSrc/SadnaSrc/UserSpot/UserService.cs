@@ -12,7 +12,6 @@ namespace SadnaSrc.UserSpot
     {
         private User user;
         private readonly UserServiceDL userDL;
-        private CartService cart;
         private int systemID;
 
         public UserService(SQLiteConnection dbConnection)
@@ -27,7 +26,6 @@ namespace SadnaSrc.UserSpot
         public void EnterSystem()
         {
             user = new User(systemID);
-            cart = new CartService(false);
             MarketLog.Log("UserSpot","User "+systemID+" has entered the system");
         }
 
@@ -39,7 +37,6 @@ namespace SadnaSrc.UserSpot
         public void CleanSession()
         {
             userDL.DeleteUser();
-            //TODO: add delete on cascade or something on policy when deleting user
         }
     }
 }
