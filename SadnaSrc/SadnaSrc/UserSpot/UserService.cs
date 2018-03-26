@@ -16,7 +16,6 @@ namespace SadnaSrc.UserSpot
 
         public UserService(SQLiteConnection dbConnection)
         {
-            var random = new Random();
             userDL = new UserServiceDL(dbConnection);
             systemID = userDL.GetSystemID();
             UserException.SetUser(systemID);
@@ -36,14 +35,34 @@ namespace SadnaSrc.UserSpot
             return user;
         }
 
+        private void ApproveSignUp(string name, string address, string password)
+        {
+            if (user == null)
+            {
+                throw new UserException(
+                    "sign up action has been requested by user which hasn't fully entered the system yet!");
+            }
+
+            if (user.GetPolicies().Length > 0)
+            {
+                throw new UserException("sign up action has been requested by registered user!");
+            }
+
+            if (name == null || address == null || password == null)
+            {
+                throw new UserException(
+                    "sign up action has been requested while some required fields are still missing!");
+            }
+        }
         public string SignUp(string name, string address, string password)
         {
             MarketLog.Log("UserSpot", "User " + systemID + " attempting to sign up to the system...");
-            MarketLog.Log("UserSpot", "encrypting User " + systemID + " password for security measures...");
-            string encryptedPassword = GetSecuredPassword(password);
-            MarketLog.Log("UserSpot", "User " + systemID + " password has been encrypted successfully!");
             try
             {
+                ApproveSignUp(name,address,password);
+                MarketLog.Log("UserSpot", "encrypting User " + systemID + " password for security measures...");
+                string encryptedPassword = GetSecuredPassword(password);
+                MarketLog.Log("UserSpot", "User " + systemID + " password has been encrypted successfully!");
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + systemID + " data...");
                 userDL.RegisterUser(name, address, encryptedPassword); // implement search
                 user = new RegisteredUser(systemID, name, address, encryptedPassword);
@@ -52,7 +71,7 @@ namespace SadnaSrc.UserSpot
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot","User "+ systemID +" has been failed to sign up. Error message has been created!");
+                MarketLog.Log("UserSpot","User "+ systemID +" has failed to sign up. Error message has been created!");
                 return e.GetErrorMessage();
             }
         }

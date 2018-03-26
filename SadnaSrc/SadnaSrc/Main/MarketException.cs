@@ -61,6 +61,11 @@ namespace SadnaSrc.Main
             return "General Error: " + message;
         }
 
+        public static bool hasErrorRaised()
+        {
+            return publishedErrorIDs.Count > 0;
+        }
+
         public static void RemoveErrors()
         {
             foreach (string errorID in publishedErrorIDs)
