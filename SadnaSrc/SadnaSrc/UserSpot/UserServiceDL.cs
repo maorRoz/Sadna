@@ -46,6 +46,31 @@ namespace SadnaSrc.UserSpot
             SaveUser(new User(_systemID));
             return _systemID;
         }
+
+        //TODO: improve this
+        private RegisteredUser findUser(string name)
+        {
+            var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "'");
+            while (dbReader.Read())
+            {
+                return new RegisteredUser(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2), null);
+
+            }
+
+            return null;
+        }
+        public void RegisterUser(string name, string address, string password)
+        {
+            if (findUser(name) != null)
+            {
+                throw new UserException("register action has been request while there" +
+                                        " is already a User with the given name in the system!");
+            }
+            string[] columnNames = { "Name" , "Address" , "Password" };
+            string[] valuesNames = {"@name", "@address", "@password"};
+            object[] values = {name, address, password};
+            UpdateTable("User","SystemID = "+_systemID, columnNames ,valuesNames,values);
+        }
         public void SaveUserPolicy(UserPolicy policy)
         {
             string [] valuesNames = {"@idParam","@stateParam","@actionParam","@storeParam"};

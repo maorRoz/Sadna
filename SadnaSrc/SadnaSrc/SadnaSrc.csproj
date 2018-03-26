@@ -72,8 +72,11 @@
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\systemDL.cs" />
     <Compile Include="OrderPool\Order.cs" />
+    <Compile Include="OrderPool\OrderException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreCenter\Store.cs" />
+    <Compile Include="StoreCenter\StoreException.cs" />
+    <Compile Include="SupplyPoint\SupplyException.cs" />
     <Compile Include="SupplyPoint\SupplyPoint.cs" />
     <Compile Include="UserSpot\CartService.cs" />
     <Compile Include="UserSpot\CartItem.cs" />
@@ -89,14 +92,13 @@
     <Compile Include="UserSpot\UserService.cs" />
     <Compile Include="UserSpot\UserServiceDL.cs" />
     <Compile Include="Walleter\Walleter.cs" />
+    <Compile Include="Walleter\WalleterException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Blackbox Tests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

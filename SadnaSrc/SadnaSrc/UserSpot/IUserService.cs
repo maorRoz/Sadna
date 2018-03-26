@@ -8,10 +8,10 @@ namespace SadnaSrc.UserSpot
 {
     public interface IUserService
     {
-        void EnterSystem();
+        string EnterSystem();
+        string SignUp(string name,string address,string password);
 
-        //   void SignUp();
-        //   void SignIn();
+        //   string SignIn();
 
     }
 }

@@ -32,7 +32,7 @@ namespace SadnaSrc.UserSpot
         {
             return cart.GetCartStorage();
         }
-        public object[] ToData()
+        public virtual object[] ToData()
         {
             object[] ret = {systemID, null, null, null};
             return ret;

@@ -45,6 +45,10 @@ namespace SadnaSrc.Main
             }
         }
 
+        public static string[] GetLogs()
+        {
+            return publishedLogsIDs.ToArray();
+        }
         public static void RemoveLogs()
         {
             foreach (string logID in publishedLogsIDs)

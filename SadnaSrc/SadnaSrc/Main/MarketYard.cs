@@ -42,5 +42,10 @@ namespace SadnaSrc.Main
         {
             return new UserService(_dbConnection);
         }
+
+        public void Exit()
+        {
+            _dbConnection.Close();
+        }
     }
 }
