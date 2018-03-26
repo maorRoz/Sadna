@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,14 @@ namespace SadnaSrc.UserSpot
             this.address = address;
             this.password = password;
             PolicyService.AddStatePolicy(UserPolicy.State.RegisteredUser);
+        }
+
+        public RegisteredUser(int systemID, string name, string address, string password, UserPolicy[] policies) : base(systemID)
+        {
+            this.name = name;
+            this.address = address;
+            this.password = password;
+            PolicyService.LoadPolicies(policies);
         }
 
         public override object[] ToData()

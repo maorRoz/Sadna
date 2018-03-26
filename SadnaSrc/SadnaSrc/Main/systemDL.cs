@@ -42,6 +42,12 @@ namespace SadnaSrc.Main
             return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
         }
 
+        protected SQLiteDataReader SelectFromTableWithCondition(string table, string toSelect, string condition)
+        {
+            var selectRequest = "SELECT " + toSelect + " FROM " + table + " WHERE "+condition;
+            return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
+        }
+
         protected void UpdateTable(string table,string updateCondition,string[] columnNames, string[] valuesNames, object[] values)
         {
             string [] setString = new string[values.Length];

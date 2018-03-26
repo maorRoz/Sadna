@@ -48,6 +48,7 @@ namespace UserSpotTests
         [TestMethod]
         public void MissingCredentialsTest1()
         {
+            Assert.IsFalse(MarketException.hasErrorRaised());
             doSignUp("Maor", "Here 3", null);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
@@ -55,6 +56,7 @@ namespace UserSpotTests
         [TestMethod]
         public void MissingCredentialsTest2()
         {
+            Assert.IsFalse(MarketException.hasErrorRaised());
             doSignUp(null, null, null);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
@@ -62,19 +64,73 @@ namespace UserSpotTests
         [TestMethod]
         public void DidntEnteredSystemTest()
         {
+            Assert.IsFalse(MarketException.hasErrorRaised());
             userServiceSession.SignUp("Maor", "Here 3", "123");
             Assert.IsTrue(MarketException.hasErrorRaised());
 
+        }
+
+        [TestMethod]
+        public void RegisteredUserCartisEmptyTest()
+        {
+            doSignUp("Maor", "Here 3", "123");
+            RegisteredUser registeredUser = (RegisteredUser)userServiceSession.GetUser();
+            Assert.AreEqual(0,registeredUser.GetCart().Length);
+        }
+
+        [TestMethod]
+        public void RegisteredUserPoliciesTest()
+        {
+            userServiceSession.EnterSystem();
+            User user = userServiceSession.GetUser();
+            Assert.AreEqual(0, user.GetPolicies().Length);
+            userServiceSession.SignUp("Maor", "Here 3", "123");
+            user = userServiceSession.GetUser();
+            UserPolicy[] expectedPolicies = user.GetPolicies();
+            Assert.AreEqual(1, expectedPolicies.Length);
+            if (expectedPolicies.Length > 0)
+            {
+                Assert.AreEqual(expectedPolicies[0].GetState(),UserPolicy.State.RegisteredUser);
+            }
+        }
+
+        [TestMethod]
+        public void SignUpAgainTest()
+        {
+            doSignUp("Maor", "Here 3", "123");
+            Assert.IsFalse(MarketException.hasErrorRaised());
+            userServiceSession.SignUp("Maor", "Here 3", "123");
+            Assert.IsTrue(MarketException.hasErrorRaised());
+        }
+
+        [TestMethod]
+        public void SignUpWithExistedName()
+        {
+            Assert.IsFalse(MarketException.hasErrorRaised());
+            doSignUp("UseCase1.2Test", "", "");
+            Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
 
         [TestMethod]
         public void PromoteToAdminTest()
         {
-            //  registeredUser.PromoteToAdmin();
-            //  Assert.IsTrue(expectedData.SequenceEqual(registeredUser.ToData()));
-            //    registeredUser.PromoteToAdmin();
-            //   Assert.AreEqual(2, registeredUser.GetPolicies().Length);
+            doSignUp("Maor", "Here 3", "123");
+            RegisteredUser adminUser = (RegisteredUser)userServiceSession.GetUser();
+            object[] expectedData = { adminUser.SystemID, "Maor", "Here 3", userServiceSession.GetSecuredPassword("123") };
+            Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
+            Assert.AreEqual(1, adminUser.GetPolicies().Length);
+            adminUser.PromoteToAdmin();
+            Assert.AreEqual(0, adminUser.GetCart().Length);
+            Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
+            UserPolicy[] expectedPolicies = adminUser.GetPolicies();
+            Assert.AreEqual(2, expectedPolicies.Length);
+            if (expectedPolicies.Length == 2)
+            {
+                Assert.AreEqual(expectedPolicies[0].GetState(), UserPolicy.State.RegisteredUser);
+                Assert.AreEqual(expectedPolicies[1].GetState(), UserPolicy.State.SystemAdmin);
+            }
+
         }
 
         [TestCleanup]

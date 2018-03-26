@@ -65,5 +65,13 @@ namespace SadnaSrc.UserSpot
             policies.Add(new UserPolicy(state));
         }
 
+        public void LoadPolicies(UserPolicy[] loadedPolicies)
+        {
+            foreach (UserPolicy loadedPolicy in  loadedPolicies)
+            {
+                policies.Add(loadedPolicy);
+            }
+        }
+
     }
 }

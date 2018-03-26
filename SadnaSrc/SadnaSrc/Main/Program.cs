@@ -14,7 +14,7 @@ namespace SadnaSrc.Main
             var marketSystem = new MarketYard();
             IUserService service = marketSystem.GetUserService();
             service.EnterSystem();
-            service.SignUp("Maor","Here 4","123");
+            service.SignUp("Moshe","Here 4","123");
             marketSystem.Exit();
         }
     }
