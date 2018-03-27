@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.OrderPool
 {
-    class Order
+    class OrderItem
     {
-       
     }
 }
