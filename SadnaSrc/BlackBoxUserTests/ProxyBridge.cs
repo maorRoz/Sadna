@@ -1,4 +1,4 @@
-﻿namespace BlackBox
+﻿namespace BlackBoxUserTests
 {
 	public class ProxyBridge : UserBridge
 	{

@@ -1,7 +1,7 @@
 ﻿using SadnaSrc.UserSpot;
 using SadnaSrc.Main;
 
-namespace BlackBox
+namespace BlackBoxUserTests
 {
 	public class RealBridge : UserBridge
 	{
