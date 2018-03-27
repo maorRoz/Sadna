@@ -21,6 +21,7 @@ namespace BlackBox
 		[TestMethod]
 		public void successGuestEntry()
 		{
+
 			Assert.Equals(bridge.EnterSystem(), "You've been entered the system successfully!");
 		}
 
