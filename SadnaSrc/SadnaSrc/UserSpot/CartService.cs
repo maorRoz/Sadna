@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.UserSpot
 {
-    class CartService
+    public class CartService
     {
         private List<CartItem> cartStorage;
         private static UserServiceDL _userDL;
         private bool _toSave;
 
-        public CartService(bool toSave)
+        public CartService()
         {
             cartStorage = new List<CartItem>();
-            _toSave = toSave;
+            _toSave = false;
         }
 
         public void EnableCartSave()
@@ -32,6 +32,18 @@ namespace SadnaSrc.UserSpot
             return cartStorage.ToArray();
         }
 
+        public void LoadCart(CartItem[] loadedStorage)
+        {
+            foreach(CartItem item in loadedStorage)
+            {
+                cartStorage.Add(item);
+            }
+        }
+
+        public void SaveCart(CartItem[] toSaveStorage)
+        {
+                _userDL.SaveCartItem(toSaveStorage);
+        }
         public void AddToCart(string store,string product,double finalPrice,string sale,int quantity)
         {
             CartItem toAdd = new CartItem(store, product, finalPrice, sale, quantity);
@@ -44,7 +56,7 @@ namespace SadnaSrc.UserSpot
                 cartStorage.Add(toAdd);
                 if (_toSave)
                 {
-                    _userDL.SaveCartItem(toAdd);
+                    _userDL.SaveCartItem(new []{toAdd});
                 }
             }            
         }

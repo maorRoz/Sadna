@@ -34,7 +34,7 @@ namespace SadnaSrc.UserSpot
 
         public void UpdateStorePolicies(string store,List<StoreAdminPolicy.StoreAction> actionsToAdd)
         {
-            //TODO: check if store exist here on in DB query(with WHERE or something)
+            //TODO: check if store exist here or in DB query(with WHERE or something)
             foreach (StoreAdminPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreAdminPolicy.StoreAction)))
             {
                 RemoveStorePolicy(store, oldAction);

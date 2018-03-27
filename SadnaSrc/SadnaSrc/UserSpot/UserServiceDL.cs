@@ -50,23 +50,18 @@ namespace SadnaSrc.UserSpot
             return _systemID;
         }
 
-        //TODO: improve this
-        private RegisteredUser findUser(string name)
+
+        private bool IsUserExist(string name)
         {
             using (var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "'"))
             {
-                while (dbReader.Read())
-                {
-                    return new RegisteredUser(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2), null);
+                return dbReader.Read();
 
-                }
             }
-
-            return null;
         }
-        public void RegisterUser(string name, string address, string password)
+        public RegisteredUser RegisterUser(string name, string address, string password, CartItem[] guestCart)
         {
-            if (findUser(name) != null)
+            if (IsUserExist(name))
             {
                 throw new UserException("register action has been request while there" +
                                         " is already a User with the given name in the system!");
@@ -75,6 +70,8 @@ namespace SadnaSrc.UserSpot
             string[] valuesNames = {"@name", "@address", "@password"};
             object[] values = {name, address, password};
             UpdateTable("User","SystemID = "+_systemID, columnNames ,valuesNames,values);
+            SaveCartItem(guestCart);
+            return new RegisteredUser(_systemID, name,address,password,guestCart);
         }
         public void SaveUserPolicy(UserPolicy policy)
         {
@@ -102,22 +99,13 @@ namespace SadnaSrc.UserSpot
         {
             return null;
         }
-        private void EncryptPassword()
-        {
-
-        }
-
-        private void DecryptPassword()
-        {
-
-        }
         public void SaveUser(User user)
         {
             string[] valuesNames = { "@idParam", "@nameParam", "@addressParam", "@passParam" };
             object[] values = user.ToData();
             InsertTable("User", "SystemID,Name,Address,Password", valuesNames,values);
         }
-        public User LoadUser()
+        public RegisteredUser LoadUser(string name, string password, CartItem[] guestCart)
         {
             return null;
         }
@@ -127,9 +115,12 @@ namespace SadnaSrc.UserSpot
             DeleteFromTable("User", "SystemID = "+_systemID);
         }
 
-        public void SaveCartItem(CartItem item)
+        public void SaveCartItem(CartItem[] cart)
         {
-
+            foreach (CartItem item in cart)
+            {
+                //TODO : save in DB cart item
+            }
         }
 
         public void RemoveCartItem(CartItem item)
