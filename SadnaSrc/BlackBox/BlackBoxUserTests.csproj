@@ -64,8 +64,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Driver.cs" />
-    <Compile Include="ProxyBridge.cs" />
     <Compile Include="RealBridge.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UseCase1_1.cs" />
