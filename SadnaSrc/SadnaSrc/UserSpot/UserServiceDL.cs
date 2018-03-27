@@ -10,7 +10,8 @@ namespace SadnaSrc.UserSpot
 {
     public class UserServiceDL : systemDL
     {
-        private int _systemID;
+
+        public int SystemID { get; private set; }
         public UserServiceDL(SQLiteConnection dbConnection) : base(dbConnection)
         {
         }
@@ -40,14 +41,14 @@ namespace SadnaSrc.UserSpot
                 newID = new Random().Next(1000, 10000);
             }
 
-            _systemID = newID;
+            SystemID = newID;
         }
 
         public int GetSystemID()
         {
             GenerateSystemID();
-            SaveUser(new User(_systemID));
-            return _systemID;
+            SaveUser(new User(SystemID));
+            return SystemID;
         }
 
 
@@ -63,20 +64,20 @@ namespace SadnaSrc.UserSpot
         {
             if (IsUserExist(name))
             {
-                throw new UserException("register action has been request while there" +
+                throw new UserException("register action has been requested while there" +
                                         " is already a User with the given name in the system!");
             }
             string[] columnNames = { "Name" , "Address" , "Password" };
             string[] valuesNames = {"@name", "@address", "@password"};
             object[] values = {name, address, password};
-            UpdateTable("User","SystemID = "+_systemID, columnNames ,valuesNames,values);
+            UpdateTable("User","SystemID = "+SystemID, columnNames ,valuesNames,values);
             SaveCartItem(guestCart);
-            return new RegisteredUser(_systemID, name,address,password,guestCart);
+            return new RegisteredUser(SystemID, name,address,password,guestCart);
         }
         public void SaveUserPolicy(UserPolicy policy)
         {
             string [] valuesNames = {"@idParam","@stateParam","@actionParam","@storeParam"};
-            object[] values = { _systemID, policy.GetStateString(), null, null};
+            object[] values = { SystemID, policy.GetStateString(), null, null};
             InsertTable("UserPolicy", "SystemID,state,action,store",valuesNames,values);
         }
 
@@ -95,31 +96,71 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        private UserPolicy LoadUserPolicy()
+        private UserPolicy[] LoadUserPolicy()
         {
-            return null;
+            List<UserPolicy> loadedPolicies = new List<UserPolicy>();
+            using (var dbReader = SelectFromTableWithCondition("UserPolicy", "*", "SystemID = " + SystemID))
+            {
+                while (dbReader.Read())
+                {
+                    if (dbReader.GetString(1).Equals("RegisteredUser"))
+                    {
+                        loadedPolicies.Add(new UserPolicy(UserPolicy.State.RegisteredUser));
+                    }
+                    else if (dbReader.GetString(1).Equals("SystemAdmin"))
+
+                    {
+                        loadedPolicies.Add(new UserPolicy(UserPolicy.State.SystemAdmin));
+                    }
+                    else
+                    {
+                        loadedPolicies.Add(new StoreAdminPolicy(StoreAdminPolicy.GetActionFromString(
+                            dbReader.GetString(2)), dbReader.GetString(3)));
+                    }
+                }
+            }
+            return loadedPolicies.ToArray();
         }
         public void SaveUser(User user)
         {
-            string[] valuesNames = { "@idParam", "@nameParam", "@addressParam", "@passParam" };
-            object[] values = user.ToData();
-            InsertTable("User", "SystemID,Name,Address,Password", valuesNames,values);
+            InsertTable("User", "SystemID,Name,Address,Password",
+                new [] { "@idParam", "@nameParam", "@addressParam", "@passParam" }, user.ToData());
+        }
+
+        private object[] FindRegisteredUserData(string name, string password)
+        {
+            using (var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "' AND password = '"+ password +"'"))
+            {
+                while (dbReader.Read())
+                {
+                    return new object[] {dbReader.GetInt32(0), dbReader.GetString(2)};
+                }
+                throw new UserException("sign in action has been requested while there" +
+                                        " is no User with the given name and password in the system!");
+
+            }
         }
         public RegisteredUser LoadUser(string name, string password, CartItem[] guestCart)
         {
-            return null;
-        }
+            object[] loadedUserIdAndAddress = FindRegisteredUserData(name, password);
 
-        public void DeleteUser()
-        {
-            DeleteFromTable("User", "SystemID = "+_systemID);
+            SystemID = (int) loadedUserIdAndAddress[0];
+            foreach (CartItem item in guestCart)
+            {
+                item.SetUserID(SystemID);
+            }
+            SaveCartItem(guestCart);
+
+            return new RegisteredUser(SystemID,name,(string) loadedUserIdAndAddress[1],
+                password, LoadCartItems(), LoadUserPolicy());
         }
 
         public void SaveCartItem(CartItem[] cart)
         {
             foreach (CartItem item in cart)
             {
-                //TODO : save in DB cart item
+                InsertTable("CartItem", "SystemID,Name,Store,Quantity,FinalPrice,SaleType",
+                    new [] { "@idParam", "@nameParam", "@storeParam", "@priceParam", "@saleParam" }, item.ToData());
             }
         }
 
@@ -127,14 +168,37 @@ namespace SadnaSrc.UserSpot
         {
 
         }
-        private List<CartItem> LoadCartItems()
+        private CartItem[] LoadCartItems()
         {
-            return null;
+            List<CartItem> loadedItems = new List<CartItem>();
+            using (var dbReader = SelectFromTableWithCondition("CartItem", "*", "SystemID = " + SystemID))
+            {
+                while (dbReader.Read())
+                {
+                    loadedItems.Add(new CartItem(dbReader.GetInt32(0),dbReader.GetString(1),
+                        dbReader.GetString(2),dbReader.GetInt32(3),dbReader.GetDouble(4),dbReader.GetString(5)));
+                }
+            }
+            return loadedItems.ToArray();
         }
 
         public void UpdateCartItemQuantity(int quantity)
         {
 
+        }
+
+        public void RemoveUser(int toDeleteID)
+        {
+            DeleteFromTable("User", "SystemID = " + toDeleteID);
+        }
+        public List<string> ViewUserPurchaseHistory(User user)
+        {
+            return null;
+        }
+
+        public List<string> ViewStorePurchaseHistory(string store)
+        {
+            return null;
         }
     }
 }

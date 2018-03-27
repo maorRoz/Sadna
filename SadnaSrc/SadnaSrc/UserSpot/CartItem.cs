@@ -8,19 +8,26 @@ namespace SadnaSrc.UserSpot
 {
     public class CartItem
     {
+        private int _systemID;
         private string _store;
         private string _name;
         private double _finalPrice;
         private string _sale;
         private int _quantity;
 
-        public CartItem(string store, string name, double finalPrice, string sale, int quantity)
+        public CartItem(int systemID, string name, string store, int quantity, double finalPrice, string sale)
         {
-            _store = store;
+            _systemID = systemID;
             _name = name;
+            _store = store;
+            _quantity = quantity;
             _finalPrice = finalPrice;
             _sale = sale;
-            _quantity = quantity;
+        }
+
+        public void SetUserID(int systemID)
+        {
+            _systemID = systemID;
         }
 
         public void IncreaseQuantity()
@@ -46,6 +53,11 @@ namespace SadnaSrc.UserSpot
         public string GetName()
         {
             return _name;
+        }
+
+        public object[] ToData()
+        {
+            return new object[] { _systemID, _name, _store, _quantity, _finalPrice, _sale};
         }
     }
 }

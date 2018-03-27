@@ -13,13 +13,13 @@ namespace SadnaSrc.UserSpot
         private string address;
         private string password;
 
-        private void RegisteredUserSetter(string name, string address, string password, CartItem[] guestCart)
+        private void RegisteredUserSetter(string name, string address, string password, CartItem[] savedCart)
         {
             this.name = name;
             this.address = address;
             this.password = password;
             cart.EnableCartSave();
-            cart.LoadCart(guestCart);
+            cart.LoadCart(savedCart);
         }
         public RegisteredUser(int systemID,string name,string address,string password,CartItem[] guestCart) 
             : base(systemID)
@@ -30,12 +30,11 @@ namespace SadnaSrc.UserSpot
         }
 
         public RegisteredUser(int loadedSystemID, string loadednName, string loadedAddress,
-            string loadedPassword,CartItem[] guestCart, UserPolicy[] loadedPolicies,  CartItem[] loadedCart) 
+            string loadedPassword, CartItem[] loadedCart, UserPolicy[] loadedPolicies) 
             : base(loadedSystemID)
         {
-            RegisteredUserSetter(loadednName, loadedAddress, loadedPassword, guestCart);
+            RegisteredUserSetter(loadednName, loadedAddress, loadedPassword, loadedCart);
             PolicyService.LoadPolicies(loadedPolicies);
-            cart.LoadCart(loadedCart);
         }
 
         public override object[] ToData()

@@ -27,7 +27,7 @@ namespace SadnaSrc.UserSpot
 
         public void AddStorePolicy(string store, StoreAdminPolicy.StoreAction storeAction)
         {
-            StoreAdminPolicy toAdd = new StoreAdminPolicy(store,storeAction); 
+            StoreAdminPolicy toAdd = new StoreAdminPolicy(storeAction, store); 
             policies.Add(toAdd);
             _userDL.SaveUserPolicy(toAdd);
         }
@@ -47,7 +47,7 @@ namespace SadnaSrc.UserSpot
         }
         private void RemoveStorePolicy(string store, StoreAdminPolicy.StoreAction storeAction)
         {
-            StoreAdminPolicy toRemove = new StoreAdminPolicy(store,storeAction);
+            StoreAdminPolicy toRemove = new StoreAdminPolicy(storeAction,store);
             if (policies.Remove(toRemove))
             {
                 _userDL.DeleteUserPolicy(toRemove);

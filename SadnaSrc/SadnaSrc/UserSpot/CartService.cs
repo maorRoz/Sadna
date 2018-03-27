@@ -11,11 +11,13 @@ namespace SadnaSrc.UserSpot
         private List<CartItem> cartStorage;
         private static UserServiceDL _userDL;
         private bool _toSave;
+        private int _systemID;
 
-        public CartService()
+        public CartService(int systemID)
         {
             cartStorage = new List<CartItem>();
             _toSave = false;
+            _systemID = systemID;
         }
 
         public void EnableCartSave()
@@ -46,7 +48,7 @@ namespace SadnaSrc.UserSpot
         }
         public void AddToCart(string store,string product,double finalPrice,string sale,int quantity)
         {
-            CartItem toAdd = new CartItem(store, product, finalPrice, sale, quantity);
+            CartItem toAdd = new CartItem(_systemID, product,store, quantity, finalPrice, sale);
             if (cartStorage.Contains(toAdd))
             {
                 IncreaseCartItem(store,product);
