@@ -11,7 +11,9 @@ namespace SadnaSrc.UserSpot
         string EnterSystem();
         string SignUp(string name,string address,string password);
 
-        //   string SignIn();
+        string SignIn();
+
+        void CleanSession(); // only for BlackBox tests
 
     }
 }

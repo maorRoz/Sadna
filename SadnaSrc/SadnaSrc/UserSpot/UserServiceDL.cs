@@ -18,14 +18,17 @@ namespace SadnaSrc.UserSpot
         private List<int> GetAllSystemIDs()
         {
             var ids = new List<int>();
-            var dbReader = SelectFromTable("User", "SystemID");
-            while (dbReader.Read())
+            using (var dbReader = SelectFromTable("User", "SystemID"))
             {
-                if (dbReader.GetValue(0) != null)
+                while (dbReader.Read())
                 {
-                    ids.Add(dbReader.GetInt32(0));
+                    if (dbReader.GetValue(0) != null)
+                    {
+                        ids.Add(dbReader.GetInt32(0));
+                    }
                 }
             }
+
             return ids;
         }
         private void GenerateSystemID()
@@ -50,11 +53,13 @@ namespace SadnaSrc.UserSpot
         //TODO: improve this
         private RegisteredUser findUser(string name)
         {
-            var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "'");
-            while (dbReader.Read())
+            using (var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "'"))
             {
-                return new RegisteredUser(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2), null);
+                while (dbReader.Read())
+                {
+                    return new RegisteredUser(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2), null);
 
+                }
             }
 
             return null;

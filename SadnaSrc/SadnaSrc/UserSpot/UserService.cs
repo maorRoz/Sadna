@@ -18,6 +18,11 @@ namespace SadnaSrc.UserSpot
         {
             userDL = new UserServiceDL(dbConnection);
             systemID = userDL.GetSystemID();
+            ReConnect();
+        }
+
+        public void ReConnect()
+        {
             UserException.SetUser(systemID);
             UserPolicyService.EstablishServiceDL(userDL);
             CartService.EstablishServiceDL(userDL);
@@ -64,7 +69,7 @@ namespace SadnaSrc.UserSpot
                 string encryptedPassword = GetSecuredPassword(password);
                 MarketLog.Log("UserSpot", "User " + systemID + " password has been encrypted successfully!");
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + systemID + " data...");
-                userDL.RegisterUser(name, address, encryptedPassword); // implement search
+                userDL.RegisterUser(name, address, encryptedPassword);
                 user = new RegisteredUser(systemID, name, address, encryptedPassword);
                 MarketLog.Log("UserSpot", "User " + systemID + " sign up to the system has been successfull!");
                 return "Sign up has been successfull!";
@@ -88,6 +93,8 @@ namespace SadnaSrc.UserSpot
 
             return newPasswordString.ToString();
         }
+
+        // only for white box tests
         public void CleanSession()
         {
             userDL.DeleteUser();

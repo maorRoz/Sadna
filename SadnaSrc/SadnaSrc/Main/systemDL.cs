@@ -32,7 +32,8 @@ namespace SadnaSrc.Main
             }
             catch (Exception e)
             {
-                Console.WriteLine("Problem occured in the attempt to save system data in DB, returned error message :" + e.Message);
+                Console.WriteLine("Problem occured in the attempt to save system data in DB, returned error message :" +
+                                  e.Message);
             }
         }
 

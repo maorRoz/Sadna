@@ -13,12 +13,15 @@ namespace UserSpotTests
     public class UseCase1_2_Test
     {
         private UserService userServiceSession;
+        private UserService userServiceSession2;
+        private MarketYard marketSession;
 
         [TestInitialize]
         public void MarketBuilder()
         {
-            var marketSession = new MarketYard();
+            marketSession = new MarketYard();
             userServiceSession = (UserService) marketSession.GetUserService();
+            userServiceSession2 = null;
         }
 
         [TestMethod]
@@ -107,8 +110,14 @@ namespace UserSpotTests
         public void SignUpWithExistedName()
         {
             Assert.IsFalse(MarketException.hasErrorRaised());
-            doSignUp("UseCase1.2Test", "", "");
+            doSignUp("UserSpotTest", "", "");
+            Assert.IsFalse(MarketException.hasErrorRaised());
+            userServiceSession2 = (UserService)marketSession.GetUserService();
+            userServiceSession2.EnterSystem();
+            Assert.IsFalse(MarketException.hasErrorRaised());
+            userServiceSession2.SignUp("UserSpotTest", "", "");
             Assert.IsTrue(MarketException.hasErrorRaised());
+
         }
 
 
@@ -136,9 +145,15 @@ namespace UserSpotTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
+            if (userServiceSession2 != null)
+            {
+                userServiceSession2.CleanSession();
+                userServiceSession.ReConnect();
+            }
             userServiceSession.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
+            marketSession.Exit();
         }
 
         private void doSignUp(string name, string address, string password)
