@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BlackBox
 {
 	[TestClass]
-	class UseCase_1
+	public class UseCase1_1
 	{
 		private UserBridge bridge;
 
@@ -22,7 +22,7 @@ namespace BlackBox
 		public void successGuestEntry()
 		{
 
-			Assert.Equals(bridge.EnterSystem(), "You've been entered the system successfully!");
+			Assert.AreEqual(bridge.EnterSystem(), "You've been entered the system successfully!");
 		}
 
 	}
