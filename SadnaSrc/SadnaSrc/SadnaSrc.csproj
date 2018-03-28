@@ -70,6 +70,7 @@
     <Compile Include="Main\MarketLog.cs" />
     <Compile Include="Main\MarketYard.cs" />
     <Compile Include="Main\Program.cs" />
+    <Compile Include="Main\MarketAnswer.cs" />
     <Compile Include="Main\systemDL.cs" />
     <Compile Include="OrderPool\Order.cs" />
     <Compile Include="OrderPool\OrderException.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="UserSpot\IUserService.cs" />
     <Compile Include="UserSpot\RegisteredUser.cs" />
     <Compile Include="UserSpot\StoreAdminPolicy.cs" />
+    <Compile Include="UserSpot\UserAnswer.cs" />
     <Compile Include="UserSpot\UserException.cs" />
     <Compile Include="UserSpot\UserPolicy.cs" />
     <Compile Include="UserSpot\UserPolicyService.cs" />

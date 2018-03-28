@@ -64,7 +64,7 @@ namespace SadnaSrc.UserSpot
         {
             if (IsUserExist(name))
             {
-                throw new UserException("register action has been requested while there" +
+                throw new UserException(SignUpStatus.TakenName,"register action has been requested while there" +
                                         " is already a User with the given name in the system!");
             }
             string[] columnNames = { "Name" , "Address" , "Password" };
@@ -127,6 +127,59 @@ namespace SadnaSrc.UserSpot
                 new [] { "@idParam", "@nameParam", "@addressParam", "@passParam" }, user.ToData());
         }
 
+        private string[] UserNamesInSystem()
+        {
+            List<string> userNames = new List<string>();
+            using (var dbReader = SelectFromTable("User", "*"))
+            {
+                while (dbReader.Read())
+                {
+                    userNames.Add(dbReader.GetString(1));
+                }
+
+            }
+
+            return userNames.ToArray();
+        }
+
+        private bool IsSimilar(string str1, string str2)
+        {
+            if (str1.Length != str2.Length)
+            {
+                return false;
+            }
+
+            int same = 0;
+            for (int i = 0; i < str1.Length; i++)
+            {
+                if (str1[i] != str2[i])
+                {
+                    same--;
+                }
+            }
+            return same >= -2;
+        }
+        private string FindSimilar(string name)
+        {
+            string[] userNames = UserNamesInSystem();
+            string similarName = "";
+            foreach (string userName in userNames)
+            {
+                if (similarName.Equals(userName))
+                {
+                    similarName = "";
+                    break;
+                }
+
+                if (IsSimilar(name, userName))
+                {
+                    similarName = userName;
+                }
+            }
+
+            return similarName;
+        }
+
         private object[] FindRegisteredUserData(string name, string password)
         {
             using (var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "' AND password = '"+ password +"'"))
@@ -135,8 +188,15 @@ namespace SadnaSrc.UserSpot
                 {
                     return new object[] {dbReader.GetInt32(0), dbReader.GetString(2)};
                 }
-                throw new UserException("sign in action has been requested while there" +
-                                        " is no User with the given name and password in the system!");
+
+                string similarName = FindSimilar(name);
+                if (similarName.Length > 0)
+                {
+                    throw new UserException(SignInStatus.MistakeTipGiven, "No user were found by that name, " +
+                                                                      "have you meant to enter " + similarName + "?");
+                }
+                throw new UserException(SignInStatus.NoUserFound,"sign in action has been requested while there" +
+                                        " is no User with the given name or password in the system! ");
 
             }
         }

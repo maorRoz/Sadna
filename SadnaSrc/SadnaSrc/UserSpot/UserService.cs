@@ -29,12 +29,12 @@ namespace SadnaSrc.UserSpot
             UserPolicyService.EstablishServiceDL(userDL);
             CartService.EstablishServiceDL(userDL);
         }
-        public string EnterSystem()
+        public MarketAnswer EnterSystem()
         {
             MarketLog.Log("UserSpot", "User " + systemID + " attempting to enter the system...");
             user = new User(systemID);
             MarketLog.Log("UserSpot","User "+systemID+" has entered the system!");
-            return "You've been entered the system successfully!";
+            return new UserAnswer(EnterSystemStatus.Success,"You've been entered the system successfully!");
         }
 
         public User GetUser()
@@ -44,25 +44,26 @@ namespace SadnaSrc.UserSpot
 
         private void ApproveEnetered(string action)
         {
-            if (user == null)
+            if (user != null) return;
+            if (action.Equals("sign up"))
             {
-                throw new UserException(
-                    action + " action has been requested by user which hasn't fully entered the system yet!");
+                throw new UserException(SignUpStatus.DidntEnterSystem,
+                    "sign up action has been requested by user which hasn't fully entered the system yet!");
             }
+            throw new UserException(SignInStatus.DidntEnterSystem,
+                "sign in action has been requested by user which hasn't fully entered the system yet!");
         }
 
         private void ApproveGuest(string action)
         {
-            if (user == null)
+            if (user.GetPolicies().Length <= 0) return;
+            if (action.Equals("sign up"))
             {
-                throw new UserException(
-                    action + " action has been requested by user which hasn't fully entered the system yet!");
+                throw new UserException(SignUpStatus.SignedUpAlready,
+                    "sign up action has been requested by registered user!");
             }
-
-            if (user.GetPolicies().Length > 0)
-            {
-                throw new UserException(action + " action has been requested by registered user!");
-            }
+            throw new UserException(SignInStatus.SignedInAlready,
+                "sign in action has been requested by registered user!");
         }
 
         private void ApproveSignUp(string name, string address, string password)
@@ -71,11 +72,11 @@ namespace SadnaSrc.UserSpot
             ApproveGuest("sign up");
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(password))
             {
-                throw new UserException(
+                throw new UserException(SignUpStatus.NullEmptyDataGiven,
                     "sign up action has been requested while some required fields are still missing!");
             }
         }
-        public string SignUp(string name, string address, string password)
+        public MarketAnswer SignUp(string name, string address, string password)
         {
             MarketLog.Log("UserSpot", "User " + systemID + " attempting to sign up to the system...");
             try
@@ -85,12 +86,12 @@ namespace SadnaSrc.UserSpot
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + systemID + " data...");
                 user = userDL.RegisterUser(name, address, encryptedPassword,user.GetCart());
                 MarketLog.Log("UserSpot", "User " + systemID + " sign up to the system has been successfull!");
-                return "Sign up has been successfull!";
+                return new UserAnswer(SignInStatus.Success,"Sign up has been successfull!");
             }
             catch (UserException e)
             {
                 MarketLog.Log("UserSpot","User "+ systemID +" has failed to sign up. Error message has been created!");
-                return e.GetErrorMessage();
+                return new UserAnswer((SignUpStatus)e.Status,e.GetErrorMessage());
             }
         }
 
@@ -100,12 +101,12 @@ namespace SadnaSrc.UserSpot
             ApproveGuest("sign in");
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(password))
             {
-                throw new UserException(
+                throw new UserException(SignInStatus.NullEmptyDataGiven,
                     "sign in action has been requested while some required fields are still missing!");
             }
         }
 
-        public string SignIn(string name, string password)
+        public MarketAnswer SignIn(string name, string password)
         {
             MarketLog.Log("UserSpot", "User " + systemID + " attempting to sign in the system...");
             try
@@ -118,13 +119,13 @@ namespace SadnaSrc.UserSpot
                 systemID = user.SystemID;
                 MarketLog.Log("UserSpot", "User " + oldID + " sign in to the system has been successfull!");
                 MarketLog.Log("UserSpot", "User " + oldID + " is now recognized as Registered User " + systemID);
-                return "Sign in has been successfull!";
+                return new UserAnswer(SignInStatus.Success, "Sign in has been successfull!");
 
             }
             catch (UserException e)
             {
                 MarketLog.Log("UserSpot", "User " + systemID + " has failed to sign in. Error message has been created!");
-                return e.GetErrorMessage();
+                return new UserAnswer((SignInStatus)e.Status, e.GetErrorMessage());
             }
         }
 

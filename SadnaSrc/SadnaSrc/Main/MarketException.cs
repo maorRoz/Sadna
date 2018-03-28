@@ -13,15 +13,17 @@ namespace SadnaSrc.Main
         private static SQLiteConnection _dbConnection;
         private static List<string> publishedErrorIDs;
         private string errorMessage;
-        public MarketException(string message)
+        public int  Status { get; }
+        public MarketException(int status,string message)
         {
             var insertRequest = "INSERT INTO System_Errors (ErrorID,ModuleName,Description) VALUES (@idParam,@moduleParam,@descriptionParam)";
             var commandDb = new SQLiteCommand(insertRequest, _dbConnection);
             string errorID = GenerateErrorID();
-            errorMessage = GetErrorMessage(message);
+            Status = status;
+            errorMessage = message;
             commandDb.Parameters.AddWithValue("@idParam", errorID);
             commandDb.Parameters.AddWithValue("@moduleParam", GetModuleName());
-            commandDb.Parameters.AddWithValue("@descriptionParam", errorMessage);
+            commandDb.Parameters.AddWithValue("@descriptionParam", WrapErrorMessageForDb(errorMessage));
             try
             {
                 commandDb.ExecuteNonQuery();
@@ -56,7 +58,7 @@ namespace SadnaSrc.Main
             return "MarketYard";
         }
 
-        protected virtual string GetErrorMessage(string message)
+        protected virtual string WrapErrorMessageForDb(string message)
         {
             return "General Error: " + message;
         }
