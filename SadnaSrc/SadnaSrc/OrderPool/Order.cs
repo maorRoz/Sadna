@@ -87,5 +87,16 @@ namespace SadnaSrc.OrderPool
             _totalPrice = acc;
         }
 
+        public object[] ToData()
+        {
+            object[] ret = { _orderId, _userName, _shippingAddress, _totalPrice };
+            
+            return ret;
+        }
+
+        public void SetShippingAddress(string shippingAddress)
+        {
+            _shippingAddress = shippingAddress;
+        }
     }
 }
