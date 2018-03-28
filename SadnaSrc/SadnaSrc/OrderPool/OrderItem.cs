@@ -28,6 +28,7 @@ namespace SadnaSrc.OrderPool
             _store = item.GetStore();
             _name = item.GetName();
             _quantity = item.GetQuantity();
+            _price = 5;
 
 
         }

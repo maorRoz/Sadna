@@ -45,7 +45,54 @@ namespace SadnaSrc.OrderPool
 
         public void AddOrder(Order order)
         {
+            string[] valuesNames = { "@idParam", "@nameParam", "@addressParam", "@priceParam" };
+            object[] values = order.ToData();
+            InsertTable("Order", "ID,Username,ShippingAddress,TotalPrice", valuesNames, values);
 
+            foreach (OrderItem item in order.GetItems())
+            {
+                string[] valuesNames2 = { "@idParam", "@storeParam", "@nameParam" };
+                object[] values2 = { order.GetOrderID(), item.GetStore(), item.GetName()};
+                InsertTable("OrderItemsToOrders", "OrderID,Store,Name", valuesNames2, values2);
+
+                string[] valuesNames3 = {"@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
+                object[] values3 = { item.GetStore(), item.GetName(), item.GetPrice(),item.GetQuantity() };
+                InsertTable("OrderItem", "Store,Name,Price,Quantity", valuesNames3, values3);
+            }
+
+        }
+
+        public void RemoveOrder(int orderId)
+        {
+            if (FindOrder(orderId) == null)
+            {
+                throw new OrderException("no user with id: "+ orderId + " in the Order database.");
+            }
+            List<OrderItem> list = FindOrderItemsOfOrder(orderId);
+            foreach (OrderItem item in list)
+            {
+                DeleteFromTable("OrderItem", "Store = '" + item.GetStore() + "' AND Name = '"+ item.GetName() +"'");
+            }
+            DeleteFromTable("OrderItemsToOrders", "OrderID = " + orderId);
+            DeleteFromTable("Order", "ID = " + orderId);
+
+        }
+
+        public void AddItemToOrder(int orderId, OrderItem item)
+        {
+            string[] valuesNames2 = { "@idParam", "@storeParam", "@nameParam" };
+            object[] values2 = { orderId, item.GetStore(), item.GetName() };
+            InsertTable("OrderItemsToOrders", "OrderID,Store,Name", valuesNames2, values2);
+
+            string[] valuesNames3 = { "@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
+            object[] values3 = { item.GetStore(), item.GetName(), item.GetPrice(), item.GetQuantity() };
+            InsertTable("OrderItem", "Store,Name,Price,Quantity", valuesNames3, values3);
+        }
+
+        public void RemoveItemFromOrder(int orderId, string name, string store)
+        {
+            DeleteFromTable("OrderItemsToOrders", "OrderID = " + orderId + " AND Name = '"+ name +"' AND Store = '"+ store +"'");
+            DeleteFromTable("OrderItem","Name = '" + name + "' AND Store = '" + store + "'");
         }
     }
 }
