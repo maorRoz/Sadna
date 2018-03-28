@@ -19,7 +19,7 @@ namespace UserSpotTests
         {
             marketSession = new MarketYard();
             userServiceSession = (UserService)marketSession.GetUserService();
-            userServiceSession.EnterSystem();
+            Assert.AreEqual((int) EnterSystemStatus.Success, userServiceSession.EnterSystem().Status);
             generatedGuest = userServiceSession.GetUser();
         }
 

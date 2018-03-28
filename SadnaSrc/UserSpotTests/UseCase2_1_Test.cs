@@ -46,56 +46,56 @@ namespace UserSpotTests
         [TestMethod]
         public void MissingCredentialsSignInTest1()
         {
-            MissingBadCredentialsSignInTest("MaorLogin", "Here 4", "123", "MaorLogin", "");
+            MissingCredentialsSignInTest("MaorLogin", "Here 4", "123", "MaorLogin", "");
         }
 
         [TestMethod]
         public void MissingCredentialsSignInTest2()
         {
-            MissingBadCredentialsSignInTest("MaorLogin", "Here 4", "123", "", "");
+            MissingCredentialsSignInTest("MaorLogin", "Here 4", "123", "", "");
         }
 
 
         [TestMethod]
         public void MissingCredentialsSignInTest3()
         {
-            MissingBadCredentialsSignInTest("MaorLogin", "Here 4", "123", null, "123");
+            MissingCredentialsSignInTest("MaorLogin", "Here 4", "123", null, "123");
         }
 
         [TestMethod]
         public void MissingCredentialsSignInTest4()
         {
-            MissingBadCredentialsSignInTest("MaorLogin", "Here 4", "123", null, "");
+            MissingCredentialsSignInTest("MaorLogin", "Here 4", "123", null, "");
         }
 
         [TestMethod]
         public void MissingCredentialsSignInTest5()
         {
-            MissingBadCredentialsSignInTest("MaorLogin", "Here 4", "123", "", null);
+            MissingCredentialsSignInTest("MaorLogin", "Here 4", "123", "", null);
         }
 
         [TestMethod]
         public void BadCredentialsSignInTest1()
         {
-            MissingBadCredentialsSignInTest("MaorLogin", "Here 4", "123", "MaorLogin", "124");
+            BadCredentialsSignInTest("MaorLogin", "Here 4", "123", "MaorLogin", "124");
         }
 
         [TestMethod]
         public void BadCredentialsSignInTest2()
         {
-            MissingBadCredentialsSignInTest("MaorLogin", "Here 4", "123", "MaorLogi1n", "123");
+            BadCredentialsSignInTest("MaorLogin", "Here 4", "123", "MaorLogi1n", "123");
         }
 
         [TestMethod]
         public void BadCredentialsSignInTest3()
         {
-            MissingBadCredentialsSignInTest("MaorLogin", "Here 4", "123", "MaorLogi1n", "124");
+            BadCredentialsSignInTest("MaorLogin", "Here 4", "123", "MaorLogi1n", "124");
         }
         [TestMethod]
         public void DidntEnteredSystemTest()
         {
             Assert.IsFalse(MarketException.hasErrorRaised());
-            userServiceSignInSession.SignIn("Maor","123");
+            Assert.AreEqual((int)SignInStatus.DidntEnterSystem, userServiceSignInSession.SignIn("Maor","123").Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
 
         }
@@ -106,7 +106,7 @@ namespace UserSpotTests
             Assert.IsFalse(MarketException.hasErrorRaised());
             userServiceSignInSession.EnterSystem();
             Assert.IsFalse(MarketException.hasErrorRaised());
-            userServiceSignInSession.SignIn("Maor", "123");
+            Assert.AreEqual((int)SignInStatus.NoUserFound, userServiceSignInSession.SignIn("Maor", "123").Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
 
         }
@@ -135,10 +135,11 @@ namespace UserSpotTests
         public void SignInAgainTest()
         {
             DoSignUp("Maor", "Here 3", "123");
-            Assert.IsFalse(MarketException.hasErrorRaised());
             DoSignIn("Maor","123");
             Assert.IsFalse(MarketException.hasErrorRaised());
-            userServiceSignInSession.SignIn("Maor", "123");
+            Assert.AreEqual((int) SignInStatus.SignedInAlready, userServiceSignInSession.SignIn("Maor", "123").Status);
+            Assert.IsTrue(MarketException.hasErrorRaised());
+
         }
 
         [TestMethod]
@@ -209,22 +210,33 @@ namespace UserSpotTests
         private void DoSignIn(string name, string password)
         {
             userServiceSignInSession.EnterSystem();
-            userServiceSignInSession.SignIn(name, password);
+            Assert.AreEqual((int)SignInStatus.Success, userServiceSignInSession.SignIn(name, password).Status);
         }
         private void DoSignUp(string name,string address , string password)
         {
             userServiceSignUpSession = (UserService)marketSession.GetUserService();
             userServiceSignUpSession.EnterSystem();
-            userServiceSignUpSession.SignUp(name, address, password);
+            Assert.AreEqual((int) SignUpStatus.Success, userServiceSignUpSession.SignUp(name, address, password).Status);
             userServiceSignInSession.ReConnect();
 
         }
-        private void MissingBadCredentialsSignInTest(string name, string address,
+        private void MissingCredentialsSignInTest(string name, string address,
             string password, string loginName,string loginPassword)
         {
             DoSignUp(name,address,password);
             Assert.IsFalse(MarketException.hasErrorRaised());
-            DoSignIn(loginName, loginPassword);
+            userServiceSignInSession.EnterSystem();
+            Assert.AreEqual((int) SignInStatus.NullEmptyDataGiven ,userServiceSignInSession.SignIn(loginName, loginPassword).Status);
+            Assert.IsTrue(MarketException.hasErrorRaised());
+        }
+
+        private void BadCredentialsSignInTest(string name, string address,
+            string password, string loginName, string loginPassword)
+        {
+            DoSignUp(name, address, password);
+            Assert.IsFalse(MarketException.hasErrorRaised());
+            userServiceSignInSession.EnterSystem();
+            Assert.AreEqual((int)SignInStatus.NoUserFound, userServiceSignInSession.SignIn(loginName, loginPassword).Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
