@@ -39,7 +39,6 @@ namespace SadnaSrc.UserSpot
         MistakeTipGiven,
         DidntEnterSystem,
         SignedInAlready,
-        SignedUpAlready,
         NoUserFound,
         NullEmptyDataGiven,
     }

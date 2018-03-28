@@ -28,7 +28,7 @@ namespace UserSpotTests
         [TestMethod]
         public void GoodLoginTest1()
         {
-            DoSignUpSignIn("MaorLogin","Here 4","123");
+            DoSignUpSignIn("MaorLogin", "Here 4", "123");
             Assert.IsFalse(MarketException.hasErrorRaised());
         }
 
@@ -124,7 +124,7 @@ namespace UserSpotTests
         {
             DoSignUp("Maor", "Here 3", "123");
             userServiceSignInSession.EnterSystem();
-            userServiceSignInSession.SignIn("Maor", "123");
+            Assert.Equals(userServiceSignUpSession.SignIn("Maor", "123").Status, SignInStatus.Success);
             RegisteredUser user = (RegisteredUser)userServiceSignInSession.GetUser();
             UserPolicy[] expectedPolicies = user.GetPolicies();
             Assert.AreEqual(1, expectedPolicies.Length);
@@ -146,7 +146,8 @@ namespace UserSpotTests
         {
             DoSignUp("Maor", "Here 3", "123");
             Assert.IsFalse(MarketException.hasErrorRaised());
-            userServiceSignUpSession.SignIn("Maor", "123");
+            Assert.Equals(userServiceSignUpSession.SignIn("Maor", "123").Status, SignInStatus.SignedInAlready);
+            Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
         [TestMethod]
