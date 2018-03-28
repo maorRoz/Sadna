@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
@@ -107,7 +108,7 @@ namespace SadnaSrc.UserSpot
             }
             if (ret == null)
             {
-                throw new UserException("There is no cart item to be modified");
+                throw new UserException(MarketError.LogicError,"There is no cart item to be modified");
             }
             cartStorage.Remove(ret);
             return ret;

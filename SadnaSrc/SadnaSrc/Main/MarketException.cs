@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
+    public enum MarketError
+    {
+        DbError,
+        LogicError
+    }
     public class MarketException : Exception
     {
         private static SQLiteConnection _dbConnection;
@@ -16,10 +21,22 @@ namespace SadnaSrc.Main
         public int  Status { get; }
         public MarketException(int status,string message)
         {
+            initiateException(message);
+            Status = status;
+
+        }
+
+        public MarketException(MarketError error,string message)
+        {
+            Status = (int)error;
+            initiateException(message);
+        }
+
+        private void initiateException(string message)
+        {
             var insertRequest = "INSERT INTO System_Errors (ErrorID,ModuleName,Description) VALUES (@idParam,@moduleParam,@descriptionParam)";
             var commandDb = new SQLiteCommand(insertRequest, _dbConnection);
             string errorID = GenerateErrorID();
-            Status = status;
             errorMessage = message;
             commandDb.Parameters.AddWithValue("@idParam", errorID);
             commandDb.Parameters.AddWithValue("@moduleParam", GetModuleName());
@@ -31,9 +48,8 @@ namespace SadnaSrc.Main
             }
             catch (Exception e)
             {
-                Console.WriteLine("Problem occured in the attempt to save system error in DB, returned error message :"+e.Message);
+                Console.WriteLine("Problem occured in the attempt to save system error in DB, returned error message :" + e.Message);
             }
-
         }
 
         public static void InsertDbConnector(SQLiteConnection dbConnection)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
@@ -59,7 +60,7 @@ namespace SadnaSrc.UserSpot
             if (state == UserPolicy.State.StoreManager)
             {
                 throw new UserException(
-                    "Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
+                    MarketError.LogicError,"Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
             }
             _userDL.SaveUserPolicy(new UserPolicy(state));
             policies.Add(new UserPolicy(state));

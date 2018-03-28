@@ -130,11 +130,14 @@ namespace SadnaSrc.UserSpot
         private string[] UserNamesInSystem()
         {
             List<string> userNames = new List<string>();
-            using (var dbReader = SelectFromTable("User", "*"))
+            using (var dbReader = SelectFromTable("User", "Name"))
             {
                 while (dbReader.Read())
                 {
-                    userNames.Add(dbReader.GetString(1));
+                    if (!dbReader.IsDBNull(0))
+                    {
+                        userNames.Add(dbReader.GetString(0));
+                    }
                 }
 
             }
@@ -165,7 +168,7 @@ namespace SadnaSrc.UserSpot
             string similarName = "";
             foreach (string userName in userNames)
             {
-                if (similarName.Equals(userName))
+                if (name.Equals(userName))
                 {
                     similarName = "";
                     break;

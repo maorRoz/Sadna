@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
@@ -67,7 +68,7 @@ namespace SadnaSrc.UserSpot
                 return StoreAction.StoreOwner;
             }
 
-            throw new UserException("Procedure to cast string into store action has failed! there is no state by that name...");
+            throw new UserException(MarketError.LogicError, "Procedure to cast string into store action has failed! there is no state by that name...");
         }
     }
 }

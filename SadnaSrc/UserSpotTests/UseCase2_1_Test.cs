@@ -114,7 +114,7 @@ namespace UserSpotTests
         [TestMethod]
         public void SignedInUserCartisEmptyTest()
         {
-            DoSignUp("Maor", "Here 3", "123");
+            DoSignUpSignIn("Maor", "Here 3", "123");
             RegisteredUser user = (RegisteredUser)userServiceSignInSession.GetUser();
             Assert.AreEqual(0, user.GetCart().Length);
         }
@@ -124,7 +124,7 @@ namespace UserSpotTests
         {
             DoSignUp("Maor", "Here 3", "123");
             userServiceSignInSession.EnterSystem();
-            Assert.Equals(userServiceSignUpSession.SignIn("Maor", "123").Status, SignInStatus.Success);
+            Assert.AreEqual((int) SignInStatus.Success, userServiceSignInSession.SignIn("Maor", "123").Status);
             RegisteredUser user = (RegisteredUser)userServiceSignInSession.GetUser();
             UserPolicy[] expectedPolicies = user.GetPolicies();
             Assert.AreEqual(1, expectedPolicies.Length);
@@ -146,7 +146,7 @@ namespace UserSpotTests
         {
             DoSignUp("Maor", "Here 3", "123");
             Assert.IsFalse(MarketException.hasErrorRaised());
-            Assert.Equals(userServiceSignUpSession.SignIn("Maor", "123").Status, SignInStatus.SignedInAlready);
+            Assert.AreEqual((int)SignInStatus.SignedInAlready, userServiceSignUpSession.SignIn("Maor", "123").Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
@@ -166,6 +166,38 @@ namespace UserSpotTests
             Assert.AreEqual(expectedPolicies[0].GetState(), UserPolicy.State.RegisteredUser);
             Assert.AreEqual(expectedPolicies[1].GetState(), UserPolicy.State.SystemAdmin);
         }
+
+        [TestMethod]
+        public void GettingErrorTipTest1()
+        {
+            DoSignUp("Maor","Here 3","123");
+            userServiceSignInSession.EnterSystem();
+            Assert.AreEqual((int)SignInStatus.MistakeTipGiven, userServiceSignInSession.SignIn("Mkor", "123").Status);
+        }
+
+        [TestMethod]
+        public void GettingErrorTipTest2()
+        {
+            DoSignUp("Maor", "Here 3", "123");
+            userServiceSignInSession.EnterSystem();
+            Assert.AreEqual((int)SignInStatus.MistakeTipGiven, userServiceSignInSession.SignIn("Mktr", "123").Status);
+        }
+        [TestMethod]
+        public void NotGettingErrorTipTest1()
+        {
+            DoSignUp("Maor", "Here 3", "123");
+            userServiceSignInSession.EnterSystem();
+            Assert.AreEqual((int)SignInStatus.NoUserFound, userServiceSignInSession.SignIn("Mktf", "123").Status);
+        }
+
+        [TestMethod]
+        public void NotGettingErrorTipTest2()
+        {
+            DoSignUp("Maor", "Here 3", "123");
+            userServiceSignInSession.EnterSystem();
+            Assert.AreEqual((int)SignInStatus.NoUserFound, userServiceSignInSession.SignIn("Mkor_", "123").Status);
+        }
+
 
 
         private void DoSignUpSignIn(string name, string address, string password)
@@ -199,6 +231,7 @@ namespace UserSpotTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
+            userServiceSignUpSession?.CleanSession();
             userServiceSignInSession.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();

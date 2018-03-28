@@ -11,6 +11,8 @@ namespace SadnaSrc.UserSpot
     class UserException : MarketException
     {
         private static int _systemID = -1;
+
+        public UserException(MarketError error,string message) : base(error, message) { }
         public UserException(EnterSystemStatus status, string message) : base((int) status, message)
         {
         }

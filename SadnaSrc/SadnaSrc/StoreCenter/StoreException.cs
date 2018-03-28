@@ -9,7 +9,7 @@ namespace SadnaSrc.StoreCenter
 {
     class StoreException : MarketException
     {
-        public StoreException(string message) : base(message)
+        public StoreException(int status, string message) : base(status, message)
         {
         }
 
@@ -19,7 +19,7 @@ namespace SadnaSrc.StoreCenter
             return "StoreCenter";
         }
 
-        protected override string GetErrorMessage(string message)
+        protected override string WrapErrorMessageForDb(string message)
         {
             // TODO: implement a better message wrapper like in UserException
             return " " + message;
