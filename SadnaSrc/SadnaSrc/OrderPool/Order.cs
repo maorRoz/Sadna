@@ -21,20 +21,21 @@ namespace SadnaSrc.OrderPool
         public string GetUserName() { return _userName; }
         public int GetOrderID() { return _orderId; }
 
-        public Order(string userName)
+        public Order(int orderId, string userName)
         {
             _userName = userName;
-            _shippingAddress = "";
+            _shippingAddress = ""; // TODO maybe change to other default value
             _items = new List<OrderItem>();
-            _orderId = new Random().Next(100000, 999999);
+            _orderId = orderId;
         }
 
-        public Order(string userName, string shippingAddress)
+        public Order(int orderId, string userName, string shippingAddress)
         {
             _userName = userName;
             _shippingAddress = shippingAddress;
             _items = new List<OrderItem>();
-            _orderId = new Random().Next(100000, 999999);
+            //_orderId = new Random().Next(100000, 999999);
+            _orderId = orderId;
         }
 
         public bool CheckOrderItem(string name,string store)
@@ -73,6 +74,17 @@ namespace SadnaSrc.OrderPool
                 _totalPrice -= item.GetPrice();
 
             }
+        }
+
+        public void ComputeTotalPrice()
+        {
+            double acc = 0;
+            foreach (OrderItem item in _items)
+            {
+                acc += item.GetPrice();
+            }
+
+            _totalPrice = acc;
         }
 
     }
