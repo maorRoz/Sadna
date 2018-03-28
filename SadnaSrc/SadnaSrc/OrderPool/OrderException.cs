@@ -9,7 +9,7 @@ namespace SadnaSrc.OrderPool
 {
     class OrderException : MarketException
     {
-        public OrderException(string message) : base(message)
+        public OrderException(int status,string message) : base(status,message)
         {
         }
 
@@ -19,7 +19,7 @@ namespace SadnaSrc.OrderPool
             return "OrderPool";
         }
 
-        protected override string GetErrorMessage(string message)
+        protected override string WrapErrorMessageForDb(string message)
         {
             // TODO: implement a better message wrapper like in UserException
             return " " + message;

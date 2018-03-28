@@ -9,7 +9,7 @@ namespace SadnaSrc.SupplyPoint
 {
     class SupplyException : MarketException
     {
-        public SupplyException(string message) : base(message)
+        public SupplyException(int status, string message) : base(status, message)
         {
         }
 
@@ -19,7 +19,7 @@ namespace SadnaSrc.SupplyPoint
             return "SupplyPoint";
         }
 
-        protected override string GetErrorMessage(string message)
+        protected override string WrapErrorMessageForDb(string message)
         {
             // TODO: implement a better message wrapper like in UserException
             return " " + message;

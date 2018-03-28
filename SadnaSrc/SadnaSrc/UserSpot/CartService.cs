@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class CartService
+    public class CartService
     {
         private List<CartItem> cartStorage;
         private static UserServiceDL _userDL;
         private bool _toSave;
+        private int _systemID;
 
-        public CartService(bool toSave)
+        public CartService(int systemID)
         {
             cartStorage = new List<CartItem>();
-            _toSave = toSave;
+            _toSave = false;
+            _systemID = systemID;
         }
 
         public void EnableCartSave()
@@ -32,9 +35,21 @@ namespace SadnaSrc.UserSpot
             return cartStorage.ToArray();
         }
 
+        public void LoadCart(CartItem[] loadedStorage)
+        {
+            foreach(CartItem item in loadedStorage)
+            {
+                cartStorage.Add(item);
+            }
+        }
+
+        public void SaveCart(CartItem[] toSaveStorage)
+        {
+                _userDL.SaveCartItem(toSaveStorage);
+        }
         public void AddToCart(string store,string product,double finalPrice,string sale,int quantity)
         {
-            CartItem toAdd = new CartItem(store, product, finalPrice, sale, quantity);
+            CartItem toAdd = new CartItem(_systemID, product,store, quantity, finalPrice, sale);
             if (cartStorage.Contains(toAdd))
             {
                 IncreaseCartItem(store,product);
@@ -44,7 +59,7 @@ namespace SadnaSrc.UserSpot
                 cartStorage.Add(toAdd);
                 if (_toSave)
                 {
-                    _userDL.SaveCartItem(toAdd);
+                    _userDL.SaveCartItem(new []{toAdd});
                 }
             }            
         }
@@ -93,7 +108,7 @@ namespace SadnaSrc.UserSpot
             }
             if (ret == null)
             {
-                throw new UserException("There is no cart item to be modified");
+                throw new UserException(MarketError.LogicError,"There is no cart item to be modified");
             }
             cartStorage.Remove(ret);
             return ret;

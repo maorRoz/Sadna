@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
@@ -27,14 +28,14 @@ namespace SadnaSrc.UserSpot
 
         public void AddStorePolicy(string store, StoreAdminPolicy.StoreAction storeAction)
         {
-            StoreAdminPolicy toAdd = new StoreAdminPolicy(store,storeAction); 
+            StoreAdminPolicy toAdd = new StoreAdminPolicy(storeAction, store); 
             policies.Add(toAdd);
             _userDL.SaveUserPolicy(toAdd);
         }
 
         public void UpdateStorePolicies(string store,List<StoreAdminPolicy.StoreAction> actionsToAdd)
         {
-            //TODO: check if store exist here on in DB query(with WHERE or something)
+            //TODO: check if store exist here or in DB query(with WHERE or something)
             foreach (StoreAdminPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreAdminPolicy.StoreAction)))
             {
                 RemoveStorePolicy(store, oldAction);
@@ -47,7 +48,7 @@ namespace SadnaSrc.UserSpot
         }
         private void RemoveStorePolicy(string store, StoreAdminPolicy.StoreAction storeAction)
         {
-            StoreAdminPolicy toRemove = new StoreAdminPolicy(store,storeAction);
+            StoreAdminPolicy toRemove = new StoreAdminPolicy(storeAction,store);
             if (policies.Remove(toRemove))
             {
                 _userDL.DeleteUserPolicy(toRemove);
@@ -59,7 +60,7 @@ namespace SadnaSrc.UserSpot
             if (state == UserPolicy.State.StoreManager)
             {
                 throw new UserException(
-                    "Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
+                    MarketError.LogicError,"Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
             }
             _userDL.SaveUserPolicy(new UserPolicy(state));
             policies.Add(new UserPolicy(state));

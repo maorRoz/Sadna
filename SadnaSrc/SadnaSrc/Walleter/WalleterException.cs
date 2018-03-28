@@ -9,7 +9,7 @@ namespace SadnaSrc.Walleter
 {
     class WalleterException : MarketException
     {
-        public WalleterException(string message) : base(message)
+        public WalleterException(int status,string message) : base(status,message)
         {
         }
 
@@ -19,7 +19,7 @@ namespace SadnaSrc.Walleter
             return "Walleter";
         }
 
-        protected override string GetErrorMessage(string message)
+        protected override string WrapErrorMessageForDb(string message)
         {
             // TODO: implement a better message wrapper like in UserException
             return " " + message;

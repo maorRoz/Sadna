@@ -32,7 +32,8 @@ namespace SadnaSrc.Main
             }
             catch (Exception e)
             {
-                Console.WriteLine("Problem occured in the attempt to save system data in DB, returned error message :" + e.Message);
+                throw new MarketException(MarketError.DbError,"Problem occured in the attempt to save system data in DB, returned error message :" +
+                                  e.Message);
             }
         }
 
@@ -69,7 +70,7 @@ namespace SadnaSrc.Main
             }
             catch (Exception e)
             {
-                Console.WriteLine("Problem occured in the attempt to update system data in DB, returned error message :" + e.Message);
+                throw new MarketException(MarketError.DbError,"Problem occured in the attempt to update system data in DB, returned error message :" + e.Message);
             }
         }
 
@@ -83,7 +84,7 @@ namespace SadnaSrc.Main
             }
             catch (Exception e)
             {
-                Console.WriteLine("Problem occured in the attempt to delete system data in DB, returned error message :" + e.Message);
+                throw new MarketException(MarketError.DbError,"Problem occured in the attempt to delete system data in DB, returned error message :" + e.Message);
             }
 
         }

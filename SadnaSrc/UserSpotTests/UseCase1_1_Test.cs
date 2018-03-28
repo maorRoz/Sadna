@@ -12,13 +12,14 @@ namespace UserSpotTests
     {
         private UserService userServiceSession;
         private User generatedGuest;
+        private MarketYard marketSession;
 
         [TestInitialize]
         public void MarketBuilder()
         {
-            var marketSession = new MarketYard();
+            marketSession = new MarketYard();
             userServiceSession = (UserService)marketSession.GetUserService();
-            userServiceSession.EnterSystem();
+            Assert.AreEqual((int) EnterSystemStatus.Success, userServiceSession.EnterSystem().Status);
             generatedGuest = userServiceSession.GetUser();
         }
 
@@ -48,6 +49,7 @@ namespace UserSpotTests
             userServiceSession.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
+            marketSession.Exit();
         }
     }
 }

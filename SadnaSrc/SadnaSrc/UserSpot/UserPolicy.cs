@@ -34,6 +34,5 @@ namespace SadnaSrc.UserSpot
                     return "RegisteredUser";
             }
         }
-
     }
 }
