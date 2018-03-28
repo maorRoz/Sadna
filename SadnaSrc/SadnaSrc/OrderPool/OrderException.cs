@@ -22,7 +22,7 @@ namespace SadnaSrc.OrderPool
         protected override string WrapErrorMessageForDb(string message)
         {
             // TODO: implement a better message wrapper like in UserException
-            return " " + message;
+            return "OrderException: " + message;
         }
     }
 }
