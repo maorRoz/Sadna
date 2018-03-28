@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.OrderPool
 {
-    class OrderService
+    public class OrderService
     {
         // TODO add support to external systems once there is more clarification about the systems. !!! IMPORTANT !!!
         private string _userName;
         private readonly OrderPoolDL _orderDL;
         private List<Order> _orders;
         private bool _toSave;
-        private string _shippingAddress;
+
+        public string getUsername() {  return _userName;}
+        public List<Order> getOrders() { return  _orders; }
 
         public OrderService(string userName, bool toSave, SQLiteConnection dbConnection)
         {

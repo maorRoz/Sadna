@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.OrderPool
 {
-    class Order
+    public class Order
     {
         private List<OrderItem> _items;
         private double _totalPrice;

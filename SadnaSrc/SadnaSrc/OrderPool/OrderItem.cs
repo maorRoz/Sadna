@@ -7,7 +7,7 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.OrderPool
 {
-    class OrderItem
+    public class OrderItem
     {
         private string _store;
         private string _name;
