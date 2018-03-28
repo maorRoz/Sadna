@@ -23,6 +23,7 @@ namespace SadnaSrc.OrderPool
         }
 
         // TODO add price when there will be getters.
+        // TODO might need to change the CartItem to Product once its implemented.
         public OrderItem(CartItem item)
         {
             _store = item.GetStore();

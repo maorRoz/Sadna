@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace OrderPoolWallaterSupplyPointTests
 {
     [TestClass]
-    public class UnitTest1
+    public class OrderPoolTest1
     {
         [TestMethod]
         public void TestMethod1()

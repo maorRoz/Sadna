@@ -8,6 +8,8 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.OrderPool
 {
+
+    // TODO add Logging mechanism and Order History DB Tables(or table) to the OrderPool
     class OrderPoolDL : systemDL
     {
         public OrderPoolDL(SQLiteConnection dbConnection) : base(dbConnection)
@@ -45,9 +47,9 @@ namespace SadnaSrc.OrderPool
 
         public void AddOrder(Order order)
         {
-            string[] valuesNames = { "@idParam", "@nameParam", "@addressParam", "@priceParam" };
+            string[] valuesNames = { "@idParam", "@nameParam", "@addressParam", "@priceParam" , "@dateParam" };
             object[] values = order.ToData();
-            InsertTable("Order", "ID,Username,ShippingAddress,TotalPrice", valuesNames, values);
+            InsertTable("Order", "ID,Username,ShippingAddress,TotalPrice,Date", valuesNames, values);
 
             foreach (OrderItem item in order.GetItems())
             {

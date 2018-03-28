@@ -14,12 +14,14 @@ namespace SadnaSrc.OrderPool
         private string _shippingAddress;
         private string _userName;
         private int _orderId;
+        private DateTime _date;
 
         public List<OrderItem> GetItems() { return _items; }
         public double GetPrice() { return _totalPrice; }
         public string GetShippingAddress() { return _shippingAddress; }
         public string GetUserName() { return _userName; }
         public int GetOrderID() { return _orderId; }
+        public DateTime getDate() {  return _date;}
 
         public Order(int orderId, string userName)
         {
@@ -27,6 +29,7 @@ namespace SadnaSrc.OrderPool
             _shippingAddress = ""; // TODO maybe change to other default value
             _items = new List<OrderItem>();
             _orderId = orderId;
+            _date = DateTime.Today;
         }
 
         public Order(int orderId, string userName, string shippingAddress)
@@ -36,22 +39,23 @@ namespace SadnaSrc.OrderPool
             _items = new List<OrderItem>();
             //_orderId = new Random().Next(100000, 999999);
             _orderId = orderId;
+            _date = DateTime.Today;
         }
 
-        public bool CheckOrderItem(string name,string store)
+        public OrderItem getOrderItem(string name,string store)
         {
             foreach (OrderItem item in _items)
             {
                 if (item.GetName() == name && item.GetStore() == store)
-                    return true;
+                    return item;
             }
 
-            return false;
+            return null;
         }
 
         public void AddOrderItem(OrderItem item)
         {
-            if (CheckOrderItem(item.GetName(), item.GetStore()))
+            if (getOrderItem(item.GetName(), item.GetStore()) != null)
             {
                 throw new OrderException("Order item is already listed in the order.");
             }
@@ -64,7 +68,7 @@ namespace SadnaSrc.OrderPool
 
         public void RemoveOrderItem(OrderItem item)
         {
-            if (!CheckOrderItem(item.GetName(), item.GetStore()))
+            if (getOrderItem(item.GetName(), item.GetStore()) == null)
             {
                 throw new OrderException("Order item is not listed in the order.");
             }
@@ -89,7 +93,7 @@ namespace SadnaSrc.OrderPool
 
         public object[] ToData()
         {
-            object[] ret = { _orderId, _userName, _shippingAddress, _totalPrice };
+            object[] ret = { _orderId, _userName, _shippingAddress, _totalPrice, _date.ToString() };
             
             return ret;
         }
