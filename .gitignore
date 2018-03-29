@@ -8,6 +8,8 @@
 *.sln.docstates
 *.db
 /SadnaSrc/SadnaSrc/MarketYardDB.db
+E:\SadnaSrc\SadnaSrc\MarketYardDB.db
+\SadnaSrc\SadnaSrc\MarketYardDB.db
 /MarketYardDB.db
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -254,3 +256,8 @@ SadnaSrc/SadnaSrc/MarketYardDB.db
 SadnaSrc/SadnaSrc/MarketYardDB.db
 *.db
 *.db
+SadnaSrc/SadnaSrc/MarketYardDB.db
+*.db
+SadnaSrc/SadnaSrc/MarketYardDB.db
+*.db
+SadnaSrc/SadnaSrc/MarketYardDB.db
