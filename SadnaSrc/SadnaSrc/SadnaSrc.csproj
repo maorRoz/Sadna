@@ -81,9 +81,9 @@
     <Compile Include="SupplyPoint\SupplyPoint.cs" />
     <Compile Include="UserSpot\CartService.cs" />
     <Compile Include="UserSpot\CartItem.cs" />
-    <Compile Include="UserSpot\ISystemAdminService.cs" />
+    <Compile Include="Main\ISystemAdminService.cs" />
     <Compile Include="UserSpot\User.cs" />
-    <Compile Include="UserSpot\IUserService.cs" />
+    <Compile Include="Main\IUserService.cs" />
     <Compile Include="UserSpot\RegisteredUser.cs" />
     <Compile Include="UserSpot\StoreAdminPolicy.cs" />
     <Compile Include="UserSpot\UserAnswer.cs" />
