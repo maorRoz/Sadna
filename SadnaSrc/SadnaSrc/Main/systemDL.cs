@@ -7,15 +7,173 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
-    public class systemDL
+    public class SystemDL
     {
-        private SQLiteConnection _dbConnection;
+        private readonly SQLiteConnection _dbConnection;
 
-        public systemDL(SQLiteConnection dbConnection)
+        protected SystemDL(SQLiteConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }
 
+        public static void CreateTables(SQLiteConnection dbConnection)
+        {
+            string[] createTableStrings = {
+                CreateSystemLogTable(),
+                CreateSystemErrorsTable(),
+                CreateUserTable(),
+                CreateStoreTable(),
+                CreateUserPolicyTable(),
+                CreateCartItemTable(),
+                CreatePurchaseHistoryTable(),
+                //createTableStrings.Add(CreateProductTable());
+                //createTableStrings.Add(CreateSaleTable());
+                //createTableStrings.Add(CreateDiscountTable());
+                CreateOrderTable(),
+                CreateOrderItemTable()
+            };
+
+            for (var i = 0; i < createTableStrings.Length; i++)
+            {
+                var createTableCommand = new SQLiteCommand(createTableStrings[i], dbConnection);
+                createTableCommand.ExecuteNonQuery();
+            }
+
+            //TODO : delete this when UseCase 2.2 successfully implemented
+            string insertStore = "INSERT INTO Store (Name,Address) VALUES ('x','Here 4')";
+            var insertStoreCommand = new SQLiteCommand(insertStore, dbConnection);
+            try
+            {
+                insertStoreCommand.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                //dont care
+            }
+        }
+
+        private static string CreateSystemLogTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [System_Log] (
+                                    [LogID]         TEXT,
+                                    [DATE]          TEXT,
+                                    [ModuleName]    TEXT,
+                                    [Description]   TEXT,
+                                    PRIMARY KEY([LogID])
+                                    )";
+        }
+
+        private static string CreateSystemErrorsTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [System_Errors] (
+                                    [ErrorID]       TEXT,
+                                    [ModuleName]    TEXT,
+                                    [Description]   TEXT,
+                                    PRIMARY KEY([ErrorID])
+                                    )";
+        }
+
+        private static string CreateUserTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [User] (
+                                    [SystemID]      INTEGER,
+                                    [Name]          TEXT,
+                                    [Address]       TEXT,
+                                    [Password]      TEXT,
+                                    PRIMARY KEY([SystemID])
+                                    )";
+        }
+
+        private static string CreateStoreTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [Store] (
+                                    [Name]          TEXT,
+                                    [Address]       TEXT,
+                                    PRIMARY KEY([Name])
+                                    )";
+        }
+
+        private static string CreateUserPolicyTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [UserPolicy] (
+                                    [SystemID]      INTEGER,
+                                    [State]         TEXT,
+                                    [Action]        TEXT,
+                                    [Store]         TEXT,
+                                    FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    PRIMARY KEY([SystemID],[STATE])
+                                    )";
+        }
+
+        private static string CreateCartItemTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [CartItem] (
+                                    [SystemID]      INTEGER,
+                                    [Name]          TEXT,
+                                    [Store]         TEXT,
+                                    [Quantity]      TEXT,
+                                    [FinalPrice]    TEXT,
+                                    [SaleType]      TEXT,
+                                    FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name]) ,
+                                    PRIMARY KEY([SystemID],[Name],[Store])
+                                    )";
+        }
+
+        private static string CreatePurchaseHistoryTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [PurchaseHistory] (
+                                    [SystemID]      INTEGER,
+                                    [Name]          TEXT,
+                                    [Store]         TEXT,
+                                    [Date]          TEXT,
+                                    FOREIGN KEY([SystemID])     REFERENCES [User]([SystemID]),
+                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name]),
+                                    PRIMARY KEY([SystemID],[Name],[Store],[Date])
+                                    )";
+        }
+
+        private static string CreateProductTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static string CreateSaleTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static string CreateDiscountTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static string CreateOrderTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [Order] (
+                                    [OrderID]           INTEGER,
+                                    [UserName]          TEXT,
+                                    [ShippingAddress]   TEXT,
+                                    [TotalPrice]        REAL,
+                                    [Date]              TEXT,
+                                    PRIMARY KEY([OrderID])
+                                    )";
+        }
+
+        private static string CreateOrderItemTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [OrderItem] (
+                                    [OrderID]       INTEGER,
+                                    [Store]         INTEGER,
+                                    [Name]          TEXT,
+                                    [Price]         REAL,
+                                    [Quantity]      INTEGER,
+                                    FOREIGN KEY([OrderID])      REFERENCES [Order]([OrderID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name]),
+                                    PRIMARY KEY([OrderID],[Store],[Name])
+                                    )";
+            //TODO: add this to the string :   FOREIGN KEY([Name])        REFERENCES [Product]([Name]),
+        }
         protected void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
         {
             var insertRequest = "INSERT INTO "+table+" ("+ tableColumns + ") VALUES ("+ string.Join(",", valuesNames)

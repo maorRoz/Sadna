@@ -27,26 +27,26 @@ namespace UserSpotTests
         [TestMethod]
         public void GoodRegisterTest()
         {
-            DoSignUp("Maor", "Here 3", "123");
+            DoSignUp("MaorRegister1", "Here 3", "123");
             Assert.IsFalse(MarketException.hasErrorRaised());
         }
 
         [TestMethod]
         public void RegisteredUserDataTest1()
         {
-            RegisteredUserDataTest("Maor", "Here 3", "123");
+            RegisteredUserDataTest("MaorRegister2", "Here 3", "123");
         }
 
         [TestMethod]
         public void RegisteredUserDataTest2()
         {
-            RegisteredUserDataTest("Maor33", "Here 3", "maor33maormaor333");
+            RegisteredUserDataTest("MaorRegister3", "Here 3", "maor33maormaor333");
         }
 
         [TestMethod]
         public void MissingCredentialsSignUpTest1()
         {
-            MissingCredentialsSignUpTest("Maor", "Here 3", "");
+            MissingCredentialsSignUpTest("MaorRegister4", "Here 3", "");
         }
 
         [TestMethod]
@@ -58,7 +58,7 @@ namespace UserSpotTests
         [TestMethod]
         public void MissingCredentialsSignUpTest3()
         {
-            MissingCredentialsSignUpTest("Maor", "Here 3", null);
+            MissingCredentialsSignUpTest("MaorRegister5", "Here 3", null);
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace UserSpotTests
         public void DidntEnteredSystemTest()
         {
             Assert.IsFalse(MarketException.hasErrorRaised());
-            Assert.AreEqual((int) SignUpStatus.DidntEnterSystem, userServiceSession.SignUp("Maor", "Here 3", "123").Status);
+            Assert.AreEqual((int) SignUpStatus.DidntEnterSystem, userServiceSession.SignUp("MaorRegister6", "Here 3", "123").Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
 
         }
@@ -85,7 +85,7 @@ namespace UserSpotTests
         [TestMethod]
         public void RegisteredUserCartisEmptyTest()
         {
-            DoSignUp("Maor", "Here 3", "123");
+            DoSignUp("MaorRegister7", "Here 3", "123");
             RegisteredUser registeredUser = (RegisteredUser)userServiceSession.GetUser();
             Assert.AreEqual(0,registeredUser.GetCart().Length);
         }
@@ -96,7 +96,7 @@ namespace UserSpotTests
             userServiceSession.EnterSystem();
             User user = userServiceSession.GetUser();
             Assert.AreEqual(0, user.GetPolicies().Length);
-            Assert.AreEqual((int) SignUpStatus.Success, userServiceSession.SignUp("Maor", "Here 3", "123").Status);
+            Assert.AreEqual((int) SignUpStatus.Success, userServiceSession.SignUp("MaorRegister8", "Here 3", "123").Status);
             user = userServiceSession.GetUser();
             UserPolicy[] expectedPolicies = user.GetPolicies();
             Assert.AreEqual(1, expectedPolicies.Length);
@@ -106,9 +106,9 @@ namespace UserSpotTests
         [TestMethod]
         public void SignUpAgainTest()
         {
-            DoSignUp("Maor", "Here 3", "123");
+            DoSignUp("MaorRegister9", "Here 3", "123");
             Assert.IsFalse(MarketException.hasErrorRaised());
-            Assert.AreEqual((int)SignUpStatus.SignedUpAlready, userServiceSession.SignUp("Maor", "Here 3", "123").Status);
+            Assert.AreEqual((int)SignUpStatus.SignedUpAlready, userServiceSession.SignUp("MaorRegister9", "Here 3", "123").Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
@@ -116,12 +116,12 @@ namespace UserSpotTests
         public void SignUpWithExistedName()
         {
             Assert.IsFalse(MarketException.hasErrorRaised());
-            DoSignUp("UserSpotTest", "Here 3", "123");
+            DoSignUp("MaorRegister10", "Here 3", "123");
             Assert.IsFalse(MarketException.hasErrorRaised());
             userServiceSession2 = (UserService)marketSession.GetUserService();
             userServiceSession2.EnterSystem();
             Assert.IsFalse(MarketException.hasErrorRaised());
-            Assert.AreEqual((int)SignUpStatus.TakenName, userServiceSession2.SignUp("UserSpotTest", "Here 3", "123").Status);
+            Assert.AreEqual((int)SignUpStatus.TakenName, userServiceSession2.SignUp("MaorRegister10", "Here 3", "123").Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
 
         }
@@ -130,9 +130,9 @@ namespace UserSpotTests
         [TestMethod]
         public void PromoteToAdminTest()
         {
-            DoSignUp("Maor", "Here 3", "123");
+            DoSignUp("MaorRegister11", "Here 3", "123");
             RegisteredUser adminUser = (RegisteredUser)userServiceSession.GetUser();
-            object[] expectedData = { adminUser.SystemID, "Maor", "Here 3", UserService.GetSecuredPassword("123") };
+            object[] expectedData = { adminUser.SystemID, "MaorRegister11", "Here 3", UserService.GetSecuredPassword("123") };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.AreEqual(1, adminUser.GetPolicies().Length);
             adminUser.PromoteToAdmin();

@@ -71,7 +71,7 @@
     <Compile Include="Main\MarketYard.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
-    <Compile Include="Main\systemDL.cs" />
+    <Compile Include="Main\SystemDL.cs" />
     <Compile Include="OrderPool\Order.cs" />
     <Compile Include="OrderPool\OrderException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,9 +81,9 @@
     <Compile Include="SupplyPoint\SupplyPoint.cs" />
     <Compile Include="UserSpot\CartService.cs" />
     <Compile Include="UserSpot\CartItem.cs" />
-    <Compile Include="UserSpot\ISystemAdminService.cs" />
+    <Compile Include="Main\ISystemAdminService.cs" />
     <Compile Include="UserSpot\User.cs" />
-    <Compile Include="UserSpot\IUserService.cs" />
+    <Compile Include="Main\IUserService.cs" />
     <Compile Include="UserSpot\RegisteredUser.cs" />
     <Compile Include="UserSpot\StoreAdminPolicy.cs" />
     <Compile Include="UserSpot\UserAnswer.cs" />

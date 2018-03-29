@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
 
-namespace SadnaSrc.UserSpot
+namespace SadnaSrc.Main
 {
     public interface IUserService
     {

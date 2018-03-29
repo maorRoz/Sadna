@@ -8,10 +8,10 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    public class UserServiceDL : systemDL
+    public class UserServiceDL : SystemDL
     {
 
-        public int SystemID { get; private set; }
+        private int SystemID { get; set; }
         public UserServiceDL(SQLiteConnection dbConnection) : base(dbConnection)
         {
         }

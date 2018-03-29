@@ -11,11 +11,11 @@ namespace SadnaSrc.Main
     {
         static void Main(string[] args)
         {
-        //    var marketSystem = new MarketYard();
+            var marketSystem = new MarketYard();
         //    IUserService service = marketSystem.GetUserService();
         //    service.EnterSystem();
        //     service.SignUp("Moshe","Here 4","123");
-        //    marketSystem.Exit();
+            marketSystem.Exit();
         }
     }
 }
