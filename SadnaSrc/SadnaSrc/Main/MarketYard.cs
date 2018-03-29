@@ -13,25 +13,30 @@ namespace SadnaSrc.Main
         private SQLiteConnection _dbConnection;
         public MarketYard()
         {
-            initiateDb();
+            InitiateDb();
         }
 
-        private void initiateDb()
+        private void InitiateDb()
         {
-            var programPath = System.AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
+            var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
             programPath = programPath.Replace("\\bin\\Debug", "");
             string[] programPathParts = programPath.Split('\\');
             programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
-            programPath = String.Join("\\", programPathParts);
+            programPath = string.Join("\\", programPathParts);
             var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
+
             _dbConnection = new SQLiteConnection(dbPath);
             _dbConnection.Open();
+
             var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON",_dbConnection);
             makeFK.ExecuteNonQuery();
+
+            SystemDL.CreateTables(_dbConnection);
             MarketException.InsertDbConnector(_dbConnection);
             MarketLog.InsertDbConnector(_dbConnection);
 
         }
+
 
         public IUserService GetUserService()
         {
@@ -42,6 +47,7 @@ namespace SadnaSrc.Main
         {
             return new UserService(_dbConnection);
         }
+
 
         public void Exit()
         {

@@ -71,7 +71,7 @@
     <Compile Include="Main\MarketYard.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
-    <Compile Include="Main\systemDL.cs" />
+    <Compile Include="Main\SystemDL.cs" />
     <Compile Include="OrderPool\Order.cs" />
     <Compile Include="OrderPool\OrderException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
