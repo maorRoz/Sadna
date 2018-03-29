@@ -7,6 +7,8 @@
 *.userosscache
 *.sln.docstates
 *.db
+/SadnaSrc/SadnaSrc/MarketYardDB.db
+/MarketYardDB.db
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -69,6 +71,7 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+*.db
 
 # Chutzpah Test files
 _Chutzpah*
@@ -242,3 +245,12 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /SadnaSrc/SadnaSrc/MarketYardDB.db
+*.db
+*.db
+SadnaSrc/SadnaSrc/MarketYardDB.db
+SadnaSrc/SadnaSrc/MarketYardDB.db
+*.db
+SadnaSrc/SadnaSrc/MarketYardDB.db
+SadnaSrc/SadnaSrc/MarketYardDB.db
+*.db
+*.db
