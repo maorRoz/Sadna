@@ -1,12 +1,8 @@
-﻿using SadnaSrc.Main;
-
-namespace BlackBox
+﻿namespace BlackBox
 {
 	public interface UserBridge
 	{
-		MarketAnswer EnterSystem();
-		MarketAnswer SignUp(string name, string address, string password);
-		void CleanSession();
-		void ExitMarket();
+		string EnterSystem();
+		string SignUp(string name, string address, string password);
 	}
 }
