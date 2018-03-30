@@ -9,16 +9,14 @@ namespace SadnaSrc.UserSpot
 {
     public class UserPolicyService
     {
-        private List<UserPolicy> policies;
         private static UserServiceDL _userDL;
-        public List<UserPolicy> Policies
-        {
-            get{ return policies;}
-        }
+        public List<StoreManagerPolicy> StorePolicies { get; }
+        public List<StatePolicy> StatesPolicies { get; }
 
         public UserPolicyService()
         {
-            policies = new List<UserPolicy>();
+            StatesPolicies = new List<StatePolicy>();
+            StorePolicies = new List<StoreManagerPolicy>();
         }
 
         public static void EstablishServiceDL(UserServiceDL userDL)
@@ -26,27 +24,11 @@ namespace SadnaSrc.UserSpot
             _userDL = userDL;
         }
 
-        public static StoreManagerPolicy[] FilterStoreManagerPolicies(UserPolicy[] unFilteredPolicies)
-        {
-            List<StoreManagerPolicy> filteredStoreManagerPolicies = new List<StoreManagerPolicy>();
-
-            foreach (UserPolicy policy in unFilteredPolicies)
-            {
-                if (policy.GetState() == UserPolicy.State.StoreManager)
-                {
-                    filteredStoreManagerPolicies.Add((StoreManagerPolicy)policy);
-                }
-            }
-
-            return filteredStoreManagerPolicies.ToArray();
-
-        }
-
         public void AddStorePolicy(string store, StoreManagerPolicy.StoreAction storeAction)
         {
-            StoreManagerPolicy toAdd = new StoreManagerPolicy(storeAction, store); 
-            policies.Add(toAdd);
-            _userDL.SaveUserPolicy(toAdd);
+            StoreManagerPolicy toAdd = new StoreManagerPolicy(store, storeAction);
+            StorePolicies.Add(toAdd);
+            _userDL.SaveUserStorePolicy(toAdd);
         }
 
         public void UpdateStorePolicies(string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
@@ -64,29 +46,29 @@ namespace SadnaSrc.UserSpot
         }
         private void RemoveStorePolicy(string store, StoreManagerPolicy.StoreAction storeAction)
         {
-            StoreManagerPolicy toRemove = new StoreManagerPolicy(storeAction,store);
-            if (policies.Remove(toRemove))
+            StoreManagerPolicy toRemove = new StoreManagerPolicy(store, storeAction);
+            if (StorePolicies.Remove(toRemove))
             {
-                _userDL.DeleteUserPolicy(toRemove);
+                _userDL.DeleteUserStorePolicy(toRemove);
             }
         }
 
-        public void AddStatePolicy(UserPolicy.State state)
+        public void AddStatePolicy(StatePolicy.State state)
         {
-            if (state == UserPolicy.State.StoreManager)
-            {
-                throw new UserException(
-                    MarketError.LogicError,"Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
-            }
-            _userDL.SaveUserPolicy(new UserPolicy(state));
-            policies.Add(new UserPolicy(state));
+            _userDL.SaveUserPolicy(new StatePolicy(state));
+            StatesPolicies.Add(new StatePolicy(state));
         }
 
-        public void LoadPolicies(UserPolicy[] loadedPolicies)
+        public void LoadPolicies(StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions)
         {
-            foreach (UserPolicy loadedPolicy in  loadedPolicies)
+            foreach (StatePolicy loadedState in loadedStates)
             {
-                policies.Add(loadedPolicy);
+                StatesPolicies.Add(loadedState);
+            }
+
+            foreach (StoreManagerPolicy loadedStorePermission in loadedStorePermissions)
+            {
+                StorePolicies.Add(loadedStorePermission);
             }
         }
 

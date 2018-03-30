@@ -25,16 +25,16 @@ namespace SadnaSrc.UserSpot
             : base(systemID)
         {
             InitiateRegisteredUser(name, address, password, guestCart);
-            PolicyService.AddStatePolicy(UserPolicy.State.RegisteredUser);
+            PolicyService.AddStatePolicy(StatePolicy.State.RegisteredUser);
 
         }
 
         public RegisteredUser(int loadedSystemID, string loadednName, string loadedAddress,
-            string loadedPassword, CartItem[] loadedCart, UserPolicy[] loadedPolicies) 
+            string loadedPassword, CartItem[] loadedCart, StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions) 
             : base(loadedSystemID)
         {
             InitiateRegisteredUser(loadednName, loadedAddress, loadedPassword, loadedCart);
-            PolicyService.LoadPolicies(loadedPolicies);
+            PolicyService.LoadPolicies(loadedStates,loadedStorePermissions);
         }
 
         public override object[] ToData()
@@ -45,7 +45,7 @@ namespace SadnaSrc.UserSpot
 
         public void PromoteToAdmin()
         {
-            PolicyService.AddStatePolicy(UserPolicy.State.SystemAdmin);
+            PolicyService.AddStatePolicy(StatePolicy.State.SystemAdmin);
         }
         public void AddStoreManagerPolicy(string store, StoreManagerPolicy.StoreAction[] actionsToAdd)
         {

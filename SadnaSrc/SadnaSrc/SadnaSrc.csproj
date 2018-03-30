@@ -95,7 +95,7 @@
     <Compile Include="UserSpot\StoreManagerPolicy.cs" />
     <Compile Include="UserSpot\UserAnswer.cs" />
     <Compile Include="UserSpot\UserException.cs" />
-    <Compile Include="UserSpot\UserPolicy.cs" />
+    <Compile Include="UserSpot\StatePolicy.cs" />
     <Compile Include="UserSpot\UserPolicyService.cs" />
     <Compile Include="UserSpot\UserService.cs" />
     <Compile Include="UserSpot\UserServiceDL.cs" />
