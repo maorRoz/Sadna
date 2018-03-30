@@ -106,10 +106,12 @@ namespace UserSpotTests
         [TestMethod]
         public void SignUpAgainTest()
         {
-            DoSignUp("Maor", "Here 3", "123");
-            Assert.IsFalse(MarketException.hasErrorRaised());
+	        userServiceSession.EnterSystem();
+	        userServiceSession.SignUp("Maor", "Here 3", "123");
+			//DoSignUp("Maor", "Here 3", "123");
+			//Assert.IsFalse(MarketException.hasErrorRaised());
             Assert.AreEqual((int)SignUpStatus.SignedUpAlready, userServiceSession.SignUp("Maor", "Here 3", "123").Status);
-            Assert.IsTrue(MarketException.hasErrorRaised());
+            //Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
         [TestMethod]
