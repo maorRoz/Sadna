@@ -4,6 +4,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.OrderPool;
 using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.Main
@@ -48,6 +49,10 @@ namespace SadnaSrc.Main
             return new UserService(_dbConnection);
         }
 
+        public IOrderService GetOrderService()
+        {
+            return new OrderService(_dbConnection);
+        }
 
         public void Exit()
         {
