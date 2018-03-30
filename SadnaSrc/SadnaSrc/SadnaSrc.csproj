@@ -66,7 +66,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main\IOrderService.cs" />
+    <Compile Include="AdminView\AdminAnswer.cs" />
+    <Compile Include="AdminView\SystemAdminServiceDL.cs" />
+    <Compile Include="AdminView\AdminException.cs" />
     <Compile Include="Main\MarketException.cs" />
     <Compile Include="Main\MarketLog.cs" />
     <Compile Include="Main\MarketYard.cs" />
@@ -86,10 +88,11 @@
     <Compile Include="UserSpot\CartService.cs" />
     <Compile Include="UserSpot\CartItem.cs" />
     <Compile Include="Main\ISystemAdminService.cs" />
+    <Compile Include="AdminView\SystemAdminService.cs" />
     <Compile Include="UserSpot\User.cs" />
     <Compile Include="Main\IUserService.cs" />
     <Compile Include="UserSpot\RegisteredUser.cs" />
-    <Compile Include="UserSpot\StoreAdminPolicy.cs" />
+    <Compile Include="UserSpot\StoreManagerPolicy.cs" />
     <Compile Include="UserSpot\UserAnswer.cs" />
     <Compile Include="UserSpot\UserException.cs" />
     <Compile Include="UserSpot\UserPolicy.cs" />

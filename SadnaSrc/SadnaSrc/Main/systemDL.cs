@@ -40,7 +40,7 @@ namespace SadnaSrc.Main
             }
 
             //TODO : delete this when UseCase 2.2 successfully implemented
-            string insertStore = "INSERT INTO Store (Name,Address) VALUES ('x','Here 4')";
+            string insertStore = "INSERT INTO Store (Name,Address,Status) VALUES ('x','Here 4','Active')";
             var insertStoreCommand = new SQLiteCommand(insertStore, dbConnection);
             try
             {
@@ -89,6 +89,7 @@ namespace SadnaSrc.Main
             return @"CREATE TABLE IF NOT EXISTS [Store] (
                                     [Name]          TEXT,
                                     [Address]       TEXT,
+                                    [Status]        TEXT,
                                     PRIMARY KEY([Name])
                                     )";
         }
@@ -246,6 +247,11 @@ namespace SadnaSrc.Main
                 throw new MarketException(MarketError.DbError,"Problem occured in the attempt to delete system data in DB, returned error message :" + e.Message);
             }
 
+        }
+
+        protected SQLiteDataReader freeStyleSelect(string cmd)
+        {
+            return new SQLiteCommand(cmd, _dbConnection).ExecuteReader();
         }
 
     }
