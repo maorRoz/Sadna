@@ -16,16 +16,17 @@ namespace SadnaSrc.AdminView
         {
         }
 
-        public string[] FindSolelyOwnedStores(int userSystemID)
+        public string[] FindSolelyOwnedStores()
         {
             List<string> solelyOwnedStores = new List<string>();
-            string cmd = @"SELECT Store FROM 
-                        (SELECT COUNT(Store) AS OwnersNum,Store FROM UserPolicy 
-                            WHERE Action = 'StoreOwner' group by Store) AS UP
-                        JOIN UserPolicy ON UP.Store = UserPolicy.Store
-                        WHERE Action = 'StoreOwner' AND OwnersNum = 1 AND SystemID = " + userSystemID;
+            string cmd1 = @"SELECT Store FROM 
+                        (SELECT Count(Store) as OwnersCount,Store FROM StoreManagerPolicy 
+                        WHERE Action = 'StoreOwner' GROUP BY Store) as StoreOwnersNum
+                        WHERE StoreOwnersNum.OwnersCount = 0";
+            // if store doesn't exist in the table store manager policy , you wouldn't find it in the table
+            // you need to do a join with store table.
 
-            using (var dbReader = freeStyleSelect(cmd))
+            using (var dbReader = freeStyleSelect(cmd1))
             {
                 while(dbReader.Read())
                 {
