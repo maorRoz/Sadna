@@ -5,22 +5,34 @@ namespace BlackBox
 {
 	public class RealBridge : UserBridge
 	{
-		public IUserService userServie;
+		private MarketYard _market;
+		private IUserService _userService;
 
 		public RealBridge()
 		{
-			var marketSession = new MarketYard();
-			userServie = marketSession.GetUserService();
+			_market = new MarketYard();
+			_userService = _market.GetUserService();
 		}
 
-		public string EnterSystem()
+		public MarketAnswer EnterSystem()
 		{
-			return userServie.EnterSystem();
+			return _userService.EnterSystem();
 		}
 
-		public string SignUp(string name, string address, string password)
+		public MarketAnswer SignUp(string name, string address, string password)
 		{
-			return userServie.SignUp(name, address, password);
+			return _userService.SignUp(name, address, password);
+		}
+
+		public void CleanSession()
+		{
+			_userService.CleanSession();
+
+		}
+
+		public void ExitMarket()
+		{
+			_market.Exit();
 		}
 	}
 }
