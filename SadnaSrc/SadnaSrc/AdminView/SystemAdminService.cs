@@ -71,26 +71,9 @@ namespace SadnaSrc.AdminView
             }
         }
 
-     /*   private void LookForSoleStoreOwners(int userSystemID, StoreManagerPolicy[] storeManagerPolicies)
-        {
-            foreach (StoreManagerPolicy policy in storeManagerPolicies)
-            {
-                if (policy.Action != StoreManagerPolicy.StoreAction.StoreOwner) { continue; }
-                // look for more policies of store owner with that store name, if there is non, close the store.
-                bool isSoleOwner = adminDL.GetOwners(policy.Store).Length > 1;
-                if (!isSoleOwner) { continue; }
-                MarketLog.Log("AdminView", "User " + userSystemID + " found to be a sole Store Owner of '"
-                                          + policy.Store + "' store. System Admin " + systemID
-                                          + " deactivating therefore store '" + policy.Store + "'");
-                adminDL.CloseStore(policy.Store);
-                MarketLog.Log("AdminView", "System Admin " + systemID +
-                                          " deactivated store '" + policy.Store + "' successfully!");
-            }
-        }*/
-
         private void RemoveSolelyOwnedStores(int userSystemID)
         {
-            string[] solelyOwnedStores = adminDL.FindSolelyOwnedStores(userSystemID);
+            string[] solelyOwnedStores = adminDL.FindSolelyOwnedStores();
             foreach (string store in solelyOwnedStores)
             {
                 MarketLog.Log("AdminView", "User " + userSystemID + " found to be a sole Store Owner of '"
@@ -110,18 +93,17 @@ namespace SadnaSrc.AdminView
             {
                 adminDL.IsUserExist(userSystemID);
                 MarketLog.Log("AdminView", "User " + userSystemID +
-                                           " has been found by the system. looking for sole ownership on stores...");
+                                           " has been found by the system. Removing user saved cart and profile...");
 
-                //  UserPolicy[] toDeletePolicies = adminDL.LoadPolicies(userSystemID);
-                //   StoreManagerPolicy[] storeManagerPolicies = adminDL.LoadStoreManagerPolicies(userSystemID);
-                RemoveSolelyOwnedStores(userSystemID);
-                // LookForSoleStoreOwners(userSystemID,storeManagerPolicies);
-
-                MarketLog.Log("AdminView", "User " + userSystemID +
-                                           " solely owned stores has been deactivated. Finally removing user saved cart and profile...");
                 adminDL.DeleteUser(userSystemID);
                 MarketLog.Log("AdminView", "System Admin " + systemID +
-                                           " success fully removed User " + userSystemID + " from the system!");
+                                           " successfully removed User " + userSystemID + " from the system!");
+
+                MarketLog.Log("AdminView", "looking for sole ownership of User "+userSystemID +" on stores...");
+                RemoveSolelyOwnedStores(userSystemID);
+
+                MarketLog.Log("AdminView", "User " + userSystemID +
+                                           " solely owned stores has been deactivated. Operation is finally completed safely!");
                 return new AdminAnswer(RemoveUserStatus.Success, "Remove user has been successful!");
             }
             catch (AdminException e)
