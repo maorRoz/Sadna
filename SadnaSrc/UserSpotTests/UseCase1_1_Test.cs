@@ -26,7 +26,8 @@ namespace UserSpotTests
         [TestMethod]
         public void GuestHasNoPolicyTest()
         {
-            Assert.AreEqual(0, generatedGuest.GetPolicies().Length);
+            Assert.AreEqual(0, generatedGuest.GetStoreManagerPolicies().Length);
+            Assert.AreEqual(0, generatedGuest.GetStatePolicies().Length);
 
         }
 

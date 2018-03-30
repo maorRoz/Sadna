@@ -23,7 +23,8 @@ namespace SadnaSrc.Main
                 CreateSystemErrorsTable(),
                 CreateUserTable(),
                 CreateStoreTable(),
-                CreateUserPolicyTable(),
+                CreateUserStatePolicyTable(),
+                CreateUserStorePolicyTable(),
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
                 //createTableStrings.Add(CreateProductTable());
@@ -94,15 +95,24 @@ namespace SadnaSrc.Main
                                     )";
         }
 
-        private static string CreateUserPolicyTable()
+        private static string CreateUserStatePolicyTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [UserPolicy] (
                                     [SystemID]      INTEGER,
                                     [State]         TEXT,
-                                    [Action]        TEXT,
-                                    [Store]         TEXT,
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
-                                    PRIMARY KEY([SystemID],[STATE])
+                                    PRIMARY KEY([SystemID],[State])
+                                    )";
+        }
+
+        private static string CreateUserStorePolicyTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [UserPolicy] (
+                                    [SystemID]      INTEGER,
+                                    [Store]         TEXT,
+                                    [Action]        TEXT,
+                                    FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    PRIMARY KEY([SystemID],[Store],[Action])
                                     )";
         }
 

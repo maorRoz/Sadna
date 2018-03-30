@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "Integra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderPoolWallaterSupplyPointTests", "OrderPoolWallaterSupplyPointTests\OrderPoolWallaterSupplyPointTests.csproj", "{F387D88E-A17C-4F74-B28A-8D034A58961E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemViewTests", "SystemViewTests\SystemViewTests.csproj", "{CA91CE53-90F2-4980-B14B-E9389F484884}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminViewTests", "SystemViewTests\AdminViewTests.csproj", "{CA91CE53-90F2-4980-B14B-E9389F484884}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

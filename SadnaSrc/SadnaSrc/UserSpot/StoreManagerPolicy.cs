@@ -7,15 +7,15 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    public class StoreManagerPolicy : UserPolicy
+    public class StoreManagerPolicy
     {
         public enum StoreAction { StoreOwner,PromoteStoreAdmin, ManageProducts, DeclarePurchasePolicy, DeclareDiscountPolicy, ViewPurchaseHistory}
         public string Store { get; }
         public StoreAction Action { get; }
-        public StoreManagerPolicy(StoreAction storeAction, string store) : base(State.StoreManager)
+        public StoreManagerPolicy(string store, StoreAction storeAction)
         {
-            Action = storeAction;
             Store = store;
+            Action = storeAction;
         }
 
         public string GetStoreActionString()

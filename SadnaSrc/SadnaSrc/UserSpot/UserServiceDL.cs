@@ -74,47 +74,52 @@ namespace SadnaSrc.UserSpot
             SaveCartItem(guestCart);
             return new RegisteredUser(SystemID, name,address,password,guestCart);
         }
-        public void SaveUserPolicy(UserPolicy policy)
+        public void SaveUserPolicy(StatePolicy policy)
         {
             string [] valuesNames = {"@idParam","@stateParam","@actionParam","@storeParam"};
             object[] values = { SystemID, policy.GetStateString(), null, null};
             InsertTable("UserPolicy", "SystemID,state,action,store",valuesNames,values);
         }
 
-        public void SaveUserPolicy(StoreManagerPolicy policy)
+        public void SaveUserStorePolicy(StoreManagerPolicy policy)
         {
 
         }
  
-        public void DeleteUserPolicy(StoreManagerPolicy policy)
+        public void DeleteUserStorePolicy(StoreManagerPolicy policy)
         {
 
         }
 
-        private UserPolicy[] LoadUserPolicy()
+        private StatePolicy[] LoadUserStatePolicy()
         {
-            List<UserPolicy> loadedPolicies = new List<UserPolicy>();
-            using (var dbReader = SelectFromTableWithCondition("UserPolicy", "*", "SystemID = " + SystemID))
+            List<StatePolicy> loadedStatesPolicies = new List<StatePolicy>();
+            using (var dbReader = SelectFromTableWithCondition("StatePolicy", "State", "SystemID = " + SystemID))
             {
                 while (dbReader.Read())
                 {
-                    if (dbReader.GetString(1).Equals("RegisteredUser"))
-                    {
-                        loadedPolicies.Add(new UserPolicy(UserPolicy.State.RegisteredUser));
-                    }
-                    else if (dbReader.GetString(1).Equals("SystemAdmin"))
-
-                    {
-                        loadedPolicies.Add(new UserPolicy(UserPolicy.State.SystemAdmin));
-                    }
-                    else
-                    {
-                        loadedPolicies.Add(new StoreManagerPolicy(StoreManagerPolicy.GetActionFromString(
-                            dbReader.GetString(2)), dbReader.GetString(3)));
-                    }
+                    StatePolicy.State state = StatePolicy.GetStateFromString(dbReader.GetString(1));
+                    loadedStatesPolicies.Add(new StatePolicy(state));
                 }
             }
-            return loadedPolicies.ToArray();
+            return loadedStatesPolicies.ToArray();
+        }
+
+        private StoreManagerPolicy[] LoadUserStorePolicies()
+        {
+            List<StoreManagerPolicy> loadedStorePolicies = new List<StoreManagerPolicy>();
+            using (var dbReader = SelectFromTableWithCondition("StatePolicy", "*", "SystemID = " + SystemID))
+            {
+                while (dbReader.Read())
+                {
+                    string storeName = dbReader.GetString(1);
+                    StoreManagerPolicy.StoreAction action =
+                        StoreManagerPolicy.GetActionFromString(dbReader.GetString(2));
+                    loadedStorePolicies.Add(new StoreManagerPolicy(storeName,action));
+
+                }
+            }
+            return loadedStorePolicies.ToArray();
         }
         public void SaveUser(User user)
         {
@@ -210,7 +215,7 @@ namespace SadnaSrc.UserSpot
             SaveCartItem(guestCart);
 
             return new RegisteredUser(SystemID,name,(string) loadedUserIdAndAddress[1],
-                password, LoadCartItems(), LoadUserPolicy());
+                password, LoadCartItems(), LoadUserStatePolicy(), LoadUserStorePolicies());
         }
 
         public void SaveCartItem(CartItem[] cart)

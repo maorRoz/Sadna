@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SystemViewTests
 {
     [TestClass]
-    public class UnitTest1
+    public class UseCase5_2_Tests
     {
         [TestMethod]
         public void TestMethod1()

@@ -28,9 +28,14 @@ namespace SadnaSrc.UserSpot
             this.systemID = systemID;
         }
 
-        public UserPolicy[] GetPolicies()
+        public StatePolicy[] GetStatePolicies()
         {
-            return PolicyService.Policies.ToArray();
+            return PolicyService.StatesPolicies.ToArray();
+        }
+
+        public StoreManagerPolicy[] GetStoreManagerPolicies()
+        {
+            return PolicyService.StorePolicies.ToArray();
         }
 
         public CartItem[] GetCart()
