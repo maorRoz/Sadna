@@ -27,5 +27,10 @@ namespace BlackBox
 			_market.GetUserService().CleanSession();
 
 		}
+
+		public void ExitMarket()
+		{
+			_market.Exit();
+		}
 	}
 }

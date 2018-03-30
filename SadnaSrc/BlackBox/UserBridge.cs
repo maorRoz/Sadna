@@ -7,5 +7,6 @@ namespace BlackBox
 		MarketAnswer EnterSystem();
 		MarketAnswer SignUp(string name, string address, string password);
 		void CleanSession();
+		void ExitMarket();
 	}
 }
