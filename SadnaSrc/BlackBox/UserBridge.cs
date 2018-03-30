@@ -1,8 +1,11 @@
-﻿namespace BlackBox
+﻿using SadnaSrc.Main;
+
+namespace BlackBox
 {
 	public interface UserBridge
 	{
-		string EnterSystem();
-		string SignUp(string name, string address, string password);
+		MarketAnswer EnterSystem();
+		MarketAnswer SignUp(string name, string address, string password);
+		void CleanSession();
 	}
 }

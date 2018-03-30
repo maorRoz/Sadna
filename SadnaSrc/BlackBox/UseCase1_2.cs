@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SadnaSrc.UserSpot;
 
 namespace BlackBox
 {
@@ -18,18 +19,23 @@ namespace BlackBox
 		public void RegistrationSucceeded()
 		{
 			_bridge.EnterSystem();
-			string res = _bridge.SignUp("Pnina", "miahol susia 12", "123456");
-			Assert.AreEqual(res, "Sign up has been successfull!");
-
+			Assert.AreEqual((int)SignUpStatus.Success, _bridge.SignUp("Pnina", "miahol susia 12", "123456"));
 		}
 
 		[TestMethod]
 
 		public void RegistrationWithoutEnteringTheSystem()
 		{
-			//string res = _bridge.SignUp("Pnina", "miahol susia 12", "123456");
-			//Assert.AreEqual(res, "sign up action has been requested by user which hasn't fully entered the system yet!");
+			Assert.AreEqual((int)SignUpStatus.DidntEnterSystem, _bridge.SignUp("Pnina", "miahol susia 12", "123456"));
 		}
+
+		/*[TestMethod]
+	
+		public void RegistrationWithoutEnteringTheSystem()
+		{
+			Assert.AreEqual((int)SignUpStatus.DidntEnterSystem, _bridge.SignUp("Pnina", "miahol susia 12", "123456"));
+		}
+		*/
 
 		[TestCleanup]
 		public void UserTestCleanUp()
