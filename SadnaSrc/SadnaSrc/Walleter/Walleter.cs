@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SadnaSrc.UserSpot
+namespace SadnaSrc.Walleter
 {
-    class UserPolicy
+    class Walleter
     {
     }
 }

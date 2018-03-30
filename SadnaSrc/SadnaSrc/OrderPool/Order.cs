@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SadnaSrc.MarketYard
+namespace SadnaSrc.OrderPool
 {
-    class MarketYard
+    class Order
     {
     }
 }
