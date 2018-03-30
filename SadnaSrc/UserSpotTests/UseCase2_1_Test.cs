@@ -160,7 +160,7 @@ namespace UserSpotTests
             object[] expectedData = { adminUser.SystemID, "MaorLogin17", "Here 3", UserService.GetSecuredPassword("123") };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.AreEqual(1, adminUser.GetStatePolicies().Length);
-            Assert.AreEqual(0,adminUser.GetStatePolicies().Length);
+            Assert.AreEqual(0,adminUser.GetStoreManagerPolicies().Length);
             adminUser.PromoteToAdmin();
             Assert.AreEqual(0, adminUser.GetCart().Length);
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
