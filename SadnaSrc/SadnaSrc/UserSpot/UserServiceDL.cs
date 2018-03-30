@@ -74,21 +74,24 @@ namespace SadnaSrc.UserSpot
             SaveCartItem(guestCart);
             return new RegisteredUser(SystemID, name,address,password,guestCart);
         }
-        public void SaveUserPolicy(StatePolicy policy)
+        public void SaveUserStatePolicy(StatePolicy policy)
         {
-            string [] valuesNames = {"@idParam","@stateParam","@actionParam","@storeParam"};
-            object[] values = { SystemID, policy.GetStateString(), null, null};
-            InsertTable("UserPolicy", "SystemID,state,action,store",valuesNames,values);
+            string [] valuesNames = {"@idParam","@stateParam"};
+            object[] values = { SystemID, policy.GetStateString()};
+            InsertTable("StatePolicy", "SystemID,State",valuesNames,values);
         }
 
         public void SaveUserStorePolicy(StoreManagerPolicy policy)
         {
-
+            string[] valuesNames = { "@idParam", "@storeParam","@actionParam" };
+            object[] values = { SystemID, policy.Store,policy.GetStoreActionString() };
+            InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
         }
  
         public void DeleteUserStorePolicy(StoreManagerPolicy policy)
         {
-
+            DeleteFromTable("StoreManagerPolicy","SystemID = "+ SystemID +" AND Store = "+policy.Store
+                                                 + " AND Action =" + policy.Action);
         }
 
         private StatePolicy[] LoadUserStatePolicy()
@@ -98,7 +101,7 @@ namespace SadnaSrc.UserSpot
             {
                 while (dbReader.Read())
                 {
-                    StatePolicy.State state = StatePolicy.GetStateFromString(dbReader.GetString(1));
+                    StatePolicy.State state = StatePolicy.GetStateFromString(dbReader.GetString(0));
                     loadedStatesPolicies.Add(new StatePolicy(state));
                 }
             }
@@ -108,7 +111,7 @@ namespace SadnaSrc.UserSpot
         private StoreManagerPolicy[] LoadUserStorePolicies()
         {
             List<StoreManagerPolicy> loadedStorePolicies = new List<StoreManagerPolicy>();
-            using (var dbReader = SelectFromTableWithCondition("StatePolicy", "*", "SystemID = " + SystemID))
+            using (var dbReader = SelectFromTableWithCondition("StoreManagerPolicy", "*", "SystemID = " + SystemID))
             {
                 while (dbReader.Read())
                 {

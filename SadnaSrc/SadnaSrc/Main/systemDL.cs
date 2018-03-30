@@ -97,7 +97,7 @@ namespace SadnaSrc.Main
 
         private static string CreateUserStatePolicyTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [UserPolicy] (
+            return @"CREATE TABLE IF NOT EXISTS [StatePolicy] (
                                     [SystemID]      INTEGER,
                                     [State]         TEXT,
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
@@ -107,7 +107,7 @@ namespace SadnaSrc.Main
 
         private static string CreateUserStorePolicyTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [UserPolicy] (
+            return @"CREATE TABLE IF NOT EXISTS [StoreManagerPolicy] (
                                     [SystemID]      INTEGER,
                                     [Store]         TEXT,
                                     [Action]        TEXT,

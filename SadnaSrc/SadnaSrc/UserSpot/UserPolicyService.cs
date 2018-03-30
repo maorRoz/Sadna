@@ -55,7 +55,7 @@ namespace SadnaSrc.UserSpot
 
         public void AddStatePolicy(StatePolicy.State state)
         {
-            _userDL.SaveUserPolicy(new StatePolicy(state));
+            _userDL.SaveUserStatePolicy(new StatePolicy(state));
             StatesPolicies.Add(new StatePolicy(state));
         }
 
