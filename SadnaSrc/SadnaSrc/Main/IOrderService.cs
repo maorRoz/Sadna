@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
-    interface IOrderService
+    public interface IOrderService
     {
 
 

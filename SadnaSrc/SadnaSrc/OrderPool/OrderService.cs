@@ -1,14 +1,16 @@
 ﻿using SadnaSrc.UserSpot;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.OrderPool
 {
-    public class OrderService
+    public class OrderService : IOrderService
     {
         // TODO add support to external systems once there is more clarification about the systems. !!! IMPORTANT !!!
         private string _userName;
@@ -17,7 +19,11 @@ namespace SadnaSrc.OrderPool
         private bool _toSave;
 
         public string getUsername() {  return _userName;}
-        //public List<Order> getOrders() { return  _orders; }
+        public List<Order> getOrders() { return  _orders; }
+
+        public void setUsername(string name) { _userName = name;}
+        public void setSave(bool save) { _toSave = save; }
+
 
         public OrderService(string userName, bool toSave, SQLiteConnection dbConnection)
         {
@@ -27,8 +33,17 @@ namespace SadnaSrc.OrderPool
             _orderDL = new OrderPoolDL(dbConnection);
         }
 
+        public OrderService(SQLiteConnection dbConnection)
+        {
+            _orders = new List<Order>();
+            _userName = "default";
+            _toSave = true;
+            _orderDL = new OrderPoolDL(dbConnection);
+        }
+
+
         // TODO might need to change the CartItem to Product once its implemented.
-        public void CreateOrderFromCart(CartItem[] items)
+        public Order CreateOrderFromCart(CartItem[] items)
         {
             Order order = new Order(RandomOrderID(), _userName);
             foreach (CartItem item in items)
@@ -41,9 +56,11 @@ namespace SadnaSrc.OrderPool
             {
                 _orderDL.AddOrder(order);
             }
+            MarketLog.Log("OrderPool", "User " + _userName + " added new order from the cart.");
+            return order;
         }
 
-        public void CreateOrder()
+        public Order CreateOrder()
         {
             Order order = new Order(RandomOrderID(), _userName);
 
@@ -52,6 +69,9 @@ namespace SadnaSrc.OrderPool
             {
                 _orderDL.AddOrder(order);
             }
+            MarketLog.Log("OrderPool", "User " + _userName + " added new order.");
+
+            return order;
         }
 
         public Order getOrder(int orderID)
@@ -76,6 +96,7 @@ namespace SadnaSrc.OrderPool
                     {
                         _orderDL.RemoveOrder(orderId);
                     }
+                    MarketLog.Log("OrderPool", "User " + _userName + " removed order ID: "+orderId+" from his OrderPool");
                 }
             } 
         }
@@ -96,8 +117,10 @@ namespace SadnaSrc.OrderPool
                             _orderDL.RemoveItemFromOrder(orderID, name, store);
                             _orderDL.UpdateOrderPrice(orderID, newPrice);
                         }
+                        MarketLog.Log("OrderPool", "User " + _userName + " removed order Item from order ID: " + orderID);
+
                     }
-                    
+
                 }
             }
         }
@@ -113,6 +136,7 @@ namespace SadnaSrc.OrderPool
                 _orderDL.AddItemToOrder(orderID, item);
                 _orderDL.UpdateOrderPrice(orderID,newPrice);
             }
+            MarketLog.Log("OrderPool", "User " + _userName + " added order Item to order ID: " + orderID);
 
         }
 
@@ -125,6 +149,14 @@ namespace SadnaSrc.OrderPool
             }
 
             return ret;
+        }
+
+        public OrderItem FindOrderItemInOrder(int orderId, string store, string user)
+        {
+            OrderItem order = _orderDL.FindOrderItemInOrder(orderId, store, user);
+            if(order == null)
+               throw new OrderException(0,"No order item found in order ID: "+orderId);
+            return order;
         }
 
 
