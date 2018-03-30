@@ -17,7 +17,7 @@ namespace SadnaSrc.OrderPool
         private bool _toSave;
 
         public string getUsername() {  return _userName;}
-        public List<Order> getOrders() { return  _orders; }
+        //public List<Order> getOrders() { return  _orders; }
 
         public OrderService(string userName, bool toSave, SQLiteConnection dbConnection)
         {
@@ -43,13 +43,9 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public void CreateOrder(OrderItem[] items)
+        public void CreateOrder()
         {
             Order order = new Order(RandomOrderID(), _userName);
-            foreach (OrderItem item in items)
-            {
-                order.AddOrderItem(item);
-            }
 
             _orders.Add(order);
             if (_toSave)
@@ -67,6 +63,7 @@ namespace SadnaSrc.OrderPool
 
             return null;
         }
+
 
         public void RemoveOrder(int orderId)
         {
@@ -89,19 +86,39 @@ namespace SadnaSrc.OrderPool
             {
                 if(order.GetOrderID() == orderID)
                 {
-                    order.RemoveOrderItem(order.getOrderItem(name,store));
-                    if (_toSave)
+                    var item = order.getOrderItem(name, store);
+                    if (item != null)
                     {
-                        _orderDL.RemoveItemFromOrder(orderID,name,store);
+                        double newPrice = order.GetPrice() - item.GetPrice();
+                        order.RemoveOrderItem(item);
+                        if (_toSave)
+                        {
+                            _orderDL.RemoveItemFromOrder(orderID, name, store);
+                            _orderDL.UpdateOrderPrice(orderID, newPrice);
+                        }
                     }
+                    
                 }
+            }
+        }
+
+        public void AddItemToOrder(int orderID, OrderItem item)
+        {
+            var order = getOrder(orderID);
+            order.AddOrderItem(item);
+            double newPrice = order.GetPrice() + item.GetPrice();
+            order.setPrice(newPrice);
+            if (_toSave)
+            {
+                _orderDL.AddItemToOrder(orderID, item);
+                _orderDL.UpdateOrderPrice(orderID,newPrice);
             }
 
         }
 
         public int RandomOrderID()
         {
-            int ret = new Random().Next(100000, 999999);
+            var ret = new Random().Next(100000, 999999);
             while (_orderDL.FindOrder(ret) != null)
             {
                 ret = new Random().Next(100000, 999999);

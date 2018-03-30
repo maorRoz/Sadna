@@ -10,7 +10,7 @@ namespace SadnaSrc.OrderPool
 {
 
     // TODO add Logging mechanism and Order History DB Tables(or table) to the OrderPool
-    class OrderPoolDL : systemDL
+    class OrderPoolDL : SystemDL
     {
         public OrderPoolDL(SQLiteConnection dbConnection) : base(dbConnection)
         {
@@ -24,16 +24,17 @@ namespace SadnaSrc.OrderPool
             {
                 if (dbReader.GetValue(0) != null)
                 {
+                    // TODO fix the order construction
                     order = new Order(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2));
                 }
             }
             return order;
         }
 
-        public List<OrderItem> FindOrderItemsOfOrder(int id)
+        public List<OrderItem> GetAllItems(int orderId)
         {
             List<OrderItem> list = new List<OrderItem>();
-            var dbReader = SelectFromTableWithCondition("OrderItemsToOrders JOIN OrderItem", "*", "OrderID = " + id + "");
+            var dbReader = SelectFromTableWithCondition("OrderItem", "*", "OrderID = " + orderId + "");
             while (dbReader.Read())
             {
                 if (dbReader.GetValue(0) != null)
@@ -45,6 +46,22 @@ namespace SadnaSrc.OrderPool
             return list;
         }
 
+        public OrderItem FindOrderItemInOrder(int orderId, string store,string name)
+        {
+            var dbReader = SelectFromTableWithCondition("OrderItem", "*", "OrderID = " + orderId + "AND"+
+                                                                          "Store = '" + store + "' AND "+
+                                                                          "Name = '"+ name + "'");
+            while (dbReader.Read())
+            {
+                if (dbReader.GetValue(0) != null)
+                {
+                    return new OrderItem(dbReader.GetString(0),dbReader.GetString(1),dbReader.GetInt32(2), dbReader.GetInt32(3));
+                    
+                }
+            }
+            return null;
+        }
+
         public void AddOrder(Order order)
         {
             string[] valuesNames = { "@idParam", "@nameParam", "@addressParam", "@priceParam" , "@dateParam" };
@@ -53,13 +70,9 @@ namespace SadnaSrc.OrderPool
 
             foreach (OrderItem item in order.GetItems())
             {
-                string[] valuesNames2 = { "@idParam", "@storeParam", "@nameParam" };
-                object[] values2 = { order.GetOrderID(), item.GetStore(), item.GetName()};
-                InsertTable("OrderItemsToOrders", "OrderID,Store,Name", valuesNames2, values2);
-
-                string[] valuesNames3 = {"@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
-                object[] values3 = { item.GetStore(), item.GetName(), item.GetPrice(),item.GetQuantity() };
-                InsertTable("OrderItem", "Store,Name,Price,Quantity", valuesNames3, values3);
+                string[] valuesNames2 = { "@idParam", "@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
+                object[] values2 = { order.GetOrderID(), item.GetStore(), item.GetName(), item.GetPrice(),item.GetQuantity() };
+                InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
             }
 
         }
@@ -68,33 +81,32 @@ namespace SadnaSrc.OrderPool
         {
             if (FindOrder(orderId) == null)
             {
-                throw new OrderException("no user with id: "+ orderId + " in the Order database.");
+                throw new OrderException(0,"no user with id: "+ orderId + " in the Order database.");
             }
-            List<OrderItem> list = FindOrderItemsOfOrder(orderId);
-            foreach (OrderItem item in list)
-            {
-                DeleteFromTable("OrderItem", "Store = '" + item.GetStore() + "' AND Name = '"+ item.GetName() +"'");
-            }
-            DeleteFromTable("OrderItemsToOrders", "OrderID = " + orderId);
+            DeleteFromTable("OrderItem", "OrderID = " + orderId);
             DeleteFromTable("Order", "ID = " + orderId);
 
         }
 
         public void AddItemToOrder(int orderId, OrderItem item)
         {
-            string[] valuesNames2 = { "@idParam", "@storeParam", "@nameParam" };
-            object[] values2 = { orderId, item.GetStore(), item.GetName() };
-            InsertTable("OrderItemsToOrders", "OrderID,Store,Name", valuesNames2, values2);
-
-            string[] valuesNames3 = { "@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
-            object[] values3 = { item.GetStore(), item.GetName(), item.GetPrice(), item.GetQuantity() };
-            InsertTable("OrderItem", "Store,Name,Price,Quantity", valuesNames3, values3);
+            string[] valuesNames2 = { "@idParam", "@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
+            object[] values2 = { orderId, item.GetStore(), item.GetName(), item.GetPrice(), item.GetQuantity() };
+            InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
         }
 
         public void RemoveItemFromOrder(int orderId, string name, string store)
         {
-            DeleteFromTable("OrderItemsToOrders", "OrderID = " + orderId + " AND Name = '"+ name +"' AND Store = '"+ store +"'");
-            DeleteFromTable("OrderItem","Name = '" + name + "' AND Store = '" + store + "'");
+            DeleteFromTable("OrderItem", "OrderID = " + orderId + "Name = '" + name + "' AND Store = '" + store + "'");
+        }
+
+
+        public void UpdateOrderPrice(int orderId, double price)
+        {
+            string[] columnNames = { "TotalPrice"};
+            string[] valuesNames = { "@totalprice"};
+            object[] values = { price };
+            UpdateTable("Order", "OrderID = " + orderId, columnNames, valuesNames, values);
         }
     }
 }

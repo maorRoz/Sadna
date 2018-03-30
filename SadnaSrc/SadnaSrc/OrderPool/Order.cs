@@ -23,6 +23,9 @@ namespace SadnaSrc.OrderPool
         public int GetOrderID() { return _orderId; }
         public DateTime getDate() {  return _date;}
 
+        public void setPrice(double price) {_totalPrice = price;}
+        public void setAddress(string address) { _shippingAddress = address; }
+
         public Order(int orderId, string userName)
         {
             _userName = userName;
@@ -42,6 +45,27 @@ namespace SadnaSrc.OrderPool
             _date = DateTime.Today;
         }
 
+        public Order(int orderId, string userName, string shippingAddress, double price, string dateString,
+            List<OrderItem> items)
+        {
+            _userName = userName;
+            _shippingAddress = shippingAddress;
+            _items = items;
+            _orderId = orderId;
+            _totalPrice = price;
+            _date = parseDate(dateString);
+        }
+
+        private DateTime parseDate(string dateString)
+        {
+            int days= Int32.Parse(dateString.Substring(0,2));
+            int months = Int32.Parse(dateString.Substring(3, 2));
+            int years = Int32.Parse(dateString.Substring(6, 4));
+            return new DateTime(years,months,days);
+
+
+        }
+
         public OrderItem getOrderItem(string name,string store)
         {
             foreach (OrderItem item in _items)
@@ -57,7 +81,7 @@ namespace SadnaSrc.OrderPool
         {
             if (getOrderItem(item.GetName(), item.GetStore()) != null)
             {
-                throw new OrderException("Order item is already listed in the order.");
+                throw new OrderException(0, "Order item is already listed in the order.");
             }
             else
             {
@@ -70,7 +94,7 @@ namespace SadnaSrc.OrderPool
         {
             if (getOrderItem(item.GetName(), item.GetStore()) == null)
             {
-                throw new OrderException("Order item is not listed in the order.");
+                throw new OrderException(0, "Order item is not listed in the order.");
             }
             else
             {
@@ -93,7 +117,7 @@ namespace SadnaSrc.OrderPool
 
         public object[] ToData()
         {
-            object[] ret = { _orderId, _userName, _shippingAddress, _totalPrice, _date.ToString() };
+            object[] ret = { _orderId, _userName, _shippingAddress, _totalPrice, _date.ToString("dd/MM/yyyy") };
             
             return ret;
         }

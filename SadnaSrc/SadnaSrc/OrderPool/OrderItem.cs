@@ -39,6 +39,10 @@ namespace SadnaSrc.OrderPool
         public double GetPrice() { return _price; }
         public int GetQuantity() { return _quantity; }
 
+        public void setName(string name) { _name = name;}
+        public void setPrice(double price) { _price = price;}
+        public void setQuantity(int quantity) { _quantity = quantity;}
+
 
 
     }
