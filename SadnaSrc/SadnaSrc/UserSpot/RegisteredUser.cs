@@ -13,7 +13,7 @@ namespace SadnaSrc.UserSpot
         private string address;
         private string password;
 
-        private void RegisteredUserSetter(string name, string address, string password, CartItem[] savedCart)
+        private void InitiateRegisteredUser(string name, string address, string password, CartItem[] savedCart)
         {
             this.name = name;
             this.address = address;
@@ -24,7 +24,7 @@ namespace SadnaSrc.UserSpot
         public RegisteredUser(int systemID,string name,string address,string password,CartItem[] guestCart) 
             : base(systemID)
         {
-            RegisteredUserSetter(name, address, password, guestCart);
+            InitiateRegisteredUser(name, address, password, guestCart);
             PolicyService.AddStatePolicy(UserPolicy.State.RegisteredUser);
 
         }
@@ -33,7 +33,7 @@ namespace SadnaSrc.UserSpot
             string loadedPassword, CartItem[] loadedCart, UserPolicy[] loadedPolicies) 
             : base(loadedSystemID)
         {
-            RegisteredUserSetter(loadednName, loadedAddress, loadedPassword, loadedCart);
+            InitiateRegisteredUser(loadednName, loadedAddress, loadedPassword, loadedCart);
             PolicyService.LoadPolicies(loadedPolicies);
         }
 
@@ -47,7 +47,7 @@ namespace SadnaSrc.UserSpot
         {
             PolicyService.AddStatePolicy(UserPolicy.State.SystemAdmin);
         }
-        public void AddUserPolicy(string store, List<StoreAdminPolicy.StoreAction> actionsToAdd)
+        public void AddStoreManagerPolicy(string store, StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
             PolicyService.UpdateStorePolicies(store,actionsToAdd);
         }

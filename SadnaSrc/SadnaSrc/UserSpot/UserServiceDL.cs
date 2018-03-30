@@ -52,7 +52,7 @@ namespace SadnaSrc.UserSpot
         }
 
 
-        private bool IsUserExist(string name)
+        private bool IsUserNameExist(string name)
         {
             using (var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "'"))
             {
@@ -62,7 +62,7 @@ namespace SadnaSrc.UserSpot
         }
         public RegisteredUser RegisterUser(string name, string address, string password, CartItem[] guestCart)
         {
-            if (IsUserExist(name))
+            if (IsUserNameExist(name))
             {
                 throw new UserException(SignUpStatus.TakenName,"register action has been requested while there" +
                                         " is already a User with the given name in the system!");
@@ -81,17 +81,12 @@ namespace SadnaSrc.UserSpot
             InsertTable("UserPolicy", "SystemID,state,action,store",valuesNames,values);
         }
 
-        public void SaveUserPolicy(StoreAdminPolicy policy)
+        public void SaveUserPolicy(StoreManagerPolicy policy)
         {
 
         }
-
-        public void DeleteUserPolicy(UserPolicy policy)
-        {
-
-        }
-
-        public void DeleteUserPolicy(StoreAdminPolicy policy)
+ 
+        public void DeleteUserPolicy(StoreManagerPolicy policy)
         {
 
         }
@@ -114,7 +109,7 @@ namespace SadnaSrc.UserSpot
                     }
                     else
                     {
-                        loadedPolicies.Add(new StoreAdminPolicy(StoreAdminPolicy.GetActionFromString(
+                        loadedPolicies.Add(new StoreManagerPolicy(StoreManagerPolicy.GetActionFromString(
                             dbReader.GetString(2)), dbReader.GetString(3)));
                     }
                 }
@@ -250,18 +245,10 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        public void RemoveUser(int toDeleteID)
+        public void DeleteUser(int toDeleteID)
         {
             DeleteFromTable("User", "SystemID = " + toDeleteID);
         }
-        public List<string> ViewUserPurchaseHistory(User user)
-        {
-            return null;
-        }
 
-        public List<string> ViewStorePurchaseHistory(string store)
-        {
-            return null;
-        }
     }
 }

@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "Integra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderPoolWallaterSupplyPointTests", "OrderPoolWallaterSupplyPointTests\OrderPoolWallaterSupplyPointTests.csproj", "{F387D88E-A17C-4F74-B28A-8D034A58961E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemViewTests", "SystemViewTests\SystemViewTests.csproj", "{CA91CE53-90F2-4980-B14B-E9389F484884}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{F387D88E-A17C-4F74-B28A-8D034A58961E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F387D88E-A17C-4F74-B28A-8D034A58961E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F387D88E-A17C-4F74-B28A-8D034A58961E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA91CE53-90F2-4980-B14B-E9389F484884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA91CE53-90F2-4980-B14B-E9389F484884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA91CE53-90F2-4980-B14B-E9389F484884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA91CE53-90F2-4980-B14B-E9389F484884}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -217,7 +217,7 @@ namespace UserSpotTests
             userServiceSignUpSession = (UserService)marketSession.GetUserService();
             userServiceSignUpSession.EnterSystem();
             Assert.AreEqual((int) SignUpStatus.Success, userServiceSignUpSession.SignUp(name, address, password).Status);
-            userServiceSignInSession.ReConnect();
+            userServiceSignInSession.Synch();
 
         }
         private void MissingCredentialsSignInTest(string name, string address,

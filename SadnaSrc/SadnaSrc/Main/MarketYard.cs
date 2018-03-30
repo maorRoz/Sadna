@@ -4,6 +4,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.AdminView;
 using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.Main
@@ -43,9 +44,9 @@ namespace SadnaSrc.Main
             return new UserService(_dbConnection);
         }
 
-        public ISystemAdminService GetSystemAdminService()
+        public ISystemAdminService GetSystemAdminService(IUserService userService)
         {
-            return new UserService(_dbConnection);
+            return new SystemAdminService(_dbConnection,(UserService) userService);
         }
 
 

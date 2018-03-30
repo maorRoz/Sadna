@@ -7,30 +7,25 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    public class StoreAdminPolicy : UserPolicy
+    public class StoreManagerPolicy : UserPolicy
     {
         public enum StoreAction { StoreOwner,PromoteStoreAdmin, ManageProducts, DeclarePurchasePolicy, DeclareDiscountPolicy, ViewPurchaseHistory}
-        private string _store;
-        private StoreAction _storeAction;
-        public StoreAdminPolicy(StoreAction storeAction, string store) : base(State.StoreManager)
+        public string Store { get; }
+        public StoreAction Action { get; }
+        public StoreManagerPolicy(StoreAction storeAction, string store) : base(State.StoreManager)
         {
-            _storeAction = storeAction;
-            _store = store;
-        }
-
-        public StoreAction GetAction()
-        {
-            return _storeAction;
+            Action = storeAction;
+            Store = store;
         }
 
         public string GetStoreActionString()
         {
-            switch (_storeAction)
+            switch (Action)
             {
                 case StoreAction.StoreOwner:
-                    return "StoreManager";
+                    return "StoreOwner";
                 case StoreAction.PromoteStoreAdmin:
-                    return "SystemAdmin";
+                    return "PromoteStoreAdmin";
                 case StoreAction.ManageProducts:
                     return "ManageProducts";
                 case StoreAction.DeclarePurchasePolicy:

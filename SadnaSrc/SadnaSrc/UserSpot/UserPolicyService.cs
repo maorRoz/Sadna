@@ -26,29 +26,45 @@ namespace SadnaSrc.UserSpot
             _userDL = userDL;
         }
 
-        public void AddStorePolicy(string store, StoreAdminPolicy.StoreAction storeAction)
+        public static StoreManagerPolicy[] FilterStoreManagerPolicies(UserPolicy[] unFilteredPolicies)
         {
-            StoreAdminPolicy toAdd = new StoreAdminPolicy(storeAction, store); 
+            List<StoreManagerPolicy> filteredStoreManagerPolicies = new List<StoreManagerPolicy>();
+
+            foreach (UserPolicy policy in unFilteredPolicies)
+            {
+                if (policy.GetState() == UserPolicy.State.StoreManager)
+                {
+                    filteredStoreManagerPolicies.Add((StoreManagerPolicy)policy);
+                }
+            }
+
+            return filteredStoreManagerPolicies.ToArray();
+
+        }
+
+        public void AddStorePolicy(string store, StoreManagerPolicy.StoreAction storeAction)
+        {
+            StoreManagerPolicy toAdd = new StoreManagerPolicy(storeAction, store); 
             policies.Add(toAdd);
             _userDL.SaveUserPolicy(toAdd);
         }
 
-        public void UpdateStorePolicies(string store,List<StoreAdminPolicy.StoreAction> actionsToAdd)
+        public void UpdateStorePolicies(string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
             //TODO: check if store exist here or in DB query(with WHERE or something)
-            foreach (StoreAdminPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreAdminPolicy.StoreAction)))
+            foreach (StoreManagerPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreManagerPolicy.StoreAction)))
             {
                 RemoveStorePolicy(store, oldAction);
             }
-            foreach (StoreAdminPolicy.StoreAction action in actionsToAdd)
+            foreach (StoreManagerPolicy.StoreAction action in actionsToAdd)
             {
                 AddStorePolicy(store,action);
             }
             
         }
-        private void RemoveStorePolicy(string store, StoreAdminPolicy.StoreAction storeAction)
+        private void RemoveStorePolicy(string store, StoreManagerPolicy.StoreAction storeAction)
         {
-            StoreAdminPolicy toRemove = new StoreAdminPolicy(storeAction,store);
+            StoreManagerPolicy toRemove = new StoreManagerPolicy(storeAction,store);
             if (policies.Remove(toRemove))
             {
                 _userDL.DeleteUserPolicy(toRemove);
