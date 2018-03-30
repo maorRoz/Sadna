@@ -175,7 +175,7 @@ namespace SadnaSrc.Main
         {
             return @"CREATE TABLE IF NOT EXISTS [OrderItem] (
                                     [OrderID]       INTEGER,
-                                    [Store]         INTEGER,
+                                    [Store]         TEXT,
                                     [Name]          TEXT,
                                     [Price]         REAL,
                                     [Quantity]      INTEGER,
