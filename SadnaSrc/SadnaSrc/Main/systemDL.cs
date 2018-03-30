@@ -161,7 +161,7 @@ namespace SadnaSrc.Main
 
         private static string CreateOrderTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [Order] (
+            return @"CREATE TABLE IF NOT EXISTS [Orders] (
                                     [OrderID]           INTEGER,
                                     [UserName]          TEXT,
                                     [ShippingAddress]   TEXT,
@@ -179,7 +179,7 @@ namespace SadnaSrc.Main
                                     [Name]          TEXT,
                                     [Price]         REAL,
                                     [Quantity]      INTEGER,
-                                    FOREIGN KEY([OrderID])      REFERENCES [Order]([OrderID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([OrderID])      REFERENCES [Orders]([OrderID]) ON DELETE CASCADE,
                                     FOREIGN KEY([Store])        REFERENCES [Store]([Name]),
                                     PRIMARY KEY([OrderID],[Store],[Name])
                                     )";
