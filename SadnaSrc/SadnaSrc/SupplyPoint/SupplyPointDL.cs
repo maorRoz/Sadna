@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SadnaSrc.Walleter
+namespace SadnaSrc.SupplyPoint
 {
-    public class Walleter
+    public class SupplyPointDL
     {
-
-
     }
 }
