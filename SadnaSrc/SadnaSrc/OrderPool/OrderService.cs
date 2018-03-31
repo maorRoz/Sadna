@@ -22,18 +22,18 @@ namespace SadnaSrc.OrderPool
         public void setUsername(string name) { _userName = name;}
 
 
-        public OrderService(string userName, SQLiteConnection dbConnection)
+        public OrderService(string userName)
         {
             _orders= new List<Order>();
             _userName = userName;
-            _orderDL = new OrderPoolDL(dbConnection);
+            _orderDL = new OrderPoolDL();
         }
 
-        public OrderService(SQLiteConnection dbConnection)
+        public OrderService()
         {
             _orders = new List<Order>();
             _userName = "default";
-            _orderDL = new OrderPoolDL(dbConnection);
+            _orderDL = new OrderPoolDL();
         }
 
 
