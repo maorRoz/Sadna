@@ -17,6 +17,7 @@ namespace SystemViewTests
         private int toRemoveUserIdSoleOwner= 2;
         private int toRemoveUserIdNotSoleOwner = 3;
         private int adminID = 1;
+        private int noUserID = 100000;
         private string adminName = "Arik1";
         private string adminPass = "123";
         [TestInitialize]
@@ -92,7 +93,7 @@ namespace SystemViewTests
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.NoUserFound, adminServiceSession.RemoveUser(53453).Status);
+            Assert.AreEqual((int)RemoveUserStatus.NoUserFound, adminServiceSession.RemoveUser(noUserID).Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
 

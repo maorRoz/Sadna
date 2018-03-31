@@ -84,6 +84,7 @@
     <Compile Include="OrderPool\OrderItem.cs" />
     <Compile Include="OrderPool\OrderPoolDL.cs" />
     <Compile Include="OrderPool\OrderService.cs" />
+    <Compile Include="OrderPool\PurchaseHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreCenter\Store.cs" />
     <Compile Include="StoreCenter\StoreException.cs" />

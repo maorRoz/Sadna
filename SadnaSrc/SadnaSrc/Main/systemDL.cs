@@ -160,14 +160,17 @@ namespace SadnaSrc.Main
         private static string CreatePurchaseHistoryTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [PurchaseHistory] (
-                                    [SystemID]      INTEGER,
-                                    [Name]          TEXT,
+                                    [UserName]      TEXT,
+                                    [Product]       TEXT,
                                     [Store]         TEXT,
+                                    [SaleType]      TEXT,
                                     [Date]          TEXT,
-                                    FOREIGN KEY([SystemID])     REFERENCES [User]([SystemID]),
-                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name]),
-                                    PRIMARY KEY([SystemID],[Name],[Store],[Date])
+                                    PRIMARY KEY([UserName],[Product],[Store],[SaleType],[Date])
                                     )";
+            //TODO: add this to the string :   FOREIGN KEY([UserName])        REFERENCES [Product]([Name]), 
+            //TODO: add this to the string :   FOREIGN KEY([Product])        REFERENCES [Product]([Name]), 
+            //TODO: add this to the string :   FOREIGN KEY([Store])        REFERENCES [Product]([Name]), 
+            //TODO: add this to the string :   FOREIGN KEY([SaleType])        REFERENCES something of sale table...? 
         }
 
         private static string CreateProductTable()
