@@ -9,14 +9,14 @@ namespace SadnaSrc.UserSpot
 {
     public class RegisteredUser : User
     {
-        private string name;
-        private string address;
+        public string Name { get; private set; }
+        public string Address { get; private set; }
         private string password;
 
-        private void RegisteredUserSetter(string name, string address, string password, CartItem[] savedCart)
+        private void InitiateRegisteredUser(string name, string address, string password, CartItem[] savedCart)
         {
-            this.name = name;
-            this.address = address;
+            Name = name;
+            Address = address;
             this.password = password;
             cart.EnableCartSave();
             cart.LoadCart(savedCart);
@@ -24,30 +24,30 @@ namespace SadnaSrc.UserSpot
         public RegisteredUser(int systemID,string name,string address,string password,CartItem[] guestCart) 
             : base(systemID)
         {
-            RegisteredUserSetter(name, address, password, guestCart);
-            PolicyService.AddStatePolicy(UserPolicy.State.RegisteredUser);
+            InitiateRegisteredUser(name, address, password, guestCart);
+            PolicyService.AddStatePolicy(StatePolicy.State.RegisteredUser);
 
         }
 
         public RegisteredUser(int loadedSystemID, string loadednName, string loadedAddress,
-            string loadedPassword, CartItem[] loadedCart, UserPolicy[] loadedPolicies) 
+            string loadedPassword, CartItem[] loadedCart, StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions) 
             : base(loadedSystemID)
         {
-            RegisteredUserSetter(loadednName, loadedAddress, loadedPassword, loadedCart);
-            PolicyService.LoadPolicies(loadedPolicies);
+            InitiateRegisteredUser(loadednName, loadedAddress, loadedPassword, loadedCart);
+            PolicyService.LoadPolicies(loadedStates,loadedStorePermissions);
         }
 
         public override object[] ToData()
         {
-            object[] ret = { systemID, name, address, password };
+            object[] ret = { systemID, Name, Address, password };
             return ret;
         }
 
         public void PromoteToAdmin()
         {
-            PolicyService.AddStatePolicy(UserPolicy.State.SystemAdmin);
+            PolicyService.AddStatePolicy(StatePolicy.State.SystemAdmin);
         }
-        public void AddUserPolicy(string store, List<StoreAdminPolicy.StoreAction> actionsToAdd)
+        public void AddStoreManagerPolicy(string store, StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
             PolicyService.UpdateStorePolicies(store,actionsToAdd);
         }

@@ -9,16 +9,14 @@ namespace SadnaSrc.UserSpot
 {
     public class UserPolicyService
     {
-        private List<UserPolicy> policies;
         private static UserServiceDL _userDL;
-        public List<UserPolicy> Policies
-        {
-            get{ return policies;}
-        }
+        public List<StoreManagerPolicy> StorePolicies { get; }
+        public List<StatePolicy> StatesPolicies { get; }
 
         public UserPolicyService()
         {
-            policies = new List<UserPolicy>();
+            StatesPolicies = new List<StatePolicy>();
+            StorePolicies = new List<StoreManagerPolicy>();
         }
 
         public static void EstablishServiceDL(UserServiceDL userDL)
@@ -26,51 +24,51 @@ namespace SadnaSrc.UserSpot
             _userDL = userDL;
         }
 
-        public void AddStorePolicy(string store, StoreAdminPolicy.StoreAction storeAction)
+        public void AddStorePolicy(string store, StoreManagerPolicy.StoreAction storeAction)
         {
-            StoreAdminPolicy toAdd = new StoreAdminPolicy(storeAction, store); 
-            policies.Add(toAdd);
-            _userDL.SaveUserPolicy(toAdd);
+            StoreManagerPolicy toAdd = new StoreManagerPolicy(store, storeAction);
+            StorePolicies.Add(toAdd);
+            _userDL.SaveUserStorePolicy(toAdd);
         }
 
-        public void UpdateStorePolicies(string store,List<StoreAdminPolicy.StoreAction> actionsToAdd)
+        public void UpdateStorePolicies(string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
             //TODO: check if store exist here or in DB query(with WHERE or something)
-            foreach (StoreAdminPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreAdminPolicy.StoreAction)))
+            foreach (StoreManagerPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreManagerPolicy.StoreAction)))
             {
                 RemoveStorePolicy(store, oldAction);
             }
-            foreach (StoreAdminPolicy.StoreAction action in actionsToAdd)
+            foreach (StoreManagerPolicy.StoreAction action in actionsToAdd)
             {
                 AddStorePolicy(store,action);
             }
             
         }
-        private void RemoveStorePolicy(string store, StoreAdminPolicy.StoreAction storeAction)
+        private void RemoveStorePolicy(string store, StoreManagerPolicy.StoreAction storeAction)
         {
-            StoreAdminPolicy toRemove = new StoreAdminPolicy(storeAction,store);
-            if (policies.Remove(toRemove))
+            StoreManagerPolicy toRemove = new StoreManagerPolicy(store, storeAction);
+            if (StorePolicies.Remove(toRemove))
             {
-                _userDL.DeleteUserPolicy(toRemove);
+                _userDL.DeleteUserStorePolicy(toRemove);
             }
         }
 
-        public void AddStatePolicy(UserPolicy.State state)
+        public void AddStatePolicy(StatePolicy.State state)
         {
-            if (state == UserPolicy.State.StoreManager)
-            {
-                throw new UserException(
-                    MarketError.LogicError,"Cannot add UserPolicy of a Store Manager role without describing the nature of the permission or the related store");
-            }
-            _userDL.SaveUserPolicy(new UserPolicy(state));
-            policies.Add(new UserPolicy(state));
+            _userDL.SaveUserStatePolicy(new StatePolicy(state));
+            StatesPolicies.Add(new StatePolicy(state));
         }
 
-        public void LoadPolicies(UserPolicy[] loadedPolicies)
+        public void LoadPolicies(StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions)
         {
-            foreach (UserPolicy loadedPolicy in  loadedPolicies)
+            foreach (StatePolicy loadedState in loadedStates)
             {
-                policies.Add(loadedPolicy);
+                StatesPolicies.Add(loadedState);
+            }
+
+            foreach (StoreManagerPolicy loadedStorePermission in loadedStorePermissions)
+            {
+                StorePolicies.Add(loadedStorePermission);
             }
         }
 

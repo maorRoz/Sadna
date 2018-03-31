@@ -8,22 +8,23 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    public class UserService : IUserService,ISystemAdminService
+    public class UserService : IUserService
     {
         private User user;
         private readonly UserServiceDL userDL;
         private int systemID;
         private int oldID;
 
-        public UserService(SQLiteConnection dbConnection)
+        public UserService()
         {
-            userDL = new UserServiceDL(dbConnection);
+            userDL = new UserServiceDL();
+            user = null;
             systemID = userDL.GetSystemID();
-            oldID = -1;
-            ReConnect();
+            oldID = systemID;
+            Synch();
         }
 
-        public void ReConnect()
+        public void Synch()
         {
             UserException.SetUser(systemID);
             UserPolicyService.EstablishServiceDL(userDL);
@@ -48,15 +49,15 @@ namespace SadnaSrc.UserSpot
             if (action.Equals("sign up"))
             {
                 throw new UserException(SignUpStatus.DidntEnterSystem,
-                    "sign up action has been requested by user which hasn't fully entered the system yet!");
+                    "sign up action has been requested by User which hasn't fully entered the system yet!");
             }
             throw new UserException(SignInStatus.DidntEnterSystem,
-                "sign in action has been requested by user which hasn't fully entered the system yet!");
+                "sign in action has been requested by User which hasn't fully entered the system yet!");
         }
 
         private void ApproveGuest(string action)
         {
-            if (user.GetPolicies().Length <= 0) return;
+            if (user.GetStoreManagerPolicies().Length == 0 && user.GetStatePolicies().Length == 0) return;
             if (action.Equals("sign up"))
             {
                 throw new UserException(SignUpStatus.SignedUpAlready,
@@ -75,6 +76,26 @@ namespace SadnaSrc.UserSpot
                 throw new UserException(SignUpStatus.NullEmptyDataGiven,
                     "sign up action has been requested while some required fields are still missing!");
             }
+        }
+        private string ToEncryptPassword(string password)
+        {
+            MarketLog.Log("UserSpot", "encrypting User " + systemID + " password for security measures...");
+            string encryptedPassword = GetSecuredPassword(password);
+            MarketLog.Log("UserSpot", "User " + systemID + " password has been encrypted successfully!");
+            return encryptedPassword;
+        }
+
+        public static string GetSecuredPassword(string password)
+        {
+            var secuirtyService = System.Security.Cryptography.MD5.Create();
+            byte[] bytes = Encoding.Default.GetBytes(password);
+            byte[] encodedBytes = secuirtyService.ComputeHash(bytes);
+
+            StringBuilder newPasswordString = new StringBuilder();
+            for (int i = 0; i < encodedBytes.Length; i++)
+                newPasswordString.Append(encodedBytes[i].ToString("x2"));
+
+            return newPasswordString.ToString();
         }
         public MarketAnswer SignUp(string name, string address, string password)
         {
@@ -113,13 +134,13 @@ namespace SadnaSrc.UserSpot
             {
                 ApproveSignIn(name, password);
                 string encryptedPassword = ToEncryptPassword(password);
-                MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest " + systemID +" into the system...");
+                MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest " 
+                                          + systemID +" into the system...");
                 user = userDL.LoadUser(name, encryptedPassword,user.GetCart());
-                oldID = systemID;
                 systemID = user.SystemID;
                 MarketLog.Log("UserSpot", "User " + oldID + " sign in to the system has been successfull!");
                 MarketLog.Log("UserSpot", "User " + oldID + " is now recognized as Registered User " + systemID);
-                return new UserAnswer(SignInStatus.Success, "Sign in has been successfull!");
+                return new UserAnswer(SignInStatus.Success, "Sign in has been successful!");
 
             }
             catch (UserException e)
@@ -129,34 +150,16 @@ namespace SadnaSrc.UserSpot
             }
         }
 
-        private string ToEncryptPassword(string password)
+        public void CleanGuestSession()
         {
-            MarketLog.Log("UserSpot", "encrypting User " + systemID + " password for security measures...");
-            string encryptedPassword = GetSecuredPassword(password);
-            MarketLog.Log("UserSpot", "User " + systemID + " password has been encrypted successfully!");
-            return encryptedPassword;
+            Synch();
+            userDL.DeleteUser(oldID);
         }
 
-        public static string GetSecuredPassword(string password)
-        {
-            var secuirtyService = System.Security.Cryptography.MD5.Create();
-            byte[] bytes = Encoding.Default.GetBytes(password);
-            byte[] encodedBytes = secuirtyService.ComputeHash(bytes);
-
-            StringBuilder newPasswordString = new StringBuilder();
-            for (int i = 0; i < encodedBytes.Length; i++)
-                newPasswordString.Append(encodedBytes[i].ToString("x2"));
-
-            return newPasswordString.ToString();
-        }
-
-
-        // only for white box tests
         public void CleanSession()
         {
-            ReConnect();
-            userDL.RemoveUser(oldID);
-            userDL.RemoveUser(systemID);
+            CleanGuestSession();
+            userDL.DeleteUser(systemID);
         }
     }
 }

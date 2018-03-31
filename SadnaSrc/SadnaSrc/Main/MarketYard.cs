@@ -4,8 +4,12 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.AdminView;
 using SadnaSrc.OrderPool;
+using SadnaSrc.StoreCenter;
+using SadnaSrc.SupplyPoint;
 using SadnaSrc.UserSpot;
+using SadnaSrc.Walleter;
 
 namespace SadnaSrc.Main
 {
@@ -31,8 +35,7 @@ namespace SadnaSrc.Main
 
             var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON",_dbConnection);
             makeFK.ExecuteNonQuery();
-
-            SystemDL.CreateTables(_dbConnection);
+            SystemDL.InsertDbConnector(_dbConnection);
             MarketException.InsertDbConnector(_dbConnection);
             MarketLog.InsertDbConnector(_dbConnection);
 
@@ -41,20 +44,38 @@ namespace SadnaSrc.Main
 
         public IUserService GetUserService()
         {
-            return new UserService(_dbConnection);
+            return new UserService();
         }
 
-        public ISystemAdminService GetSystemAdminService()
+        public ISystemAdminService GetSystemAdminService(IUserService userService)
         {
-            return new UserService(_dbConnection);
+            return new SystemAdminService((UserService) userService);
         }
 
-        public IOrderService GetOrderService()
+        public IStoreService GetStoreService(IUserService userService)
         {
-            return new OrderService(_dbConnection);
+            return new StoreService((UserService)userService);
         }
 
-        public void Exit()
+        public IOrderService GetOrderService(IUserService userService, IStoreService storeService,
+            ISupplyService supplyService, IPaymentService paymentService)
+        {
+           return new OrderService((UserService)userService, (StoreService)storeService,
+               (SupplyService)supplyService, (PaymentService)paymentService);
+        }
+
+        public IPaymentService GetPaymentService()
+        {
+            return new PaymentService();
+        }
+
+        public ISupplyService GetSupplyService()
+        {
+            return new SupplyService();
+        }
+
+
+    public void Exit()
         {
             _dbConnection.Close();
         }

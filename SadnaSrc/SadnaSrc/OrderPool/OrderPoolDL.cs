@@ -12,9 +12,6 @@ namespace SadnaSrc.OrderPool
     // TODO add Logging mechanism and Order History DB Tables(or table) to the OrderPool
     class OrderPoolDL : SystemDL
     {
-        public OrderPoolDL(SQLiteConnection dbConnection) : base(dbConnection)
-        {
-        }
 
         public Order FindOrder(int orderId)
         {

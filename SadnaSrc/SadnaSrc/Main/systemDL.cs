@@ -9,21 +9,26 @@ namespace SadnaSrc.Main
 {
     public class SystemDL
     {
-        private readonly SQLiteConnection _dbConnection;
+        private static SQLiteConnection _dbConnection;
 
-        protected SystemDL(SQLiteConnection dbConnection)
+        protected SystemDL()
+        {
+        }
+        public static void InsertDbConnector(SQLiteConnection dbConnection)
         {
             _dbConnection = dbConnection;
+            CreateTables();
         }
 
-        public static void CreateTables(SQLiteConnection dbConnection)
+        public static void CreateTables()
         {
             string[] createTableStrings = {
                 CreateSystemLogTable(),
                 CreateSystemErrorsTable(),
                 CreateUserTable(),
                 CreateStoreTable(),
-                CreateUserPolicyTable(),
+                CreateUserStatePolicyTable(),
+                CreateUserStorePolicyTable(),  // should improve this one
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
                 //createTableStrings.Add(CreateProductTable());
@@ -35,20 +40,42 @@ namespace SadnaSrc.Main
 
             for (var i = 0; i < createTableStrings.Length; i++)
             {
-                var createTableCommand = new SQLiteCommand(createTableStrings[i], dbConnection);
+                var createTableCommand = new SQLiteCommand(createTableStrings[i], _dbConnection);
                 createTableCommand.ExecuteNonQuery();
             }
 
-            //TODO : delete this when UseCase 2.2 successfully implemented
-            string insertStore = "INSERT INTO Store (Name,Address) VALUES ('x','Here 4')";
-            var insertStoreCommand = new SQLiteCommand(insertStore, dbConnection);
-            try
+            //TODO : delete this when The Right UseCase is implemented (Except the SystemAdmin since he is mandatory by constraint)
+            string[] thingsToInsertByForce = 
             {
-                insertStoreCommand.ExecuteNonQuery();
-            }
-            catch (Exception)
+                "INSERT INTO Store (Name,Address,Status) VALUES ('X','Here 4','Active')",
+                "INSERT INTO Store (Name,Address,Status) VALUES ('Y','Here 4','Active')",
+                "INSERT INTO Store (Name,Address,Status) VALUES ('M','Here 4','Active')",
+                "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
+                "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
+                "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",
+                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (2,'Arik2','H3','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (3,'Arik3','H3','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (3,'RegisteredUser')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'X','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'X','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Y','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'M','StoreOwner')",
+            };
+            for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
-                //dont care
+                var insertStoreCommand = new SQLiteCommand(thingsToInsertByForce[i], _dbConnection);
+                try
+                {
+                    insertStoreCommand.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    //dont care
+                }
             }
         }
 
@@ -89,19 +116,29 @@ namespace SadnaSrc.Main
             return @"CREATE TABLE IF NOT EXISTS [Store] (
                                     [Name]          TEXT,
                                     [Address]       TEXT,
+                                    [Status]        TEXT,
                                     PRIMARY KEY([Name])
                                     )";
         }
 
-        private static string CreateUserPolicyTable()
+        private static string CreateUserStatePolicyTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [UserPolicy] (
+            return @"CREATE TABLE IF NOT EXISTS [StatePolicy] (
                                     [SystemID]      INTEGER,
                                     [State]         TEXT,
-                                    [Action]        TEXT,
-                                    [Store]         TEXT,
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
-                                    PRIMARY KEY([SystemID],[STATE])
+                                    PRIMARY KEY([SystemID],[State])
+                                    )";
+        }
+
+        private static string CreateUserStorePolicyTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [StoreManagerPolicy] (
+                                    [SystemID]      INTEGER,
+                                    [Store]         TEXT,
+                                    [Action]        TEXT,
+                                    FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    PRIMARY KEY([SystemID],[Store],[Action])
                                     )";
         }
 
@@ -164,7 +201,7 @@ namespace SadnaSrc.Main
         {
             return @"CREATE TABLE IF NOT EXISTS [OrderItem] (
                                     [OrderID]       INTEGER,
-                                    [Store]         INTEGER,
+                                    [Store]         TEXT,
                                     [Name]          TEXT,
                                     [Price]         REAL,
                                     [Quantity]      INTEGER,
@@ -246,6 +283,11 @@ namespace SadnaSrc.Main
                 throw new MarketException(MarketError.DbError,"Problem occured in the attempt to delete system data in DB, returned error message :" + e.Message);
             }
 
+        }
+
+        protected SQLiteDataReader freeStyleSelect(string cmd)
+        {
+            return new SQLiteCommand(cmd, _dbConnection).ExecuteReader();
         }
 
     }

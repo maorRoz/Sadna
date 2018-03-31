@@ -4,7 +4,10 @@ using System.Data.SQLite;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.OrderPool;
+using SadnaSrc.StoreCenter;
+using SadnaSrc.SupplyPoint;
 using SadnaSrc.UserSpot;
+using SadnaSrc.Walleter;
 
 namespace OrderPoolWallaterSupplyPointTests
 {
@@ -18,13 +21,21 @@ namespace OrderPoolWallaterSupplyPointTests
         private OrderItem item2;
         private OrderItem item3;
         private List<int> orderIDs;
+        private UserService userService;
+        private StoreService storeService;
+        private SupplyService supplyService;
+        private PaymentService paymentService;
 
         [TestInitialize]
         public void BuildOrderPool()
         {
             user = new User(5);
             market = new MarketYard();
-            orderService= (OrderService)market.GetOrderService();
+            userService = new UserService();
+            storeService = new StoreService(userService);
+            supplyService = new SupplyService();
+            paymentService = new PaymentService();
+            orderService= (OrderService)market.GetOrderService(userService, storeService,supplyService,paymentService);
             orderService.setUsername("Big Smoke");
             item1= new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
@@ -98,6 +109,7 @@ namespace OrderPoolWallaterSupplyPointTests
             {
                 orderService.RemoveOrder(i);
             }
+            userService.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
             market.Exit();

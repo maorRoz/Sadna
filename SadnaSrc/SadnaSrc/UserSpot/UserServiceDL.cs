@@ -12,9 +12,7 @@ namespace SadnaSrc.UserSpot
     {
 
         private int SystemID { get; set; }
-        public UserServiceDL(SQLiteConnection dbConnection) : base(dbConnection)
-        {
-        }
+
 
         private List<int> GetAllSystemIDs()
         {
@@ -52,7 +50,7 @@ namespace SadnaSrc.UserSpot
         }
 
 
-        private bool IsUserExist(string name)
+        private bool IsUserNameExist(string name)
         {
             using (var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "'"))
             {
@@ -62,7 +60,7 @@ namespace SadnaSrc.UserSpot
         }
         public RegisteredUser RegisterUser(string name, string address, string password, CartItem[] guestCart)
         {
-            if (IsUserExist(name))
+            if (IsUserNameExist(name))
             {
                 throw new UserException(SignUpStatus.TakenName,"register action has been requested while there" +
                                         " is already a User with the given name in the system!");
@@ -74,52 +72,55 @@ namespace SadnaSrc.UserSpot
             SaveCartItem(guestCart);
             return new RegisteredUser(SystemID, name,address,password,guestCart);
         }
-        public void SaveUserPolicy(UserPolicy policy)
+        public void SaveUserStatePolicy(StatePolicy policy)
         {
-            string [] valuesNames = {"@idParam","@stateParam","@actionParam","@storeParam"};
-            object[] values = { SystemID, policy.GetStateString(), null, null};
-            InsertTable("UserPolicy", "SystemID,state,action,store",valuesNames,values);
+            string [] valuesNames = {"@idParam","@stateParam"};
+            object[] values = { SystemID, policy.GetStateString()};
+            InsertTable("StatePolicy", "SystemID,State",valuesNames,values);
         }
 
-        public void SaveUserPolicy(StoreAdminPolicy policy)
+        public void SaveUserStorePolicy(StoreManagerPolicy policy)
         {
-
+            string[] valuesNames = { "@idParam", "@storeParam","@actionParam" };
+            object[] values = { SystemID, policy.Store,policy.GetStoreActionString() };
+            InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
+        }
+ 
+        public void DeleteUserStorePolicy(StoreManagerPolicy policy)
+        {
+            DeleteFromTable("StoreManagerPolicy","SystemID = "+ SystemID +" AND Store = "+policy.Store
+                                                 + " AND Action =" + policy.Action);
         }
 
-        public void DeleteUserPolicy(UserPolicy policy)
+        private StatePolicy[] LoadUserStatePolicy()
         {
-
-        }
-
-        public void DeleteUserPolicy(StoreAdminPolicy policy)
-        {
-
-        }
-
-        private UserPolicy[] LoadUserPolicy()
-        {
-            List<UserPolicy> loadedPolicies = new List<UserPolicy>();
-            using (var dbReader = SelectFromTableWithCondition("UserPolicy", "*", "SystemID = " + SystemID))
+            List<StatePolicy> loadedStatesPolicies = new List<StatePolicy>();
+            using (var dbReader = SelectFromTableWithCondition("StatePolicy", "State", "SystemID = " + SystemID))
             {
                 while (dbReader.Read())
                 {
-                    if (dbReader.GetString(1).Equals("RegisteredUser"))
-                    {
-                        loadedPolicies.Add(new UserPolicy(UserPolicy.State.RegisteredUser));
-                    }
-                    else if (dbReader.GetString(1).Equals("SystemAdmin"))
-
-                    {
-                        loadedPolicies.Add(new UserPolicy(UserPolicy.State.SystemAdmin));
-                    }
-                    else
-                    {
-                        loadedPolicies.Add(new StoreAdminPolicy(StoreAdminPolicy.GetActionFromString(
-                            dbReader.GetString(2)), dbReader.GetString(3)));
-                    }
+                    StatePolicy.State state = StatePolicy.GetStateFromString(dbReader.GetString(0));
+                    loadedStatesPolicies.Add(new StatePolicy(state));
                 }
             }
-            return loadedPolicies.ToArray();
+            return loadedStatesPolicies.ToArray();
+        }
+
+        private StoreManagerPolicy[] LoadUserStorePolicies()
+        {
+            List<StoreManagerPolicy> loadedStorePolicies = new List<StoreManagerPolicy>();
+            using (var dbReader = SelectFromTableWithCondition("StoreManagerPolicy", "*", "SystemID = " + SystemID))
+            {
+                while (dbReader.Read())
+                {
+                    string storeName = dbReader.GetString(1);
+                    StoreManagerPolicy.StoreAction action =
+                        StoreManagerPolicy.GetActionFromString(dbReader.GetString(2));
+                    loadedStorePolicies.Add(new StoreManagerPolicy(storeName,action));
+
+                }
+            }
+            return loadedStorePolicies.ToArray();
         }
         public void SaveUser(User user)
         {
@@ -215,7 +216,7 @@ namespace SadnaSrc.UserSpot
             SaveCartItem(guestCart);
 
             return new RegisteredUser(SystemID,name,(string) loadedUserIdAndAddress[1],
-                password, LoadCartItems(), LoadUserPolicy());
+                password, LoadCartItems(), LoadUserStatePolicy(), LoadUserStorePolicies());
         }
 
         public void SaveCartItem(CartItem[] cart)
@@ -250,18 +251,10 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        public void RemoveUser(int toDeleteID)
+        public void DeleteUser(int toDeleteID)
         {
             DeleteFromTable("User", "SystemID = " + toDeleteID);
         }
-        public List<string> ViewUserPurchaseHistory(User user)
-        {
-            return null;
-        }
 
-        public List<string> ViewStorePurchaseHistory(string store)
-        {
-            return null;
-        }
     }
 }
