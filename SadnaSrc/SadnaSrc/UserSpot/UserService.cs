@@ -15,9 +15,9 @@ namespace SadnaSrc.UserSpot
         private int systemID;
         private int oldID;
 
-        public UserService(SQLiteConnection dbConnection)
+        public UserService()
         {
-            userDL = new UserServiceDL(dbConnection);
+            userDL = new UserServiceDL();
             user = null;
             systemID = userDL.GetSystemID();
             oldID = -1;
@@ -151,12 +151,15 @@ namespace SadnaSrc.UserSpot
             }
         }
 
-
-        // only for white box tests
-        public void CleanSession()
+        public void CleanGuestSession()
         {
             Synch();
             userDL.DeleteUser(oldID);
+        }
+
+        public void CleanSession()
+        {
+            CleanGuestSession();
             userDL.DeleteUser(systemID);
         }
     }
