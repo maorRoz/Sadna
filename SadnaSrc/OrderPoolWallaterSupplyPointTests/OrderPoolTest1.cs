@@ -73,7 +73,7 @@ namespace OrderPoolWallaterSupplyPointTests
             orderService.AddItemToOrder(id, item1);
             orderService.AddItemToOrder(id, item2);
             orderService.AddItemToOrder(id, item3);
-            Assert.AreEqual(20.50,
+            Assert.AreEqual(25.50,
                 orderService.getOrder(id).GetPrice());
         }
 
@@ -88,7 +88,7 @@ namespace OrderPoolWallaterSupplyPointTests
             orderService.AddItemToOrder(id, item2);
             orderService.AddItemToOrder(id, item3);
             orderService.RemoveItemFromOrder(id,"Cluckin Bell","#6 Extra Dip");
-            Assert.AreEqual(12,
+            Assert.AreEqual(17,
                 orderService.getOrder(id).GetPrice());
         }
         [TestCleanup]

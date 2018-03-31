@@ -86,7 +86,7 @@ namespace SadnaSrc.OrderPool
             else
             {
                 _items.Add(item);
-                _totalPrice += item.GetPrice();
+                _totalPrice += (item.GetPrice()*item.GetQuantity());
             }
         }
 
@@ -99,7 +99,7 @@ namespace SadnaSrc.OrderPool
             else
             {
                 _items.Remove(item);
-                _totalPrice -= item.GetPrice();
+                _totalPrice -= (item.GetPrice() * item.GetQuantity());
 
             }
         }

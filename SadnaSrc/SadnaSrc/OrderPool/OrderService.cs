@@ -12,7 +12,6 @@ namespace SadnaSrc.OrderPool
 {
     public class OrderService : IOrderService
     {
-        // TODO add support to external systems once there is more clarification about the systems. !!! IMPORTANT !!!
         private string _userName;
         private readonly OrderPoolDL _orderDL;
         private List<Order> _orders;
@@ -38,13 +37,12 @@ namespace SadnaSrc.OrderPool
         }
 
 
-        // TODO might need to change the CartItem to Product once its implemented.
-        public Order CreateOrderFromCart(CartItem[] items)
+        public Order CreateOrder(OrderItem[] items)
         {
             Order order = new Order(RandomOrderID(), _userName);
-            foreach (CartItem item in items)
+            foreach (OrderItem item in items)
             {
-                order.AddOrderItem(new OrderItem(item));
+                order.AddOrderItem(item);
             }
 
             _orders.Add(order);
@@ -100,7 +98,7 @@ namespace SadnaSrc.OrderPool
                     var item = order.getOrderItem(name, store);
                     if (item != null)
                     {
-                        double newPrice = order.GetPrice() - item.GetPrice();
+                        double newPrice = order.GetPrice() - item.GetPrice() * item.GetQuantity();
                         order.RemoveOrderItem(item);
                         _orderDL.RemoveItemFromOrder(orderID, name, store);
                         _orderDL.UpdateOrderPrice(orderID, newPrice);
@@ -115,7 +113,7 @@ namespace SadnaSrc.OrderPool
         public void AddItemToOrder(int orderID, OrderItem item)
         {
             var order = getOrder(orderID);
-            double newPrice = order.GetPrice() + item.GetPrice();
+            double newPrice = order.GetPrice() + item.GetPrice() * item.GetQuantity();
 
             order.AddOrderItem(item);
             order.setPrice(newPrice);

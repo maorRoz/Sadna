@@ -11,13 +11,14 @@ namespace SadnaSrc.Main
     public interface IOrderService
     {
 
-        Order CreateOrderFromCart(CartItem[] items);
+        Order CreateOrder(OrderItem[] items);
         Order CreateOrder();
-        Order getOrder(int orderID);
         void RemoveOrder(int orderId);
         void RemoveItemFromOrder(int orderID, string store, string name);
         void AddItemToOrder(int orderID, OrderItem item);
         OrderItem FindOrderItemInOrder(int orderId, string store, string user);
+        List<Order> getOrders();
+        Order getOrder(int orderID);
 
     }
 }
