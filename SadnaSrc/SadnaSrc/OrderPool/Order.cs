@@ -109,7 +109,7 @@ namespace SadnaSrc.OrderPool
             double acc = 0;
             foreach (OrderItem item in _items)
             {
-                acc += item.GetPrice();
+                acc += item.GetPrice()*item.GetQuantity();
             }
 
             _totalPrice = acc;
