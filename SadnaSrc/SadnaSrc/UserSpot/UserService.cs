@@ -20,7 +20,7 @@ namespace SadnaSrc.UserSpot
             userDL = new UserServiceDL();
             user = null;
             systemID = userDL.GetSystemID();
-            oldID = -1;
+            oldID = systemID;
             Synch();
         }
 
@@ -137,7 +137,6 @@ namespace SadnaSrc.UserSpot
                 MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest " 
                                           + systemID +" into the system...");
                 user = userDL.LoadUser(name, encryptedPassword,user.GetCart());
-                oldID = systemID;
                 systemID = user.SystemID;
                 MarketLog.Log("UserSpot", "User " + oldID + " sign in to the system has been successfull!");
                 MarketLog.Log("UserSpot", "User " + oldID + " is now recognized as Registered User " + systemID);

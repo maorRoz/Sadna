@@ -31,7 +31,7 @@ namespace SystemViewTests
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner));
+            Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner).Status);
             Assert.IsFalse(MarketException.hasErrorRaised());
         }
 
@@ -41,7 +41,7 @@ namespace SystemViewTests
             //TODO: should check if store has been closed by this operation when StoreCenter Module will be ready
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner));
+            Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner).Status);
 
         }
 
@@ -51,14 +51,14 @@ namespace SystemViewTests
             //TODO: should check if store has been closed by this operation when StoreCenter Module will be ready
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserIdNotSoleOwner));
+            Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserIdNotSoleOwner).Status);
         }
 
         [TestMethod]
         public void DidntEnterTest()
         {
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int) RemoveUserStatus.NotSystemAdmin, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner));
+            Assert.AreEqual((int) RemoveUserStatus.NotSystemAdmin, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner).Status);
         }
 
         [TestMethod]
@@ -66,17 +66,16 @@ namespace SystemViewTests
         {
             userServiceSession.EnterSystem();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner));
+            Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner).Status);
         }
 
         [TestMethod]
         public void NotSystemAdminTest()
         {
             userServiceSession.EnterSystem();
-            userServiceSession.SignIn("Arik2", "123");
-            Assert.AreEqual((int)SignInStatus.Success, userServiceSession.SignIn("Arik2", "123"));
+            Assert.AreEqual((int)SignInStatus.Success, userServiceSession.SignIn("Arik2", "123").Status);
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner));
+            Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, adminServiceSession.RemoveUser(toRemoveUserIdSoleOwner).Status);
         }
 
         [TestMethod]
@@ -84,7 +83,7 @@ namespace SystemViewTests
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.SelfTermination, adminServiceSession.RemoveUser(adminID));
+            Assert.AreEqual((int)RemoveUserStatus.SelfTermination, adminServiceSession.RemoveUser(adminID).Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
@@ -93,7 +92,7 @@ namespace SystemViewTests
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.NoUserFound, adminServiceSession.RemoveUser(53453));
+            Assert.AreEqual((int)RemoveUserStatus.NoUserFound, adminServiceSession.RemoveUser(53453).Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
@@ -108,8 +107,8 @@ namespace SystemViewTests
 
         private void DoSignInToAdmin()
         {
-            Assert.AreEqual((int)EnterSystemStatus.Success, userServiceSession.EnterSystem());
-            Assert.AreEqual((int)SignInStatus.Success, userServiceSession.SignIn(adminName, adminPass));
+            Assert.AreEqual((int)EnterSystemStatus.Success, userServiceSession.EnterSystem().Status);
+            Assert.AreEqual((int)SignInStatus.Success, userServiceSession.SignIn(adminName, adminPass).Status);
         }
     }
 }
