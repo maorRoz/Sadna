@@ -16,20 +16,17 @@ namespace SadnaSrc.OrderPool
         private string _userName;
         private readonly OrderPoolDL _orderDL;
         private List<Order> _orders;
-        private bool _toSave;
 
         public string getUsername() {  return _userName;}
         public List<Order> getOrders() { return  _orders; }
 
         public void setUsername(string name) { _userName = name;}
-        public void setSave(bool save) { _toSave = save; }
 
 
-        public OrderService(string userName, bool toSave, SQLiteConnection dbConnection)
+        public OrderService(string userName, SQLiteConnection dbConnection)
         {
             _orders= new List<Order>();
             _userName = userName;
-            _toSave = toSave;
             _orderDL = new OrderPoolDL(dbConnection);
         }
 
@@ -37,7 +34,6 @@ namespace SadnaSrc.OrderPool
         {
             _orders = new List<Order>();
             _userName = "default";
-            _toSave = true;
             _orderDL = new OrderPoolDL(dbConnection);
         }
 
@@ -52,10 +48,8 @@ namespace SadnaSrc.OrderPool
             }
 
             _orders.Add(order);
-            if (_toSave)
-            {
-                _orderDL.AddOrder(order);
-            }
+            _orderDL.AddOrder(order);
+
             MarketLog.Log("OrderPool", "User " + _userName + " added new order from the cart.");
             return order;
         }
@@ -65,10 +59,8 @@ namespace SadnaSrc.OrderPool
             Order order = new Order(RandomOrderID(), _userName);
 
             _orders.Add(order);
-            if (_toSave)
-            {
-                _orderDL.AddOrder(order);
-            }
+            _orderDL.AddOrder(order);
+
             MarketLog.Log("OrderPool", "User " + _userName + " added new order.");
 
             return order;
@@ -92,11 +84,9 @@ namespace SadnaSrc.OrderPool
                 if (order.GetOrderID() == orderId)
                 {
                     _orders.Remove(order);
-                    if (_toSave)
-                    {
-                        _orderDL.RemoveOrder(orderId);
-                    }
+                    _orderDL.RemoveOrder(orderId);
                     MarketLog.Log("OrderPool", "User " + _userName + " removed order ID: "+orderId+" from his OrderPool");
+                    return;
                 }
             } 
         }
@@ -112,13 +102,10 @@ namespace SadnaSrc.OrderPool
                     {
                         double newPrice = order.GetPrice() - item.GetPrice();
                         order.RemoveOrderItem(item);
-                        if (_toSave)
-                        {
-                            _orderDL.RemoveItemFromOrder(orderID, name, store);
-                            _orderDL.UpdateOrderPrice(orderID, newPrice);
-                        }
+                        _orderDL.RemoveItemFromOrder(orderID, name, store);
+                        _orderDL.UpdateOrderPrice(orderID, newPrice);
                         MarketLog.Log("OrderPool", "User " + _userName + " removed order Item from order ID: " + orderID);
-
+                        return;
                     }
 
                 }
@@ -128,19 +115,17 @@ namespace SadnaSrc.OrderPool
         public void AddItemToOrder(int orderID, OrderItem item)
         {
             var order = getOrder(orderID);
-            order.AddOrderItem(item);
             double newPrice = order.GetPrice() + item.GetPrice();
+
+            order.AddOrderItem(item);
             order.setPrice(newPrice);
-            if (_toSave)
-            {
-                _orderDL.AddItemToOrder(orderID, item);
-                _orderDL.UpdateOrderPrice(orderID,newPrice);
-            }
+            _orderDL.AddItemToOrder(orderID, item);
+            _orderDL.UpdateOrderPrice(orderID, newPrice);
             MarketLog.Log("OrderPool", "User " + _userName + " added order Item to order ID: " + orderID);
 
         }
 
-        public int RandomOrderID()
+        private int RandomOrderID()
         {
             var ret = new Random().Next(100000, 999999);
             while (_orderDL.FindOrder(ret) != null)
@@ -153,10 +138,12 @@ namespace SadnaSrc.OrderPool
 
         public OrderItem FindOrderItemInOrder(int orderId, string store, string user)
         {
-            OrderItem order = _orderDL.FindOrderItemInOrder(orderId, store, user);
-            if(order == null)
-               throw new OrderException(0,"No order item found in order ID: "+orderId);
-            return order;
+            foreach (Order order in _orders)
+            {
+                return order.getOrderItem(user, store);
+            }
+
+            return null;
         }
 
 

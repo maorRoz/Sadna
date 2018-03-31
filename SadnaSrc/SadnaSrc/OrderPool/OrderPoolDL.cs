@@ -96,7 +96,7 @@ namespace SadnaSrc.OrderPool
 
         public void RemoveItemFromOrder(int orderId, string name, string store)
         {
-            DeleteFromTable("OrderItem", "OrderID = " + orderId + "Name = '" + name + "' AND Store = '" + store + "'");
+            DeleteFromTable("OrderItem", "OrderID = " + orderId + " AND Name = '" + name + "' AND Store = '" + store + "'");
         }
 
 
