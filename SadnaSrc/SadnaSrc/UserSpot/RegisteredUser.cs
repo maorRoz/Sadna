@@ -9,14 +9,14 @@ namespace SadnaSrc.UserSpot
 {
     public class RegisteredUser : User
     {
-        private string name;
-        private string address;
+        public string Name { get; private set; }
+        public string Address { get; private set; }
         private string password;
 
         private void InitiateRegisteredUser(string name, string address, string password, CartItem[] savedCart)
         {
-            this.name = name;
-            this.address = address;
+            Name = name;
+            Address = address;
             this.password = password;
             cart.EnableCartSave();
             cart.LoadCart(savedCart);
@@ -39,7 +39,7 @@ namespace SadnaSrc.UserSpot
 
         public override object[] ToData()
         {
-            object[] ret = { systemID, name, address, password };
+            object[] ret = { systemID, Name, Address, password };
             return ret;
         }
 

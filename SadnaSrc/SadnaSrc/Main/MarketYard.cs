@@ -6,7 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.AdminView;
 using SadnaSrc.OrderPool;
+using SadnaSrc.StoreCenter;
+using SadnaSrc.SupplyPoint;
 using SadnaSrc.UserSpot;
+using SadnaSrc.Walleter;
 
 namespace SadnaSrc.Main
 {
@@ -49,9 +52,26 @@ namespace SadnaSrc.Main
             return new SystemAdminService((UserService) userService);
         }
 
-        public IOrderService GetOrderService()
+        public IStoreService GetStoreService(IUserService userService)
         {
-           return new OrderService();
+            return new StoreService((UserService)userService);
+        }
+
+        public IOrderService GetOrderService(IUserService userService, IStoreService storeService,
+            ISupplyService supplyService, IPaymentService paymentService)
+        {
+           return new OrderService((UserService)userService, (StoreService)storeService,
+               (SupplyService)supplyService, (PaymentService)paymentService);
+        }
+
+        public IPaymentService GetPaymentService()
+        {
+            return new PaymentService();
+        }
+
+        public ISupplyService GetSupplyService()
+        {
+            return new SupplyService();
         }
 
 
