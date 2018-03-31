@@ -17,6 +17,7 @@ namespace SadnaSrc.Main
     public enum RemoveUserStatus
     {
         Success,
+        SelfTermination,
         NotSystemAdmin,
         NoUserFound
     }

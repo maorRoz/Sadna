@@ -11,18 +11,14 @@ namespace SadnaSrc.AdminView
 {
     class SystemAdminServiceDL : SystemDL
     {
-        private int SystemID { get; set; }
-        public SystemAdminServiceDL(SQLiteConnection dbConnection) : base(dbConnection)
-        {
-        }
 
         public string[] FindSolelyOwnedStores()
         {
             List<string> solelyOwnedStores = new List<string>();
-            string cmd = @"SELECT Store FROM 
+            string cmd = @"SELECT Name FROM Store AS T1 LEFT JOIN
                         (SELECT Store FROM StoreManagerPolicy 
-                        WHERE Action = 'StoreOwner') t1 LEFT JOIN Store t2 ON t2.Store = t1.Store
-                        WHERE t2.Store IS NULL";
+                        WHERE Action = 'StoreOwner') AS T2 ON T1.Name = T2.Store
+                        WHERE T2.Store IS NULL";
 
             using (var dbReader = freeStyleSelect(cmd))
             {
@@ -38,7 +34,7 @@ namespace SadnaSrc.AdminView
 
         public void CloseStore(string store)
         {
-            UpdateTable("Store", "Name = "+store,new[] { "Status"},new[] {"@stat"},new object[] {"Inactive"});
+            UpdateTable("Store", "Name = '"+store+"'",new[] {"Status"},new[] {"@stat"},new object[] {"Inactive"});
         }
 
         public void IsUserExist(int userSystemID)

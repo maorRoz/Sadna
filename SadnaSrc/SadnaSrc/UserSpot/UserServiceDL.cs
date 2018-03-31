@@ -12,9 +12,7 @@ namespace SadnaSrc.UserSpot
     {
 
         private int SystemID { get; set; }
-        public UserServiceDL(SQLiteConnection dbConnection) : base(dbConnection)
-        {
-        }
+
 
         private List<int> GetAllSystemIDs()
         {

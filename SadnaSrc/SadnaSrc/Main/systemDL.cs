@@ -9,14 +9,18 @@ namespace SadnaSrc.Main
 {
     public class SystemDL
     {
-        private readonly SQLiteConnection _dbConnection;
+        private static SQLiteConnection _dbConnection;
 
-        protected SystemDL(SQLiteConnection dbConnection)
+        protected SystemDL()
+        {
+        }
+        public static void InsertDbConnector(SQLiteConnection dbConnection)
         {
             _dbConnection = dbConnection;
+            CreateTables();
         }
 
-        public static void CreateTables(SQLiteConnection dbConnection)
+        public static void CreateTables()
         {
             string[] createTableStrings = {
                 CreateSystemLogTable(),
@@ -24,7 +28,7 @@ namespace SadnaSrc.Main
                 CreateUserTable(),
                 CreateStoreTable(),
                 CreateUserStatePolicyTable(),
-                CreateUserStorePolicyTable(),
+                CreateUserStorePolicyTable(),  // should improve this one
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
                 //createTableStrings.Add(CreateProductTable());
@@ -36,20 +40,42 @@ namespace SadnaSrc.Main
 
             for (var i = 0; i < createTableStrings.Length; i++)
             {
-                var createTableCommand = new SQLiteCommand(createTableStrings[i], dbConnection);
+                var createTableCommand = new SQLiteCommand(createTableStrings[i], _dbConnection);
                 createTableCommand.ExecuteNonQuery();
             }
 
-            //TODO : delete this when UseCase 2.2 successfully implemented
-            string insertStore = "INSERT INTO Store (Name,Address,Status) VALUES ('x','Here 4','Active')";
-            var insertStoreCommand = new SQLiteCommand(insertStore, dbConnection);
-            try
+            //TODO : delete this when The Right UseCase is implemented (Except the SystemAdmin since he is mandatory by constraint)
+            string[] thingsToInsertByForce = 
             {
-                insertStoreCommand.ExecuteNonQuery();
-            }
-            catch (Exception)
+                "INSERT INTO Store (Name,Address,Status) VALUES ('X','Here 4','Active')",
+                "INSERT INTO Store (Name,Address,Status) VALUES ('Y','Here 4','Active')",
+                "INSERT INTO Store (Name,Address,Status) VALUES ('M','Here 4','Active')",
+                "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
+                "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
+                "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",
+                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (2,'Arik2','H3','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (3,'Arik3','H3','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (3,'RegisteredUser')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'X','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'X','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Y','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'M','StoreOwner')",
+            };
+            for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
-                //dont care
+                var insertStoreCommand = new SQLiteCommand(thingsToInsertByForce[i], _dbConnection);
+                try
+                {
+                    insertStoreCommand.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    //dont care
+                }
             }
         }
 

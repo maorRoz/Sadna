@@ -31,8 +31,7 @@ namespace SadnaSrc.Main
 
             var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON",_dbConnection);
             makeFK.ExecuteNonQuery();
-
-            SystemDL.CreateTables(_dbConnection);
+            SystemDL.InsertDbConnector(_dbConnection);
             MarketException.InsertDbConnector(_dbConnection);
             MarketLog.InsertDbConnector(_dbConnection);
 
@@ -41,16 +40,21 @@ namespace SadnaSrc.Main
 
         public IUserService GetUserService()
         {
-            return new UserService(_dbConnection);
+            return new UserService();
         }
 
         public ISystemAdminService GetSystemAdminService(IUserService userService)
         {
-            return new SystemAdminService(_dbConnection,(UserService) userService);
+            return new SystemAdminService((UserService) userService);
+        }
+
+        public IOrderService GetOrderService()
+        {
+           return new OrderService();
         }
 
 
-        public void Exit()
+    public void Exit()
         {
             _dbConnection.Close();
         }

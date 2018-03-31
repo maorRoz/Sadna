@@ -9,14 +9,14 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.AdminView
 {
-    class SystemAdminService : ISystemAdminService
+    public class SystemAdminService : ISystemAdminService
     {
         private int systemID;
         private bool _isSystemAdmin;
         private SystemAdminServiceDL adminDL;
-        public SystemAdminService(SQLiteConnection dbConnection, UserService userService)
+        public SystemAdminService(UserService userService)
         {
-            adminDL = new SystemAdminServiceDL(dbConnection);
+            adminDL = new SystemAdminServiceDL();
             GetSystemAdmin(userService);
         }
 
@@ -67,7 +67,17 @@ namespace SadnaSrc.AdminView
             if (action.Equals("View Purchase History"))
             {
                 throw new AdminException(ViewPurchaseHistoryStatus.NotSystemAdmin,
-                    "view purchase history action has been requested by User which hasn't fully identified as System Admin!");
+                    "view purchase history action has been requested by User which hasn't fully identified as" +
+                    " System Admin!");
+            }
+        }
+
+        private void ApproveNotSelfTermination(int userSystemID)
+        {
+            if (userSystemID == systemID)
+            { 
+                throw new AdminException(RemoveUserStatus.SelfTermination, "remove user action has been requested " +
+                                                                           "by System Admin on himself!");
             }
         }
 
@@ -84,16 +94,18 @@ namespace SadnaSrc.AdminView
                                            " deactivated store '" + store + "' successfully!");
             }
         }
+
         public MarketAnswer RemoveUser(int userSystemID)
         {
-            ApproveSystemAdmin("Remove User");
             MarketLog.Log("AdminView", "System Admin " + systemID +
-                                      " attempting to execute remove user procedure on User " + userSystemID + "...");
+                                      " attempting to execute remove user operation on User " + userSystemID + "...");
             try
             {
+                ApproveSystemAdmin("Remove User");
+                ApproveNotSelfTermination(userSystemID);
                 adminDL.IsUserExist(userSystemID);
                 MarketLog.Log("AdminView", "User " + userSystemID +
-                                           " has been found by the system. Removing user saved cart and profile...");
+                                           " has been found by the system. Removing user's saved cart and profile...");
 
                 adminDL.DeleteUser(userSystemID);
                 MarketLog.Log("AdminView", "System Admin " + systemID +
@@ -103,7 +115,8 @@ namespace SadnaSrc.AdminView
                 RemoveSolelyOwnedStores(userSystemID);
 
                 MarketLog.Log("AdminView", "User " + userSystemID +
-                                           " solely owned stores has been deactivated. Operation is finally completed safely!");
+                                           " solely owned stores has been deactivated. Operation is " +
+                                           "finally completed safely!");
                 return new AdminAnswer(RemoveUserStatus.Success, "Remove user has been successful!");
             }
             catch (AdminException e)
