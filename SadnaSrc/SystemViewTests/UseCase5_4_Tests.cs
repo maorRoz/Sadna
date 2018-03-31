@@ -31,7 +31,7 @@ namespace SystemViewTests
         }
 
         [TestMethod]
-        public void PurchaseHistoryOfUser()
+        public void PurchaseHistoryOfUserTest()
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
@@ -39,8 +39,8 @@ namespace SystemViewTests
             PurchaseHistory[] expectedHistory = 
             {
                 new PurchaseHistory(userNameToView, "Health Potion", "XXX", "Immediate", "Today"),
-                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery", "Yesterday"),
                 new PurchaseHistory(userNameToView, "INT Potion", storeNameToView, "Lottery", "Yesterday"),
+                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery", "Yesterday"),
 
             };
             Assert.IsTrue(adminServiceSession.LastHistoryReport.SequenceEqual(expectedHistory));
@@ -48,7 +48,7 @@ namespace SystemViewTests
         }
 
         [TestMethod]
-        public void PurchaseHistoryOfStore()
+        public void PurchaseHistoryOfStoreTest()
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);

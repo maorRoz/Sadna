@@ -137,7 +137,6 @@ namespace SadnaSrc.AdminView
                                        " attempting to view purchase history of " + field + " "+ givenValue + "...");
             try
             {
-                ApproveSystemAdmin("View Purchase History");
                 LastHistoryReport = adminDL.GetPurchaseHistory(field, givenValue);
                 return new AdminAnswer(ViewPurchaseHistoryStatus.Success, "View purchase history has been successful!");
             }
@@ -155,8 +154,9 @@ namespace SadnaSrc.AdminView
                                        " attempting to view purchase history of User " + userName + " ...");
             try
             {
+                ApproveSystemAdmin("View Purchase History");
                 adminDL.IsUserNameExistInHistory(userName);
-                return ViewPurchaseHistory("UserName", systemID.ToString());
+                return ViewPurchaseHistory("UserName", userName);
             }
             catch (AdminException e)
             {
@@ -172,6 +172,7 @@ namespace SadnaSrc.AdminView
                                        " attempting to view purchase history of Store " + storeName + " ...");
             try
             {
+                ApproveSystemAdmin("View Purchase History");
                 adminDL.IsStoreExistInHistory(storeName);
                 return ViewPurchaseHistory("Store",storeName);
 
