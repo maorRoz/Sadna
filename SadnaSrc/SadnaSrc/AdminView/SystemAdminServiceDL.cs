@@ -51,7 +51,7 @@ namespace SadnaSrc.AdminView
 
         public void IsUserNameExistInHistory(string userName)
         {
-            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "UserName = " + userName))
+            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "UserName = '" + userName +"'"))
             {
                 if (!dbReader.Read())
                 {

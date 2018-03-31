@@ -64,6 +64,10 @@ namespace SadnaSrc.Main
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Y','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'M','StoreOwner')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Date) VALUES ('Moshe','Health Potion','XXX','Immediate','Today')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Date) VALUES ('Moshe','Mana Potion','YYY','Lottery','Yesterday')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Date) VALUES ('Moshe','INT Potion','YYY','Lottery','Yesterday')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Date) VALUES ('MosheYYY','STR Potion','YYY','Immediate','Today')",
             };
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
