@@ -8,10 +8,10 @@ namespace SadnaSrc.StoreCenter
 {
     class Product
     {
-        private int SystemId;
-        private String name { get; private set; }
-        private int BasePrice { get; private set; }
-        private String description { get; private set; }
+        public int SystemId;
+        public String name { get; private set; }
+        public int BasePrice { get; private set; }
+        public String description { get; private set; }
 
         public Product(int _SystemId, String _name, int _price, String _description)
         {
@@ -27,6 +27,10 @@ namespace SadnaSrc.StoreCenter
         public bool equal(Product other)
         {
             return ((SystemId == other.SystemId)&(name==other.name) & (BasePrice == other.BasePrice));
+        }
+        public String toString()
+        {
+            return name;
         }
     }
 }
