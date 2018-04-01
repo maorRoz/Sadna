@@ -48,6 +48,7 @@ namespace SadnaSrc.StoreCenter
             {
                 return calculateVisibleDiscount(basePrice);
             }
+            return -1;
         }
         public double calculateHiddenDiscount(int basePrice, int code)
         {
@@ -69,6 +70,7 @@ namespace SadnaSrc.StoreCenter
                 return basePrice - DiscountAmount;
             }
         }
+        public String toString() { return "" + DiscountAmount; }
     }
 }
 

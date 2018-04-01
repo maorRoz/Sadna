@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SadnaSrc.Main;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,7 @@ namespace SadnaSrc.StoreCenter
 {
     class StoreAnswer : MarketAnswer
     {
-        public StoreAnswer(int status, string answer)
-            {
-            MarketAnswer(status, answer);
-            }
+        public StoreAnswer(int status, string answer) : base(status, answer) { }
 
     }
 }
