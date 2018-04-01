@@ -1,12 +1,12 @@
-﻿using SadnaSrc.UserSpot;
+﻿
 using SadnaSrc.Main;
 
 namespace BlackBox
 {
 	public class RealBridge : IUserBridge
 	{
-		private MarketYard _market;
-		private IUserService _userService;
+		private readonly MarketYard _market;
+		private readonly IUserService _userService;
 
 		public RealBridge()
 		{
@@ -22,6 +22,11 @@ namespace BlackBox
 		public MarketAnswer SignUp(string name, string address, string password)
 		{
 			return _userService.SignUp(name, address, password);
+		}
+
+		public MarketAnswer SignIn(string name, string password)
+		{
+			return _userService.SignIn(name, password);
 		}
 
 		public void CleanSession()
