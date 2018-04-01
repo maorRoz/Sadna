@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SadnaSrc.Main;
+using SadnaSrc.OrderPool;
 
 namespace SadnaSrc.AdminView
 {
@@ -39,7 +40,7 @@ namespace SadnaSrc.AdminView
 
         public void IsUserExist(int userSystemID)
         {
-            using (var dbReader = SelectFromTableWithCondition("User", "SystemID", "SystemID = " + userSystemID))
+            using (var dbReader = SelectFromTableWithCondition("User", "*", "SystemID = " + userSystemID))
             {
                 if (!dbReader.Read())
                 {
@@ -48,9 +49,49 @@ namespace SadnaSrc.AdminView
             }
         }
 
+        public void IsUserNameExistInHistory(string userName)
+        {
+            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "UserName = '" + userName +"'"))
+            {
+                if (!dbReader.Read())
+                {
+                    throw new AdminException(ViewPurchaseHistoryStatus.NoUserFound, "Couldn't find any User with that ID in history records");
+                }
+            }
+        }
+
+        public void IsStoreExistInHistory(string storeName)
+        {
+            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + storeName +"'"))
+            {
+                if (!dbReader.Read())
+                {
+                    throw new AdminException(ViewPurchaseHistoryStatus.NoStoreFound, "Couldn't find any Store with that name in history records");
+                }
+            }
+        }
+
         public void DeleteUser(int toDeleteID)
         {
             DeleteFromTable("User", "SystemID = " + toDeleteID);
         }
+
+        private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
+        {
+            List<PurchaseHistory> historyData = new List<PurchaseHistory>();
+            while (dbReader.Read())
+            {
+                historyData.Add(new PurchaseHistory(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2),
+                    dbReader.GetString(3), dbReader.GetString(4)));
+            }
+
+            return historyData.ToArray();
+        }
+        public PurchaseHistory[] GetPurchaseHistory(string field, string givenValue)
+        {
+            var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", field + " = '" + givenValue + "'");
+            return GetPurchaseHistory(dbReader);
+        }
+
     }
 }

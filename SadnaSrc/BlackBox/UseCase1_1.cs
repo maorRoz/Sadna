@@ -9,7 +9,7 @@ namespace BlackBoxUserTests
 	[TestClass]
 	public class UseCase1_1
 	{
-		private UserBridge _bridge;
+		private IUserBridge _bridge;
 
 		[TestInitialize]
 		public void MarketBuilder()
@@ -26,8 +26,7 @@ namespace BlackBoxUserTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			MarketLog.RemoveLogs();
-			_bridge.ExitMarket();
+			_bridge.CleanMarket();
 
 		}
 

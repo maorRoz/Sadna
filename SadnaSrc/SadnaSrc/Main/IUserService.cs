@@ -14,6 +14,8 @@ namespace SadnaSrc.Main
 
         MarketAnswer SignIn(string name, string password);
 
+     //   MarketAnswer AddToCart(string product);
+
         void CleanSession(); // only for BlackBox tests
 
     }

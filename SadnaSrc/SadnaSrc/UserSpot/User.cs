@@ -28,9 +28,20 @@ namespace SadnaSrc.UserSpot
             this.systemID = systemID;
         }
 
-        public StatePolicy[] GetStatePolicies()
+        public bool IsRegisteredUser()
         {
-            return PolicyService.StatesPolicies.ToArray();
+            return PolicyService.StatesPolicies.Count > 0 &&
+                   PolicyService.StatesPolicies.Count < 3 &&
+                   PolicyService.StatesPolicies.ElementAt(0).GetState() ==
+                   StatePolicy.State.RegisteredUser;
+        }
+
+        public bool IsSystemAdmin()
+        {
+            return IsRegisteredUser() && PolicyService.StatesPolicies.Count == 2
+                   && PolicyService.StatesPolicies.ElementAt(1).GetState() ==
+                   StatePolicy.State.SystemAdmin;
+
         }
 
         public StoreManagerPolicy[] GetStoreManagerPolicies()

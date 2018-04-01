@@ -3,14 +3,14 @@ using SadnaSrc.Main;
 
 namespace BlackBox
 {
-	public class RealBridge : UserBridge
+	public class RealBridge : IUserBridge
 	{
 		private MarketYard _market;
 		private IUserService _userService;
 
 		public RealBridge()
 		{
-			_market = new MarketYard();
+			_market = MarketYard.Instance;
 			_userService = _market.GetUserService();
 		}
 
@@ -30,9 +30,9 @@ namespace BlackBox
 
 		}
 
-		public void ExitMarket()
+		public void CleanMarket()
 		{
-			_market.Exit();
+			MarketYard.CleanSession();
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace SadnaSrc.OrderPool
             _orders= new List<Order>();
             User user = userService.GetUser();
             _userName = "default";
-            if (user != null && user.GetStatePolicies().Length > 0)
+            if (user != null && user.IsRegisteredUser())
             {
                 _userName = ((RegisteredUser) user).Name;
             }

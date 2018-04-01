@@ -80,6 +80,10 @@ namespace SadnaSrc.Main
 
         public static void CleanSession()
         {
+            if (_instance == null)
+            {
+                return;
+            }
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
             Exit();
