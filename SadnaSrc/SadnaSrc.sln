@@ -6,9 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SadnaSrc", "SadnaSrc\SadnaSrc.csproj", "{8CA28E0B-777E-47DD-89C7-B94AE5DACF9B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3812C6E1-02B6-4E8E-A0BC-50533821ECBC}"
-	ProjectSection(SolutionItems) = preProject
-		SadnaSrc\MarketYardDB.db = SadnaSrc\MarketYardDB.db
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserSpotTests", "UserSpotTests\UserSpotTests.csproj", "{EA6E64D9-BE7C-48B1-A2FB-99089F9036D6}"
 EndProject
