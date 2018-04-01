@@ -57,7 +57,11 @@ namespace SadnaSrc.UserSpot
 
         private void ApproveGuest(string action)
         {
-            if (user.GetStoreManagerPolicies().Length == 0 && user.GetStatePolicies().Length == 0) return;
+            if (user.GetStoreManagerPolicies().Length == 0 
+                && !user.IsRegisteredUser())
+            {
+                return;
+            }
             if (action.Equals("sign up"))
             {
                 throw new UserException(SignUpStatus.SignedUpAlready,

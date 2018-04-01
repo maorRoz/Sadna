@@ -26,7 +26,7 @@ namespace SadnaSrc.AdminView
         private void GetSystemAdmin(UserService userService)
         {
             User user = userService.GetUser();
-            _isSystemAdmin = hasEntered(user) && HasSystemAdminPolicy(user.GetStatePolicies());
+            _isSystemAdmin = hasEntered(user) && user.IsSystemAdmin();
 
             if (_isSystemAdmin)
             {
@@ -38,20 +38,6 @@ namespace SadnaSrc.AdminView
         private bool hasEntered(User user)
         {
             return user != null;
-        }
-        private bool HasSystemAdminPolicy(StatePolicy[] policies)
-        {
-            if (policies.Length > 1)
-            {
-                foreach (StatePolicy policy in policies)
-                {
-                    if (policy.GetState() == StatePolicy.State.SystemAdmin)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         private void ApproveSystemAdmin(string action)

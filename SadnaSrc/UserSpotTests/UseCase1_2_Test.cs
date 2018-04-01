@@ -95,13 +95,12 @@ namespace UserSpotTests
         {
             userServiceSession.EnterSystem();
             User user = userServiceSession.GetUser();
-            Assert.AreEqual(0, user.GetStatePolicies().Length);
+            Assert.IsFalse(user.IsRegisteredUser());
             Assert.AreEqual(0, user.GetStoreManagerPolicies().Length);
             Assert.AreEqual((int) SignUpStatus.Success, userServiceSession.SignUp("MaorRegister8", "Here 3", "123").Status);
             user = userServiceSession.GetUser();
-            StatePolicy[] expectedStates = user.GetStatePolicies();
-            Assert.AreEqual(1, expectedStates.Length);
-            Assert.AreEqual(expectedStates[0].GetState(),StatePolicy.State.RegisteredUser);
+            Assert.IsFalse(user.IsSystemAdmin());
+            Assert.IsTrue(user.IsRegisteredUser());
             Assert.AreEqual(0, user.GetStoreManagerPolicies().Length);
         }
 
@@ -136,16 +135,15 @@ namespace UserSpotTests
             RegisteredUser adminUser = (RegisteredUser)userServiceSession.GetUser();
             object[] expectedData = { adminUser.SystemID, "MaorRegister11", "Here 3", UserService.GetSecuredPassword("123") };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
-            Assert.AreEqual(1, adminUser.GetStatePolicies().Length);
+            Assert.IsTrue(adminUser.IsRegisteredUser());
+            Assert.IsFalse(adminUser.IsSystemAdmin());
             Assert.AreEqual(0, adminUser.GetStoreManagerPolicies().Length);
             adminUser.PromoteToAdmin();
             Assert.AreEqual(0, adminUser.GetCart().Length);
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.AreEqual(0, adminUser.GetStoreManagerPolicies().Length);
-            StatePolicy[] expectedStatePolicies = adminUser.GetStatePolicies();
-            Assert.AreEqual(2, expectedStatePolicies.Length);
-            Assert.AreEqual(expectedStatePolicies[0].GetState(), StatePolicy.State.RegisteredUser);
-            Assert.AreEqual(expectedStatePolicies[1].GetState(), StatePolicy.State.SystemAdmin);
+            Assert.IsTrue(adminUser.IsRegisteredUser());
+            Assert.IsTrue(adminUser.IsSystemAdmin());
         }
 
         [TestCleanup]
