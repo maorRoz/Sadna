@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
-using SadnaSrc.UserSpot;
 
 namespace BlackBox
 {

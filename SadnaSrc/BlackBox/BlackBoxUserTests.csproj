@@ -68,7 +68,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UseCase1_2.cs" />
     <Compile Include="UseCase1_1.cs" />
-    <Compile Include="IUserBridge.cs" />
+    <Compile Include="UseCase2_1.cs" />
+    <Compile Include="UserBridge.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
