@@ -2,11 +2,11 @@
 
 namespace BlackBox
 {
-	public interface UserBridge
+	public interface IUserBridge
 	{
 		MarketAnswer EnterSystem();
 		MarketAnswer SignUp(string name, string address, string password);
 		void CleanSession();
-		void ExitMarket();
+		void CleanMarket();
 	}
 }

@@ -8,8 +8,8 @@ namespace BlackBox
 	[TestClass]
 	public class UseCase1_2
 	{
-		private UserBridge _bridge;
-		private UserBridge _bridge2;
+		private IUserBridge _bridge;
+		private IUserBridge _bridge2;
 
 		[TestInitialize]
 		public void MarketBuilder()
@@ -171,10 +171,8 @@ namespace BlackBox
 		{
 			_bridge2?.CleanSession();
 			_bridge.CleanSession();
-			MarketLog.RemoveLogs();
-			MarketException.RemoveErrors();
-			_bridge.ExitMarket();
-			_bridge2?.ExitMarket();
+			_bridge.CleanMarket();
+			_bridge2?.CleanMarket();
 		}
 	}
 }
