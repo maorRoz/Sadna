@@ -21,11 +21,16 @@ namespace SadnaSrc.StoreCenter
             int quantity { get; set; }
             Product product { get; set; }
             Discount discount { get; set; }
-            public StockListItem(int _quantity, Product _product, Discount _discount)
+
+            public enum PurchesEnum { IMMIDIATE, LOTTERY}
+            PurchesEnum PurchesWay { get; set; }
+
+            public StockListItem(int _quantity, Product _product, Discount _discount, PurchesEnum _PurchesWay)
             {
                 quantity = _quantity;
                 product = _product;
                 discount = _discount;
+                PurchesWay = _PurchesWay;
             }
         }
         public LinkedList<StockListItem> StockList;
@@ -33,14 +38,45 @@ namespace SadnaSrc.StoreCenter
         {
             StockList = new LinkedList<StockListItem>();
         }
-        public StockListItem findByProduct(Product _product)
+
+
+        private StockListItem findByProduct(Product _product)
         {
             return StockList.Find(item => item.product.equal(_product));
         }
-        public bool CheckIfAvailable(Product _product, int _quantity)
+        private bool CheckIfAvailable(Product _product, int _quantity)
         {
             StockListItem item = findByProduct(_product);
             return (item.quantity >= _quantity);
+        }
+
+        /**
+         * this function will be use by store, no deligation
+         **/
+        public Product getProduct(Product _product)
+        {
+            StockListItem item = findByProduct(_product);
+            return item.Product;
+        }
+
+        public Discount getProductDiscount(Product _product)
+        {
+            StockListItem item = findByProduct(_product);
+            return item.discount;
+
+        }
+
+        public int getProductQuantity(Product _product)
+        {
+            StockListItem item = findByProduct(_product);
+            return item.quanitiy;
+
+        }
+        public PurchesEnum getProductPurchaseWay(Product _product)
+        {
+            StockListItem item = findByProduct(_product);
+            return item.PurchaseWay;
+
         }
         public StoreAnswer UpdateQuantityAfterPruchese(Product _product, int _quantity)
         {
@@ -81,16 +117,6 @@ namespace SadnaSrc.StoreCenter
             return StockList.Find(item => item.product.equal(_product));
         }
         /**
-         * this function will be use by store, no deligation
-         **/
-
-        public Product getProduct(Product _product)
-        {
-            StockListItem item = findByProduct(_product);
-            return item.Product;
-        }
-
-        /**
          * assume that the product is in the list
          **/
         public StoreAnswer editProductDiscount(Product _product, Discount _discount)
@@ -110,13 +136,44 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(false, "product " + _product.toString() + " does not exist in Stock");
             }
         }
-        public StoreAnswer removeDiscountToProduct(Product _product, Discount _discount)
+        public StoreAnswer removeDiscountToProduct(Product _product)
         {
             StockListItem item = findByProduct(_product);
             if (item != null)
             {
                 item.discount = null;
-                return new StoreAnswer(true, "item " + _product.toString() + " added discount of" + _discount.toString());
+                return new StoreAnswer(true, "item " + _product.toString() + " remove has no discount");
+            }
+            else
+            {
+                return new StoreAnswer(false, "product " + _product.toString() + " does not exist in Stock");
+            }
+        }
+
+        public StoreAnswer editProductPurchesWay(Product _product, PurchesEnum _purchesWay)
+        {
+            return addPurchesWayToProduct(_product, _purchesWay);
+        }
+        public StoreAnswer addPurchesWayToProduct(Product _product, PurchesEnum _purchesWay)
+        {
+            StockListItem item = findByProduct(_product);
+            if (item != null)
+            {
+                item.purchesWay = _purchesWay;
+                return new StoreAnswer(true, "item " + _product.toString() + " added PurchesWay of" + _purchesWay.toString());
+            }
+            else
+            {
+                return new StoreAnswer(false, "product " + _product.toString() + " does not exist in Stock");
+            }
+        }
+        public StoreAnswer removePurchesWayToProduct(Product _product)
+        {
+            StockListItem item = findByProduct(_product);
+            if (item != null)
+            {
+                item.purchesWay = StockListItem.PurchesEnum.IMMIDIATE;
+                return new StoreAnswer(true, "item " + _product.toString() + " removed PurchesWay and set back to IMMIDIEATE");
             }
             else
             {
@@ -152,7 +209,7 @@ namespace SadnaSrc.StoreCenter
         {
             if (quantity >= 0)
             {
-                StockList.AddLast(new StockListItem(quantity, item, null));
+                StockList.AddLast(new StockListItem(quantity, item, null, StockListItem.PurchesEnum.IMMIDIATE));
                 return new StoreAnswer(true, "item " + item + " added by amound of " + quantity);
             }
             else
