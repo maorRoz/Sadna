@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    class Store
+    class StoreAnswer : MarketAnswer
     {
-        
+        public StoreAnswer(int status, string answer)
+            {
+            MarketAnswer(status, answer);
+            }
+
     }
 }
