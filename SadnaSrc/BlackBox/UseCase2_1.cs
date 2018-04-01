@@ -7,8 +7,8 @@ namespace BlackBox
 	[TestClass]
 	public class UseCase2_1
 	{
-		private UserBridge _bridgeSignUp;
-		private UserBridge _bridgeSignIn;
+		private IUserBridge _bridgeSignUp;
+		private IUserBridge _bridgeSignIn;
 
 		[TestInitialize]
 		public void MarketBuilder()
@@ -107,12 +107,106 @@ namespace BlackBox
 
 		[TestMethod]
 
+		public void FindUserWithErrorUserName2Letters1()
+		{
+			SignUp("shal", "hatavor", "852");
+			_bridgeSignIn.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("sarl", "852").Status);
+
+		}
+
+		[TestMethod]
+
+		public void FindUserWithErrorUserName2Letters2()
+		{
+			SignUp("shal", "hatavor", "852");
+			_bridgeSignIn.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("rtal", "852").Status);
+
+		}
+
+		[TestMethod]
+
+		public void FindUserWithErrorUserName2Letters3()
+		{
+			SignUp("shal", "hatavor", "852");
+			_bridgeSignIn.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("shor", "852").Status);
+
+		}
+
+		[TestMethod]
+
+		public void FindUserWithErrorUserName1Letter1()
+		{
+			SignUp("shal", "hatavor", "852");
+			_bridgeSignIn.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("ahal", "852").Status);
+
+		}
+
+		[TestMethod]
+
+		public void FindUserWithErrorUserName1Letter2()
+		{
+			SignUp("shal", "hatavor", "852");
+			_bridgeSignIn.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("saal", "852").Status);
+
+		}
+
+		[TestMethod]
+
+		public void FindUserWithErrorUserName1Letter3()
+		{
+			SignUp("shal", "hatavor", "852");
+			_bridgeSignIn.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("shol", "852").Status);
+
+		}
+
+		[TestMethod]
+
+		public void FindUserWithErrorUserName1Letter4()
+		{
+			SignUp("shal", "hatavor", "852");
+			_bridgeSignIn.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("shar", "852").Status);
+
+		}
+
+		[TestMethod]
+
+		public void FindUserWithErrorUserNameMoreThan2Letters1()
+		{
+			SignUp("shal", "hatavor", "852");
+			_bridgeSignIn.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.NoUserFound, _bridgeSignIn.SignIn("saor", "852").Status);
+
+		}
+
+
+		[TestMethod]
+
+		public void FindUserWithErrorUserNameMoreThan2Letters2()
+		{
+			SignUp("shal", "hatavor", "852");
+			_bridgeSignIn.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.NoUserFound, _bridgeSignIn.SignIn("horl", "852").Status);
+
+		}
+
+
 		private void SignUp(string name,string address, string password)
 		{
 			_bridgeSignUp = new RealBridge();
 			_bridgeSignUp.EnterSystem();
 			_bridgeSignUp.SignUp(name,address,password);
 		}
+
+		
+
+		 
 
 		[TestCleanup]
 		public void UserTestCleanUp()
@@ -121,8 +215,8 @@ namespace BlackBox
 			_bridgeSignIn.CleanSession();
 			MarketLog.RemoveLogs();
 			MarketException.RemoveErrors();
-			_bridgeSignIn.ExitMarket();
-			_bridgeSignUp?.ExitMarket();
+			_bridgeSignIn.CleanMarket();
+			_bridgeSignUp?.CleanMarket();
 		}
 
 	}
