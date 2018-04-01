@@ -68,6 +68,20 @@ namespace BlackBox
 
 		}
 
+		[TestMethod]
+
+		public void SignUpWithEmptyStringAsData()
+		{
+			_bridge.EnterSystem();
+			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("", "hello", "741").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("Pnin", "", "741").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("Pnin", "hello", "").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("", "", "742").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("", "mishol", "").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("Hello3", "", "").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("", "", "").Status);
+
+		}
 
 		[TestCleanup]
 		public void UserTestCleanUp()
