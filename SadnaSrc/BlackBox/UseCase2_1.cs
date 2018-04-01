@@ -213,8 +213,6 @@ namespace BlackBox
 		{
 			_bridgeSignUp?.CleanSession();
 			_bridgeSignIn.CleanSession();
-			MarketLog.RemoveLogs();
-			MarketException.RemoveErrors();
 			_bridgeSignIn.CleanMarket();
 			_bridgeSignUp?.CleanMarket();
 		}
