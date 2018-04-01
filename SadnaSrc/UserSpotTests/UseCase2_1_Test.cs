@@ -127,9 +127,8 @@ namespace UserSpotTests
             Assert.AreEqual((int) SignInStatus.Success, userServiceSignInSession.SignIn("MaorLogin14", "123").Status);
             RegisteredUser user = (RegisteredUser)userServiceSignInSession.GetUser();
             Assert.AreEqual(0, user.GetStoreManagerPolicies().Length);
-            StatePolicy[] expectedStatePolicies = user.GetStatePolicies();
-            Assert.AreEqual(1, expectedStatePolicies.Length);
-            Assert.AreEqual(expectedStatePolicies[0].GetState(), StatePolicy.State.RegisteredUser);
+            Assert.IsTrue(user.IsRegisteredUser());
+            Assert.IsFalse(user.IsSystemAdmin());
         }
 
         [TestMethod]
@@ -159,15 +158,14 @@ namespace UserSpotTests
             RegisteredUser adminUser = (RegisteredUser)userServiceSignInSession.GetUser();
             object[] expectedData = { adminUser.SystemID, "MaorLogin17", "Here 3", UserService.GetSecuredPassword("123") };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
-            Assert.AreEqual(1, adminUser.GetStatePolicies().Length);
+            Assert.IsTrue(adminUser.IsRegisteredUser());
+            Assert.IsFalse(adminUser.IsSystemAdmin());
             Assert.AreEqual(0,adminUser.GetStoreManagerPolicies().Length);
             adminUser.PromoteToAdmin();
             Assert.AreEqual(0, adminUser.GetCart().Length);
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
-            StatePolicy[] expectedStatePolicies = adminUser.GetStatePolicies();
-            Assert.AreEqual(2, expectedStatePolicies.Length);
-            Assert.AreEqual(expectedStatePolicies[0].GetState(), StatePolicy.State.RegisteredUser);
-            Assert.AreEqual(expectedStatePolicies[1].GetState(), StatePolicy.State.SystemAdmin);
+            Assert.IsTrue(adminUser.IsRegisteredUser());
+            Assert.IsTrue(adminUser.IsSystemAdmin());
         }
 
         [TestMethod]
