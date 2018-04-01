@@ -5,8 +5,8 @@ namespace BlackBox
 {
 	public class RealBridge : UserBridge
 	{
-		private MarketYard _market;
-		private IUserService _userService;
+		private readonly MarketYard _market;
+		private readonly IUserService _userService;
 
 		public RealBridge()
 		{
