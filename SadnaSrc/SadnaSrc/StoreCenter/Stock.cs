@@ -142,7 +142,7 @@ namespace SadnaSrc.StoreCenter
             if (item != null)
             {
                 item.discount = null;
-                return new StoreAnswer(true, "item " + _product.toString() + " remove has no discount");
+                return new StoreAnswer(true, "item " + _product.toString() + " discount has removed");
             }
             else
             {
@@ -188,6 +188,19 @@ namespace SadnaSrc.StoreCenter
             if (findByProduct(_product)!=null)
             { return addExistingProductToStock(_product, _quantity); }
             return addNewProductToStock(_product, _quantity);
+        }
+        public StoreAnser removeProductFromStock (Product _product)
+        {
+            StockListItem item = findByProduct(_product);
+            if (item != null)
+            {
+                StockList.Remove(item);
+                return new StoreAnswer(true, "item " + _product.toString() + " removed");
+            }
+            else
+            {
+                return new StoreAnswer(false, "product " + _product.toString() + " does not exist in Stock");
+            }
         }
         public StoreAnswer addExistingProductToStock(Product _product, int _quantity)
         {
