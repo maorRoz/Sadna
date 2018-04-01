@@ -12,9 +12,9 @@ namespace SadnaSrc.StoreCenter
     {
         public StoreService(UserService userService)
         {
-
+            
         }
-
+        
         public MarketAnswer OpenStore()
         {
             throw new NotImplementedException();
