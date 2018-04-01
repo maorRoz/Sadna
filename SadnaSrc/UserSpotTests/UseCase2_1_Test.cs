@@ -20,7 +20,7 @@ namespace UserSpotTests
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketSession = new MarketYard();
+            marketSession = MarketYard.Instance;
             userServiceSignInSession = (UserService)marketSession.GetUserService();
             userServiceSignUpSession = null;
         }
@@ -247,9 +247,7 @@ namespace UserSpotTests
         {
             userServiceSignUpSession?.CleanSession();
             userServiceSignInSession.CleanSession();
-            MarketLog.RemoveLogs();
-            MarketException.RemoveErrors();
-            marketSession.Exit();
+            MarketYard.CleanSession();
         }
     }
 }

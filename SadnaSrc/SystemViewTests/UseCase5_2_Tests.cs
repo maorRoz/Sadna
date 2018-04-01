@@ -22,7 +22,7 @@ namespace SystemViewTests
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketSession = new MarketYard();
+            marketSession = MarketYard.Instance;
             userServiceSession = (UserService)marketSession.GetUserService();
         }
 
@@ -100,9 +100,7 @@ namespace SystemViewTests
         public void AdminTestCleanUp()
         {
             userServiceSession.CleanGuestSession();
-            MarketLog.RemoveLogs();
-            MarketException.RemoveErrors();
-            marketSession.Exit();
+            MarketYard.CleanSession();
         }
 
         private void DoSignInToAdmin()

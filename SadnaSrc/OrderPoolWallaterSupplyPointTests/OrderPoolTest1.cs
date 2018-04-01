@@ -30,7 +30,7 @@ namespace OrderPoolWallaterSupplyPointTests
         public void BuildOrderPool()
         {
             user = new User(5);
-            market = new MarketYard();
+            market = MarketYard.Instance;
             userService = new UserService();
             storeService = new StoreService(userService);
             supplyService = new SupplyService();
@@ -110,9 +110,7 @@ namespace OrderPoolWallaterSupplyPointTests
                 orderService.RemoveOrder(i);
             }
             userService.CleanSession();
-            MarketLog.RemoveLogs();
-            MarketException.RemoveErrors();
-            market.Exit();
+            MarketYard.CleanSession();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace UserSpotTests
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketSession = new MarketYard();
+            marketSession = MarketYard.Instance;
             userServiceSession = (UserService)marketSession.GetUserService();
             Assert.AreEqual((int) EnterSystemStatus.Success, userServiceSession.EnterSystem().Status);
             generatedGuest = userServiceSession.GetUser();
@@ -48,9 +48,7 @@ namespace UserSpotTests
         public void UserTestCleanUp()
         {
             userServiceSession.CleanSession();
-            MarketLog.RemoveLogs();
-            MarketException.RemoveErrors();
-            marketSession.Exit();
+            MarketYard.CleanSession();
         }
     }
 }

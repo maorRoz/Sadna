@@ -15,8 +15,12 @@ namespace SadnaSrc.Main
 {
     public class MarketYard
     {
-        private SQLiteConnection _dbConnection;
-        public MarketYard()
+        private static MarketYard _instance;
+
+        public static MarketYard Instance => _instance ?? (_instance = new MarketYard());
+
+        private static SQLiteConnection _dbConnection;
+        private MarketYard()
         {
             InitiateDb();
         }
@@ -74,8 +78,14 @@ namespace SadnaSrc.Main
             return new SupplyService();
         }
 
-
-    public void Exit()
+        public static void CleanSession()
+        {
+            MarketLog.RemoveLogs();
+            MarketException.RemoveErrors();
+            Exit();
+            _instance = null;
+        }
+        public static void Exit()
         {
             _dbConnection.Close();
         }
