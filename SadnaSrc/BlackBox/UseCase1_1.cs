@@ -1,5 +1,8 @@
 ﻿using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SadnaSrc.Main;
+using SadnaSrc.UserSpot;
+
 
 namespace BlackBoxUserTests
 {
@@ -15,10 +18,17 @@ namespace BlackBoxUserTests
 		}
 
 		[TestMethod]
-		public void successGuestEntry()
+		public void SuccessGuestEntry()
 		{
+			Assert.AreEqual((int)EnterSystemStatus.Success, _bridge.EnterSystem().Status);
+		}
 
-			Assert.AreEqual(_bridge.EnterSystem(), "You've been entered the system successfully!");
+		[TestCleanup]
+		public void UserTestCleanUp()
+		{
+			MarketLog.RemoveLogs();
+			_bridge.ExitMarket();
+
 		}
 
 	}
