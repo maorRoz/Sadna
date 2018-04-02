@@ -9,20 +9,22 @@ namespace SadnaSrc.UserSpot
     public class CartItem
     {
         private int _systemID;
-        private string _store;
-        private string _name;
-        private double _finalPrice;
-        private string _sale;
-        private int _quantity;
+        public string Store { get; }
+        public string Name { get; }
 
-        public CartItem(int systemID, string name, string store, int quantity, double finalPrice, string sale)
+        private double UnitPrice { get; }
+        public double FinalPrice => UnitPrice * Quantity;
+        public string Sale { get; }
+        public int Quantity { get; private set; }
+
+        public CartItem(int systemID, string name, string store, int quantity,double unitPrice, string sale)
         {
             _systemID = systemID;
-            _name = name;
-            _store = store;
-            _quantity = quantity;
-            _finalPrice = finalPrice;
-            _sale = sale;
+            Name = name;
+            Store = store;
+            Quantity = quantity;
+            UnitPrice = unitPrice;
+            Sale = sale;
         }
 
         public void SetUserID(int systemID)
@@ -32,32 +34,39 @@ namespace SadnaSrc.UserSpot
 
         public void IncreaseQuantity()
         {
-            _quantity++;
+            Quantity++;
         }
 
         public void DecreaseQuantity()
         {
-            _quantity--;
-        }
-
-        public int GetQuantity()
-        {
-            return _quantity;
-        }
-
-        public string GetStore()
-        {
-            return _store;
-        }
-
-        public string GetName()
-        {
-            return _name;
+            Quantity--;
         }
 
         public object[] ToData()
         {
-            return new object[] { _systemID, _name, _store, _quantity, _finalPrice, _sale};
+            return new object[] { _systemID, Name, Store, Quantity, FinalPrice, Sale};
         }
+
+        public string GetDbIdentifier()
+        {
+            return "SystemID = " + _systemID + " AND Name = '" + Name +
+                   "' AND Store = '" + Store +"' AND UnitPrice = "+ UnitPrice + " AND SaleType = '" + Sale + "'";
+        }
+
+        public string GetStore()
+        {
+            throw new NotImplementedException("dont use this method Igor!!");
+        }
+
+        public string GetName()
+        {
+            throw new NotImplementedException("dont use this method Igor!!");
+        }
+
+        public int GetQuantity()
+        {
+            throw new NotImplementedException("dont use this method Igor!!");
+        }
+
     }
 }

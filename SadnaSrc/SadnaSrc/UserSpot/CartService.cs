@@ -47,6 +47,8 @@ namespace SadnaSrc.UserSpot
         {
                 _userDL.SaveCartItem(toSaveStorage);
         }
+
+        //TODO: Replace the arguments with product class
         public void AddToCart(string store,string product,double finalPrice,string sale,int quantity)
         {
             CartItem toAdd = new CartItem(_systemID, product,store, quantity, finalPrice, sale);
@@ -71,7 +73,7 @@ namespace SadnaSrc.UserSpot
             cartStorage.Add(found);
             if (_toSave)
             {
-                _userDL.UpdateCartItemQuantity(found.GetQuantity());
+                _userDL.UpdateCartItemQuantity(found);
             }
         }
 
@@ -82,7 +84,7 @@ namespace SadnaSrc.UserSpot
             cartStorage.Add(found);
             if (_toSave)
             {
-                _userDL.UpdateCartItemQuantity(found.GetQuantity());
+                _userDL.UpdateCartItemQuantity(found);
             }
         }
 

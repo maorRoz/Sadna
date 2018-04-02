@@ -230,7 +230,7 @@ namespace SadnaSrc.UserSpot
 
         public void RemoveCartItem(CartItem item)
         {
-
+            DeleteFromTable("CartItem", item.GetDbIdentifier());
         }
         private CartItem[] LoadCartItems()
         {
@@ -246,9 +246,12 @@ namespace SadnaSrc.UserSpot
             return loadedItems.ToArray();
         }
 
-        public void UpdateCartItemQuantity(int quantity)
+        public void UpdateCartItemQuantity(CartItem item)
         {
-
+            string[] columnNames = { "Quantity", "FinalPrice"};
+            string[] valuesNames = { "@quantity", "@price"};
+            object[] values = { item.Quantity,item.FinalPrice};
+            UpdateTable("CartItem", item.GetDbIdentifier(), columnNames, valuesNames, values);
         }
 
         public void DeleteUser(int toDeleteID)

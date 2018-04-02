@@ -152,12 +152,13 @@ namespace SadnaSrc.Main
                                     [SystemID]      INTEGER,
                                     [Name]          TEXT,
                                     [Store]         TEXT,
-                                    [Quantity]      TEXT,
-                                    [FinalPrice]    TEXT,
+                                    [Quantity]      INTEGER,
+                                    [UnitPrice]     REAL,
+                                    [FinalPrice]    REAL,
                                     [SaleType]      TEXT,
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
                                     FOREIGN KEY([Store])        REFERENCES [Store]([Name]) ,
-                                    PRIMARY KEY([SystemID],[Name],[Store])
+                                    PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice],[SaleType])
                                     )";
         }
 
