@@ -12,9 +12,9 @@ namespace SadnaSrc.Main
 
         MarketAnswer PromoteToOwner();
     }
-    public enum SignUpStatus
+    public enum UpdateStockStatus
     {
-        Success
+        Success,
         Fail
     }
 }

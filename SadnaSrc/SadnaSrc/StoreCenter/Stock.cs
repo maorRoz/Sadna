@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SadnaSrc.Main;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace SadnaSrc.StoreCenter
     {
         public class StockListItem
         {
+            public int SystemId { get; set; }
             public int quantity { get; set; }
             public Product product { get; set; }
             public Discount discount { get; set; }
@@ -95,11 +97,11 @@ namespace SadnaSrc.StoreCenter
             {
                 StockListItem item = findByProduct(_product);
                 item.quantity = item.quantity - _quantity;
-                return new StoreAnswer(1, "amount of " + _quantity + " unites has been removed from product" + _product);
+                return new StoreAnswer(UpdateStockStatus.Success, "amount of " + _quantity + " unites has been removed from product" + _product);
             }
             else
             {
-                return new StoreAnswer(0, "there are not enough units from product" + _product);
+                return new StoreAnswer(UpdateStockStatus.Fail, "there are not enough units from product" + _product);
             }
         }
         /**
@@ -137,11 +139,11 @@ namespace SadnaSrc.StoreCenter
             if (item!=null)
             {
                 item.discount = _discount;
-                return new StoreAnswer(1, "item " + _product.toString() + " added discount of" + _discount.toString());
+                return new StoreAnswer(UpdateStockStatus.Success, "item " + _product.toString() + " added discount of" + _discount.toString());
             }
             else
             {
-                return new StoreAnswer(0, "product " + _product.toString() + " does not exist in Stock");
+                return new StoreAnswer(UpdateStockStatus.Fail, "product " + _product.toString() + " does not exist in Stock");
             }
         }
         public StoreAnswer removeDiscountToProduct(Product _product)
@@ -150,11 +152,11 @@ namespace SadnaSrc.StoreCenter
             if (item != null)
             {
                 item.discount = null;
-                return new StoreAnswer(1, "item " + _product.toString() + " discount has removed");
+                return new StoreAnswer(UpdateStockStatus.Success, "item " + _product.toString() + " discount has removed");
             }
             else
             {
-                return new StoreAnswer(0, "product " + _product.toString() + " does not exist in Stock");
+                return new StoreAnswer(UpdateStockStatus.Fail, "product " + _product.toString() + " does not exist in Stock");
             }
         }
 
@@ -168,11 +170,11 @@ namespace SadnaSrc.StoreCenter
             if (item != null)
             {
                 item.PurchesWay = _purchesWay;
-                return new StoreAnswer(1, "item " + _product.toString() + " added PurchesWay of" + _purchesWay);
+                return new StoreAnswer(UpdateStockStatus.Success, "item " + _product.toString() + " added PurchesWay of" + _purchesWay);
             }
             else
             {
-                return new StoreAnswer(0, "product " + _product.toString() + " does not exist in Stock");
+                return new StoreAnswer(UpdateStockStatus.Fail, "product " + _product.toString() + " does not exist in Stock");
             }
         }
         public StoreAnswer removePurchesWayToProduct(Product _product)
@@ -181,11 +183,11 @@ namespace SadnaSrc.StoreCenter
             if (item != null)
             {
                 item.PurchesWay = PurchesEnum.IMMIDIATE;
-                return new StoreAnswer(1, "item " + _product.toString() + " removed PurchesWay and set back to IMMIDIEATE");
+                return new StoreAnswer(UpdateStockStatus.Success, "item " + _product.toString() + " removed PurchesWay and set back to IMMIDIEATE");
             }
             else
             {
-                return new StoreAnswer(0, "product " + _product.toString() + " does not exist in Stock");
+                return new StoreAnswer(UpdateStockStatus.Fail, "product " + _product.toString() + " does not exist in Stock");
             }
         }
         /**
@@ -203,11 +205,11 @@ namespace SadnaSrc.StoreCenter
             if (item != null)
             {
                 StockList.Remove(item);
-                return new StoreAnswer(1, "item " + _product.toString() + " removed");
+                return new StoreAnswer(UpdateStockStatus.Success, "item " + _product.toString() + " removed");
             }
             else
             {
-                return new StoreAnswer(0, "product " + _product.toString() + " does not exist in Stock");
+                return new StoreAnswer(UpdateStockStatus.Fail, "product " + _product.toString() + " does not exist in Stock");
             }
         }
         public StoreAnswer addExistingProductToStock(Product _product, int _quantity)
@@ -216,11 +218,11 @@ namespace SadnaSrc.StoreCenter
             {
                 StockListItem item = findByProduct(_product);
                 item.quantity += _quantity;
-                return new StoreAnswer(1, "item " + item + " added by amound of " + _quantity);
+                return new StoreAnswer(UpdateStockStatus.Success, "item " + item + " added by amound of " + _quantity);
             }
             else
             {
-                return new StoreAnswer(0, "quantity " + _quantity + " is less then 0");
+                return new StoreAnswer(UpdateStockStatus.Fail, "quantity " + _quantity + " is less then 0");
             }
 
         }
@@ -232,11 +234,11 @@ namespace SadnaSrc.StoreCenter
             if (quantity >= 0)
             {
                 StockList.AddLast(new StockListItem(quantity, item, null, PurchesEnum.IMMIDIATE));
-                return new StoreAnswer(1, "item " + item + " added by amound of " + quantity);
+                return new StoreAnswer(UpdateStockStatus.Success, "item " + item + " added by amound of " + quantity);
             }
             else
             {
-                return new StoreAnswer(0, "quantity " + quantity + " is less then 0");
+                return new StoreAnswer(UpdateStockStatus.Fail, "quantity " + quantity + " is less then 0");
             }
         }
     }
