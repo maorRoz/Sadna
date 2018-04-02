@@ -36,6 +36,21 @@ namespace IntegrationTests
         [TestMethod]
         public void TestConvertCartToOrder()
         {
+            userServiceSession.EnterSystem();
+            User currentUser = userServiceSession.GetUser();
+            CartService cart = currentUser.Cart;
+            cart.AddToCart("The Red Rock","Bamba", 6.90, "regular", 3);
+            CartItem[] userCartItems = currentUser.GetCart();
+            orderServiceSession.setUsername(""+ currentUser.SystemID);
+            OrderItem[] userOrderItems = new OrderItem[userCartItems.Length];
+            for (int i = 0; i < userCartItems.Length; i++)
+            {
+                userOrderItems[i] = new OrderItem(userCartItems[i]);
+            }
+
+            Order o = orderServiceSession.CreateOrder(userOrderItems);
+            Assert.IsNotNull(orderServiceSession.FindOrderItemInOrder(o.GetOrderID(), "The Red Rock", 
+                orderServiceSession.getUsername()));
 
         }
     }
