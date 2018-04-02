@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
@@ -12,7 +13,7 @@ namespace SadnaSrc.UserSpot
         public string Store { get; }
         public string Name { get; }
 
-        private double UnitPrice { get; }
+        public double UnitPrice { get; }
         public double FinalPrice => UnitPrice * Quantity;
         public string Sale { get; }
         public int Quantity { get; private set; }
@@ -32,14 +33,18 @@ namespace SadnaSrc.UserSpot
             _systemID = systemID;
         }
 
-        public void IncreaseQuantity()
+        public void IncreaseQuantity(int quantity)
         {
-            Quantity++;
+            Quantity += quantity;
         }
 
-        public void DecreaseQuantity()
+        public void DecreaseQuantity(int quantity)
         {
-            Quantity--;
+            if (quantity >= Quantity)
+            {
+                throw new UserException(MarketError.LogicError,"Cannot hold quantity of zero or negative value in cart item");
+            }
+            Quantity -= quantity;
         }
 
         public object[] ToData()
@@ -53,16 +58,48 @@ namespace SadnaSrc.UserSpot
                    "' AND Store = '" + Store +"' AND UnitPrice = "+ UnitPrice + " AND SaleType = '" + Sale + "'";
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return Equals((CartItem)obj);
+        }
+
+
+        private bool Equals(CartItem obj)
+        {
+            return obj.Store.Equals(Store) && obj.Name.Equals(Name) && obj.UnitPrice == UnitPrice &&
+                   obj.Sale.Equals(Sale);
+        }
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = _systemID;
+                hashCode = (hashCode * 397) ^ (Store != null ? Store.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ UnitPrice.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Sale != null ? Sale.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Quantity;
+                return hashCode;
+            }
+        }
+        //TODO: delete this when there is no more reference related to it
         public string GetStore()
         {
             throw new NotImplementedException("dont use this method Igor!!");
         }
 
+        //TODO: delete this when there is no more reference related to it
         public string GetName()
         {
             throw new NotImplementedException("dont use this method Igor!!");
         }
 
+        //TODO: delete this when there is no more reference related to it
         public int GetQuantity()
         {
             throw new NotImplementedException("dont use this method Igor!!");

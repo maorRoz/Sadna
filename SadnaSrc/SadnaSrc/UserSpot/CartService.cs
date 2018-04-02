@@ -49,12 +49,12 @@ namespace SadnaSrc.UserSpot
         }
 
         //TODO: Replace the arguments with product class
-        public void AddToCart(string store,string product,double finalPrice,string sale,int quantity)
+        public void AddToCart(string store,string product,double unitPrice,string sale,int quantity)
         {
-            CartItem toAdd = new CartItem(_systemID, product,store, quantity, finalPrice, sale);
+            CartItem toAdd = new CartItem(_systemID, product,store, quantity, unitPrice, sale);
             if (cartStorage.Contains(toAdd))
             {
-                IncreaseCartItem(store,product);
+                IncreaseCartItem(store,product,unitPrice,sale, quantity);
             }
             else
             {
@@ -66,10 +66,10 @@ namespace SadnaSrc.UserSpot
             }            
         }
 
-        public void IncreaseCartItem(string store, string product)
+        public void IncreaseCartItem(string store, string product,double unitPrice, string sale, int quantity)
         {
-            CartItem found = PopFromCart(store, product);
-            found.IncreaseQuantity();
+            CartItem found = PopFromCart(store, product,unitPrice,sale);
+            found.IncreaseQuantity(quantity);
             cartStorage.Add(found);
             if (_toSave)
             {
@@ -77,10 +77,10 @@ namespace SadnaSrc.UserSpot
             }
         }
 
-        public void DecreaseCartItem(string store, string product)
+        public void DecreaseCartItem(string store, string product, double unitPrice, string sale, int quantity)
         {
-            CartItem found = PopFromCart(store, product);
-            found.DecreaseQuantity();
+            CartItem found = PopFromCart(store, product, unitPrice, sale);
+            found.DecreaseQuantity(quantity);
             cartStorage.Add(found);
             if (_toSave)
             {
@@ -88,21 +88,21 @@ namespace SadnaSrc.UserSpot
             }
         }
 
-        public void RemoveFromCart(string store,string product)
+        public void RemoveFromCart(string store,string product, double unitPrice, string sale)
         {
-            CartItem found = PopFromCart(store, product);
+            CartItem found = PopFromCart(store, product, unitPrice, sale);
             if (_toSave)
             {
                 _userDL.RemoveCartItem(found);
             }
         }
 
-        private CartItem PopFromCart(string store, string product)
+        private CartItem PopFromCart(string store, string product, double unitPrice, string sale)
         {
             CartItem ret = null;
             foreach (CartItem item in cartStorage)
             {
-                if (item.GetStore() == store && item.GetName() == product)
+                if (item.Equals(new CartItem(0, product, store, 0, unitPrice, sale)))
                 {
                     ret = item;
                     break;
@@ -116,11 +116,11 @@ namespace SadnaSrc.UserSpot
             return ret;
         }
 
-        public CartItem SearchInCart(string store, string product)
+        public CartItem SearchInCart(string store, string product, double unitPrice, string sale)
         {
             foreach (CartItem item in cartStorage)
             {
-                if (item.GetStore() == store && item.GetName() == product)
+                if (item.Equals(new CartItem(0,product,store,0,unitPrice,sale)))
                 {
                     return item;
                 }
