@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    class Product
+    public class Product
     {
         public int SystemId;
         public String name { get; private set; }

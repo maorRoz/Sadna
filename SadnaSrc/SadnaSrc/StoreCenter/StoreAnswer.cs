@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    class StoreAnswer : MarketAnswer
+    public class StoreAnswer : MarketAnswer
     {
-        public StoreAnswer(UpdateStockStatus status, string answer) : base((int)status, answer) { }
+        public StoreAnswer(StoreEnum status, string answer) : base((int)status, answer) { }
 
     }
 }
