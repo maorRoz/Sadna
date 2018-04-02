@@ -9,7 +9,6 @@ namespace SadnaSrc.StoreCenter
     class Discount
     {
         int discountCode { get; set; }
-        public enum discountTypeEnum { HIDDEN, VISIBLE };
         discountTypeEnum discountType { get; set; }
         DateTime startDate { get; set; }
         DateTime EndDate { get; set; }
