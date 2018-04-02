@@ -9,7 +9,7 @@ namespace SadnaSrc.StoreCenter
 {
     class StoreAnswer : MarketAnswer
     {
-        public StoreAnswer(int status, string answer) : base(status, answer) { }
+        public StoreAnswer(UpdateStockStatus status, string answer) : base((int)status, answer) { }
 
     }
 }

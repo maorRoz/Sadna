@@ -88,6 +88,8 @@
     <Compile Include="OrderPool\OrderPoolDL.cs" />
     <Compile Include="OrderPool\OrderService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreCenter\LotteryTicket.cs" />
+    <Compile Include="StoreCenter\LotterySaleManagmentTicket.cs" />
     <Compile Include="StoreCenter\PurchesEnum.cs" />
     <Compile Include="StoreCenter\Discount.cs" />
     <Compile Include="StoreCenter\Product.cs" />
