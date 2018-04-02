@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SadnaSrc.UserSpot
+namespace SadnaSrc.Main
 {
-    class UserPolicy
+    public interface IStoreService
     {
+        MarketAnswer OpenStore();
+
+        MarketAnswer PromoteToOwner();
     }
 }
