@@ -11,14 +11,26 @@ namespace SadnaSrc.Main
     public interface IOrderService
     {
 
-        Order CreateOrder(OrderItem[] items);
-        Order CreateOrder();
-        void RemoveOrder(int orderId);
-        void RemoveItemFromOrder(int orderID, string store, string name);
-        void AddItemToOrder(int orderID, OrderItem item);
-        OrderItem FindOrderItemInOrder(int orderId, string store, string user);
-        List<Order> getOrders();
-        Order getOrder(int orderID);
+        MarketAnswer CreateOrder();  
+        MarketAnswer RemoveOrder(int orderId);
 
+        MarketAnswer AddItemToOrder(int orderID, OrderItem item);
+        MarketAnswer RemoveItemFromOrder(int orderID, string store, string name);
+        
+
+    }
+
+    public enum OrderStatus
+    {
+        Success,
+        NoOrderWithID,
+
+    }
+
+    public enum OrderItemStatus
+    {
+        Success,
+        NoOrderItemInOrder,
+        ItemAlreadyInOrder
     }
 }

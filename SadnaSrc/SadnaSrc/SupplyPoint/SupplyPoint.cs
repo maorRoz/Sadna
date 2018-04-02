@@ -9,7 +9,6 @@ namespace SadnaSrc.SupplyPoint
 {
     public class SupplyPoint
     {
-        private readonly SupplyPointDL _dl;
         public SupplyPoint()
         {
 

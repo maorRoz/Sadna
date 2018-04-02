@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.OrderPool
 {
@@ -81,7 +82,7 @@ namespace SadnaSrc.OrderPool
         {
             if (getOrderItem(item.GetName(), item.GetStore()) != null)
             {
-                throw new OrderException(0, "Order item is already listed in the order.");
+                throw new OrderException(OrderItemStatus.ItemAlreadyInOrder, "Order item is already listed in the order.");
             }
             else
             {
@@ -94,7 +95,7 @@ namespace SadnaSrc.OrderPool
         {
             if (getOrderItem(item.GetName(), item.GetStore()) == null)
             {
-                throw new OrderException(0, "Order item is not listed in the order.");
+                throw new OrderException(OrderItemStatus.NoOrderItemInOrder, "Order item is not listed in the order.");
             }
             else
             {

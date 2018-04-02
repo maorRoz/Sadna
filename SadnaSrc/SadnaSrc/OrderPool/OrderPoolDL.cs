@@ -9,7 +9,6 @@ using SadnaSrc.Main;
 namespace SadnaSrc.OrderPool
 {
 
-    // TODO add Logging mechanism and Order History DB Tables(or table) to the OrderPool
     class OrderPoolDL : SystemDL
     {
 
@@ -77,7 +76,7 @@ namespace SadnaSrc.OrderPool
         {
             if (FindOrder(orderId) == null)
             {
-                throw new OrderException(0,"no user with id: "+ orderId + " in the Order database.");
+                throw new OrderException(OrderStatus.NoOrderWithID,"no user with id: "+ orderId + " in the Order database.");
             }
             DeleteFromTable("OrderItem", "OrderID = " + orderId);
             DeleteFromTable("Orders", "OrderID = " + orderId);

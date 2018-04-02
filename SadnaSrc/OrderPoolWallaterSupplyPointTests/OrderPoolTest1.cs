@@ -52,7 +52,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestNewWorldOrder() // the new world order is upon us ... 
         {
-            var o = orderService.CreateOrder();
+            var o = orderService.InitOrder();
             int id = o.GetOrderID();
             orderIDs.Add(id); Assert.AreEqual(1, orderService.getOrders().Count);
         }
@@ -66,7 +66,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestOrderWithOneItem()
         {
-            var o= orderService.CreateOrder();
+            var o= orderService.InitOrder();
             int id = o.GetOrderID();
             orderIDs.Add(id);
             orderService.AddItemToOrder(id, item2);
@@ -77,7 +77,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestOrderWithItems()
         {
-            var o = orderService.CreateOrder();
+            var o = orderService.InitOrder();
             int id = o.GetOrderID();
             orderIDs.Add(id);
 
@@ -91,7 +91,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestOrderRemoveItem()
         {
-            var o = orderService.CreateOrder();
+            var o = orderService.InitOrder();
             int id = o.GetOrderID();
             orderIDs.Add(id);
 
@@ -105,10 +105,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            foreach (int i in orderIDs)
-            {
-                orderService.RemoveOrder(i);
-            }
+
             userService.CleanSession();
             MarketYard.CleanSession();
         }
