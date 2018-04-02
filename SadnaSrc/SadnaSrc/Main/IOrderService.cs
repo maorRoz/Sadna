@@ -11,7 +11,7 @@ namespace SadnaSrc.Main
     public interface IOrderService
     {
 
-        MarketAnswer CreateOrder();  
+        MarketAnswer CreateOrder(out int orderId);  
         MarketAnswer RemoveOrder(int orderId);
 
         MarketAnswer AddItemToOrder(int orderID, OrderItem item);

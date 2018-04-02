@@ -90,10 +90,9 @@
     <Compile Include="StoreCenter\Store.cs" />
     <Compile Include="StoreCenter\StoreException.cs" />
     <Compile Include="StoreCenter\StoreService.cs" />
+    <Compile Include="SupplyPoint\SupplyAnswer.cs" />
     <Compile Include="SupplyPoint\SupplyException.cs" />
-    <Compile Include="SupplyPoint\SupplyPoint.cs" />
     <Compile Include="SupplyPoint\SupplyService.cs" />
-    <Compile Include="SupplyPoint\SupplyPointDL.cs" />
     <Compile Include="UserSpot\CartService.cs" />
     <Compile Include="UserSpot\CartItem.cs" />
     <Compile Include="Main\ISystemAdminService.cs" />

@@ -25,8 +25,7 @@ namespace SadnaSrc.OrderPool
         public void setUsername(string name) { _userName = name;}
 
 
-        public OrderService(UserService userService, StoreService storeService,
-            SupplyService supplyService, PaymentService paymentService)
+        public OrderService(UserService userService, StoreService storeService)
         {
             _orders= new List<Order>();
             User user = userService.GetUser();
@@ -99,9 +98,10 @@ namespace SadnaSrc.OrderPool
          * Interface functions
          */
 
-        public MarketAnswer CreateOrder()
+        public MarketAnswer CreateOrder(out int orderId)
         {
             Order order = InitOrder();
+            orderId = order.GetOrderID();
             MarketLog.Log("OrderPool", "User " + _userName + " successfully initialized new order.");
             return new OrderAnswer(OrderStatus.Success, "Success, You created an order with ID: " + order.GetOrderID());
 

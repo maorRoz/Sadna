@@ -41,7 +41,6 @@ namespace SadnaSrc.OrderPool
             _userName = userName;
             _shippingAddress = shippingAddress;
             _items = new List<OrderItem>();
-            //_orderId = new Random().Next(100000, 999999);
             _orderId = orderId;
             _date = DateTime.Today;
         }
