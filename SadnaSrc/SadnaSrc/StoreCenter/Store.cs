@@ -305,6 +305,18 @@ namespace SadnaSrc.StoreCenter
             throw new NotImplementedException();
         }
 
+        public bool canPurchesImmidiate(Product product, int quantity)
+        {
+            return (stock.getProductQuantity(product) >= quantity);
+        }
+
+        public bool canPurchesLottery(Product product, int amountOfMoney)
+        {
+            return ((stock.getProductPurchaseWay(product) == PurchesEnum.LOTTERY) &&
+                    (stock.getProductQuantity(product) > 0) &&
+                    (getLotterySale(product) != null) &&
+                    (getLotterySale(product).CanPurches(amountOfMoney)));
+        }
     }
 }
 

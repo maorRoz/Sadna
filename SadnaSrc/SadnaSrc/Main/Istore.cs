@@ -24,6 +24,8 @@ namespace SadnaSrc.Main
         Discount getProductDiscountByProductID(int ID); //will return null if product is not exists or discount not exists
         PurchesEnum getProductPurchesWayByProductID(int ID);//will return PRODUCTNOTFOUND if product is not exists
         int getProductQuantitybyProductID(int ID);//will return -1 if product is not exists
+        bool canPurchesImmidiate(Product product, int quantity);
+        bool canPurchesLottery(Product product, int amountOfMoney);
 
         /**
          * Store Managment, handling products
