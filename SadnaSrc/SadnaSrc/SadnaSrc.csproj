@@ -108,14 +108,19 @@
     <Compile Include="UserSpot\UserService.cs" />
     <Compile Include="UserSpot\UserServiceDL.cs" />
     <Compile Include="Walleter\PaymentService.cs" />
-    <Compile Include="Walleter\Walleter.cs" />
+    <Compile Include="Walleter\WalleterAnswer.cs" />
     <Compile Include="Walleter\WalleterException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ProxyExternalSystems\ProxyExternalSystems.csproj">
+      <Project>{f4484437-aa89-4a9d-994b-36b603202356}</Project>
+      <Name>ProxyExternalSystems</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

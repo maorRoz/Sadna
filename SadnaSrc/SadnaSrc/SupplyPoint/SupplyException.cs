@@ -9,7 +9,7 @@ namespace SadnaSrc.SupplyPoint
 {
     class SupplyException : MarketException
     {
-        public SupplyException(int status, string message) : base(status, message)
+        public SupplyException(SupplyStatus status, string message) : base((int)status, message)
         {
         }
 
