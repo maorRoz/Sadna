@@ -20,6 +20,7 @@ namespace SadnaSrc.StoreCenter
         private LinkedList<User> Managers;
         private LinkedList<PurchesPolicy> purchesPolicy;
         private LinkedList<LotterySaleManagmentTicket> lotterys;
+        private LinkedList<String> history;
         private StoreService master { get; }
         private bool isActive { get; set; }
 
@@ -60,13 +61,13 @@ namespace SadnaSrc.StoreCenter
         }
         private StoreAnswer pAddDiscountToProduct(Product p, int _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, bool _presenteges)
         {
-            if (_presenteges&& _DiscountAmount>=100)
+            if (_presenteges && _DiscountAmount >= 100)
             {
                 return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100 and the discoint is presenteges");
             }
             if (_startDate < DateTime.Now.Date)
             {
-                    return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past");
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past");
             }
             if (_EndDate < DateTime.Now.Date)
             {
@@ -88,22 +89,22 @@ namespace SadnaSrc.StoreCenter
         {
             if (purches == PurchesEnum.LOTTERY)
             {
-                if (getLotterySale(p)==null) {
+                if (getLotterySale(p) == null) {
                     if (LotterySaleManagmentTicket.checkDates(startDate, endDate)) {
                         lotterys.AddLast(new LotterySaleManagmentTicket(master.getLottyerID(), p, startDate, endDate));
-                      return stock.addPurchesWayToProduct(p, purches);
+                        return stock.addPurchesWayToProduct(p, purches);
                     }
                     return new StoreAnswer(StoreEnum.ChangePurchesTypeFail, "the dates are wrong or in the past");
                 }
-                return new StoreAnswer(StoreEnum.ChangePurchesTypeFail, "product "+p.SystemId+" is already in lottery mode");
+                return new StoreAnswer(StoreEnum.ChangePurchesTypeFail, "product " + p.SystemId + " is already in lottery mode");
             }
             return stock.addPurchesWayToProduct(p, purches);
         }
 
         public MarketAnswer PromoteToOwner(User currentUser, User someoneToPromote)
         {
-            if (IsOwner(currentUser)) { 
-               if (!OtherOwners.Contains(someoneToPromote))
+            if (IsOwner(currentUser)) {
+                if (!OtherOwners.Contains(someoneToPromote))
                 {
                     OtherOwners.AddLast(someoneToPromote);
                     return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote.SystemID + " has been premoted to be a owner of store " + SystemId);
@@ -118,15 +119,15 @@ namespace SadnaSrc.StoreCenter
             if (IsOwner(currentUser))
             {
                 if (!Managers.Contains(someoneToPromote))
-            {
-                Managers.AddLast(someoneToPromote);
-                return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote.SystemID + " has been premoted to be a owner of store " + SystemId);
+                {
+                    Managers.AddLast(someoneToPromote);
+                    return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote.SystemID + " has been premoted to be a owner of store " + SystemId);
+                }
+                return new StoreAnswer(StoreEnum.AddStoreManagerFail, "user " + someoneToPromote.SystemID + " is Already a manager of the store " + SystemId);
             }
-            return new StoreAnswer(StoreEnum.AddStoreManagerFail, "user " + someoneToPromote.SystemID + " is Already a manager of the store " + SystemId);
+            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + currentUser.SystemID + " is not an owner of the store and can't make " + someoneToPromote.SystemID + " to a manager");
         }
-        return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + currentUser.SystemID + " is not an owner of the store and can't make " + someoneToPromote.SystemID + " to a manager");
-    }
-   
+
         public LinkedList<Product> getAllStoreProducts()
         {
             return stock.getAllProducts();
@@ -136,8 +137,8 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer CloseStore(User ownerOrSystemAdmin)
         {
-            if (IsOwner(ownerOrSystemAdmin)) { 
-               if (isActive)
+            if (IsOwner(ownerOrSystemAdmin)) {
+                if (isActive)
                 {
                     isActive = false;
                     return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
@@ -146,7 +147,7 @@ namespace SadnaSrc.StoreCenter
             }
             return new StoreAnswer(StoreEnum.CloseStoreFail, "user " + ownerOrSystemAdmin.SystemID + " is not a System admin and not an owner of the store " + SystemId);
         }
-        
+
         public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
         {
             Product P = new Product(master.getProductID(), _name, _price, _description);
@@ -214,7 +215,7 @@ namespace SadnaSrc.StoreCenter
                 return pAddDiscountToProduct(product, master.getDiscountCode(), discountTypeEnum.HIDDEN, _startDate, _EndDate, _DiscountAmount, true);
             }
             return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100");
-    }
+        }
 
         public MarketAnswer removeDiscountFormProduct(Product product)
         {
@@ -235,7 +236,7 @@ namespace SadnaSrc.StoreCenter
         {
             return stock.EditDiscountMode(product, discountTypeEnum.HIDDEN);
         }
-        
+
         public MarketAnswer EditDiscountToVisible(Product product)
         {
             return stock.EditDiscountMode(product, discountTypeEnum.VISIBLE);
@@ -256,7 +257,7 @@ namespace SadnaSrc.StoreCenter
             return stock.EditDiscountEndTime(product, _EndDate);
         }
 
-       
+
         public Product getProductById(int ID) //will return null if product is not exists
         {
             return stock.getProductById(ID);
@@ -290,19 +291,71 @@ namespace SadnaSrc.StoreCenter
             }
             return null;
         }
-        public LotteryTicket MakeALotteryPurches(Product product, int moeny)
+        public LotteryTicket MakeALotteryPurches(int productID, int moeny, User user)
         {
-            throw new NotImplementedException();
+            LotteryTicket result = null;
+            Product product = stock.getProductById(productID);
+            if (canPurchesLottery(product, moeny))
+            {
+                result = getLotterySale(product).PurchesALotteryTicket(moeny);
+                history.AddLast("user " + user.SystemID + " purches a Lottery ticket of the prodcut Product " + product.SystemId);
+
+            }
+            return result;
         }
 
-        public Product MakeAImmidiatePurches(Product product)
+        public Product MakeAImmidiatePurches(int productID, int quantity, User user)
         {
-            throw new NotImplementedException();
+            Product product = stock.getProductById(productID);
+            if (canPurchesImmidiate(product,quantity))
+            {
+                stock.UpdateQuantityAfterPruchese(product, quantity);
+                history.AddLast("user " + user.SystemID + " purches by ImmidatePurches Product " + productID);
+                return product;
+            }
+            return null;
+        }
+        public LotteryTicket MakeALotteryPurches(Product product, int moeny, User user)
+        {
+            LotteryTicket result = null;
+            if (canPurchesLottery(product, moeny))
+            {
+                result= getLotterySale(product).PurchesALotteryTicket(moeny);
+                history.AddLast("user " + user.SystemID + " purches a Lottery ticket of the prodcut Product " + product.SystemId);
+            }
+            return result;
         }
 
+        public Product MakeAImmidiatePurches(Product product, int quantity, User user)
+        {
+            if (canPurchesImmidiate(product, quantity))
+            {
+                stock.UpdateQuantityAfterPruchese(product, quantity);
+                history.AddLast("user " + user.SystemID + " purches by ImmidatePurches Product " + product.SystemId);
+                return product;
+            }
+            return null;
+        }
+
+        public double getProductPrice(Product _product, int _DiscountCode, int _quantity)
+        {
+            return stock.CalculateSingleItemPrice(_product, _DiscountCode, _quantity);
+        }
+        public LotteryTicket DoLottery(Product product)
+        {
+            LotteryTicket result = null;
+            foreach (LotterySaleManagmentTicket LSMT in lotterys)
+            {
+                if (LSMT.original.equal(product))
+                {
+                    result= LSMT.Dolottery();
+                }
+            }
+            return result;
+        }
         public LinkedList<string> ViewPurchesHistory()
         {
-            throw new NotImplementedException();
+            return history;
         }
 
         public bool canPurchesImmidiate(Product product, int quantity)

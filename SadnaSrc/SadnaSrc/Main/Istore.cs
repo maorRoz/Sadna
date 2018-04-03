@@ -63,7 +63,11 @@ namespace SadnaSrc.Main
         /**
          * Store Managment, Purches
          **/
-        LotteryTicket MakeALotteryPurches(Product product, int moeny);
-        Product MakeAImmidiatePurches(Product product);
+        LotteryTicket MakeALotteryPurches(Product product, int moeny, User user);
+        Product MakeAImmidiatePurches(Product product, int quantity, User user);
+        LotteryTicket MakeALotteryPurches(int productID, int moeny, User user);
+        Product MakeAImmidiatePurches(int productID, int quantity, User user);
+        LotteryTicket DoLottery(Product product); // will return the lottery ticket of the winner, or null if faild
+        double getProductPrice(Product _product, int _DiscountCode, int _quantity);
     }
 }

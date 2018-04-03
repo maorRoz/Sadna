@@ -11,11 +11,13 @@ namespace SadnaSrc.StoreCenter
         LotterySaleManagmentTicket MyManager;
         int IntervalStart;
         int IntervalEnd;
+        LotteryTicketStatus myStatus;
         public LotteryTicket(LotterySaleManagmentTicket _MyManager, int _IntervalStart, int _IntervalEnd)
         {
             MyManager = _MyManager;
             IntervalStart = _IntervalStart;
             IntervalEnd = _IntervalEnd;
+            myStatus = LotteryTicketStatus.WAITING;
         }
 
         internal bool isWinning(int winningNumber)
@@ -25,17 +27,17 @@ namespace SadnaSrc.StoreCenter
 
         internal void RunWinning()
         {
-            throw new NotImplementedException();
+            myStatus = LotteryTicketStatus.WINNING;
         }
 
         internal void RunLosing()
         {
-            throw new NotImplementedException();
+            myStatus = LotteryTicketStatus.LOSING;
         }
 
         internal void runCancel()
         {
-            throw new NotImplementedException();
+            myStatus = LotteryTicketStatus.CANCEL;
         }
     }
 }

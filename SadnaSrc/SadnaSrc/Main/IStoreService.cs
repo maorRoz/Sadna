@@ -65,8 +65,6 @@ namespace SadnaSrc.Main
         /**
          * Store Managment, Purches
          **/
-        LotteryTicket MakeALotteryPurches(Store store, Product product, int moeny);
-        Product MakeAImmidiatePurches(Store store, Product product);
 
 
     }

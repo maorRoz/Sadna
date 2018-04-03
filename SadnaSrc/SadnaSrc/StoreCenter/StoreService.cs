@@ -245,18 +245,9 @@ namespace SadnaSrc.StoreCenter
             return store.EditDiscountEndTime(product, _EndDate);
         }
 
-        public LotteryTicket MakeALotteryPurches(Store store, Product product, int moeny)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Product MakeAImmidiatePurches(Store store, Product product)
-        {
-            throw new NotImplementedException();
-        }
         public LinkedList<string> ViewPurchesHistory(Store store)
         {
-            throw new NotImplementedException();
+            return store.ViewPurchesHistory();
         }
     }
 }

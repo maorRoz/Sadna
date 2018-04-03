@@ -60,25 +60,28 @@ namespace SadnaSrc.StoreCenter
                 return null;
             }
         }
-        public void TimeUp()
+        public LotteryTicket Dolottery()
         {
             if (TotalMoneyPayed==ProductNormalPrice)
             {
-                informAllWinner();
+                return informAllWinner();
             }
             else
             {
                 informAllCancel();
+                return null;
             }
         }
-        private void informAllWinner()
+        private LotteryTicket informAllWinner()
         {
             Random r = new Random(DateTime.Now.Millisecond);
             int winningNumber = r.Next(0, ProductNormalPrice);
+            LotteryTicket winner = null;
             foreach (LotteryTicket lotter in tickets)
             {
                 if (lotter.isWinning(winningNumber))
                 {
+                    winner = lotter;
                     lotter.RunWinning();
                 }
                 else
@@ -86,6 +89,7 @@ namespace SadnaSrc.StoreCenter
                     lotter.RunLosing();
                 }
             }
+            return winner;
         }
         private void informAllCancel()
         {
