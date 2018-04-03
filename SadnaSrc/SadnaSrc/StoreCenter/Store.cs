@@ -86,7 +86,7 @@ namespace SadnaSrc.StoreCenter
             return stock.addPurchesWayToProduct(p, purches);
         }
 
-        public MarketAnswer PromoteToOwner(User someoneToPromote)
+     /**   public MarketAnswer PromoteToOwner(User someoneToPromote)
         {
             return pPromoteToOwner(someoneToPromote);
         }
@@ -95,7 +95,7 @@ namespace SadnaSrc.StoreCenter
         {
             return pPromoteToManager(someoneToPromote);
         }
-
+    **/
         public LinkedList<Product> getAllStoreProducts()
         {
             return stock.getAllProducts();
@@ -103,7 +103,7 @@ namespace SadnaSrc.StoreCenter
 
 
 
-        public MarketAnswer CloseStore()
+        public MarketAnswer CloseStore(User ownerOrSystemAdmin)
         {
             if (isActive)
             {
