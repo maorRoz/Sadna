@@ -14,7 +14,6 @@ namespace BlackBox
 		{
 			_market = MarketYard.Instance;
 			_userService = _market.GetUserService();
-			_systemAdminService = _market.GetSystemAdminService(_userService);
 		}
 
 		public MarketAnswer EnterSystem()

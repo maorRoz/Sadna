@@ -34,6 +34,7 @@ namespace BlackBox
 
 		public void SuccessDeleteUserSoleOwner()
 		{
+			//TODO: check the store was closed
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(UserIdNotSoleOwner).Status);
@@ -91,6 +92,7 @@ namespace BlackBox
 		}
 
 		[TestCleanup]
+
 		public void UserTestCleanUp()
 		{
 			_adminBridge.CleanSession();
