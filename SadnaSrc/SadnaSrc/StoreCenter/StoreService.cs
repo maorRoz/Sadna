@@ -14,22 +14,24 @@ namespace SadnaSrc.StoreCenter
      * it will hold the logger
      * this is the gateway from the system to the StoreCenter Packege
      **/
-    class StoreService : IStoreService
+    public class StoreService : IStoreService
     {
         LinkedList<Store> allStores;
         int StoreIdCounter;
+        int globalProductID;
         int globalDiscountCode;
 
         public StoreService()
         {
             StoreIdCounter = 0;
             globalDiscountCode = 0;
+            globalProductID = 0;
             allStores = new LinkedList<Store>();
         }
 
         public MarketAnswer OpenStore(User owner)
         {
-            Store temp = new Store(owner, getNextStoreId());
+            Store temp = new Store(owner, getNextStoreId(), this);
             allStores.AddLast(temp);
             return new StoreAnswer(StoreEnum.Success, "Store " + temp.SystemId + "opend successfully");
         }
@@ -46,7 +48,7 @@ namespace SadnaSrc.StoreCenter
             LinkedList<Store> result = new LinkedList<Store>();
             foreach (Store store in allStores)
             {
-                if (store.IsOwner(user) && store.isStoreActive())
+                if (store.IsOwner(user) && store.IsStoreActive())
                 {
                     result.AddLast(store);
                 }
@@ -97,6 +99,17 @@ namespace SadnaSrc.StoreCenter
         {
             return store.CloseStore();
         }
+        public MarketAnswer AddProduct (Store store, String _name, int _price, String _description, int quantity)
+        {
+            return store.AddProduct(_name, _price, _description, quantity);
+        }
+
+        internal int getProductID()
+        {
+            int temp = globalProductID;
+            globalProductID++;
+            return temp;
+        }
 
         public MarketAnswer ChangeProductPurchesWayToImmidiate(Store store, Product product)
         {
@@ -124,7 +137,7 @@ namespace SadnaSrc.StoreCenter
             return store.removeDiscountToProduct(product);
         }
         public MarketAnswer removeProduct(Store store, Product product) { return store.removeProduct(product); }
-        private int getDiscountCode()
+        public int getDiscountCode()
         {
             int temp = globalDiscountCode;
             globalDiscountCode++;
@@ -135,7 +148,15 @@ namespace SadnaSrc.StoreCenter
         {
             return store.ChangeProductPurchesWayToLottery(product);
         }
-
+        public Store getStoreByID(int ID)
+        {
+            Store result;
+            foreach (Store store in allStores)
+            {
+                if ( store.SystemId == ID) {
+                    return new Storestore;
+                }
+        }
         /**  public MarketAnswer CloseStore(User CurrentUser)             maybe to remove this one? ask Zohar
           {
               Store temp = getStoreByUser(CurrentUser);

@@ -39,6 +39,9 @@ namespace SadnaSrc.StoreCenter
         /** 
          * will be used by the store
          **/
+        public bool CanPurches(int moneyPaied) {
+            return (TotalMoneyPayed + moneyPaied < ProductNormalPrice);
+        }
         public LotteryTicket PurchesALotteryTicket(int moneyPaied)
         {
             if (TotalMoneyPayed+ moneyPaied<ProductNormalPrice)
