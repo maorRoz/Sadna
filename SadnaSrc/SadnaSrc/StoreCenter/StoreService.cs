@@ -36,13 +36,6 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.Success, "Store " + temp.SystemId + "opend successfully");
         }
 
-        private int getNextStoreId()
-        {
-            int temp = StoreIdCounter;
-            StoreIdCounter++;
-            return temp;
-        }
-
         private LinkedList<Store> getStoresOfUser(User user)
         {
             LinkedList<Store> result = new LinkedList<Store>();
@@ -57,114 +50,201 @@ namespace SadnaSrc.StoreCenter
                 return result;
             return null;
         }
-        public MarketAnswer PromoteToOwner(Store store, User CurrentUser, User someoneToPromote)
+        
+        public Store getStoreByID(int ID)
         {
-            LinkedList<Store> temp = getStoresOfUser(CurrentUser);
-            if (temp == null)
+            foreach (Store store in allStores)
             {
-                return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + CurrentUser.SystemID + " has no active Store");
-            }
-            else
-            {
-                if (temp.Contains(store))
+                if (store.SystemId == ID)
                 {
-                    return store.PromoteToOwner(someoneToPromote);
-                }
-                else
-                {
-                    return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + CurrentUser.SystemID + " is not a Store Owner of the store" + store.SystemId);
+                    return store;
                 }
             }
+            return null;
         }
-        public MarketAnswer PromoteToManager(Store store, User CurrentUser, User someoneToPromote)
-        {
-            LinkedList<Store> temp = getStoresOfUser(CurrentUser);
-            if (temp == null)
-            {
-                return new StoreAnswer(StoreEnum.AddStoreManagerFail, "user " + CurrentUser.SystemID + " has no Store");
-            }
-            else
-            {
-                if (temp.Contains(store))
-                {
-                    return store.PromoteToManager(someoneToPromote);
-                }
-                else
-                {
-                    return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + CurrentUser.SystemID + " is not a Store Owner of the store" + store.SystemId);
-                }
-            }
-        }
-        public MarketAnswer CloseStore(Store store)
-        {
-            return store.CloseStore();
-        }
-        public MarketAnswer AddProduct (Store store, String _name, int _price, String _description, int quantity)
-        {
-            return store.AddProduct(_name, _price, _description, quantity);
-        }
-
+        
+        /**
+         * next section is ID handlers
+         **/
         internal int getProductID()
         {
             int temp = globalProductID;
             globalProductID++;
             return temp;
         }
-
-        public MarketAnswer ChangeProductPurchesWayToImmidiate(Store store, Product product)
-        {
-            return store.ChangeProductPurchesWayToImmidiate(product);
-        }
-
-        public MarketAnswer addDiscountToProduct_presenteges_HIDDEN(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
-        {
-            return store.addDiscountToProduct(product, getDiscountCode(), discountTypeEnum.HIDDEN, _startDate, _EndDate, _DiscountAmount, true);
-        }
-        public MarketAnswer addDiscountToProduct_presenteges_VISIBLE(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
-        {
-            return store.addDiscountToProduct(product, getDiscountCode(), discountTypeEnum.VISIBLE, _startDate, _EndDate, _DiscountAmount, true);
-        }
-        public MarketAnswer addDiscountToProduct_HIDDEN(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
-        {
-            return store.addDiscountToProduct(product, getDiscountCode(), discountTypeEnum.HIDDEN, _startDate, _EndDate, _DiscountAmount, false);
-        }
-        public MarketAnswer addDiscountToProduct_VISIBLE(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
-        {
-            return store.addDiscountToProduct(product, getDiscountCode(), discountTypeEnum.VISIBLE, _startDate, _EndDate, _DiscountAmount, false);
-        }
-        public MarketAnswer removeDiscountToProduct(Store store, Product product)
-        {
-            return store.removeDiscountToProduct(product);
-        }
-        public MarketAnswer removeProduct(Store store, Product product) { return store.removeProduct(product); }
-        public int getDiscountCode()
+        internal int getDiscountCode()
         {
             int temp = globalDiscountCode;
             globalDiscountCode++;
             return temp;
         }
+        private int getNextStoreId()
+        {
+            int temp = StoreIdCounter;
+            StoreIdCounter++;
+            return temp;
+        }
+
+        public MarketAnswer CloseStore(Store store, User ownerOrSystemAdmin)
+        {
+            return store.CloseStore(ownerOrSystemAdmin);
+        }
+
+        public LinkedList<Store> getAllUsersStores(User owner)
+        {
+            LinkedList<Store> result = new LinkedList<Store>();
+            foreach (Store store in allStores)
+            {
+                if (store.IsOwner(owner) && store.IsStoreActive())
+                {
+                    result.AddLast(store);
+                }
+            }
+
+                return result;
+        }
+
+        public LinkedList<Store> getAllStores(User owner)
+        {
+            return allStores;
+        }
+
+        public LinkedList<Product> getAllMarketProducts()
+        {
+            LinkedList<Product> result = new LinkedList<Product>();
+            foreach (Store store in allStores)
+            {
+                result.
+            }
+        }
+
+        public MarketAnswer PromoteToOwner(Store store, User CurrentUser, User someoneToPromote)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer PromoteToManager(Store store, User CurrentUser, User someoneToPromote)
+        {
+            throw new NotImplementedException();
+        }
+
+        public LinkedList<Product> getAllStoreProducts(Store store)
+        {
+            throw new NotImplementedException();
+        }
+
+        public LinkedList<string> ViewPurchesHistory(Store store)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer AddProduct(Store store, string _name, int _price, string _description, int quantity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer IncreaseProductQuantity(Store store, Product product, int quantity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer removeProduct(Store store, Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer editProductPrice(Store store, Product product, int newprice)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer editProductName(Store store, Product product, string Name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer editProductDescripiton(Store store, Product product, string Desccription)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer ChangeProductPurchesWayToImmidiate(Store store, Product product)
+        {
+            throw new NotImplementedException();
+        }
 
         public MarketAnswer ChangeProductPurchesWayToLottery(Store store, Product product)
         {
-            return store.ChangeProductPurchesWayToLottery(product);
+            throw new NotImplementedException();
         }
-        public Store getStoreByID(int ID)
+
+        public MarketAnswer addDiscountToProduct_VISIBLE(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
         {
-            Store result;
-            foreach (Store store in allStores)
-            {
-                if ( store.SystemId == ID) {
-                    return new Storestore;
-                }
+            throw new NotImplementedException();
         }
-        /**  public MarketAnswer CloseStore(User CurrentUser)             maybe to remove this one? ask Zohar
-          {
-              Store temp = getStoreByUser(CurrentUser);
-              if (temp != null)
-              {
-                  return temp.CloseStore();
-              }
-              return new StoreAnswer(StoreEnum.CloseStoreFail, "user " + CurrentUser.SystemID + " has no Store");
-          }**/
+
+        public MarketAnswer addDiscountToProduct_HIDDEN(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer addDiscountToProduct_presenteges_VISIBLE(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer addDiscountToProduct_presenteges_HIDDEN(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer removeDiscount(Store store, Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer MakeDiscountPrecenteges(Store store, Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer MakeDiscountNonPrecenteges(Store store, Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer MakeDiscountHidden(Store store, Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer MakeDiscountVisible(Store store, Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditDiscountAmunt(Store store, Product product, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditStartTimeAmunt(Store store, Product product, DateTime _startDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditEndTimeAmunt(Store store, Product product, DateTime _EndDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public LotteryTicket MakeALotteryPurches(Store store, Product product, int moeny)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Product MakeAImmidiatePurches(Store store, Product product)
+        {
+            throw new NotImplementedException();
+        }
     }
-}

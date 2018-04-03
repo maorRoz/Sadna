@@ -17,7 +17,7 @@ namespace SadnaSrc.Main
         MarketAnswer PromoteToManager(User someoneToPromote);
         LinkedList<Product> getAllStoreProducts();
         LinkedList<String> ViewPurchesHistory();
-        MarketAnswer CloseStore();
+        MarketAnswer CloseStore(User ownerOrSystemAdmin);
         bool IsStoreActive();
         bool IsOwner(User user);
         Product getProductById(int ID); //will return null if product is not exists

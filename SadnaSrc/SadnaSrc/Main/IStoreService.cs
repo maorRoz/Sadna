@@ -14,10 +14,10 @@ namespace SadnaSrc.Main
          * general actions that refer to all the stores/some of them
          **/
         MarketAnswer OpenStore(User owner);
-        MarketAnswer CloseStore(Store store);
+        MarketAnswer CloseStore(Store store, User ownerOrSystemAdmin);
         LinkedList<Store> getAllUsersStores(User owner);
         LinkedList<Store> getAllStores(User owner);
-        LinkedList<Product> getAllMarketProducts(Store store);
+        LinkedList<Product> getAllMarketProducts();
         Store getStoreByID(int ID);
 
 
