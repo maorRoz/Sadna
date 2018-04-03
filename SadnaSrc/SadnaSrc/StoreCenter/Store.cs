@@ -86,7 +86,7 @@ namespace SadnaSrc.StoreCenter
             return stock.addPurchesWayToProduct(p, purches);
         }
 
-     /**   public MarketAnswer PromoteToOwner(User someoneToPromote)
+        public MarketAnswer PromoteToOwner(User someoneToPromote)
         {
             return pPromoteToOwner(someoneToPromote);
         }
@@ -95,7 +95,7 @@ namespace SadnaSrc.StoreCenter
         {
             return pPromoteToManager(someoneToPromote);
         }
-    **/
+   
         public LinkedList<Product> getAllStoreProducts()
         {
             return stock.getAllProducts();
@@ -113,7 +113,7 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " is alrady closed");
 
         }
-
+        
         public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
         {
             Product P = new Product(master.getProductID(), _name, _price, _description);
@@ -244,7 +244,11 @@ namespace SadnaSrc.StoreCenter
             Product temp = stock.getProductById(ID);
             return stock.getProductQuantity(temp);
         }
-        
+        internal void addAllProductsToExistingList(LinkedList<Product> result)
+        {
+            stock.addAllProductsToExistingList(result);
+        }
+
         public LotteryTicket MakeALotteryPurches(Product product, int moeny)
         {
             throw new NotImplementedException();
