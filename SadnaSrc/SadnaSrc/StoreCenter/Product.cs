@@ -9,9 +9,9 @@ namespace SadnaSrc.StoreCenter
     public class Product
     {
         public int SystemId;
-        public String name { get; private set; }
-        public int BasePrice { get; private set; }
-        public String description { get; private set; }
+        public String name { get; set; }
+        public int BasePrice { get; set; }
+        public String description { get; set; }
 
         public Product(int _SystemId, String _name, int _price, String _description)
         {

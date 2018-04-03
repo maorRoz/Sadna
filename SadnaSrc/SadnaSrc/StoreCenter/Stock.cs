@@ -43,7 +43,6 @@ namespace SadnaSrc.StoreCenter
 
         private StockListItem findByProduct(Product _product)
         {
-            IEnumerator< StockListItem> iter = StockList.GetEnumerator();
             foreach (StockListItem item in StockList) {
                 if (findItemByProductPred(item, _product))
                 {
@@ -52,6 +51,17 @@ namespace SadnaSrc.StoreCenter
             }
             return null;
             //return StockList.Find(item => item.product.equal(_product));
+        }
+        public Product getProductById(int ID)
+        {
+            foreach (StockListItem item in StockList)
+            {
+                if (item.product.SystemId==ID)
+                {
+                    return item.product;
+                }
+            }
+            return null;
         }
         private static bool findItemByProductPred(StockListItem item, Product _product)
         {
@@ -75,29 +85,42 @@ namespace SadnaSrc.StoreCenter
         public Discount getProductDiscount(Product _product)
         {
             StockListItem item = findByProduct(_product);
+            if (item != null) { 
             return item.discount;
+            }
+            return null;
 
         }
 
         public int getProductQuantity(Product _product)
         {
             StockListItem item = findByProduct(_product);
-            return item.quantity;
+            if (item != null){
+                return item.quantity;
+            }
+            return -1;
 
         }
         public PurchesEnum getProductPurchaseWay(Product _product)
         {
             StockListItem item = findByProduct(_product);
-            return item.PurchesWay;
-
+            if (item != null){
+                return item.PurchesWay;
+            }
+            return PurchesEnum.PRODUCTNOTFOUND;
         }
+        // keep in mind next Function
         public StoreAnswer UpdateQuantityAfterPruchese(Product _product, int _quantity)
         {
             if (CheckIfAvailable(_product, _quantity))
             {
                 StockListItem item = findByProduct(_product);
-                item.quantity = item.quantity - _quantity;
+                
+                if (item != null) {
+                    item.quantity = item.quantity - _quantity;
                 return new StoreAnswer(StoreEnum.Success, "amount of " + _quantity + " unites has been removed from product" + _product);
+                }
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + _product.toString() + " does not exist in Stock");
             }
             else
             {
@@ -124,15 +147,8 @@ namespace SadnaSrc.StoreCenter
             return -1;
         }
         /**
-         * find product in the list, not clear if this is internal or external function.
-         **/
-        /**
          * assume that the product is in the list
          **/
-        public StoreAnswer editProductDiscount(Product _product, Discount _discount)
-        {
-            return addDiscountToProduct(_product, _discount);
-        }
         public StoreAnswer addDiscountToProduct(Product _product, Discount _discount)
         {
             StockListItem item = findByProduct(_product);
@@ -144,6 +160,145 @@ namespace SadnaSrc.StoreCenter
             else
             {
                 return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + _product.toString() + " does not exist in Stock");
+            }
+        }
+
+        public LinkedList<Product> getAllProducts()
+        {
+            LinkedList<Product> result = new LinkedList<Product>();
+            foreach (StockListItem item in StockList)
+            {
+                result.AddLast(item.product);
+            }
+            return result;
+        }
+
+        internal StoreAnswer editProductPrice(Product product, int newprice)
+        {
+            StockListItem item = findByProduct(product);
+            if (item != null)
+            {
+                item.product.BasePrice = newprice;
+                return new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " price has been updated to " + newprice);
+            }
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + product.toString() + " does not exist in Stock");
+
+        }
+
+        internal StoreAnswer editProductName(Product product, string name)
+        {
+            StockListItem item = findByProduct(product);
+            if (item != null)
+            {
+                item.product.name = name;
+                return new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + name);
+            }
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + product.toString() + " does not exist in Stock");
+
+        }
+        internal StoreAnswer editProductDescripiton(Product product, string Description)
+        {
+            StockListItem item = findByProduct(product);
+            if (item != null)
+            {
+                item.product.description = Description;
+                return new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + Description);
+            }
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + product.toString() + " does not exist in Stock");
+
+        }
+        public StoreAnswer EditDiscountPrecenteges(Product product, bool isPresenteges)
+        {
+            StockListItem item = findByProduct(product);
+            if (item != null)
+            {
+                if (isPresenteges && item.discount.DiscountAmount > 100)
+                {
+                    return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100, cant make it presenteges");
+                }
+                item.discount.Presenteges= isPresenteges;
+                if (isPresenteges) { 
+                return new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount preseneges become true");}
+                return new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount preseneges become false");
+            }
+            else
+            {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + product.toString() + " does not exist in Stock");
+            }
+        }
+        public StoreAnswer EditDiscountMode(Product product, discountTypeEnum type)
+        {
+            StockListItem item = findByProduct(product);
+            if (item != null)
+            {
+                item.discount.discountType = type;
+                return new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount type become " + Discount.PrintEnum(type));
+            }
+            else
+            {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + product.toString() + " does not exist in Stock");
+            }
+        }
+        public StoreAnswer EditDiscountAmount(Product product, int amount)
+        {
+            StockListItem item = findByProduct(product);
+            if (item != null)
+            {
+                if (item.discount.Presenteges&&amount>100)
+                {
+                        return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100, cant make it presenteges");
+                }
+                item.discount.DiscountAmount = amount;
+                return new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount amount become " + amount);
+            }
+            else
+            {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + product.toString() + " does not exist in Stock");
+            }
+        }
+
+        public StoreAnswer EditDiscountStartTime(Product product, DateTime startTime)
+        {
+            StockListItem item = findByProduct(product);
+            if (item != null)
+            {
+                if (startTime < DateTime.Now.Date)
+                {
+                    return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past");
+                }
+
+                if (startTime > item.discount.EndDate)
+                {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time that is later then the discount end time");
+                }
+            item.discount.startDate = startTime;
+                return new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount Start Date become " + startTime);
+            }
+            else
+            {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + product.toString() + " does not exist in Stock");
+            }
+        }
+        public StoreAnswer EditDiscountEndTime(Product product, DateTime EndTime)
+        {
+            StockListItem item = findByProduct(product);
+            if (item != null)
+            {
+                if (EndTime < DateTime.Now.Date)
+                {
+                    return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set end time to the past");
+                }
+
+                if (EndTime < item.discount.startDate)
+                {
+                    return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set End time that is sooner then the discount start time");
+                }
+                item.discount.EndDate = EndTime;
+                return new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount End Date become " + EndTime);
+            }
+            else
+            {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + product.toString() + " does not exist in Stock");
             }
         }
         public StoreAnswer removeDiscountToProduct(Product _product)
@@ -159,7 +314,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + _product.toString() + " does not exist in Stock");
             }
         }
-
+        
         public StoreAnswer editProductPurchesWay(Product _product, PurchesEnum _purchesWay)
         {
             return addPurchesWayToProduct(_product, _purchesWay);
@@ -212,7 +367,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + _product.toString() + " does not exist in Stock");
             }
         }
-        public StoreAnswer addExistingProductToStock(Product _product, int _quantity)
+        private StoreAnswer addExistingProductToStock(Product _product, int _quantity)
         {
             if (_quantity >= 0)
             {
@@ -226,10 +381,7 @@ namespace SadnaSrc.StoreCenter
             }
 
         }
-        /**
-         * assume that the product never has been in the list
-         **/
-        public StoreAnswer addNewProductToStock(Product item, int quantity)
+        private StoreAnswer addNewProductToStock(Product item, int quantity)
         {
             if (quantity >= 0)
             {

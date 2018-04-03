@@ -6,15 +6,23 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    class Discount
+    public class Discount
     {
-        int discountCode { get; set; }
-        discountTypeEnum discountType { get; set; }
-        DateTime startDate { get; set; }
-        DateTime EndDate { get; set; }
-        int DiscountAmount { get; set; }
-        bool Presenteges { get; set; }
+        public int discountCode { get; }
+        public discountTypeEnum discountType { get; set; }
+        public DateTime startDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int DiscountAmount { get; set; }
+        public bool Presenteges { get; set; }
 
+        public static String PrintEnum(discountTypeEnum type)
+        {
+            if (type == discountTypeEnum.HIDDEN)
+                return "HIDDEN";
+            if (type == discountTypeEnum.VISIBLE)
+                return "VISIBLE";
+            return "";
+        }
         //assume that the startDate < EndDate
         public Discount(int _discountCode, discountTypeEnum _discountType, DateTime _EndDate, int _DiscountAmount, bool _presenteges)
         {

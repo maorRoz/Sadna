@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
     /**
      * this class is describing a single store, the managmnet of all the stores + implementing StoreService is done in StoreCenter
      **/
-    public class Store
+    public class Store : IStore
     {
         public int SystemId { get; }
         private Stock stock { get; set; }
@@ -19,9 +19,10 @@ namespace SadnaSrc.StoreCenter
         private LinkedList<User> OtherOwners;
         private LinkedList<User> Managers;
         private LinkedList<PurchesPolicy> purchesPolicy;
+        private StoreService master { get; }
         private bool isActive { get; set; }
 
-        public Store(User _Owner, int id)
+        public Store(User _Owner, int id, StoreService _master)
         {
             SystemId = id;
             stock = new Stock();
@@ -30,30 +31,13 @@ namespace SadnaSrc.StoreCenter
             Managers = new LinkedList<User>();
             purchesPolicy = new LinkedList<PurchesPolicy>();
             isActive = true;
+            master = _master;
         }
-        public StoreAnswer addProduct(Product product, int quantity)
+        private StoreAnswer paddProduct(Product product, int quantity)
         {
             return stock.addProductToStock(product, quantity);
         }
-        public StoreAnswer PromoteToOwner(User user)
-        {
-            if (!OtherOwners.Contains(user))
-            {
-                OtherOwners.AddLast(user);
-                return new StoreAnswer(StoreEnum.Success, "user " + user.SystemID + " has been premoted to be a owner of store " + SystemId);
-            }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + user.SystemID + " is Already a owner of the store " + SystemId);
-        }
-        public StoreAnswer PromoteToManager(User user)
-        {
-            if (!Managers.Contains(user))
-            {
-                Managers.AddLast(user);
-                return new StoreAnswer(StoreEnum.Success, "user " + user.SystemID + " has been premoted to be a manager of store " + SystemId);
-            }
-            return new StoreAnswer(StoreEnum.AddStoreManagerFail, "user " + user.SystemID + " is Already a manager of the store " + SystemId);
-        }
-        internal bool IsOwner(User user)
+        public bool IsOwner(User user)
         {
             if (isActive)
             {
@@ -67,7 +51,59 @@ namespace SadnaSrc.StoreCenter
             }
             return false;
         }
-        public StoreAnswer CloseStore()
+        public bool IsStoreActive()
+        {
+            return isActive;
+        }
+        private StoreAnswer pAddDiscountToProduct(Product p, int _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, bool _presenteges)
+        {
+            if (_presenteges&& _DiscountAmount>=100)
+            {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100 and the discoint is presenteges");
+            }
+            if (_startDate < DateTime.Now.Date)
+            {
+                    return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past");
+            }
+            if (_EndDate < DateTime.Now.Date)
+            {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set end time to the past");
+            }
+            if (_startDate > _EndDate)
+            {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time that is later then the discount end time");
+            }
+            Discount discount = new Discount(_discountCode, _discountType, _startDate, _EndDate, _DiscountAmount, _presenteges);
+            return stock.addDiscountToProduct(p, discount);
+        }
+        private StoreAnswer pRemoveDiscountToProduct(Product p)
+        {
+            return stock.removeDiscountToProduct(p);
+        }
+
+        private StoreAnswer pChangeProductPurchesWay(Product p, PurchesEnum purches)
+        {
+            return stock.addPurchesWayToProduct(p, purches);
+        }
+
+        public MarketAnswer PromoteToOwner(User someoneToPromote)
+        {
+            return pPromoteToOwner(someoneToPromote);
+        }
+
+        public MarketAnswer PromoteToManager(User someoneToPromote)
+        {
+            return pPromoteToManager(someoneToPromote);
+        }
+
+        public LinkedList<Product> getAllStoreProducts()
+        {
+            return stock.getAllProducts();
+        }
+
+
+
+        public MarketAnswer CloseStore()
         {
             if (isActive)
             {
@@ -75,45 +111,155 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
             }
             return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " is alrady closed");
+
         }
-        public bool isStoreActive()
+
+        public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
         {
-            return isActive;
+            Product P = new Product(master.getProductID(), _name, _price, _description);
+            return stock.addProductToStock(P, quantity);
         }
-        public StoreAnswer addDiscountToProduct(Product p, int _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, bool _presenteges)
+
+        public MarketAnswer IncreaseProductQuantity(Product product, int quantity)
         {
-            Discount discount = new Discount(_discountCode, _discountType, _startDate, _EndDate, _DiscountAmount, _presenteges);
-            return stock.addDiscountToProduct(p, discount);
+            return stock.addProductToStock(product, quantity);
         }
-        //need to think about it. Don't shure it's the best way to go
-        /** public StoreAnswer editProductDiscount(Product p, int _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, bool _presenteges)
-         {
-             Discount discount = new Discount(_discountCode, _discountType, _startDate, _EndDate, _DiscountAmount, _presenteges);
-             return stock.editProductDiscount(p, discount);
-         }**/
-        public StoreAnswer removeProduct(Product p)
+
+        public MarketAnswer removeProduct(Product product)
         {
-            return stock.removeProductFromStock(p);
+            return stock.removeProductFromStock(product);
         }
-        public StoreAnswer removeDiscountToProduct(Product p)
+
+        public MarketAnswer editProductPrice(Product product, int newprice)
         {
-            return stock.removeDiscountToProduct(p);
+            return stock.editProductPrice(product, newprice);
         }
-        public StoreAnswer Edi(Product p)
+
+        public MarketAnswer editProductName(Product product, string Name)
         {
-            return stock.removeDiscountToProduct(p);
+            return stock.editProductName(product, Name);
         }
-        public StoreAnswer ChangeProductPurchesWayToImmidiate (Product p)
+
+        public MarketAnswer editProductDescripiton(Product product, string Desccription)
         {
-            return ChangeProductPurchesWay(p, PurchesEnum.IMMIDIATE);
+            return stock.editProductDescripiton(product, Desccription);
         }
-        public StoreAnswer ChangeProductPurchesWayToLottery(Product p)
+
+        public MarketAnswer ChangeProductPurchesWayToImmidiate(Product product)
         {
-            return ChangeProductPurchesWay(p, PurchesEnum.LOTTERY);
+            return pChangeProductPurchesWay(product, PurchesEnum.IMMIDIATE);
         }
-        private StoreAnswer ChangeProductPurchesWay(Product p, PurchesEnum purches)
+
+        public MarketAnswer ChangeProductPurchesWayToLottery(Product product)
         {
-            return stock.addPurchesWayToProduct(p, purches);
+            return pChangeProductPurchesWay(product, PurchesEnum.LOTTERY);
         }
+
+        public MarketAnswer addDiscountToProduct_VISIBLE(Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            return pAddDiscountToProduct(product, master.getDiscountCode(), discountTypeEnum.VISIBLE, _startDate, _EndDate, _DiscountAmount, false);
+        }
+
+        public MarketAnswer addDiscountToProduct_HIDDEN(Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            return pAddDiscountToProduct(product, master.getDiscountCode(), discountTypeEnum.HIDDEN, _startDate, _EndDate, _DiscountAmount, false);
+        }
+
+        public MarketAnswer addDiscountToProduct_presenteges_VISIBLE(Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            if (_DiscountAmount < 100)
+            {
+                return pAddDiscountToProduct(product, master.getDiscountCode(), discountTypeEnum.VISIBLE, _startDate, _EndDate, _DiscountAmount, true);
+            }
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100");
+        }
+
+        public MarketAnswer addDiscountToProduct_presenteges_HIDDEN(Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            if (_DiscountAmount < 100)
+            {
+                return pAddDiscountToProduct(product, master.getDiscountCode(), discountTypeEnum.HIDDEN, _startDate, _EndDate, _DiscountAmount, true);
+            }
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100");
+    }
+
+        public MarketAnswer removeDiscountFormProduct(Product product)
+        {
+            return stock.removeDiscountToProduct(product);
+        }
+
+        public MarketAnswer EditDiscountToPrecenteges(Product product)
+        {
+            return stock.EditDiscountPrecenteges(product, true);
+        }
+
+        public MarketAnswer EditDiscountToNonPrecenteges(Product product)
+        {
+            return stock.EditDiscountPrecenteges(product, false);
+        }
+
+        public MarketAnswer EditDiscountToHidden(Product product)
+        {
+            return stock.EditDiscountMode(product, discountTypeEnum.HIDDEN);
+        }
+        
+        public MarketAnswer EditDiscountToVisible(Product product)
+        {
+            return stock.EditDiscountMode(product, discountTypeEnum.VISIBLE);
+        }
+
+        public MarketAnswer EditDiscountAmount(Product product, int amount)
+        {
+            return stock.EditDiscountAmount(product, amount);
+        }
+
+        public MarketAnswer EditDiscountStartTime(Product product, DateTime _startDate)
+        {
+            return stock.EditDiscountStartTime(product, _startDate);
+        }
+
+        public MarketAnswer EditDiscountEndTime(Product product, DateTime _EndDate)
+        {
+            return stock.EditDiscountEndTime(product, _EndDate);
+        }
+
+       
+        public Product getProductById(int ID) //will return null if product is not exists
+        {
+            return stock.getProductById(ID);
+        }
+        public Discount getProductDiscountByProductID(int ID)//will return null if product is not exists or discount not exists
+        {
+            Product temp = stock.getProductById(ID);
+            return stock.getProductDiscount(temp);
+        }
+
+        public PurchesEnum getProductPurchesWayByProductID(int ID)//will return PRODUCTNOTFOUND if product is not exists
+        {
+            Product temp = stock.getProductById(ID);
+            return stock.getProductPurchaseWay(temp);
+        }
+        public int getProductQuantitybyProductID(int ID)//will return -1 if product is not exists
+        {
+            Product temp = stock.getProductById(ID);
+            return stock.getProductQuantity(temp);
+        }
+        
+        public LotteryTicket MakeALotteryPurches(Product product, int moeny)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Product MakeAImmidiatePurches(Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public LinkedList<string> ViewPurchesHistory()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
+

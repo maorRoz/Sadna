@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    class LotteryTicket
+    public class LotteryTicket
     {
         LotterySaleManagmentTicket MyManager;
         int IntervalStart;
