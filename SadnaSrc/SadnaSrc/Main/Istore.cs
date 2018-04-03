@@ -13,8 +13,8 @@ namespace SadnaSrc.Main
         /**
         * Store Managment, general Actions
         **/
-        MarketAnswer PromoteToOwner(User someoneToPromote);
-        MarketAnswer PromoteToManager(User someoneToPromote);
+        MarketAnswer PromoteToOwner(User currentUser, User someoneToPromote);
+        MarketAnswer PromoteToManager(User currentUser,User someoneToPromote);
         LinkedList<Product> getAllStoreProducts();
         LinkedList<String> ViewPurchesHistory();
         MarketAnswer CloseStore(User ownerOrSystemAdmin);
@@ -40,7 +40,7 @@ namespace SadnaSrc.Main
          **/
 
         MarketAnswer ChangeProductPurchesWayToImmidiate(Product product);
-        MarketAnswer ChangeProductPurchesWayToLottery(Product product);
+        MarketAnswer ChangeProductPurchesWayToLottery(Product product, DateTime StartDate, DateTime EndDate);
         /**
          * Store Managment, Discounts
          **/

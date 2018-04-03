@@ -19,6 +19,7 @@ namespace SadnaSrc.StoreCenter
         private LinkedList<User> OtherOwners;
         private LinkedList<User> Managers;
         private LinkedList<PurchesPolicy> purchesPolicy;
+        private LinkedList<LotterySaleManagmentTicket> lotterys;
         private StoreService master { get; }
         private bool isActive { get; set; }
 
@@ -33,6 +34,7 @@ namespace SadnaSrc.StoreCenter
             purchesPolicy = new LinkedList<PurchesPolicy>();
             isActive = true;
             master = _master;
+            lotterys = new LinkedList<LotterySaleManagmentTicket>();
         }
         private StoreAnswer paddProduct(Product product, int quantity)
         {
@@ -82,30 +84,48 @@ namespace SadnaSrc.StoreCenter
             return stock.removeDiscountToProduct(p);
         }
 
-        private StoreAnswer pChangeProductPurchesWay(Product p, PurchesEnum purches)
+        private StoreAnswer pChangeProductPurchesWay(Product p, PurchesEnum purches, DateTime startDate, DateTime endDate)
         {
+            if (purches == PurchesEnum.LOTTERY)
+            {
+                if (getLotterySale(p)==null) {
+                    if (LotterySaleManagmentTicket.checkDates(startDate, endDate)) {
+                        lotterys.AddLast(new LotterySaleManagmentTicket(master.getLottyerID(), p, startDate, endDate));
+                      return stock.addPurchesWayToProduct(p, purches);
+                    }
+                    return new StoreAnswer(StoreEnum.ChangePurchesTypeFail, "the dates are wrong or in the past");
+                }
+                return new StoreAnswer(StoreEnum.ChangePurchesTypeFail, "product "+p.SystemId+" is already in lottery mode");
+            }
             return stock.addPurchesWayToProduct(p, purches);
         }
 
-        public MarketAnswer PromoteToOwner(User someoneToPromote)
+        public MarketAnswer PromoteToOwner(User currentUser, User someoneToPromote)
         {
-            if (!OtherOwners.Contains(someoneToPromote))
-            {
-                OtherOwners.AddLast(someoneToPromote);
-                return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote.SystemID + " has been premoted to be a owner of store " + SystemId);
+            if (IsOwner(currentUser)) { 
+               if (!OtherOwners.Contains(someoneToPromote))
+                {
+                    OtherOwners.AddLast(someoneToPromote);
+                    return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote.SystemID + " has been premoted to be a owner of store " + SystemId);
+                }
+                return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + someoneToPromote.SystemID + " is Already a owner of the store " + SystemId);
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + someoneToPromote.SystemID + " is Already a owner of the store " + SystemId);
+            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + currentUser.SystemID + " is not an owner of the store and can't make " + someoneToPromote.SystemID + " to an owner");
         }
 
-        public MarketAnswer PromoteToManager(User someoneToPromote)
+        public MarketAnswer PromoteToManager(User currentUser, User someoneToPromote)
         {
-            if (!Managers.Contains(someoneToPromote))
+            if (IsOwner(currentUser))
+            {
+                if (!Managers.Contains(someoneToPromote))
             {
                 Managers.AddLast(someoneToPromote);
                 return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote.SystemID + " has been premoted to be a owner of store " + SystemId);
             }
             return new StoreAnswer(StoreEnum.AddStoreManagerFail, "user " + someoneToPromote.SystemID + " is Already a manager of the store " + SystemId);
         }
+        return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + currentUser.SystemID + " is not an owner of the store and can't make " + someoneToPromote.SystemID + " to a manager");
+    }
    
         public LinkedList<Product> getAllStoreProducts()
         {
@@ -160,12 +180,12 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer ChangeProductPurchesWayToImmidiate(Product product)
         {
-            return pChangeProductPurchesWay(product, PurchesEnum.IMMIDIATE);
+            return pChangeProductPurchesWay(product, PurchesEnum.IMMIDIATE, DateTime.Now, DateTime.Now);
         }
 
-        public MarketAnswer ChangeProductPurchesWayToLottery(Product product)
+        public MarketAnswer ChangeProductPurchesWayToLottery(Product product, DateTime StartDate, DateTime EndDate)
         {
-            return pChangeProductPurchesWay(product, PurchesEnum.LOTTERY);
+            return pChangeProductPurchesWay(product, PurchesEnum.LOTTERY, StartDate, EndDate);
         }
 
         public MarketAnswer addDiscountToProduct_VISIBLE(Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
@@ -261,7 +281,15 @@ namespace SadnaSrc.StoreCenter
         {
             stock.addAllProductsToExistingList(result);
         }
-
+        private LotterySaleManagmentTicket getLotterySale(Product p)
+        {
+            foreach (LotterySaleManagmentTicket LSMT in lotterys)
+            {
+                if (LSMT.original.equal(p))
+                    return LSMT;
+            }
+            return null;
+        }
         public LotteryTicket MakeALotteryPurches(Product product, int moeny)
         {
             throw new NotImplementedException();

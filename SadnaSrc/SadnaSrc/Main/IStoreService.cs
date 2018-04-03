@@ -16,7 +16,7 @@ namespace SadnaSrc.Main
         MarketAnswer OpenStore(User owner);
         MarketAnswer CloseStore(Store store, User ownerOrSystemAdmin);
         LinkedList<Store> getAllUsersStores(User owner);
-        LinkedList<Store> getAllStores(User owner);
+        LinkedList<Store> getAllStores();
         LinkedList<Product> getAllMarketProducts();
         Store getStoreByID(int ID);
 
@@ -44,7 +44,7 @@ namespace SadnaSrc.Main
          **/
 
         MarketAnswer ChangeProductPurchesWayToImmidiate(Store store, Product product);
-        MarketAnswer ChangeProductPurchesWayToLottery(Store store, Product product);
+        MarketAnswer ChangeProductPurchesWayToLottery(Store store, Product product, DateTime StartDate, DateTime EndDate);
         /**
          * Store Managment, Discounts
          **/
@@ -77,6 +77,7 @@ namespace SadnaSrc.Main
         OpenStoreFail,
         AddStoreOwnerFail,
         AddStoreManagerFail,
-        CloseStoreFail
+        CloseStoreFail,
+        ChangePurchesTypeFail
     }
 }

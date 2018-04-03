@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    class LotterySaleManagmentTicket
+    public class LotterySaleManagmentTicket
     {
         int SystemID;
-        Product original;
+        internal Product original { get; }
         int ProductNormalPrice;
         int TotalMoneyPayed;
         DateTime StartDate;
@@ -41,6 +41,10 @@ namespace SadnaSrc.StoreCenter
          **/
         public bool CanPurches(int moneyPaied) {
             return (TotalMoneyPayed + moneyPaied < ProductNormalPrice);
+        }
+        public static bool checkDates(DateTime startDate, DateTime endDate)
+        {
+            return ((startDate > DateTime.Now.Date) && (endDate > DateTime.Now.Date) && (endDate > startDate));
         }
         public LotteryTicket PurchesALotteryTicket(int moneyPaied)
         {

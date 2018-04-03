@@ -20,12 +20,13 @@ namespace SadnaSrc.StoreCenter
         int StoreIdCounter;
         int globalProductID;
         int globalDiscountCode;
-
+        int globalLotteryID;
         public StoreService()
         {
             StoreIdCounter = 0;
             globalDiscountCode = 0;
             globalProductID = 0;
+            globalLotteryID = 0;
             allStores = new LinkedList<Store>();
         }
 
@@ -84,6 +85,12 @@ namespace SadnaSrc.StoreCenter
             StoreIdCounter++;
             return temp;
         }
+        internal int getLottyerID()
+        {
+            int temp = globalLotteryID;
+            globalLotteryID++;
+            return temp;
+        }
 
         public MarketAnswer CloseStore(Store store, User ownerOrSystemAdmin)
         {
@@ -108,7 +115,7 @@ namespace SadnaSrc.StoreCenter
             return result;
         }
 
-        public LinkedList<Store> getAllStores(User owner)
+        public LinkedList<Store> getAllStores()
         {
             return allStores;
         }
@@ -125,12 +132,12 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer PromoteToOwner(Store store, User CurrentUser, User someoneToPromote)
         {
-            throw new NotImplementedException();
+            return store.PromoteToOwner(CurrentUser, someoneToPromote);
         }
 
         public MarketAnswer PromoteToManager(Store store, User CurrentUser, User someoneToPromote)
         {
-            throw new NotImplementedException();
+            return store.PromoteToManager(CurrentUser, someoneToPromote);
         }
 
         public LinkedList<Product> getAllStoreProducts(Store store)
@@ -173,9 +180,9 @@ namespace SadnaSrc.StoreCenter
             return store.ChangeProductPurchesWayToImmidiate(product);
         }
 
-        public MarketAnswer ChangeProductPurchesWayToLottery(Store store, Product product)
+        public MarketAnswer ChangeProductPurchesWayToLottery(Store store, Product product, DateTime StartDate, DateTime EndDate)
         {
-            return store.ChangeProductPurchesWayToLottery(product);
+            return store.ChangeProductPurchesWayToLottery(product, StartDate, EndDate);
         }
 
         public MarketAnswer addDiscountToProduct_VISIBLE(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
