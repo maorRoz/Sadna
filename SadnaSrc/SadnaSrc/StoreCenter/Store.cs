@@ -28,6 +28,7 @@ namespace SadnaSrc.StoreCenter
             stock = new Stock();
             Owner = _Owner;
             OtherOwners = new LinkedList<User>();
+            OtherOwners.AddFirst(_Owner);
             Managers = new LinkedList<User>();
             purchesPolicy = new LinkedList<PurchesPolicy>();
             isActive = true;
@@ -88,12 +89,22 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer PromoteToOwner(User someoneToPromote)
         {
-            return pPromoteToOwner(someoneToPromote);
+            if (!OtherOwners.Contains(someoneToPromote))
+            {
+                OtherOwners.AddLast(someoneToPromote);
+                return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote.SystemID + " has been premoted to be a owner of store " + SystemId);
+            }
+            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + someoneToPromote.SystemID + " is Already a owner of the store " + SystemId);
         }
 
         public MarketAnswer PromoteToManager(User someoneToPromote)
         {
-            return pPromoteToManager(someoneToPromote);
+            if (!Managers.Contains(someoneToPromote))
+            {
+                Managers.AddLast(someoneToPromote);
+                return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote.SystemID + " has been premoted to be a owner of store " + SystemId);
+            }
+            return new StoreAnswer(StoreEnum.AddStoreManagerFail, "user " + someoneToPromote.SystemID + " is Already a manager of the store " + SystemId);
         }
    
         public LinkedList<Product> getAllStoreProducts()
@@ -105,13 +116,15 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer CloseStore(User ownerOrSystemAdmin)
         {
-            if (isActive)
-            {
-                isActive = false;
-                return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
+            if (IsOwner(ownerOrSystemAdmin)) { 
+               if (isActive)
+                {
+                    isActive = false;
+                    return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
+                }
+                return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " is alrady closed");
             }
-            return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " is alrady closed");
-
+            return new StoreAnswer(StoreEnum.CloseStoreFail, "user " + ownerOrSystemAdmin.SystemID + " is not a System admin and not an owner of the store " + SystemId);
         }
         
         public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
