@@ -50,7 +50,7 @@ namespace SadnaSrc.StoreCenter
                 return result;
             return null;
         }
-        
+
         public Store getStoreByID(int ID)
         {
             foreach (Store store in allStores)
@@ -62,7 +62,7 @@ namespace SadnaSrc.StoreCenter
             }
             return null;
         }
-        
+
         /**
          * next section is ID handlers
          **/
@@ -89,6 +89,10 @@ namespace SadnaSrc.StoreCenter
         {
             return store.CloseStore(ownerOrSystemAdmin);
         }
+        public static MarketAnswer StaticCloseStore(Store store, User ownerOrSystemAdmin)
+        {
+            return store.CloseStore(ownerOrSystemAdmin);
+        }
 
         public LinkedList<Store> getAllUsersStores(User owner)
         {
@@ -101,7 +105,7 @@ namespace SadnaSrc.StoreCenter
                 }
             }
 
-                return result;
+            return result;
         }
 
         public LinkedList<Store> getAllStores(User owner)
@@ -114,8 +118,9 @@ namespace SadnaSrc.StoreCenter
             LinkedList<Product> result = new LinkedList<Product>();
             foreach (Store store in allStores)
             {
-                result.
+                store.addAllProductsToExistingList(result);
             }
+            return result;
         }
 
         public MarketAnswer PromoteToOwner(Store store, User CurrentUser, User someoneToPromote)
@@ -130,112 +135,107 @@ namespace SadnaSrc.StoreCenter
 
         public LinkedList<Product> getAllStoreProducts(Store store)
         {
-            throw new NotImplementedException();
-        }
-
-        public LinkedList<string> ViewPurchesHistory(Store store)
-        {
-            throw new NotImplementedException();
-        }
+            return store.getAllStoreProducts();
+        } 
 
         public MarketAnswer AddProduct(Store store, string _name, int _price, string _description, int quantity)
         {
-            throw new NotImplementedException();
+            return store.AddProduct(_name, _price, _description, quantity);
         }
 
         public MarketAnswer IncreaseProductQuantity(Store store, Product product, int quantity)
         {
-            throw new NotImplementedException();
+            return store.IncreaseProductQuantity(product, quantity);
         }
 
         public MarketAnswer removeProduct(Store store, Product product)
         {
-            throw new NotImplementedException();
+            return store.removeProduct(product);
         }
 
         public MarketAnswer editProductPrice(Store store, Product product, int newprice)
         {
-            throw new NotImplementedException();
+            return store.editProductPrice(product, newprice);
         }
 
         public MarketAnswer editProductName(Store store, Product product, string Name)
         {
-            throw new NotImplementedException();
+            return store.editProductName(product, Name);
         }
 
         public MarketAnswer editProductDescripiton(Store store, Product product, string Desccription)
         {
-            throw new NotImplementedException();
+            return store.editProductDescripiton(product, Desccription);
         }
 
         public MarketAnswer ChangeProductPurchesWayToImmidiate(Store store, Product product)
         {
-            throw new NotImplementedException();
+            return store.ChangeProductPurchesWayToImmidiate(product);
         }
 
         public MarketAnswer ChangeProductPurchesWayToLottery(Store store, Product product)
         {
-            throw new NotImplementedException();
+            return store.ChangeProductPurchesWayToLottery(product);
         }
 
         public MarketAnswer addDiscountToProduct_VISIBLE(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
         {
-            throw new NotImplementedException();
+            return store.addDiscountToProduct_VISIBLE(product, _startDate, _EndDate, _DiscountAmount);
         }
 
         public MarketAnswer addDiscountToProduct_HIDDEN(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
         {
-            throw new NotImplementedException();
+            return store.addDiscountToProduct_HIDDEN(product, _startDate, _EndDate, _DiscountAmount);
         }
 
         public MarketAnswer addDiscountToProduct_presenteges_VISIBLE(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
         {
-            throw new NotImplementedException();
+            return store.addDiscountToProduct_presenteges_VISIBLE(product, _startDate, _EndDate, _DiscountAmount);
         }
 
         public MarketAnswer addDiscountToProduct_presenteges_HIDDEN(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
         {
-            throw new NotImplementedException();
+            return store.addDiscountToProduct_presenteges_HIDDEN(product, _startDate, _EndDate, _DiscountAmount);
         }
 
         public MarketAnswer removeDiscount(Store store, Product product)
         {
-            throw new NotImplementedException();
+            return store.removeDiscountFormProduct(product);
         }
 
-        public MarketAnswer MakeDiscountPrecenteges(Store store, Product product)
+        public MarketAnswer EditDiscountToPrecenteges(Store store, Product product)
         {
-            throw new NotImplementedException();
+            return store.EditDiscountToPrecenteges(product);
         }
 
-        public MarketAnswer MakeDiscountNonPrecenteges(Store store, Product product)
+        public MarketAnswer EditDiscountToNonPrecenteges(Store store, Product product)
         {
-            throw new NotImplementedException();
+            return store.EditDiscountToNonPrecenteges(product);
         }
 
-        public MarketAnswer MakeDiscountHidden(Store store, Product product)
+        public MarketAnswer EditDiscountToHidden(Store store, Product product)
         {
-            throw new NotImplementedException();
+            return store.EditDiscountToHidden(product);
         }
 
-        public MarketAnswer MakeDiscountVisible(Store store, Product product)
+        public MarketAnswer EditDiscountToVisible(Store store, Product product)
         {
-            throw new NotImplementedException();
+            return store.EditDiscountToVisible(product);
         }
 
         public MarketAnswer EditDiscountAmunt(Store store, Product product, int amount)
         {
-            throw new NotImplementedException();
+            return store.EditDiscountAmount(product, amount);
         }
 
-        public MarketAnswer EditStartTimeAmunt(Store store, Product product, DateTime _startDate)
+        public MarketAnswer EditDiscountStartTime(Store store, Product product, DateTime _startDate)
         {
-            throw new NotImplementedException();
+            return store.EditDiscountStartTime(product, _startDate);
         }
 
-        public MarketAnswer EditEndTimeAmunt(Store store, Product product, DateTime _EndDate)
+        public MarketAnswer EditDiscountEndTime(Store store, Product product, DateTime _EndDate)
         {
-            throw new NotImplementedException();
+            return store.EditDiscountEndTime(product, _EndDate);
         }
 
         public LotteryTicket MakeALotteryPurches(Store store, Product product, int moeny)
@@ -247,4 +247,9 @@ namespace SadnaSrc.StoreCenter
         {
             throw new NotImplementedException();
         }
+        public LinkedList<string> ViewPurchesHistory(Store store)
+        {
+            throw new NotImplementedException();
+        }
     }
+}

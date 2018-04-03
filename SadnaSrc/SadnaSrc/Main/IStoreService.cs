@@ -54,13 +54,13 @@ namespace SadnaSrc.Main
         MarketAnswer addDiscountToProduct_presenteges_VISIBLE(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
         MarketAnswer addDiscountToProduct_presenteges_HIDDEN(Store store, Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
         MarketAnswer removeDiscount(Store store, Product product);
-        MarketAnswer MakeDiscountPrecenteges(Store store, Product product);
-        MarketAnswer MakeDiscountNonPrecenteges(Store store, Product product);
-        MarketAnswer MakeDiscountHidden(Store store, Product product);
-        MarketAnswer MakeDiscountVisible(Store store, Product product);
+        MarketAnswer EditDiscountToPrecenteges(Store store, Product product);
+        MarketAnswer EditDiscountToNonPrecenteges(Store store, Product product);
+        MarketAnswer EditDiscountToHidden(Store store, Product product);
+        MarketAnswer EditDiscountToVisible(Store store, Product product);
         MarketAnswer EditDiscountAmunt(Store store, Product product, int amount);
-        MarketAnswer EditStartTimeAmunt(Store store, Product product, DateTime _startDate);
-        MarketAnswer EditEndTimeAmunt(Store store, Product product, DateTime _EndDate);
+        MarketAnswer EditDiscountStartTime(Store store, Product product, DateTime _startDate);
+        MarketAnswer EditDiscountEndTime(Store store, Product product, DateTime _EndDate);
 
         /**
          * Store Managment, Purches

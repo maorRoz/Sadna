@@ -393,5 +393,12 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(StoreEnum.UpdateStockFail, "quantity " + quantity + " is less then 0");
             }
         }
+        internal void addAllProductsToExistingList(LinkedList<Product> result)
+        {
+            foreach (StockListItem item in StockList)
+            {
+                result.AddLast(item.product);
+            }
+        }
     }
 }
