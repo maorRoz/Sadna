@@ -1,4 +1,5 @@
 ﻿
+using SadnaSrc.AdminView;
 using SadnaSrc.Main;
 
 namespace BlackBox
@@ -7,6 +8,7 @@ namespace BlackBox
 	{
 		private readonly MarketYard _market;
 		private readonly IUserService _userService;
+		private ISystemAdminService _systemAdminService;
 
 		public RealBridge()
 		{
@@ -38,6 +40,16 @@ namespace BlackBox
 		public void CleanMarket()
 		{
 			MarketYard.CleanSession();
+		}
+
+		public void GetAdminService()
+		{
+			_systemAdminService = _market.GetSystemAdminService(_userService);
+		}
+
+		public MarketAnswer RemoveUser(int userSystemId)
+		{
+			return _systemAdminService.RemoveUser(userSystemId);
 		}
 	}
 }

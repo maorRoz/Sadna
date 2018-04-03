@@ -9,11 +9,20 @@ namespace BlackBox
 {
 	interface IUserBridge
 	{
-
+		/*
+		 * Regular user
+		 */
 		MarketAnswer EnterSystem();
 		MarketAnswer SignUp(string name, string address, string password);
 		MarketAnswer SignIn(string name, string password);
 		void CleanSession();
 		void CleanMarket();
+
+		/*
+		 * Admin system
+		 */
+		MarketAnswer RemoveUser(int userSystemID);
+		void GetAdminService();
+
 	}
 }
