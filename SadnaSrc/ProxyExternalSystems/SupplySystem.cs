@@ -8,9 +8,20 @@ namespace ProxyExternalSystems
 {
     public class SupplySystem
     {
+        private bool ans = true;
         public bool ProcessDelivery(int orderId, string username, string address)
         {
-            return true;
+            return ans;
+        }
+
+        public void fuckUp()
+        {
+            ans = false;
+        }
+
+        public void fuckDown()
+        {
+            ans = true;
         }
     }
 }

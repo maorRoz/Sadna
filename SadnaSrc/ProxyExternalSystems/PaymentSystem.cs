@@ -8,9 +8,20 @@ namespace ProxyExternalSystems
 {
     public class PaymentSystem
     {
+        private bool ans = true;
         public bool ProccessPayment(List<string> creditCardetails, double price)
         {
-            return true;
+            return ans;
+        }
+
+        public void fuckUp()
+        {
+            ans = false;
+        }
+
+        public void fuckDown()
+        {
+            ans = true;
         }
     }
 }

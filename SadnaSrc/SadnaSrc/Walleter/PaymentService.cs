@@ -13,20 +13,33 @@ namespace SadnaSrc.Walleter
     public class PaymentService : IPaymentService
     {
         private readonly OrderService _orderService;
-        private readonly PaymentSystem sock;
+        private PaymentSystem sock;
 
         public PaymentService(UserService userService, OrderService orderService)
         {
             _orderService = orderService;
-            sock = new PaymentSystem();
         }
+
+        //TODO: change this once info about external systems is available.
+        public MarketAnswer AttachExternalSystem()
+        {
+            sock = new PaymentSystem();
+            return new WalleterAnswer(WalleterStatus.Success, "Success, External payment system attached.");
+
+        }
+
         public MarketAnswer ProccesPayment(int orderId, string address, List<string> creditCardetails)
         {
+            if (sock == null)
+            {
+                throw new WalleterException(WalleterStatus.NoPaymentSystem, "Failed, an error in the payment system occured.");
+            }
             Order order = _orderService.getOrder(orderId);
             if (CheckCreditCard(creditCardetails))
             {
                 if (sock.ProccessPayment(creditCardetails, order.GetPrice()))
                 {
+                    MarketLog.Log("Walleter", "Payment for order ID: " + orderId + " was completed.");
                     return new WalleterAnswer(WalleterStatus.Success, "Success, payment proccess completed.");
                 }
                 throw new WalleterException(WalleterStatus.PaymentSystemError, "Failed, an error in the payment system occured.");
@@ -40,16 +53,22 @@ namespace SadnaSrc.Walleter
             int x;
             for (int i = 0; i < 4; i++)
             {
-                if (!Int32.TryParse(details[i],out x))
+                if (details[i].Length != 4 || !Int32.TryParse(details[i],out x) || x < 0)
                 {
                     return false;
                 }
             }
 
-            if (!Int32.TryParse(details[4], out x) || x > 12 || x < 0) return false;
-            if (!Int32.TryParse(details[5], out x)) return false;
-            if (!Int32.TryParse(details[6], out x)) return false;
+            if (details[4].Length != 2 || !Int32.TryParse(details[4], out x) || x > 12 || x < 0) return false;
+            if (details[5].Length != 2 || !Int32.TryParse(details[5], out x) || x < 0) return false;
+            if (details[6].Length != 3 || !Int32.TryParse(details[6], out x) || x < 0) return false;
             return true;
+        }
+
+        // Method for testing only WILL BE REMOVED
+        public void FuckUpExternal()
+        {
+            sock.fuckUp();
         }
     }
 }

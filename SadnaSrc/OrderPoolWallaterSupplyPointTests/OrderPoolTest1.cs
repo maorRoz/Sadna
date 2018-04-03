@@ -15,21 +15,18 @@ namespace OrderPoolWallaterSupplyPointTests
     public class OrderPoolTest1
     {
         private MarketYard market;
-        private OrderService orderService;
-        private User user;
         private OrderItem item1;
         private OrderItem item2;
         private OrderItem item3;
         private List<int> orderIDs;
         private UserService userService;
         private StoreService storeService;
-        private SupplyService supplyService;
-        private PaymentService paymentService;
+        private OrderService orderService;
+
 
         [TestInitialize]
         public void BuildOrderPool()
         {
-            user = new User(5);
             market = MarketYard.Instance;
             userService = new UserService();
             storeService = new StoreService(userService);

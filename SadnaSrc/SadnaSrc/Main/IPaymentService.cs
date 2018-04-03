@@ -8,6 +8,7 @@ namespace SadnaSrc.Main
 {
     public interface IPaymentService
     {
+        MarketAnswer AttachExternalSystem();
         MarketAnswer ProccesPayment(int orderId, string address, List<string> details);
     }
 
@@ -15,7 +16,8 @@ namespace SadnaSrc.Main
     {
         Success,
         InvalidCreditCardSyntax,
-        PaymentSystemError
+        PaymentSystemError,
+        NoPaymentSystem
     }
 
 }

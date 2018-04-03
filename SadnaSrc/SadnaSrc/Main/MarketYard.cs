@@ -66,9 +66,9 @@ namespace SadnaSrc.Main
             return new OrderService((UserService) userService, (StoreService) storeService);
         }
 
-        public IPaymentService GetPaymentService()
+        public IPaymentService GetPaymentService(IUserService userService, IOrderService orderService)
         {
-            return new PaymentService();
+            return new PaymentService((UserService)userService, (OrderService)orderService);
         }
 
         public ISupplyService GetSupplyService(IUserService userService, IOrderService orderService)
