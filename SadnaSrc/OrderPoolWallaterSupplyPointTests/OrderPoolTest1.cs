@@ -84,6 +84,22 @@ namespace OrderPoolWallaterSupplyPointTests
         }
 
         [TestMethod]
+        public void TestDB()
+        {
+            var o = orderService.InitOrder();
+            int id = o.GetOrderID();
+            orderIDs.Add(id);
+
+            orderService.AddItemToOrder(id, item1);
+            orderService.AddItemToOrder(id, item2);
+            orderService.AddItemToOrder(id, item3);
+            
+            orderService.SaveToDB();
+            Assert.AreEqual(25.50,
+                orderService.getOrderFromDB(id).GetPrice());
+        }
+
+        [TestMethod]
         public void TestOrderRemoveItem()
         {
             var o = orderService.InitOrder();
@@ -100,7 +116,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-
+            orderService.CleanSession();
             userService.CleanSession();
             MarketYard.CleanSession();
         }

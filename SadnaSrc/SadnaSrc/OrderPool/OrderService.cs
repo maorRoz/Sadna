@@ -46,33 +46,41 @@ namespace SadnaSrc.OrderPool
             }
 
             _orders.Add(order);
-
             return order;
         }
 
         public Order InitOrder()
         {
             Order order = new Order(RandomOrderID(), _userName);
-
             _orders.Add(order);
-
-
             return order;
         }
 
-        public void SynchDB()
+        public void SaveToDB()
         {
             foreach (Order order in _orders)
             {
                 _orderDL.AddOrder(order);
-
             }
+        }
+
+        public void CleanSession()
+        {
+            foreach (Order order in _orders)
+            {
+                _orderDL.RemoveOrder(order.GetOrderID());
+            }
+        }
+
+        public void SaveOrderToDB(int orderId)
+        {   
+            _orderDL.AddOrder(getOrder(orderId));
         }
 
         public void RemoveOrderFromDB(int orderId)
         {
-           _orderDL.RemoveOrder(orderId);
-        }
+            _orderDL.RemoveOrder(orderId);
+        }      
 
         public Order getOrder(int orderID)
         {
@@ -80,8 +88,12 @@ namespace SadnaSrc.OrderPool
             {
                 if (order.GetOrderID() == orderID) return order;
             }
-
             return null;
+        }
+
+        public Order getOrderFromDB(int orderID)
+        {
+            return _orderDL.FindOrder(orderID);
         }
 
         public OrderItem FindOrderItemInOrder(int orderId, string store, string user)

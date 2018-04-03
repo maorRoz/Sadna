@@ -27,6 +27,21 @@ namespace SadnaSrc.OrderPool
             return order;
         }
 
+        public List<Order> GetAllOrders()
+        {
+            List<Order> orders = new List<Order>();
+            var dbReader = SelectFromTable("Orders", "*");
+            while (dbReader.Read())
+            {
+                if (dbReader.GetValue(0) != null)
+                {
+                    orders.Add( new Order(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3)
+                        , dbReader.GetString(4), GetAllItems(dbReader.GetInt32(0))));
+                }
+            }
+            return orders;
+        }
+
         public List<OrderItem> GetAllItems(int orderId)
         {
             List<OrderItem> list = new List<OrderItem>();
@@ -74,10 +89,7 @@ namespace SadnaSrc.OrderPool
 
         public void RemoveOrder(int orderId)
         {
-            if (FindOrder(orderId) == null)
-            {
-                throw new OrderException(OrderStatus.NoOrderWithID,"no user with id: "+ orderId + " in the Order database.");
-            }
+            
             DeleteFromTable("OrderItem", "OrderID = " + orderId);
             DeleteFromTable("Orders", "OrderID = " + orderId);
 
