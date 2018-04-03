@@ -19,27 +19,26 @@ namespace SadnaSrc.OrderPool
         private readonly OrderPoolDL _orderDL;
         private List<Order> _orders;
 
-        public string getUsername() {  return _userName;}
-        public List<Order> getOrders() { return  _orders; }
+        public string getUsername() { return _userName; }
+        public List<Order> getOrders() { return _orders; }
 
-        public void setUsername(string name) { _userName = name;}
+        public void setUsername(string name) { _userName = name; }
 
 
         public OrderService(UserService userService, StoreService storeService,
             SupplyService supplyService, PaymentService paymentService)
         {
-            _orders= new List<Order>();
+            _orders = new List<Order>();
             User user = userService.GetUser();
-            _userName = "default";
+            _userName = "Guest";
             if (user != null && user.IsRegisteredUser())
             {
-                _userName = ((RegisteredUser) user).Name;
+                _userName = ((RegisteredUser)user).Name;
             }
             _orderDL = new OrderPoolDL();
         }
 
-
-        public Order CreateOrder(OrderItem[] items)
+        public Order InitOrder(OrderItem[] items)
         {
             Order order = new Order(RandomOrderID(), _userName);
             foreach (OrderItem item in items)
@@ -48,22 +47,32 @@ namespace SadnaSrc.OrderPool
             }
 
             _orders.Add(order);
-            _orderDL.AddOrder(order);
 
-            MarketLog.Log("OrderPool", "User " + _userName + " added new order from the cart.");
             return order;
         }
 
-        public Order CreateOrder()
+        public Order InitOrder()
         {
             Order order = new Order(RandomOrderID(), _userName);
 
             _orders.Add(order);
-            _orderDL.AddOrder(order);
 
-            MarketLog.Log("OrderPool", "User " + _userName + " added new order.");
 
             return order;
+        }
+
+        public void SynchDB()
+        {
+            foreach (Order order in _orders)
+            {
+                _orderDL.AddOrder(order);
+
+            }
+        }
+
+        public void RemoveOrderFromDB(int orderId)
+        {
+            _orderDL.RemoveOrder(orderId);
         }
 
         public Order getOrder(int orderID)
@@ -76,54 +85,68 @@ namespace SadnaSrc.OrderPool
             return null;
         }
 
+        public OrderItem FindOrderItemInOrder(int orderId, string store, string user)
+        {
+            foreach (Order order in _orders)
+            {
+                return order.getOrderItem(user, store);
+            }
 
-        public void RemoveOrder(int orderId)
+            return null;
+        }
+
+        /*
+         * Interface functions
+         */
+
+        public MarketAnswer CreateOrder()
+        {
+            Order order = InitOrder();
+            MarketLog.Log("OrderPool", "User " + _userName + " successfully initialized new order.");
+            return new OrderAnswer(OrderStatus.Success, "Success, You created an order with ID: " + order.GetOrderID());
+
+        }
+
+        public MarketAnswer RemoveOrder(int orderId)
         {
             foreach (Order order in _orders)
             {
                 if (order.GetOrderID() == orderId)
                 {
                     _orders.Remove(order);
-                    _orderDL.RemoveOrder(orderId);
-                    MarketLog.Log("OrderPool", "User " + _userName + " removed order ID: "+orderId+" from his OrderPool");
-                    return;
+                    MarketLog.Log("OrderPool", "User " + _userName + " successfully removed order ID: " + orderId + " from his OrderPool");
+                    return new OrderAnswer(OrderStatus.Success, "Success, You removed order Item from order ID: " + order.GetOrderID());
                 }
-            } 
+            }
+            throw new OrderException(OrderStatus.NoOrderWithID, "Failed, No Order with the specific ID.");
         }
 
-        public void RemoveItemFromOrder(int orderID, string store, string name)
+        public MarketAnswer RemoveItemFromOrder(int orderID, string store, string name)
         {
             foreach (Order order in _orders)
             {
-                if(order.GetOrderID() == orderID)
+                if (order.GetOrderID() == orderID)
                 {
                     var item = order.getOrderItem(name, store);
-                    if (item != null)
-                    {
-                        double newPrice = order.GetPrice() - item.GetPrice() * item.GetQuantity();
-                        order.RemoveOrderItem(item);
-                        _orderDL.RemoveItemFromOrder(orderID, name, store);
-                        _orderDL.UpdateOrderPrice(orderID, newPrice);
-                        MarketLog.Log("OrderPool", "User " + _userName + " removed order Item from order ID: " + orderID);
-                        return;
-                    }
-
+                    order.RemoveOrderItem(item);
+                    MarketLog.Log("OrderPool", "User " + _userName + " successfully removed an order Item from order ID: " + orderID);
+                    return new OrderAnswer(OrderStatus.Success, "Success, You removed an order Item from order ID: " + orderID);
                 }
             }
+            throw new OrderException(OrderStatus.NoOrderWithID, "Failed, No Order with the specific ID.");
         }
 
-        public void AddItemToOrder(int orderID, OrderItem item)
+        public MarketAnswer AddItemToOrder(int orderID, OrderItem item)
         {
             var order = getOrder(orderID);
-            double newPrice = order.GetPrice() + item.GetPrice() * item.GetQuantity();
-
             order.AddOrderItem(item);
-            order.setPrice(newPrice);
-            _orderDL.AddItemToOrder(orderID, item);
-            _orderDL.UpdateOrderPrice(orderID, newPrice);
-            MarketLog.Log("OrderPool", "User " + _userName + " added order Item to order ID: " + orderID);
-
+            MarketLog.Log("OrderPool", "User " + _userName + " successfully added an order Item to order ID: " + orderID);
+            return new OrderAnswer(OrderItemStatus.Success, "Success, you added an order Item to order ID: " + orderID);
         }
+
+        /*
+         * Private Functions
+         */
 
         private int RandomOrderID()
         {
@@ -136,15 +159,7 @@ namespace SadnaSrc.OrderPool
             return ret;
         }
 
-        public OrderItem FindOrderItemInOrder(int orderId, string store, string user)
-        {
-            foreach (Order order in _orders)
-            {
-                return order.getOrderItem(user, store);
-            }
 
-            return null;
-        }
 
 
     }
