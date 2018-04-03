@@ -199,7 +199,13 @@ namespace UserSpotTests
             Assert.AreEqual((int)SignInStatus.NoUserFound, userServiceSignInSession.SignIn("Mkor_Login21", "123").Status);
         }
 
-
+        [TestCleanup]
+        public void UserTestCleanUp()
+        {
+            userServiceSignUpSession?.CleanSession();
+            userServiceSignInSession.CleanSession();
+            MarketYard.CleanSession();
+        }
 
         private void DoSignUpSignIn(string name, string address, string password)
         {
@@ -238,14 +244,6 @@ namespace UserSpotTests
             userServiceSignInSession.EnterSystem();
             Assert.AreEqual((int)SignInStatus.NoUserFound, userServiceSignInSession.SignIn(loginName, loginPassword).Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
-        }
-
-        [TestCleanup]
-        public void UserTestCleanUp()
-        {
-            userServiceSignUpSession?.CleanSession();
-            userServiceSignInSession.CleanSession();
-            MarketYard.CleanSession();
         }
     }
 }
