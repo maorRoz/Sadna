@@ -39,5 +39,9 @@ namespace SadnaSrc.StoreCenter
         {
             myStatus = LotteryTicketStatus.CANCEL;
         }
+        public string toString()
+        {
+            return "lottery ticket, end time is: " + IntervalEnd;
+        }
     }
 }

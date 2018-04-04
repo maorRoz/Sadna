@@ -8,14 +8,14 @@ namespace SadnaSrc.StoreCenter
 {
     public class Product
     {
-        public int SystemId;
+        public String SystemId;
         public String name { get; set; }
         public int BasePrice { get; set; }
         public String description { get; set; }
 
         public Product(int _SystemId, String _name, int _price, String _description)
         {
-            SystemId = _SystemId;
+            SystemId = "P"+_SystemId;
             name = _name;
             BasePrice = _price;
             description = _description;
@@ -30,7 +30,7 @@ namespace SadnaSrc.StoreCenter
         }
         public String toString()
         {
-            return name;
+            return "name "+name+" base price: "+BasePrice;
         }
     }
 }

@@ -39,14 +39,14 @@ namespace SadnaSrc.StoreCenter
         /** 
          * will be used by the store
          **/
-        public bool CanPurches(int moneyPaied) {
+        public bool CanPurchase(int moneyPaied) {
             return (TotalMoneyPayed + moneyPaied < ProductNormalPrice);
         }
         public static bool checkDates(DateTime startDate, DateTime endDate)
         {
             return ((startDate > DateTime.Now.Date) && (endDate > DateTime.Now.Date) && (endDate > startDate));
         }
-        public LotteryTicket PurchesALotteryTicket(int moneyPaied)
+        public LotteryTicket PurchaseALotteryTicket(int moneyPaied)
         {
             if (TotalMoneyPayed+ moneyPaied<ProductNormalPrice)
             {

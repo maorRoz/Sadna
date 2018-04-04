@@ -1,6 +1,4 @@
-﻿using SadnaSrc.StoreCenter;
-using SadnaSrc.UserSpot;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,61 +11,62 @@ namespace SadnaSrc.Main
         /**
         * Store Managment, general Actions
         **/
-        MarketAnswer PromoteToOwner(User currentUser, User someoneToPromote);
-        MarketAnswer PromoteToManager(User currentUser,User someoneToPromote);
-        LinkedList<Product> getAllStoreProducts();
-        LinkedList<String> ViewPurchesHistory();
-        MarketAnswer CloseStore(User ownerOrSystemAdmin);
+        MarketAnswer PromoteToOwner(int currentUserID, int someoneToPromoteID);
+        MarketAnswer PromoteToManager(int currentUserID,int someoneToPromoteID);
+        LinkedList<string> getAllStoreProducts();
+        LinkedList<string> ViewPurchesHistory();
+        MarketAnswer CloseStore(int ownerOrSystemAdmin);
         bool IsStoreActive();
-        bool IsOwner(User user);
-        Product getProductById(int ID); //will return null if product is not exists
-        Discount getProductDiscountByProductID(int ID); //will return null if product is not exists or discount not exists
-        PurchesEnum getProductPurchesWayByProductID(int ID);//will return PRODUCTNOTFOUND if product is not exists
-        int getProductQuantitybyProductID(int ID);//will return -1 if product is not exists
-        bool canPurchesImmidiate(Product product, int quantity);
-        bool canPurchesLottery(Product product, int amountOfMoney);
+        bool IsOwner(int user);
+        string getProductById(string ID); //will return null if product is not exists
+        string getProductDiscountByProductID(string ID); //will return null if product is not exists or discount not exists
+        string getProductPurchaseWayByProductID(string ID);//will return PRODUCTNOTFOUND if product is not exists
+        int getProductQuantitybyProductID(string ID);//will return -1 if product is not exists
+        bool canPurchaseImmediate(string productName, int quantity);
+        bool canPurchaseLottery(string productName, int amountOfMoney);
 
         /**
          * Store Managment, handling products
          **/
         MarketAnswer AddProduct(String _name, int _price, String _description, int quantity);
-        MarketAnswer IncreaseProductQuantity(Product product, int quantity);
-        MarketAnswer removeProduct(Product product);
-        MarketAnswer editProductPrice(Product product, int newprice);
-        MarketAnswer editProductName(Product product, String Name);
-        MarketAnswer editProductDescripiton(Product product, String Desccription);
+        MarketAnswer IncreaseProductQuantity(string productName, int quantity);
+        MarketAnswer removeProduct(string productName);
+        MarketAnswer editProductPrice(string productName, int newprice);
+        MarketAnswer editProductName(string productName, String Name);
+        MarketAnswer editProductDescripiton(string productName, String Desccription);
 
         /**
-         * Store Managment, handling PurchesWay
+         * Store Managment, handling PurchaseWay
          **/
 
-        MarketAnswer ChangeProductPurchesWayToImmidiate(Product product);
-        MarketAnswer ChangeProductPurchesWayToLottery(Product product, DateTime StartDate, DateTime EndDate);
+        MarketAnswer ChangeProductPurchaseWayToImmediate(string productName);
+        MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime StartDate, DateTime EndDate);
         /**
          * Store Managment, Discounts
          **/
 
-        MarketAnswer addDiscountToProduct_VISIBLE(Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
-        MarketAnswer addDiscountToProduct_HIDDEN(Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
-        MarketAnswer addDiscountToProduct_presenteges_VISIBLE(Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
-        MarketAnswer addDiscountToProduct_presenteges_HIDDEN(Product product, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
-        MarketAnswer EditDiscountToPrecenteges(Product product);
-        MarketAnswer EditDiscountToNonPrecenteges(Product product);
-        MarketAnswer EditDiscountToHidden(Product product);
-        MarketAnswer EditDiscountToVisible(Product product);
-        MarketAnswer EditDiscountAmount(Product product, int amount);
-        MarketAnswer EditDiscountStartTime(Product product, DateTime _startDate);
-        MarketAnswer EditDiscountEndTime(Product product, DateTime _EndDate);
-        MarketAnswer removeDiscountFormProduct(Product product);
+        MarketAnswer addDiscountToProduct_VISIBLE(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
+        MarketAnswer addDiscountToProduct_HIDDEN(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
+        MarketAnswer addDiscountToProduct_presenteges_VISIBLE(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
+        MarketAnswer addDiscountToProduct_presenteges_HIDDEN(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
+        MarketAnswer EditDiscountToPrecenteges(string productName);
+        MarketAnswer EditDiscountToNonPrecenteges(string productName);
+        MarketAnswer EditDiscountToHidden(string productName);
+        MarketAnswer EditDiscountToVisible(string productName);
+        MarketAnswer EditDiscountAmount(string productName, int amount);
+        MarketAnswer EditDiscountStartTime(string productName, DateTime _startDate);
+        MarketAnswer EditDiscountEndTime(string productName, DateTime _EndDate);
+        MarketAnswer removeDiscountFormProduct(string productName);
 
         /**
-         * Store Managment, Purches
+         * Store Managment, Purchase
          **/
-        LotteryTicket MakeALotteryPurches(Product product, int moeny, User user);
-        Product MakeAImmidiatePurches(Product product, int quantity, User user);
-        LotteryTicket MakeALotteryPurches(int productID, int moeny, User user);
-        Product MakeAImmidiatePurches(int productID, int quantity, User user);
-        LotteryTicket DoLottery(Product product); // will return the lottery ticket of the winner, or null if faild
-        double getProductPrice(Product _product, int _DiscountCode, int _quantity);
+        string MakeALotteryPurchase(string productName, int moeny);
+        string MakeAImmediatePurchase(string productName, int quantity);
+        string DoLottery(string productName); // will return the lottery ticket of the winner, or null if faild
+        double getProductPrice(string _product, int _DiscountCode, int _quantity);
     }
+    public enum PurchaseEnum { IMMEDIATE, LOTTERY, PRODUCTNOTFOUND }
+public enum discountTypeEnum { HIDDEN, VISIBLE };
+public enum LotteryTicketStatus { WAITING, WINNING, LOSING, CANCEL};
 }
