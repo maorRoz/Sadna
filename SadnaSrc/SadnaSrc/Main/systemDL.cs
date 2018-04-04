@@ -31,9 +31,10 @@ namespace SadnaSrc.Main
                 CreateUserStorePolicyTable(),  // should improve this one
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
-                //createTableStrings.Add(CreateProductTable());
-                //createTableStrings.Add(CreateSaleTable());
-                //createTableStrings.Add(CreateDiscountTable());
+                CreateProductTable(),
+                //CreateLotteryTable();
+                //CreateStoreTableTable();
+                //CreateDiscountTable();
                 CreateOrderTable(),
                 CreateOrderItemTable()
             };
@@ -125,7 +126,7 @@ namespace SadnaSrc.Main
                                     )";
         }
 
-        private static string CreateUserStatePolicyTable()
+    private static string CreateUserStatePolicyTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [StatePolicy] (
                                     [SystemID]      INTEGER,
@@ -179,7 +180,14 @@ namespace SadnaSrc.Main
 
         private static string CreateProductTable()
         {
-            throw new NotImplementedException();
+            return @"CREATE TABLE IF NOT EXISTS [ProductTable] (
+                                    [SystemID]     TEXT,
+                                    [name]         TEXT,
+                                    [BasePrice]    INTEGER,
+                                    [description]  TEXT,
+                                    FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    PRIMARY KEY([SystemID])
+                                    )";
         }
 
         private static string CreateSaleTable()

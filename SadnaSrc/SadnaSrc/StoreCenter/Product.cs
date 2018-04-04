@@ -30,7 +30,7 @@ namespace SadnaSrc.StoreCenter
         }
         public String toString()
         {
-            return "name "+name+" base price: "+BasePrice;
+            return "SystemId: "+ SystemId +" name: " + name+" base price: "+BasePrice+ " description: "+ description;
         }
     }
 }

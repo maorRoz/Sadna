@@ -13,6 +13,9 @@ namespace SadnaSrc.StoreCenter
         {
         }
 
+        public StoreException(ViewPurchaseHistoryStatus status, string message) : base((int)status, message)
+        {
+        }
 
         protected override string GetModuleName()
         {

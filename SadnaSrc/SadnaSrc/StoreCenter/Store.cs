@@ -317,7 +317,6 @@ namespace SadnaSrc.StoreCenter
             if (canPurchaseLottery(productID, moeny))
             {
                 result = getLotterySale(product).PurchaseALotteryTicket(moeny);
-                history.AddLast("a user Purchased a Lottery ticket of the  Product " + product.SystemId);
 
             }
             return result.toString();
@@ -329,7 +328,6 @@ namespace SadnaSrc.StoreCenter
             if (canPurchaseImmediate(productID, quantity))
             {
                 stock.UpdateQuantityAfterPruchese(product, quantity);
-                history.AddLast( "a user Purchased by ImmidatePurchase the Product " + productID);
                 return product.toString();
             }
             return "";
@@ -381,6 +379,15 @@ namespace SadnaSrc.StoreCenter
             return "PRODUCTNOTFOUND";
         }
 
+        LinkedList<string> IStore.getAllStoreProducts()
+        {
+            throw new NotImplementedException();
+        }
+
+        public LinkedList<string> ViewPurchesHistory()
+        {
+            throw new NotImplementedException(); //waiting for Igor 4 help
+        }
     }
 }
 
