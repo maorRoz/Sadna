@@ -36,8 +36,8 @@ namespace UserSpotTests
         public void GoodLoginDataTest()
         {
             DoSignUpSignIn("MaorLogin2", "Here 4", "123");
-            object[] loggedUserData = ((RegisteredUser) userServiceSignInSession.GetUser()).ToData();
-            object[] registeredUserData = ((RegisteredUser)userServiceSignUpSession.GetUser()).ToData();
+            object[] loggedUserData = ((RegisteredUser) userServiceSignInSession.MarketUser).ToData();
+            object[] registeredUserData = ((RegisteredUser)userServiceSignUpSession.MarketUser).ToData();
             object[] expectedData = { loggedUserData[0], "MaorLogin2", "Here 4", UserService.GetSecuredPassword("123") };
             Assert.IsTrue(loggedUserData.SequenceEqual(registeredUserData));
             Assert.IsTrue(loggedUserData.SequenceEqual(expectedData));
@@ -115,7 +115,7 @@ namespace UserSpotTests
         public void SignedInUserCartisEmptyTest()
         {
             DoSignUpSignIn("MaorLogin13", "Here 3", "123");
-            RegisteredUser user = (RegisteredUser)userServiceSignInSession.GetUser();
+            RegisteredUser user = (RegisteredUser)userServiceSignInSession.MarketUser;
             Assert.AreEqual(0, user.GetCart().Length);
         }
 
@@ -125,7 +125,7 @@ namespace UserSpotTests
             DoSignUp("MaorLogin14", "Here 3", "123");
             userServiceSignInSession.EnterSystem();
             Assert.AreEqual((int) SignInStatus.Success, userServiceSignInSession.SignIn("MaorLogin14", "123").Status);
-            RegisteredUser user = (RegisteredUser)userServiceSignInSession.GetUser();
+            RegisteredUser user = (RegisteredUser)userServiceSignInSession.MarketUser;
             Assert.AreEqual(0, user.GetStoreManagerPolicies().Length);
             Assert.IsTrue(user.IsRegisteredUser());
             Assert.IsFalse(user.IsSystemAdmin());
@@ -155,7 +155,7 @@ namespace UserSpotTests
         public void PromoteToAdminTest()
         {
             DoSignUpSignIn("MaorLogin17", "Here 3", "123");
-            RegisteredUser adminUser = (RegisteredUser)userServiceSignInSession.GetUser();
+            RegisteredUser adminUser = (RegisteredUser)userServiceSignInSession.MarketUser;
             object[] expectedData = { adminUser.SystemID, "MaorLogin17", "Here 3", UserService.GetSecuredPassword("123") };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.IsTrue(adminUser.IsRegisteredUser());

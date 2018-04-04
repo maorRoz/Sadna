@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
-using SadnaSrc.OrderPool;
-using SadnaSrc.UserSpot;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
 {
@@ -16,29 +15,33 @@ namespace SadnaSrc.AdminView
         private bool _isSystemAdmin;
         private SystemAdminServiceDL adminDL;
         public PurchaseHistory[] LastHistoryReport { get; private set; }
-        public SystemAdminService(UserService userService)
+        public SystemAdminService(IUserAdmin user)
         {
             adminDL = new SystemAdminServiceDL();
-            GetSystemAdmin(userService);
+            _isSystemAdmin = user.IsSystemAdmin();
+            if (_isSystemAdmin)
+            {
+                systemID = user.GetAdminSystemID();
+            }
             LastHistoryReport = null;
         }
 
-        private void GetSystemAdmin(UserService userService)
+    /*    private void GetSystemAdmin(UserService userService)
         {
-            User user = userService.GetUser();
+            User user = userService.MarketUser;
             _isSystemAdmin = hasEntered(user) && user.IsSystemAdmin();
 
             if (_isSystemAdmin)
             {
                 systemID = user.SystemID;
             }
-        }
+        } 
 
 
         private bool hasEntered(User user)
         {
             return user != null;
-        }
+        } */
 
         private void ApproveSystemAdmin(string action)
         {

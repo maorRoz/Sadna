@@ -30,7 +30,7 @@ namespace UserSpotTests
         [TestMethod]
         public void AddToGuestCartTest()
         {
-
+            
         }
 
         [TestMethod]

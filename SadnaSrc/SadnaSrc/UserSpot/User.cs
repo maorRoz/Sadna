@@ -10,21 +10,14 @@ namespace SadnaSrc.UserSpot
     {
         protected readonly UserPolicyService PolicyService;
         protected int systemID;
-        protected readonly CartService cart;
 
-        public CartService Cart
-        {
-            get { return cart; }
-        }
+        public CartService Cart { get; }
 
-        public int SystemID
-        {
-            get { return systemID; }
-        }
+        public int SystemID { get; }
         public User(int systemID)
         {
             PolicyService = new UserPolicyService();
-            cart = new CartService(systemID);
+            Cart = new CartService(systemID);
             this.systemID = systemID;
         }
 
@@ -51,7 +44,7 @@ namespace SadnaSrc.UserSpot
 
         public CartItem[] GetCart()
         {
-            return cart.GetCartStorage();
+            return Cart.GetCartStorage();
         }
         public virtual object[] ToData()
         {

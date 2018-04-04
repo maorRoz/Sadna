@@ -79,16 +79,30 @@ namespace SadnaSrc.UserSpot
             InsertTable("StatePolicy", "SystemID,State",valuesNames,values);
         }
 
-        public void SaveUserStorePolicy(StoreManagerPolicy policy)
+        private int GetUserNameFromID(string userName)
         {
+            var dbReader = SelectFromTableWithCondition("User","SystemID", "WHERE Name = '" + userName + "'");
+            if (dbReader.Read())
+            {
+                return dbReader.GetInt32(0);
+            }
+
+            throw new UserException(MarketError.DbError,
+                "No user by the name " + userName + " has been found in the db");
+        }
+
+        public void SaveUserStorePolicy(string userName,StoreManagerPolicy policy)
+        {
+            int idOfPromoted = GetUserNameFromID(userName);
             string[] valuesNames = { "@idParam", "@storeParam","@actionParam" };
-            object[] values = { SystemID, policy.Store,policy.GetStoreActionString() };
+            object[] values = { idOfPromoted, policy.Store,policy.GetStoreActionString() };
             InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
         }
  
-        public void DeleteUserStorePolicy(StoreManagerPolicy policy)
+        public void DeleteUserStorePolicy(string userName, StoreManagerPolicy policy)
         {
-            DeleteFromTable("StoreManagerPolicy","SystemID = "+ SystemID +" AND Store = "+policy.Store
+            int idOfDemoted = GetUserNameFromID(userName);
+            DeleteFromTable("StoreManagerPolicy","SystemID = "+ idOfDemoted + " AND Store = "+policy.Store
                                                  + " AND Action =" + policy.Action);
         }
 
