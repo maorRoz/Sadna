@@ -12,11 +12,13 @@ namespace SadnaSrc.MarketHarmony
     {
         public StoreManagerPolicy[] policies;
         private string _store;
-        public UserSellerHarmony(IUserService userServic,string store)
+        public UserSellerHarmony(ref IUserService userService,string store)
         {
             _store = store;
-            policies = ((UserService) userServic).MarketUser.GetStoreManagerPolicies(store);
+            policies = ((UserService) userService).MarketUser.GetStoreManagerPolicies(store);
         }
+
+
         public void Promote(string userName, StoreManagerPolicy.StoreAction[] permissions)
         {
             UserPolicyService.PromoteStorePolicies(userName, _store, permissions);

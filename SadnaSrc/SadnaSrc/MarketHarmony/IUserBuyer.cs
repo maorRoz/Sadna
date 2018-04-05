@@ -9,7 +9,7 @@ using SadnaSrc.OrderPool;
 namespace SadnaSrc.MarketHarmony
 {
     // integration between UserSpot to OrderPool only
-    interface IUserBuyer
+    public interface IUserBuyer
     {
         OrderItem[] Checkout();
 

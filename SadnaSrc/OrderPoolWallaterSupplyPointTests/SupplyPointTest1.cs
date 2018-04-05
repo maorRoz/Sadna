@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.OrderPool;
-using SadnaSrc.StoreCenter;
 using SadnaSrc.SupplyPoint;
-using SadnaSrc.UserSpot;
 
 namespace OrderPoolWallaterSupplyPointTests
 {
@@ -19,8 +17,8 @@ namespace OrderPoolWallaterSupplyPointTests
         private OrderItem item1;
         private OrderItem item2;
         private OrderItem item3;
-        private UserService userService;
-        private StoreService storeService;
+        private IUserService userService;
+        private IStoreService storeService;
         private OrderService orderService;
         private SupplyService supplyService;
 
@@ -28,14 +26,15 @@ namespace OrderPoolWallaterSupplyPointTests
         public void BuildSupplyPoint()
         {
             market = MarketYard.Instance;
-            userService = new UserService();
-            storeService = new StoreService(userService);
-            orderService = (OrderService)market.GetOrderService(userService, storeService);
+            userService = market.GetUserService();
+            userService.EnterSystem();
+            storeService = market.GetStoreService(userService);
+            orderService = (OrderService)market.GetOrderService(ref userService, storeService);
             orderService.setUsername("Big Smoke");
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
             item3 = new OrderItem("Cluckin Bell", "#6 Extra Dip", 8.50, 1);
-            supplyService = new SupplyService(userService,orderService);
+            supplyService = new SupplyService(orderService);
         }
 
         [TestMethod]
@@ -67,8 +66,8 @@ namespace OrderPoolWallaterSupplyPointTests
             supplyService.AttachExternalSystem();
             int orderId;
             orderService.CreateOrder(out orderId);
-            orderService.AddItemToOrder(orderId, item1);
-            orderService.AddItemToOrder(orderId, item2);
+            orderService.AddItemToOrder(orderId, item1.GetStore(), item1.GetName(), item1.GetPrice(), item1.GetQuantity());
+            orderService.AddItemToOrder(orderId, item2.GetStore(), item2.GetName(), item2.GetPrice(), item2.GetQuantity());
             MarketAnswer ans = supplyService.CreateDelivery(orderId, "Grove Street");
             Assert.AreEqual((int)SupplyStatus.Success, ans.Status);
         }
@@ -79,8 +78,8 @@ namespace OrderPoolWallaterSupplyPointTests
             supplyService.AttachExternalSystem();
             int orderId;
             orderService.CreateOrder(out orderId);
-            orderService.AddItemToOrder(orderId, item1);
-            orderService.AddItemToOrder(orderId, item2);
+            orderService.AddItemToOrder(orderId, item1.GetStore(), item1.GetName(), item1.GetPrice(), item1.GetQuantity());
+            orderService.AddItemToOrder(orderId, item2.GetStore(), item2.GetName(), item2.GetPrice(), item2.GetQuantity());
             supplyService.FuckUpExternal();
             try
             {

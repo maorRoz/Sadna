@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
 using SadnaSrc.OrderPool;
-using SadnaSrc.UserSpot;
 
 
 using ProxyExternalSystems;

@@ -40,7 +40,7 @@ namespace SadnaSrc.AdminView
 
         public void IsUserExist(string userName)
         {
-            using (var dbReader = SelectFromTableWithCondition("User", "*", "Name = " + userName))
+            using (var dbReader = SelectFromTableWithCondition("User", "*", "Name = '" + userName +"'"))
             {
                 if (!dbReader.Read())
                 {
@@ -73,7 +73,7 @@ namespace SadnaSrc.AdminView
 
         public void DeleteUser(string userName)
         {
-            DeleteFromTable("User", "Name = " + userName);
+            DeleteFromTable("User", "Name = '" + userName +"'");
         }
 
         private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)

@@ -9,9 +9,8 @@ namespace BlackBox
 		private IUserBridge _adminBridge;
 		private readonly string adminName = "Arik1";
 		private readonly string adminPass = "123";
-		private readonly int adminId = 1;
-		private readonly int UserIdNotSoleOwner = 3;
-		private int UserIdSoleOwner = 2;
+		private readonly string userNameNotSoleOwner = "Arik3";
+		private string userNameSoleOwner = "Arik2";
 
 		[TestInitialize]
 
@@ -27,7 +26,7 @@ namespace BlackBox
 		{
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(UserIdNotSoleOwner).Status);
+			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userNameNotSoleOwner).Status);
 		}
 
 		[TestMethod]
@@ -37,7 +36,7 @@ namespace BlackBox
 			//TODO: check the store was closed
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(UserIdNotSoleOwner).Status);
+			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userNameNotSoleOwner).Status);
 		}
 
 		[TestMethod]
@@ -46,7 +45,7 @@ namespace BlackBox
 		{
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.SelfTermination, _adminBridge.RemoveUser(adminId).Status);
+			Assert.AreEqual((int)RemoveUserStatus.SelfTermination, _adminBridge.RemoveUser(adminName).Status);
 		}
 
 		[TestMethod]
@@ -55,7 +54,7 @@ namespace BlackBox
 		{
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.NoUserFound, _adminBridge.RemoveUser(-5).Status);
+			Assert.AreEqual((int)RemoveUserStatus.NoUserFound, _adminBridge.RemoveUser("sdadasdasdasdasdasdas").Status);
 		}
 
 		[TestMethod]
@@ -64,7 +63,7 @@ namespace BlackBox
 		{
 			SignIn("hello", adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(UserIdNotSoleOwner).Status);
+			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNameNotSoleOwner).Status);
 		}
 
 		[TestMethod]
@@ -73,7 +72,7 @@ namespace BlackBox
 		{
 			SignIn(adminName, "852963");
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(UserIdNotSoleOwner).Status);
+			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNameNotSoleOwner).Status);
 		}
 
 		[TestMethod]
@@ -82,7 +81,7 @@ namespace BlackBox
 		{
 			SignIn("Hello", "852963");
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(UserIdSoleOwner).Status);
+			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNameSoleOwner).Status);
 		}
 
 		private void SignIn(string userName, string password)

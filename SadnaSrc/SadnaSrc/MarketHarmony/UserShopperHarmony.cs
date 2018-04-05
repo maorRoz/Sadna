@@ -10,7 +10,7 @@ namespace SadnaSrc.MarketHarmony
     class UserShopperHarmony : IUserShopper
     {
         private UserService _userService;
-        public UserShopperHarmony(UserService userService)
+        public UserShopperHarmony(ref UserService userService)
         {
             _userService = userService;
         }
