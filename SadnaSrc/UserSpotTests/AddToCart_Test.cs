@@ -9,7 +9,7 @@ namespace UserSpotTests
 {
 
     [TestClass]
-    public class UseCase1_5_Test
+    public class AddToCart_Test
     {
         private UserService userServiceGuestSession;
         private UserService userServiceRegisteredSession;
@@ -30,6 +30,8 @@ namespace UserSpotTests
         [TestMethod]
         public void AddToGuestCartTest()
         {
+            Assert.AreEqual(0,userServiceGuestSession.MarketUser.Cart.GetCartStorage());
+            userServiceGuestSession.AddToCart();
             
         }
 
