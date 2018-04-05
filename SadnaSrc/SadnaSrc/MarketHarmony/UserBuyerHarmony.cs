@@ -33,7 +33,7 @@ namespace SadnaSrc.MarketHarmony
         public string GetName()
         {
             return _userService.MarketUser.IsRegisteredUser() ? 
-                ((RegisteredUser)_userService.MarketUser).Name : "";
+                ((RegisteredUser)_userService.MarketUser).Name : "Guest";
         }
     }
 }
