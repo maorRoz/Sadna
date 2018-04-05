@@ -13,22 +13,22 @@ namespace SadnaSrc.Main
         **/
         MarketAnswer PromoteToOwner(int currentUserID, int someoneToPromoteID);
         MarketAnswer PromoteToManager(int currentUserID,int someoneToPromoteID);
-        LinkedList<string> getAllStoreProducts();
-        LinkedList<string> ViewPurchesHistory();
+//        LinkedList<string> getAllStoreProducts();
+        //LinkedList<string> ViewPurchesHistory();
         MarketAnswer CloseStore(int ownerOrSystemAdmin);
-        bool IsStoreActive();
-        bool IsOwner(int user);
-        string getProductById(string ID); //will return null if product is not exists
-        string getProductDiscountByProductID(string ID); //will return null if product is not exists or discount not exists
-        string getProductPurchaseWayByProductID(string ID);//will return PRODUCTNOTFOUND if product is not exists
-        int getProductQuantitybyProductID(string ID);//will return -1 if product is not exists
-        bool canPurchaseImmediate(string productName, int quantity);
-        bool canPurchaseLottery(string productName, int amountOfMoney);
+        //bool IsStoreActive();
+        //bool IsOwner(int user);
+        //string getProductById(string ID); //will return null if product is not exists
+        //string getProductDiscountByProductID(string ID); //will return null if product is not exists or discount not exists
+        //string getProductPurchaseWayByProductID(string ID);//will return PRODUCTNOTFOUND if product is not exists
+        //int getProductQuantitybyProductID(string ID);//will return -1 if product is not exists
+        //bool canPurchaseImmediate(string productName, int quantity);
+        //bool canPurchaseLottery(string productName, int amountOfMoney);
 
         /**
          * Store Managment, handling products
          **/
-        MarketAnswer AddProduct(String _name, int _price, String _description, int quantity);
+        MarketAnswer AddProduct(string _name, int _price, string _description, int quantity);
         MarketAnswer IncreaseProductQuantity(string productName, int quantity);
         MarketAnswer removeProduct(string productName);
         MarketAnswer editProductPrice(string productName, int newprice);
@@ -44,6 +44,8 @@ namespace SadnaSrc.Main
         /**
          * Store Managment, Discounts
          **/
+        //MarketAnswer editDiscount();
+
 
         MarketAnswer addDiscountToProduct_VISIBLE(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
         MarketAnswer addDiscountToProduct_HIDDEN(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
@@ -61,10 +63,10 @@ namespace SadnaSrc.Main
         /**
          * Store Managment, Purchase
          **/
-        string MakeALotteryPurchase(string productName, int moeny);
-        string MakeAImmediatePurchase(string productName, int quantity);
-        string DoLottery(string productName); // will return the lottery ticket of the winner, or null if faild
-        double getProductPrice(string _product, int _DiscountCode, int _quantity);
+        //string MakeALotteryPurchase(string productName, int moeny);
+        //string MakeAImmediatePurchase(string productName, int quantity);
+        //string DoLottery(string productName); // will return the lottery ticket of the winner, or null if faild
+        //double getProductPrice(string _product, int _DiscountCode, int _quantity);
     }
     public enum PurchaseEnum { IMMEDIATE, LOTTERY, PRODUCTNOTFOUND }
 public enum discountTypeEnum { HIDDEN, VISIBLE };

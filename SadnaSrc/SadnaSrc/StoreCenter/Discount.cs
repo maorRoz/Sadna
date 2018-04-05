@@ -9,31 +9,23 @@ namespace SadnaSrc.StoreCenter
 {
     public class Discount
     {
-        public int discountCode { get; }
+        public string discountCode { get; }
         public discountTypeEnum discountType { get; set; }
         public DateTime startDate { get; set; }
         public DateTime EndDate { get; set; }
         public int DiscountAmount { get; set; }
-        public bool Presenteges { get; set; }
+        public bool Percentages { get; set; }
 
-        public static String PrintEnum(discountTypeEnum type)
-        {
-            if (type == discountTypeEnum.HIDDEN)
-                return "HIDDEN";
-            if (type == discountTypeEnum.VISIBLE)
-                return "VISIBLE";
-            return "";
-        }
         //assume that the startDate < EndDate
         
-        public Discount(int _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
+        public Discount(string _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
         {
             discountCode = _discountCode;
             discountType = _discountType;
             startDate = _startDate;
             EndDate = _EndDate;
             DiscountAmount = _discountAmount;
-            Presenteges = _presenteges;
+            Percentages = _presenteges;
 
         }
         //assume that the User discountCode is the right one, the check is done by the Store itself
@@ -43,10 +35,10 @@ namespace SadnaSrc.StoreCenter
             {
                 {
 
-                    if ((DateTime.Now.Date < EndDate) && (DateTime.Now.Date > startDate) && (discountCode == code))
+                    if ((DateTime.Now.Date < EndDate) && (DateTime.Now.Date > startDate) && (discountCode.Equals(code)))
                     {
                         {
-                            if (Presenteges)
+                            if (Percentages)
                             {
                                 return basePrice * (1 - DiscountAmount);
                             }
@@ -61,7 +53,7 @@ namespace SadnaSrc.StoreCenter
             }
             if (discountType == discountTypeEnum.VISIBLE)
             {
-                if (Presenteges)
+                if (Percentages)
                 {
                     return basePrice * (1 - DiscountAmount);
                 }
@@ -72,7 +64,7 @@ namespace SadnaSrc.StoreCenter
             }
             return -1;
         }
-        public String toString() {if(Presenteges) return "" + DiscountAmount+"%"; return "" + DiscountAmount; }
+        public String toString() {if(Percentages) return "" + DiscountAmount+"%"; return "" + DiscountAmount; }
     }
 }
 

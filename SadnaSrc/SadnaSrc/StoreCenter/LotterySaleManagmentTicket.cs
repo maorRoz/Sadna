@@ -8,7 +8,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class LotterySaleManagmentTicket
     {
-        int SystemID;
+        string SystemID;
         internal Product original { get; }
         int ProductNormalPrice;
         int TotalMoneyPayed;
@@ -16,7 +16,7 @@ namespace SadnaSrc.StoreCenter
         DateTime EndDate;
         LinkedList<LotteryTicket> tickets;
 
-        public LotterySaleManagmentTicket(int _SystemID, Product _original, DateTime _StartDate, DateTime _EndDate)
+        public LotterySaleManagmentTicket(string _SystemID, Product _original, DateTime _StartDate, DateTime _EndDate)
         {
             SystemID = _SystemID;
             original = _original;
@@ -26,39 +26,27 @@ namespace SadnaSrc.StoreCenter
             EndDate = _EndDate;
             tickets = new LinkedList<LotteryTicket>();
         }
-        public LotterySaleManagmentTicket(int _SystemID, Product _original, DateTime _EndDate)
-        {
-            SystemID = _SystemID;
-            original = _original;
-            ProductNormalPrice = _original.BasePrice;
-            TotalMoneyPayed = 0;
-            StartDate = DateTime.Now.Date;
-            EndDate = _EndDate;
-            tickets = new LinkedList<LotteryTicket>();
-        }
+        
         /** 
          * will be used by the store
          **/
-        public bool CanPurchase(int moneyPaied) {
-            return (TotalMoneyPayed + moneyPaied < ProductNormalPrice);
+        public bool CanPurchase(int moneyPayed) {
+            return (TotalMoneyPayed + moneyPayed < ProductNormalPrice);
         }
         public static bool checkDates(DateTime startDate, DateTime endDate)
         {
             return ((startDate > DateTime.Now.Date) && (endDate > DateTime.Now.Date) && (endDate > startDate));
         }
-        public LotteryTicket PurchaseALotteryTicket(int moneyPaied)
+        public LotteryTicket PurchaseALotteryTicket(int moneyPayed)
         {
-            if (TotalMoneyPayed+ moneyPaied<ProductNormalPrice)
+            if (CanPurchase(moneyPayed))
             {
-                LotteryTicket lottery = new LotteryTicket(this, TotalMoneyPayed, TotalMoneyPayed+moneyPaied);
-                TotalMoneyPayed += moneyPaied;
+                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed);
+                TotalMoneyPayed += moneyPayed;
                 tickets.AddLast(lottery);
                 return lottery;
             }
-            else
-            {
                 return null;
-            }
         }
         public LotteryTicket Dolottery()
         {

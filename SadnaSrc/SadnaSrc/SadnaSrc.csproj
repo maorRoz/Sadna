@@ -109,6 +109,7 @@
     <Compile Include="UserSpot\CartItem.cs" />
     <Compile Include="Main\ISystemAdminService.cs" />
     <Compile Include="AdminView\SystemAdminService.cs" />
+    <Compile Include="StoreCenter\ModuleGlobalHandler.cs" />
     <Compile Include="UserSpot\User.cs" />
     <Compile Include="Main\IUserService.cs" />
     <Compile Include="UserSpot\RegisteredUser.cs" />

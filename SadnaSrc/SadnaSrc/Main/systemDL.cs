@@ -26,15 +26,14 @@ namespace SadnaSrc.Main
                 CreateSystemLogTable(),
                 CreateSystemErrorsTable(),
                 CreateUserTable(),
-                CreateStoreTable(),
+                CreateProductTable(),//added by lior
+                CreateDiscountTable(), //added by lior
+                CreateStockTable(), //added by lior
+                CreateStoreTable(), //TODO: need to be edited by by lior
                 CreateUserStatePolicyTable(),
                 CreateUserStorePolicyTable(),  // should improve this one
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
-                CreateProductTable(),
-                //CreateLotteryTable();
-                //CreateStoreTableTable();
-                //CreateDiscountTable();
                 CreateOrderTable(),
                 CreateOrderItemTable()
             };
@@ -180,25 +179,44 @@ namespace SadnaSrc.Main
 
         private static string CreateProductTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [ProductTable] (
+            return @"CREATE TABLE IF NOT EXISTS [Products] (
                                     [SystemID]     TEXT,
                                     [name]         TEXT,
                                     [BasePrice]    INTEGER,
                                     [description]  TEXT,
-                                    FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID])
                                     )";
         }
-
+        private static string CreateDiscountTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [Discount] (
+                                    [DiscountCode]     TEXT,
+                                    [DiscountType]     INTEGER,
+                                    [StartDate]     TEXT,
+                                    [EndDate]     TEXT,
+                                    [DiscountAmount]     INTEGER,
+                                    [Percentages]     Bit,
+                                    PRIMARY KEY([DiscountCode])
+                                    )";
+        }
+        private static string CreateStockTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [Stock] (
+                                    [StockID] TEXT,
+                                    [ProductSystemID]    TEXT,
+                                    [quantity]    INTEGER,
+                                    [discount]  TEXT,
+                                    [PurchaseWay] INTEGER,
+                                    PRIMARY KEY([StockID]),
+                                    FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([discount]) REFERENCES [Discount]([DiscountCode]) ON DELETE CASCADE
+                                    )";
+        }
         private static string CreateSaleTable()
         {
             throw new NotImplementedException();
         }
-
-        private static string CreateDiscountTable()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         private static string CreateOrderTable()
         {

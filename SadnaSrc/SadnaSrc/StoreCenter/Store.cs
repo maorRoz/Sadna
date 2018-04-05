@@ -13,43 +13,36 @@ namespace SadnaSrc.StoreCenter
      **/
     public class Store : IStore
     {
-        public String SystemId { get; }
+        public string SystemId { get; }
         private Stock stock { get; set; }
-        private int Owner;
-        private LinkedList<int> OtherOwners;
-        private LinkedList<int> Managers;
+        private LinkedList<User> OtherOwners;
+        private LinkedList<User> Managers;
         private LinkedList<PurchasePolicy> PurchasePolicy;
         private LinkedList<LotterySaleManagmentTicket> lotterys;
         private LinkedList<String> history;
         private StoreService master { get; }
         private bool isActive { get; set; }
 
-        public Store(int _Owner, int id, StoreService _master)
+        public Store(User _Owner, string id, StoreService _master)
         {
-            SystemId = "S"+id;
+            SystemId = id;
             stock = new Stock();
-            Owner = _Owner;
-            OtherOwners = new LinkedList<int>();
+            OtherOwners = new LinkedList<User>();
             OtherOwners.AddFirst(_Owner);
-            Managers = new LinkedList<int>();
+            Managers = new LinkedList<User>();
             PurchasePolicy = new LinkedList<PurchasePolicy>();
             isActive = true;
             master = _master;
             lotterys = new LinkedList<LotterySaleManagmentTicket>();
         }
-        private StoreAnswer paddProduct(Product product, int quantity)
-        {
-            return stock.addProductToStock(product, quantity);
-        }
-        public bool IsOwner(int user)
+        public bool IsOwner(User user)
         {
             if (isActive)
             {
-                bool result = (user == Owner);
-                if (result) { return result; }
-                foreach (int other in OtherOwners)
+                bool result = false;
+                foreach (User other in OtherOwners)
                 {
-                    result = result || (user == other);
+                    result = result || (user.SystemID == other.SystemID);
                 }
                 return result;
             }
@@ -59,9 +52,9 @@ namespace SadnaSrc.StoreCenter
         {
             return isActive;
         }
-        private StoreAnswer pAddDiscountToProduct(Product p, int _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, bool _presenteges)
+        private StoreAnswer pAddDiscountToProduct(Product p, string _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, bool _percentages)
         {
-            if (_presenteges && _DiscountAmount >= 100)
+            if (_percentages&& _DiscountAmount >= 100)
             {
                 return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100 and the discoint is presenteges");
             }
@@ -77,7 +70,7 @@ namespace SadnaSrc.StoreCenter
             {
                 return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time that is later then the discount end time");
             }
-            Discount discount = new Discount(_discountCode, _discountType, _startDate, _EndDate, _DiscountAmount, _presenteges);
+            Discount discount = new Discount(_discountCode, _discountType, _startDate, _EndDate, _DiscountAmount, _percentages);
             return stock.addDiscountToProduct(p, discount);
         }
         private StoreAnswer pRemoveDiscountToProduct(string productID)
@@ -102,7 +95,7 @@ namespace SadnaSrc.StoreCenter
             return stock.addPurchaseWayToProduct(p, Purchase);
         }
 
-        public MarketAnswer PromoteToOwner(int currentUser, int someoneToPromote)
+        public MarketAnswer PromoteToOwner(User currentUser, User someoneToPromote)
         {
             if (IsOwner(currentUser)) {
                 if (!OtherOwners.Contains(someoneToPromote))
@@ -115,7 +108,7 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + currentUser + " is not an owner of the store and can't make " + someoneToPromote + " to an owner");
         }
 
-        public MarketAnswer PromoteToManager(int currentUser, int someoneToPromote)
+        public MarketAnswer PromoteToManager(User currentUser, User someoneToPromote)
         {
             if (IsOwner(currentUser))
             {
@@ -136,7 +129,7 @@ namespace SadnaSrc.StoreCenter
 
 
 
-        public MarketAnswer CloseStore(int ownerOrSystemAdmin)
+        public MarketAnswer CloseStore(User ownerOrSystemAdmin)
         {
             if (IsOwner(ownerOrSystemAdmin)) {
                 if (isActive)
@@ -166,25 +159,6 @@ namespace SadnaSrc.StoreCenter
             Product product = stock.getProductById(productID);
             return stock.removeProductFromStock(product);
         }
-
-        public MarketAnswer editProductPrice(string productID, int newprice)
-        {
-            Product product = stock.getProductById(productID);
-            return stock.editProductPrice(product, newprice);
-        }
-
-        public MarketAnswer editProductName(string productID, string Name)
-        {
-            Product product = stock.getProductById(productID);
-            return stock.editProductName(product, Name);
-        }
-
-        public MarketAnswer editProductDescripiton(string productID, string Desccription)
-        {
-            Product product = stock.getProductById(productID);
-            return stock.editProductDescripiton(product, Desccription);
-        }
-
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productID)
         {
             Product product = stock.getProductById(productID);
@@ -202,7 +176,7 @@ namespace SadnaSrc.StoreCenter
             return pAddDiscountToProduct(product, master.getDiscountCode(), discountTypeEnum.VISIBLE, _startDate, _EndDate, _DiscountAmount, false);
         }
 
-        public MarketAnswer addDiscountToProduct_HIDDEN(string productID, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        /**public MarketAnswer addDiscountToProduct_HIDDEN(string productID, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
         {
             Product product = stock.getProductById(productID);
             return pAddDiscountToProduct(product, master.getDiscountCode(), discountTypeEnum.HIDDEN, _startDate, _EndDate, _DiscountAmount, false);
@@ -274,29 +248,24 @@ namespace SadnaSrc.StoreCenter
         {
             Product product = stock.getProductById(productID);
             return stock.EditDiscountEndTime(product, _EndDate);
-        }
+        }**/
 
-        public string getProductById(string ID) //will return null if product is not exists
+        public Product getProductById(string ID) //will return null if product is not exists
         {
-            return stock.getProductById(ID).ToString();
+            return stock.getProductById(ID);
         }
-        public string getProductDiscountByProductID(string ID)//will return null if product is not exists or discount not exists
+        public Discount getProductDiscountByProductID(string ID)//will return null if product is not exists or discount not exists
         {
             Product temp = stock.getProductById(ID);
-            return stock.getProductDiscount(temp).toString();
+            return stock.getProductDiscount(temp);
         }
 
-        public string getProductPurchaseWayByProductID(string ID)//will return PRODUCTNOTFOUND if product is not exists
+        public PurchaseEnum getProductPurchaseWayByProductID(string ID)//will return PRODUCTNOTFOUND if product is not exists
         {
             Product temp = stock.getProductById(ID);
-            return printEnum(stock.getProductPurchaseWay(temp));
+            return stock.getProductPurchaseWay(temp);
         }
-
-        public int getProductQuantitybyProductID(string ID)//will return -1 if product is not exists
-        {
-            Product temp = stock.getProductById(ID);
-            return stock.Quantity(temp);
-        }
+        
         internal void addAllProductsToExistingList(LinkedList<Product> result)
         {
             stock.addAllProductsToExistingList(result);
@@ -310,34 +279,34 @@ namespace SadnaSrc.StoreCenter
             }
             return null;
         }
-        public string MakeALotteryPurchase(string productID, int moeny)
+        public LotteryTicket MakeALotteryPurchase(string productID, int money)
         {
             LotteryTicket result = null;
             Product product = stock.getProductById(productID);
-            if (canPurchaseLottery(productID, moeny))
+            if (canPurchaseLottery(productID, money))
             {
-                result = getLotterySale(product).PurchaseALotteryTicket(moeny);
+                result = getLotterySale(product).PurchaseALotteryTicket(money);
 
             }
-            return result.toString();
+            return result;
         }
 
-        public string MakeAImmediatePurchase(string productID, int quantity)
+        public Product MakeAImmediatePurchase(string productID, int quantity)
         {
             Product product = stock.getProductById(productID);
             if (canPurchaseImmediate(productID, quantity))
             {
                 stock.UpdateQuantityAfterPruchese(product, quantity);
-                return product.toString();
+                return product;
             }
-            return "";
+            return null;
         }
      
         public double getProductPrice(string _product, int _DiscountCode, int _quantity)
         {
             return stock.CalculateSingleItemPrice(stock.getProductById(_product), _DiscountCode, _quantity);
         }
-        public string DoLottery(string product)
+        public LotteryTicket DoLottery(string product)
         {
             Product p = stock.getProductById(product);
             LotteryTicket result = null;
@@ -348,46 +317,137 @@ namespace SadnaSrc.StoreCenter
                     result= LSMT.Dolottery();
                 }
             }
-            return result.toString();
+            return result;
         }
         public LinkedList<string> ViewPurchaseHistory()
         {
             return history;
         }
 
-        public bool canPurchaseImmediate(string product, int quantity)
+        public bool canPurchaseImmediate(Product product, int quantity)
         {
-            return (stock.Quantity(stock.getProductById(product)) >= quantity);
+            return (stock.Quantity(product) >= quantity);
         }
 
-        public bool canPurchaseLottery(string product, int amountOfMoney)
+        public bool canPurchaseLottery(Product product, int amountOfMoney)
         {
-            Product p = stock.getProductById(product);
-            return ((stock.getProductPurchaseWay(p) == PurchaseEnum.LOTTERY) &&
-                    (stock.Quantity(p) > 0) &&
-                    (getLotterySale(p) != null) &&
-                    (getLotterySale(p).CanPurchase(amountOfMoney)));
+            return ((stock.getProductPurchaseWay(product) == PurchaseEnum.LOTTERY) &&
+                    (stock.Quantity(product) > 0) &&
+                    (getLotterySale(product) != null) &&
+                    (getLotterySale(product).CanPurchase(amountOfMoney)));
         }
         public string ToString()
         {
             return "storeId: " + SystemId;
-        }
-        private string printEnum(PurchaseEnum purchaseEnum)
-        {
-            if (purchaseEnum == PurchaseEnum.IMMEDIATE) return "IMMIDIATE";
-            if (purchaseEnum == PurchaseEnum.LOTTERY) return "LOTTERY";
-            return "PRODUCTNOTFOUND";
-        }
-
-        LinkedList<string> IStore.getAllStoreProducts()
-        {
-            throw new NotImplementedException();
         }
 
         public LinkedList<string> ViewPurchesHistory()
         {
             throw new NotImplementedException(); //waiting for Igor 4 help
         }
+
+        public MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue)
+        {
+            StoreAnswer result = null;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            Product product = stock.getProductById(productID);
+            if (product == null) { return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock"); };
+                Discount discount = stock.getProductDiscount(product);
+            if (discount == null) { return new StoreAnswer(StoreEnum.DiscountNotFound, "product " + product.toString() + " has no discount"); };
+
+            if (whatToEdit == "discountType")
+            {
+                discount.discountType = handler.GetdiscountTypeEnumString(newValue);
+                result = new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount type become " +newValue);
+            }
+            if (whatToEdit == "startDate")
+            {
+                DateTime startTime = DateTime.Parse(newValue);
+                if (startTime < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time in the past"); }
+
+                if (startTime > discount.EndDate) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time that is later then the discount end time"); }
+                discount.startDate = startTime;
+                result= new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount Start Date become " + startTime);
+            }
+            
+            if (whatToEdit == "EndDate")
+            {
+                DateTime EndDate = DateTime.Parse(newValue);
+                if (EndDate < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time in the past"); }
+
+                if (EndDate < discount.startDate) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set end time that is sooner then the discount start time"); }
+                discount.EndDate = EndDate;
+                result = new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount End Date become " + EndDate);
+            }
+                
+            if (whatToEdit == "DiscountAmount")
+            {
+               int newintValue = Int32.Parse(newValue);
+               if (discount.Percentages && newintValue > 100) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "DiscountAmount is >= 100, cant make it presenteges"); }
+                discount.DiscountAmount = newintValue;
+               return new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount amount become " + newValue);
+            }
+            if (whatToEdit == "Percentages")
+            {
+                bool newboolValue = Boolean.Parse(newValue);
+                if (newboolValue && discount.DiscountAmount > 100) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "DiscountAmount is >= 100, cant make it presenteges"); }
+                discount.Percentages = newboolValue;
+                if (newboolValue)
+                    result = new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount preseneges become true");
+                result = new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount preseneges become false");
+            }
+            if (result==null) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "no leagal attrebute found"); }
+            handler.dataLayer.EditDiscountInDatabase(discount);
+            return result;
+        }
+        public MarketAnswer EditProduct (string productID, string whatToEdit, string newValue)
+        {
+            StoreAnswer result = null;
+            Product product = stock.getProductById(productID);
+            if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock"); }
+            if (whatToEdit == "Name") {
+                result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
+                product.name = newValue;
+            }
+            if (whatToEdit == "BasePrice") {
+                int newBasePrice = Int32.Parse(newValue);
+                if (newBasePrice < 0) { return new StoreAnswer(StoreEnum.UpdateProductFail, "price can not be negative"); };
+                result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " price has been updated to " + newValue);
+                product.BasePrice = Int32.Parse(newValue);
+            }
+            if (whatToEdit == "Desccription") {
+                result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
+                product.description = newValue;
+            }
+            if (result==null) { return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            handler.dataLayer.EditProductInDatabase(product);
+            return result;
+        }
+        public MarketAnswer editStockListItem(string productID, string whatToEdit, string newValue)
+        {
+            StoreAnswer result = null;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            Stock.StockListItem stockListItem = stock.findstockListItembyProductID(productID);
+            if (stockListItem==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock"); }
+            if (whatToEdit == "quantity")
+            {
+                int quantity = Int32.Parse(newValue);
+                if (quantity<0) { return new StoreAnswer(StoreEnum.UpdateStockFail, "quantity " + quantity + " is less then 0"); }
+                stockListItem.quantity += quantity;
+                result = new StoreAnswer(StoreEnum.Success, "item " + productID + " added by amound of " + quantity);
+            }
+            if (whatToEdit == "PurchaseWay")
+            {
+                PurchaseEnum purchaseEnum = handler.GetPurchaseEnumString(newValue);
+                stockListItem.PurchaseWay = purchaseEnum;
+                result = new StoreAnswer(StoreEnum.Success, "item " + stockListItem.product.SystemId + " added PurchaseWay of" + newValue);
+            }
+            if (result == null) { return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
+            handler.dataLayer.EditStockInDatabase(stockListItem);
+            return result;
+        }
+
     }
 }
 

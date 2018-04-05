@@ -11,9 +11,39 @@ namespace SadnaSrc.StoreCenter
 {
     class StoreDL : SystemDL
     {
-        public void makeAProductToData(Product product)
+        private string[] getProductStringValues(Product product)
         {
-            
+
+            string[] Stringvalues = new string[4];
+            Stringvalues[0] = "'" + product.SystemId + "'";
+            Stringvalues[1] = "'" + product.name + "'";
+            Stringvalues[2] = product.BasePrice + "";
+            Stringvalues[3] = "'" + product.description + "'";
+            return Stringvalues;
+        }
+        private object[] getProductValuesArray(Product product)
+        {
+            object[] values = new string[4];
+            values[0] = product.SystemId;
+            values[1] = product.name;
+            values[2] = product.BasePrice;
+            values[3] = product.description;
+            return values;
+        }
+        public void AddProductToDatabase(Product product)
+        {   
+            InsertTable("Products", "SystemID, name, BasePrice, description",
+                getProductStringValues(product),getProductValuesArray(product));
+        }
+        public void EditProductInDatabase(Product product)
+        {
+            string[] columnNames = new string[4];
+            columnNames[0] = "SystemID";
+            columnNames[1] = "name";
+            columnNames[2] = "BasePrice";
+            columnNames[3] = "description";
+            UpdateTable("Products", "SystemID = '"+product.SystemId+"'", columnNames,
+                getProductStringValues(product), getProductValuesArray(product));
         }
         private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
         {
@@ -45,6 +75,16 @@ namespace SadnaSrc.StoreCenter
                 }
                 return result;
             }
+        }
+
+        internal void EditDiscountInDatabase(Discount discount)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void EditStockInDatabase(Stock.StockListItem stockListItem)
+        {
+            throw new NotImplementedException();
         }
     }
 }

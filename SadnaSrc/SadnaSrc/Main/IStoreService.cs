@@ -12,15 +12,19 @@ namespace SadnaSrc.Main
          * general actions that refer to all the stores/some of them
          **/
         MarketAnswer OpenStore();
-        LinkedList<string> getAllMyStores();
-        LinkedList<string> getAllStores();
-        LinkedList<string> getAllMarketProducts();
-        string getStoreByID(int ID);
+//        LinkedList<string> getAllMyStores();
+//        LinkedList<string> getAllStores();
+//        LinkedList<string> getAllMarketProducts();
+//        string getStoreByID(int ID);
     }
     public enum StoreEnum
     {
         Success,
         UpdateStockFail,
+        ProductNotFound,
+        DiscountNotFound,
+        UpdateDiscountFail,
+        UpdateProductFail,
         OpenStoreFail,
         AddStoreOwnerFail,
         AddStoreManagerFail,

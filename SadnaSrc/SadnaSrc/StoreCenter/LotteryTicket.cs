@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.StoreCenter
 {
     public class LotteryTicket
     {
-        LotterySaleManagmentTicket MyManager;
         int IntervalStart;
         int IntervalEnd;
         LotteryTicketStatus myStatus;
-        public LotteryTicket(LotterySaleManagmentTicket _MyManager, int _IntervalStart, int _IntervalEnd)
+        public LotteryTicket(int _IntervalStart, int _IntervalEnd)
         {
-            MyManager = _MyManager;
             IntervalStart = _IntervalStart;
             IntervalEnd = _IntervalEnd;
             myStatus = LotteryTicketStatus.WAITING;

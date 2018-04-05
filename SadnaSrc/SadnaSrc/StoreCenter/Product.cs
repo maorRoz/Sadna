@@ -8,14 +8,14 @@ namespace SadnaSrc.StoreCenter
 {
     public class Product
     {
-        public String SystemId;
+        public string SystemId;
         public String name { get; set; }
         public int BasePrice { get; set; }
         public String description { get; set; }
 
-        public Product(int _SystemId, String _name, int _price, String _description)
+        public Product(string _SystemId, String _name, int _price, String _description)
         {
-            SystemId = "P"+_SystemId;
+            SystemId = _SystemId;
             name = _name;
             BasePrice = _price;
             description = _description;
