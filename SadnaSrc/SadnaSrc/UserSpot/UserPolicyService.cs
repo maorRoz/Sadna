@@ -22,41 +22,50 @@ namespace SadnaSrc.UserSpot
         public static void EstablishServiceDL(UserServiceDL userDL)
         {
             _userDL = userDL;
-        }
-
-        public void AddStorePolicy(string store, StoreManagerPolicy.StoreAction storeAction)
+        }       
+        public static void PromoteStorePolicies(string userName,string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
-            StoreManagerPolicy toAdd = new StoreManagerPolicy(store, storeAction);
-            StorePolicies.Add(toAdd);
-            _userDL.SaveUserStorePolicy(toAdd);
-        }
-
-        public void UpdateStorePolicies(string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
-        {
-            //TODO: check if store exist here or in DB query(with WHERE or something)
             foreach (StoreManagerPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreManagerPolicy.StoreAction)))
             {
-                RemoveStorePolicy(store, oldAction);
+                _userDL.DeleteUserStorePolicy(userName, new StoreManagerPolicy(store, oldAction));
             }
+
+            if (actionsToAdd.Contains(StoreManagerPolicy.StoreAction.StoreOwner))
+            {
+                actionsToAdd = new []{ StoreManagerPolicy.StoreAction.StoreOwner };
+            }
+
             foreach (StoreManagerPolicy.StoreAction action in actionsToAdd)
             {
-                AddStorePolicy(store,action);
+                _userDL.SaveUserStorePolicy(userName,new StoreManagerPolicy(store,action));
             }
             
-        }
-        private void RemoveStorePolicy(string store, StoreManagerPolicy.StoreAction storeAction)
-        {
-            StoreManagerPolicy toRemove = new StoreManagerPolicy(store, storeAction);
-            if (StorePolicies.Remove(toRemove))
-            {
-                _userDL.DeleteUserStorePolicy(toRemove);
-            }
         }
 
         public void AddStatePolicy(StatePolicy.State state)
         {
             _userDL.SaveUserStatePolicy(new StatePolicy(state));
             StatesPolicies.Add(new StatePolicy(state));
+        }
+
+        public StoreManagerPolicy[] FilteredStorePolicies(string store)
+        {
+            List<StoreManagerPolicy> storePolicies = new List<StoreManagerPolicy>();
+            foreach (StoreManagerPolicy policy in StorePolicies)
+            {
+                if(policy.Store.Equals(store))
+                storePolicies.Add(policy);
+            }
+
+            return storePolicies.ToArray();
+        }
+
+        public void AddStoreOwnership(string store)
+        {
+            StoreManagerPolicy storeOwnershipPermission =
+                new StoreManagerPolicy(store, StoreManagerPolicy.StoreAction.StoreOwner);
+            StorePolicies.Add(storeOwnershipPermission);
+            _userDL.SaveUserStorePolicy(storeOwnershipPermission);
         }
 
         public void LoadPolicies(StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions)

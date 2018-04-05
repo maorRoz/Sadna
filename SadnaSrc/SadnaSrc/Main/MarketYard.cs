@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.AdminView;
+using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.SupplyPoint;
@@ -53,7 +54,7 @@ namespace SadnaSrc.Main
 
         public ISystemAdminService GetSystemAdminService(IUserService userService)
         {
-            return new SystemAdminService((UserService) userService);
+            return new SystemAdminService(new UserAdminHarmony(userService));
         }
 
         public IStoreService GetStoreService(IUserService userService)

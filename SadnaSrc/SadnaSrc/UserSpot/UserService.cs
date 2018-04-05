@@ -10,7 +10,7 @@ namespace SadnaSrc.UserSpot
 {
     public class UserService : IUserService
     {
-        private User user;
+        public User MarketUser { get; private set; }
         private readonly UserServiceDL userDL;
         private int systemID;
         private int oldID;
@@ -18,7 +18,7 @@ namespace SadnaSrc.UserSpot
         public UserService()
         {
             userDL = new UserServiceDL();
-            user = null;
+            MarketUser = null;
             systemID = userDL.GetSystemID();
             oldID = systemID;
             Synch();
@@ -33,19 +33,14 @@ namespace SadnaSrc.UserSpot
         public MarketAnswer EnterSystem()
         {
             MarketLog.Log("UserSpot", "User " + systemID + " attempting to enter the system...");
-            user = new User(systemID);
+            MarketUser = new User(systemID);
             MarketLog.Log("UserSpot","User "+systemID+" has entered the system!");
             return new UserAnswer(EnterSystemStatus.Success,"You've been entered the system successfully!");
         }
 
-        public User GetUser()
-        {
-            return user;
-        }
-
         private void ApproveEnetered(string action)
         {
-            if (user != null) return;
+            if (MarketUser != null) return;
             if (action.Equals("sign up"))
             {
                 throw new UserException(SignUpStatus.DidntEnterSystem,
@@ -57,8 +52,7 @@ namespace SadnaSrc.UserSpot
 
         private void ApproveGuest(string action)
         {
-            if (user.GetStoreManagerPolicies().Length == 0 
-                && !user.IsRegisteredUser())
+            if (!MarketUser.IsRegisteredUser())
             {
                 return;
             }
@@ -109,7 +103,7 @@ namespace SadnaSrc.UserSpot
                 ApproveSignUp(name,address,password);
                 string encryptedPassword = ToEncryptPassword(password);
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + systemID + " data...");
-                user = userDL.RegisterUser(name, address, encryptedPassword,user.GetCart());
+                MarketUser = userDL.RegisterUser(name, address, encryptedPassword, MarketUser.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + systemID + " sign up to the system has been successfull!");
                 return new UserAnswer(SignInStatus.Success,"Sign up has been successfull!");
             }
@@ -140,8 +134,8 @@ namespace SadnaSrc.UserSpot
                 string encryptedPassword = ToEncryptPassword(password);
                 MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest " 
                                           + systemID +" into the system...");
-                user = userDL.LoadUser(name, encryptedPassword,user.GetCart());
-                systemID = user.SystemID;
+                MarketUser = userDL.LoadUser(name, encryptedPassword, MarketUser.Cart.GetCartStorage());
+                systemID = MarketUser.SystemID;
                 MarketLog.Log("UserSpot", "User " + oldID + " sign in to the system has been successfull!");
                 MarketLog.Log("UserSpot", "User " + oldID + " is now recognized as Registered User " + systemID);
                 return new UserAnswer(SignInStatus.Success, "Sign in has been successful!");
@@ -154,6 +148,21 @@ namespace SadnaSrc.UserSpot
             }
         }
 
+        public void ViewCart()
+        {
+
+        }
+
+        public CartItem[] CheckoutCart()
+        {
+            CartItem[] storage = MarketUser.Cart.GetCartStorage();
+            MarketUser.Cart.EmptyCart();
+            return storage;
+        }
+        public void AddToCart(string store, string product, double unitPrice, string sale, int quantity)
+        {
+            MarketUser.Cart.AddToCart(store,product,unitPrice,sale,quantity);
+        }
         public void CleanGuestSession()
         {
             Synch();
@@ -164,6 +173,12 @@ namespace SadnaSrc.UserSpot
         {
             CleanGuestSession();
             userDL.DeleteUser(systemID);
+        }
+
+        //TODO: delete this
+        public User GetUser()
+        {
+            throw new NotImplementedException("igor dont use this method!");
         }
     }
 }

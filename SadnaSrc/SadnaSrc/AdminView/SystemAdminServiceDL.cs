@@ -38,13 +38,13 @@ namespace SadnaSrc.AdminView
             UpdateTable("Store", "Name = '"+store+"'",new[] {"Status"},new[] {"@stat"},new object[] {"Inactive"});
         }
 
-        public void IsUserExist(int userSystemID)
+        public void IsUserExist(string userName)
         {
-            using (var dbReader = SelectFromTableWithCondition("User", "*", "SystemID = " + userSystemID))
+            using (var dbReader = SelectFromTableWithCondition("User", "*", "Name = " + userName))
             {
                 if (!dbReader.Read())
                 {
-                    throw new AdminException(RemoveUserStatus.NoUserFound,"Couldn't find any User with that ID to remove");
+                    throw new AdminException(RemoveUserStatus.NoUserFound,"Couldn't find any User with that Name to remove");
                 }
             }
         }
@@ -71,9 +71,9 @@ namespace SadnaSrc.AdminView
             }
         }
 
-        public void DeleteUser(int toDeleteID)
+        public void DeleteUser(string userName)
         {
-            DeleteFromTable("User", "SystemID = " + toDeleteID);
+            DeleteFromTable("User", "Name = " + userName);
         }
 
         private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)

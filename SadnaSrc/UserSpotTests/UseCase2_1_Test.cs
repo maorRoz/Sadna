@@ -36,8 +36,8 @@ namespace UserSpotTests
         public void GoodLoginDataTest()
         {
             DoSignUpSignIn("MaorLogin2", "Here 4", "123");
-            object[] loggedUserData = ((RegisteredUser) userServiceSignInSession.GetUser()).ToData();
-            object[] registeredUserData = ((RegisteredUser)userServiceSignUpSession.GetUser()).ToData();
+            object[] loggedUserData = ((RegisteredUser) userServiceSignInSession.MarketUser).ToData();
+            object[] registeredUserData = ((RegisteredUser)userServiceSignUpSession.MarketUser).ToData();
             object[] expectedData = { loggedUserData[0], "MaorLogin2", "Here 4", UserService.GetSecuredPassword("123") };
             Assert.IsTrue(loggedUserData.SequenceEqual(registeredUserData));
             Assert.IsTrue(loggedUserData.SequenceEqual(expectedData));
@@ -115,8 +115,8 @@ namespace UserSpotTests
         public void SignedInUserCartisEmptyTest()
         {
             DoSignUpSignIn("MaorLogin13", "Here 3", "123");
-            RegisteredUser user = (RegisteredUser)userServiceSignInSession.GetUser();
-            Assert.AreEqual(0, user.GetCart().Length);
+            RegisteredUser user = (RegisteredUser)userServiceSignInSession.MarketUser;
+            Assert.AreEqual(0, user.Cart.GetCartStorage().Length);
         }
 
         [TestMethod]
@@ -125,8 +125,8 @@ namespace UserSpotTests
             DoSignUp("MaorLogin14", "Here 3", "123");
             userServiceSignInSession.EnterSystem();
             Assert.AreEqual((int) SignInStatus.Success, userServiceSignInSession.SignIn("MaorLogin14", "123").Status);
-            RegisteredUser user = (RegisteredUser)userServiceSignInSession.GetUser();
-            Assert.AreEqual(0, user.GetStoreManagerPolicies().Length);
+            RegisteredUser user = (RegisteredUser)userServiceSignInSession.MarketUser;
+            Assert.IsFalse(user.HasStorePolicies());
             Assert.IsTrue(user.IsRegisteredUser());
             Assert.IsFalse(user.IsSystemAdmin());
         }
@@ -155,17 +155,18 @@ namespace UserSpotTests
         public void PromoteToAdminTest()
         {
             DoSignUpSignIn("MaorLogin17", "Here 3", "123");
-            RegisteredUser adminUser = (RegisteredUser)userServiceSignInSession.GetUser();
+            RegisteredUser adminUser = (RegisteredUser)userServiceSignInSession.MarketUser;
             object[] expectedData = { adminUser.SystemID, "MaorLogin17", "Here 3", UserService.GetSecuredPassword("123") };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.IsTrue(adminUser.IsRegisteredUser());
             Assert.IsFalse(adminUser.IsSystemAdmin());
-            Assert.AreEqual(0,adminUser.GetStoreManagerPolicies().Length);
+            Assert.IsFalse(adminUser.HasStorePolicies());
             adminUser.PromoteToAdmin();
-            Assert.AreEqual(0, adminUser.GetCart().Length);
+            Assert.AreEqual(0, adminUser.Cart.GetCartStorage().Length);
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.IsTrue(adminUser.IsRegisteredUser());
             Assert.IsTrue(adminUser.IsSystemAdmin());
+            Assert.IsFalse(adminUser.HasStorePolicies());
         }
 
         [TestMethod]
@@ -199,7 +200,13 @@ namespace UserSpotTests
             Assert.AreEqual((int)SignInStatus.NoUserFound, userServiceSignInSession.SignIn("Mkor_Login21", "123").Status);
         }
 
-
+        [TestCleanup]
+        public void UserTestCleanUp()
+        {
+            userServiceSignUpSession?.CleanSession();
+            userServiceSignInSession.CleanSession();
+            MarketYard.CleanSession();
+        }
 
         private void DoSignUpSignIn(string name, string address, string password)
         {
@@ -238,14 +245,6 @@ namespace UserSpotTests
             userServiceSignInSession.EnterSystem();
             Assert.AreEqual((int)SignInStatus.NoUserFound, userServiceSignInSession.SignIn(loginName, loginPassword).Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
-        }
-
-        [TestCleanup]
-        public void UserTestCleanUp()
-        {
-            userServiceSignUpSession?.CleanSession();
-            userServiceSignInSession.CleanSession();
-            MarketYard.CleanSession();
         }
     }
 }

@@ -79,16 +79,37 @@ namespace SadnaSrc.UserSpot
             InsertTable("StatePolicy", "SystemID,State",valuesNames,values);
         }
 
-        public void SaveUserStorePolicy(StoreManagerPolicy policy)
+        private int GetUserNameFromID(string userName)
         {
+            var dbReader = SelectFromTableWithCondition("User","SystemID", "WHERE Name = '" + userName + "'");
+            if (dbReader.Read())
+            {
+                return dbReader.GetInt32(0);
+            }
+
+            throw new UserException(MarketError.DbError,
+                "No user by the name " + userName + " has been found in the db");
+        }
+
+        public void SaveUserStorePolicy(string userName,StoreManagerPolicy policy)
+        {
+            int idOfPromoted = GetUserNameFromID(userName);
             string[] valuesNames = { "@idParam", "@storeParam","@actionParam" };
-            object[] values = { SystemID, policy.Store,policy.GetStoreActionString() };
+            object[] values = { idOfPromoted, policy.Store,policy.GetStoreActionString() };
             InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
         }
- 
-        public void DeleteUserStorePolicy(StoreManagerPolicy policy)
+
+        public void SaveUserStorePolicy(StoreManagerPolicy policy)
         {
-            DeleteFromTable("StoreManagerPolicy","SystemID = "+ SystemID +" AND Store = "+policy.Store
+            string[] valuesNames = { "@idParam", "@storeParam", "@actionParam" };
+            object[] values = { SystemID, policy.Store, policy.GetStoreActionString() };
+            InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
+        }
+
+        public void DeleteUserStorePolicy(string userName, StoreManagerPolicy policy)
+        {
+            int idOfDemoted = GetUserNameFromID(userName);
+            DeleteFromTable("StoreManagerPolicy","SystemID = "+ idOfDemoted + " AND Store = "+policy.Store
                                                  + " AND Action =" + policy.Action);
         }
 
@@ -219,6 +240,11 @@ namespace SadnaSrc.UserSpot
                 password, LoadCartItems(), LoadUserStatePolicy(), LoadUserStorePolicies());
         }
 
+        public void RemoveCart()
+        {
+            DeleteFromTable("CartItem","SystemID = "+SystemID);
+        }
+
         public void SaveCartItem(CartItem[] cart)
         {
             foreach (CartItem item in cart)
@@ -230,7 +256,7 @@ namespace SadnaSrc.UserSpot
 
         public void RemoveCartItem(CartItem item)
         {
-
+            DeleteFromTable("CartItem", item.GetDbIdentifier());
         }
         private CartItem[] LoadCartItems()
         {
@@ -246,9 +272,12 @@ namespace SadnaSrc.UserSpot
             return loadedItems.ToArray();
         }
 
-        public void UpdateCartItemQuantity(int quantity)
+        public void UpdateCartItemQuantity(CartItem item)
         {
-
+            string[] columnNames = { "Quantity", "FinalPrice"};
+            string[] valuesNames = { "@quantity", "@price"};
+            object[] values = { item.Quantity,item.FinalPrice};
+            UpdateTable("CartItem", item.GetDbIdentifier(), columnNames, valuesNames, values);
         }
 
         public void DeleteUser(int toDeleteID)
