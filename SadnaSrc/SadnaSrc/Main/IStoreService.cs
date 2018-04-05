@@ -23,31 +23,31 @@ namespace SadnaSrc.Main
          * Store Managment, handling products
          **/
         MarketAnswer AddProduct(string _name, int _price, string _description, int quantity);
-        MarketAnswer removeProduct(string productName);
-        MarketAnswer editProduct(string productName, string WhatToEdit, string NewValue);
+        MarketAnswer removeProduct(string productID);
+        MarketAnswer editProduct(string productID, string WhatToEdit, string NewValue);
         
         /**
          * Store Managment, handling PurchaseWay
          **/
 
-        MarketAnswer ChangeProductPurchaseWayToImmediate(string productName);
-        MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime StartDate, DateTime EndDate);
+        MarketAnswer ChangeProductPurchaseWayToImmediate(string productID);
+        MarketAnswer ChangeProductPurchaseWayToLottery(string productID, DateTime StartDate, DateTime EndDate);
         /**
          * Store Managment, Discounts
          **/
         //MarketAnswer editDiscount();
 
 
-        MarketAnswer addDiscountToProduct(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, string DiscountType, bool presenteges);
-        MarketAnswer EditDiscount(string productName, string whatToEdit, string NewValue);
-        MarketAnswer removeDiscountFormProduct(string productName);
+        MarketAnswer addDiscountToProduct(string productID, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, string DiscountType, bool presenteges);
+        MarketAnswer EditDiscount(string productID, string whatToEdit, string NewValue);
+        MarketAnswer removeDiscountFromProduct(string productID);
 
         /**
          * Store Managment, Purchase
          **/
-        MarketAnswer MakeALotteryPurchase(string productName, int moeny);
-        MarketAnswer MakeAImmediatePurchase(string productName, int quantity);
-        MarketAnswer getProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity);
+        MarketAnswer MakeALotteryPurchase(string productID, int moeny);
+        MarketAnswer MakeAImmediatePurchase(string productID, int DiscountCode, int quantity);
+        MarketAnswer getProductPriceWithDiscount(string productID, int DiscountCode, int quantity);
         MarketAnswer getStoreProducts();
     }
     public enum StoreEnum
@@ -62,7 +62,8 @@ namespace SadnaSrc.Main
         AddStoreOwnerFail,
         AddStoreManagerFail,
         CloseStoreFail,
-        ChangePurchaseTypeFail
+        ChangePurchaseTypeFail,
+        PurchesFail
     }
 
     public enum PurchaseEnum { IMMEDIATE, LOTTERY };

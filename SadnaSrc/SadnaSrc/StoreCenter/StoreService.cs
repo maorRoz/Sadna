@@ -83,7 +83,7 @@ namespace SadnaSrc.StoreCenter
             if (proxyIHavePremmision(user.GetUser())){
                 return store.PromoteToManager(user.GetUser(), proxyCreateUser(someoneToPromote));
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.AddStoreManagerFail, "you have no premmision to do that");
         }
 
         public MarketAnswer getStoreProducts()
@@ -103,7 +103,7 @@ namespace SadnaSrc.StoreCenter
             {
                 return store.AddProduct(_name, _price, _description, quantity);
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
         public MarketAnswer getProductStockInformation(int ProductID)
@@ -115,81 +115,89 @@ namespace SadnaSrc.StoreCenter
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
-                store.removeProduct(productName);
+                return store.removeProduct(productName);
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
         public MarketAnswer editProduct(string productName, string WhatToEdit, string NewValue)
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
-                store.EditProduct(productName, WhatToEdit, NewValue);
+                return store.EditProduct(productName, WhatToEdit, NewValue);
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productName)
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
-                store.editStockListItem(productName, "P")
+                return store.editStockListItem(productName, "PurchaseWay", "IMMEDIATE");
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
         public MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime StartDate, DateTime EndDate)
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
-                throw new NotImplementedException();
+                return store.editStockListItem(productName, "PurchaseWay", "LOTTERY");
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
         public MarketAnswer addDiscountToProduct(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, string DiscountType, bool presenteges)
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
-                throw new NotImplementedException();
+                return store.addDiscountToProduct(productName, _startDate, _EndDate, _DiscountAmount, DiscountType, presenteges);
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer EditDiscount(string productName, string whatToEdit, string NewValue)
+        public MarketAnswer EditDiscount(string productID, string whatToEdit, string NewValue)
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
-                throw new NotImplementedException();
+                return store.EditDiscount(productID, whatToEdit, NewValue);
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer removeDiscountFormProduct(string productName)
+        public MarketAnswer removeDiscountFromProduct(string productID)
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
-                throw new NotImplementedException();
+                return store.removeDiscountFromProduct(productID);
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
         public MarketAnswer MakeALotteryPurchase(string productName, int moeny)
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
-                throw new NotImplementedException();
+                if (moeny > 0)
+                { 
+                LotteryTicket loti = store.MakeALotteryPurchase(productName, moeny);
+                user.GetUser().Cart.AddToCart(store.SystemId, loti.toString(), moeny, "", 1); //ASK MAOR ABOUT IT
+                return new StoreAnswer(StoreEnum.Success, "lottery ticket sold");
+                }
+                return new StoreAnswer(StoreEnum.PurchesFail, "cannot pay non-positie amount of moeny");
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer MakeAImmediatePurchase(string productName, int quantity)
+        public MarketAnswer MakeAImmediatePurchase(string productName, int discountCode, int quantity)
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
-                throw new NotImplementedException();
+                Product product = store.MakeAImmediatePurchase(productName, quantity);
+                user.GetUser().Cart.AddToCart(store.SystemId, product.SystemId, store.getProductPriceWithDiscountbyDouble(productName, discountCode, quantity), "", quantity);
+                return new StoreAnswer(StoreEnum.Success, "product "+ productName+" sold");
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
         }
 
         public MarketAnswer getProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)

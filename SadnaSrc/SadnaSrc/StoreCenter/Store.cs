@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
     /**
      * this class is describing a single store, the managmnet of all the stores + implementing StoreService is done in StoreCenter
      **/
-    public class Store : IStoreService
+    public class Store
     {
         public string SystemId { get; }
         private Stock stock { get; set; }
@@ -26,7 +26,7 @@ namespace SadnaSrc.StoreCenter
         public Store(User _Owner, string id, StoreService _master)
         {
             SystemId = id;
-            stock = new Stock();
+            stock = new Stock(SystemId);
             OtherOwners = new LinkedList<User>();
             OtherOwners.AddFirst(_Owner);
             Managers = new LinkedList<User>();
@@ -132,12 +132,16 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + currentUser + " is not an owner of the store and can't make " + someoneToPromote + " to a manager");
         }
 
+
         public LinkedList<Product> getAllStoreProducts()
         {
             return stock.getAllProducts();
         }
 
-
+        internal MarketAnswer addDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
+        {
+            throw new NotImplementedException();
+        }
 
         public MarketAnswer CloseStore(User ownerOrSystemAdmin)
         {
@@ -150,6 +154,11 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " is alrady closed");
             }
             return new StoreAnswer(StoreEnum.CloseStoreFail, "user " + ownerOrSystemAdmin + " is not a System admin and not an owner of the store " + SystemId);
+        }
+
+        internal MarketAnswer removeDiscountFromProduct(string productID)
+        {
+            throw new NotImplementedException();
         }
 
         public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
@@ -173,6 +182,11 @@ namespace SadnaSrc.StoreCenter
         {
             Product product = stock.getProductById(productID);
             return pChangeProductPurchaseWay(product, PurchaseEnum.IMMEDIATE, DateTime.Now, DateTime.Now);
+        }
+
+        internal double getProductPriceWithDiscountbyDouble(string productName, int discountCode, int quantity)
+        {
+            throw new NotImplementedException();
         }
 
         public MarketAnswer ChangeProductPurchaseWayToLottery(string productID, DateTime StartDate, DateTime EndDate)
@@ -451,106 +465,6 @@ namespace SadnaSrc.StoreCenter
             if (result == null) { return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
             handler.dataLayer.EditStockInDatabase(stockListItem);
             return result;
-        }
-
-        public MarketAnswer OpenStore()
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer PromoteToOwner(int someoneToPromoteID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer PromoteToManager(int someoneToPromoteID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer CloseStore(int ownerOrSystemAdmin)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer editProductPrice(string productName, int newprice)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer editProductName(string productName, string Name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer editProductDescripiton(string productName, string Desccription)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer addDiscountToProduct_HIDDEN(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer addDiscountToProduct_presenteges_VISIBLE(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer addDiscountToProduct_presenteges_HIDDEN(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer EditDiscountToPrecenteges(string productName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer EditDiscountToNonPrecenteges(string productName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer EditDiscountToHidden(string productName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer EditDiscountToVisible(string productName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer EditDiscountAmount(string productName, int amount)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer EditDiscountStartTime(string productName, DateTime _startDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer EditDiscountEndTime(string productName, DateTime _EndDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer removeDiscountFormProduct(string productName)
-        {
-            throw new NotImplementedException();
-        }
-
-        MarketAnswer IStoreService.MakeALotteryPurchase(string productName, int moeny)
-        {
-            throw new NotImplementedException();
-        }
-
-        MarketAnswer IStoreService.MakeAImmediatePurchase(string productName, int quantity)
-        {
-            throw new NotImplementedException();
         }
     }
 }
