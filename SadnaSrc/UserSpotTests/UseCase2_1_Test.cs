@@ -116,7 +116,7 @@ namespace UserSpotTests
         {
             DoSignUpSignIn("MaorLogin13", "Here 3", "123");
             RegisteredUser user = (RegisteredUser)userServiceSignInSession.MarketUser;
-            Assert.AreEqual(0, user.GetCart().Length);
+            Assert.AreEqual(0, user.Cart.GetCartStorage().Length);
         }
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace UserSpotTests
             userServiceSignInSession.EnterSystem();
             Assert.AreEqual((int) SignInStatus.Success, userServiceSignInSession.SignIn("MaorLogin14", "123").Status);
             RegisteredUser user = (RegisteredUser)userServiceSignInSession.MarketUser;
-            Assert.AreEqual(0, user.GetStoreManagerPolicies().Length);
+            Assert.IsFalse(user.HasStorePolicies());
             Assert.IsTrue(user.IsRegisteredUser());
             Assert.IsFalse(user.IsSystemAdmin());
         }
@@ -160,12 +160,13 @@ namespace UserSpotTests
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.IsTrue(adminUser.IsRegisteredUser());
             Assert.IsFalse(adminUser.IsSystemAdmin());
-            Assert.AreEqual(0,adminUser.GetStoreManagerPolicies().Length);
+            Assert.IsFalse(adminUser.HasStorePolicies());
             adminUser.PromoteToAdmin();
-            Assert.AreEqual(0, adminUser.GetCart().Length);
+            Assert.AreEqual(0, adminUser.Cart.GetCartStorage().Length);
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.IsTrue(adminUser.IsRegisteredUser());
             Assert.IsTrue(adminUser.IsSystemAdmin());
+            Assert.IsFalse(adminUser.HasStorePolicies());
         }
 
         [TestMethod]

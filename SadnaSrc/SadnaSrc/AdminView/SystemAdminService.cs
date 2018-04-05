@@ -11,7 +11,8 @@ namespace SadnaSrc.AdminView
 {
     public class SystemAdminService : ISystemAdminService
     {
-        private int systemID;
+        private int adminSystemID;
+        private string adminUserName;
         private bool _isSystemAdmin;
         private SystemAdminServiceDL adminDL;
         public PurchaseHistory[] LastHistoryReport { get; private set; }
@@ -21,27 +22,12 @@ namespace SadnaSrc.AdminView
             _isSystemAdmin = user.IsSystemAdmin();
             if (_isSystemAdmin)
             {
-                systemID = user.GetAdminSystemID();
+                adminSystemID = user.GetAdminSystemID();
+                adminUserName = user.GetAdminName();
+
             }
             LastHistoryReport = null;
         }
-
-    /*    private void GetSystemAdmin(UserService userService)
-        {
-            User user = userService.MarketUser;
-            _isSystemAdmin = hasEntered(user) && user.IsSystemAdmin();
-
-            if (_isSystemAdmin)
-            {
-                systemID = user.SystemID;
-            }
-        } 
-
-
-        private bool hasEntered(User user)
-        {
-            return user != null;
-        } */
 
         private void ApproveSystemAdmin(string action)
         {
@@ -65,56 +51,56 @@ namespace SadnaSrc.AdminView
             }
         }
 
-        private void ApproveNotSelfTermination(int userSystemID)
+        private void ApproveNotSelfTermination(string userName)
         {
-            if (userSystemID == systemID)
+            if (adminUserName == userName)
             { 
                 throw new AdminException(RemoveUserStatus.SelfTermination, "remove user action has been requested " +
                                                                            "by System Admin on himself!");
             }
         }
 
-        private void RemoveSolelyOwnedStores(int userSystemID)
+        private void RemoveSolelyOwnedStores(string userName)
         {
             string[] solelyOwnedStores = adminDL.FindSolelyOwnedStores();
             foreach (string store in solelyOwnedStores)
             {
-                MarketLog.Log("AdminView", "User " + userSystemID + " found to be a sole Store Owner of '"
-                                           + store + "' store. System Admin " + systemID
+                MarketLog.Log("AdminView", "User " + userName + " found to be a sole Store Owner of '"
+                                           + store + "' store. System Admin " + adminSystemID
                                            + " deactivating therefore store '" + store + "'");
                 adminDL.CloseStore(store);
-                MarketLog.Log("AdminView", "System Admin " + systemID +
+                MarketLog.Log("AdminView", "System Admin " + adminSystemID +
                                            " deactivated store '" + store + "' successfully!");
             }
         }
 
-        public MarketAnswer RemoveUser(int userSystemID)
+        public MarketAnswer RemoveUser(string userName)
         {
-            MarketLog.Log("AdminView", "System Admin " + systemID +
-                                      " attempting to execute remove user operation on User " + userSystemID + "...");
+            MarketLog.Log("AdminView", "System Admin " + adminSystemID +
+                                      " attempting to execute remove user operation on User " + userName + "...");
             try
             {
                 ApproveSystemAdmin("Remove User");
-                ApproveNotSelfTermination(userSystemID);
-                adminDL.IsUserExist(userSystemID);
-                MarketLog.Log("AdminView", "User " + userSystemID +
+                ApproveNotSelfTermination(userName);
+                adminDL.IsUserExist(userName);
+                MarketLog.Log("AdminView", "User " + userName +
                                            " has been found by the system. Removing user's saved cart and profile...");
 
-                adminDL.DeleteUser(userSystemID);
-                MarketLog.Log("AdminView", "System Admin " + systemID +
-                                           " successfully removed User " + userSystemID + " from the system!");
+                adminDL.DeleteUser(userName);
+                MarketLog.Log("AdminView", "System Admin " + adminSystemID +
+                                           " successfully removed User " + userName + " from the system!");
 
-                MarketLog.Log("AdminView", "looking for sole ownership of User "+userSystemID +" on stores...");
-                RemoveSolelyOwnedStores(userSystemID);
+                MarketLog.Log("AdminView", "looking for sole ownership of User "+ userName + " on stores...");
+                RemoveSolelyOwnedStores(userName);
 
-                MarketLog.Log("AdminView", "User " + userSystemID +
+                MarketLog.Log("AdminView", "User " + userName +
                                            " solely owned stores has been deactivated. Operation is " +
                                            "finally completed safely!");
                 return new AdminAnswer(RemoveUserStatus.Success, "Remove user has been successful!");
             }
             catch (AdminException e)
             {
-                MarketLog.Log("AdminView", "System Admin " + systemID + " has failed to remove User "+ userSystemID + 
+                MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to remove User "+ adminSystemID + 
                                            ". Error message has been created!");
                 return new AdminAnswer((RemoveUserStatus)e.Status, e.GetErrorMessage());
             }
@@ -122,7 +108,7 @@ namespace SadnaSrc.AdminView
 
         private MarketAnswer ViewPurchaseHistory(string field, string givenValue)
         {
-            MarketLog.Log("AdminView", "System Admin " + systemID +
+            MarketLog.Log("AdminView", "System Admin " + adminSystemID +
                                        " attempting to view purchase history of " + field + " "+ givenValue + "...");
             try
             {
@@ -131,7 +117,7 @@ namespace SadnaSrc.AdminView
             }
             catch (AdminException e)
             {
-                MarketLog.Log("AdminView", "System Admin " + systemID + " has failed to view purchase history report " +
+                MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to view purchase history report " +
                                            "of " + field + " " + givenValue + ". Error message has been created!");
                 return new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage());
             }
@@ -139,7 +125,7 @@ namespace SadnaSrc.AdminView
         }
         public MarketAnswer ViewPurchaseHistoryByUser(string userName)
         {
-            MarketLog.Log("AdminView", "System Admin " + systemID +
+            MarketLog.Log("AdminView", "System Admin " + adminSystemID +
                                        " attempting to view purchase history of User " + userName + " ...");
             try
             {
@@ -149,7 +135,7 @@ namespace SadnaSrc.AdminView
             }
             catch (AdminException e)
             {
-                MarketLog.Log("AdminView", "System Admin " + systemID + " has failed to view purchase history report " +
+                MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to view purchase history report " +
                                            "of User "+ userName + " . Error message has been created!");
                 return new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage());
             }
@@ -157,7 +143,7 @@ namespace SadnaSrc.AdminView
 
         public MarketAnswer ViewPurchaseHistoryByStore(string storeName)
         {
-            MarketLog.Log("AdminView", "System Admin " + systemID +
+            MarketLog.Log("AdminView", "System Admin " + adminSystemID +
                                        " attempting to view purchase history of Store " + storeName + " ...");
             try
             {
@@ -168,7 +154,7 @@ namespace SadnaSrc.AdminView
             }
             catch (AdminException e)
             {
-                MarketLog.Log("AdminView", "System Admin " + systemID + " has failed to view purchase history report " +
+                MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to view purchase history report " +
                                            "of Store " + storeName + " . Error message has been created!");
                 return new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage());
             }

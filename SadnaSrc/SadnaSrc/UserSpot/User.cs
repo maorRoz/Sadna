@@ -9,7 +9,6 @@ namespace SadnaSrc.UserSpot
     public class User
     {
         protected readonly UserPolicyService PolicyService;
-        protected int systemID;
 
         public CartService Cart { get; }
 
@@ -18,7 +17,7 @@ namespace SadnaSrc.UserSpot
         {
             PolicyService = new UserPolicyService();
             Cart = new CartService(systemID);
-            this.systemID = systemID;
+            SystemID = systemID;
         }
 
         public bool IsRegisteredUser()
@@ -37,18 +36,19 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        public StoreManagerPolicy[] GetStoreManagerPolicies()
+        public bool HasStorePolicies()
         {
-            return PolicyService.StorePolicies.ToArray();
+            return PolicyService.StorePolicies.Count > 0;
         }
 
-        public CartItem[] GetCart()
+        public StoreManagerPolicy[] GetStoreManagerPolicies(string store)
         {
-            return Cart.GetCartStorage();
+            return PolicyService.FilteredStorePolicies(store);
         }
+
         public virtual object[] ToData()
         {
-            object[] ret = {systemID, null, null, null};
+            object[] ret = {SystemID, null, null, null};
             return ret;
         }
     }

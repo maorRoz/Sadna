@@ -54,6 +54,12 @@ namespace SadnaSrc.UserSpot
             }
         }
 
+        public void EmptyCart()
+        {
+            cartStorage.Clear();
+            _userDL.RemoveCart();
+        }
+
         //TODO: Replace the arguments with product class
         public void AddToCart(string store,string product,double unitPrice,string sale,int quantity)
         {

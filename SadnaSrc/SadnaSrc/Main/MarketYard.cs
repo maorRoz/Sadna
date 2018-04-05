@@ -54,7 +54,7 @@ namespace SadnaSrc.Main
 
         public ISystemAdminService GetSystemAdminService(IUserService userService)
         {
-            return new SystemAdminService(new UserAdmin(userService));
+            return new SystemAdminService(new UserAdminHarmony(userService));
         }
 
         public IStoreService GetStoreService(IUserService userService)

@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.OrderPool;
 
-namespace SadnaSrc.UserSpot
+namespace SadnaSrc.MarketHarmony
 {
+    // integration between UserSpot to OrderPool only
     interface IUserBuyer
     {
         OrderItem[] Checkout();

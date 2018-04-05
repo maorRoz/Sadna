@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SadnaSrc.UserSpot
+namespace SadnaSrc.MarketHarmony
 {
     interface IUserShopper
     {
         void AddToCart(/* product */);
+
+        bool AddOwnership(string store);
 
     }
 }

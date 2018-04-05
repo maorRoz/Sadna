@@ -26,7 +26,7 @@ namespace UserSpotTests
         [TestMethod]
         public void GuestHasNoPolicyTest()
         {
-            Assert.AreEqual(0, generatedGuest.GetStoreManagerPolicies().Length);
+            Assert.IsFalse(generatedGuest.HasStorePolicies());
             Assert.IsFalse(generatedGuest.IsRegisteredUser());
 
         }
@@ -41,7 +41,7 @@ namespace UserSpotTests
         [TestMethod]
         public void NewGuestCartEmptyTest()
         {
-            Assert.AreEqual(0, generatedGuest.GetCart().Length);
+            Assert.AreEqual(0, generatedGuest.Cart.GetCartStorage().Length);
         }
 
         [TestCleanup]

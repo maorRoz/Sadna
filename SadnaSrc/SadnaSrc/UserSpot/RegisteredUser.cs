@@ -39,13 +39,18 @@ namespace SadnaSrc.UserSpot
 
         public override object[] ToData()
         {
-            object[] ret = { systemID, Name, Address, password };
+            object[] ret = { SystemID, Name, Address, password };
             return ret;
         }
 
         public void PromoteToAdmin()
         {
             PolicyService.AddStatePolicy(StatePolicy.State.SystemAdmin);
+        }
+
+        public void AddStoreOwnership(string store)
+        {
+            PolicyService.AddStoreOwnership(store);
         }
     }
 }

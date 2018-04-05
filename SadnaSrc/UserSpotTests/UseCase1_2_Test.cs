@@ -87,7 +87,7 @@ namespace UserSpotTests
         {
             DoSignUp("MaorRegister7", "Here 3", "123");
             RegisteredUser registeredUser = (RegisteredUser)userServiceSession.MarketUser;
-            Assert.AreEqual(0,registeredUser.GetCart().Length);
+            Assert.AreEqual(0, registeredUser.Cart.GetCartStorage().Length);
         }
 
         [TestMethod]
@@ -96,12 +96,12 @@ namespace UserSpotTests
             userServiceSession.EnterSystem();
             User user = userServiceSession.MarketUser;
             Assert.IsFalse(user.IsRegisteredUser());
-            Assert.AreEqual(0, user.GetStoreManagerPolicies().Length);
+            Assert.AreEqual(0, user.Cart.GetCartStorage().Length);
             Assert.AreEqual((int) SignUpStatus.Success, userServiceSession.SignUp("MaorRegister8", "Here 3", "123").Status);
             user = userServiceSession.MarketUser;
             Assert.IsFalse(user.IsSystemAdmin());
             Assert.IsTrue(user.IsRegisteredUser());
-            Assert.AreEqual(0, user.GetStoreManagerPolicies().Length);
+            Assert.AreEqual(0, user.Cart.GetCartStorage().Length);
         }
 
         [TestMethod]
@@ -137,11 +137,11 @@ namespace UserSpotTests
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.IsTrue(adminUser.IsRegisteredUser());
             Assert.IsFalse(adminUser.IsSystemAdmin());
-            Assert.AreEqual(0, adminUser.GetStoreManagerPolicies().Length);
+            Assert.IsFalse(adminUser.HasStorePolicies());
             adminUser.PromoteToAdmin();
-            Assert.AreEqual(0, adminUser.GetCart().Length);
+            Assert.AreEqual(0, adminUser.Cart.GetCartStorage().Length);
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
-            Assert.AreEqual(0, adminUser.GetStoreManagerPolicies().Length);
+            Assert.IsFalse(adminUser.HasStorePolicies());
             Assert.IsTrue(adminUser.IsRegisteredUser());
             Assert.IsTrue(adminUser.IsSystemAdmin());
         }

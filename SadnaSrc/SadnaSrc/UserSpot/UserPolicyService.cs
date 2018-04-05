@@ -48,6 +48,26 @@ namespace SadnaSrc.UserSpot
             StatesPolicies.Add(new StatePolicy(state));
         }
 
+        public StoreManagerPolicy[] FilteredStorePolicies(string store)
+        {
+            List<StoreManagerPolicy> storePolicies = new List<StoreManagerPolicy>();
+            foreach (StoreManagerPolicy policy in StorePolicies)
+            {
+                if(policy.Store.Equals(store))
+                storePolicies.Add(policy);
+            }
+
+            return storePolicies.ToArray();
+        }
+
+        public void AddStoreOwnership(string store)
+        {
+            StoreManagerPolicy storeOwnershipPermission =
+                new StoreManagerPolicy(store, StoreManagerPolicy.StoreAction.StoreOwner);
+            StorePolicies.Add(storeOwnershipPermission);
+            _userDL.SaveUserStorePolicy(storeOwnershipPermission);
+        }
+
         public void LoadPolicies(StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions)
         {
             foreach (StatePolicy loadedState in loadedStates)

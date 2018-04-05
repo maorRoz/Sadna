@@ -98,7 +98,14 @@ namespace SadnaSrc.UserSpot
             object[] values = { idOfPromoted, policy.Store,policy.GetStoreActionString() };
             InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
         }
- 
+
+        public void SaveUserStorePolicy(StoreManagerPolicy policy)
+        {
+            string[] valuesNames = { "@idParam", "@storeParam", "@actionParam" };
+            object[] values = { SystemID, policy.Store, policy.GetStoreActionString() };
+            InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
+        }
+
         public void DeleteUserStorePolicy(string userName, StoreManagerPolicy policy)
         {
             int idOfDemoted = GetUserNameFromID(userName);
@@ -231,6 +238,11 @@ namespace SadnaSrc.UserSpot
 
             return new RegisteredUser(SystemID,name,(string) loadedUserIdAndAddress[1],
                 password, LoadCartItems(), LoadUserStatePolicy(), LoadUserStorePolicies());
+        }
+
+        public void RemoveCart()
+        {
+            DeleteFromTable("CartItem","SystemID = "+SystemID);
         }
 
         public void SaveCartItem(CartItem[] cart)
