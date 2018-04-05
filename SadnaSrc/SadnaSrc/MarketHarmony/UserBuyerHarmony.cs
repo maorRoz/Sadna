@@ -20,6 +20,7 @@ namespace SadnaSrc.MarketHarmony
         public OrderItem[] Checkout()
         {
             CartItem[] userCart = _userService.CheckoutCart();
+            //continue this shit and covert it into order items
             return null;
         }
 
