@@ -58,5 +58,14 @@ namespace UserSpotTests
         {
 
         }
+
+        [TestCleanup]
+        public void UserTestCleanUp()
+        {
+            userServiceGuestSession.CleanSession();
+            userServiceRegisteredSession?.CleanSession();
+            userServiceLoggedSession?.CleanSession();
+            MarketYard.CleanSession();
+        }
     }
 }
