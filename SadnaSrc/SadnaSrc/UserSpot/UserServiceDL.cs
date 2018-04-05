@@ -49,8 +49,7 @@ namespace SadnaSrc.UserSpot
             return SystemID;
         }
 
-
-        private bool IsUserNameExist(string name)
+        public bool IsUserNameExist(string name)
         {
             using (var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "'"))
             {
