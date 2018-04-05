@@ -15,27 +15,22 @@ namespace OrderPoolWallaterSupplyPointTests
     public class OrderPoolTest1
     {
         private MarketYard market;
-        private OrderService orderService;
-        private User user;
         private OrderItem item1;
         private OrderItem item2;
         private OrderItem item3;
         private List<int> orderIDs;
         private UserService userService;
         private StoreService storeService;
-        private SupplyService supplyService;
-        private PaymentService paymentService;
+        private OrderService orderService;
+
 
         [TestInitialize]
         public void BuildOrderPool()
         {
-            user = new User(5);
             market = MarketYard.Instance;
             userService = new UserService();
             storeService = new StoreService(userService);
-            supplyService = new SupplyService();
-            paymentService = new PaymentService();
-            orderService= (OrderService)market.GetOrderService(userService, storeService,supplyService,paymentService);
+            orderService= (OrderService)market.GetOrderService(userService, storeService);
             orderService.setUsername("Big Smoke");
             item1= new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
@@ -52,7 +47,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestNewWorldOrder() // the new world order is upon us ... 
         {
-            var o = orderService.CreateOrder();
+            var o = orderService.InitOrder();
             int id = o.GetOrderID();
             orderIDs.Add(id); Assert.AreEqual(1, orderService.getOrders().Count);
         }
@@ -66,7 +61,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestOrderWithOneItem()
         {
-            var o= orderService.CreateOrder();
+            var o= orderService.InitOrder();
             int id = o.GetOrderID();
             orderIDs.Add(id);
             orderService.AddItemToOrder(id, item2);
@@ -77,7 +72,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestOrderWithItems()
         {
-            var o = orderService.CreateOrder();
+            var o = orderService.InitOrder();
             int id = o.GetOrderID();
             orderIDs.Add(id);
 
@@ -89,9 +84,25 @@ namespace OrderPoolWallaterSupplyPointTests
         }
 
         [TestMethod]
+        public void TestDB()
+        {
+            var o = orderService.InitOrder();
+            int id = o.GetOrderID();
+            orderIDs.Add(id);
+
+            orderService.AddItemToOrder(id, item1);
+            orderService.AddItemToOrder(id, item2);
+            orderService.AddItemToOrder(id, item3);
+            
+            orderService.SaveToDB();
+            Assert.AreEqual(25.50,
+                orderService.getOrderFromDB(id).GetPrice());
+        }
+
+        [TestMethod]
         public void TestOrderRemoveItem()
         {
-            var o = orderService.CreateOrder();
+            var o = orderService.InitOrder();
             int id = o.GetOrderID();
             orderIDs.Add(id);
 
@@ -105,10 +116,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            foreach (int i in orderIDs)
-            {
-                orderService.RemoveOrder(i);
-            }
+            orderService.CleanSession();
             userService.CleanSession();
             MarketYard.CleanSession();
         }

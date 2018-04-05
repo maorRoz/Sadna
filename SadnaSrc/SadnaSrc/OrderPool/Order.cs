@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.OrderPool
 {
@@ -40,7 +41,6 @@ namespace SadnaSrc.OrderPool
             _userName = userName;
             _shippingAddress = shippingAddress;
             _items = new List<OrderItem>();
-            //_orderId = new Random().Next(100000, 999999);
             _orderId = orderId;
             _date = DateTime.Today;
         }
@@ -81,7 +81,7 @@ namespace SadnaSrc.OrderPool
         {
             if (getOrderItem(item.GetName(), item.GetStore()) != null)
             {
-                throw new OrderException(0, "Order item is already listed in the order.");
+                throw new OrderException(OrderItemStatus.ItemAlreadyInOrder, "Order item is already listed in the order.");
             }
             else
             {
@@ -94,7 +94,7 @@ namespace SadnaSrc.OrderPool
         {
             if (getOrderItem(item.GetName(), item.GetStore()) == null)
             {
-                throw new OrderException(0, "Order item is not listed in the order.");
+                throw new OrderException(OrderItemStatus.NoOrderItemInOrder, "Order item is not listed in the order.");
             }
             else
             {
@@ -109,7 +109,7 @@ namespace SadnaSrc.OrderPool
             double acc = 0;
             foreach (OrderItem item in _items)
             {
-                acc += item.GetPrice();
+                acc += item.GetPrice()*item.GetQuantity();
             }
 
             _totalPrice = acc;

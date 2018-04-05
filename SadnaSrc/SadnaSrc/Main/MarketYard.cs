@@ -61,21 +61,19 @@ namespace SadnaSrc.Main
             return new StoreService((UserService)userService);
         }
 
-        public IOrderService GetOrderService(IUserService userService, IStoreService storeService,
-            ISupplyService supplyService, IPaymentService paymentService)
+        public IOrderService GetOrderService(IUserService userService, IStoreService storeService)
         {
-           return new OrderService((UserService)userService, (StoreService)storeService,
-               (SupplyService)supplyService, (PaymentService)paymentService);
+            return new OrderService((UserService) userService, (StoreService) storeService);
         }
 
-        public IPaymentService GetPaymentService()
+        public IPaymentService GetPaymentService(IOrderService orderService)
         {
-            return new PaymentService();
+            return new PaymentService((OrderService)orderService);
         }
 
-        public ISupplyService GetSupplyService()
+        public ISupplyService GetSupplyService(IOrderService orderService)
         {
-            return new SupplyService();
+            return new SupplyService((OrderService)orderService);
         }
 
         public static void CleanSession()
