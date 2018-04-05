@@ -76,6 +76,12 @@ namespace SadnaSrc.StoreCenter
         {
             return item.product.equal(_product);
         }
+
+        internal StoreAnswer addDiscountToProduct(Product p, Discount discount)
+        {
+            throw new NotImplementedException();
+        }
+
         private bool CheckIfAvailable(Product _product, int _quantity)
         {
             StockListItem item = findByProduct(_product);

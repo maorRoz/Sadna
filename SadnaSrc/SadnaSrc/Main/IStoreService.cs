@@ -38,7 +38,8 @@ namespace SadnaSrc.Main
         //MarketAnswer editDiscount();
 
 
-        MarketAnswer addDiscountToProduct(string productID, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, string DiscountType, bool presenteges);
+        MarketAnswer addDiscountToProduct(string productID, DateTime _startDate, DateTime _EndDate, 
+            int _DiscountAmount,string DiscountType, bool presenteges);
         MarketAnswer EditDiscount(string productID, string whatToEdit, string NewValue);
         MarketAnswer removeDiscountFromProduct(string productID);
 

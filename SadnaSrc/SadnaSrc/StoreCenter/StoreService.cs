@@ -8,12 +8,6 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.StoreCenter
 {
-    /**
-     * this class handles the stores, Adding Stores, and so on. 
-     * it will hold the connection to the DB
-     * it will hold the logger
-     * this is the gateway from the system to the StoreCenter Packege
-     **/
     public class StoreService : IStoreService
     {
 
@@ -178,10 +172,14 @@ namespace SadnaSrc.StoreCenter
         {
             if (proxyIHavePremmision(user.GetUser()))
             {
+                Product product = store.getProductById(productName);
+                if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
                 if (moeny > 0)
                 { 
                 LotteryTicket loti = store.MakeALotteryPurchase(productName, moeny);
-                user.GetUser().Cart.AddToCart(store.SystemId, loti.toString(), moeny, "", 1); //ASK MAOR ABOUT IT
+                    if (loti==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
+                    if (!store.canPurchaseLottery(product,moeny)) { return new StoreAnswer(StoreEnum.PurchesFail, "purching lottery ticket faild"); }
+                    user.GetUser().Cart.AddToCart(store.SystemId, loti.toString(), moeny, "", 1); //ASK MAOR ABOUT IT                    
                 return new StoreAnswer(StoreEnum.Success, "lottery ticket sold");
                 }
                 return new StoreAnswer(StoreEnum.PurchesFail, "cannot pay non-positie amount of moeny");
@@ -194,7 +192,11 @@ namespace SadnaSrc.StoreCenter
             if (proxyIHavePremmision(user.GetUser()))
             {
                 Product product = store.MakeAImmediatePurchase(productName, quantity);
-                user.GetUser().Cart.AddToCart(store.SystemId, product.SystemId, store.getProductPriceWithDiscountbyDouble(productName, discountCode, quantity), "", quantity);
+                if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
+                double price = store.getProductPriceWithDiscountbyDouble(productName, discountCode, quantity);
+                if (price==-1) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
+                user.GetUser().Cart.AddToCart(store.SystemId, product.SystemId, price, "", quantity); //ASK MAOR ABOUT IT
+                store.updateQuanityAfterPurches(product, quantity);
                 return new StoreAnswer(StoreEnum.Success, "product "+ productName+" sold");
             }
             return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
