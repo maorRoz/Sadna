@@ -10,7 +10,9 @@ namespace SadnaSrc.MarketHarmony
     //integration between UserSpot to StoreCenter for store managing
     interface IUserSeller
     {
-        void Promote(string userName, StoreManagerPolicy.StoreAction [] permission);
+        void Promote(string userName, string permission);
+
+        bool IsStoreOwner();
 
         bool CanPromoteStoreAdmin();
 

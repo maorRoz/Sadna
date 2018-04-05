@@ -18,8 +18,17 @@ namespace SadnaSrc.MarketHarmony
             policies = ((UserService) userService).MarketUser.GetStoreManagerPolicies(store);
         }
 
+        public void Promote(string userName, string permissions)
+        {
+            List<StoreManagerPolicy.StoreAction> actions = new List<StoreManagerPolicy.StoreAction>(); 
+            foreach(var permission in permissions.Split(','))
+            {
+                actions.Add(StoreManagerPolicy.GetActionFromString(permission));
+            }
+            PromoteStorePolicies(userName, actions.ToArray());
+        }
 
-        public void Promote(string userName, StoreManagerPolicy.StoreAction[] permissions)
+        private void PromoteStorePolicies(string userName, StoreManagerPolicy.StoreAction[] permissions)
         {
             UserPolicyService.PromoteStorePolicies(userName, _store, permissions);
         }
@@ -36,7 +45,7 @@ namespace SadnaSrc.MarketHarmony
 
             return false;
         }
-        private bool IsStoreOwner()
+        public bool IsStoreOwner()
         {
             return SearchPermission(StoreManagerPolicy.StoreAction.StoreOwner);
         }
