@@ -302,9 +302,10 @@ namespace SadnaSrc.StoreCenter
             return null;
         }
      
-        public double getProductPrice(string _product, int _DiscountCode, int _quantity)
+        public MarketAnswer getProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
         {
-            return stock.CalculateSingleItemPrice(stock.getProductById(_product), _DiscountCode, _quantity);
+            double result = stock.CalculateSingleItemPrice(stock.getProductById(_product), _DiscountCode, _quantity);
+            return new StoreAnswer(StoreEnum.Success, "" + result);
         }
         public LotteryTicket DoLottery(string product)
         {
@@ -319,26 +320,20 @@ namespace SadnaSrc.StoreCenter
             }
             return result;
         }
-        public LinkedList<string> ViewPurchaseHistory()
-        {
-            return history;
-        }
 
         public bool canPurchaseImmediate(Product product, int quantity)
         {
-            return (stock.Quantity(product) >= quantity);
+            Stock.StockListItem SLI = stock.findstockListItembyProductID(product.SystemId);
+            return (SLI.quantity >= quantity);
         }
 
         public bool canPurchaseLottery(Product product, int amountOfMoney)
         {
-            return ((stock.getProductPurchaseWay(product) == PurchaseEnum.LOTTERY) &&
-                    (stock.Quantity(product) > 0) &&
+            Stock.StockListItem SLI = stock.findstockListItembyProductID(product.SystemId);
+            return ((SLI.PurchaseWay == PurchaseEnum.LOTTERY) &&
+                    (SLI.quantity > 0) &&
                     (getLotterySale(product) != null) &&
                     (getLotterySale(product).CanPurchase(amountOfMoney)));
-        }
-        public string ToString()
-        {
-            return "storeId: " + SystemId;
         }
 
         public LinkedList<string> ViewPurchesHistory()

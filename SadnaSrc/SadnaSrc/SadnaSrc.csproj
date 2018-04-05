@@ -72,7 +72,6 @@
     <Compile Include="AdminView\AdminAnswer.cs" />
     <Compile Include="AdminView\SystemAdminServiceDL.cs" />
     <Compile Include="AdminView\AdminException.cs" />
-    <Compile Include="Main\IStore.cs" />
     <Compile Include="Main\IOrderService.cs" />
     <Compile Include="Main\IPaymentService.cs" />
     <Compile Include="Main\IStoreService.cs" />

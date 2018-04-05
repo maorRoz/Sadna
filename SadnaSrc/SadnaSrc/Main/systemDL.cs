@@ -191,7 +191,7 @@ namespace SadnaSrc.Main
         {
             return @"CREATE TABLE IF NOT EXISTS [Discount] (
                                     [DiscountCode]     TEXT,
-                                    [DiscountType]     INTEGER,
+                                    [DiscountType]     TEXT,
                                     [StartDate]     TEXT,
                                     [EndDate]     TEXT,
                                     [DiscountAmount]     INTEGER,
@@ -206,7 +206,7 @@ namespace SadnaSrc.Main
                                     [ProductSystemID]    TEXT,
                                     [quantity]    INTEGER,
                                     [discount]  TEXT,
-                                    [PurchaseWay] INTEGER,
+                                    [PurchaseWay] TEXT, CHECK (PurchaseWay IN ('IMMIDIATE', 'LOTTERY')),
                                     PRIMARY KEY([StockID]),
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE,
                                     FOREIGN KEY([discount]) REFERENCES [Discount]([DiscountCode]) ON DELETE CASCADE

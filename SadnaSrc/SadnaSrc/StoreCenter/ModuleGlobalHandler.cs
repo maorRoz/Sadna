@@ -47,7 +47,7 @@ namespace SadnaSrc.StoreCenter
         {
             if (purchaseEnum == PurchaseEnum.IMMEDIATE) return "IMMIDIATE";
             if (purchaseEnum == PurchaseEnum.LOTTERY) return "LOTTERY";
-            return "PRODUCTNOTFOUND";
+            throw new StoreException(1, "Enum value not exists");
         }
         internal discountTypeEnum GetdiscountTypeEnumString(String astring)
         {
@@ -55,7 +55,7 @@ namespace SadnaSrc.StoreCenter
                 return discountTypeEnum.HIDDEN;
             if (astring == "VISIBLE")
                 return discountTypeEnum.VISIBLE;
-            throw new StoreException(1, "Enum not exists");
+            throw new StoreException(1, "Enum value not exists");
         }
         internal PurchaseEnum GetPurchaseEnumString(String astring)
         {
@@ -63,8 +63,6 @@ namespace SadnaSrc.StoreCenter
                 return PurchaseEnum.IMMEDIATE;
             if (astring == "LOTTERY")
                 return PurchaseEnum.LOTTERY;
-            if (astring == "PRODUCTNOTFOUND")
-                return PurchaseEnum.PRODUCTNOTFOUND;
             throw new StoreException(1, "Enum not exists");
         }
 
