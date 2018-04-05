@@ -33,18 +33,14 @@ namespace SadnaSrc.UserSpot
             _systemID = systemID;
         }
 
-        public void IncreaseQuantity(int quantity)
+        public void ChangeQuantity(int quantity)
         {
-            Quantity += quantity;
-        }
-
-        public void DecreaseQuantity(int quantity)
-        {
-            if (quantity >= Quantity)
+            if (Quantity + quantity <= 0)
             {
-                throw new UserException(MarketError.LogicError,"Cannot hold quantity of zero or negative value in cart item");
+                throw new UserException(MarketError.LogicError, "Cannot hold quantity of zero or negative value in cart item");
             }
-            Quantity -= quantity;
+            Quantity += quantity;
+           
         }
 
         public object[] ToData()
@@ -73,6 +69,11 @@ namespace SadnaSrc.UserSpot
         {
             return obj.Store.Equals(Store) && obj.Name.Equals(Name) && obj.UnitPrice == UnitPrice &&
                    obj.Sale.Equals(Sale);
+        }
+
+        public bool Equals(string store, string name, double unitPrice, string sale)
+        {
+            return Store.Equals(store) && Name.Equals(name) && UnitPrice == unitPrice && Sale.Equals(sale);
         }
         public override int GetHashCode()
         {

@@ -36,9 +36,10 @@ namespace SadnaSrc.UserSpot
         }
         public CartItem SearchInCart(string store, string product, double unitPrice, string sale)
         {
+
             foreach (CartItem item in cartStorage)
             {
-                if (item.Equals(new CartItem(0, product, store, 0, unitPrice, sale)))
+                if (item.Equals(store,product,unitPrice,sale))
                 {
                     return item;
                 }
@@ -66,7 +67,7 @@ namespace SadnaSrc.UserSpot
             CartItem toAdd = new CartItem(_systemID, product,store, quantity, unitPrice, sale);
             if (cartStorage.Contains(toAdd))
             {
-                IncreaseCartItem(store,product,unitPrice,sale, quantity);
+                EditCartItem(store,product,unitPrice,sale, quantity);
             }
             else
             {
@@ -78,54 +79,30 @@ namespace SadnaSrc.UserSpot
             }            
         }
 
-        public void IncreaseCartItem(string store, string product,double unitPrice, string sale, int quantity)
+        private void EditCartItem(string store, string product, double unitPrice, string sale, int quantity)
         {
-            CartItem found = PopFromCart(store, product,unitPrice,sale);
-            found.IncreaseQuantity(quantity);
-            cartStorage.Add(found);
-            if (_toSave)
+            foreach (CartItem item in cartStorage)
             {
-                _userDL.UpdateCartItemQuantity(found);
-            }
-        }
-
-        public void DecreaseCartItem(string store, string product, double unitPrice, string sale, int quantity)
-        {
-            CartItem found = PopFromCart(store, product, unitPrice, sale);
-            found.DecreaseQuantity(quantity);
-            cartStorage.Add(found);
-            if (_toSave)
-            {
-                _userDL.UpdateCartItemQuantity(found);
+                if (!item.Equals(store, product, unitPrice, sale)) {continue;}
+                item.ChangeQuantity(quantity);
+                if (_toSave)
+                {
+                    _userDL.UpdateCartItemQuantity(item);
+                }
             }
         }
 
         public void RemoveFromCart(string store,string product, double unitPrice, string sale)
         {
-            CartItem found = PopFromCart(store, product, unitPrice, sale);
-            if (_toSave)
+            foreach (CartItem item in cartStorage)
             {
-                _userDL.RemoveCartItem(found);
+                if (!item.Equals(store, product, unitPrice, sale)) { continue; }
+                if (_toSave)
+                {
+                    _userDL.RemoveCartItem(item);
+                }
             }
         }
 
-        private CartItem PopFromCart(string store, string product, double unitPrice, string sale)
-        {
-            CartItem ret = null;
-            foreach (CartItem item in cartStorage)
-            {
-                if (item.Equals(new CartItem(0, product, store, 0, unitPrice, sale)))
-                {
-                    ret = item;
-                    break;
-                }
-            }
-            if (ret == null)
-            {
-                throw new UserException(MarketError.LogicError,"There is no cart item to be modified");
-            }
-            cartStorage.Remove(ret);
-            return ret;
-        }
     }
 }
