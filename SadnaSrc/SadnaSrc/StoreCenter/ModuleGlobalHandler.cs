@@ -1,5 +1,6 @@
 ﻿using SadnaSrc.Main;
 using SadnaSrc.StoreCenter;
+using SadnaSrc.UserSpot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,31 +9,37 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class ModuleGlobalHandler
+    public class ModuleGlobalHandler : OutsideModuleService
     {
         static ModuleGlobalHandler instance;
         int StoreIdCounter;
         int globalProductID;
         int globalDiscountCode;
         int globalLotteryID;
-        internal LinkedList<Store> allStores { get; set; }
+      //  internal LinkedList<Store> allStores { get; set; }
         internal StoreDL dataLayer { get; }
         public static ModuleGlobalHandler getInstance()
         {
-            if (instance==null) {
+            if (instance == null)
+            {
                 instance = new ModuleGlobalHandler();
                 return instance;
-             }
+            }
             return instance;
         }
         private ModuleGlobalHandler()
         {
-            allStores = new LinkedList<Store>();
+        //    allStores = new LinkedList<Store>();
             StoreIdCounter = 0;
             globalProductID = 0;
             globalDiscountCode = 0;
             globalLotteryID = 0;
             dataLayer = new StoreDL();
+        }
+
+        internal void AddStore(Store temp)
+        {
+            throw new NotImplementedException();
         }
 
         internal string PrintEnum(discountTypeEnum type)
@@ -74,26 +81,73 @@ namespace SadnaSrc.StoreCenter
         {
             int temp = globalProductID;
             globalProductID++;
-            return "P"+temp;
+            return "P" + temp;
         }
         internal string getDiscountCode()
         {
             int temp = globalDiscountCode;
             globalDiscountCode++;
-            return "D"+temp;
+            return "D" + temp;
         }
         internal string getNextStoreId()
         {
             int temp = StoreIdCounter;
             StoreIdCounter++;
-            return "S"+temp;
+            return "S" + temp;
         }
         internal string getLottyerID()
         {
             int temp = globalLotteryID;
             globalLotteryID++;
-            return "L"+temp;
+            return "L" + temp;
         }
 
+        public LinkedList<Store> getAllUserStores(User user) // this implementation will be change after maor finish his work
+        {
+            LinkedList<Store> AllStores = StoreDL.getAllActiveStores();
+            LinkedList<Store> result = new LinkedList<Store>();
+            foreach (Store store in AllStores)
+            {
+                if (store.IsOwner(user))
+                {
+                    result.AddLast(store);
+                }
+            }
+            return result;
+        }
+
+        public LinkedList<Store> getAllStores()
+        {
+            LinkedList<Store> AllStores = StoreDL.getAllActiveStores();
+            return AllStores;
+        }
+
+        
+        public Store getStoreByID(int ID)
+        {
+            return getStoreByID("S" + ID);
+        }
+        public Store getStoreByID(string ID)
+        {
+            LinkedList<Store> AllStores = StoreDL.getAllActiveStores();
+            foreach (Store store in AllStores)
+            {
+                if (store.SystemId.Equals(ID))
+                {
+                    return store;
+                }
+            }
+            return null;
+        }
+        public LinkedList<Product> getAllMarketProducts()
+        {
+            LinkedList<Store> AllStores = StoreDL.getAllActiveStores();
+            LinkedList<Product> result = new LinkedList<Product>();
+            foreach (Store store in AllStores)
+            {
+                store.addAllProductsToExistingList(result);
+            }
+            return result;
+        }
     }
 }

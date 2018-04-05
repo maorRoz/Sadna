@@ -15,19 +15,17 @@ namespace SadnaSrc.Main
         **/
         MarketAnswer PromoteToOwner(int someoneToPromoteID);
         MarketAnswer PromoteToManager(int someoneToPromoteID);
-        MarketAnswer CloseStore(int ownerOrSystemAdmin);
-
+        MarketAnswer getProductStockInformation(int ProductID);
+        MarketAnswer CloseStore();
+        
 
         /**
          * Store Managment, handling products
          **/
         MarketAnswer AddProduct(string _name, int _price, string _description, int quantity);
-        MarketAnswer IncreaseProductQuantity(string productName, int quantity);
         MarketAnswer removeProduct(string productName);
-        MarketAnswer editProductPrice(string productName, int newprice);
-        MarketAnswer editProductName(string productName, String Name);
-        MarketAnswer editProductDescripiton(string productName, String Desccription);
-
+        MarketAnswer editProduct(string productName, string WhatToEdit, string NewValue);
+        
         /**
          * Store Managment, handling PurchaseWay
          **/
@@ -40,17 +38,8 @@ namespace SadnaSrc.Main
         //MarketAnswer editDiscount();
 
 
-        MarketAnswer addDiscountToProduct_VISIBLE(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
-        MarketAnswer addDiscountToProduct_HIDDEN(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
-        MarketAnswer addDiscountToProduct_presenteges_VISIBLE(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
-        MarketAnswer addDiscountToProduct_presenteges_HIDDEN(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount);
-        MarketAnswer EditDiscountToPrecenteges(string productName);
-        MarketAnswer EditDiscountToNonPrecenteges(string productName);
-        MarketAnswer EditDiscountToHidden(string productName);
-        MarketAnswer EditDiscountToVisible(string productName);
-        MarketAnswer EditDiscountAmount(string productName, int amount);
-        MarketAnswer EditDiscountStartTime(string productName, DateTime _startDate);
-        MarketAnswer EditDiscountEndTime(string productName, DateTime _EndDate);
+        MarketAnswer addDiscountToProduct(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, string DiscountType, bool presenteges);
+        MarketAnswer EditDiscount(string productName, string whatToEdit, string NewValue);
         MarketAnswer removeDiscountFormProduct(string productName);
 
         /**
@@ -59,6 +48,7 @@ namespace SadnaSrc.Main
         MarketAnswer MakeALotteryPurchase(string productName, int moeny);
         MarketAnswer MakeAImmediatePurchase(string productName, int quantity);
         MarketAnswer getProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity);
+        MarketAnswer getStoreProducts();
     }
     public enum StoreEnum
     {

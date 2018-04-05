@@ -86,5 +86,10 @@ namespace SadnaSrc.StoreCenter
         {
             throw new NotImplementedException();
         }
+
+        internal static LinkedList<Store> getAllActiveStores() // all active stores
+        {
+            throw new NotImplementedException();
+        }
     }
 }

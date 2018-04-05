@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
     /**
      * this class is describing a single store, the managmnet of all the stores + implementing StoreService is done in StoreCenter
      **/
-    public class Store : IStore
+    public class Store : IStoreService
     {
         public string SystemId { get; }
         private Stock stock { get; set; }
@@ -94,6 +94,11 @@ namespace SadnaSrc.StoreCenter
             }
             return stock.addPurchaseWayToProduct(p, Purchase);
         }
+        
+        internal LinkedList<Product> getAllProducts()
+        {
+            throw new NotImplementedException();
+        }
 
         public MarketAnswer PromoteToOwner(User currentUser, User someoneToPromote)
         {
@@ -106,6 +111,11 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + someoneToPromote + " is Already a owner of the store " + SystemId);
             }
             return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + currentUser + " is not an owner of the store and can't make " + someoneToPromote + " to an owner");
+        }
+
+        internal MarketAnswer getProductStockInformation(int productID)
+        {
+            throw new NotImplementedException();
         }
 
         public MarketAnswer PromoteToManager(User currentUser, User someoneToPromote)
@@ -443,6 +453,105 @@ namespace SadnaSrc.StoreCenter
             return result;
         }
 
+        public MarketAnswer OpenStore()
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer PromoteToOwner(int someoneToPromoteID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer PromoteToManager(int someoneToPromoteID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer CloseStore(int ownerOrSystemAdmin)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer editProductPrice(string productName, int newprice)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer editProductName(string productName, string Name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer editProductDescripiton(string productName, string Desccription)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer addDiscountToProduct_HIDDEN(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer addDiscountToProduct_presenteges_VISIBLE(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer addDiscountToProduct_presenteges_HIDDEN(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditDiscountToPrecenteges(string productName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditDiscountToNonPrecenteges(string productName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditDiscountToHidden(string productName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditDiscountToVisible(string productName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditDiscountAmount(string productName, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditDiscountStartTime(string productName, DateTime _startDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditDiscountEndTime(string productName, DateTime _EndDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer removeDiscountFormProduct(string productName)
+        {
+            throw new NotImplementedException();
+        }
+
+        MarketAnswer IStoreService.MakeALotteryPurchase(string productName, int moeny)
+        {
+            throw new NotImplementedException();
+        }
+
+        MarketAnswer IStoreService.MakeAImmediatePurchase(string productName, int quantity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

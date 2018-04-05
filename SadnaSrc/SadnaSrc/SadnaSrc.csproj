@@ -89,6 +89,7 @@
     <Compile Include="OrderPool\OrderService.cs" />
     <Compile Include="OrderPool\PurchaseHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreCenter\OutsideModuleService.cs" />
     <Compile Include="StoreCenter\LotteryTicket.cs" />
     <Compile Include="StoreCenter\LotterySaleManagmentTicket.cs" />
     <Compile Include="StoreCenter\Discount.cs" />
@@ -100,7 +101,6 @@
     <Compile Include="StoreCenter\StoreDL.cs" />
     <Compile Include="StoreCenter\StoreException.cs" />
     <Compile Include="StoreCenter\StoreService.cs" />
-    <Compile Include="StoreCenter\UserSession.cs" />
     <Compile Include="SupplyPoint\SupplyException.cs" />
     <Compile Include="SupplyPoint\SupplyPoint.cs" />
     <Compile Include="SupplyPoint\SupplyService.cs" />
