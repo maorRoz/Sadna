@@ -72,6 +72,21 @@ namespace SadnaSrc.OrderPool
             return null;
         }
 
+        public List<OrderItem> FindOrderItemsFromStore(string store)
+        {
+            List<OrderItem> res = new List<OrderItem>();
+            var dbReader = SelectFromTableWithCondition("OrderItem", "*", "Store = '" + store + "'");
+            while (dbReader.Read())
+            {
+                if (dbReader.GetValue(0) != null)
+                {
+                    res.Add(new OrderItem(dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4)));
+
+                }
+            }
+            return res;
+        }
+
         public void AddOrder(Order order)
         {
             string[] valuesNames = { "@orderidParam", "@nameParam", "@addressParam", "@priceParam" , "@dateParam" };

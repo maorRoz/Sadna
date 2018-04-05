@@ -15,7 +15,7 @@ namespace SadnaSrc.Walleter
         private readonly OrderService _orderService;
         private PaymentSystem sock;
 
-        public PaymentService(UserService userService, OrderService orderService)
+        public PaymentService(OrderService orderService)
         {
             _orderService = orderService;
         }
@@ -53,15 +53,15 @@ namespace SadnaSrc.Walleter
             int x;
             for (int i = 0; i < 4; i++)
             {
-                if (details[i].Length != 4 || !Int32.TryParse(details[i],out x) || x < 0)
+                if (details.ElementAt(i).Length != 4 || !Int32.TryParse(details.ElementAt(i),out x) || x < 0)
                 {
                     return false;
                 }
             }
 
-            if (details[4].Length != 2 || !Int32.TryParse(details[4], out x) || x > 12 || x < 0) return false;
-            if (details[5].Length != 2 || !Int32.TryParse(details[5], out x) || x < 0) return false;
-            if (details[6].Length != 3 || !Int32.TryParse(details[6], out x) || x < 0) return false;
+            if (details.ElementAt(4).Length != 2 || !Int32.TryParse(details.ElementAt(4), out x) || x > 12 || x < 0) return false;
+            if (details.ElementAt(5).Length != 2 || !Int32.TryParse(details.ElementAt(5), out x) || x < 0) return false;
+            if (details.ElementAt(6).Length != 3 || !Int32.TryParse(details.ElementAt(6), out x) || x < 0) return false;
             return true;
         }
 

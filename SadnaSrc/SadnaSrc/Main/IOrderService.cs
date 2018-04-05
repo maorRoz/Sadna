@@ -14,9 +14,9 @@ namespace SadnaSrc.Main
         MarketAnswer CreateOrder(out int orderId);  
         MarketAnswer RemoveOrder(int orderId);
 
-        MarketAnswer AddItemToOrder(int orderID, OrderItem item);
+        MarketAnswer AddItemToOrder(int orderID, string store, string name, double price, int quantity);
         MarketAnswer RemoveItemFromOrder(int orderID, string store, string name);
-        
+
 
     }
 

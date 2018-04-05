@@ -18,7 +18,7 @@ namespace SadnaSrc.SupplyPoint
         private OrderService _orderService;
         private SupplySystem sock = null;
 
-        public SupplyService(UserService userService,OrderService orderService)
+        public SupplyService(OrderService orderService)
         {
             _orderService = orderService;
         }

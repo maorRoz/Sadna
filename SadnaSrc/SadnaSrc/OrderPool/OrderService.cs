@@ -18,7 +18,8 @@ namespace SadnaSrc.OrderPool
         private string _userName;
         private readonly OrderPoolDL _orderDL;
         private List<Order> _orders;
-
+        private UserService _userService;
+        private StoreService _storeService;
         public string getUsername() {  return _userName;}
         public List<Order> getOrders() { return  _orders; }
 
@@ -28,6 +29,9 @@ namespace SadnaSrc.OrderPool
         public OrderService(UserService userService, StoreService storeService)
         {
             _orders= new List<Order>();
+            _userService = userService;
+            _storeService = storeService;
+
             User user = userService.GetUser();
             _userName = "Guest";
             if (user != null && user.IsRegisteredUser())
@@ -35,6 +39,7 @@ namespace SadnaSrc.OrderPool
                 _userName = ((RegisteredUser) user).Name;
             }
             _orderDL = new OrderPoolDL();
+            
         }
         
         public Order InitOrder(OrderItem[] items)
@@ -148,10 +153,10 @@ namespace SadnaSrc.OrderPool
             throw new OrderException(OrderStatus.NoOrderWithID, "Failed, No Order with the specific ID.");
         }
 
-        public MarketAnswer AddItemToOrder(int orderID, OrderItem item)
+        public MarketAnswer AddItemToOrder(int orderID, string store, string name, double price, int quantity)
         {
             var order = getOrder(orderID);
-            order.AddOrderItem(item);
+            order.AddOrderItem(new OrderItem(store, name, price, quantity));
             MarketLog.Log("OrderPool", "User " + _userName + " successfully added an order Item to order ID: " + orderID);
             return new OrderAnswer(OrderItemStatus.Success, "Success, you added an order Item to order ID: " + orderID);
         }
