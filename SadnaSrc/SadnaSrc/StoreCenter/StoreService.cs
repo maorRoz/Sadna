@@ -45,7 +45,7 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer CloseStore()
         {
             if (proxyIHavePremmision(user.GetUser())){
-                return store.CloseStore(user.GetUser());
+                return store.CloseStore();
             }
             return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
         }
@@ -56,7 +56,7 @@ namespace SadnaSrc.StoreCenter
                 Store other = global.getStoreByID(storeString);
 
                 //Need Maor function here!
-                return other.CloseStore(proxyCreateUser(ownerOrSystemAdmin));
+                return other.CloseStore();
             }
             return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
         }
@@ -205,6 +205,11 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer getProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
         {
             return store.getProductPriceWithDiscount(_product, _DiscountCode, _quantity);
+        }
+
+        public MarketAnswer setManagersActions(string otherUser, string actions)
+        {
+            throw new NotImplementedException(); //Ask Maor about it
         }
     }
 }

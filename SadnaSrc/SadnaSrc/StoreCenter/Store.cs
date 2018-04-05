@@ -79,17 +79,8 @@ namespace SadnaSrc.StoreCenter
 
 
         public MarketAnswer PromoteToManager(User currentUser, User someoneToPromote)
-        {
-            if (IsOwner(currentUser))
-            {
-                if (!Managers.Contains(someoneToPromote))
-                {
-                    Managers.AddLast(someoneToPromote);
-                    return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a owner of store " + SystemId);
-                }
-                return new StoreAnswer(StoreEnum.AddStoreManagerFail, "user " + someoneToPromote + " is Already a manager of the store " + SystemId);
-            }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "user " + currentUser + " is not an owner of the store and can't make " + someoneToPromote + " to a manager");
+        {    
+               return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a owner of store " + SystemId);
         }
 
 
@@ -98,41 +89,29 @@ namespace SadnaSrc.StoreCenter
             return stock.getAllProducts();
         }
 
-        public MarketAnswer CloseStore(User ownerOrSystemAdmin)
+        public MarketAnswer CloseStore()
         {
-            if (IsOwner(ownerOrSystemAdmin)) {
                 if (isActive)
                 {
                     isActive = false;
                     return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
                 }
                 return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " is alrady closed");
-            }
-            return new StoreAnswer(StoreEnum.CloseStoreFail, "user " + ownerOrSystemAdmin + " is not a System admin and not an owner of the store " + SystemId);
         }
 
 
         public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
         {
-            Product P = new Product(master.getProductID(), _name, _price, _description);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            Product P = new Product(handler.getProductID(), _name, _price, _description);
             return stock.addProductToStock(P, quantity);
-        }
-
-        public MarketAnswer IncreaseProductQuantity(string productID, int quantity)
-        {
-            Product product = stock.getProductById(productID);
-            return stock.addProductToStock(product, quantity);
         }
 
         public MarketAnswer removeProduct(string productID)
         {
             Product product = stock.getProductById(productID);
+            if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no Such Product"); }
             return stock.removeProductFromStock(product);
-        }
-        public MarketAnswer ChangeProductPurchaseWayToImmediate(string productID)
-        {
-            Product product = stock.getProductById(productID);
-            return pChangeProductPurchaseWay(product, PurchaseEnum.IMMEDIATE, DateTime.Now, DateTime.Now);
         }
 
         internal double getProductPriceWithDiscountbyDouble(string productName, int discountCode, int quantity)
@@ -150,23 +129,12 @@ namespace SadnaSrc.StoreCenter
         {
             return stock.getProductById(ID);
         }
-        public Discount getProductDiscountByProductID(string ID)//will return null if product is not exists or discount not exists
-        {
-            Product temp = stock.getProductById(ID);
-            return stock.getProductDiscount(temp);
-        }
-
-        public PurchaseEnum getProductPurchaseWayByProductID(string ID)//will return PRODUCTNOTFOUND if product is not exists
-        {
-            Product temp = stock.getProductById(ID);
-            return stock.getProductPurchaseWay(temp);
-        }
         
         internal void addAllProductsToExistingList(LinkedList<Product> result)
         {
             stock.addAllProductsToExistingList(result);
         }
-        /**private LotterySaleManagmentTicket getLotterySale(Product p)
+        private LotterySaleManagmentTicket getLotterySale(Product p)
         {
             foreach (LotterySaleManagmentTicket LSMT in lotterys)
             {
@@ -174,7 +142,7 @@ namespace SadnaSrc.StoreCenter
                     return LSMT;
             }
             return null;
-        }**/
+        }
         public LotteryTicket MakeALotteryPurchase(string productID, int money)
         {
             LotteryTicket result = null;
@@ -343,7 +311,7 @@ namespace SadnaSrc.StoreCenter
         {
             throw new NotImplementedException(); //waiting for Igor 4 help
         }
-        /**public LotteryTicket DoLottery(string product)
+        /public LotteryTicket DoLottery(string product)
         {
             Product p = stock.getProductById(product);
             LotteryTicket result = null;
@@ -355,7 +323,7 @@ namespace SadnaSrc.StoreCenter
                 }
             }
             return result;
-        }**/
+        }
     }
 }
 
