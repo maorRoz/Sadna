@@ -12,7 +12,7 @@ namespace SadnaSrc.MarketHarmony
     class UserBuyerHarmony : IUserBuyer
     {
         private UserService _userService;
-        public UserBuyerHarmony(IUserService userService)
+        public UserBuyerHarmony(ref IUserService userService)
         {
             _userService = (UserService) userService;
         }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketHarmony;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.Walleter;
@@ -18,7 +19,7 @@ namespace SadnaSrc.OrderPool
         private string _userName;
         private readonly OrderPoolDL _orderDL;
         private List<Order> _orders;
-        private UserService _userService;
+        private IUserBuyer _buyer;
         private StoreService _storeService;
         public string getUsername() {  return _userName;}
         public List<Order> getOrders() { return  _orders; }
@@ -26,18 +27,13 @@ namespace SadnaSrc.OrderPool
         public void setUsername(string name) { _userName = name;}
 
 
-        public OrderService(UserService userService, StoreService storeService)
+        public OrderService(IUserBuyer buyer, StoreService storeService)
         {
             _orders= new List<Order>();
-            _userService = userService;
+            _buyer = buyer;
             _storeService = storeService;
 
-            User user = userService.GetUser();
-            _userName = "Guest";
-            if (user != null && user.IsRegisteredUser())
-            {
-                _userName = ((RegisteredUser) user).Name;
-            }
+            _userName = buyer.GetName();
             _orderDL = new OrderPoolDL();
             
         }

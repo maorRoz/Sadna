@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.OrderPool;
-using SadnaSrc.StoreCenter;
 using SadnaSrc.Walleter;
-using SadnaSrc.UserSpot;
 
 namespace OrderPoolWallaterSupplyPointTests
 {
@@ -16,11 +14,8 @@ namespace OrderPoolWallaterSupplyPointTests
     public class WalleterTest1
     {
         private MarketYard market;
-        private OrderItem item1;
-        private OrderItem item2;
-        private OrderItem item3;
-        private UserService userService;
-        private StoreService storeService;
+        private IUserService userService;
+        private IStoreService storeService;
         private OrderService orderService;
         private PaymentService paymentService;
         private List<string> creditCard;
@@ -29,14 +24,11 @@ namespace OrderPoolWallaterSupplyPointTests
         public void BuildSupplyPoint()
         {
             market = MarketYard.Instance;
-            userService = new UserService();
-            storeService = new StoreService(userService);
-            orderService = (OrderService)market.GetOrderService(userService, storeService);
+            userService = market.GetUserService();
+            storeService = market.GetStoreService(userService);
+            orderService = (OrderService)market.GetOrderService(ref userService, storeService);
             orderService.setUsername("Big Smoke");
-            item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
-            item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
-            item3 = new OrderItem("Cluckin Bell", "#6 Extra Dip", 8.50, 1);
-            paymentService = new PaymentService(userService, orderService);
+            paymentService = new PaymentService(orderService);
             creditCard = new List<string>();
 
         }

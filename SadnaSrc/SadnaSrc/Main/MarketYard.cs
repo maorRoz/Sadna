@@ -57,14 +57,16 @@ namespace SadnaSrc.Main
             return new SystemAdminService(new UserAdminHarmony(userService));
         }
 
+
+        //TODO: fix this method to work with UserSellerHarmony/UserShopperHarmony instead
         public IStoreService GetStoreService(IUserService userService)
         {
             return new StoreService((UserService)userService);
         }
 
-        public IOrderService GetOrderService(IUserService userService, IStoreService storeService)
+        public IOrderService GetOrderService(ref IUserService userService, IStoreService storeService)
         {
-            return new OrderService((UserService) userService, (StoreService) storeService);
+            return new OrderService(new UserBuyerHarmony(ref userService), (StoreService) storeService);
         }
 
         public IPaymentService GetPaymentService(IOrderService orderService)

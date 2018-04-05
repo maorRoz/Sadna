@@ -21,7 +21,7 @@ namespace BlackBox
 		/*
 		 * Admin system
 		 */
-		MarketAnswer RemoveUser(int userSystemID);
+		MarketAnswer RemoveUser(string userName);
 		void GetAdminService();
 
 	}
