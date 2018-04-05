@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ProxyExternalSystems;
 using SadnaSrc.Main;
 using SadnaSrc.OrderPool;
-using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.Walleter
 {

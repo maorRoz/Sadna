@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.OrderPool;
-using SadnaSrc.StoreCenter;
 using SadnaSrc.SupplyPoint;
-using SadnaSrc.UserSpot;
 
 namespace OrderPoolWallaterSupplyPointTests
 {
