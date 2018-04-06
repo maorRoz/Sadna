@@ -57,7 +57,8 @@ namespace SadnaSrc.Main
     public enum EditCartItemStatus
     {
         Success,
-        NoItemFound
+        NoItemFound,
+        ZeroNegativeQuantity
     }
 
     public enum RemoveFromCartStatus
