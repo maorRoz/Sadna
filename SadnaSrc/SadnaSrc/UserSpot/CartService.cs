@@ -103,6 +103,7 @@ namespace SadnaSrc.UserSpot
                 {
                     _userDL.RemoveCartItem(item);
                 }
+                break;
             }
         }
 

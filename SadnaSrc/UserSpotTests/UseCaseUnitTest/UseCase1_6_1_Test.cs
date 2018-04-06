@@ -45,8 +45,8 @@ namespace UserSpotTests.UseCaseUnitTest
         {
             AddAllItems(userServiceGuestSession);
             Assert.AreEqual((int)EditCartItemStatus.Success, userServiceGuestSession.EditCartItem("Y", "Health Potion", 0.5, "Immediate", -1).Status);
-            item1.ChangeQuantity(-1);
-            Assert.AreEqual(item1, userServiceGuestSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0, "Immediate"));
+            item2.ChangeQuantity(-1);
+            Assert.AreEqual(item2, userServiceGuestSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5, "Immediate"));
         }
 
         [TestMethod]

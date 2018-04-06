@@ -27,7 +27,7 @@ namespace SadnaSrc.UserSpot
         {
             if (_userDL.IsUserNameExist(userName))
             {
-                throw new UserException(MarketError.DbError, "No user by the name '" + userName + " has been found for promotion!");
+                throw new UserException(PromoteStoreManager.NoUserFound, "No user by the name '" + userName + " has been found for promotion!");
             }
             foreach (StoreManagerPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreManagerPolicy.StoreAction)))
             {

@@ -69,4 +69,10 @@ namespace SadnaSrc.Main
         DidntEnterSystem,
         NoItemFound
     }
+
+    public enum PromoteStoreManager
+    {
+        NoUserFound,
+        InvalidPromotion
+    }
 }

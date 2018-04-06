@@ -33,7 +33,7 @@ namespace SadnaSrc.UserSpot
         {
             if (Quantity + quantity <= 0)
             {
-                throw new UserException(MarketError.LogicError, "Cannot hold quantity of zero or negative value in cart item");
+                throw new UserException(EditCartItemStatus.ZeroNegativeQuantity, "Cannot hold quantity of zero or negative value in cart item");
             }
             Quantity += quantity;
            
@@ -46,7 +46,7 @@ namespace SadnaSrc.UserSpot
 
         public string GetDbIdentifier()
         {
-            return " AND Name = '" + Name +
+            return "Name = '" + Name +
                    "' AND Store = '" + Store +"' AND UnitPrice = "+ UnitPrice + " AND SaleType = '" + Sale + "'";
         }
 

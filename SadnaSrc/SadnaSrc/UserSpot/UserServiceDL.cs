@@ -255,7 +255,7 @@ namespace SadnaSrc.UserSpot
 
         public void RemoveCartItem(CartItem item)
         {
-            DeleteFromTable("CartItem", "SystemID = "+SystemID + item.GetDbIdentifier());
+            DeleteFromTable("CartItem", "SystemID = "+SystemID +" AND "+ item.GetDbIdentifier());
         }
         private CartItem[] LoadCartItems()
         {

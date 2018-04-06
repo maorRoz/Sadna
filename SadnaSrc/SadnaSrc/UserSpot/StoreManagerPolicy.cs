@@ -63,7 +63,23 @@ namespace SadnaSrc.UserSpot
                 return StoreAction.StoreOwner;
             }
 
-            throw new UserException(MarketError.LogicError, "Procedure to cast string into store action has failed! there is no state by that name...");
+            throw new UserException(PromoteStoreManager.InvalidPromotion, "Procedure to cast string into store action has failed! there is no state by that name...");
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return Equals((StoreManagerPolicy)obj);
+        }
+
+
+        private bool Equals(StoreManagerPolicy obj)
+        {
+            return obj.Store.Equals(Store) && obj.Action == Action;
         }
     }
 }

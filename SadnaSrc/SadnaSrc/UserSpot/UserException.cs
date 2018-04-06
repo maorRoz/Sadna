@@ -36,6 +36,10 @@ namespace SadnaSrc.UserSpot
         {
         }
 
+        public UserException(PromoteStoreManager status, string message) : base((int)status, message)
+        {
+        }
+
         public static void SetUser(int systemID)
         {
             _systemID = systemID;
