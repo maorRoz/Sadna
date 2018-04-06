@@ -11,8 +11,9 @@ namespace SadnaSrc.StoreCenter
     {
         int IntervalStart;
         int IntervalEnd;
+        string LotteryNumber;
         LotteryTicketStatus myStatus;
-        public LotteryTicket(int _IntervalStart, int _IntervalEnd)
+        public LotteryTicket(int _IntervalStart, int _IntervalEnd, string LotteryNumber)
         {
             IntervalStart = _IntervalStart;
             IntervalEnd = _IntervalEnd;
@@ -40,7 +41,7 @@ namespace SadnaSrc.StoreCenter
         }
         public string toString()
         {
-            return "lottery ticket, end time is: " + IntervalEnd;
+            return "lottery ticket of Lottery number: " + LotteryNumber;
         }
     }
 }

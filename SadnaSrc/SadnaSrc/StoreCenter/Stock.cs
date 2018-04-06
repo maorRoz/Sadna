@@ -35,59 +35,28 @@ namespace SadnaSrc.StoreCenter
             }
         }
         public string myStoreID;
-        public LinkedList<StockListItem> StockList;
         public Stock(string _myStoreID)
         {
             myStoreID = _myStoreID;
-            StockList = new LinkedList<StockListItem>();
         }
 
 
         internal StockListItem findstockListItembyProductID(string _product)
         {
-            foreach (StockListItem item in StockList)
-            {
-                if (item.product.SystemId.Equals(_product)) { return item; }
-            }
-            return null;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            StockListItem SLI = handler.dataLayer.getStockListItembyProductID(_product);
+            return SLI;
         }
         internal StockListItem findByProduct(Product _product)
         {
-            foreach (StockListItem item in StockList) {
-                if (findItemByProductPred(item, _product))
-                {
-                    return item;
-                }
-            }
-            return null;
+            return findstockListItembyProductID(_product.SystemId);
         }
         public Product getProductById(string ID)
         {
-            foreach (StockListItem item in StockList)
-            {
-                if (item.product.SystemId==ID)
-                {
-                    return item.product;
-                }
-            }
-            return null;
-        }
-        private static bool findItemByProductPred(StockListItem item, Product _product)
-        {
-            return item.product.equal(_product);
-        }
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            Product product = handler.dataLayer.getProductID(ID);
+            return product;
 
-        internal StoreAnswer addDiscountToProduct(Product p, Discount discount)
-        {
-            throw new NotImplementedException();
-        }
-
-        private bool CheckIfAvailable(Product _product, int _quantity)
-        {
-            StockListItem item = findByProduct(_product);
-            if (item!=null)
-                return (item.quantity >= _quantity);
-            return false;
         }
 
         /**
@@ -118,93 +87,9 @@ namespace SadnaSrc.StoreCenter
             }
             return -1;
         }
-
-        public LinkedList<Product> getAllProducts()
-        {
-            LinkedList<Product> result = new LinkedList<Product>();
-            foreach (StockListItem item in StockList)
-            {
-                result.AddLast(item.product);
-            }
-            return result;
-        }
-
-        public StoreAnswer removeDiscountToProduct(Product _product)
-        {
-            StockListItem item = findByProduct(_product);
-            if (item != null)
-            {
-                item.discount = null;
-                return new StoreAnswer(StoreEnum.Success, "item " + _product.toString() + " discount has removed");
-            }
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + _product.toString() + " does not exist in Stock");
-        }
-
-        /**public StoreAnswer addPurchaseWayToProduct(Product _product, PurchaseEnum _PurchaseWay)
-        {
-            StockListItem item = findByProduct(_product);
-            if (item != null)
-            {
-                item.PurchaseWay = _PurchaseWay;
-                return new StoreAnswer(StoreEnum.Success, "item " + _product.toString() + " added PurchaseWay of" + _PurchaseWay);
-            }
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + _product.toString() + " does not exist in Stock");
-        }
-        public StoreAnswer removePurchaseWayToProduct(Product _product)
-        {
-            StockListItem item = findByProduct(_product);
-            if (item != null)
-            {
-                item.PurchaseWay = PurchaseEnum.IMMEDIATE;
-                return new StoreAnswer(StoreEnum.Success, "item " + _product.toString() + " removed PurchaseWay and set back to IMMIDIEATE");
-            }
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + _product.toString() + " does not exist in Stock");
-        }**/
         /**
-        * assume that the product is in the list
-        **/
-        public StoreAnswer addProductToStock(Product _product, int _quantity)
-        {
-            if (findByProduct(_product)!=null)
-            { return addExistingProductToStock(_product, _quantity); }
-            return addNewProductToStock(_product, _quantity);
-        }
-        public StoreAnswer removeProductFromStock (Product _product)
-        {
-            StockListItem item = findByProduct(_product);
-            if (item != null)
-            {
-                StockList.Remove(item);
-                return new StoreAnswer(StoreEnum.Success, "item " + _product.toString() + " removed");
-            }
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "product " + _product.toString() + " does not exist in Stock");
-        }
-        private StoreAnswer addExistingProductToStock(Product _product, int _quantity)
-        {
-            if (_quantity >= 0)
-            {
-                StockListItem item = findByProduct(_product);
-                item.quantity += _quantity;
-                return new StoreAnswer(StoreEnum.Success, "item " + item + " added by amound of " + _quantity);
-            }
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "quantity " + _quantity + " is less then 0");
+* assume that the product is in the list
+**/
 
-        }
-        private StoreAnswer addNewProductToStock(Product item, int quantity)
-        {
-            if (quantity >= 0)
-            {
-                StockList.AddLast(new StockListItem(quantity, item, null, PurchaseEnum.IMMEDIATE));
-                return new StoreAnswer(StoreEnum.Success, "item " + item + " added by amound of " + quantity);
-            }
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "quantity " + quantity + " is less then 0");
-        }
-        internal void addAllProductsToExistingList(LinkedList<Product> result)
-        {
-            foreach (StockListItem item in StockList)
-            {
-                result.AddLast(item.product);
-            }
-        }
     }
 }

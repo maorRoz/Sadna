@@ -15,6 +15,7 @@ namespace SadnaSrc.StoreCenter
         DateTime StartDate;
         DateTime EndDate;
         LinkedList<LotteryTicket> tickets;
+        internal bool isActive { get; set; }
 
         public LotterySaleManagmentTicket(string _SystemID, Product _original, DateTime _StartDate, DateTime _EndDate)
         {
@@ -25,11 +26,13 @@ namespace SadnaSrc.StoreCenter
             StartDate = _StartDate;
             EndDate = _EndDate;
             tickets = new LinkedList<LotteryTicket>();
+            isActive = true;
         }
         
         /** 
          * will be used by the store
          **/
+
         public bool CanPurchase(int moneyPayed) {
             return (TotalMoneyPayed + moneyPayed < ProductNormalPrice);
         }
@@ -41,7 +44,7 @@ namespace SadnaSrc.StoreCenter
         {
             if (CanPurchase(moneyPayed))
             {
-                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed);
+                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID);
                 TotalMoneyPayed += moneyPayed;
                 tickets.AddLast(lottery);
                 return lottery;
@@ -56,7 +59,7 @@ namespace SadnaSrc.StoreCenter
             }
             else
             {
-                informAllCancel();
+                informCancel();
                 return null;
             }
         }
@@ -79,14 +82,10 @@ namespace SadnaSrc.StoreCenter
             }
             return winner;
         }
-        private void informAllCancel()
+        internal void informCancel()
         {
-            foreach (LotteryTicket lotter in tickets)
-            {
-                lotter.runCancel();
-            }
+            isActive = false;
+        //call maor method here
         }
-
-        
     }
 }

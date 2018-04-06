@@ -45,6 +45,12 @@ namespace SadnaSrc.StoreCenter
             UpdateTable("Products", "SystemID = '"+product.SystemId+"'", columnNames,
                 getProductStringValues(product), getProductValuesArray(product));
         }
+
+        internal Stock.StockListItem getStockListItembyProductID(string product)
+        {
+            throw new NotImplementedException();
+        }
+
         private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
         {
             List<PurchaseHistory> historyData = new List<PurchaseHistory>();
@@ -56,6 +62,12 @@ namespace SadnaSrc.StoreCenter
 
             return historyData.ToArray();
         }
+
+        internal Product getProductID(string iD)
+        {
+            throw new NotImplementedException();
+        }
+
         public String[] getHistory(Store store)
         {
             String[] result;
@@ -77,7 +89,27 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
+        internal void AddStockListItemToDataBase(Stock.StockListItem stockListItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void removeLottery(LotterySaleManagmentTicket lSMT)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void removeStockListItem(Stock.StockListItem sLI)
+        {
+            throw new NotImplementedException();
+        }
+
         internal void EditDiscountInDatabase(Discount discount)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void removeProduct(Product product)
         {
             throw new NotImplementedException();
         }
@@ -88,6 +120,36 @@ namespace SadnaSrc.StoreCenter
         }
 
         internal static LinkedList<Store> getAllActiveStores() // all active stores
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void removeDiscount(Discount discount)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void addDiscount(Discount discount)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void AddLottery(LotterySaleManagmentTicket lSMT)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal LinkedList<string> getAllStoreProductsID(object systemID)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal LotterySaleManagmentTicket getLotteryByProductID(string productID)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void editLotteryInDatabase(LotterySaleManagmentTicket lSMT)
         {
             throw new NotImplementedException();
         }

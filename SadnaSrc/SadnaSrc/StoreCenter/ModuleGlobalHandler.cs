@@ -149,5 +149,15 @@ namespace SadnaSrc.StoreCenter
             }
             return result;
         }
+
+        internal void getAllStoreProductsID(Store store)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal LinkedList<string> getAllStoreProductsIKD(string systemId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

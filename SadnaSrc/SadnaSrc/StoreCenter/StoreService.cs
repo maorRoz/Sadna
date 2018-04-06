@@ -37,7 +37,7 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer OpenStore()
         {
-            Store temp = new Store(user.GetUser(), global.getNextStoreId(), this);
+            Store temp = new Store(user.GetUser(), global.getNextStoreId());
             global.AddStore(temp);
             return new StoreAnswer(StoreEnum.Success, "Store " + temp.SystemId + "opend successfully");
         }
@@ -47,7 +47,7 @@ namespace SadnaSrc.StoreCenter
             if (proxyIHavePremmision(user.GetUser())){
                 return store.CloseStore();
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
         }
         public static MarketAnswer StaticCloseStore(string storeString, int ownerOrSystemAdmin) //Maor asked my for this one
         {
@@ -58,7 +58,7 @@ namespace SadnaSrc.StoreCenter
                 //Need Maor function here!
                 return other.CloseStore();
             }
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
         }
 
         
@@ -66,16 +66,16 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer PromoteToOwner(int someoneToPromote)
         {
-            if (proxyIHavePremmision(user.GetUser())){ 
-            // need here to find the fucntion from Maor that add user to be an owner of the store (using 
-            return store.PromoteToOwner(user.GetUser(), proxyCreateUser(someoneToPromote)); //need way to make someoneToPromote to User Type
+            if (proxyIHavePremmision(user.GetUser())){
+                // need here to find the fucntion from Maor that add user to be an owner of the store (using 
+                return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a owner of store " + store.SystemId);
             }            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer PromoteToManager(int someoneToPromote)
+        public MarketAnswer PromoteToManager(int someoneToPromote, string actions)
         {
             if (proxyIHavePremmision(user.GetUser())){
-                return store.PromoteToManager(user.GetUser(), proxyCreateUser(someoneToPromote));
+                return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a Manager of store " + store.SystemId);
             }
             return new StoreAnswer(StoreEnum.AddStoreManagerFail, "you have no premmision to do that");
         }
@@ -102,7 +102,7 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer getProductStockInformation(int ProductID)
         {
-            return store.getProductStockInformation(ProductID);
+            return store.getProductStockInformation("P"+ProductID);
         }
         
         public MarketAnswer removeProduct(string productName)
@@ -209,6 +209,8 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer setManagersActions(string otherUser, string actions)
         {
+            string notAllowed = "StoreOwner";
+            if (actions.Contains(notAllowed)) { return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "you tryed to make a manager into a store owner"); }
             throw new NotImplementedException(); //Ask Maor about it
         }
     }

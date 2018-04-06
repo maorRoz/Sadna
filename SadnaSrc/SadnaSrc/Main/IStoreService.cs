@@ -14,7 +14,7 @@ namespace SadnaSrc.Main
         * Store Managment, general Actions
         **/
         MarketAnswer PromoteToOwner(int someoneToPromoteID);
-        MarketAnswer PromoteToManager(int someoneToPromoteID);
+        MarketAnswer PromoteToManager(int someoneToPromoteID, string actions);
         MarketAnswer getProductStockInformation(int ProductID);
         MarketAnswer CloseStore();
         
@@ -37,7 +37,7 @@ namespace SadnaSrc.Main
          **/
         //MarketAnswer editDiscount();
 
-        MarketAnswer setManagersActions(string actions);
+        MarketAnswer setManagersActions(string otherUser, string actions);
         MarketAnswer addDiscountToProduct(string productID, DateTime _startDate, DateTime _EndDate, 
             int _DiscountAmount,string DiscountType, bool presenteges);
         MarketAnswer EditDiscount(string productID, string whatToEdit, string NewValue);
@@ -64,7 +64,8 @@ namespace SadnaSrc.Main
         AddStoreManagerFail,
         CloseStoreFail,
         ChangePurchaseTypeFail,
-        PurchesFail
+        PurchesFail,
+        SetManagerPermissionsFail
     }
 
     public enum PurchaseEnum { IMMEDIATE, LOTTERY };
