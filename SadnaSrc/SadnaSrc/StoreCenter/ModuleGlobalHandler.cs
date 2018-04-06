@@ -43,7 +43,18 @@ namespace SadnaSrc.StoreCenter
         {
             throw new NotImplementedException();
         }
-
+        internal string PrintEnum(LotteryTicketStatus status)
+        {
+            if (status == LotteryTicketStatus.CANCEL)
+                return "CANCEL";
+            if (status == LotteryTicketStatus.WINNING)
+                return "WINNING";
+            if (status == LotteryTicketStatus.WAITING)
+                return "WAITING";
+            if (status == LotteryTicketStatus.LOSING)
+                return "LOSING";
+            return "";
+        }
         internal string PrintEnum(discountTypeEnum type)
         {
             if (type == discountTypeEnum.HIDDEN)

@@ -31,11 +31,6 @@ namespace SadnaSrc.StoreCenter
         {
             return isActive;
         }
-        ////////////////////  this is a proxy function  /////////////////////////////////////////////////////////
-        public bool IsOwner(User user)
-        {
-            return true;
-        }
         //////////////////// this function will be removed after I will have Maor function!//////////////////////
 
 
@@ -60,8 +55,7 @@ namespace SadnaSrc.StoreCenter
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
             Product P = new Product(handler.getProductID(), _name, _price, _description);
-            handler.dataLayer.AddStockListItemToDataBase(new Stock.StockListItem(quantity, P, null, PurchaseEnum.IMMEDIATE));
-            handler.dataLayer.AddProductToDatabase(P);
+            handler.dataLayer.AddStockListItemToDataBase(new Stock.StockListItem(quantity, P, null, PurchaseEnum.IMMEDIATE, SystemId));
             return new StoreAnswer(StoreEnum.Success, "product added");
         }
 
@@ -338,13 +332,14 @@ namespace SadnaSrc.StoreCenter
         {
             throw new NotImplementedException();
         }
-        internal bool isOwner(User user) //waiting to Maor's function
+        internal bool IsOwner(User user) //waiting to Maor's function
         {
             return true;
         }
-        public LinkedList<string> ViewPurchesHistory()
+        public string[] ViewPurchesHistory()
         {
-            throw new NotImplementedException(); //waiting for Igor 4 help
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            return handler.dataLayer.getHistory(this);
         }
     }
 }

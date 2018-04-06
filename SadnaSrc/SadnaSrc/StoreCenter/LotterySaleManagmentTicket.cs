@@ -8,13 +8,13 @@ namespace SadnaSrc.StoreCenter
 {
     public class LotterySaleManagmentTicket
     {
-        string SystemID;
-        internal Product original { get; }
-        int ProductNormalPrice;
-        int TotalMoneyPayed;
-        DateTime StartDate;
-        DateTime EndDate;
-        LinkedList<LotteryTicket> tickets;
+        internal string SystemID { get; set; }
+        internal Product original { get; set; }
+        internal int ProductNormalPrice { get; set; }
+        internal int TotalMoneyPayed { get; set; }
+        internal DateTime StartDate { get; set; }
+        internal DateTime EndDate { get; set; }
+        internal LinkedList<LotteryTicket> tickets { get; set; }
         internal bool isActive { get; set; }
 
         public LotterySaleManagmentTicket(string _SystemID, Product _original, DateTime _StartDate, DateTime _EndDate)

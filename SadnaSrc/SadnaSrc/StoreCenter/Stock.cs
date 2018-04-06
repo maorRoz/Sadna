@@ -19,15 +19,16 @@ namespace SadnaSrc.StoreCenter
     {
         public class StockListItem
         {
-            public int SystemId { get; set; }
+            public string SystemId { get; set; }
             public int quantity { get; set; }
             public Product product { get; set; }
             public Discount discount { get; set; }
 
             public PurchaseEnum PurchaseWay { get; set; }
 
-            public StockListItem(int _quantity, Product _product, Discount _discount, PurchaseEnum _PurchaseWay)
+            public StockListItem(int _quantity, Product _product, Discount _discount, PurchaseEnum _PurchaseWay, string id)
             {
+                SystemId = id;
                 quantity = _quantity;
                 product = _product;
                 discount = _discount;

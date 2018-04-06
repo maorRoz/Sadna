@@ -124,6 +124,7 @@ namespace SadnaSrc.Main
                                     [Name]          TEXT,
                                     [Address]       TEXT,
                                     [Status]        TEXT,
+                                    [IsActive]      BIT,
                                     PRIMARY KEY([Name])
                                     )";
         }
@@ -222,7 +223,7 @@ namespace SadnaSrc.Main
                                     [myID] TEXT,
                                     [LotteryID]    TEXT,
                                     [IntervalStart]    INTEGER,
-                                    [InterValEnd]  INTEGER,
+                                    [IntervalEnd]  INTEGER,
                                     [Status] TEXT, CHECK (PurchaseWay IN ('WAITING', 'WINNING', 'LOSING', 'CANCEL')),
                                     PRIMARY KEY([myID]),
                                     FOREIGN KEY([LotteryID]) REFERENCES [LotteryTable]([SystemID]) ON DELETE CASCADE,

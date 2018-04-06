@@ -9,11 +9,11 @@ namespace SadnaSrc.StoreCenter
 {
     public class LotteryTicket
     {
-        int IntervalStart;
-        int IntervalEnd;
-        string LotteryNumber;
-        string myID;
-        LotteryTicketStatus myStatus;
+        internal int IntervalStart { get; set; }
+        internal int IntervalEnd { get; set; }
+        internal string LotteryNumber { get; set; }
+        internal string myID { get; set; }
+        internal LotteryTicketStatus myStatus { get; set; }
         public LotteryTicket(int _IntervalStart, int _IntervalEnd, string _LotteryNumber, string _myID)
         {
             LotteryNumber = _LotteryNumber;
@@ -44,7 +44,7 @@ namespace SadnaSrc.StoreCenter
         }
         public string toString()
         {
-            return "lottery ticket of Lottery number: " + LotteryNumber +" ticket number is: "+myID+" status: "+myStatus;
+            return "lottery ticket of Lottery number: " + LotteryNumber + " ticket number is: "+myID+" status: "+myStatus;
         }
     }
 }
