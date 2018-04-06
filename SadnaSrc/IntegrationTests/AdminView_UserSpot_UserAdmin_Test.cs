@@ -10,11 +10,12 @@ using SadnaSrc.AdminView;
 namespace IntegrationTests
 {
     [TestClass]
-    public class UserAdmin_Test
+    public class AdminView_UserSpot_UserAdmin_Test
     {
 
         private UserService userServiceSession;
         private UserService deletedUserSession;
+        private UserService deletedUserSession2;
         private SystemAdminService adminServiceSession;
         private UserAdminHarmony userAdminHarmony;
         private MarketYard marketSession;
@@ -29,6 +30,8 @@ namespace IntegrationTests
             userServiceSession = (UserService)marketSession.GetUserService();
             userAdminHarmony = null;
             adminServiceSession = null;
+            deletedUserSession = null;
+            deletedUserSession2 = null;
         }
 
         [TestMethod]
@@ -71,18 +74,21 @@ namespace IntegrationTests
         public void GetAdminNameTest()
         {
             ToSignIn(adminName, adminPass);
-            Assert.AreEqual(adminName, userAdminHarmony.GetAdminSystemID());
+            Assert.AreEqual(adminName, userAdminHarmony.GetAdminName());
         }
 
         [TestMethod]
         public void CantLoginToDeletedUserTest()
         {
-            ToSignIn(adminName, adminPass);
-            adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            adminServiceSession.RemoveUser(notAdminName);
             deletedUserSession = (UserService)marketSession.GetUserService();
             deletedUserSession.EnterSystem();
-            Assert.AreEqual((int)SignInStatus.NoUserFound ,deletedUserSession.SignIn(notAdminName, notAdminPass).Status);
+            deletedUserSession.SignUp("DeleteMe", "no-where", "123");
+            ToSignIn(adminName, adminPass);
+            adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
+            adminServiceSession.RemoveUser("DeleteMe");
+            deletedUserSession2 = (UserService)marketSession.GetUserService();
+            deletedUserSession2.EnterSystem();
+            Assert.AreEqual((int)SignInStatus.NoUserFound ,deletedUserSession2.SignIn("DeleteMe", "123").Status);
 
 
         }
@@ -93,9 +99,9 @@ namespace IntegrationTests
             ToSignIn(adminName, adminPass);
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             adminServiceSession.RemoveUser(notAdminName);
-            deletedUserSession = (UserService)marketSession.GetUserService();
-            deletedUserSession.EnterSystem();
-            Assert.AreEqual((int)SignUpStatus.Success, deletedUserSession.SignUp(notAdminName,"no-where" ,notAdminPass).Status);
+            deletedUserSession2 = (UserService)marketSession.GetUserService();
+            deletedUserSession2.EnterSystem();
+            Assert.AreEqual((int)SignUpStatus.Success, deletedUserSession2.SignUp(notAdminName,"no-where" ,notAdminPass).Status);
         }
 
         [TestMethod]
@@ -124,7 +130,8 @@ namespace IntegrationTests
         public void UserAdminTestCleanUp()
         {
             userServiceSession.CleanGuestSession();
-            deletedUserSession.CleanSession();
+            deletedUserSession?.CleanSession();
+            deletedUserSession2?.CleanSession();
             MarketYard.CleanSession();
         }
 
