@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
@@ -42,7 +43,7 @@ namespace UserSpotTests
         public void AddToGuestCartTest()
         {
             Assert.AreEqual(0,userServiceGuestSession.MarketUser.Cart.GetCartStorage().Length);
-            addAllItems();
+            addAllItems(userServiceGuestSession);
             Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceGuestSession.MarketUser.Cart.GetCartStorage()));
 
         }
@@ -50,7 +51,10 @@ namespace UserSpotTests
         [TestMethod]
         public void AddToSignedSaveCartTest()
         {
-
+            userServiceRegisteredSession = DoEnter();
+            addItem1();
+            addItem2();
+            Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceRegisteredSession.MarketUser.Cart.GetCartStorage()));
         }
 
         [TestMethod]
@@ -101,24 +105,32 @@ namespace UserSpotTests
             MarketYard.CleanSession();
         }
 
+        private UserService DoEnter()
+        {
+            UserService userService = (UserService)marketSession.GetUserService();
+            userService.EnterSystem();
+            return userService;
+        }
+
+        private void DoSignUp(string name, string address, string password)
+        {
+            userServiceRegisteredSession = DoEnter();
+            Assert.AreEqual((int)SignUpStatus.Success, userServiceRegisteredSession.SignUp(name, address, password).Status);
+            userServiceRegisteredSession.Synch();
+
+        }
+
+        private void DoSignIn(string name, string password)
+        {
+            userServiceLoggedSession = DoEnter();
+            Assert.AreEqual((int)SignInStatus.Success, userServiceLoggedSession.SignIn(name, password).Status);
+        }
+
         private void DoSignUpSignIn(string name, string address, string password)
         {
             DoSignUp(name, address, password);
             Assert.IsFalse(MarketException.hasErrorRaised());
             DoSignIn(name, password);
-        }
-        private void DoSignIn(string name, string password)
-        {
-            userServiceRegisteredSession.EnterSystem();
-            Assert.AreEqual((int)SignInStatus.Success, userServiceRegisteredSession.SignIn(name, password).Status);
-        }
-        private void DoSignUp(string name, string address, string password)
-        {
-            userServiceRegisteredSession = (UserService)marketSession.GetUserService();
-            userServiceRegisteredSession.EnterSystem();
-            Assert.AreEqual((int)SignUpStatus.Success, userServiceRegisteredSession.SignUp(name, address, password).Status);
-            userServiceRegisteredSession.Synch();
-
         }
 
         private void addItem1()
@@ -129,7 +141,7 @@ namespace UserSpotTests
 
         private void addItem2()
         {
-            expected.Add(item1);
+            expected.Add(item2);
             userServiceGuestSession.AddToCart("Health Potion", "Y", 2, 0.5, "Immediate");
         }
 
@@ -141,11 +153,11 @@ namespace UserSpotTests
 
         private void addItem4()
         {
-            expected.Add(item3);
+            expected.Add(item4);
             userServiceGuestSession.AddToCart("Health Potion", "M", 5, 7.0, "Immediate");
         }
 
-        private void addAllItems()
+        private void addAllItems(UserService userService)
         {
             addItem1();
             addItem2();
