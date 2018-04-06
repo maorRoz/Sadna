@@ -35,9 +35,9 @@ namespace SystemViewTests
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             string[] expectedHistory = 
             {
-                new PurchaseHistory(userNameToView, "Health Potion", "XXX", "Immediate", "Today").ToString(),
-                new PurchaseHistory(userNameToView, "INT Potion", storeNameToView, "Lottery", "Yesterday").ToString(),
-                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery", "Yesterday").ToString(),
+                new PurchaseHistory(userNameToView, "Health Potion", "XXX", "Immediate",2,11.5, "Today").ToString(),
+                new PurchaseHistory(userNameToView, "INT Potion", storeNameToView, "Lottery",2,8.0, "Yesterday").ToString(),
+                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery",3,12.0, "Yesterday").ToString(),
 
             };
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByUser(userNameToView).Status);
@@ -52,9 +52,9 @@ namespace SystemViewTests
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             string[] expectedHistory =
             {
-                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery", "Yesterday").ToString(),
-                new PurchaseHistory(userNameToView, "INT Potion", storeNameToView, "Lottery", "Yesterday").ToString(),
-                new PurchaseHistory("MosheYYY", "STR Potion", storeNameToView, "Immediate", "Today").ToString(),
+                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery",3,12.0, "Yesterday").ToString(),
+                new PurchaseHistory(userNameToView, "INT Potion", storeNameToView, "Lottery",2,8.0, "Yesterday").ToString(),
+                new PurchaseHistory("MosheYYY", "STR Potion", storeNameToView, "Immediate",1,4.0, "Today").ToString(),
 
             };
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByStore(storeNameToView).Status);

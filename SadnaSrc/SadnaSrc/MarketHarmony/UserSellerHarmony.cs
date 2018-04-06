@@ -16,6 +16,7 @@ namespace SadnaSrc.MarketHarmony
         {
             _store = store;
             policies = ((UserService) userService).MarketUser.GetStoreManagerPolicies(store);
+            //TODO: we should do something about user which hasn't entered the system here
         }
 
         public void Promote(string userName, string permissions)

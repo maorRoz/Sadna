@@ -82,7 +82,7 @@ namespace SadnaSrc.AdminView
             while (dbReader.Read())
             {
                 PurchaseHistory record = new PurchaseHistory(dbReader.GetString(0), dbReader.GetString(1),
-                    dbReader.GetString(2),dbReader.GetString(3), dbReader.GetString(4));
+                    dbReader.GetString(2),dbReader.GetString(3),dbReader.GetInt32(0),dbReader.GetDouble(0), dbReader.GetString(4));
                 historyData.Add(record.ToString());
             }
 
