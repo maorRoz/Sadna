@@ -67,6 +67,14 @@ namespace UserSpotTests.UseCaseUnitTest
         }
 
         [TestMethod]
+        public void DidntEnterTest()
+        {
+            userServiceRegisteredSession = (UserService)marketSession.GetUserService();
+            Assert.AreEqual((int)RemoveFromCartStatus.DidntEnterSystem, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
+            Assert.IsTrue(MarketException.hasErrorRaised());
+        }
+
+        [TestMethod]
         public void NoItemToRemoveFoundTest1()
         {
             userServiceRegisteredSession = DoEnter();

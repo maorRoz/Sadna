@@ -123,6 +123,14 @@ namespace UserSpotTests.UseCaseUnitTest
         }
 
         [TestMethod]
+        public void DidntEnterTest()
+        {
+            userServiceRegisteredSession = (UserService)marketSession.GetUserService();
+            Assert.AreEqual((int)EditCartItemStatus.DidntEnterSystem, userServiceRegisteredSession.EditCartItem("X", "Health Potion", 5.0, "Immediate", -2).Status);
+            Assert.IsTrue(MarketException.hasErrorRaised());
+        }
+
+        [TestMethod]
         public void NoItemToEditFoundTest1()
         {
             userServiceRegisteredSession = DoEnter();

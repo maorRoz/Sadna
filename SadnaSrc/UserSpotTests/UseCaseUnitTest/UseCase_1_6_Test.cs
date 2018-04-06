@@ -60,6 +60,14 @@ namespace UserSpotTests.UseCaseUnitTest
             Assert.IsTrue(userServiceRegisteredSession.ViewCart().ReportList.SequenceEqual(expected));
         }
 
+
+        [TestMethod]
+        public void DidntEnterTest()
+        {
+            userServiceRegisteredSession = (UserService)marketSession.GetUserService();
+            Assert.AreEqual((int)ViewCartStatus.DidntEnterSystem, userServiceRegisteredSession.ViewCart().Status);
+            Assert.IsTrue(MarketException.hasErrorRaised());
+        }
         [TestMethod]
         public void ViewEmptyCartTest()
         {

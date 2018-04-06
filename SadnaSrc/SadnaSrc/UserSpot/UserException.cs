@@ -24,7 +24,17 @@ namespace SadnaSrc.UserSpot
         public UserException(SignInStatus status, string message) : base((int)status, message)
         {
         }
+        public UserException(ViewCartStatus status, string message) : base((int)status, message)
+        {
 
+        }
+        public UserException(EditCartItemStatus status, string message) : base((int)status, message)
+        {
+        }
+
+        public UserException(RemoveFromCartStatus status, string message) : base((int)status, message)
+        {
+        }
 
         public static void SetUser(int systemID)
         {

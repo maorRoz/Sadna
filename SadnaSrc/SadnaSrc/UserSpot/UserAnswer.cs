@@ -27,5 +27,15 @@ namespace SadnaSrc.UserSpot
         {
 
         }
+
+        public UserAnswer(EditCartItemStatus status, string answer) : base((int)status, answer)
+        {
+
+        }
+
+        public UserAnswer(RemoveFromCartStatus status, string answer) : base((int)status, answer)
+        {
+
+        }
     }
 }
