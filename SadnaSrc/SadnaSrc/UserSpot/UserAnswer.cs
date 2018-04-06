@@ -22,5 +22,10 @@ namespace SadnaSrc.UserSpot
         {
 
         }
+
+        public UserAnswer(ViewCartStatus status, string answer,string[] cartItems) : base((int)status, answer,cartItems)
+        {
+
+        }
     }
 }

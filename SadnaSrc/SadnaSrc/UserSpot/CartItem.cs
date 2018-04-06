@@ -9,13 +9,16 @@ namespace SadnaSrc.UserSpot
 {
     public class CartItem
     {
-        public string Store { get; }
         public string Name { get; }
 
-        public double UnitPrice { get; }
-        public double FinalPrice => UnitPrice * Quantity;
-        public string Sale { get; }
+        public string Store { get; }
+
         public int Quantity { get; private set; }
+        public double UnitPrice { get; }
+
+        public double FinalPrice => UnitPrice * Quantity;
+
+        public string Sale { get; }
 
         public CartItem( string name, string store, int quantity,double unitPrice, string sale)
         {
@@ -45,6 +48,12 @@ namespace SadnaSrc.UserSpot
         {
             return " AND Name = '" + Name +
                    "' AND Store = '" + Store +"' AND UnitPrice = "+ UnitPrice + " AND SaleType = '" + Sale + "'";
+        }
+
+        public override string ToString()
+        {
+            return "Name : " + Name + " Store " + Store + " Quantity: " + Quantity + " Unit Price : " + UnitPrice
+                   + " Final Price: " + FinalPrice + " Sale : " + Sale;
         }
 
         public override bool Equals(object obj)

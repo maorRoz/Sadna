@@ -76,8 +76,14 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer ViewCart()
         {
-            List<string> itemRecords = new List<string>();
-            
+            MarketLog.Log("UserSpot", "User " + systemID + " attempting to view his cart...");
+            var itemRecords = new List<string>();
+            foreach (CartItem item in MarketUser.Cart.GetCartStorage())
+            {
+                itemRecords.Add(item.ToString());
+            }
+            MarketLog.Log("UserSpot", "User " + systemID + " has successfully retrieved his cart info...");
+            return new UserAnswer(ViewCartStatus.Success,"View of the user's cart has been granted successfully!",itemRecords.ToArray());
 
         }
 

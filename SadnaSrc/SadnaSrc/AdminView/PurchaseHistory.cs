@@ -42,8 +42,8 @@ namespace SadnaSrc.AdminView
 
         public override string ToString()
         {
-            return "User: " + _user + "Product: " + _product + "Store: " + _store + "Sale: " + _sale 
-                   + "Quantity: "+ _quantity + "Price: " + _price + "Date: " + _date;
+            return "User: " + _user + " Product: " + _product + " Store: " + _store + " Sale: " + _sale 
+                   + " Quantity: "+ _quantity + " Price: " + _price + " Date: " + _date;
         }
         public override int GetHashCode()
         {
