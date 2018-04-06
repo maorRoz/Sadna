@@ -11,7 +11,7 @@ namespace UserSpotTests.PureUnitTest
 {
 
     [TestClass]
-    public class AddToCart_Test
+    public class CartService_Test
     {
         private UserService userServiceGuestSession;
         private UserService userServiceRegisteredSession;
@@ -200,7 +200,7 @@ namespace UserSpotTests.PureUnitTest
         }
 
         [TestCleanup]
-        public void UserTestCleanUp()
+        public void CartServiceTestCleanUp()
         {
             userServiceLoggedSession?.CleanSession();
             userServiceLoggedSession2?.CleanSession();

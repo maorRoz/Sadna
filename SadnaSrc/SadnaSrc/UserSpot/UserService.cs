@@ -76,8 +76,9 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer ViewCart()
         {
-            //...
-            return null;
+            List<string> itemRecords = new List<string>();
+            
+
         }
 
         public MarketAnswer EditCartItem(string store, string product, double unitPrice, string sale, int quantity)

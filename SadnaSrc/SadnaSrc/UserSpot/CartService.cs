@@ -34,6 +34,7 @@ namespace SadnaSrc.UserSpot
         {
             return cartStorage.ToArray();
         }
+        //TODO: make sure there is usage for this method outside tests. if there isn't , delete this
         public CartItem SearchInCart(string store, string product, double unitPrice, string sale)
         {
 
