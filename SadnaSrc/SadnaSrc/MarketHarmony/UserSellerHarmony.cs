@@ -22,25 +22,12 @@ namespace SadnaSrc.MarketHarmony
         public void Promote(string userName, string permissions)
         {
             List<StoreManagerPolicy.StoreAction> actions = new List<StoreManagerPolicy.StoreAction>();
-            var permissionsNames = EliminateDuplicates(permissions.Split(','));
-            foreach (var permission in permissionsNames)
+            var permissionsArray = permissions.Split(',').Distinct().ToArray();
+            foreach (var permission in permissionsArray)
             {
                 actions.Add(StoreManagerPolicy.GetActionFromString(permission));
             }
             PromoteStorePolicies(userName, actions.ToArray());
-        }
-
-        private static string[] EliminateDuplicates(string[] permissions)
-        {
-            var noDuplicates = new List<string>();
-            foreach (var permission in permissions)
-            {
-                if(noDuplicates.Contains(permission)) { continue;}
-                noDuplicates.Add(permission);
-            }
-
-            return noDuplicates.ToArray();
-
         }
 
         private void PromoteStorePolicies(string userName, StoreManagerPolicy.StoreAction[] permissions)
