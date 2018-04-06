@@ -38,7 +38,7 @@ namespace SadnaSrc.UserSpot
 
         public object[] ToData()
         {
-            return new object[] {Name, Store, Quantity, FinalPrice, Sale};
+            return new object[] {Name, Store, Quantity,UnitPrice, FinalPrice, Sale};
         }
 
         public string GetDbIdentifier()
