@@ -51,6 +51,11 @@ namespace SadnaSrc.StoreCenter
             throw new NotImplementedException();
         }
 
+        internal void addLotteryTicket(LotteryTicket lottery)
+        {
+            throw new NotImplementedException();
+        }
+
         private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
         {
             List<PurchaseHistory> historyData = new List<PurchaseHistory>();

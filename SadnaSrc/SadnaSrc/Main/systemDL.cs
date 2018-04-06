@@ -29,6 +29,8 @@ namespace SadnaSrc.Main
                 CreateProductTable(),//added by lior
                 CreateDiscountTable(), //added by lior
                 CreateStockTable(), //added by lior
+                CreateLotteryTable(),
+                CreateLotteryTicketsTable(),
                 CreateStoreTable(), //TODO: need to be edited by by lior
                 CreateUserStatePolicyTable(),
                 CreateUserStorePolicyTable(),  // should improve this one
@@ -82,6 +84,7 @@ namespace SadnaSrc.Main
                 }
             }
         }
+
 
         private static string CreateSystemLogTable()
         {
@@ -210,6 +213,34 @@ namespace SadnaSrc.Main
                                     PRIMARY KEY([StockID]),
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE,
                                     FOREIGN KEY([discount]) REFERENCES [Discount]([DiscountCode]) ON DELETE CASCADE
+                                    )";
+        }
+
+        private static string CreateLotteryTicketsTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [LotteryTicket] (
+                                    [myID] TEXT,
+                                    [LotteryID]    TEXT,
+                                    [IntervalStart]    INTEGER,
+                                    [InterValEnd]  INTEGER,
+                                    [Status] TEXT, CHECK (PurchaseWay IN ('WAITING', 'WINNING', 'LOSING', 'CANCEL')),
+                                    PRIMARY KEY([myID]),
+                                    FOREIGN KEY([LotteryID]) REFERENCES [LotteryTable]([SystemID]) ON DELETE CASCADE,
+                                    )";
+        }
+
+        private static string CreateLotteryTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [LotteryTable] (
+                                    [SystemID] TEXT,
+                                    [ProductSystemID]    TEXT,
+                                    [ProductNormalPrice]    INTEGER,
+                                    [TotalMoneyPayed]  INTEGER,
+                                    [StartDate] TEXT,
+                                    [EndDate] TEXT,
+                                    [isActive] BIT,
+                                    PRIMARY KEY([SystemID]),
+                                    FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE,
                                     )";
         }
         private static string CreateSaleTable()

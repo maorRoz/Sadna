@@ -57,8 +57,10 @@ namespace SadnaSrc.Main
         }
 
         public IStoreService GetStoreService(IUserService userService)
-        {
-            return new StoreService((UserService)userService);
+        { // this should not work
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            Store store = handler.getStoreByID("S1");
+            return new StoreService((UserService)userService, store);
         }
 
         public IOrderService GetOrderService(IUserService userService, IStoreService storeService,

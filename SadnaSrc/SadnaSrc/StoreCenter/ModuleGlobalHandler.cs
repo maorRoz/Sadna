@@ -16,6 +16,7 @@ namespace SadnaSrc.StoreCenter
         int globalProductID;
         int globalDiscountCode;
         int globalLotteryID;
+        int globalLotteryTicketID;
       //  internal LinkedList<Store> allStores { get; set; }
         internal StoreDL dataLayer { get; }
         public static ModuleGlobalHandler getInstance()
@@ -30,10 +31,11 @@ namespace SadnaSrc.StoreCenter
         private ModuleGlobalHandler()
         {
         //    allStores = new LinkedList<Store>();
-            StoreIdCounter = 0;
-            globalProductID = 0;
-            globalDiscountCode = 0;
-            globalLotteryID = 0;
+            StoreIdCounter = 1;
+            globalProductID = 1;
+            globalDiscountCode = 1;
+            globalLotteryID = 1;
+            globalLotteryTicketID = 1;
             dataLayer = new StoreDL();
         }
 
@@ -101,6 +103,12 @@ namespace SadnaSrc.StoreCenter
             globalLotteryID++;
             return "L" + temp;
         }
+        internal string getLotteryTicketID()
+        {
+            int temp = globalLotteryTicketID;
+            globalLotteryTicketID++;
+            return "T" + temp;
+        }
 
         public LinkedList<Store> getAllUserStores(User user) // this implementation will be change after maor finish his work
         {
@@ -139,6 +147,7 @@ namespace SadnaSrc.StoreCenter
             }
             return null;
         }
+        
         public LinkedList<Product> getAllMarketProducts()
         {
             LinkedList<Store> AllStores = StoreDL.getAllActiveStores();
@@ -150,12 +159,7 @@ namespace SadnaSrc.StoreCenter
             return result;
         }
 
-        internal void getAllStoreProductsID(Store store)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal LinkedList<string> getAllStoreProductsIKD(string systemId)
+        internal LinkedList<string> getAllStoreProductsID(string systemId)
         {
             throw new NotImplementedException();
         }

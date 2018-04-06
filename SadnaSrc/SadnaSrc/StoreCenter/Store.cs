@@ -31,8 +31,11 @@ namespace SadnaSrc.StoreCenter
         {
             return isActive;
         }
-        
-        
+        ////////////////////  this is a proxy function  /////////////////////////////////////////////////////////
+        public bool IsOwner(User user)
+        {
+            return true;
+        }
         //////////////////// this function will be removed after I will have Maor function!//////////////////////
 
 

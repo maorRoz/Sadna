@@ -44,7 +44,9 @@ namespace SadnaSrc.StoreCenter
         {
             if (CanPurchase(moneyPayed))
             {
-                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID);
+                ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID, handler.getLotteryTicketID());
+                handler.dataLayer.addLotteryTicket(lottery);
                 TotalMoneyPayed += moneyPayed;
                 tickets.AddLast(lottery);
                 return lottery;

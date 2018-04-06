@@ -12,9 +12,12 @@ namespace SadnaSrc.StoreCenter
         int IntervalStart;
         int IntervalEnd;
         string LotteryNumber;
+        string myID;
         LotteryTicketStatus myStatus;
-        public LotteryTicket(int _IntervalStart, int _IntervalEnd, string LotteryNumber)
+        public LotteryTicket(int _IntervalStart, int _IntervalEnd, string _LotteryNumber, string _myID)
         {
+            LotteryNumber = _LotteryNumber;
+            myID = _myID;
             IntervalStart = _IntervalStart;
             IntervalEnd = _IntervalEnd;
             myStatus = LotteryTicketStatus.WAITING;
@@ -41,7 +44,7 @@ namespace SadnaSrc.StoreCenter
         }
         public string toString()
         {
-            return "lottery ticket of Lottery number: " + LotteryNumber;
+            return "lottery ticket of Lottery number: " + LotteryNumber +" ticket number is: "+myID+" status: "+myStatus;
         }
     }
 }
