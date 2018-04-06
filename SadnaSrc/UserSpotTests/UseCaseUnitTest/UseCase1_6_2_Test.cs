@@ -5,11 +5,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.UserSpot;
 
-namespace UserSpotTests
+namespace UserSpotTests.UseCaseUnitTest
 {
-    /// <summary>
-    /// Summary description for UseCase1_6_2_Test
-    /// </summary>
+
     [TestClass]
     public class UseCase1_6_2_Test
     {

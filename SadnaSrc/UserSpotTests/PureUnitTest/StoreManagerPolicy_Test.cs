@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.UserSpot;
 
-namespace UserSpotTests
+namespace UserSpotTests.PureUnitTest
 {
     [TestClass]
     public class StoreManagerPolicy_Test

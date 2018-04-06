@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.UserSpot;
 
-namespace UserSpotTests
+namespace UserSpotTests.UseCaseUnitTest
 {
     [TestClass]
     public class UseCase1_6_1_Test
