@@ -50,8 +50,8 @@ namespace SadnaSrc.UserSpot
         }
 
         public bool IsUserNameExist(string name)
-        {
-            using (var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "'"))
+         {
+            using (var dbReader = SelectFromTableWithCondition("User", "*", "Name = '" + name + "'"))
             {
                 return dbReader.Read();
 
@@ -78,21 +78,24 @@ namespace SadnaSrc.UserSpot
             InsertTable("StatePolicy", "SystemID,State",valuesNames,values);
         }
 
-        private int GetUserNameFromID(string userName)
+        private int GetIDFromUserName(string userName)
         {
-            var dbReader = SelectFromTableWithCondition("User","SystemID", "WHERE Name = '" + userName + "'");
-            if (dbReader.Read())
+            using (var dbReader = SelectFromTableWithCondition("User", "SystemID", "Name = '" + userName + "'"))
             {
-                return dbReader.GetInt32(0);
+                if (dbReader.Read())
+                {
+                    return dbReader.GetInt32(0);
+                }
             }
 
             throw new UserException(MarketError.DbError,
-                "No user by the name " + userName + " has been found in the db");
+                    "No user by the name " + userName + " has been found in the db");
+            
         }
 
         public void SaveUserStorePolicy(string userName,StoreManagerPolicy policy)
         {
-            int idOfPromoted = GetUserNameFromID(userName);
+            int idOfPromoted = GetIDFromUserName(userName);
             string[] valuesNames = { "@idParam", "@storeParam","@actionParam" };
             object[] values = { idOfPromoted, policy.Store,policy.GetStoreActionString() };
             InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
@@ -107,9 +110,9 @@ namespace SadnaSrc.UserSpot
 
         public void DeleteUserStorePolicy(string userName, StoreManagerPolicy policy)
         {
-            int idOfDemoted = GetUserNameFromID(userName);
-            DeleteFromTable("StoreManagerPolicy","SystemID = "+ idOfDemoted + " AND Store = "+policy.Store
-                                                 + " AND Action =" + policy.Action);
+            int idOfDemoted = GetIDFromUserName(userName);
+            DeleteFromTable("StoreManagerPolicy","SystemID = "+ idOfDemoted + " AND Store = '"+policy.Store
+                                                 + "' AND Action = '" + policy.Action +"'");
         }
 
         private StatePolicy[] LoadUserStatePolicy()

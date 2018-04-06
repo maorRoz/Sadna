@@ -90,10 +90,10 @@ namespace UserSpotTests.PureUnitTest
             };
             StoreManagerPolicy[] expected =
             {
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts),
                 new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.PromoteStoreAdmin),
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.DeclareDiscountPolicy),
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts),
                 new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.DeclarePurchasePolicy),
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.DeclareDiscountPolicy),
                 new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ViewPurchaseHistory),
             };
             AddMoreThenOnePolicy(expected,givenPermissions);
@@ -150,8 +150,8 @@ namespace UserSpotTests.PureUnitTest
             StoreManagerPolicy[] expected3 =
             {
                 new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.PromoteStoreAdmin),
-                new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.ViewPurchaseHistory),
-                new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.ManageProducts)
+                new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.ManageProducts),
+                new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.ViewPurchaseHistory)
             };
             AddMoreThenOneStorePolicyTest(expected1, expected2, expected3, givenPermissions1, givenPermissions2,
                 givenPermissions3);
@@ -190,8 +190,8 @@ namespace UserSpotTests.PureUnitTest
             StoreManagerPolicy[] expected3 =
             {
                 new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.PromoteStoreAdmin),
-                new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.ViewPurchaseHistory),
-                new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.ManageProducts)
+                new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.ManageProducts),
+                new StoreManagerPolicy(store3,StoreManagerPolicy.StoreAction.ViewPurchaseHistory)
             };
             AddMoreThenOneStorePolicyTest(expected1, expected2, expected3, givenPermissions1, givenPermissions2,
                 givenPermissions3);
@@ -217,8 +217,8 @@ namespace UserSpotTests.PureUnitTest
             };
             StoreManagerPolicy[] expected2 =
             {
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts),
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.PromoteStoreAdmin)
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.PromoteStoreAdmin),
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts)
             };
             AddMorePoliciesLater(expected1, expected2, givenPermissions1, givenPermissions2);
 
@@ -245,8 +245,8 @@ namespace UserSpotTests.PureUnitTest
             };
             StoreManagerPolicy[] expected2 =
             {
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts),
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.PromoteStoreAdmin)
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.PromoteStoreAdmin),
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts)
             };
             AddMorePoliciesLater(expected1, expected2, givenPermissions1, givenPermissions2);
         }
@@ -267,8 +267,8 @@ namespace UserSpotTests.PureUnitTest
             };
             StoreManagerPolicy[] expected1 =
             {
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts),
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.PromoteStoreAdmin)
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.PromoteStoreAdmin),
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts)
             };
             StoreManagerPolicy[] expected2 =
             {
@@ -291,10 +291,10 @@ namespace UserSpotTests.PureUnitTest
             StoreManagerPolicy.StoreAction[] givenPermissions2 = new StoreManagerPolicy.StoreAction[0];
             StoreManagerPolicy[] expected1 =
             {
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts),
                 new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.PromoteStoreAdmin),
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ViewPurchaseHistory),
-                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.DeclarePurchasePolicy)
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ManageProducts),
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.DeclarePurchasePolicy),
+                new StoreManagerPolicy(store1,StoreManagerPolicy.StoreAction.ViewPurchaseHistory)
             };
             StoreManagerPolicy[] expected2 = new StoreManagerPolicy[0];
             AddMorePoliciesLater(expected1, expected2, givenPermissions1, givenPermissions2);
@@ -326,8 +326,8 @@ namespace UserSpotTests.PureUnitTest
             };
             StoreManagerPolicy[] expected2 =
             {
-                new StoreManagerPolicy(store2,StoreManagerPolicy.StoreAction.ManageProducts),
                 new StoreManagerPolicy(store2,StoreManagerPolicy.StoreAction.PromoteStoreAdmin),
+                new StoreManagerPolicy(store2,StoreManagerPolicy.StoreAction.ManageProducts)
 
             };
             StoreManagerPolicy[] expected3 =
@@ -538,9 +538,9 @@ namespace UserSpotTests.PureUnitTest
             Assert.AreEqual(0, actions3.Length);
             UserPolicyService.PromoteStorePolicies(promoteName, store3, givenPermissions3);
             DoSignIn2(promoteName, promotePassword);
-            actions1 = userServiceSignInSession.MarketUser.GetStoreManagerPolicies(store1);
-            actions2 = userServiceSignInSession.MarketUser.GetStoreManagerPolicies(store2);
-            actions3 = userServiceSignInSession.MarketUser.GetStoreManagerPolicies(store3);
+            actions1 = userServiceSignInSession2.MarketUser.GetStoreManagerPolicies(store1);
+            actions2 = userServiceSignInSession2.MarketUser.GetStoreManagerPolicies(store2);
+            actions3 = userServiceSignInSession2.MarketUser.GetStoreManagerPolicies(store3);
             Assert.AreEqual(expected1.Length, actions1.Length);
             Assert.IsTrue(expected1.SequenceEqual(actions1));
             Assert.AreEqual(expected2.Length, actions2.Length);

@@ -25,7 +25,7 @@ namespace SadnaSrc.UserSpot
         }       
         public static void PromoteStorePolicies(string userName,string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
-            if (_userDL.IsUserNameExist(userName))
+            if (!_userDL.IsUserNameExist(userName))
             {
                 throw new UserException(PromoteStoreManager.NoUserFound, "No user by the name '" + userName + " has been found for promotion!");
             }
@@ -60,8 +60,12 @@ namespace SadnaSrc.UserSpot
                 if(policy.Store.Equals(store))
                 storePolicies.Add(policy);
             }
+            return SortStorePolicy(storePolicies.ToArray());
+        }
 
-            return storePolicies.ToArray();
+        private static StoreManagerPolicy[] SortStorePolicy(StoreManagerPolicy[] storePolicies)
+        {
+            return storePolicies.OrderBy(x => x.Action).ToArray();
         }
 
         public void AddStoreOwnership(string store)
