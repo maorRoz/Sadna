@@ -9,7 +9,6 @@ namespace SadnaSrc.UserSpot
 {
     public class CartItem
     {
-        private int _systemID;
         public string Store { get; }
         public string Name { get; }
 
@@ -18,19 +17,13 @@ namespace SadnaSrc.UserSpot
         public string Sale { get; }
         public int Quantity { get; private set; }
 
-        public CartItem(int systemID, string name, string store, int quantity,double unitPrice, string sale)
+        public CartItem( string name, string store, int quantity,double unitPrice, string sale)
         {
-            _systemID = systemID;
             Name = name;
             Store = store;
             Quantity = quantity;
             UnitPrice = unitPrice;
             Sale = sale;
-        }
-
-        public void SetUserID(int systemID)
-        {
-            _systemID = systemID;
         }
 
         public void ChangeQuantity(int quantity)
@@ -45,12 +38,12 @@ namespace SadnaSrc.UserSpot
 
         public object[] ToData()
         {
-            return new object[] { _systemID, Name, Store, Quantity, FinalPrice, Sale};
+            return new object[] {Name, Store, Quantity, FinalPrice, Sale};
         }
 
         public string GetDbIdentifier()
         {
-            return "SystemID = " + _systemID + " AND Name = '" + Name +
+            return " AND Name = '" + Name +
                    "' AND Store = '" + Store +"' AND UnitPrice = "+ UnitPrice + " AND SaleType = '" + Sale + "'";
         }
 
@@ -75,19 +68,7 @@ namespace SadnaSrc.UserSpot
         {
             return Store.Equals(store) && Name.Equals(name) && UnitPrice == unitPrice && Sale.Equals(sale);
         }
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = _systemID;
-                hashCode = (hashCode * 397) ^ (Store != null ? Store.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ UnitPrice.GetHashCode();
-                hashCode = (hashCode * 397) ^ (Sale != null ? Sale.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ Quantity;
-                return hashCode;
-            }
-        }
+
         //TODO: delete this when there is no more reference related to it
         public string GetStore()
         {
@@ -106,5 +87,16 @@ namespace SadnaSrc.UserSpot
             throw new NotImplementedException("dont use this method Igor!!");
         }
 
+        public override int GetHashCode()
+        {
+            var hashCode = -776670310;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Store);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + UnitPrice.GetHashCode();
+            hashCode = hashCode * -1521134295 + FinalPrice.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Sale);
+            hashCode = hashCode * -1521134295 + Quantity.GetHashCode();
+            return hashCode;
+        }
     }
 }

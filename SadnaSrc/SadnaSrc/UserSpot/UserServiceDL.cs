@@ -229,10 +229,6 @@ namespace SadnaSrc.UserSpot
             object[] loadedUserIdAndAddress = FindRegisteredUserData(name, password);
 
             SystemID = (int) loadedUserIdAndAddress[0];
-            foreach (CartItem item in guestCart)
-            {
-                item.SetUserID(SystemID);
-            }
             SaveCartItem(guestCart);
 
             return new RegisteredUser(SystemID,name,(string) loadedUserIdAndAddress[1],
@@ -248,14 +244,18 @@ namespace SadnaSrc.UserSpot
         {
             foreach (CartItem item in cart)
             {
+                var userItem = new List<object>(item.ToData())
+                {
+                    SystemID
+                };
                 InsertTable("CartItem", "SystemID,Name,Store,Quantity,FinalPrice,SaleType",
-                    new [] { "@idParam", "@nameParam", "@storeParam", "@priceParam", "@saleParam" }, item.ToData());
+                    new [] { "@idParam", "@nameParam", "@storeParam", "@priceParam", "@saleParam" }, userItem.ToArray());
             }
         }
 
         public void RemoveCartItem(CartItem item)
         {
-            DeleteFromTable("CartItem", item.GetDbIdentifier());
+            DeleteFromTable("CartItem", "SystemID = "+SystemID + item.GetDbIdentifier());
         }
         private CartItem[] LoadCartItems()
         {
@@ -264,8 +264,8 @@ namespace SadnaSrc.UserSpot
             {
                 while (dbReader.Read())
                 {
-                    loadedItems.Add(new CartItem(dbReader.GetInt32(0),dbReader.GetString(1),
-                        dbReader.GetString(2),dbReader.GetInt32(3),dbReader.GetDouble(4),dbReader.GetString(5)));
+                    loadedItems.Add(new CartItem(dbReader.GetString(0),
+                        dbReader.GetString(1),dbReader.GetInt32(0),dbReader.GetDouble(0),dbReader.GetString(2)));
                 }
             }
             return loadedItems.ToArray();

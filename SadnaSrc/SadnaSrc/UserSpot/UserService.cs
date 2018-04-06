@@ -165,7 +165,7 @@ namespace SadnaSrc.UserSpot
             MarketUser.Cart.EmptyCart();
             return storage;
         }
-        public void AddToCart(string store, string product, double unitPrice, string sale, int quantity)
+        public void AddToCart(string product, string store, int quantity, double unitPrice, string sale)
         {
             MarketUser.Cart.AddToCart(store,product,unitPrice,sale,quantity);
         }
