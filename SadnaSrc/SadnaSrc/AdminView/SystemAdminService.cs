@@ -15,7 +15,6 @@ namespace SadnaSrc.AdminView
         private string adminUserName;
         private bool _isSystemAdmin;
         private SystemAdminServiceDL adminDL;
-        public PurchaseHistory[] LastHistoryReport { get; private set; }
         public SystemAdminService(IUserAdmin user)
         {
             adminDL = new SystemAdminServiceDL();
@@ -26,7 +25,6 @@ namespace SadnaSrc.AdminView
                 adminUserName = user.GetAdminName();
 
             }
-            LastHistoryReport = null;
         }
 
         private void ApproveSystemAdmin(string action)
@@ -112,14 +110,14 @@ namespace SadnaSrc.AdminView
                                        " attempting to view purchase history of " + field + " "+ givenValue + "...");
             try
             {
-                LastHistoryReport = adminDL.GetPurchaseHistory(field, givenValue);
-                return new AdminAnswer(ViewPurchaseHistoryStatus.Success, "View purchase history has been successful!");
+                var historyReport = adminDL.GetPurchaseHistory(field, givenValue);
+                return new AdminAnswer(ViewPurchaseHistoryStatus.Success, "View purchase history has been successful!",historyReport);
             }
             catch (AdminException e)
             {
                 MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to view purchase history report " +
                                            "of " + field + " " + givenValue + ". Error message has been created!");
-                return new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage());
+                return new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage(),null);
             }
 
         }
@@ -137,7 +135,7 @@ namespace SadnaSrc.AdminView
             {
                 MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to view purchase history report " +
                                            "of User "+ userName + " . Error message has been created!");
-                return new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage());
+                return new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage(),null);
             }
         }
 
@@ -156,7 +154,7 @@ namespace SadnaSrc.AdminView
             {
                 MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to view purchase history report " +
                                            "of Store " + storeName + " . Error message has been created!");
-                return new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage());
+                return new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage(),null);
             }
         }
     }

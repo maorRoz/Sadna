@@ -8,7 +8,7 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.MarketHarmony
 {
-    class UserAdminHarmony : IUserAdmin
+    public class UserAdminHarmony : IUserAdmin
     {
         private readonly User user;
         public UserAdminHarmony(IUserService userService)

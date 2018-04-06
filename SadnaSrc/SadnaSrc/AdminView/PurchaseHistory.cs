@@ -34,6 +34,10 @@ namespace SadnaSrc.AdminView
                                          && obj.Sale.Equals(Sale) && obj.Date.Equals(Date);
         }
 
+        public override string ToString()
+        {
+            return "User: " + User + "Product: " + Product + "Store: " + Store + "Sale: " + Sale + "Date: " + Date;
+        }
         public override int GetHashCode()
         {
             var hashCode = -1637592205;

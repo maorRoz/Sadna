@@ -31,7 +31,7 @@ namespace UserSpotTests
         public void AddToGuestCartTest()
         {
             Assert.AreEqual(0,userServiceGuestSession.MarketUser.Cart.GetCartStorage());
-            userServiceGuestSession.AddToCart();
+       //     userServiceGuestSession.AddToCart();
             
         }
 

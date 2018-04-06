@@ -5,8 +5,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.AdminView;
 using SadnaSrc.Main;
-using SadnaSrc.OrderPool;
-using SadnaSrc.UserSpot;
 
 namespace SystemViewTests
 {
@@ -15,7 +13,7 @@ namespace SystemViewTests
     public class UseCase5_4_Tests
     {
         private SystemAdminService adminServiceSession;
-        private UserService userServiceSession;
+        private IUserService userServiceSession;
         private MarketYard marketSession;
         private string adminName = "Arik1";
         private string adminPass = "123";
@@ -27,7 +25,7 @@ namespace SystemViewTests
         public void MarketBuilder()
         {
             marketSession = MarketYard.Instance;
-            userServiceSession = (UserService)marketSession.GetUserService();
+            userServiceSession = marketSession.GetUserService();
         }
 
         [TestMethod]
@@ -35,15 +33,15 @@ namespace SystemViewTests
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByUser(userNameToView).Status);
-            PurchaseHistory[] expectedHistory = 
+            string[] expectedHistory = 
             {
-                new PurchaseHistory(userNameToView, "Health Potion", "XXX", "Immediate", "Today"),
-                new PurchaseHistory(userNameToView, "INT Potion", storeNameToView, "Lottery", "Yesterday"),
-                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery", "Yesterday"),
+                new PurchaseHistory(userNameToView, "Health Potion", "XXX", "Immediate", "Today").ToString(),
+                new PurchaseHistory(userNameToView, "INT Potion", storeNameToView, "Lottery", "Yesterday").ToString(),
+                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery", "Yesterday").ToString(),
 
             };
-            Assert.IsTrue(adminServiceSession.LastHistoryReport.SequenceEqual(expectedHistory));
+            Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByUser(userNameToView).Status);
+            Assert.IsTrue(adminServiceSession.ViewPurchaseHistoryByUser(userNameToView).ReportList.SequenceEqual(expectedHistory));
             Assert.IsFalse(MarketException.hasErrorRaised());
         }
 
@@ -52,15 +50,15 @@ namespace SystemViewTests
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByStore(storeNameToView).Status);
-            PurchaseHistory[] expectedHistory =
+            string[] expectedHistory =
             {
-                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery", "Yesterday"),
-                new PurchaseHistory(userNameToView, "INT Potion", storeNameToView, "Lottery", "Yesterday"),
-                new PurchaseHistory("MosheYYY", "STR Potion", storeNameToView, "Immediate", "Today"),
+                new PurchaseHistory(userNameToView, "Mana Potion", storeNameToView, "Lottery", "Yesterday").ToString(),
+                new PurchaseHistory(userNameToView, "INT Potion", storeNameToView, "Lottery", "Yesterday").ToString(),
+                new PurchaseHistory("MosheYYY", "STR Potion", storeNameToView, "Immediate", "Today").ToString(),
 
             };
-            Assert.IsTrue(adminServiceSession.LastHistoryReport.SequenceEqual(expectedHistory));
+            Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByStore(storeNameToView).Status);
+            Assert.IsTrue(adminServiceSession.ViewPurchaseHistoryByStore(storeNameToView).ReportList.SequenceEqual(expectedHistory));
             Assert.IsFalse(MarketException.hasErrorRaised());
         }
         [TestMethod]
@@ -124,8 +122,8 @@ namespace SystemViewTests
 
         private void DoSignInToAdmin()
         {
-            Assert.AreEqual((int)EnterSystemStatus.Success, userServiceSession.EnterSystem().Status);
-            Assert.AreEqual((int)SignInStatus.Success, userServiceSession.SignIn(adminName, adminPass).Status);
+            userServiceSession.EnterSystem();
+            userServiceSession.SignIn(adminName, adminPass);
         }
 
     }

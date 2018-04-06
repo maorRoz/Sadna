@@ -13,9 +13,8 @@ namespace SadnaSrc.AdminView
         {
 
         }
-        public AdminAnswer(ViewPurchaseHistoryStatus status, string answer) : base((int)status, answer)
+        public AdminAnswer(ViewPurchaseHistoryStatus status, string answer, string[] historyReport) : base((int)status, answer,historyReport)
         {
-
         }
 
     }
