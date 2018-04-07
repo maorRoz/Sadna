@@ -29,8 +29,8 @@ namespace SadnaSrc.Main
                 CreateProductTable(),//added by lior
                 CreateDiscountTable(), //added by lior
                 CreateStockTable(), //added by lior
-                CreateLotteryTable(),
-                CreateLotteryTicketsTable(),
+                CreateLotteryTable(), //added by lior
+                CreateLotteryTicketsTable(), //added by lior
                 CreateStoreTable(), //TODO: need to be edited by by lior
                 CreateUserStatePolicyTable(),
                 CreateUserStorePolicyTable(),  // should improve this one
@@ -121,11 +121,11 @@ namespace SadnaSrc.Main
         private static string CreateStoreTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [Store] (
+                                    [SystemID]      TEXT,
                                     [Name]          TEXT,
                                     [Address]       TEXT,
-                                    [Status]        TEXT,
-                                    [IsActive]      BIT,
-                                    PRIMARY KEY([Name])
+                                    [IsActive]      TEXT,
+                                    PRIMARY KEY([SystemID])
                                     )";
         }
 
@@ -199,7 +199,7 @@ namespace SadnaSrc.Main
                                     [StartDate]     TEXT,
                                     [EndDate]     TEXT,
                                     [DiscountAmount]     INTEGER,
-                                    [Percentages]     Bit,
+                                    [Percentages]     TEXT,
                                     PRIMARY KEY([DiscountCode])
                                     )";
         }
@@ -216,7 +216,7 @@ namespace SadnaSrc.Main
                                     FOREIGN KEY([discount]) REFERENCES [Discount]([DiscountCode]) ON DELETE CASCADE
                                     )";
         }
-
+        
         private static string CreateLotteryTicketsTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [LotteryTicket] (
@@ -224,9 +224,9 @@ namespace SadnaSrc.Main
                                     [LotteryID]    TEXT,
                                     [IntervalStart]    INTEGER,
                                     [IntervalEnd]  INTEGER,
-                                    [Status] TEXT, CHECK (PurchaseWay IN ('WAITING', 'WINNING', 'LOSING', 'CANCEL')),
+                                    [Status] TEXT, CHECK (Status IN ('WAITING', 'WINNING', 'LOSING', 'CANCEL')),
                                     PRIMARY KEY([myID]),
-                                    FOREIGN KEY([LotteryID]) REFERENCES [LotteryTable]([SystemID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([LotteryID]) REFERENCES [LotteryTable]([SystemID]) ON DELETE CASCADE
                                     )";
         }
 
@@ -239,9 +239,9 @@ namespace SadnaSrc.Main
                                     [TotalMoneyPayed]  INTEGER,
                                     [StartDate] TEXT,
                                     [EndDate] TEXT,
-                                    [isActive] BIT,
+                                    [isActive] TEXT,
                                     PRIMARY KEY([SystemID]),
-                                    FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
                                     )";
         }
         private static string CreateSaleTable()

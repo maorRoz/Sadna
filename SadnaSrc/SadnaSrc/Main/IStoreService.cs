@@ -8,7 +8,7 @@ namespace SadnaSrc.Main
 {
     public interface IStoreService
     {
-        MarketAnswer OpenStore();
+        MarketAnswer OpenStore(string name, string );
 
         /**
         * Store Managment, general Actions
@@ -17,7 +17,9 @@ namespace SadnaSrc.Main
         MarketAnswer PromoteToManager(int someoneToPromoteID, string actions);
         MarketAnswer getProductStockInformation(int ProductID);
         MarketAnswer CloseStore();
-        
+
+        MarketAnswer setStoreName(string name);
+        MarketAnswer setStoreAddress(string address);
 
         /**
          * Store Managment, handling products
@@ -65,7 +67,8 @@ namespace SadnaSrc.Main
         CloseStoreFail,
         ChangePurchaseTypeFail,
         PurchesFail,
-        SetManagerPermissionsFail
+        SetManagerPermissionsFail,
+        EditStoreFail
     }
 
     public enum PurchaseEnum { IMMEDIATE, LOTTERY };

@@ -14,5 +14,6 @@ namespace SadnaSrc.StoreCenter
         Store getStoreByID(int ID); // this one if you need extra help 
         Store getStoreByID(string ID);
         LinkedList<Product> getAllMarketProducts(); // you will need it. I don't know how to return it by MarketAnswer
+        void UpdateQuantityAfterPurches(string storeID, string productID, int quantity);
     }
 }

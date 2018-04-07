@@ -35,9 +35,9 @@ namespace SadnaSrc.StoreCenter
             global = ModuleGlobalHandler.getInstance();
         }
 
-        public MarketAnswer OpenStore()
+        public MarketAnswer OpenStore(string name, string address)
         {
-            Store temp = new Store(user.GetUser(), global.getNextStoreId());
+            Store temp = new Store(global.getNextStoreId(), name, address);
             global.AddStore(temp);
             return new StoreAnswer(StoreEnum.Success, "Store " + temp.SystemId + "opend successfully");
         }
@@ -196,7 +196,6 @@ namespace SadnaSrc.StoreCenter
                 double price = store.getProductPriceWithDiscountbyDouble(productName, discountCode, quantity);
                 if (price==-1) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
                 user.GetUser().Cart.AddToCart(store.SystemId, product.SystemId, price, "", quantity); //ASK MAOR ABOUT IT
-                store.updateQuanityAfterPurches(product, quantity);
                 return new StoreAnswer(StoreEnum.Success, "product "+ productName+" sold");
             }
             return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
@@ -209,9 +208,26 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer setManagersActions(string otherUser, string actions)
         {
+            if (proxyIHavePremmision(user.GetUser())) { 
             string notAllowed = "StoreOwner";
             if (actions.Contains(notAllowed)) { return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "you tryed to make a manager into a store owner"); }
             throw new NotImplementedException(); //Ask Maor about it
+            }
+            return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "you have no premmision to do that");
         }
+
+        public MarketAnswer setStoreName(string name)
+        {
+            if (proxyIHavePremmision(user.GetUser()))
+                return store.setStoreName(name);
+            return new StoreAnswer(StoreEnum.EditStoreFail, "you have no premmision to do that");
+        }
+
+        public MarketAnswer setStoreAddress(string address)
+        {
+            if (proxyIHavePremmision(user.GetUser()))
+                return store.setStoreAddress(address);
+        return new StoreAnswer(StoreEnum.EditStoreFail, "you have no premmision to do that");
+    }
     }
 }

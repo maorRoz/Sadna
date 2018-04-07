@@ -13,23 +13,26 @@ namespace SadnaSrc.StoreCenter
      **/
     public class Store
     {
-        public string SystemId { get; }
-        private Stock stock { get; set; }
-        private LinkedList<PurchasePolicy> PurchasePolicy;
-        private LinkedList<String> history;
-        private bool isActive { get; set; }
+        internal string SystemId { get; }
+        internal Stock stock { get; set; }
+        internal LinkedList<PurchasePolicy> PurchasePolicy;
+        internal string isActive { get; set; }
+        internal string name { get; set; }
+        internal string address { get; set; }
 
-        public Store(User _Owner, string id)
+        public Store(string id, string name, string addrss)
         {
             SystemId = id;
             stock = new Stock(SystemId);
             PurchasePolicy = new LinkedList<PurchasePolicy>();
-            isActive = true;
+            isActive = "Active";
         }
 
         public bool IsStoreActive()
         {
-            return isActive;
+            if (isActive.Equals("Active"))
+                return true;
+            return false;
         }
         //////////////////// this function will be removed after I will have Maor function!//////////////////////
 
@@ -39,15 +42,16 @@ namespace SadnaSrc.StoreCenter
                return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a owner of store " + SystemId);
         }
 
-
         public MarketAnswer CloseStore()
         {
-                if (isActive)
-                {
-                    isActive = false;
-                    return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
-                }
-                return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " is alrady closed");
+            if (isActive.Equals("Active"))
+            {
+                isActive = "InActive";
+                ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+                handler.dataLayer.editStore(this);
+                return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
+            }
+            return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is alrady closed");
         }
 
         
@@ -93,13 +97,19 @@ namespace SadnaSrc.StoreCenter
             return stock.getProductById(ID);
         }
         
-        internal void addAllProductsToExistingList(LinkedList<Product> result)
+        internal LinkedList<Product> addAllProductsToExistingList(LinkedList<Product> Param)
         {
+            LinkedList<Product> answer = new LinkedList<Product>();
+            foreach (Product P in Param)
+            {
+                answer.AddLast(P);
+            }
             LinkedList<Product> products = getAllProducts();
             foreach (Product product in products)
             {
-                result.AddLast(product);
+                answer.AddLast(product);
             }
+            return answer;
         }
         private LotterySaleManagmentTicket getLotterySale(Product p)
         {
@@ -207,6 +217,23 @@ namespace SadnaSrc.StoreCenter
             handler.dataLayer.EditDiscountInDatabase(discount);
             return result;
         }
+
+        internal MarketAnswer setStoreAddress(string _address)
+        {
+            address = _address;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            handler.dataLayer.editStore(this);
+            return new StoreAnswer(StoreEnum.Success, "Store Address changed");
+        }
+
+        internal MarketAnswer setStoreName(string _name)
+        {
+            address = _name;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
+            handler.dataLayer.editStore(this);
+            return new StoreAnswer(StoreEnum.Success, "Store Address changed");
+        }
+
         public MarketAnswer EditProduct (string productID, string whatToEdit, string newValue)
         {
             StoreAnswer result = null;
@@ -247,7 +274,7 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "PurchaseWay")
             {
                 PurchaseEnum purchaseEnum = handler.GetPurchaseEnumString(newValue);
-
+                if (purchaseEnum.Equals(null)) { return new StoreAnswer(StoreEnum.UpdateStockFail, "this Purchase Enum is not leagal"); }
                 if (stockListItem.PurchaseWay == PurchaseEnum.LOTTERY)
                 {
                     LotterySaleManagmentTicket LSMT = handler.dataLayer.getLotteryByProductID(productID);

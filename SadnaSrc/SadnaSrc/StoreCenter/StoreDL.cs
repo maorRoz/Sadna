@@ -42,6 +42,7 @@ namespace SadnaSrc.StoreCenter
             values[4] = lottery.myStatus;
             return values;
         }
+
         private object[] getDiscountValuesArray(Discount discount)
         {
             object[] values = new object[6];
@@ -65,7 +66,15 @@ namespace SadnaSrc.StoreCenter
             values[6] = lSMT.isActive;
             return values;
         }
-
+        private object[] getStoreArray(Store store)
+        {
+            object[] values = new object[4];
+            values[0] = store.SystemId;
+            values[1] = store.name;
+            values[2] = store.address;
+            values[3] = store.isActive;
+            return values;
+        }
         private string[] getTicketStringValues(LotteryTicket lottery)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
@@ -111,6 +120,23 @@ namespace SadnaSrc.StoreCenter
             return Stringvalues;
         }
 
+        internal Store getStore(string storeID)
+        {
+            var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = " + storeID);
+            Store S = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2));
+            S.isActive = dbReader.GetString(3);
+            return S;
+        }
+
+        private string[] getStoreStringValues(Store store)
+        {
+            string[] Stringvalues = new string[4];
+            Stringvalues[0] = "'" + store.SystemId + "'";
+            Stringvalues[1] = "'" + store.name + "'";
+            Stringvalues[2] = "'" + store.address + "'";
+            Stringvalues[3] = "'" + store.isActive + "'";
+            return Stringvalues;
+        }
         private string[] getLotteryManagmentStringValues(LotterySaleManagmentTicket lSMT)
         {
             string[] Stringvalues = new string[7];
@@ -180,7 +206,12 @@ namespace SadnaSrc.StoreCenter
             
             return SLI;
         }
-        
+
+        internal void addStore(Store temp)
+        {
+            InsertTable("Store", "SystemID, Name, Address, IsActive",
+                getStoreStringValues(temp), getStoreArray(temp));
+        }
 
         internal void addLotteryTicket(LotteryTicket lottery)
         {
@@ -256,6 +287,20 @@ namespace SadnaSrc.StoreCenter
             UpdateTable("Stock", "DiscountCode = '" + discount.discountCode + "'", columnNames,
                 getDiscountStringValues(discount), getDiscountValuesArray(discount));
         }
+
+        internal void editStore(Store store)
+        {
+
+            string[] columnNames = new string[4];
+            columnNames[0] = "SystemID";
+            columnNames[1] = "Name";
+            columnNames[2] = "Address";
+            columnNames[3] = "IsActive";
+            UpdateTable("Store", "SystemID = '" + store.SystemId + "'", columnNames,
+                getStoreStringValues(store), getStoreArray(store));
+        }
+
+
         
 
         internal void removeProduct(Product product)
@@ -276,9 +321,18 @@ namespace SadnaSrc.StoreCenter
         }
         
 
-        internal static LinkedList<Store> getAllActiveStores() // all active stores
+        internal LinkedList<Store> getAllActiveStores() // all active stores
         {
-            throw new NotImplementedException();
+            LinkedList<Store> result = new LinkedList<Store>();
+            Store store;
+            var dbReader = SelectFromTableWithCondition("Store", "*", "IsActive = Active");
+            while (dbReader.Read())
+            {
+                store = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2));
+                store.isActive = dbReader.GetString(3);
+                result.AddLast(store);
+            }
+            return result;
         }
 
         internal void removeDiscount(Discount discount)
@@ -303,9 +357,11 @@ namespace SadnaSrc.StoreCenter
         {
             LinkedList<string> result = new LinkedList<string>();
             var dbReader = SelectFromTableWithCondition("Stock", "ProductSystemID", "StockID = " +systemID);
-            //foreach ()
-            //result.AddLast(dbReader.ToString(0));
-            throw new NotImplementedException();
+            while (dbReader.Read())
+            {
+                result.AddLast(dbReader.GetString(0));
+            }
+            return result;
         }
 
         internal LotterySaleManagmentTicket getLotteryByProductID(string productID)

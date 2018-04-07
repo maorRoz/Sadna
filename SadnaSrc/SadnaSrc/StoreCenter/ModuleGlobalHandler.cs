@@ -41,7 +41,7 @@ namespace SadnaSrc.StoreCenter
 
         internal void AddStore(Store temp)
         {
-            throw new NotImplementedException();
+            dataLayer.addStore(temp);
         }
         internal string PrintEnum(LotteryTicketStatus status)
         {
@@ -65,7 +65,7 @@ namespace SadnaSrc.StoreCenter
         }
         internal string PrintEnum(PurchaseEnum purchaseEnum)
         {
-            if (purchaseEnum == PurchaseEnum.IMMEDIATE) return "IMMIDIATE";
+            if (purchaseEnum == PurchaseEnum.IMMEDIATE) return "IMMEDIATE";
             if (purchaseEnum == PurchaseEnum.LOTTERY) return "LOTTERY";
             throw new StoreException(1, "Enum value not exists");
         }
@@ -79,7 +79,7 @@ namespace SadnaSrc.StoreCenter
         }
         internal PurchaseEnum GetPurchaseEnumString(String astring)
         {
-            if (astring == "IMMIDIATE")
+            if (astring == "IMEMIDIATE")
                 return PurchaseEnum.IMMEDIATE;
             if (astring == "LOTTERY")
                 return PurchaseEnum.LOTTERY;
@@ -123,7 +123,7 @@ namespace SadnaSrc.StoreCenter
 
         public LinkedList<Store> getAllUserStores(User user) // this implementation will be change after maor finish his work
         {
-            LinkedList<Store> AllStores = StoreDL.getAllActiveStores();
+            LinkedList<Store> AllStores = dataLayer.getAllActiveStores();
             LinkedList<Store> result = new LinkedList<Store>();
             foreach (Store store in AllStores)
             {
@@ -137,42 +137,38 @@ namespace SadnaSrc.StoreCenter
 
         public LinkedList<Store> getAllStores()
         {
-            LinkedList<Store> AllStores = StoreDL.getAllActiveStores();
+            LinkedList<Store> AllStores = dataLayer.getAllActiveStores();
             return AllStores;
         }
 
-        
+        public void UpdateQuantityAfterPurches(string storeID, string productID, int quantity)
+        {
+            Store store = dataLayer.getStore(storeID);
+            if (store ==null) { throw new StoreException(-1, "no such store"); }
+            Product product = dataLayer.getProductID(productID);
+            if (product==null) { throw new StoreException(-1, "no such product"); }
+            store.updateQuanityAfterPurches(product, quantity);
+        }
         public Store getStoreByID(int ID)
         {
             return getStoreByID("S" + ID);
         }
         public Store getStoreByID(string ID)
         {
-            LinkedList<Store> AllStores = StoreDL.getAllActiveStores();
-            foreach (Store store in AllStores)
-            {
-                if (store.SystemId.Equals(ID))
-                {
-                    return store;
-                }
-            }
-            return null;
+            return dataLayer.getStore(ID);
         }
         
         public LinkedList<Product> getAllMarketProducts()
         {
-            LinkedList<Store> AllStores = StoreDL.getAllActiveStores();
+            LinkedList<Store> AllStores = dataLayer.getAllActiveStores();
             LinkedList<Product> result = new LinkedList<Product>();
             foreach (Store store in AllStores)
             {
-                store.addAllProductsToExistingList(result);
+                result = store.addAllProductsToExistingList(result);
             }
             return result;
         }
 
-        internal LinkedList<string> getAllStoreProductsID(string systemId)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
