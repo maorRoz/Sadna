@@ -130,9 +130,9 @@ namespace SadnaSrc.StoreCenter
             };
         }
 
-        internal Store GetStore(string storeID)
+        public Store GetStore(string storeID)
         {
-            var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = " + storeID);
+            var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = '" + storeID +"'");
             return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
         }
 

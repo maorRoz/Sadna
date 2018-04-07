@@ -28,8 +28,8 @@ namespace OrderPoolWallaterSupplyPointTests
             market = MarketYard.Instance;
             userService = market.GetUserService();
             userService.EnterSystem();
-            storeService = market.GetStoreService(userService);
-            orderService = (OrderService)market.GetOrderService(ref userService, storeService);
+          //  storeService = market.GetStoreService(userService); //TODO: fix this
+            orderService = (OrderService)market.GetOrderService(ref userService, null);
             orderService.setUsername("Big Smoke");
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
