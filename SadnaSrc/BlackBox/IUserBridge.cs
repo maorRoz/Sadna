@@ -28,7 +28,6 @@ namespace BlackBox
 		 * StoreSystem
 		 */
 		void GetStoreService();
-		
-		MarketAnswer createStore(int id, string address, string status);
+		MarketAnswer OpenStore(string name, string store);
 	}
 }
