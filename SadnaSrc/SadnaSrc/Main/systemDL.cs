@@ -124,7 +124,7 @@ namespace SadnaSrc.Main
                                     [SystemID]      TEXT,
                                     [Name]          TEXT,
                                     [Address]       TEXT,
-                                    [IsActive]      TEXT,
+                                    [Status]      TEXT,
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -161,9 +161,10 @@ namespace SadnaSrc.Main
                                     [FinalPrice]    REAL,
                                     [SaleType]      TEXT,
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
-                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice],[SaleType])
                                     )";
+
+            //TODO:                                     FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
         }
 
         //TODO: this table is bad and should be deleted once OrderPool DB is finally ready

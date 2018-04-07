@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.AdminView;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -129,9 +130,9 @@ namespace SadnaSrc.StoreCenter
             };
         }
 
-        internal Store GetStore(string storeID)
+        public Store GetStore(string storeID)
         {
-            var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = " + storeID);
+            var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = '" + storeID +"'");
             return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
         }
 
@@ -185,7 +186,7 @@ namespace SadnaSrc.StoreCenter
             while (dbReader.Read())
             {
                 historyData.Add(new PurchaseHistory(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2),
-                    dbReader.GetString(3), dbReader.GetString(4)));
+                    dbReader.GetString(3), dbReader.GetInt32(4),dbReader.GetDouble(5),dbReader.GetString(6)));
             }
 
             return historyData.ToArray();

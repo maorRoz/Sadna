@@ -26,8 +26,8 @@ namespace OrderPoolWallaterSupplyPointTests
             market = MarketYard.Instance;
             userService = market.GetUserService();
             userService.EnterSystem();
-            storeService = market.GetStoreService(userService);
-            orderService = (OrderService)market.GetOrderService(ref userService, storeService);
+//            storeService = market.GetStoreService(userService); //TODO: fix this
+            orderService = (OrderService)market.GetOrderService(ref userService, null);
             orderService.setUsername("Big Smoke");
             paymentService = new PaymentService(orderService);
             creditCard = new List<string>();
