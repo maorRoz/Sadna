@@ -26,11 +26,11 @@ namespace SadnaSrc.Main
                 CreateSystemLogTable(),
                 CreateSystemErrorsTable(),
                 CreateUserTable(),
-                CreateProductTable(),//added by lior
-                CreateDiscountTable(), //added by lior
-                CreateStockTable(), //added by lior
-                CreateLotteryTable(), //added by lior
-                CreateLotteryTicketsTable(), //added by lior
+            //    CreateProductTable(),//added by lior
+            //    CreateDiscountTable(), //added by lior
+            //    CreateStockTable(), //added by lior
+            //    CreateLotteryTable(), //added by lior
+            //    CreateLotteryTicketsTable(), //added by lior
                 CreateStoreTable(), //TODO: need to be edited by by lior
                 CreateUserStatePolicyTable(),
                 CreateUserStorePolicyTable(),  // should improve this one
@@ -49,9 +49,9 @@ namespace SadnaSrc.Main
             //TODO : delete this when The Right UseCase is implemented (Except the SystemAdmin since he is mandatory by constraint)
             string[] thingsToInsertByForce = 
             {
-                "INSERT INTO Store (Name,Address,Status) VALUES ('X','Here 4','Active')",
-                "INSERT INTO Store (Name,Address,Status) VALUES ('Y','Here 4','Active')",
-                "INSERT INTO Store (Name,Address,Status) VALUES ('M','Here 4','Active')",
+                "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S1','X','Here 4','Active')",
+                "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S2','Y','Here 4','Active')",
+                "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S3','M','Here 4','Active')",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",
