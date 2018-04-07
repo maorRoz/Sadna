@@ -9,28 +9,52 @@ namespace SadnaSrc.StoreCenter
     public class Product
     {
         public string SystemId;
-        public String name { get; set; }
+        public string Name { get; set; }
         public int BasePrice { get; set; }
-        public String description { get; set; }
+        public string Description { get; set; }
 
-        public Product(string _SystemId, String _name, int _price, String _description)
+        public Product(string _SystemId, string _name, int _price, string _description)
         {
             SystemId = _SystemId;
-            name = _name;
+            Name = _name;
             BasePrice = _price;
-            description = _description;
+            Description = _description;
         }
         public object[] ToData()
         {
-            return new object[] { SystemId, name, BasePrice, description };
+            return new object[] { SystemId, Name, BasePrice, Description };
         }
-        public bool equal(Product other)
+
+        public override bool Equals(object obj)
         {
-            return ((SystemId == other.SystemId)&(name==other.name) & (BasePrice == other.BasePrice));
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return Equals((Product)obj);
         }
-        public String toString()
+
+
+        private bool Equals(Product obj)
         {
-            return "SystemId: "+ SystemId +" name: " + name+" base price: "+BasePrice+ " description: "+ description;
+            return ((SystemId == obj.SystemId)&(Name== obj.Name) & (BasePrice == obj.BasePrice));
+        }
+        public override string ToString()
+        {
+            return "SystemId: "+ SystemId +" name: " + Name+" base price: "+BasePrice+ " description: "+ Description;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (SystemId != null ? SystemId.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ BasePrice;
+                hashCode = (hashCode * 397) ^ (Description != null ? Description.GetHashCode() : 0);
+                return hashCode;
+            }
         }
     }
 }

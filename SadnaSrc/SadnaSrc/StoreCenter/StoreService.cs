@@ -17,11 +17,11 @@ namespace SadnaSrc.StoreCenter
         
         /// /////////////////////////////////////////////////////////////////////////////////////////
         //*************************************this function is proxy and will be removed!********///
-        public static User proxyCreateUser(int number)
+        public static User ProxyCreateUser(int number)
         {
             return null;
         }
-        public static bool proxyIHavePremmision(User number)
+        public static bool ProxyIHavePremmision(User number)
         {
             return true;
         }
@@ -32,28 +32,28 @@ namespace SadnaSrc.StoreCenter
         {
             user = _user;
             store = _store;
-            global = ModuleGlobalHandler.getInstance();
+            global = ModuleGlobalHandler.GetInstance();
         }
 
         public MarketAnswer OpenStore(string name, string address)
         {
-            Store temp = new Store(global.getNextStoreId(), name, address);
+            Store temp = new Store(global.GetNextStoreId(), name, address);
             global.AddStore(temp);
             return new StoreAnswer(StoreEnum.Success, "Store " + temp.SystemId + "opend successfully");
         }
         
         public MarketAnswer CloseStore()
         {
-            if (proxyIHavePremmision(user.GetUser())){
+            if (ProxyIHavePremmision(user.GetUser())){
                 return store.CloseStore();
             }
             return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
         }
         public static MarketAnswer StaticCloseStore(string storeString, int ownerOrSystemAdmin) //Maor asked my for this one
         {
-            if (proxyIHavePremmision(proxyCreateUser(ownerOrSystemAdmin))){
-                ModuleGlobalHandler global = ModuleGlobalHandler.getInstance();
-                Store other = global.getStoreByID(storeString);
+            if (ProxyIHavePremmision(ProxyCreateUser(ownerOrSystemAdmin))){
+                ModuleGlobalHandler global = ModuleGlobalHandler.GetInstance();
+                Store other = global.GetStoreByID(storeString);
 
                 //Need Maor function here!
                 return other.CloseStore();
@@ -66,7 +66,7 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer PromoteToOwner(int someoneToPromote)
         {
-            if (proxyIHavePremmision(user.GetUser())){
+            if (ProxyIHavePremmision(user.GetUser())){
                 // need here to find the fucntion from Maor that add user to be an owner of the store (using 
                 return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a owner of store " + store.SystemId);
             }            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
@@ -74,112 +74,112 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer PromoteToManager(int someoneToPromote, string actions)
         {
-            if (proxyIHavePremmision(user.GetUser())){
+            if (ProxyIHavePremmision(user.GetUser())){
                 return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a Manager of store " + store.SystemId);
             }
             return new StoreAnswer(StoreEnum.AddStoreManagerFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer getStoreProducts()
+        public MarketAnswer GetStoreProducts()
         {
-            LinkedList<Product> Plist = store.getAllProducts();
+            LinkedList<Product> productList = store.GetAllProducts();
             string result = "";
-            foreach (Product P in Plist)
+            foreach (Product product in productList)
             {
-                result += P.toString();
+                result += product.ToString();
             }
             return new StoreAnswer(StoreEnum.Success, result);
         }
 
         public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
                 return store.AddProduct(_name, _price, _description, quantity);
             }
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer getProductStockInformation(int ProductID)
+        public MarketAnswer GetProductStockInformation(int productID)
         {
-            return store.getProductStockInformation("P"+ProductID);
+            return store.GetProductStockInformation("P"+ productID);
         }
         
-        public MarketAnswer removeProduct(string productName)
+        public MarketAnswer RemoveProduct(string productName)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
-                return store.removeProduct(productName);
+                return store.RemoveProduct(productName);
             }
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer editProduct(string productName, string WhatToEdit, string NewValue)
+        public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
-                return store.EditProduct(productName, WhatToEdit, NewValue);
+                return store.EditProduct(productName, whatToEdit, newValue);
             }
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productName)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
-                return store.editStockListItem(productName, "PurchaseWay", "IMMEDIATE");
+                return store.EditStockListItem(productName, "PurchaseWay", "IMMEDIATE");
             }
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime StartDate, DateTime EndDate)
+        public MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
-                return store.editStockListItem(productName, "PurchaseWay", "LOTTERY");
+                return store.EditStockListItem(productName, "PurchaseWay", "LOTTERY");
             }
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer addDiscountToProduct(string productName, DateTime _startDate, DateTime _EndDate, int _DiscountAmount, string DiscountType, bool presenteges)
+        public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
-                return store.addDiscountToProduct(productName, _startDate, _EndDate, _DiscountAmount, DiscountType, presenteges);
+                return store.AddDiscountToProduct(productName, startDate, endDate, discountAmount, discountType, presenteges);
             }
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer EditDiscount(string productID, string whatToEdit, string NewValue)
+        public MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
-                return store.EditDiscount(productID, whatToEdit, NewValue);
+                return store.EditDiscount(productID, whatToEdit, newValue);
             }
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer removeDiscountFromProduct(string productID)
+        public MarketAnswer RemoveDiscountFromProduct(string productID)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
-                return store.removeDiscountFromProduct(productID);
+                return store.RemoveDiscountFromProduct(productID);
             }
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
         public MarketAnswer MakeALotteryPurchase(string productName, int moeny)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
-                Product product = store.getProductById(productName);
+                Product product = store.GetProductById(productName);
                 if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
                 if (moeny > 0)
                 { 
                 LotteryTicket loti = store.MakeALotteryPurchase(productName, moeny);
                     if (loti==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
-                    if (!store.canPurchaseLottery(product,moeny)) { return new StoreAnswer(StoreEnum.PurchesFail, "purching lottery ticket faild"); }
-                    user.GetUser().Cart.AddToCart(store.SystemId, loti.toString(), moeny, "", 1); //ASK MAOR ABOUT IT                    
+                    if (!store.CanPurchaseLottery(product,moeny)) { return new StoreAnswer(StoreEnum.PurchesFail, "purching lottery ticket faild"); }
+                    user.GetUser().Cart.AddToCart(store.SystemId, loti.ToString(), moeny, "", 1); //ASK MAOR ABOUT IT                    
                 return new StoreAnswer(StoreEnum.Success, "lottery ticket sold");
                 }
                 return new StoreAnswer(StoreEnum.PurchesFail, "cannot pay non-positie amount of moeny");
@@ -189,11 +189,11 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer MakeAImmediatePurchase(string productName, int discountCode, int quantity)
         {
-            if (proxyIHavePremmision(user.GetUser()))
+            if (ProxyIHavePremmision(user.GetUser()))
             {
                 Product product = store.MakeAImmediatePurchase(productName, quantity);
                 if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
-                double price = store.getProductPriceWithDiscountbyDouble(productName, discountCode, quantity);
+                double price = store.GetProductPriceWithDiscountbyDouble(productName, discountCode, quantity);
                 if (price==-1) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
                 user.GetUser().Cart.AddToCart(store.SystemId, product.SystemId, price, "", quantity); //ASK MAOR ABOUT IT
                 return new StoreAnswer(StoreEnum.Success, "product "+ productName+" sold");
@@ -201,14 +201,14 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer getProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
+        public MarketAnswer GetProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
         {
-            return store.getProductPriceWithDiscount(_product, _DiscountCode, _quantity);
+            return store.GetProductPriceWithDiscount(_product, _DiscountCode, _quantity);
         }
 
-        public MarketAnswer setManagersActions(string otherUser, string actions)
+        public MarketAnswer SetManagersActions(string otherUser, string actions)
         {
-            if (proxyIHavePremmision(user.GetUser())) { 
+            if (ProxyIHavePremmision(user.GetUser())) { 
             string notAllowed = "StoreOwner";
             if (actions.Contains(notAllowed)) { return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "you tryed to make a manager into a store owner"); }
             throw new NotImplementedException(); //Ask Maor about it
@@ -216,17 +216,17 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer setStoreName(string name)
+        public MarketAnswer SetStoreName(string name)
         {
-            if (proxyIHavePremmision(user.GetUser()))
-                return store.setStoreName(name);
+            if (ProxyIHavePremmision(user.GetUser()))
+                return store.SetStoreName(name);
             return new StoreAnswer(StoreEnum.EditStoreFail, "you have no premmision to do that");
         }
 
-        public MarketAnswer setStoreAddress(string address)
+        public MarketAnswer SetStoreAddress(string address)
         {
-            if (proxyIHavePremmision(user.GetUser()))
-                return store.setStoreAddress(address);
+            if (ProxyIHavePremmision(user.GetUser()))
+                return store.SetStoreAddress(address);
         return new StoreAnswer(StoreEnum.EditStoreFail, "you have no premmision to do that");
     }
     }

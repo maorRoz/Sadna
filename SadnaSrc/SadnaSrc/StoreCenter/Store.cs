@@ -13,26 +13,39 @@ namespace SadnaSrc.StoreCenter
      **/
     public class Store
     {
-        internal string SystemId { get; }
-        internal Stock stock { get; set; }
-        internal LinkedList<PurchasePolicy> PurchasePolicy;
-        internal string isActive { get; set; }
-        internal string name { get; set; }
-        internal string address { get; set; }
+        public string SystemId { get; }
+        private Stock stock { get;}
+        private LinkedList<PurchasePolicy> PurchasePolicy;
+        public bool IsActive { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
 
         public Store(string id, string name, string addrss)
         {
             SystemId = id;
             stock = new Stock(SystemId);
             PurchasePolicy = new LinkedList<PurchasePolicy>();
-            isActive = "Active";
+            IsActive = true;
         }
 
-        public bool IsStoreActive()
+        public Store(string id, string name, string addrss, string active)
         {
-            if (isActive.Equals("Active"))
-                return true;
-            return false;
+            SystemId = id;
+            stock = new Stock(SystemId);
+            PurchasePolicy = new LinkedList<PurchasePolicy>();
+            GetActiveFromString(active);
+        }
+
+        private void GetActiveFromString(string active)
+        {
+            if (active.Equals("Active"))
+                IsActive = true;
+            IsActive = false;
+        }
+
+        public string GetStringFromActive()
+        {
+            return IsActive ? "Active" : "InActive";
         }
         //////////////////// this function will be removed after I will have Maor function!//////////////////////
 
@@ -44,11 +57,11 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer CloseStore()
         {
-            if (isActive.Equals("Active"))
+            if (IsActive)
             {
-                isActive = "InActive";
-                ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-                handler.dataLayer.editStore(this);
+                IsActive = false;
+                ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+                handler.DataLayer.EditStore(this);
                 return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
             }
             return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is alrady closed");
@@ -57,33 +70,33 @@ namespace SadnaSrc.StoreCenter
         
         public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Product P = new Product(handler.getProductID(), _name, _price, _description);
-            handler.dataLayer.AddStockListItemToDataBase(new Stock.StockListItem(quantity, P, null, PurchaseEnum.IMMEDIATE, SystemId));
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            Product product = new Product(handler.GetProductID(), _name, _price, _description);
+            handler.DataLayer.AddStockListItemToDataBase(new StockListItem(quantity, product, null, PurchaseEnum.Immediate, SystemId));
             return new StoreAnswer(StoreEnum.Success, "product added");
         }
 
-        public MarketAnswer removeProduct(string productID)
+        public MarketAnswer RemoveProduct(string productID)
         {
-            Product product = stock.getProductById(productID);
+            Product product = stock.GetProductById(productID);
             if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no Such Product"); }
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Stock.StockListItem SLI = handler.dataLayer.getStockListItembyProductID(productID);
-            if (SLI.PurchaseWay==PurchaseEnum.LOTTERY)
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(productID);
+            if (stockListItem.PurchaseWay==PurchaseEnum.Lottery)
             {
-                LotterySaleManagmentTicket LSMT = handler.dataLayer.getLotteryByProductID(productID);
-                LSMT.informCancel();
-                handler.dataLayer.removeLottery(LSMT);
+                LotterySaleManagmentTicket LotteryManagment = handler.DataLayer.GetLotteryByProductID(productID);
+                LotteryManagment.InformCancel();
+                handler.DataLayer.RemoveLottery(LotteryManagment);
             }
-            handler.dataLayer.removeDiscount(SLI.discount);
-            handler.dataLayer.removeProduct(SLI.product);
-            handler.dataLayer.removeStockListItem(SLI);
+            handler.DataLayer.RemoveDiscount(stockListItem.Discount);
+            handler.DataLayer.RemoveProduct(stockListItem.Product);
+            handler.DataLayer.RemoveStockListItem(stockListItem);
             return new StoreAnswer(StoreEnum.Success, "product removed");
         }
 
-        internal double getProductPriceWithDiscountbyDouble(string productName, int discountCode, int quantity)
+        internal double GetProductPriceWithDiscountbyDouble(string productName, int discountCode, int quantity)
         {
-            Product p = stock.getProductById(productName);
+            Product p = stock.GetProductById(productName);
             if (p != null) { 
             return stock.CalculateSingleItemPrice(p, discountCode, quantity);
             }
@@ -92,41 +105,40 @@ namespace SadnaSrc.StoreCenter
         }
 
 
-        public Product getProductById(string ID) //will return null if product is not exists
+        public Product GetProductById(string ID) //will return null if product is not exists
         {
-            return stock.getProductById(ID);
+            return stock.GetProductById(ID);
         }
         
-        internal LinkedList<Product> addAllProductsToExistingList(LinkedList<Product> Param)
+        internal LinkedList<Product> AddAllProductsToExistingList(LinkedList<Product> param)
         {
             LinkedList<Product> answer = new LinkedList<Product>();
-            foreach (Product P in Param)
+            foreach (Product product in param)
             {
-                answer.AddLast(P);
+                answer.AddLast(product);
             }
-            LinkedList<Product> products = getAllProducts();
+            LinkedList<Product> products = GetAllProducts();
             foreach (Product product in products)
             {
                 answer.AddLast(product);
             }
             return answer;
         }
-        private LotterySaleManagmentTicket getLotterySale(Product p)
+        private LotterySaleManagmentTicket GetLotterySale(Product p)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            LotterySaleManagmentTicket LSMT = handler.dataLayer.getLotteryByProductID(p.SystemId);
-            return LSMT;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            return handler.DataLayer.GetLotteryByProductID(p.SystemId);
         }
         public LotteryTicket MakeALotteryPurchase(string productID, int money)
         {
             LotteryTicket result = null;
-            Product product = stock.getProductById(productID);
+            Product product = stock.GetProductById(productID);
             if (product == null) return null;
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            LotterySaleManagmentTicket LSMT = handler.dataLayer.getLotteryByProductID(productID);
-            if (canPurchaseLottery(product, money))
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            LotterySaleManagmentTicket lotteryManagement = handler.DataLayer.GetLotteryByProductID(productID);
+            if (CanPurchaseLottery(product, money))
             {
-                result = LSMT.PurchaseALotteryTicket(money);
+                result = lotteryManagement.PurchaseALotteryTicket(money);
 
             }
             return result;
@@ -134,31 +146,31 @@ namespace SadnaSrc.StoreCenter
         
         public Product MakeAImmediatePurchase(string productID, int quantity)
         {
-            Product product = stock.getProductById(productID);
+            Product product = stock.GetProductById(productID);
             if (product == null) return null;
-            if (canPurchaseImmediate(product, quantity))
+            if (CanPurchaseImmediate(product, quantity))
             {
                 return product;
             }
             return null;
         }
-        public MarketAnswer getProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
+        public MarketAnswer GetProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
         {
-            double result = stock.CalculateSingleItemPrice(stock.getProductById(_product), _DiscountCode, _quantity);
+            double result = stock.CalculateSingleItemPrice(stock.GetProductById(_product), _DiscountCode, _quantity);
             return new StoreAnswer(StoreEnum.Success, "" + result);
         }
-        internal bool canPurchaseImmediate(Product product, int quantity)
+        internal bool CanPurchaseImmediate(Product product, int quantity)
         {
-            Stock.StockListItem SLI = stock.findstockListItembyProductID(product.SystemId);
-            return (SLI.quantity >= quantity);
+            StockListItem stockListItem = stock.FindstockListItembyProductID(product.SystemId);
+            return (stockListItem.Quantity >= quantity);
         }
-        internal bool canPurchaseLottery(Product product, int amountOfMoney)
+        internal bool CanPurchaseLottery(Product product, int amountOfMoney)
         {
-            Stock.StockListItem SLI = stock.findstockListItembyProductID(product.SystemId);
-            return ((SLI.PurchaseWay == PurchaseEnum.LOTTERY) &&
-                    (SLI.quantity > 0) &&
-                    (getLotterySale(product) != null) &&
-                    (getLotterySale(product).CanPurchase(amountOfMoney)));
+            StockListItem stockListItem = stock.FindstockListItembyProductID(product.SystemId);
+            return stockListItem.PurchaseWay == PurchaseEnum.Lottery &&
+                    stockListItem.Quantity > 0 &&
+                    GetLotterySale(product) != null &&
+                    GetLotterySale(product).CanPurchase(amountOfMoney);
         }
 
 
@@ -166,16 +178,16 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue)
         {
             StoreAnswer result = null;
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Product product = stock.getProductById(productID);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            Product product = stock.GetProductById(productID);
             if (product == null) { return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock"); };
-                Discount discount = stock.getProductDiscount(product);
-            if (discount == null) { return new StoreAnswer(StoreEnum.DiscountNotFound, "product " + product.toString() + " has no discount"); };
+                Discount discount = stock.GetProductDiscount(product);
+            if (discount == null) { return new StoreAnswer(StoreEnum.DiscountNotFound, "product " + product.ToString() + " has no discount"); };
 
             if (whatToEdit == "discountType")
             {
                 discount.discountType = handler.GetdiscountTypeEnumString(newValue);
-                result = new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount type become " +newValue);
+                result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount type become " +newValue);
             }
             if (whatToEdit == "startDate")
             {
@@ -184,7 +196,7 @@ namespace SadnaSrc.StoreCenter
 
                 if (startTime > discount.EndDate) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time that is later then the discount end time"); }
                 discount.startDate = startTime;
-                result= new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount Start Date become " + startTime);
+                result= new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount Start Date become " + startTime);
             }
             
             if (whatToEdit == "EndDate")
@@ -194,7 +206,7 @@ namespace SadnaSrc.StoreCenter
 
                 if (EndDate < discount.startDate) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set end time that is sooner then the discount start time"); }
                 discount.EndDate = EndDate;
-                result = new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount End Date become " + EndDate);
+                result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount End Date become " + EndDate);
             }
                 
             if (whatToEdit == "DiscountAmount")
@@ -202,7 +214,7 @@ namespace SadnaSrc.StoreCenter
                int newintValue = Int32.Parse(newValue);
                if (discount.Percentages && newintValue > 100) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "DiscountAmount is >= 100, cant make it presenteges"); }
                 discount.DiscountAmount = newintValue;
-               return new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount amount become " + newValue);
+               return new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount amount become " + newValue);
             }
             if (whatToEdit == "Percentages")
             {
@@ -210,38 +222,38 @@ namespace SadnaSrc.StoreCenter
                 if (newboolValue && discount.DiscountAmount > 100) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "DiscountAmount is >= 100, cant make it presenteges"); }
                 discount.Percentages = newboolValue;
                 if (newboolValue)
-                    result = new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount preseneges become true");
-                result = new StoreAnswer(StoreEnum.Success, "item " + product.toString() + " discount preseneges become false");
+                    result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount preseneges become true");
+                result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount preseneges become false");
             }
             if (result==null) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "no leagal attrebute found"); }
-            handler.dataLayer.EditDiscountInDatabase(discount);
+            handler.DataLayer.EditDiscountInDatabase(discount);
             return result;
         }
 
-        internal MarketAnswer setStoreAddress(string _address)
+        internal MarketAnswer SetStoreAddress(string _address)
         {
-            address = _address;
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            handler.dataLayer.editStore(this);
+            Address = _address;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            handler.DataLayer.EditStore(this);
             return new StoreAnswer(StoreEnum.Success, "Store Address changed");
         }
 
-        internal MarketAnswer setStoreName(string _name)
+        internal MarketAnswer SetStoreName(string _name)
         {
-            address = _name;
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            handler.dataLayer.editStore(this);
+            Address = _name;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            handler.DataLayer.EditStore(this);
             return new StoreAnswer(StoreEnum.Success, "Store Address changed");
         }
 
         public MarketAnswer EditProduct (string productID, string whatToEdit, string newValue)
         {
             StoreAnswer result = null;
-            Product product = stock.getProductById(productID);
+            Product product = stock.GetProductById(productID);
             if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock"); }
             if (whatToEdit == "Name") {
                 result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
-                product.name = newValue;
+                product.Name = newValue;
             }
             if (whatToEdit == "BasePrice") {
                 int newBasePrice = Int32.Parse(newValue);
@@ -251,108 +263,108 @@ namespace SadnaSrc.StoreCenter
             }
             if (whatToEdit == "Desccription") {
                 result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
-                product.description = newValue;
+                product.Description = newValue;
             }
             if (result==null) { return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            handler.dataLayer.EditProductInDatabase(product);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            handler.DataLayer.EditProductInDatabase(product);
             return result;
         }
-         public MarketAnswer editStockListItem(string productID, string whatToEdit, string newValue)
+         public MarketAnswer EditStockListItem(string productID, string whatToEdit, string newValue)
         {
             StoreAnswer result = null;
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Stock.StockListItem stockListItem = stock.findstockListItembyProductID(productID);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
             if (stockListItem==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock"); }
             if (whatToEdit == "quantity")
             {
                 int quantity = Int32.Parse(newValue);
                 if (quantity<0) { return new StoreAnswer(StoreEnum.UpdateStockFail, "quantity " + quantity + " is less then 0"); }
-                stockListItem.quantity += quantity;
+                stockListItem.Quantity += quantity;
                 result = new StoreAnswer(StoreEnum.Success, "item " + productID + " added by amound of " + quantity);
             }
             if (whatToEdit == "PurchaseWay")
             {
                 PurchaseEnum purchaseEnum = handler.GetPurchaseEnumString(newValue);
                 if (purchaseEnum.Equals(null)) { return new StoreAnswer(StoreEnum.UpdateStockFail, "this Purchase Enum is not leagal"); }
-                if (stockListItem.PurchaseWay == PurchaseEnum.LOTTERY)
+                if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
                 {
-                    LotterySaleManagmentTicket LSMT = handler.dataLayer.getLotteryByProductID(productID);
-                    LSMT.informCancel();
-                    handler.dataLayer.editLotteryInDatabase(LSMT);
+                    LotterySaleManagmentTicket lotteryManagment = handler.DataLayer.GetLotteryByProductID(productID);
+                    lotteryManagment.InformCancel();
+                    handler.DataLayer.EditLotteryInDatabase(lotteryManagment);
                 }
-                if (purchaseEnum == PurchaseEnum.LOTTERY)
+                if (purchaseEnum == PurchaseEnum.Lottery)
                 {
-                    LotterySaleManagmentTicket LSMT2 = new LotterySaleManagmentTicket(handler.getLottyerID(), stockListItem.product, DateTime.Now, DateTime.MaxValue);
-                    handler.dataLayer.AddLottery(LSMT2);
+                    LotterySaleManagmentTicket lotteryManagment = new LotterySaleManagmentTicket(handler.GetLottyerID(), stockListItem.Product, DateTime.Now, DateTime.MaxValue);
+                    handler.DataLayer.AddLottery(lotteryManagment);
                     stockListItem.PurchaseWay = purchaseEnum;
-                    result = new StoreAnswer(StoreEnum.Success, "item " + stockListItem.product.SystemId + " added PurchaseWay of Lottery, yet, you should change it's values");
+                    result = new StoreAnswer(StoreEnum.Success, "item " + stockListItem.Product.SystemId + " added PurchaseWay of Lottery, yet, you should change it's values");
                 }
                 else { 
                 stockListItem.PurchaseWay = purchaseEnum;
-                result = new StoreAnswer(StoreEnum.Success, "item " + stockListItem.product.SystemId + " added PurchaseWay of" + newValue);
+                result = new StoreAnswer(StoreEnum.Success, "item " + stockListItem.Product.SystemId + " added PurchaseWay of" + newValue);
 
                 }
             }
             if (result == null) { return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
-            handler.dataLayer.EditStockInDatabase(stockListItem);
+            handler.DataLayer.EditStockInDatabase(stockListItem);
             return result;
         }
-        internal LinkedList<Product> getAllProducts()
+        internal LinkedList<Product> GetAllProducts()
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            LinkedList<string> theirID = handler.dataLayer.getAllStoreProductsID(SystemId);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            LinkedList<string> theirID = handler.DataLayer.GetAllStoreProductsID(SystemId);
             LinkedList<Product> result = new LinkedList<Product>();
             foreach (string ID in theirID)
             {
-                Product product = handler.dataLayer.getProductID(ID);
+                Product product = handler.DataLayer.GetProductID(ID);
                     result.AddLast(product);
             }
             return result;
         }
-        internal MarketAnswer getProductStockInformation(string productID)
+        internal MarketAnswer GetProductStockInformation(string productID)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Stock.StockListItem SLI = stock.findstockListItembyProductID(productID);
-            if (SLI==null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
-            string Product = SLI.product.toString();
-            string Discount = SLI.discount.toString();
-            string PurchaseWay = handler.PrintEnum(SLI.PurchaseWay);
-            string Quanitity = SLI.quantity + "";
-            string result = Product + " , " + Discount + " , " + PurchaseWay + " , " + Quanitity;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
+            if (stockListItem == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
+            string product = stockListItem.Product.ToString();
+            string discount = stockListItem.Discount.ToString();
+            string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
+            string quanitity = stockListItem.Quantity + "";
+            string result = product + " , " + discount + " , " + purchaseWay + " , " + quanitity;
             return new StoreAnswer(StoreEnum.Success, result);
         }
         
-        internal MarketAnswer addDiscountToProduct(string productID, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
+        internal MarketAnswer AddDiscountToProduct(string productID, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Discount discount = new Discount(handler.getDiscountCode(), handler.GetdiscountTypeEnumString(discountType),
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            Discount discount = new Discount(handler.GetDiscountCode(), handler.GetdiscountTypeEnumString(discountType),
                 startDate, endDate,discountAmount, presenteges);
-            Stock.StockListItem SLI = stock.findstockListItembyProductID(productID);
-            if (SLI == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
-            SLI.discount = discount;
-            handler.dataLayer.addDiscount(discount);
-            handler.dataLayer.EditStockInDatabase(SLI);
+            StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
+            if (stockListItem == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
+            stockListItem.Discount = discount;
+            handler.DataLayer.AddDiscount(discount);
+            handler.DataLayer.EditStockInDatabase(stockListItem);
             return new StoreAnswer(StoreEnum.Success, "Discount added");
         }
-        internal MarketAnswer removeDiscountFromProduct(string productID)
+        internal MarketAnswer RemoveDiscountFromProduct(string productID)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Stock.StockListItem SLI = stock.findstockListItembyProductID(productID);
-            if (SLI == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
-            Discount discount = SLI.discount;
-            handler.dataLayer.removeDiscount(discount);
-            SLI.discount = null;
-            handler.dataLayer.EditStockInDatabase(SLI);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
+            if (stockListItem == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
+            Discount discount = stockListItem.Discount;
+            handler.DataLayer.RemoveDiscount(discount);
+            stockListItem.Discount = null;
+            handler.DataLayer.EditStockInDatabase(stockListItem);
             return new StoreAnswer(StoreEnum.Success, "discount remvoed");
         }
-        internal void updateQuanityAfterPurches(Product product, int quantity)
+        internal void UpdateQuanityAfterPurches(Product product, int quantity)
         {
-            Stock.StockListItem SLI = stock.findstockListItembyProductID(product.SystemId);
-            if (SLI == null) throw new StoreException(-1, "Item not found");
-            SLI.quantity = SLI.quantity - quantity;
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            handler.dataLayer.EditStockInDatabase(SLI);
+            StockListItem stockListItem = stock.FindstockListItembyProductID(product.SystemId);
+            if (stockListItem == null) throw new StoreException(-1, "Item not found");
+            stockListItem.Quantity = stockListItem.Quantity - quantity;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            handler.DataLayer.EditStockInDatabase(stockListItem);
         }
         
         public LotteryTicket DoLottery(string product)
@@ -365,8 +377,8 @@ namespace SadnaSrc.StoreCenter
         }
         public string[] ViewPurchesHistory()
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            return handler.dataLayer.getHistory(this);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            return handler.DataLayer.GetHistory(this);
         }
     }
 }

@@ -9,162 +9,172 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    class StoreDL : SystemDL
+    public class StoreDL : SystemDL
     {
 
-        private object[] getStockListItemArray(Stock.StockListItem stockListItem)
+        private object[] GetStockListItemArray(StockListItem stockListItem)
         {
-            object[] values = new object[5];
-            values[0] = stockListItem.SystemId;
-            values[1] = stockListItem.product;
-            values[2] = stockListItem.quantity;
-            values[3] = stockListItem.discount;
-            values[4] = stockListItem.PurchaseWay;
-            return values;
+            return new object[]
+            {
+                stockListItem.SystemId,
+                stockListItem.Product,
+                stockListItem.Quantity,
+                stockListItem.Discount,
+                stockListItem.PurchaseWay
+            };
         }
-        private object[] getProductValuesArray(Product product)
+        private object[] GetProductValuesArray(Product product)
         {
-            object[] values = new object[4];
-            values[0] = product.SystemId;
-            values[1] = product.name;
-            values[2] = product.BasePrice;
-            values[3] = product.description;
-            return values;
+            return new object[]
+            {
+                product.SystemId,
+                product.Name,
+                product.BasePrice,
+                product.Description
+            };
         }
-        private object[] getTicketValuesArray(LotteryTicket lottery)
-        {
-
-            object[] values = new object[5];
-            values[0] = lottery.myID;
-            values[1] = lottery.LotteryNumber;
-            values[2] = lottery.IntervalStart;
-            values[3] = lottery.IntervalEnd;
-            values[4] = lottery.myStatus;
-            return values;
-        }
-
-        private object[] getDiscountValuesArray(Discount discount)
-        {
-            object[] values = new object[6];
-            values[0] = discount.discountCode;
-            values[1] = discount.discountType;
-            values[2] = discount.startDate;
-            values[3] = discount.EndDate;
-            values[4] = discount.DiscountAmount;
-            values[5] = discount.Percentages;
-            return values;
-        }
-        private object[] getLotteryManagmentValuesArray(LotterySaleManagmentTicket lSMT)
-        {
-            object[] values = new object[7];
-            values[0] = lSMT.SystemID;
-            values[1] = lSMT.original.SystemId;
-            values[2] = lSMT.ProductNormalPrice;
-            values[3] = lSMT.TotalMoneyPayed;
-            values[4] = lSMT.StartDate;
-            values[5] = lSMT.EndDate;
-            values[6] = lSMT.isActive;
-            return values;
-        }
-        private object[] getStoreArray(Store store)
-        {
-            object[] values = new object[4];
-            values[0] = store.SystemId;
-            values[1] = store.name;
-            values[2] = store.address;
-            values[3] = store.isActive;
-            return values;
-        }
-        private string[] getTicketStringValues(LotteryTicket lottery)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            string[] Stringvalues = new string[5];
-            Stringvalues[0] = "'" + lottery.myID + "'";
-            Stringvalues[1] = "'" + lottery.LotteryNumber + "'";
-            Stringvalues[2] = "'" + lottery.IntervalStart + "'";
-            Stringvalues[3] = "'" + lottery.IntervalEnd + "'";
-            Stringvalues[4] = "'" + handler.PrintEnum(lottery.myStatus) + "'";
-            return Stringvalues;
-        }
-        private string[] getDiscountStringValues(Discount discount)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            string[] Stringvalues = new string[6];
-            Stringvalues[0] = "'" + discount.discountCode + "'";
-            Stringvalues[1] = "'" + handler.PrintEnum(discount.discountType) + "'";
-            Stringvalues[2] = "'" + discount.startDate + "'";
-            Stringvalues[3] = "'" + discount.EndDate + "'";
-            Stringvalues[4] = "'" + discount.DiscountAmount + "'";
-            Stringvalues[5] = "'" + discount.Percentages + "'";
-            return Stringvalues;
-        }
-        private string[] getProductStringValues(Product product)
+        private object[] GetTicketValuesArray(LotteryTicket lottery)
         {
 
-            string[] Stringvalues = new string[4];
-            Stringvalues[0] = "'" + product.SystemId + "'";
-            Stringvalues[1] = "'" + product.name + "'";
-            Stringvalues[2] = product.BasePrice + "";
-            Stringvalues[3] = "'" + product.description + "'";
-            return Stringvalues;
-        }
-        private string[] getStockListItemStringValues(Stock.StockListItem stockListItem)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            string[] Stringvalues = new string[5];
-            Stringvalues[0] = "'" + stockListItem.SystemId + "'";
-            Stringvalues[1] = "'" + stockListItem.product.SystemId + "'";
-            Stringvalues[2] = "'" + stockListItem.quantity + "'";
-            Stringvalues[3] = "'" + stockListItem.discount.discountCode + "'";
-            Stringvalues[4] = "'" + handler.PrintEnum(stockListItem.PurchaseWay) + "'";
-            return Stringvalues;
+            return new object[]
+            {
+                lottery.myID,
+                lottery.LotteryNumber,
+                lottery.IntervalStart,
+                lottery.IntervalEnd,
+                lottery.myStatus
+            };
         }
 
-        internal Store getStore(string storeID)
+        private object[] GetDiscountValuesArray(Discount discount)
+        {
+            return new object[]
+            {
+                discount.discountCode,
+                discount.discountType,
+                discount.startDate,
+                discount.EndDate,
+                discount.DiscountAmount,
+                discount.Percentages
+            };
+        }
+        private object[] GetLotteryManagmentValuesArray(LotterySaleManagmentTicket lotterySaleManagementTicket)
+        {
+            return new object[]
+            {
+                lotterySaleManagementTicket.SystemID,
+                lotterySaleManagementTicket.Original.SystemId,
+                lotterySaleManagementTicket.ProductNormalPrice,
+                lotterySaleManagementTicket.TotalMoneyPayed,
+                lotterySaleManagementTicket.StartDate,
+                lotterySaleManagementTicket.EndDate,
+                lotterySaleManagementTicket.IsActive
+            };
+        }
+        private object[] GetStoreArray(Store store)
+        {
+            return new object[]
+            {
+                store.SystemId,
+                store.Name,
+                store.Address,
+                store.GetStringFromActive()
+            };
+        }
+        private string[] GetTicketStringValues(LotteryTicket lottery)
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            return new []
+            {
+                "'" + lottery.myID + "'",
+                "'" + lottery.LotteryNumber + "'",
+                "'" + lottery.IntervalStart + "'",
+                "'" + lottery.IntervalEnd + "'",
+                "'" + handler.PrintEnum(lottery.myStatus) + "'"
+            };
+        }
+        private string[] GetDiscountStringValues(Discount discount)
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            return new[]
+            {
+                "'" + discount.discountCode + "'",
+                 "'" + handler.PrintEnum(discount.discountType) + "'",
+                "'" + discount.startDate + "'",
+                "'" + discount.EndDate + "'",
+                "'" + discount.DiscountAmount + "'",
+                "'" + discount.Percentages + "'"
+            };
+        }
+        private string[] GetProductStringValues(Product product)
+        {
+            return new[]
+            {
+                "'" + product.SystemId + "'",
+                "'" + product.Name + "'",
+                product.BasePrice + "",
+                "'" + product.Description + "'"
+            };
+        }
+        private string[] GetStockListItemStringValues(StockListItem stockListItem)
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            return new[]
+            {
+                "'" + stockListItem.SystemId + "'",
+                "'" + stockListItem.Product.SystemId + "'",
+                "'" + stockListItem.Quantity + "'",
+                "'" + stockListItem.Discount.discountCode + "'",
+                "'" + handler.PrintEnum(stockListItem.PurchaseWay) + "'"
+            };
+        }
+
+        internal Store GetStore(string storeID)
         {
             var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = " + storeID);
-            Store S = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2));
-            S.isActive = dbReader.GetString(3);
-            return S;
+            return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
         }
 
-        private string[] getStoreStringValues(Store store)
+        private string[] GetStoreStringValues(Store store)
         {
-            string[] Stringvalues = new string[4];
-            Stringvalues[0] = "'" + store.SystemId + "'";
-            Stringvalues[1] = "'" + store.name + "'";
-            Stringvalues[2] = "'" + store.address + "'";
-            Stringvalues[3] = "'" + store.isActive + "'";
-            return Stringvalues;
+            return new[]
+            {
+                "'" + store.SystemId + "'",
+                "'" + store.Name + "'",
+                "'" + store.Address + "'",
+                "'" + store.GetStringFromActive() + "'"
+            };
         }
-        private string[] getLotteryManagmentStringValues(LotterySaleManagmentTicket lSMT)
+        private string[] GetLotteryManagmentStringValues(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
-            string[] Stringvalues = new string[7];
-            Stringvalues[0] = "'" + lSMT.SystemID + "'";
-            Stringvalues[1] = "'" + lSMT.original.SystemId + "'";
-            Stringvalues[2] = "'" + lSMT.ProductNormalPrice + "'";
-            Stringvalues[3] = "'" + lSMT.TotalMoneyPayed + "'";
-            Stringvalues[4] = "'" + lSMT.StartDate + "'";
-            Stringvalues[5] = "'" + lSMT.EndDate + "'";
-            Stringvalues[6] = "'" + lSMT.isActive + "'";
-            return Stringvalues;
+            return new[]
+            {
+                 "'" + lotterySaleManagementTicket.SystemID + "'",
+                "'" + lotterySaleManagementTicket.Original.SystemId + "'",
+                "'" + lotterySaleManagementTicket.ProductNormalPrice + "'",
+                "'" + lotterySaleManagementTicket.TotalMoneyPayed + "'",
+                "'" + lotterySaleManagementTicket.StartDate + "'",
+                "'" + lotterySaleManagementTicket.EndDate + "'",
+                "'" + lotterySaleManagementTicket.IsActive + "'"
+            };
         }
 
 
         public void AddProductToDatabase(Product product)
         {   
             InsertTable("Products", "SystemID, name, BasePrice, description",
-                getProductStringValues(product),getProductValuesArray(product));
+                GetProductStringValues(product),GetProductValuesArray(product));
         }
         public void EditProductInDatabase(Product product)
         {
-            string[] columnNames = new string[4];
-            columnNames[0] = "SystemID";
-            columnNames[1] = "name";
-            columnNames[2] = "BasePrice";
-            columnNames[3] = "description";
+            string[] columnNames = {
+                "SystemID",
+                "name",
+                "BasePrice",
+                "description"
+            };
             UpdateTable("Products", "SystemID = '"+product.SystemId+"'", columnNames,
-                getProductStringValues(product), getProductValuesArray(product));
+                GetProductStringValues(product), GetProductValuesArray(product));
         }
 
         
@@ -180,15 +190,15 @@ namespace SadnaSrc.StoreCenter
 
             return historyData.ToArray();
         }
-        internal Stock.StockListItem getStockListItembyProductID(string product)
+        internal StockListItem GetStockListItembyProductID(string product)
         {
-            Product P = getProductID(product);
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Stock.StockListItem SLI = new Stock.StockListItem(0, P, null, 0, "");
-            var dbReader = SelectFromTableWithCondition("Stock", "*", "ProductSystemID = "+product);
-            SLI.SystemId = dbReader.GetString(0);
-            SLI.quantity = dbReader.GetInt32(2);
-            SLI.PurchaseWay = handler.GetPurchaseEnumString(dbReader.GetString(4));
+            Product _product = GetProductID(product);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StockListItem stockListItem = new StockListItem(0, _product, null, 0, "");
+            var dbReader = SelectFromTableWithCondition("Stock", "*", "ProductSystemID = "+_product);
+            stockListItem.SystemId = dbReader.GetString(0);
+            stockListItem.Quantity = dbReader.GetInt32(2);
+            stockListItem.PurchaseWay = handler.GetPurchaseEnumString(dbReader.GetString(4));
 
             string DiscountCode = dbReader.GetString(3);
             var discountReader = SelectFromTableWithCondition("Discount", "*", "DiscountCode = " + DiscountCode);
@@ -201,33 +211,32 @@ namespace SadnaSrc.StoreCenter
             discount.DiscountAmount = discountReader.GetInt32(4);
             discount.Percentages = discountReader.GetBoolean(5);
 
-            SLI.discount = discount;
+            stockListItem.Discount = discount;
 
             
-            return SLI;
+            return stockListItem;
         }
 
-        internal void addStore(Store temp)
+        internal void AddStore(Store temp)
         {
             InsertTable("Store", "SystemID, Name, Address, IsActive",
-                getStoreStringValues(temp), getStoreArray(temp));
+                GetStoreStringValues(temp), GetStoreArray(temp));
         }
 
-        internal void addLotteryTicket(LotteryTicket lottery)
+        internal void AddLotteryTicket(LotteryTicket lottery)
         {
             InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, Status",
-                getTicketStringValues(lottery), getTicketValuesArray(lottery));
+                GetTicketStringValues(lottery), GetTicketValuesArray(lottery));
         }
 
-        internal Product getProductID(string iD)
+        internal Product GetProductID(string iD)
         {
-            var ProductReader = SelectFromTableWithCondition("Products", "*", "ProductSystemID = " + iD);
-            Product P = new Product(iD, ProductReader.GetString(1), ProductReader.GetInt32(2), ProductReader.GetString(3));
-            return P;
+            var productReader = SelectFromTableWithCondition("Products", "*", "ProductSystemID = " + iD);
+            return new Product(iD, productReader.GetString(1), productReader.GetInt32(2), productReader.GetString(3));
             
         }
 
-        public string[] getHistory(Store store)
+        public string[] GetHistory(Store store)
         {
             string[] result;
             using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + store.SystemId + "'"))
@@ -236,116 +245,120 @@ namespace SadnaSrc.StoreCenter
                 {
                     throw new StoreException(ViewPurchaseHistoryStatus.NoStoreFound, "Couldn't find any store with that ID in history records");
                 }
-                PurchaseHistory[] resultP = GetPurchaseHistory(dbReader);
-                result = new String[resultP.Length];
+                PurchaseHistory[] resultPurchase = GetPurchaseHistory(dbReader);
+                result = new String[resultPurchase.Length];
                 int i = 0;
-                foreach (PurchaseHistory ph in resultP)
+                foreach (PurchaseHistory purchaseHistory in resultPurchase)
                 {
-                    result[i] = ph.ToString();
+                    result[i] = purchaseHistory.ToString();
                     i++;
                 }
                 return result;
             }
         }
 
-        internal void addDiscount(Discount discount)
+        internal void AddDiscount(Discount discount)
         {
             InsertTable("Discount", "DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount,Percentages ",
-                getDiscountStringValues(discount), getDiscountValuesArray(discount));
+                GetDiscountStringValues(discount), GetDiscountValuesArray(discount));
         }
 
         
-        internal void AddStockListItemToDataBase(Stock.StockListItem stockListItem)
+        internal void AddStockListItemToDataBase(StockListItem stockListItem)
         {
-            addDiscount(stockListItem.discount);
-            AddProductToDatabase(stockListItem.product);
+            AddDiscount(stockListItem.Discount);
+            AddProductToDatabase(stockListItem.Product);
             InsertTable("Stock", "StockID, ProductSystemID, quantity, discount, PurchaseWay",
-                   getStockListItemStringValues(stockListItem), getStockListItemArray(stockListItem));
+                   GetStockListItemStringValues(stockListItem), GetStockListItemArray(stockListItem));
         }
 
        
 
-        internal void removeLottery(LotterySaleManagmentTicket LSMT)
+        internal void RemoveLottery(LotterySaleManagmentTicket lotteryManagment)
         {
-            DeleteFromTable("LotteryTable", "SystemID = " + LSMT.SystemID);
+            DeleteFromTable("LotteryTable", "SystemID = " + lotteryManagment.SystemID);
         }
 
-        internal void removeStockListItem(Stock.StockListItem SLI)
+        internal void RemoveStockListItem(StockListItem stockListItem)
         {
-            DeleteFromTable("Stock", "StockID = " + SLI.SystemId);
+            DeleteFromTable("Stock", "StockID = " + stockListItem.SystemId);
         }
 
         internal void EditDiscountInDatabase(Discount discount)
         {
-            string[] columnNames = new string[6];
-            columnNames[0] = "DiscountCode";
-            columnNames[1] = "DiscountType";
-            columnNames[2] = "StartDate";
-            columnNames[3] = "EndDate";
-            columnNames[4] = "DiscountAmount";
-            columnNames[5] = "Percentages";
+            string[] columnNames =
+            {
+                 "DiscountCode",
+                 "DiscountType",
+                "StartDate",
+                "EndDate",
+                "DiscountAmount",
+                "Percentages"
+            };
             UpdateTable("Stock", "DiscountCode = '" + discount.discountCode + "'", columnNames,
-                getDiscountStringValues(discount), getDiscountValuesArray(discount));
+                GetDiscountStringValues(discount), GetDiscountValuesArray(discount));
         }
 
-        internal void editStore(Store store)
+        internal void EditStore(Store store)
         {
 
-            string[] columnNames = new string[4];
-            columnNames[0] = "SystemID";
-            columnNames[1] = "Name";
-            columnNames[2] = "Address";
-            columnNames[3] = "IsActive";
+            string[] columnNames =
+            {
+                "SystemID",
+                "Name",
+                "Address",
+                "IsActive",
+            };
             UpdateTable("Store", "SystemID = '" + store.SystemId + "'", columnNames,
-                getStoreStringValues(store), getStoreArray(store));
+                GetStoreStringValues(store), GetStoreArray(store));
         }
 
 
         
 
-        internal void removeProduct(Product product)
+        internal void RemoveProduct(Product product)
         {
             DeleteFromTable("Products", "SystemID" + product.SystemId);
         }
 
-        internal void EditStockInDatabase(Stock.StockListItem stockListItem)
+        internal void EditStockInDatabase(StockListItem stockListItem)
         {
-            string[] columnNames = new string[5];
-            columnNames[0] = "StockID";
-            columnNames[1] = "ProductSystemID";
-            columnNames[2] = "quantity";
-            columnNames[3] = "discount";
-            columnNames[4] = "PurchaseWay";
+            string[] columnNames =
+            {
+                "StockID",
+                "ProductSystemID",
+                "quantity",
+                "discount",
+                "PurchaseWay"
+            };
             UpdateTable("Stock", "StockID = '" + stockListItem.SystemId + "'", columnNames,
-                getStockListItemStringValues(stockListItem), getStockListItemArray(stockListItem));
+                GetStockListItemStringValues(stockListItem), GetStockListItemArray(stockListItem));
         }
         
 
-        internal LinkedList<Store> getAllActiveStores() // all active stores
+        internal LinkedList<Store> GetAllActiveStores() // all active stores
         {
             LinkedList<Store> result = new LinkedList<Store>();
-            Store store;
             var dbReader = SelectFromTableWithCondition("Store", "*", "IsActive = Active");
             while (dbReader.Read())
             {
-                store = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2));
-                store.isActive = dbReader.GetString(3);
+                Store store = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
                 result.AddLast(store);
             }
             return result;
         }
 
-        internal void removeDiscount(Discount discount)
+        internal void RemoveDiscount(Discount discount)
         {
             DeleteFromTable("Discount", "DiscountCode = " + discount.discountCode);
         }
 
 
 
-        internal void AddLottery(LotterySaleManagmentTicket LSMT)
+        internal void AddLottery(LotterySaleManagmentTicket lotteryManagment)
         {
             InsertTable("LotteryTable", "SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, StartDate,EndDate,isActive ",
-                getLotteryManagmentStringValues(LSMT), getLotteryManagmentValuesArray(LSMT));
+                GetLotteryManagmentStringValues(lotteryManagment), GetLotteryManagmentValuesArray(lotteryManagment));
 
         }
 
@@ -353,7 +366,7 @@ namespace SadnaSrc.StoreCenter
 
         
 
-        internal LinkedList<string> getAllStoreProductsID(object systemID)
+        internal LinkedList<string> GetAllStoreProductsID(object systemID)
         {
             LinkedList<string> result = new LinkedList<string>();
             var dbReader = SelectFromTableWithCondition("Stock", "ProductSystemID", "StockID = " +systemID);
@@ -364,28 +377,30 @@ namespace SadnaSrc.StoreCenter
             return result;
         }
 
-        internal LotterySaleManagmentTicket getLotteryByProductID(string productID)
+        internal LotterySaleManagmentTicket GetLotteryByProductID(string productID)
         {
-            Product P = getProductID(productID);
+            Product P = GetProductID(productID);
             var dbReader = SelectFromTableWithCondition("LotteryTable", "*", "ProductSystemID = " + productID);
-            LotterySaleManagmentTicket LSMT = new LotterySaleManagmentTicket(dbReader.GetString(0), P, DateTime.Parse(dbReader.GetString(4)), DateTime.Parse(dbReader.GetString(5)));
-            LSMT.TotalMoneyPayed = dbReader.GetInt32(3);
-            LSMT.isActive = dbReader.GetBoolean(6);
-            return LSMT;
+            LotterySaleManagmentTicket lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0), P, DateTime.Parse(dbReader.GetString(4)), DateTime.Parse(dbReader.GetString(5)));
+            lotteryManagement.TotalMoneyPayed = dbReader.GetInt32(3);
+            lotteryManagement.IsActive = dbReader.GetBoolean(6);
+            return lotteryManagement;
         }
 
-        internal void editLotteryInDatabase(LotterySaleManagmentTicket LSMT)
+        internal void EditLotteryInDatabase(LotterySaleManagmentTicket lotteryManagment)
         {
-            string[] columnNames = new string[7];
-            columnNames[0] = "SystemID";
-            columnNames[1] = "ProductSystemID";
-            columnNames[2] = "ProductNormalPrice";
-            columnNames[3] = "TotalMoneyPayed";
-            columnNames[4] = "StartDate";
-            columnNames[5] = "EndDate";
-            columnNames[6] = "isActive";
-            UpdateTable("LotteryTable", "SystemID = '" + LSMT.SystemID + "'", columnNames,
-                getLotteryManagmentStringValues(LSMT), getLotteryManagmentValuesArray(LSMT));
+            string[] columnNames =
+            {
+                "SystemID",
+                "ProductSystemID",
+                "ProductNormalPrice",
+                "TotalMoneyPayed",
+                "StartDate",
+                "EndDate",
+                "isActive"
+            };
+            UpdateTable("LotteryTable", "SystemID = '" + lotteryManagment.SystemID + "'", columnNames,
+                GetLotteryManagmentStringValues(lotteryManagment), GetLotteryManagmentValuesArray(lotteryManagment));
         }
 
     }

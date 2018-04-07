@@ -8,50 +8,50 @@ namespace SadnaSrc.Main
 {
     public interface IStoreService
     {
-        MarketAnswer OpenStore(string name, string );
+        MarketAnswer OpenStore(string name, string store);
 
         /**
         * Store Managment, general Actions
         **/
         MarketAnswer PromoteToOwner(int someoneToPromoteID);
         MarketAnswer PromoteToManager(int someoneToPromoteID, string actions);
-        MarketAnswer getProductStockInformation(int ProductID);
+        MarketAnswer GetProductStockInformation(int ProductID);
         MarketAnswer CloseStore();
 
-        MarketAnswer setStoreName(string name);
-        MarketAnswer setStoreAddress(string address);
+        MarketAnswer SetStoreName(string name);
+        MarketAnswer SetStoreAddress(string address);
 
         /**
          * Store Managment, handling products
          **/
         MarketAnswer AddProduct(string _name, int _price, string _description, int quantity);
-        MarketAnswer removeProduct(string productID);
-        MarketAnswer editProduct(string productID, string WhatToEdit, string NewValue);
+        MarketAnswer RemoveProduct(string productID);
+        MarketAnswer EditProduct(string productID, string whatToEdit, string newValue);
         
         /**
          * Store Managment, handling PurchaseWay
          **/
 
         MarketAnswer ChangeProductPurchaseWayToImmediate(string productID);
-        MarketAnswer ChangeProductPurchaseWayToLottery(string productID, DateTime StartDate, DateTime EndDate);
+        MarketAnswer ChangeProductPurchaseWayToLottery(string productID, DateTime startDate, DateTime endDate);
         /**
          * Store Managment, Discounts
          **/
         //MarketAnswer editDiscount();
 
-        MarketAnswer setManagersActions(string otherUser, string actions);
-        MarketAnswer addDiscountToProduct(string productID, DateTime _startDate, DateTime _EndDate, 
-            int _DiscountAmount,string DiscountType, bool presenteges);
-        MarketAnswer EditDiscount(string productID, string whatToEdit, string NewValue);
-        MarketAnswer removeDiscountFromProduct(string productID);
+        MarketAnswer SetManagersActions(string otherUser, string actions);
+        MarketAnswer AddDiscountToProduct(string productID, DateTime _startDate, DateTime _endDate, 
+            int _discountAmount,string discountType, bool presenteges);
+        MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue);
+        MarketAnswer RemoveDiscountFromProduct(string productID);
 
         /**
          * Store Managment, Purchase
          **/
         MarketAnswer MakeALotteryPurchase(string productID, int moeny);
-        MarketAnswer MakeAImmediatePurchase(string productID, int DiscountCode, int quantity);
-        MarketAnswer getProductPriceWithDiscount(string productID, int DiscountCode, int quantity);
-        MarketAnswer getStoreProducts();
+        MarketAnswer MakeAImmediatePurchase(string productID, int discountCode, int quantity);
+        MarketAnswer GetProductPriceWithDiscount(string productID, int discountCode, int quantity);
+        MarketAnswer GetStoreProducts();
     }
     public enum StoreEnum
     {
@@ -71,7 +71,7 @@ namespace SadnaSrc.Main
         EditStoreFail
     }
 
-    public enum PurchaseEnum { IMMEDIATE, LOTTERY };
-    public enum discountTypeEnum { HIDDEN, VISIBLE };
-    public enum LotteryTicketStatus { WAITING, WINNING, LOSING, CANCEL };
+    public enum PurchaseEnum { Immediate, Lottery };
+    public enum discountTypeEnum { Hidden, Visible };
+    public enum LotteryTicketStatus { Waiting, Winning, Losing, Cancel };
 }

@@ -8,25 +8,25 @@ namespace SadnaSrc.StoreCenter
 {
     public class LotterySaleManagmentTicket
     {
-        internal string SystemID { get; set; }
-        internal Product original { get; set; }
-        internal int ProductNormalPrice { get; set; }
-        internal int TotalMoneyPayed { get; set; }
-        internal DateTime StartDate { get; set; }
-        internal DateTime EndDate { get; set; }
-        internal LinkedList<LotteryTicket> tickets { get; set; }
-        internal bool isActive { get; set; }
+        public string SystemID { get; set; }
+        public Product Original { get; }
+        public int ProductNormalPrice { get;  }
+        public  int TotalMoneyPayed { get; set; }
+        public DateTime StartDate { get; }
+        public DateTime EndDate { get; }
+        private LinkedList<LotteryTicket> tickets { get;}
+        public bool IsActive { get; set; }
 
         public LotterySaleManagmentTicket(string _SystemID, Product _original, DateTime _StartDate, DateTime _EndDate)
         {
             SystemID = _SystemID;
-            original = _original;
+            Original = _original;
             ProductNormalPrice = _original.BasePrice;
             TotalMoneyPayed = 0;
             StartDate = _StartDate;
             EndDate = _EndDate;
             tickets = new LinkedList<LotteryTicket>();
-            isActive = true;
+            IsActive = true;
         }
         
         /** 
@@ -36,7 +36,7 @@ namespace SadnaSrc.StoreCenter
         public bool CanPurchase(int moneyPayed) {
             return (TotalMoneyPayed + moneyPayed < ProductNormalPrice);
         }
-        public static bool checkDates(DateTime startDate, DateTime endDate)
+        public static bool CheckDates(DateTime startDate, DateTime endDate)
         {
             return ((startDate > DateTime.Now.Date) && (endDate > DateTime.Now.Date) && (endDate > startDate));
         }
@@ -44,9 +44,9 @@ namespace SadnaSrc.StoreCenter
         {
             if (CanPurchase(moneyPayed))
             {
-                ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID, handler.getLotteryTicketID());
-                handler.dataLayer.addLotteryTicket(lottery);
+                ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID, handler.GetLotteryTicketID());
+                handler.DataLayer.AddLotteryTicket(lottery);
                 TotalMoneyPayed += moneyPayed;
                 tickets.AddLast(lottery);
                 return lottery;
@@ -57,22 +57,19 @@ namespace SadnaSrc.StoreCenter
         {
             if (TotalMoneyPayed==ProductNormalPrice)
             {
-                return informAllWinner();
+                return InformAllWinner();
             }
-            else
-            {
-                informCancel();
-                return null;
-            }
+            InformCancel();
+            return null; //TODO : think of better return in this case
         }
-        private LotteryTicket informAllWinner()
+        private LotteryTicket InformAllWinner()
         {
             Random r = new Random(DateTime.Now.Millisecond);
             int winningNumber = r.Next(0, ProductNormalPrice);
             LotteryTicket winner = null;
             foreach (LotteryTicket lotter in tickets)
             {
-                if (lotter.isWinning(winningNumber))
+                if (lotter.IsWinning(winningNumber))
                 {
                     winner = lotter;
                     lotter.RunWinning();
@@ -84,9 +81,9 @@ namespace SadnaSrc.StoreCenter
             }
             return winner;
         }
-        internal void informCancel()
+        internal void InformCancel()
         {
-            isActive = false;
+            IsActive = false;
         //call maor method here
         }
     }

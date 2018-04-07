@@ -29,9 +29,9 @@ namespace SadnaSrc.StoreCenter
 
         }
         //assume that the User discountCode is the right one, the check is done by the Store itself
-        public double calcDiscount(int basePrice, int code)
+        public double CalcDiscount(int basePrice, int code)
         {
-            if (discountType == discountTypeEnum.HIDDEN)
+            if (discountType == discountTypeEnum.Hidden)
             {
                 {
 
@@ -51,7 +51,7 @@ namespace SadnaSrc.StoreCenter
                     return basePrice;
                 }
             }
-            if (discountType == discountTypeEnum.VISIBLE)
+            if (discountType == discountTypeEnum.Visible)
             {
                 if (Percentages)
                 {
@@ -64,7 +64,7 @@ namespace SadnaSrc.StoreCenter
             }
             return -1;
         }
-        public String toString() {if(Percentages) return "" + DiscountAmount+"%"; return "" + DiscountAmount; }
+        public override string ToString() {if(Percentages) return "" + DiscountAmount+"%"; return "" + DiscountAmount; }
     }
 }
 

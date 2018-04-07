@@ -96,6 +96,7 @@
     <Compile Include="StoreCenter\Product.cs" />
     <Compile Include="StoreCenter\PurchesPolicy.cs" />
     <Compile Include="StoreCenter\Stock.cs" />
+    <Compile Include="StoreCenter\StockListItem.cs" />
     <Compile Include="StoreCenter\Store.cs" />
     <Compile Include="StoreCenter\StoreAnswer.cs" />
     <Compile Include="StoreCenter\StoreDL.cs" />

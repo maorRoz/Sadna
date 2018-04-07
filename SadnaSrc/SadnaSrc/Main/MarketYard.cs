@@ -58,8 +58,8 @@ namespace SadnaSrc.Main
 
         public IStoreService GetStoreService(IUserService userService)
         { // this should not work
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Store store = handler.getStoreByID("S1");
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            Store store = handler.GetStoreByID("S1");
             return new StoreService((UserService)userService, store);
         }
 

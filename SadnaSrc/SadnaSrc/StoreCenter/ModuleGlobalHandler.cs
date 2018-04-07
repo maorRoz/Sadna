@@ -12,14 +12,14 @@ namespace SadnaSrc.StoreCenter
     public class ModuleGlobalHandler : OutsideModuleService
     {
         static ModuleGlobalHandler instance;
-        int StoreIdCounter;
-        int globalProductID;
-        int globalDiscountCode;
-        int globalLotteryID;
-        int globalLotteryTicketID;
+        private int StoreIdCounter;
+        private int globalProductID;
+        private int globalDiscountCode;
+        private int globalLotteryID;
+        private int globalLotteryTicketID;
       //  internal LinkedList<Store> allStores { get; set; }
-        internal StoreDL dataLayer { get; }
-        public static ModuleGlobalHandler getInstance()
+        public StoreDL DataLayer { get; }
+        public static ModuleGlobalHandler GetInstance()
         {
             if (instance == null)
             {
@@ -36,53 +36,57 @@ namespace SadnaSrc.StoreCenter
             globalDiscountCode = 1;
             globalLotteryID = 1;
             globalLotteryTicketID = 1;
-            dataLayer = new StoreDL();
+            DataLayer = new StoreDL();
         }
 
-        internal void AddStore(Store temp)
+        public void AddStore(Store temp)
         {
-            dataLayer.addStore(temp);
+            DataLayer.AddStore(temp);
         }
-        internal string PrintEnum(LotteryTicketStatus status)
+        public string PrintEnum(LotteryTicketStatus status)
         {
-            if (status == LotteryTicketStatus.CANCEL)
-                return "CANCEL";
-            if (status == LotteryTicketStatus.WINNING)
-                return "WINNING";
-            if (status == LotteryTicketStatus.WAITING)
-                return "WAITING";
-            if (status == LotteryTicketStatus.LOSING)
-                return "LOSING";
-            return "";
+            switch (status)
+            {
+                case LotteryTicketStatus.Cancel: return "CANCEL";
+                case LotteryTicketStatus.Winning: return "WINNING";
+                case LotteryTicketStatus.Waiting: return "WAITING";
+                case LotteryTicketStatus.Losing: return "LOSING";
+                default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
+            }
+
         }
-        internal string PrintEnum(discountTypeEnum type)
+        public string PrintEnum(discountTypeEnum type)
         {
-            if (type == discountTypeEnum.HIDDEN)
-                return "HIDDEN";
-            if (type == discountTypeEnum.VISIBLE)
-                return "VISIBLE";
-            return "";
+            switch (type)
+            {
+                case discountTypeEnum.Hidden: return "HIDDEN";
+                case discountTypeEnum.Visible: return "VISIBLE";
+                default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
+            }
         }
-        internal string PrintEnum(PurchaseEnum purchaseEnum)
+        public string PrintEnum(PurchaseEnum purchaseEnum)
         {
-            if (purchaseEnum == PurchaseEnum.IMMEDIATE) return "IMMEDIATE";
-            if (purchaseEnum == PurchaseEnum.LOTTERY) return "LOTTERY";
-            throw new StoreException(1, "Enum value not exists");
+            switch (purchaseEnum)
+            {
+                case PurchaseEnum.Immediate: return "HIDDEN";
+                case PurchaseEnum.Lottery: return "VISIBLE";
+                default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
+            }
         }
-        internal discountTypeEnum GetdiscountTypeEnumString(String astring)
+        public discountTypeEnum GetdiscountTypeEnumString(String astring)
         {
             if (astring == "HIDDEN")
-                return discountTypeEnum.HIDDEN;
+                return discountTypeEnum.Hidden;
             if (astring == "VISIBLE")
-                return discountTypeEnum.VISIBLE;
+                return discountTypeEnum.Visible;
             throw new StoreException(1, "Enum value not exists");
         }
-        internal PurchaseEnum GetPurchaseEnumString(String astring)
+        public PurchaseEnum GetPurchaseEnumString(String astring)
         {
             if (astring == "IMEMIDIATE")
-                return PurchaseEnum.IMMEDIATE;
+                return PurchaseEnum.Immediate;
             if (astring == "LOTTERY")
-                return PurchaseEnum.LOTTERY;
+                return PurchaseEnum.Lottery;
             throw new StoreException(1, "Enum not exists");
         }
 
@@ -90,40 +94,40 @@ namespace SadnaSrc.StoreCenter
         /**
          * next section is ID handlers
          **/
-        internal string getProductID()
+        public string GetProductID()
         {
             int temp = globalProductID;
             globalProductID++;
             return "P" + temp;
         }
-        internal string getDiscountCode()
+        public string GetDiscountCode()
         {
             int temp = globalDiscountCode;
             globalDiscountCode++;
             return "D" + temp;
         }
-        internal string getNextStoreId()
+        public string GetNextStoreId()
         {
             int temp = StoreIdCounter;
             StoreIdCounter++;
             return "S" + temp;
         }
-        internal string getLottyerID()
+        public string GetLottyerID()
         {
             int temp = globalLotteryID;
             globalLotteryID++;
             return "L" + temp;
         }
-        internal string getLotteryTicketID()
+        public string GetLotteryTicketID()
         {
             int temp = globalLotteryTicketID;
             globalLotteryTicketID++;
             return "T" + temp;
         }
 
-        public LinkedList<Store> getAllUserStores(User user) // this implementation will be change after maor finish his work
+        public LinkedList<Store> GetAllUserStores(User user) // this implementation will be change after maor finish his work
         {
-            LinkedList<Store> AllStores = dataLayer.getAllActiveStores();
+            LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
             LinkedList<Store> result = new LinkedList<Store>();
             foreach (Store store in AllStores)
             {
@@ -135,36 +139,36 @@ namespace SadnaSrc.StoreCenter
             return result;
         }
 
-        public LinkedList<Store> getAllStores()
+        public LinkedList<Store> GetAllStores()
         {
-            LinkedList<Store> AllStores = dataLayer.getAllActiveStores();
+            LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
             return AllStores;
         }
 
         public void UpdateQuantityAfterPurches(string storeID, string productID, int quantity)
         {
-            Store store = dataLayer.getStore(storeID);
+            Store store = DataLayer.GetStore(storeID);
             if (store ==null) { throw new StoreException(-1, "no such store"); }
-            Product product = dataLayer.getProductID(productID);
+            Product product = DataLayer.GetProductID(productID);
             if (product==null) { throw new StoreException(-1, "no such product"); }
-            store.updateQuanityAfterPurches(product, quantity);
+            store.UpdateQuanityAfterPurches(product, quantity);
         }
-        public Store getStoreByID(int ID)
+        public Store GetStoreByID(int ID)
         {
-            return getStoreByID("S" + ID);
+            return GetStoreByID("S" + ID);
         }
-        public Store getStoreByID(string ID)
+        public Store GetStoreByID(string ID)
         {
-            return dataLayer.getStore(ID);
+            return DataLayer.GetStore(ID);
         }
         
-        public LinkedList<Product> getAllMarketProducts()
+        public LinkedList<Product> GetAllMarketProducts()
         {
-            LinkedList<Store> AllStores = dataLayer.getAllActiveStores();
+            LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
             LinkedList<Product> result = new LinkedList<Product>();
             foreach (Store store in AllStores)
             {
-                result = store.addAllProductsToExistingList(result);
+                result = store.AddAllProductsToExistingList(result);
             }
             return result;
         }

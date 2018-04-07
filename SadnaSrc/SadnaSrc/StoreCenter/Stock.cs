@@ -17,45 +17,26 @@ namespace SadnaSrc.StoreCenter
      **/
     class Stock
     {
-        public class StockListItem
+        public string MyStoreID { get; set; }
+        public Stock(string myStoreID)
         {
-            public string SystemId { get; set; }
-            public int quantity { get; set; }
-            public Product product { get; set; }
-            public Discount discount { get; set; }
-
-            public PurchaseEnum PurchaseWay { get; set; }
-
-            public StockListItem(int _quantity, Product _product, Discount _discount, PurchaseEnum _PurchaseWay, string id)
-            {
-                SystemId = id;
-                quantity = _quantity;
-                product = _product;
-                discount = _discount;
-                PurchaseWay = _PurchaseWay;
-            }
-        }
-        public string myStoreID;
-        public Stock(string _myStoreID)
-        {
-            myStoreID = _myStoreID;
+            MyStoreID = myStoreID;
         }
 
 
-        internal StockListItem findstockListItembyProductID(string _product)
+        public StockListItem FindstockListItembyProductID(string product)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            StockListItem SLI = handler.dataLayer.getStockListItembyProductID(_product);
-            return SLI;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            return handler.DataLayer.GetStockListItembyProductID(product);
         }
-        internal StockListItem findByProduct(Product _product)
+        public StockListItem FindByProduct(Product _product)
         {
-            return findstockListItembyProductID(_product.SystemId);
+            return FindstockListItembyProductID(_product.SystemId);
         }
-        public Product getProductById(string ID)
+        public Product GetProductById(string ID)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.getInstance();
-            Product product = handler.dataLayer.getProductID(ID);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            Product product = handler.DataLayer.GetProductID(ID);
             return product;
 
         }
@@ -64,11 +45,11 @@ namespace SadnaSrc.StoreCenter
          * this function will be use by store, no deligation
          **/
 
-        public Discount getProductDiscount(Product _product)
+        public Discount GetProductDiscount(Product _product)
         {
-            StockListItem item = findByProduct(_product);
+            StockListItem item = FindByProduct(_product);
             if (item != null) { 
-            return item.discount;
+            return item.Discount;
             }
             return null;
 
@@ -77,14 +58,14 @@ namespace SadnaSrc.StoreCenter
 
         public double CalculateSingleItemPrice(Product _product, int _DiscountCode, int _quantity)
         {
-            StockListItem item = findByProduct(_product);
+            StockListItem item = FindByProduct(_product);
             if (item != null)
             {
-                if (_quantity < item.quantity && item.discount != null)
+                if (_quantity < item.Quantity && item.Discount != null)
                 {
-                    return item.discount.calcDiscount(item.product.BasePrice, _DiscountCode) * _quantity;
+                    return item.Discount.CalcDiscount(item.Product.BasePrice, _DiscountCode) * _quantity;
                 }
-                return item.product.BasePrice * _quantity;
+                return item.Product.BasePrice * _quantity;
             }
             return -1;
         }

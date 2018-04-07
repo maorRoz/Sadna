@@ -20,29 +20,29 @@ namespace SadnaSrc.StoreCenter
             myID = _myID;
             IntervalStart = _IntervalStart;
             IntervalEnd = _IntervalEnd;
-            myStatus = LotteryTicketStatus.WAITING;
+            myStatus = LotteryTicketStatus.Waiting;
         }
 
-        internal bool isWinning(int winningNumber)
+        internal bool IsWinning(int winningNumber)
         {
             return ((winningNumber <= IntervalEnd) && (winningNumber > IntervalStart));
         }
 
         internal void RunWinning()
         {
-            myStatus = LotteryTicketStatus.WINNING;
+            myStatus = LotteryTicketStatus.Winning;
         }
 
         internal void RunLosing()
         {
-            myStatus = LotteryTicketStatus.LOSING;
+            myStatus = LotteryTicketStatus.Losing;
         }
 
-        internal void runCancel()
+        internal void RunCancel()
         {
-            myStatus = LotteryTicketStatus.CANCEL;
+            myStatus = LotteryTicketStatus.Cancel;
         }
-        public string toString()
+        public override string ToString()
         {
             return "lottery ticket of Lottery number: " + LotteryNumber + " ticket number is: "+myID+" status: "+myStatus;
         }
