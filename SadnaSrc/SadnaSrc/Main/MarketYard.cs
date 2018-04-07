@@ -60,8 +60,10 @@ namespace SadnaSrc.Main
 
         //TODO: fix this method to work with UserSellerHarmony/UserShopperHarmony instead
         public IStoreService GetStoreService(IUserService userService)
-        {
-            return new StoreService((UserService)userService);
+        { // this should not work
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            Store store = handler.GetStoreByID("S1");
+            return new StoreService((UserService)userService, store);
         }
 
         public IOrderService GetOrderService(ref IUserService userService, IStoreService storeService)

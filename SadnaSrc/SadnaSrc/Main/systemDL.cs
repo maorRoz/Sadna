@@ -26,14 +26,16 @@ namespace SadnaSrc.Main
                 CreateSystemLogTable(),
                 CreateSystemErrorsTable(),
                 CreateUserTable(),
-                CreateStoreTable(),
+            //    CreateProductTable(),//added by lior
+            //    CreateDiscountTable(), //added by lior
+            //    CreateStockTable(), //added by lior
+            //    CreateLotteryTable(), //added by lior
+            //    CreateLotteryTicketsTable(), //added by lior
+                CreateStoreTable(), //TODO: need to be edited by by lior
                 CreateUserStatePolicyTable(),
                 CreateUserStorePolicyTable(),  // should improve this one
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
-                //createTableStrings.Add(CreateProductTable());
-                //createTableStrings.Add(CreateSaleTable());
-                //createTableStrings.Add(CreateDiscountTable());
                 CreateOrderTable(),
                 CreateOrderItemTable()
             };
@@ -47,9 +49,9 @@ namespace SadnaSrc.Main
             //TODO : delete this when The Right UseCase is implemented (Except the SystemAdmin since he is mandatory by constraint)
             string[] thingsToInsertByForce = 
             {
-                "INSERT INTO Store (Name,Address,Status) VALUES ('X','Here 4','Active')",
-                "INSERT INTO Store (Name,Address,Status) VALUES ('Y','Here 4','Active')",
-                "INSERT INTO Store (Name,Address,Status) VALUES ('M','Here 4','Active')",
+                "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S1','X','Here 4','Active')",
+                "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S2','Y','Here 4','Active')",
+                "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S3','M','Here 4','Active')",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",
@@ -82,6 +84,7 @@ namespace SadnaSrc.Main
                 }
             }
         }
+
 
         private static string CreateSystemLogTable()
         {
@@ -118,14 +121,15 @@ namespace SadnaSrc.Main
         private static string CreateStoreTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [Store] (
+                                    [SystemID]      TEXT,
                                     [Name]          TEXT,
                                     [Address]       TEXT,
-                                    [Status]        TEXT,
-                                    PRIMARY KEY([Name])
+                                    [IsActive]      TEXT,
+                                    PRIMARY KEY([SystemID])
                                     )";
         }
 
-        private static string CreateUserStatePolicyTable()
+    private static string CreateUserStatePolicyTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [StatePolicy] (
                                     [SystemID]      INTEGER,
@@ -183,18 +187,72 @@ namespace SadnaSrc.Main
 
         private static string CreateProductTable()
         {
-            throw new NotImplementedException();
+            return @"CREATE TABLE IF NOT EXISTS [Products] (
+                                    [SystemID]     TEXT,
+                                    [name]         TEXT,
+                                    [BasePrice]    INTEGER,
+                                    [description]  TEXT,
+                                    PRIMARY KEY([SystemID])
+                                    )";
+        }
+        private static string CreateDiscountTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [Discount] (
+                                    [DiscountCode]     TEXT,
+                                    [DiscountType]     TEXT,
+                                    [StartDate]     TEXT,
+                                    [EndDate]     TEXT,
+                                    [DiscountAmount]     INTEGER,
+                                    [Percentages]     TEXT,
+                                    PRIMARY KEY([DiscountCode])
+                                    )";
+        }
+        private static string CreateStockTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [Stock] (
+                                    [StockID] TEXT,
+                                    [ProductSystemID]    TEXT,
+                                    [quantity]    INTEGER,
+                                    [discount]  TEXT,
+                                    [PurchaseWay] TEXT, CHECK (PurchaseWay IN ('IMMIDIATE', 'LOTTERY')),
+                                    PRIMARY KEY([StockID]),
+                                    FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([discount]) REFERENCES [Discount]([DiscountCode]) ON DELETE CASCADE
+                                    )";
+        }
+        
+        private static string CreateLotteryTicketsTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [LotteryTicket] (
+                                    [myID] TEXT,
+                                    [LotteryID]    TEXT,
+                                    [IntervalStart]    INTEGER,
+                                    [IntervalEnd]  INTEGER,
+                                    [Status] TEXT, CHECK (Status IN ('WAITING', 'WINNING', 'LOSING', 'CANCEL')),
+                                    PRIMARY KEY([myID]),
+                                    FOREIGN KEY([LotteryID]) REFERENCES [LotteryTable]([SystemID]) ON DELETE CASCADE
+                                    )";
         }
 
+        private static string CreateLotteryTable()
+        {
+            return @"CREATE TABLE IF NOT EXISTS [LotteryTable] (
+                                    [SystemID] TEXT,
+                                    [ProductSystemID]    TEXT,
+                                    [ProductNormalPrice]    INTEGER,
+                                    [TotalMoneyPayed]  INTEGER,
+                                    [StartDate] TEXT,
+                                    [EndDate] TEXT,
+                                    [isActive] TEXT,
+                                    PRIMARY KEY([SystemID]),
+                                    FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
+                                    )";
+        }
         private static string CreateSaleTable()
         {
             throw new NotImplementedException();
         }
-
-        private static string CreateDiscountTable()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         private static string CreateOrderTable()
         {
