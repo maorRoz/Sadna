@@ -66,10 +66,10 @@ namespace SadnaSrc.Main
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Y','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'M','StoreOwner')",
-                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Date) VALUES ('Moshe','Health Potion','XXX','Immediate','Today')",
-                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Date) VALUES ('Moshe','Mana Potion','YYY','Lottery','Yesterday')",
-                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Date) VALUES ('Moshe','INT Potion','YYY','Lottery','Yesterday')",
-                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Date) VALUES ('MosheYYY','STR Potion','YYY','Immediate','Today')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Moshe','Health Potion','XXX','Immediate',2,11.5,'Today')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Moshe','Mana Potion','YYY','Lottery',3,12.0,'Yesterday')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Moshe','INT Potion','YYY','Lottery',2,8.0,'Yesterday')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('MosheYYY','STR Potion','YYY','Immediate',1,4.0,'Today')",
             };
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
@@ -156,15 +156,17 @@ namespace SadnaSrc.Main
                                     [SystemID]      INTEGER,
                                     [Name]          TEXT,
                                     [Store]         TEXT,
-                                    [Quantity]      TEXT,
-                                    [FinalPrice]    TEXT,
+                                    [Quantity]      INTEGER,
+                                    [UnitPrice]     REAL,
+                                    [FinalPrice]    REAL,
                                     [SaleType]      TEXT,
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
-                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name]) ,
-                                    PRIMARY KEY([SystemID],[Name],[Store])
+                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
+                                    PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice],[SaleType])
                                     )";
         }
 
+        //TODO: this table is bad and should be deleted once OrderPool DB is finally ready
         private static string CreatePurchaseHistoryTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [PurchaseHistory] (
@@ -172,6 +174,8 @@ namespace SadnaSrc.Main
                                     [Product]       TEXT,
                                     [Store]         TEXT,
                                     [SaleType]      TEXT,
+                                    [Quantity]      INTEGER,
+                                    [Price]         REAL,
                                     [Date]          TEXT,
                                     PRIMARY KEY([UserName],[Product],[Store],[SaleType],[Date])
                                     )";

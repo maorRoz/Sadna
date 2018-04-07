@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SadnaSrc.SupplyPoint
+namespace SadnaSrc.MarketHarmony
 {
-    class SupplyPoint
+    //integration between OrderPool to StoreCenter 
+    interface IStoreSyncher
     {
     }
 }

@@ -14,9 +14,13 @@ namespace SadnaSrc.Main
 
         MarketAnswer SignIn(string name, string password);
 
-     //   MarketAnswer AddToCart(string product);
+        MarketAnswer ViewCart();
 
-        void CleanSession(); // only for BlackBox tests
+        MarketAnswer EditCartItem(string store, string product, double unitPrice, string sale, int quantity);
+        MarketAnswer RemoveFromCart(string store, string product, double unitPrice, string sale);
+
+        void CleanGuestSession(); // only for tests
+        void CleanSession(); // only for tests
 
     }
 
@@ -43,5 +47,32 @@ namespace SadnaSrc.Main
         SignedInAlready,
         NoUserFound,
         NullEmptyDataGiven,
+    }
+
+    public enum ViewCartStatus
+    {
+        Success,
+        DidntEnterSystem,
+    }
+
+    public enum EditCartItemStatus
+    {
+        Success,
+        DidntEnterSystem,
+        NoItemFound,
+        ZeroNegativeQuantity
+    }
+
+    public enum RemoveFromCartStatus
+    {
+        Success,
+        DidntEnterSystem,
+        NoItemFound
+    }
+
+    public enum PromoteStoreManager
+    {
+        NoUserFound,
+        InvalidPromotion
     }
 }

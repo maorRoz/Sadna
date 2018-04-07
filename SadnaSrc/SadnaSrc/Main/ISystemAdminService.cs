@@ -9,7 +9,7 @@ namespace SadnaSrc.Main
 {
     public interface ISystemAdminService
     {
-        MarketAnswer RemoveUser(int userSystemID);
+        MarketAnswer RemoveUser(string userName);
         MarketAnswer ViewPurchaseHistoryByUser(string userName);
         MarketAnswer ViewPurchaseHistoryByStore(string storeName);
     }

@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.UserSpot;
 
-namespace UserSpotTests
+namespace UserSpotTests.UseCaseUnitTest
 {
     [TestClass]
     public class UseCase1_1_Test
@@ -20,13 +20,13 @@ namespace UserSpotTests
             marketSession = MarketYard.Instance;
             userServiceSession = (UserService)marketSession.GetUserService();
             Assert.AreEqual((int) EnterSystemStatus.Success, userServiceSession.EnterSystem().Status);
-            generatedGuest = userServiceSession.GetUser();
+            generatedGuest = userServiceSession.MarketUser;
         }
 
         [TestMethod]
         public void GuestHasNoPolicyTest()
         {
-            Assert.AreEqual(0, generatedGuest.GetStoreManagerPolicies().Length);
+            Assert.IsFalse(generatedGuest.HasStorePolicies());
             Assert.IsFalse(generatedGuest.IsRegisteredUser());
 
         }
@@ -41,7 +41,7 @@ namespace UserSpotTests
         [TestMethod]
         public void NewGuestCartEmptyTest()
         {
-            Assert.AreEqual(0, generatedGuest.GetCart().Length);
+            Assert.AreEqual(0, generatedGuest.Cart.GetCartStorage().Length);
         }
 
         [TestCleanup]

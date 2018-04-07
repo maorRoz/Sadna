@@ -45,25 +45,46 @@ namespace SadnaSrc.UserSpot
 
             if (actionString.Equals("PromoteStoreAdmin"))
             {
-                return StoreAction.StoreOwner;
+                return StoreAction.PromoteStoreAdmin;
             }
 
             if (actionString.Equals("ManageProducts"))
             {
-                return StoreAction.StoreOwner;
+                return StoreAction.ManageProducts;
+            }
+
+            if (actionString.Equals("DeclareDiscountPolicy"))
+            {
+                return StoreAction.DeclareDiscountPolicy;
             }
 
             if (actionString.Equals("DeclarePurchasePolicy"))
             {
-                return StoreAction.StoreOwner;
+                return StoreAction.DeclarePurchasePolicy;
             }
 
             if (actionString.Equals("ViewPurchaseHistory"))
             {
-                return StoreAction.StoreOwner;
+                return StoreAction.ViewPurchaseHistory;
             }
 
-            throw new UserException(MarketError.LogicError, "Procedure to cast string into store action has failed! there is no state by that name...");
+            throw new UserException(PromoteStoreManager.InvalidPromotion, "Procedure to cast string into store action has failed! there is no state by that name...");
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return Equals((StoreManagerPolicy)obj);
+        }
+
+
+        private bool Equals(StoreManagerPolicy obj)
+        {
+            return obj.Store.Equals(Store) && obj.Action == Action;
         }
     }
 }

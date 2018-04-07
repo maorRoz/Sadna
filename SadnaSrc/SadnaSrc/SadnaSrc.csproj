@@ -82,12 +82,19 @@
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
     <Compile Include="Main\SystemDL.cs" />
+    <Compile Include="MarketHarmony\IStoreSyncher.cs" />
+    <Compile Include="MarketHarmony\IUserSeller.cs" />
+    <Compile Include="MarketHarmony\UserAdminHarmony.cs" />
+    <Compile Include="MarketHarmony\UserBuyerHarmony.cs" />
+    <Compile Include="MarketHarmony\UserSellerHarmony.cs" />
+    <Compile Include="MarketHarmony\UserShopperHarmony.cs" />
     <Compile Include="OrderPool\Order.cs" />
+    <Compile Include="OrderPool\OrderAnswer.cs" />
     <Compile Include="OrderPool\OrderException.cs" />
     <Compile Include="OrderPool\OrderItem.cs" />
     <Compile Include="OrderPool\OrderPoolDL.cs" />
     <Compile Include="OrderPool\OrderService.cs" />
-    <Compile Include="OrderPool\PurchaseHistory.cs" />
+    <Compile Include="AdminView\PurchaseHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreCenter\OutsideModuleService.cs" />
     <Compile Include="StoreCenter\LotteryTicket.cs" />
@@ -102,14 +109,17 @@
     <Compile Include="StoreCenter\StoreDL.cs" />
     <Compile Include="StoreCenter\StoreException.cs" />
     <Compile Include="StoreCenter\StoreService.cs" />
+    <Compile Include="SupplyPoint\SupplyAnswer.cs" />
     <Compile Include="SupplyPoint\SupplyException.cs" />
-    <Compile Include="SupplyPoint\SupplyPoint.cs" />
     <Compile Include="SupplyPoint\SupplyService.cs" />
     <Compile Include="UserSpot\CartService.cs" />
     <Compile Include="UserSpot\CartItem.cs" />
     <Compile Include="Main\ISystemAdminService.cs" />
     <Compile Include="AdminView\SystemAdminService.cs" />
     <Compile Include="StoreCenter\ModuleGlobalHandler.cs" />
+    <Compile Include="MarketHarmony\IUserAdmin.cs" />
+    <Compile Include="MarketHarmony\IUserBuyer.cs" />
+    <Compile Include="MarketHarmony\IUserShopper.cs" />
     <Compile Include="UserSpot\User.cs" />
     <Compile Include="Main\IUserService.cs" />
     <Compile Include="UserSpot\RegisteredUser.cs" />
@@ -121,12 +131,18 @@
     <Compile Include="UserSpot\UserService.cs" />
     <Compile Include="UserSpot\UserServiceDL.cs" />
     <Compile Include="Walleter\PaymentService.cs" />
-    <Compile Include="Walleter\Walleter.cs" />
+    <Compile Include="Walleter\WalleterAnswer.cs" />
     <Compile Include="Walleter\WalleterException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProxyExternalSystems\ProxyExternalSystems.csproj">
+      <Project>{f4484437-aa89-4a9d-994b-36b603202356}</Project>
+      <Name>ProxyExternalSystems</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

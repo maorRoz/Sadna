@@ -8,5 +8,14 @@ namespace SadnaSrc.Main
 {
     public interface ISupplyService
     {
+        MarketAnswer AttachExternalSystem();
+        MarketAnswer CreateDelivery(int OrderId, string address);
+    }
+
+    public enum SupplyStatus
+    {
+        Success,
+        SupplySystemError,
+        NoSupplySystem
     }
 }

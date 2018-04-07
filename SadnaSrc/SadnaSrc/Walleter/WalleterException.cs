@@ -9,7 +9,7 @@ namespace SadnaSrc.Walleter
 {
     class WalleterException : MarketException
     {
-        public WalleterException(int status,string message) : base(status,message)
+        public WalleterException(WalleterStatus status,string message) : base((int)status,message)
         {
         }
 

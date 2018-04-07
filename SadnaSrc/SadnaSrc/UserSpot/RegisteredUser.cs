@@ -18,8 +18,8 @@ namespace SadnaSrc.UserSpot
             Name = name;
             Address = address;
             this.password = password;
-            cart.EnableCartSave();
-            cart.LoadCart(savedCart);
+            Cart.EnableCartSave();
+            Cart.LoadCart(savedCart);
         }
         public RegisteredUser(int systemID,string name,string address,string password,CartItem[] guestCart) 
             : base(systemID)
@@ -39,7 +39,7 @@ namespace SadnaSrc.UserSpot
 
         public override object[] ToData()
         {
-            object[] ret = { systemID, Name, Address, password };
+            object[] ret = { SystemID, Name, Address, password };
             return ret;
         }
 
@@ -47,9 +47,10 @@ namespace SadnaSrc.UserSpot
         {
             PolicyService.AddStatePolicy(StatePolicy.State.SystemAdmin);
         }
-        public void AddStoreManagerPolicy(string store, StoreManagerPolicy.StoreAction[] actionsToAdd)
+
+        public void AddStoreOwnership(string store)
         {
-            PolicyService.UpdateStorePolicies(store,actionsToAdd);
+            PolicyService.AddStoreOwnership(store);
         }
     }
 }

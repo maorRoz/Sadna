@@ -47,9 +47,9 @@ namespace BlackBox
 			_systemAdminService = _market.GetSystemAdminService(_userService);
 		}
 
-		public MarketAnswer RemoveUser(int userSystemId)
+		public MarketAnswer RemoveUser(string userName)
 		{
-			return _systemAdminService.RemoveUser(userSystemId);
+			return _systemAdminService.RemoveUser(userName);
 		}
 	}
 }

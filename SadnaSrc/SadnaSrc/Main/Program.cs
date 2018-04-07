@@ -12,13 +12,6 @@ namespace SadnaSrc.Main
         static void Main(string[] args)
         {
             var marketSystem = MarketYard.Instance;
-           /**
-                  IUserService service = marketSystem.GetUserService();
-                  service.EnterSystem();
-                 service.SignIn("Arik1","123");
-                  ISystemAdminService sysService= marketSystem.GetSystemAdminService(service);
-                  sysService.RemoveUser(2);
-            **/
             MarketYard.Exit();
         }
     }

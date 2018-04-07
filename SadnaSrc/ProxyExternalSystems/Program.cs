@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SadnaSrc.Walleter
+namespace ProxyExternalSystems
 {
-    class Walleter
+    class Program
     {
+        static void Main(string[] args)
+        {
+           
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.AdminView;
+using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.SupplyPoint;
@@ -53,9 +54,11 @@ namespace SadnaSrc.Main
 
         public ISystemAdminService GetSystemAdminService(IUserService userService)
         {
-            return new SystemAdminService((UserService) userService);
+            return new SystemAdminService(new UserAdminHarmony(userService));
         }
 
+
+        //TODO: fix this method to work with UserSellerHarmony/UserShopperHarmony instead
         public IStoreService GetStoreService(IUserService userService)
         { // this should not work
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
@@ -63,21 +66,19 @@ namespace SadnaSrc.Main
             return new StoreService((UserService)userService, store);
         }
 
-        public IOrderService GetOrderService(IUserService userService, IStoreService storeService,
-            ISupplyService supplyService, IPaymentService paymentService)
+        public IOrderService GetOrderService(ref IUserService userService, IStoreService storeService)
         {
-           return new OrderService((UserService)userService, (StoreService)storeService,
-               (SupplyService)supplyService, (PaymentService)paymentService);
+            return new OrderService(new UserBuyerHarmony(ref userService), (StoreService) storeService);
         }
 
-        public IPaymentService GetPaymentService()
+        public IPaymentService GetPaymentService(IOrderService orderService)
         {
-            return new PaymentService();
+            return new PaymentService((OrderService)orderService);
         }
 
-        public ISupplyService GetSupplyService()
+        public ISupplyService GetSupplyService(IOrderService orderService)
         {
-            return new SupplyService();
+            return new SupplyService((OrderService)orderService);
         }
 
         public static void CleanSession()
