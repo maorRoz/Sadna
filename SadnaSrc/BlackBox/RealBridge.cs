@@ -1,4 +1,5 @@
 ﻿
+using System;
 using SadnaSrc.AdminView;
 using SadnaSrc.Main;
 
@@ -64,5 +65,9 @@ namespace BlackBox
 			return new MarketAnswer(0,"");
 		}
 
+		public MarketAnswer OpenStore(string name, string store)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

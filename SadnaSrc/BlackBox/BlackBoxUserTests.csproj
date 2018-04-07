@@ -71,6 +71,7 @@
     <Compile Include="UseCase1_1.cs" />
     <Compile Include="UseCase2_1.cs" />
     <Compile Include="UseCase5_2.cs" />
+    <Compile Include="UseCase5_4.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
