@@ -9,8 +9,7 @@ namespace BlackBox
 		private IUserBridge _adminBridge;
 		private IUserBridge _signUpBridge1;
 		private IUserBridge _signUpBridge2;
-		private IUserBridge _signInBridge1;
-		private IUserBridge _signInBridge2;
+		private IUserBridge _signInBridge;
 		private readonly string userSoleStoreOwner = "PninaSoleStoreOwner";
 		private readonly string userNotSoleStoreOwner = "PninaNotSoleStoreOwner";
 		private readonly string userSoleStoreOwnerPass = "789456";
@@ -29,9 +28,7 @@ namespace BlackBox
 			_signUpBridge2 = new RealBridge();
 			_signUpBridge2.EnterSystem();
 			_signUpBridge2.SignUp(userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass);
-			_signInBridge1 = new RealBridge();
-			_signInBridge2 = new RealBridge();
-
+			
 		}
 
 		[TestMethod]
@@ -41,7 +38,9 @@ namespace BlackBox
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userNotSoleStoreOwner).Status);
-			Assert.AreEqual((int)SignInStatus.NoUserFound,_signInBridge1.SignIn(userNotSoleStoreOwner, userNotSoleStoreOwnerPass).Status);
+			_signInBridge = new RealBridge();
+			_signInBridge.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.NoUserFound,_signInBridge.SignIn(userNotSoleStoreOwner, userNotSoleStoreOwnerPass).Status);
 		}
 
 		[TestMethod]
@@ -51,7 +50,12 @@ namespace BlackBox
 			//TODO: check the store was closed
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
+			_signInBridge = new RealBridge();
+			_signInBridge.EnterSystem();
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userSoleStoreOwner).Status);
+
+			Assert.AreEqual((int)SignInStatus.NoUserFound, _signInBridge.SignIn(userSoleStoreOwner, userSoleStoreOwnerPass).Status);
+
 		}
 
 		[TestMethod]
@@ -110,15 +114,11 @@ namespace BlackBox
 		public void UserTestCleanUp()
 		{
 			_adminBridge.CleanSession();
-			_adminBridge.CleanMarket();
 			_signUpBridge1.CleanSession();
-			_signUpBridge1.CleanMarket();
 			_signUpBridge2.CleanSession();
-			_signUpBridge2.CleanMarket();
-			_signInBridge1.CleanSession();
-			_signInBridge1.CleanMarket();
-			_signInBridge2.CleanSession();
-			_signInBridge2.CleanMarket();
+			_signInBridge?.CleanSession();
+			_signUpBridge1.CleanMarket();
+
 		}
 	}
 }
