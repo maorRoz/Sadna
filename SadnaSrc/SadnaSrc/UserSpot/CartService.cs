@@ -64,10 +64,10 @@ namespace SadnaSrc.UserSpot
         //TODO: Replace the arguments with product class
         public void AddToCart(string store,string product,double unitPrice,string sale,int quantity)
         {
-            CartItem toAdd = new CartItem(_systemID, product,store, quantity, unitPrice, sale);
+            CartItem toAdd = new CartItem(product,store, quantity, unitPrice, sale);
             if (cartStorage.Contains(toAdd))
             {
-                EditCartItem(store,product,unitPrice,sale, quantity);
+                EditCartItem(toAdd, quantity);
             }
             else
             {
@@ -79,11 +79,11 @@ namespace SadnaSrc.UserSpot
             }            
         }
 
-        private void EditCartItem(string store, string product, double unitPrice, string sale, int quantity)
+        public void EditCartItem(CartItem toEdit, int quantity)
         {
             foreach (CartItem item in cartStorage)
             {
-                if (!item.Equals(store, product, unitPrice, sale)) {continue;}
+                if (!item.Equals(toEdit)) {continue;}
                 item.ChangeQuantity(quantity);
                 if (_toSave)
                 {
@@ -92,15 +92,18 @@ namespace SadnaSrc.UserSpot
             }
         }
 
-        public void RemoveFromCart(string store,string product, double unitPrice, string sale)
+        public void RemoveFromCart(CartItem toRemove)
         {
             foreach (CartItem item in cartStorage)
             {
-                if (!item.Equals(store, product, unitPrice, sale)) { continue; }
+                if (!item.Equals(toRemove)) { continue; }
+
+                cartStorage.Remove(item);
                 if (_toSave)
                 {
                     _userDL.RemoveCartItem(item);
                 }
+                break;
             }
         }
 

@@ -76,21 +76,24 @@ namespace SadnaSrc.AdminView
             DeleteFromTable("User", "Name = '" + userName +"'");
         }
 
-        private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
+        private string[] GetPurchaseHistory(SQLiteDataReader dbReader)
         {
-            List<PurchaseHistory> historyData = new List<PurchaseHistory>();
+            List<string> historyData = new List<string>();
             while (dbReader.Read())
             {
-                historyData.Add(new PurchaseHistory(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2),
-                    dbReader.GetString(3), dbReader.GetString(4)));
+                PurchaseHistory record = new PurchaseHistory(dbReader.GetString(0), dbReader.GetString(1),
+                    dbReader.GetString(2),dbReader.GetString(3),dbReader.GetInt32(4),dbReader.GetDouble(5), dbReader.GetString(6));
+                historyData.Add(record.ToString());
             }
 
             return historyData.ToArray();
         }
-        public PurchaseHistory[] GetPurchaseHistory(string field, string givenValue)
+        public string[] GetPurchaseHistory(string field, string givenValue)
         {
-            var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", field + " = '" + givenValue + "'");
-            return GetPurchaseHistory(dbReader);
+            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", field + " = '" + givenValue + "'"))
+            {
+                return GetPurchaseHistory(dbReader);
+            }
         }
 
     }

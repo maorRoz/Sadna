@@ -9,18 +9,19 @@ namespace SadnaSrc.UserSpot
 {
     public class CartItem
     {
-        private int _systemID;
-        public string Store { get; }
         public string Name { get; }
 
-        public double UnitPrice { get; }
-        public double FinalPrice => UnitPrice * Quantity;
-        public string Sale { get; }
-        public int Quantity { get; private set; }
+        public string Store { get; }
 
-        public CartItem(int systemID, string name, string store, int quantity,double unitPrice, string sale)
+        public int Quantity { get; private set; }
+        public double UnitPrice { get; }
+
+        public double FinalPrice => UnitPrice * Quantity;
+
+        public string Sale { get; }
+
+        public CartItem( string name, string store, int quantity,double unitPrice, string sale)
         {
-            _systemID = systemID;
             Name = name;
             Store = store;
             Quantity = quantity;
@@ -28,16 +29,11 @@ namespace SadnaSrc.UserSpot
             Sale = sale;
         }
 
-        public void SetUserID(int systemID)
-        {
-            _systemID = systemID;
-        }
-
         public void ChangeQuantity(int quantity)
         {
             if (Quantity + quantity <= 0)
             {
-                throw new UserException(MarketError.LogicError, "Cannot hold quantity of zero or negative value in cart item");
+                throw new UserException(EditCartItemStatus.ZeroNegativeQuantity, "Cannot hold quantity of zero or negative value in cart item");
             }
             Quantity += quantity;
            
@@ -45,13 +41,19 @@ namespace SadnaSrc.UserSpot
 
         public object[] ToData()
         {
-            return new object[] { _systemID, Name, Store, Quantity, FinalPrice, Sale};
+            return new object[] {Name, Store, Quantity,UnitPrice, FinalPrice, Sale};
         }
 
         public string GetDbIdentifier()
         {
-            return "SystemID = " + _systemID + " AND Name = '" + Name +
+            return "Name = '" + Name +
                    "' AND Store = '" + Store +"' AND UnitPrice = "+ UnitPrice + " AND SaleType = '" + Sale + "'";
+        }
+
+        public override string ToString()
+        {
+            return "Name : " + Name + " Store " + Store + " Quantity: " + Quantity + " Unit Price : " + UnitPrice
+                   + " Final Price: " + FinalPrice + " Sale : " + Sale;
         }
 
         public override bool Equals(object obj)
@@ -75,19 +77,7 @@ namespace SadnaSrc.UserSpot
         {
             return Store.Equals(store) && Name.Equals(name) && UnitPrice == unitPrice && Sale.Equals(sale);
         }
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = _systemID;
-                hashCode = (hashCode * 397) ^ (Store != null ? Store.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ UnitPrice.GetHashCode();
-                hashCode = (hashCode * 397) ^ (Sale != null ? Sale.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ Quantity;
-                return hashCode;
-            }
-        }
+
         //TODO: delete this when there is no more reference related to it
         public string GetStore()
         {
@@ -106,5 +96,16 @@ namespace SadnaSrc.UserSpot
             throw new NotImplementedException("dont use this method Igor!!");
         }
 
+        public override int GetHashCode()
+        {
+            var hashCode = -776670310;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Store);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + UnitPrice.GetHashCode();
+            hashCode = hashCode * -1521134295 + FinalPrice.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Sale);
+            hashCode = hashCode * -1521134295 + Quantity.GetHashCode();
+            return hashCode;
+        }
     }
 }

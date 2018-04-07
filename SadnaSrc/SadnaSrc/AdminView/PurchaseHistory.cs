@@ -1,21 +1,27 @@
 ﻿using System.Collections.Generic;
+using SadnaSrc.StoreCenter;
 
 namespace SadnaSrc.AdminView
 {
     public class PurchaseHistory
     {
-        public string User  { get; }
-        public string Product { get; }
-        public string Store { get; }
-        public string Sale { get; }
-        public string Date  { get; }
-        public PurchaseHistory(string userName,string productName, string storeName, string saleType, string date)
+        private string _user;
+        private string _product;
+        private string _store;
+        private string _sale;
+        private int _quantity;
+        private double _price;
+        private string _date;
+
+        public PurchaseHistory(string userName,string productName, string storeName, string saleType, int quantity, double price, string date)
         {
-            User = userName;
-            Product = productName;
-            Store = storeName;
-            Sale = saleType;
-            Date = date;
+            _user = userName;
+            _product = productName;
+            _store = storeName;
+            _sale = saleType;
+            _quantity = quantity;
+            _price = price;
+            _date = date;
         }
 
         public override bool Equals(object obj)
@@ -30,18 +36,23 @@ namespace SadnaSrc.AdminView
 
         private bool Equals(PurchaseHistory obj)
         {
-            return obj.User.Equals(User) && obj.Product.Equals(Product) && obj.Store.Equals(Store) 
-                                         && obj.Sale.Equals(Sale) && obj.Date.Equals(Date);
+            return obj._user.Equals(_user) && obj._product.Equals(_product) && obj._store.Equals(_store) 
+                          && obj._sale.Equals(_sale) && obj._quantity == _quantity && obj._price == _price && obj._date.Equals(_date);
         }
 
+        public override string ToString()
+        {
+            return "User: " + _user + " Product: " + _product + " Store: " + _store + " Sale: " + _sale 
+                   + " Quantity: "+ _quantity + " Price: " + _price + " Date: " + _date;
+        }
         public override int GetHashCode()
         {
             var hashCode = -1637592205;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(User);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Product);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Store);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Sale);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Date);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(_user);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(_product);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(_store);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(_sale);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(_date);
             return hashCode;
         }
     }

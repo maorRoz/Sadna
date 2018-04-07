@@ -16,10 +16,21 @@ namespace SadnaSrc.MarketHarmony
         {
             _store = store;
             policies = ((UserService) userService).MarketUser.GetStoreManagerPolicies(store);
+            //TODO: we should do something about user which hasn't entered the system here
         }
 
+        public void Promote(string userName, string permissions)
+        {
+            List<StoreManagerPolicy.StoreAction> actions = new List<StoreManagerPolicy.StoreAction>();
+            var permissionsArray = permissions.Split(',').Distinct().ToArray();
+            foreach (var permission in permissionsArray)
+            {
+                actions.Add(StoreManagerPolicy.GetActionFromString(permission));
+            }
+            PromoteStorePolicies(userName, actions.ToArray());
+        }
 
-        public void Promote(string userName, StoreManagerPolicy.StoreAction[] permissions)
+        private void PromoteStorePolicies(string userName, StoreManagerPolicy.StoreAction[] permissions)
         {
             UserPolicyService.PromoteStorePolicies(userName, _store, permissions);
         }
@@ -36,7 +47,7 @@ namespace SadnaSrc.MarketHarmony
 
             return false;
         }
-        private bool IsStoreOwner()
+        public bool IsStoreOwner()
         {
             return SearchPermission(StoreManagerPolicy.StoreAction.StoreOwner);
         }

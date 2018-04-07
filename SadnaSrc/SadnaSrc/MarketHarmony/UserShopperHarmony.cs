@@ -13,6 +13,7 @@ namespace SadnaSrc.MarketHarmony
         public UserShopperHarmony(ref UserService userService)
         {
             _userService = userService;
+            //TODO: we should do something about user which hasn't entered the system here
         }
 
         public void AddToCart()
