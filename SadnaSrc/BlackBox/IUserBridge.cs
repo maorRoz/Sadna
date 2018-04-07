@@ -24,5 +24,11 @@ namespace BlackBox
 		MarketAnswer RemoveUser(string userName);
 		void GetAdminService();
 
+		/*
+		 * StoreSystem
+		 */
+		void GetStoreService();
+		
+		MarketAnswer createStore(int id, string address, string status);
 	}
 }
