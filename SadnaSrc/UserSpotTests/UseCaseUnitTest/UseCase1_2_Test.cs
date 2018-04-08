@@ -97,6 +97,24 @@ namespace UserSpotTests.UseCaseUnitTest
             MissingCredentialsSignUpTest(null, null, null,null);
         }
 
+        [TestMethod]
+        public void CreditCardIsTooShort()
+        {
+            MissingCredentialsSignUpTest("MaorRegister19", "no-where", "123", "123456");
+        }
+
+        [TestMethod]
+        public void CreditCardIsTooLong()
+        {
+            MissingCredentialsSignUpTest("MaorRegister20", "no-where", "123", "123456789");
+        }
+
+        [TestMethod]
+        public void CreditCardHasInvalidChars()
+        {
+            MissingCredentialsSignUpTest("MaorRegister21", "no-where", "123", "12#$%^78");
+        }
+
 
         [TestMethod]
         public void DidntEnteredSystemTest()

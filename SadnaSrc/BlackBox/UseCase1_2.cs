@@ -156,7 +156,28 @@ namespace BlackBox
 			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", "", "", "12345678").Status);
 		}
 
-		[TestMethod]
+	    [TestMethod]
+	    public void CreditCardIsTooShort()
+	    {
+	        _bridge.EnterSystem();
+	        Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", "mishol susia 12", "123", "123456").Status);
+	    }
+
+	    [TestMethod]
+	    public void CreditCardIsTooLong()
+	    {
+	        _bridge.EnterSystem();
+	        Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", "mishol susia 12", "123", "123456789").Status);
+	    }
+
+	    [TestMethod]
+	    public void CreditCardHasInvalidChars()
+	    {
+	        _bridge.EnterSystem();
+	        Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", "mishol susia 12", "123", "123%&*(8").Status);
+	    }
+
+        [TestMethod]
 		public void UserNameAddressAndPasswordAreEmpty()
 		{
 			_bridge.EnterSystem();
