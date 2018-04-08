@@ -38,7 +38,14 @@ namespace IntegrationTests
         public void IsSystemAdminTest1()
         {
             ToSignIn(adminName, adminPass);
-            Assert.IsTrue(userAdminHarmony.IsSystemAdmin());
+            try
+            {
+                userAdminHarmony.ValidateSystemAdmin();
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
         }
 
         [TestMethod]
@@ -46,21 +53,42 @@ namespace IntegrationTests
         {
             userServiceSession.EnterSystem();
             userAdminHarmony = new UserAdminHarmony(userServiceSession);
-            Assert.IsFalse(userAdminHarmony.IsSystemAdmin());
+            try
+            {
+                userAdminHarmony.ValidateSystemAdmin();
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
         }
 
         [TestMethod]
         public void IsSystemAdminTest3()
         {
             userAdminHarmony = new UserAdminHarmony(userServiceSession);
-            Assert.IsFalse(userAdminHarmony.IsSystemAdmin());
+            try
+            {
+                userAdminHarmony.ValidateSystemAdmin();
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
         }
 
         [TestMethod]
         public void IsSystemAdminTest4()
         {
             ToSignIn(notAdminName, notAdminPass);
-            Assert.IsFalse(userAdminHarmony.IsSystemAdmin());
+            try
+            {
+                userAdminHarmony.ValidateSystemAdmin();
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
         }
 
         [TestMethod]

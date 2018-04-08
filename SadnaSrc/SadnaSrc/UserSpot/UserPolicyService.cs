@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.UserSpot
 {
@@ -27,7 +28,7 @@ namespace SadnaSrc.UserSpot
         {
             if (!_userDL.IsUserNameExist(userName))
             {
-                throw new UserException(PromoteStoreManager.NoUserFound, "No user by the name '" + userName + " has been found for promotion!");
+                throw new UserException(PromoteStoreStatus.NoUserFound, "No user by the name '" + userName + " has been found for promotion!");
             }
             foreach (StoreManagerPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreManagerPolicy.StoreAction)))
             {

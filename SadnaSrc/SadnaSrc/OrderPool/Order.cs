@@ -22,10 +22,10 @@ namespace SadnaSrc.OrderPool
         public string GetShippingAddress() { return _shippingAddress; }
         public string GetUserName() { return _userName; }
         public int GetOrderID() { return _orderId; }
-        public DateTime getDate() {  return _date;}
+        public DateTime GetDate() {  return _date;}
 
-        public void setPrice(double price) {_totalPrice = price;}
-        public void setAddress(string address) { _shippingAddress = address; }
+        public void SetPrice(double price) {_totalPrice = price;}
+        public void SetAddress(string address) { _shippingAddress = address; }
 
         public Order(int orderId, string userName)
         {
@@ -53,10 +53,10 @@ namespace SadnaSrc.OrderPool
             _items = items;
             _orderId = orderId;
             _totalPrice = price;
-            _date = parseDate(dateString);
+            _date = ParseDate(dateString);
         }
 
-        private DateTime parseDate(string dateString)
+        private DateTime ParseDate(string dateString)
         {
             int days= Int32.Parse(dateString.Substring(0,2));
             int months = Int32.Parse(dateString.Substring(3, 2));
@@ -66,11 +66,11 @@ namespace SadnaSrc.OrderPool
 
         }
 
-        public OrderItem getOrderItem(string name,string store)
+        public OrderItem GetOrderItem(string name,string store)
         {
             foreach (OrderItem item in _items)
             {
-                if (item.GetName() == name && item.GetStore() == store)
+                if (item.Name == name && item.Store == store)
                     return item;
             }
 
@@ -79,29 +79,24 @@ namespace SadnaSrc.OrderPool
 
         public void AddOrderItem(OrderItem item)
         {
-            if (getOrderItem(item.GetName(), item.GetStore()) != null)
+            if (GetOrderItem(item.Name, item.Store) != null)
             {
                 throw new OrderException(OrderItemStatus.ItemAlreadyInOrder, "Order item is already listed in the order.");
             }
-            else
-            {
-                _items.Add(item);
-                _totalPrice += (item.GetPrice()*item.GetQuantity());
-            }
+
+            _items.Add(item);
+            _totalPrice += item.Price*item.Quantity;
         }
 
         public void RemoveOrderItem(OrderItem item)
         {
-            if (getOrderItem(item.GetName(), item.GetStore()) == null)
+            if (GetOrderItem(item.Name, item.Store) == null)
             {
                 throw new OrderException(OrderItemStatus.NoOrderItemInOrder, "Order item is not listed in the order.");
             }
-            else
-            {
-                _items.Remove(item);
-                _totalPrice -= (item.GetPrice() * item.GetQuantity());
 
-            }
+            _items.Remove(item);
+            _totalPrice -= item.Price * item.Quantity;
         }
 
         public void ComputeTotalPrice()
@@ -109,7 +104,7 @@ namespace SadnaSrc.OrderPool
             double acc = 0;
             foreach (OrderItem item in _items)
             {
-                acc += item.GetPrice()*item.GetQuantity();
+                acc += item.Price*item.Quantity;
             }
 
             _totalPrice = acc;

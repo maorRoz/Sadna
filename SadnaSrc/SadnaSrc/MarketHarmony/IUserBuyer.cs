@@ -11,10 +11,16 @@ namespace SadnaSrc.MarketHarmony
     // integration between UserSpot to OrderPool only
     public interface IUserBuyer
     {
-        OrderItem[] Checkout();
+        OrderItem[] CheckoutAll();
+            
+        OrderItem[] CheckoutFromStore(string store);
+
+        OrderItem CheckoutItem(string itemName, string store, int quantity, double unitPrice, string sale);
 
         string GetAddress();
 
         string GetName();
+
+        void CleanSession(); //only for testing
     }
 }

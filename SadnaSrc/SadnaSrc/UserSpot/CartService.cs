@@ -34,6 +34,20 @@ namespace SadnaSrc.UserSpot
         {
             return cartStorage.ToArray();
         }
+
+        public CartItem[] GetCartStorage(string store)
+        {
+            List<CartItem> filteredCartStorage = new List<CartItem>();
+            foreach (CartItem item in cartStorage)
+            {
+                if (item.Store.Equals(store))
+                {
+                    filteredCartStorage.Add(item);
+                }
+            }
+
+            return filteredCartStorage.ToArray();
+        }
         public CartItem SearchInCart(string store, string product, double unitPrice, string sale)
         {
 
@@ -59,6 +73,23 @@ namespace SadnaSrc.UserSpot
         {
             cartStorage.Clear();
             _userDL.RemoveCart();
+        }
+
+        public void EmptyCart(string store)
+        {
+            List<CartItem> filteredStorage = new List<CartItem>();
+            foreach (CartItem item in cartStorage)
+            {
+                if (_toSave && item.Store.Equals(store))
+                {
+                    _userDL.RemoveCartItem(item);
+                }
+                else
+                {
+                    filteredStorage.Add(item);
+                }
+            }
+            cartStorage = filteredStorage;
         }
 
         //TODO: Replace the arguments with product class

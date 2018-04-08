@@ -70,9 +70,16 @@ namespace SadnaSrc.Main
         NoItemFound
     }
 
-    public enum PromoteStoreManager
+    public enum BrowseMarketStatus
     {
-        NoUserFound,
-        InvalidPromotion
+        DidntEnterSystem,
+        DidntLoggedSystem
     }
+
+    public enum ManageMarketSystem
+    {
+        NotSystemAdmin
+    }
+
+    
 }

@@ -96,7 +96,7 @@ namespace SadnaSrc.OrderPool
             foreach (OrderItem item in order.GetItems())
             {
                 string[] valuesNames2 = { "@orderidParam", "@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
-                object[] values2 = { order.GetOrderID(), item.GetStore(), item.GetName(), item.GetPrice(),item.GetQuantity() };
+                object[] values2 = { order.GetOrderID(), item.Store, item.Name, item.Price,item.Quantity };
                 InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
             }
 
@@ -113,7 +113,7 @@ namespace SadnaSrc.OrderPool
         public void AddItemToOrder(int orderId, OrderItem item)
         {
             string[] valuesNames2 = { "@OrderIdParam", "@StoreParam", "@NameParam", "@PriceParam", "@quantityParam" };
-            object[] values2 = { orderId, item.GetStore(), item.GetName(), item.GetPrice(), item.GetQuantity() };
+            object[] values2 = { orderId, item.Store, item.Name, item.Price, item.Quantity };
             InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
         }
 

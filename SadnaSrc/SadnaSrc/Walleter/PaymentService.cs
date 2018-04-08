@@ -18,7 +18,7 @@ namespace SadnaSrc.Walleter
         {
             _orderService = orderService;
         }
-
+        //TODO: you shouldn't let the client get any interaction with this interface, no MarketAnswer is needed here
         //TODO: change this once info about external systems is available.
         public MarketAnswer AttachExternalSystem()
         {
@@ -33,7 +33,7 @@ namespace SadnaSrc.Walleter
             {
                 throw new WalleterException(WalleterStatus.NoPaymentSystem, "Failed, an error in the payment system occured.");
             }
-            Order order = _orderService.getOrder(orderId);
+            Order order = _orderService.GetOrder(orderId);
             if (CheckCreditCard(creditCardetails))
             {
                 if (sock.ProccessPayment(creditCardetails, order.GetPrice()))

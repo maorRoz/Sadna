@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.UserSpot
 {
@@ -68,7 +69,7 @@ namespace SadnaSrc.UserSpot
                 return StoreAction.ViewPurchaseHistory;
             }
 
-            throw new UserException(PromoteStoreManager.InvalidPromotion, "Procedure to cast string into store action has failed! there is no state by that name...");
+            throw new UserException(PromoteStoreStatus.InvalidPromotion, "Procedure to cast string into store action has failed! there is no state by that name...");
         }
 
         public override bool Equals(object obj)
@@ -85,6 +86,14 @@ namespace SadnaSrc.UserSpot
         private bool Equals(StoreManagerPolicy obj)
         {
             return obj.Store.Equals(Store) && obj.Action == Action;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -1019910883;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Store);
+            hashCode = hashCode * -1521134295 + Action.GetHashCode();
+            return hashCode;
         }
     }
 }

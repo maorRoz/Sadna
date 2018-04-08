@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
-    public interface IStoreService
+    public interface IStoreManagementService
     {
-        MarketAnswer OpenStore(string name, string store);
 
         /**
         * Store Managment, general Actions
         **/
-        MarketAnswer PromoteToOwner(int someoneToPromoteID);
+        MarketAnswer PromoteToStoreOwner(string someoneToPromoteName);
         MarketAnswer PromoteToManager(int someoneToPromoteID, string actions);
         MarketAnswer GetProductStockInformation(int ProductID);
         MarketAnswer CloseStore();
@@ -37,7 +36,7 @@ namespace SadnaSrc.Main
         /**
          * Store Managment, Discounts
          **/
-        //MarketAnswer editDiscount();
+        //MarketAnswer EditDiscount();
 
         MarketAnswer SetManagersActions(string otherUser, string actions);
         MarketAnswer AddDiscountToProduct(string productID, DateTime _startDate, DateTime _endDate, 

@@ -9,6 +9,9 @@ namespace SadnaSrc.OrderPool
 {
     class OrderException : MarketException
     {
+        public OrderException(GiveDetailsStatus status, string message) : base((int)status, message)
+        {
+        }
         public OrderException(OrderStatus status,string message) : base((int)status,message)
         {
         }

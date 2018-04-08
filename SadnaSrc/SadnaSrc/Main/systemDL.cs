@@ -20,20 +20,20 @@ namespace SadnaSrc.Main
             CreateTables();
         }
 
-        public static void CreateTables()
+        private static void CreateTables()
         {
             string[] createTableStrings = {
                 CreateSystemLogTable(),
                 CreateSystemErrorsTable(),
                 CreateUserTable(),
-            //    CreateProductTable(),//added by lior
-            //    CreateDiscountTable(), //added by lior
-            //    CreateStockTable(), //added by lior
-            //    CreateLotteryTable(), //added by lior
-            //    CreateLotteryTicketsTable(), //added by lior
-                CreateStoreTable(), //TODO: need to be edited by by lior
+                CreateProductTable(),
+                CreateDiscountTable(), 
+                CreateStockTable(), 
+                CreateLotteryTable(), 
+                CreateLotteryTicketsTable(), 
+                CreateStoreTable(), 
                 CreateUserStatePolicyTable(),
-                CreateUserStorePolicyTable(),  // should improve this one
+                CreateUserStorePolicyTable(),  
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
                 CreateOrderTable(),
@@ -52,24 +52,41 @@ namespace SadnaSrc.Main
                 "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S1','X','Here 4','Active')",
                 "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S2','Y','Here 4','Active')",
                 "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S3','M','Here 4','Active')",
+                "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S4','Cluckin Bell','Los Santos','Active')",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",
                 "INSERT INTO User (SystemID,Name,Address,Password) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70')",
                 "INSERT INTO User (SystemID,Name,Address,Password) VALUES (2,'Arik2','H3','202cb962ac59075b964b07152d234b70')",
                 "INSERT INTO User (SystemID,Name,Address,Password) VALUES (3,'Arik3','H3','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (4,'Big Smoke','Los Santos','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (5,'CJ','Los Santos','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (6,'Ryder','Los Santos','202cb962ac59075b964b07152d234b70')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (3,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (4,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (5,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (6,'RegisteredUser')",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#9','Cluckin Bell',2,5.00,10.00,'Lottery')",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#9 Large','Cluckin Bell',1,7.00,7.00,'Immediate')",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#6 Extra Dip','Cluckin Bell',1,8.50,8.50,'Immediate')",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#7','Cluckin Bell',1,8.00,8.00,'Immediate')",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#45','Cluckin Bell',1,16.00,16.00,'Immediate')",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#45 With Cheese','Cluckin Bell',1,18.00,18.00,'Immediate')",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'Large Soda','Cluckin Bell',1,5.00,5.00,'Immediate')",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'Gun','M',3,25.00,75.00,'Immediate')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Y','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'M','StoreOwner')",
-                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Moshe','Health Potion','XXX','Immediate',2,11.5,'Today')",
-                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Moshe','Mana Potion','YYY','Lottery',3,12.0,'Yesterday')",
-                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Moshe','INT Potion','YYY','Lottery',2,8.0,'Yesterday')",
-                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('MosheYYY','STR Potion','YYY','Immediate',1,4.0,'Today')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik1','Health Potion','X','Immediate',2,11.5,'Today')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik1','Mana Potion','Y','Lottery',3,12.0,'Yesterday')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik1','INT Potion','Y','Lottery',2,8.0,'Yesterday')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik3','STR Potion','Y','Immediate',1,4.0,'Today')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('CJ','#9','Cluckin Bell','Lottery',1,5.00,'Today')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Ryder','#9','Cluckin Bell','Lottery',1,5.00,'Today')",
             };
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
@@ -122,9 +139,9 @@ namespace SadnaSrc.Main
         {
             return @"CREATE TABLE IF NOT EXISTS [Store] (
                                     [SystemID]      TEXT,
-                                    [Name]          TEXT,
+                                    [Name]          TEXT  NOT NULL UNIQUE,
                                     [Address]       TEXT,
-                                    [Status]      TEXT,
+                                    [Status]        TEXT,
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -190,32 +207,32 @@ namespace SadnaSrc.Main
         {
             return @"CREATE TABLE IF NOT EXISTS [Products] (
                                     [SystemID]     TEXT,
-                                    [name]         TEXT,
+                                    [Name]         TEXT,
                                     [BasePrice]    INTEGER,
-                                    [description]  TEXT,
+                                    [Description]  TEXT,
                                     PRIMARY KEY([SystemID])
                                     )";
         }
         private static string CreateDiscountTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [Discount] (
-                                    [DiscountCode]     TEXT,
-                                    [DiscountType]     TEXT,
-                                    [StartDate]     TEXT,
-                                    [EndDate]     TEXT,
-                                    [DiscountAmount]     INTEGER,
-                                    [Percentages]     TEXT,
+                                    [DiscountCode]          TEXT,
+                                    [DiscountType]          TEXT,
+                                    [StartDate]             TEXT,
+                                    [EndDate]               TEXT,
+                                    [DiscountAmount]        INTEGER,
+                                    [Percentages]           TEXT,
                                     PRIMARY KEY([DiscountCode])
                                     )";
         }
         private static string CreateStockTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [Stock] (
-                                    [StockID] TEXT,
-                                    [ProductSystemID]    TEXT,
-                                    [quantity]    INTEGER,
-                                    [discount]  TEXT,
-                                    [PurchaseWay] TEXT, CHECK (PurchaseWay IN ('IMMIDIATE', 'LOTTERY')),
+                                    [StockID]               TEXT,
+                                    [ProductSystemID]       TEXT,
+                                    [Quantity]              INTEGER,
+                                    [Discount]              TEXT,
+                                    [PurchaseWay]           TEXT, CHECK (PurchaseWay IN ('Immediate', 'Lottery')),
                                     PRIMARY KEY([StockID]),
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE,
                                     FOREIGN KEY([discount]) REFERENCES [Discount]([DiscountCode]) ON DELETE CASCADE
@@ -225,11 +242,11 @@ namespace SadnaSrc.Main
         private static string CreateLotteryTicketsTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [LotteryTicket] (
-                                    [myID] TEXT,
-                                    [LotteryID]    TEXT,
-                                    [IntervalStart]    INTEGER,
-                                    [IntervalEnd]  INTEGER,
-                                    [Status] TEXT, CHECK (Status IN ('WAITING', 'WINNING', 'LOSING', 'CANCEL')),
+                                    [myID]              TEXT,
+                                    [LotteryID]         TEXT,
+                                    [IntervalStart]     INTEGER,
+                                    [IntervalEnd]       INTEGER,
+                                    [Status]            TEXT, CHECK (Status IN ('WAITING', 'WINNING', 'LOSING', 'CANCEL')),
                                     PRIMARY KEY([myID]),
                                     FOREIGN KEY([LotteryID]) REFERENCES [LotteryTable]([SystemID]) ON DELETE CASCADE
                                     )";
@@ -238,23 +255,18 @@ namespace SadnaSrc.Main
         private static string CreateLotteryTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [LotteryTable] (
-                                    [SystemID] TEXT,
-                                    [ProductSystemID]    TEXT,
+                                    [SystemID]              TEXT,
+                                    [ProductSystemID]       TEXT,
                                     [ProductNormalPrice]    INTEGER,
-                                    [TotalMoneyPayed]  INTEGER,
-                                    [StartDate] TEXT,
-                                    [EndDate] TEXT,
-                                    [isActive] TEXT,
+                                    [TotalMoneyPayed]       INTEGER,
+                                    [StartDate]             TEXT,
+                                    [EndDate]               TEXT,
+                                    [isActive]              TEXT,
                                     PRIMARY KEY([SystemID]),
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
                                     )";
         }
-        private static string CreateSaleTable()
-        {
-            throw new NotImplementedException();
-        }
         
-
         private static string CreateOrderTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [Orders] (

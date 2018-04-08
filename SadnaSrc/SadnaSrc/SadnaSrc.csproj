@@ -74,7 +74,8 @@
     <Compile Include="AdminView\AdminException.cs" />
     <Compile Include="Main\IOrderService.cs" />
     <Compile Include="Main\IPaymentService.cs" />
-    <Compile Include="Main\IStoreService.cs" />
+    <Compile Include="Main\IStoreManagementService.cs" />
+    <Compile Include="Main\IStoreShoppingService.cs" />
     <Compile Include="Main\ISupplyService.cs" />
     <Compile Include="Main\MarketException.cs" />
     <Compile Include="Main\MarketLog.cs" />
@@ -82,8 +83,9 @@
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
     <Compile Include="Main\SystemDL.cs" />
-    <Compile Include="MarketHarmony\IStoreSyncher.cs" />
+    <Compile Include="MarketHarmony\IStoresSyncher.cs" />
     <Compile Include="MarketHarmony\IUserSeller.cs" />
+    <Compile Include="MarketHarmony\StoresSyncherHarmony.cs" />
     <Compile Include="MarketHarmony\UserAdminHarmony.cs" />
     <Compile Include="MarketHarmony\UserBuyerHarmony.cs" />
     <Compile Include="MarketHarmony\UserSellerHarmony.cs" />
