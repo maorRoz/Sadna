@@ -18,15 +18,12 @@ namespace SadnaSrc.UserSpot
 
         public double FinalPrice => UnitPrice * Quantity;
 
-        public string Sale { get; }
-
-        public CartItem( string name, string store, int quantity,double unitPrice, string sale)
+        public CartItem( string name, string store, int quantity,double unitPrice)
         {
             Name = name;
             Store = store;
             Quantity = quantity;
             UnitPrice = unitPrice;
-            Sale = sale;
         }
 
         public void ChangeQuantity(int quantity)
@@ -41,19 +38,19 @@ namespace SadnaSrc.UserSpot
 
         public object[] ToData()
         {
-            return new object[] {Name, Store, Quantity,UnitPrice, FinalPrice, Sale};
+            return new object[] {Name, Store, Quantity,UnitPrice, FinalPrice};
         }
 
         public string GetDbIdentifier()
         {
             return "Name = '" + Name +
-                   "' AND Store = '" + Store +"' AND UnitPrice = "+ UnitPrice + " AND SaleType = '" + Sale + "'";
+                   "' AND Store = '" + Store +"' AND UnitPrice = "+ UnitPrice ;
         }
 
         public override string ToString()
         {
             return "Name : " + Name + " Store " + Store + " Quantity: " + Quantity + " Unit Price : " + UnitPrice
-                   + " Final Price: " + FinalPrice + " Sale : " + Sale;
+                   + " Final Price: " + FinalPrice ;
         }
 
         public override bool Equals(object obj)
@@ -69,43 +66,14 @@ namespace SadnaSrc.UserSpot
 
         private bool Equals(CartItem obj)
         {
-            return obj.Store.Equals(Store) && obj.Name.Equals(Name) && obj.UnitPrice == UnitPrice &&
-                   obj.Sale.Equals(Sale);
+            return obj.Store.Equals(Store) && obj.Name.Equals(Name) && obj.UnitPrice == UnitPrice;
         }
 
-        public bool Equals(string store, string name, double unitPrice, string sale)
+        public bool Equals(string store, string name, double unitPrice)
         {
-            return Store.Equals(store) && Name.Equals(name) && UnitPrice == unitPrice && Sale.Equals(sale);
+            return Store.Equals(store) && Name.Equals(name) && UnitPrice == unitPrice;
         }
 
-        //TODO: delete this when there is no more reference related to it
-        public string GetStore()
-        {
-            throw new NotImplementedException("dont use this method Igor!!");
-        }
 
-        //TODO: delete this when there is no more reference related to it
-        public string GetName()
-        {
-            throw new NotImplementedException("dont use this method Igor!!");
-        }
-
-        //TODO: delete this when there is no more reference related to it
-        public int GetQuantity()
-        {
-            throw new NotImplementedException("dont use this method Igor!!");
-        }
-
-        public override int GetHashCode()
-        {
-            var hashCode = -776670310;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Store);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
-            hashCode = hashCode * -1521134295 + UnitPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + FinalPrice.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Sale);
-            hashCode = hashCode * -1521134295 + Quantity.GetHashCode();
-            return hashCode;
-        }
     }
 }

@@ -32,10 +32,10 @@ namespace SadnaSrc.MarketHarmony
             return ConvertCartItemsToOrderItems(userCart);
         }
 
-        public OrderItem CheckoutItem(string itemName, string store, int quantity, double unitPrice, string sale)
+        public OrderItem CheckoutItem(string itemName, string store, int quantity, double unitPrice)
         {
             ValidUserEnteredSystem();
-            CartItem userItem = _userService.CheckoutItem(itemName,store,quantity,unitPrice,sale);
+            CartItem userItem = _userService.CheckoutItem(itemName,store,quantity,unitPrice);
             return CnvertCartItemToOrderItem(userItem);
         }
 

@@ -34,10 +34,10 @@ namespace UserSpotTests.PureUnitTest
             userServiceLoggedSession = null;
             userServiceLoggedSession2 = null;
             expected = new List<CartItem>();
-            item1 = new CartItem("Health Potion", "X", 1, 5.0, "Immediate");
-            item2 = new CartItem("Health Potion", "Y", 2, 0.5, "Immediate");
-            item3 = new CartItem("Health Potion", "Y", 2, 6.0, "Immediate");
-            item4 = new CartItem("Health Potion", "M", 5, 7.0, "Immediate");
+            item1 = new CartItem("Health Potion", "X", 1, 5.0);
+            item2 = new CartItem("Health Potion", "Y", 2, 0.5);
+            item3 = new CartItem("Health Potion", "Y", 2, 6.0);
+            item4 = new CartItem("Health Potion", "M", 5, 7.0);
         }
 
         [TestMethod]
@@ -73,8 +73,8 @@ namespace UserSpotTests.PureUnitTest
         {
             CartService cart = new CartService(0);
             cart.LoadCart(new[] { item1, item2, item3, item4 });
-            Assert.AreEqual(item1, cart.SearchInCart(item1.Store, item1.Name, item1.UnitPrice, item1.Sale));
-            Assert.AreEqual(item3, cart.SearchInCart(item3.Store, item3.Name, item3.UnitPrice, item3.Sale));
+            Assert.AreEqual(item1, cart.SearchInCart(item1.Store, item1.Name, item1.UnitPrice));
+            Assert.AreEqual(item3, cart.SearchInCart(item3.Store, item3.Name, item3.UnitPrice));
         }
 
         [TestMethod]
@@ -82,8 +82,8 @@ namespace UserSpotTests.PureUnitTest
         {
             CartService cart = new CartService(0);
             cart.LoadCart(new[] { item1});
-            Assert.AreEqual(null,cart.SearchInCart(item2.Store,item2.Name,item2.UnitPrice,item2.Sale));
-            Assert.AreEqual(null, cart.SearchInCart(item4.Store, item4.Name, item4.UnitPrice, item4.Sale));
+            Assert.AreEqual(null,cart.SearchInCart(item2.Store,item2.Name,item2.UnitPrice));
+            Assert.AreEqual(null, cart.SearchInCart(item4.Store, item4.Name, item4.UnitPrice));
         }
 
         [TestMethod]
@@ -91,8 +91,8 @@ namespace UserSpotTests.PureUnitTest
         {
             CartService cart = new CartService(0);
             cart.LoadCart(new CartItem[0]);
-            Assert.AreEqual(null, cart.SearchInCart(item1.Store, item1.Name, item1.UnitPrice, item1.Sale));
-            Assert.AreEqual(null, cart.SearchInCart(item2.Store, item2.Name, item2.UnitPrice, item2.Sale));
+            Assert.AreEqual(null, cart.SearchInCart(item1.Store, item1.Name, item1.UnitPrice));
+            Assert.AreEqual(null, cart.SearchInCart(item2.Store, item2.Name, item2.UnitPrice));
         }
 
         [TestMethod]
@@ -249,25 +249,25 @@ namespace UserSpotTests.PureUnitTest
         private void AddItem1(UserService userService)
         {
             expected.Add(item1);
-            userService.AddToCart("Health Potion", "X", 1, 5.0, "Immediate");
+            userService.AddToCart("Health Potion", "X", 1, 5.0);
         }
 
         private void AddItem2(UserService userService)
         {
             expected.Add(item2);
-            userService.AddToCart("Health Potion", "Y", 2, 0.5, "Immediate");
+            userService.AddToCart("Health Potion", "Y", 2, 0.5);
         }
 
         private void AddItem3(UserService userService)
         {
             expected.Add(item3);
-            userService.AddToCart("Health Potion", "Y", 2, 6.0, "Immediate");
+            userService.AddToCart("Health Potion", "Y", 2, 6.0);
         }
 
         private void AddItem4(UserService userService)
         {
             expected.Add(item4);
-            userService.AddToCart("Health Potion", "M", 5, 7.0, "Immediate");
+            userService.AddToCart("Health Potion", "M", 5, 7.0);
         }
 
         private void AddAllItems(UserService userService)

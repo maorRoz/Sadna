@@ -69,14 +69,14 @@ namespace SadnaSrc.Main
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (4,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (5,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (6,'RegisteredUser')",
-                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#9','Cluckin Bell',2,5.00,10.00,'Lottery')",
-                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#9 Large','Cluckin Bell',1,7.00,7.00,'Immediate')",
-                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#6 Extra Dip','Cluckin Bell',1,8.50,8.50,'Immediate')",
-                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#7','Cluckin Bell',1,8.00,8.00,'Immediate')",
-                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#45','Cluckin Bell',1,16.00,16.00,'Immediate')",
-                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'#45 With Cheese','Cluckin Bell',1,18.00,18.00,'Immediate')",
-                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'Large Soda','Cluckin Bell',1,5.00,5.00,'Immediate')",
-                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType) VALUES (4,'Gun','M',3,25.00,75.00,'Immediate')",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (4,'#9','Cluckin Bell',2,5.00,10.00)",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (4,'#9 Large','Cluckin Bell',1,7.00,7.00)",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (4,'#6 Extra Dip','Cluckin Bell',1,8.50,8.50)",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (4,'#7','Cluckin Bell',1,8.00,8.00)",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,) VALUES (4,'#45','Cluckin Bell',1,16.00,16.00)",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (4,'#45 With Cheese','Cluckin Bell',1,18.00,18.00)",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (4,'Large Soda','Cluckin Bell',1,5.00,5.00)",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (4,'Gun','M',3,25.00,75.00)",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Y','StoreOwner')",
@@ -176,9 +176,8 @@ namespace SadnaSrc.Main
                                     [Quantity]      INTEGER,
                                     [UnitPrice]     REAL,
                                     [FinalPrice]    REAL,
-                                    [SaleType]      TEXT,
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
-                                    PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice],[SaleType])
+                                    PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice])
                                     )";
 
             //TODO:                                     FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,

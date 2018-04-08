@@ -70,7 +70,7 @@ namespace BlackBox
 		{
 			SignIn("hello", adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoUserFound, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
 		}
 
 		[TestMethod]
@@ -78,7 +78,7 @@ namespace BlackBox
 		{
 			SignIn("hello", adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoUserFound, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
 		}
 
 		[TestMethod]
@@ -86,7 +86,7 @@ namespace BlackBox
 		{
 			SignIn(adminName, "852963");
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoStoreFound, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
 		}
 
 		[TestMethod]
@@ -94,7 +94,7 @@ namespace BlackBox
 		{
 			SignIn(adminName, "852963");
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoUserFound, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
 		}
 
 		[TestMethod]
@@ -102,7 +102,7 @@ namespace BlackBox
 		{
 			SignIn("Hello", "852963");
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoStoreFound, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
 		}
 
 		[TestMethod]
@@ -110,7 +110,7 @@ namespace BlackBox
 		{
 			SignIn("Hello", "852963");
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoUserFound, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
 		}
 
 		[TestMethod]

@@ -15,7 +15,7 @@ namespace SadnaSrc.MarketHarmony
             
         OrderItem[] CheckoutFromStore(string store);
 
-        OrderItem CheckoutItem(string itemName, string store, int quantity, double unitPrice, string sale);
+        OrderItem CheckoutItem(string itemName, string store, int quantity, double unitPrice);
 
         string GetAddress();
 

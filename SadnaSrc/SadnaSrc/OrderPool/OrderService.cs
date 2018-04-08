@@ -154,7 +154,7 @@ namespace SadnaSrc.OrderPool
             try
             {
                 IsValidUserDetails();
-                OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice, "Immediate");
+                OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
                 throw new NotImplementedException();
                 //TODO: continue this
             }
@@ -191,7 +191,7 @@ namespace SadnaSrc.OrderPool
             try
             {
                 IsValidUserDetails();
-                OrderItem ticketToBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice, "Lottery");
+                OrderItem ticketToBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
                 throw new NotImplementedException();
                 //TODO: continue this
             }
