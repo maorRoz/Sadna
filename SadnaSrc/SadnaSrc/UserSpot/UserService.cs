@@ -247,6 +247,34 @@ namespace SadnaSrc.UserSpot
             MarketUser.Cart.EmptyCart();
             return storage;
         }
+
+        public CartItem[] CheckoutCartFromStore(string store)
+        {
+            CartItem[] storageFromStore = MarketUser.Cart.GetCartStorage(store);
+            MarketUser.Cart.EmptyCart(store);
+            return storageFromStore;
+        }
+
+        public CartItem CheckoutItem(string itemName, string store, int quantity, double unitPrice, string sale)
+        {
+            CartItem itemFromStore = MarketUser.Cart.SearchInCart(store,itemName,unitPrice,sale);
+            if (itemFromStore == null || quantity > itemFromStore.Quantity)
+            {
+                throw new UserException(EditCartItemStatus.NoItemFound,
+                    "No item by that info or quantity has been found in the user cart!");
+            }
+            if(quantity == itemFromStore.Quantity)
+            {
+                MarketUser.Cart.RemoveFromCart(itemFromStore);
+            }
+            else
+            {
+                MarketUser.Cart.EditCartItem(itemFromStore,-quantity);
+            }
+            itemFromStore.ChangeQuantity(-quantity);
+            return itemFromStore;
+        }
+
         public void AddToCart(string product, string store, int quantity, double unitPrice, string sale)
         {
             MarketUser.Cart.AddToCart(store,product,unitPrice,sale,quantity);

@@ -8,21 +8,33 @@ using SadnaSrc.UserSpot;
 namespace SadnaSrc.MarketHarmony
 {
     //integration between UserSpot to StoreCenter for store managing
-    interface IUserSeller
+    public interface IUserSeller
     {
+        int GetID();
         void Promote(string userName, string permission);
 
-        bool IsStoreOwner();
+        void ValidateNotPromotingHimself(string userName);
 
-        bool CanPromoteStoreAdmin();
+        void CanPromoteStoreOwner();
+        void CanPromoteStoreAdmin();
 
-        bool CanManagePurchasePolicy();
+        void CanManagePurchasePolicy();
 
-        bool CanDeclarePurchasePolicy();
+        void CanDeclarePurchasePolicy();
 
-        bool CanDeclareDiscountPolicy();
+        void CanDeclareDiscountPolicy();
 
-        bool CanViewPurchaseHistory();
+        void CanViewPurchaseHistory();
 
+    }
+    public enum PromoteStoreStatus
+    {
+        Success,
+        InvalidStore,
+        PromoteSelf,
+        PromotionOutOfReach,
+        NoAuthority,
+        NoUserFound,
+        InvalidPromotion
     }
 }

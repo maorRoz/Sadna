@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.StoreCenter;
 
 namespace SadnaSrc.MarketHarmony
 {
-    interface IUserShopper
+    public interface IUserShopper
     {
-        void AddToCart(/* product */);
+        void AddToCart(Product product, string store, int quantity, string sale);
 
-        bool AddOwnership(string store);
+        void AddOwnership(string store);
+
+        void ValidateCanOpenStore();
+
+        void ValidateCanBrowseMarket();
 
     }
 }

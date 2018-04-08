@@ -1,38 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
-using SadnaSrc.UserSpot;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class StoreService : IStoreService
+    public class StoreService : IStoreManagementService,IStoreShoppingService
     {
 
-        UserService user;
-        Store store;
-        ModuleGlobalHandler global;
-        
+     //   UserService user;
+        public Store store;
+        ModuleGlobalHandler global; //TODO: remove this one
+
         /// /////////////////////////////////////////////////////////////////////////////////////////
         //*************************************this function is proxy and will be removed!********///
-        public static User ProxyCreateUser(int number)
-        {
-            return null;
-        }
-        public static bool ProxyIHavePremmision(User number)
-        {
-            return true;
-        }
+        /*   public static User ProxyCreateUser(int number)
+            {
+                return null;
+            }
+            public static bool ProxyIHavePremmision(User number)
+            {
+                return true;
+            }*/
+
         /// /////////////////////////////////////////////////////////////////////////////////////////
 
 
-        public StoreService(UserService _user, Store _store)
+        /*  public StoreService(UserService _user, Store _store)
+          {
+              user = _user;
+              store = _store;
+              global = ModuleGlobalHandler.GetInstance();
+          } */
+
+        private IUserShopper _shooper;
+
+        private IUserSeller _storeManager;
+        private string _storeName;
+
+
+
+
+        //TODO: (maor wrote this) on my opinion, you shouldn't have class who deals with shopping and managing. 
+        //TODO: its way too complicated and this class is too big already....
+        //TODO: you dont need a class who return only MarketAnswer !!!! this isn't an interface for client. only interface for client need this.
+        public StoreService(IUserShopper shopper)
         {
-            user = _user;
-            store = _store;
-            global = ModuleGlobalHandler.GetInstance();
+            _shooper = shopper;
+            //TODO: continue this
+        }
+
+        public StoreService(IUserSeller storeManager, string storeName)
+        {
+            _storeManager = storeManager;
+            _storeName = storeName;
+            //TODO: continue this
         }
 
         public MarketAnswer OpenStore(string name, string address)
@@ -41,7 +67,22 @@ namespace SadnaSrc.StoreCenter
             global.AddStore(temp);
             return new StoreAnswer(StoreEnum.Success, "Store " + temp.SystemId + "opend successfully");
         }
-        
+
+        public MarketAnswer ViewStoreInfo(string store)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer ViewStoreStock(string store)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer AddProductToCart(string productName)
+        {
+            throw new NotImplementedException();
+        }
+
         public MarketAnswer CloseStore()
         {
          //   if (ProxyIHavePremmision(user.GetUser())){ //TODO: fix this
@@ -51,27 +92,51 @@ namespace SadnaSrc.StoreCenter
         }
         public static MarketAnswer StaticCloseStore(string storeString, int ownerOrSystemAdmin) //Maor asked my for this one
         {
-            if (ProxyIHavePremmision(ProxyCreateUser(ownerOrSystemAdmin))){
+            //TODO: fix this
+        /*    if (ProxyIHavePremmision(ProxyCreateUser(ownerOrSystemAdmin))){
                 ModuleGlobalHandler global = ModuleGlobalHandler.GetInstance();
                 Store other = global.GetStoreByID(storeString);
 
                 //Need Maor function here!
                 return other.CloseStore();
-            }
+            }*/
             return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
         }
 
-        
-        
 
-        public MarketAnswer PromoteToOwner(int someoneToPromote)
+
+        //TODO: continue this, find store and make sure it is active in DB/with Store class entity
+        public MarketAnswer PromoteToStoreOwner(string someoneToPromoteName)
         {
-            //TODO: fix this
-         /*   if (ProxyIHavePremmision(user.GetUser())){
-                // need here to find the fucntion from Maor that add user to be an owner of the store (using 
-                return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a owner of store " + store.SystemId);
-            } */
-            return new StoreAnswer(StoreEnum.AddStoreOwnerFail, "you have no premmision to do that");
+            MarketLog.Log("StoreCenter", "User " + _storeManager.GetID() + " attempting to promote "+ someoneToPromoteName+" into " +
+                                         "store owner in Store" + _storeName +". Validating store activity and existence..");
+            try
+            {
+                //find store and make sure it is active in DB/with Store class entity
+                _storeManager.CanPromoteStoreOwner();
+                _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
+                MarketLog.Log("StoreCenter", "User " + _storeManager.GetID() + " has been authorized. promoting " +
+                                             someoneToPromoteName + " to " +
+                                             "store owner in Store" + _storeName + "...");
+                _storeManager.Promote(someoneToPromoteName, "StoreOwner");
+                MarketLog.Log("StoreCenter", "User " + _storeManager.GetID() + "made " +
+                                             someoneToPromoteName + " into store owner in Store" + _storeName + "successfully");
+                return new StoreAnswer(PromoteStoreStatus.Success,"promote to store owner has been successful!");
+
+            }
+            catch (StoreException e)
+            {
+                MarketLog.Log("StoreCenter", "User " + _storeManager.GetID() + " tried to promote others in unavailable Store "+_storeName +
+                                             "and has been denied. Error message has been created!");
+                return new StoreAnswer(PromoteStoreStatus.InvalidStore, e.GetErrorMessage());
+            }
+            catch (MarketException e)
+            {
+                MarketLog.Log("StoreCenter", "User " + _storeManager.GetID() + " has no permission to promote " + someoneToPromoteName +
+                                  "into store owner in Store" + _storeName + " and therefore has been denied. Error message has been created!" );
+                return new StoreAnswer((PromoteStoreStatus)e.Status,e.GetErrorMessage());
+            }
+
         }
 
         public MarketAnswer PromoteToManager(int someoneToPromote, string actions)

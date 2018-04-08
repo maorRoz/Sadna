@@ -15,7 +15,6 @@ namespace OrderPoolWallaterSupplyPointTests
     {
         private MarketYard market;
         private IUserService userService;
-        private IStoreService storeService;
         private OrderService orderService;
         private PaymentService paymentService;
         private List<string> creditCard;
@@ -25,10 +24,8 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             market = MarketYard.Instance;
             userService = market.GetUserService();
-            userService.EnterSystem();
-//            storeService = market.GetStoreService(userService); //TODO: fix this
-            orderService = (OrderService)market.GetOrderService(ref userService, null);
-            orderService.setUsername("Big Smoke");
+            orderService = (OrderService)market.GetOrderService(ref userService);
+            orderService.LoginBuyer("Big Smoke", "123");
             paymentService = new PaymentService(orderService);
             creditCard = new List<string>();
 

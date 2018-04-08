@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework.Constraints;
 using SadnaSrc.Main;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.UserSpot
 {
@@ -36,7 +37,15 @@ namespace SadnaSrc.UserSpot
         {
         }
 
-        public UserException(PromoteStoreManager status, string message) : base((int)status, message)
+        public UserException(PromoteStoreStatus status, string message) : base((int)status, message)
+        {
+        }
+
+        public UserException(BrowseMarketStatus status, string message) : base((int)status, message)
+        {
+        }
+
+        public UserException(ManageMarketSystem status, string message) : base((int)status, message)
         {
         }
 

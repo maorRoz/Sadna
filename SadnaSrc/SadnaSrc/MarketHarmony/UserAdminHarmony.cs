@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.AdminView;
 using SadnaSrc.Main;
 using SadnaSrc.UserSpot;
 
@@ -15,19 +16,35 @@ namespace SadnaSrc.MarketHarmony
         {
             user = ((UserService)userService).MarketUser;
         }
-        public bool IsSystemAdmin()
+        public void ValidateSystemAdmin()
         {
-            return user != null && user.IsSystemAdmin();
+            if (user != null && user.IsSystemAdmin())
+            {
+                return;
+            }
+
+            throw new UserException(ManageMarketSystem.NotSystemAdmin,
+                "User which hasn't fully identified as System Admin cannot act as one!");
         }
 
         public int GetAdminSystemID()
         {
-            return user.SystemID;
+            if (user != null)
+            {
+                return user.SystemID;
+            }
+
+            return -1;
         }
 
         public string GetAdminName()
         {
-            return ((RegisteredUser)user).Name;
+            if (user != null && user.IsRegisteredUser())
+            {
+                return ((RegisteredUser) user).Name;
+            }
+
+            return null;
         }
     }
 }

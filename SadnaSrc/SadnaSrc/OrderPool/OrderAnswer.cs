@@ -9,6 +9,10 @@ namespace SadnaSrc.OrderPool
 {
     class OrderAnswer : MarketAnswer
     {
+        public OrderAnswer(GiveDetailsStatus status, string answer) : base((int) status, answer)
+        {
+
+        }
         public OrderAnswer(OrderStatus status, string answer) : base((int)status, answer)
         {
 

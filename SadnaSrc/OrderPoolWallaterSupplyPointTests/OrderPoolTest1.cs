@@ -20,7 +20,6 @@ namespace OrderPoolWallaterSupplyPointTests
         private OrderItem item3;
         private List<int> orderIDs;
         private IUserService userService;
-        private IStoreService storeService = null; // TODO: remove this null after you use IBUYer harmony
         private OrderService orderService;
 
 
@@ -29,10 +28,8 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             market = MarketYard.Instance;
             userService = market.GetUserService();
-            userService.EnterSystem();
-  //          storeService = market.GetStoreService(userService);
-            orderService= (OrderService)market.GetOrderService(ref userService, null); //TODO: use somehow in the harmony classes
-            orderService.setUsername("Big Smoke");
+            orderService= (OrderService)market.GetOrderService(ref userService); 
+            orderService.LoginBuyer("Big Smoke","123");
             item1= new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
             item3 = new OrderItem("Cluckin Bell", "#6 Extra Dip", 8.50, 1);
@@ -42,7 +39,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestNewService()
         {
-            Assert.AreEqual(0, orderService.getOrders().Count);
+            Assert.AreEqual(0, orderService.Orders.Count);
         }
 
         [TestMethod]
@@ -50,13 +47,13 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             var order = orderService.InitOrder();
             int id = order.GetOrderID();
-            orderIDs.Add(id); Assert.AreEqual(1, orderService.getOrders().Count);
+            orderIDs.Add(id); Assert.AreEqual(1, orderService.Orders.Count);
         }
 
         [TestMethod]
         public void TestNoOrder()
         {
-            Assert.AreEqual(orderService.getOrder(918721), null);
+            Assert.AreEqual(orderService.GetOrder(918721), null);
         }
 
         [TestMethod]
@@ -65,9 +62,9 @@ namespace OrderPoolWallaterSupplyPointTests
             var order = orderService.InitOrder();
             int id = order.GetOrderID();
             orderIDs.Add(id);
-            orderService.AddItemToOrder(id, item2.GetStore(), item2.GetName(), item2.GetPrice(),item2.GetQuantity() );
+            orderService.AddItemToOrder(id, item2.Store, item2.Name, item2.Price, item2.Quantity);
             Assert.AreEqual(7.0,
-                orderService.FindOrderItemInOrder(id, "Cluckin Bell", "#9 Large").GetPrice());
+                orderService.FindOrderItemInOrder(id, "Cluckin Bell", "#9 Large").Price);
         }
 
         [TestMethod]
@@ -77,11 +74,11 @@ namespace OrderPoolWallaterSupplyPointTests
             int id = order.GetOrderID();
             orderIDs.Add(id);
 
-            orderService.AddItemToOrder(id, item1.GetStore(), item1.GetName(), item1.GetPrice(), item1.GetQuantity());
-            orderService.AddItemToOrder(id, item2.GetStore(), item2.GetName(), item2.GetPrice(), item2.GetQuantity());
-            orderService.AddItemToOrder(id, item3.GetStore(), item3.GetName(), item3.GetPrice(), item3.GetQuantity());
+            orderService.AddItemToOrder(id, item1.Store, item1.Name, item1.Price, item1.Quantity);
+            orderService.AddItemToOrder(id, item2.Store, item2.Name, item2.Price, item2.Quantity);
+            orderService.AddItemToOrder(id, item3.Store, item3.Name, item3.Price, item3.Quantity);
             Assert.AreEqual(25.50,
-                orderService.getOrder(id).GetPrice());
+                orderService.GetOrder(id).GetPrice());
         }
 
         [TestMethod]
@@ -91,13 +88,13 @@ namespace OrderPoolWallaterSupplyPointTests
             int id = o.GetOrderID();
             orderIDs.Add(id);
 
-            orderService.AddItemToOrder(id, item1.GetStore(), item1.GetName(), item1.GetPrice(), item1.GetQuantity());
-            orderService.AddItemToOrder(id, item2.GetStore(), item2.GetName(), item2.GetPrice(), item2.GetQuantity());
-            orderService.AddItemToOrder(id, item3.GetStore(), item3.GetName(), item3.GetPrice(), item3.GetQuantity());
+            orderService.AddItemToOrder(id, item1.Store, item1.Name, item1.Price, item1.Quantity);
+            orderService.AddItemToOrder(id, item2.Store, item2.Name, item2.Price, item2.Quantity);
+            orderService.AddItemToOrder(id, item3.Store, item3.Name, item3.Price, item3.Quantity);
 
             orderService.SaveToDB();
             Assert.AreEqual(25.50,
-                orderService.getOrderFromDB(id).GetPrice());
+                orderService.GetOrderFromDB(id).GetPrice());
         }
 
         [TestMethod]
@@ -107,12 +104,12 @@ namespace OrderPoolWallaterSupplyPointTests
             int id = o.GetOrderID();
             orderIDs.Add(id);
 
-            orderService.AddItemToOrder(id, item1.GetStore(), item1.GetName(), item1.GetPrice(), item1.GetQuantity());
-            orderService.AddItemToOrder(id, item2.GetStore(), item2.GetName(), item2.GetPrice(), item2.GetQuantity());
-            orderService.AddItemToOrder(id, item3.GetStore(), item3.GetName(), item3.GetPrice(), item3.GetQuantity());
+            orderService.AddItemToOrder(id, item1.Store, item1.Name, item1.Price, item1.Quantity);
+            orderService.AddItemToOrder(id, item2.Store, item2.Name, item2.Price, item2.Quantity);
+            orderService.AddItemToOrder(id, item3.Store, item3.Name, item3.Price, item3.Quantity);
             orderService.RemoveItemFromOrder(id,"Cluckin Bell","#6 Extra Dip");
             Assert.AreEqual(17,
-                orderService.getOrder(id).GetPrice());
+                orderService.GetOrder(id).GetPrice());
         }
         [TestCleanup]
         public void UserTestCleanUp()

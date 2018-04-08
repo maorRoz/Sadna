@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.MarketHarmony;
 using SadnaSrc.UserSpot;
 
 namespace UserSpotTests.PureUnitTest
@@ -389,7 +390,7 @@ namespace UserSpotTests.PureUnitTest
             }
             catch (MarketException e)
             {
-                Assert.AreEqual((int)PromoteStoreManager.NoUserFound,e.Status);
+                Assert.AreEqual((int)PromoteStoreStatus.NoUserFound,e.Status);
             }
         }
 
@@ -405,7 +406,7 @@ namespace UserSpotTests.PureUnitTest
             }
             catch (MarketException e)
             {
-                Assert.AreEqual((int)PromoteStoreManager.NoUserFound, e.Status);
+                Assert.AreEqual((int)PromoteStoreStatus.NoUserFound, e.Status);
             }
         }
 
@@ -420,7 +421,7 @@ namespace UserSpotTests.PureUnitTest
             }
             catch (MarketException e)
             {
-                Assert.AreEqual((int)PromoteStoreManager.InvalidPromotion, e.Status);
+                Assert.AreEqual((int)PromoteStoreStatus.InvalidPromotion, e.Status);
                 Assert.AreEqual(0, userServiceSignUpSession.MarketUser.GetStoreManagerPolicies(store1).Length);
                 DoSignIn(promoteName, promotePassword);
                 Assert.AreEqual(0, userServiceSignInSession.MarketUser.GetStoreManagerPolicies(store1).Length);
@@ -439,7 +440,7 @@ namespace UserSpotTests.PureUnitTest
             }
             catch (MarketException e)
             {
-                Assert.AreEqual((int)PromoteStoreManager.InvalidPromotion, e.Status);
+                Assert.AreEqual((int)PromoteStoreStatus.InvalidPromotion, e.Status);
                 Assert.AreEqual(0, userServiceSignUpSession.MarketUser.GetStoreManagerPolicies(store1).Length);
                 DoSignIn(promoteName, promotePassword);
                 Assert.AreEqual(0,userServiceSignInSession.MarketUser.GetStoreManagerPolicies(store2).Length);

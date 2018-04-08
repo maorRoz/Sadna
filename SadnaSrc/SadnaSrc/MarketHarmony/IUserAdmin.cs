@@ -9,7 +9,7 @@ namespace SadnaSrc.MarketHarmony
     //integration between UserSpot to AdminView 
     public interface IUserAdmin
     {
-        bool IsSystemAdmin();
+        void ValidateSystemAdmin();
 
         int GetAdminSystemID();
 

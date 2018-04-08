@@ -18,23 +18,78 @@ namespace SadnaSrc.MarketHarmony
             //TODO: we should do something about user which hasn't entered the system here
         }
 
-        public OrderItem[] Checkout()
+        public OrderItem[] CheckoutAll()
         {
+            ValidUserEnteredSystem();
             CartItem[] userCart = _userService.CheckoutCart();
-            //continue this shit and covert it into order items
+            return ConvertCartItemsToOrderItems(userCart);
+        }
+
+        public OrderItem[] CheckoutFromStore(string store)
+        {
+            ValidUserEnteredSystem();
+            CartItem[] userCart = _userService.CheckoutCartFromStore(store);
+            return ConvertCartItemsToOrderItems(userCart);
+        }
+
+        public OrderItem CheckoutItem(string itemName, string store, int quantity, double unitPrice, string sale)
+        {
+            ValidUserEnteredSystem();
+            CartItem userItem = _userService.CheckoutItem(itemName,store,quantity,unitPrice,sale);
+            return CnvertCartItemToOrderItem(userItem);
+        }
+
+        private static OrderItem[] ConvertCartItemsToOrderItems(CartItem[] cart)
+        { 
+            //TODO: implement this
             return null;
+        }
+        private static OrderItem CnvertCartItemToOrderItem(CartItem item)
+        {
+            //TODO: implement this
+            return null;
+        }
+
+        private void ValidUserEnteredSystem()
+        {
+            if (_userService.MarketUser == null)
+            {
+                throw new UserException(EditCartItemStatus.DidntEnterSystem,
+                    "Cannot let User which hasn't entered the system to Purchase items from store!");
+            }
+        }
+        private bool IsRegisteredUser()
+        {
+            return _userService.MarketUser != null && _userService.MarketUser.IsRegisteredUser();
         }
 
         public string GetAddress()
         {
-            return _userService.MarketUser.IsRegisteredUser() ? 
-                ((RegisteredUser) _userService.MarketUser).Address : "";
+            return IsRegisteredUser() ? 
+                ((RegisteredUser) _userService.MarketUser).Address : null;
         }
 
         public string GetName()
         {
-            return _userService.MarketUser.IsRegisteredUser() ? 
-                ((RegisteredUser)_userService.MarketUser).Name : "Guest";
+            return IsRegisteredUser() ? 
+                ((RegisteredUser)_userService.MarketUser).Name : null;
+        }
+
+        public void CleanSession()
+        {
+            _userService.CleanSession();
+        }
+
+        //only for unit tests of OrderPool(and not for Integration)
+        public void LogInBuyer(string userName,string password)
+        {
+            _userService.EnterSystem();
+            _userService.SignIn(userName, password);
+        }
+        //only for unit tests of OrderPool(and not for Integration)
+        public void MakeGuest()
+        {
+            _userService.EnterSystem();
         }
     }
 }

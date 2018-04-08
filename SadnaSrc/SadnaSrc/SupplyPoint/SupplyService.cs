@@ -22,6 +22,7 @@ namespace SadnaSrc.SupplyPoint
             _orderService = orderService;
         }
 
+        //TODO: you shouldn't let the client get any interaction with this interface, no MarketAnswer is needed here
         //TODO: change this once info about external systems is available.
         public MarketAnswer AttachExternalSystem()
         {
@@ -36,8 +37,8 @@ namespace SadnaSrc.SupplyPoint
             {
                 throw new SupplyException(SupplyStatus.NoSupplySystem, "Failed, an error in the supply system occured.");
             }
-            Order order = _orderService.getOrder(orderId);
-            order.setAddress(address);
+            Order order = _orderService.GetOrder(orderId);
+            order.SetAddress(address);
             // TODO: Find out how the Order Data must reach the delivery system.
             if (sock.ProcessDelivery(orderId, order.GetUserName(), address))
             {

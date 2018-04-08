@@ -18,7 +18,6 @@ namespace OrderPoolWallaterSupplyPointTests
         private OrderItem item2;
         private OrderItem item3;
         private IUserService userService;
-        private IStoreService storeService;
         private OrderService orderService;
         private SupplyService supplyService;
 
@@ -27,10 +26,8 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             market = MarketYard.Instance;
             userService = market.GetUserService();
-            userService.EnterSystem();
-          //  storeService = market.GetStoreService(userService); //TODO: fix this
-            orderService = (OrderService)market.GetOrderService(ref userService, null);
-            orderService.setUsername("Big Smoke");
+            orderService = (OrderService)market.GetOrderService(ref userService);
+            orderService.LoginBuyer("Big Smoke","123");
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
             item3 = new OrderItem("Cluckin Bell", "#6 Extra Dip", 8.50, 1);
@@ -66,8 +63,8 @@ namespace OrderPoolWallaterSupplyPointTests
             supplyService.AttachExternalSystem();
             int orderId;
             orderService.CreateOrder(out orderId);
-            orderService.AddItemToOrder(orderId, item1.GetStore(), item1.GetName(), item1.GetPrice(), item1.GetQuantity());
-            orderService.AddItemToOrder(orderId, item2.GetStore(), item2.GetName(), item2.GetPrice(), item2.GetQuantity());
+            orderService.AddItemToOrder(orderId, item1.Store, item1.Name, item1.Price, item1.Quantity);
+            orderService.AddItemToOrder(orderId, item2.Store, item2.Name, item2.Price, item2.Quantity);
             MarketAnswer ans = supplyService.CreateDelivery(orderId, "Grove Street");
             Assert.AreEqual((int)SupplyStatus.Success, ans.Status);
         }
@@ -78,8 +75,8 @@ namespace OrderPoolWallaterSupplyPointTests
             supplyService.AttachExternalSystem();
             int orderId;
             orderService.CreateOrder(out orderId);
-            orderService.AddItemToOrder(orderId, item1.GetStore(), item1.GetName(), item1.GetPrice(), item1.GetQuantity());
-            orderService.AddItemToOrder(orderId, item2.GetStore(), item2.GetName(), item2.GetPrice(), item2.GetQuantity());
+            orderService.AddItemToOrder(orderId, item1.Store, item1.Name, item1.Price, item1.Quantity);
+            orderService.AddItemToOrder(orderId, item2.Store, item2.Name, item2.Price, item2.Quantity);
             supplyService.FuckUpExternal();
             try
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,22 +11,75 @@ namespace SadnaSrc.MarketHarmony
 {
     class UserSellerHarmony : IUserSeller
     {
-        public StoreManagerPolicy[] policies;
-        private string _store;
-        public UserSellerHarmony(ref IUserService userService,string store)
+        private readonly StoreManagerPolicy[] policies;
+        private bool isSystemAdmin;
+        private readonly string _store;
+        private string managerName;
+        private int managerID;
+
+        public UserSellerHarmony(ref IUserService userService, string store)
         {
             _store = store;
-            policies = ((UserService) userService).MarketUser.GetStoreManagerPolicies(store);
-            //TODO: we should do something about user which hasn't entered the system here
+            policies = null;
+            isSystemAdmin = false;
+            managerID = -1;
+            var user = ((UserService) userService).MarketUser;
+            if (user == null) {return;}
+
+            managerID = user.SystemID;
+            policies = user.GetStoreManagerPolicies(store);
+            isSystemAdmin = user.IsSystemAdmin();
+            if (user.IsRegisteredUser())
+            {
+                managerName = ((RegisteredUser) user).Name;
+            }
+        }
+
+        private void ValidateCanManageStore()
+        {
+            if(policies == null || policies.Length == 0 && !isSystemAdmin)
+            {
+                throw new UserException(PromoteStoreStatus.NoAuthority,"Cannot manage store "+ _store +"!!");
+            }
+        }
+
+        private void CanDoAction(StoreManagerPolicy.StoreAction action)
+        {
+            ValidateCanManageStore();
+            if (CanDoAnything())
+            {
+                return;
+            }
+            ValidateHasPermission(action);
+        }
+
+        public void ValidateNotPromotingHimself(string userName)
+        {
+            if (managerName.Equals(userName))
+            {
+                throw new UserException(PromoteStoreStatus.PromoteSelf,"Cannot grant permissions to yourself!");
+            }
+        }
+
+        public int GetID()
+        {
+            return managerID;
         }
 
         public void Promote(string userName, string permissions)
         {
+            ValidateNotPromotingHimself(userName);
             List<StoreManagerPolicy.StoreAction> actions = new List<StoreManagerPolicy.StoreAction>();
             var permissionsArray = permissions.Split(',').Distinct().ToArray();
+
             foreach (var permission in permissionsArray)
             {
-                actions.Add(StoreManagerPolicy.GetActionFromString(permission));
+                StoreManagerPolicy.StoreAction action = StoreManagerPolicy.GetActionFromString(permission);
+                if (!CanDoAnything() && !SearchPermission(action))
+                {
+                    throw new UserException(PromoteStoreStatus.PromotionOutOfReach, "Cannot grant permission " + permission+ " to others if you don't have it yourself");
+                }
+                actions.Add(action);
             }
             PromoteStorePolicies(userName, actions.ToArray());
         }
@@ -35,11 +89,11 @@ namespace SadnaSrc.MarketHarmony
             UserPolicyService.PromoteStorePolicies(userName, _store, permissions);
         }
 
-        private bool SearchPermission(StoreManagerPolicy.StoreAction action)
+        private bool SearchPermission(StoreManagerPolicy.StoreAction permission)
         {
             foreach (StoreManagerPolicy policy in policies)
             {
-                if (policy.Action == action)
+                if (policy.Action == permission)
                 {
                     return true;
                 }
@@ -47,34 +101,49 @@ namespace SadnaSrc.MarketHarmony
 
             return false;
         }
-        public bool IsStoreOwner()
+        private void ValidateHasPermission(StoreManagerPolicy.StoreAction action)
         {
-            return SearchPermission(StoreManagerPolicy.StoreAction.StoreOwner);
+            if (!SearchPermission(action))
+            {
+
+                throw new UserException(PromoteStoreStatus.NoAuthority,
+                    "Cannot do the required action in store " + _store + "!");
+            }
         }
 
-        public bool CanPromoteStoreAdmin()
+        private bool CanDoAnything()
         {
-            return IsStoreOwner() || SearchPermission(StoreManagerPolicy.StoreAction.PromoteStoreAdmin);
+            return isSystemAdmin || SearchPermission(StoreManagerPolicy.StoreAction.StoreOwner);
         }
 
-        public bool CanManagePurchasePolicy()
+        public void CanPromoteStoreOwner()
         {
-            return IsStoreOwner() || SearchPermission(StoreManagerPolicy.StoreAction.ManageProducts);
+            CanDoAction(StoreManagerPolicy.StoreAction.StoreOwner);
         }
 
-        public bool CanDeclarePurchasePolicy()
+        public void CanPromoteStoreAdmin()
         {
-            return IsStoreOwner() || SearchPermission(StoreManagerPolicy.StoreAction.DeclarePurchasePolicy);
+            CanDoAction(StoreManagerPolicy.StoreAction.PromoteStoreAdmin);
         }
 
-        public bool CanDeclareDiscountPolicy()
+        public void CanManagePurchasePolicy()
         {
-            return IsStoreOwner() || SearchPermission(StoreManagerPolicy.StoreAction.DeclareDiscountPolicy);
+            CanDoAction(StoreManagerPolicy.StoreAction.ManageProducts);
         }
 
-        public bool CanViewPurchaseHistory()
+        public void CanDeclarePurchasePolicy()
         {
-            return IsStoreOwner() || SearchPermission(StoreManagerPolicy.StoreAction.ViewPurchaseHistory);
+            CanDoAction(StoreManagerPolicy.StoreAction.DeclarePurchasePolicy);
+        }
+
+        public void CanDeclareDiscountPolicy()
+        {
+            CanDoAction(StoreManagerPolicy.StoreAction.DeclareDiscountPolicy);
+        }
+
+        public void CanViewPurchaseHistory()
+        {
+            CanDoAction(StoreManagerPolicy.StoreAction.ViewPurchaseHistory);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace SadnaSrc.Main
 {
     public interface IPaymentService
     {
+        //TODO: you shouldn't let the client get any interaction with this interface, no MarketAnswer is needed here
         MarketAnswer AttachExternalSystem();
         MarketAnswer ProccesPayment(int orderId, string address, List<string> details);
     }
