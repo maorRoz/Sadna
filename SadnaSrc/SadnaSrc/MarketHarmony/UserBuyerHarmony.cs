@@ -21,22 +21,54 @@ namespace SadnaSrc.MarketHarmony
         public OrderItem[] CheckoutAll()
         {
             ValidUserEnteredSystem();
-            CartItem[] userCart = _userService.CheckoutCart();
+            CartItem[] userCart = _userService.MarketUser.Cart.GetCartStorage();
             return ConvertCartItemsToOrderItems(userCart);
+        }
+        public void EmptyCart()
+        {
+            _userService.MarketUser.Cart.EmptyCart();
         }
 
         public OrderItem[] CheckoutFromStore(string store)
         {
             ValidUserEnteredSystem();
-            CartItem[] userCart = _userService.CheckoutCartFromStore(store);
+            CartItem[] userCart = _userService.MarketUser.Cart.GetCartStorage(store);
             return ConvertCartItemsToOrderItems(userCart);
+        }
+
+        public void EmptyCart(string store)
+        {
+            _userService.MarketUser.Cart.EmptyCart(store);
         }
 
         public OrderItem CheckoutItem(string itemName, string store, int quantity, double unitPrice)
         {
             ValidUserEnteredSystem();
-            CartItem userItem = _userService.CheckoutItem(itemName,store,quantity,unitPrice);
-            return CnvertCartItemToOrderItem(userItem);
+            CartItem itemFromStore = _userService.MarketUser.Cart.SearchInCart(store, itemName, unitPrice);
+            if (itemFromStore == null)
+            {
+                throw new UserException(EditCartItemStatus.NoItemFound,
+                    "No item by that info  has been found in the user cart!");
+            }
+            return CnvertCartItemToOrderItem(itemFromStore);
+        }
+
+        public void RemoveItemFromCart(string itemName, string store, int quantity, double unitPrice)
+        {
+            CartItem itemFromStore = _userService.MarketUser.Cart.SearchInCart(store, itemName, unitPrice);
+            if (itemFromStore == null || quantity > itemFromStore.Quantity)
+            {
+                throw new UserException(EditCartItemStatus.NoItemFound,
+                    "No item by that info or quantity has been found in the user cart!");
+            }
+            if (quantity == itemFromStore.Quantity)
+            {
+                _userService.MarketUser.Cart.RemoveFromCart(itemFromStore);
+            }
+            else
+            {
+                _userService.MarketUser.Cart.EditCartItem(itemFromStore, -quantity);
+            }
         }
 
         private static OrderItem[] ConvertCartItemsToOrderItems(CartItem[] cart)
