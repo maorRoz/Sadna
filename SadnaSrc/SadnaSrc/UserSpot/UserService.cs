@@ -98,12 +98,12 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        public MarketAnswer EditCartItem(string store, string product, double unitPrice, string sale, int quantity)
+        public MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity)
         {
             MarketLog.Log("UserSpot", "User " + systemID + " attempting to edit his cart item: " +product + " from store: "+ store + " ...");
             try
             {
-                CartItem toEdit = ApproveModifyCart("EditCartItem", store, product, unitPrice, sale);
+                CartItem toEdit = ApproveModifyCart("EditCartItem", store, product, unitPrice);
 
                 MarketLog.Log("UserSpot","User " + systemID + " found cart item: " + product + " from store: " + store +". proceeding for the edit...");
                 MarketUser.Cart.EditCartItem(toEdit, quantity);
@@ -118,12 +118,12 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        public MarketAnswer RemoveFromCart(string store, string product, double unitPrice, string sale)
+        public MarketAnswer RemoveFromCart(string store, string product, double unitPrice)
         {
             MarketLog.Log("UserSpot", "User " + systemID + " attempting to remove his cart item: " + product + " from store: " + store + " ...");
             try
             {
-                CartItem toRemove = ApproveModifyCart("RemoveFromCart", store, product, unitPrice, sale);
+                CartItem toRemove = ApproveModifyCart("RemoveFromCart", store, product, unitPrice);
 
                 MarketLog.Log("UserSpot","User " + systemID + " found cart item: " + product + " from store: " + store +". proceeding for the removal...");
                 MarketUser.Cart.RemoveFromCart(toRemove);
@@ -193,10 +193,10 @@ namespace SadnaSrc.UserSpot
             }
         }
 
-        private CartItem ApproveModifyCart(string action, string store, string product, double unitPrice, string sale)
+        private CartItem ApproveModifyCart(string action, string store, string product, double unitPrice)
         {
             ApproveEnetered(action);
-            CartItem found = MarketUser.Cart.SearchInCart(store, product, unitPrice, sale);
+            CartItem found = MarketUser.Cart.SearchInCart(store, product, unitPrice);
             if (found != null)
             {
                 return found;
@@ -255,9 +255,9 @@ namespace SadnaSrc.UserSpot
             return storageFromStore;
         }
 
-        public CartItem CheckoutItem(string itemName, string store, int quantity, double unitPrice, string sale)
+        public CartItem CheckoutItem(string itemName, string store, int quantity, double unitPrice)
         {
-            CartItem itemFromStore = MarketUser.Cart.SearchInCart(store,itemName,unitPrice,sale);
+            CartItem itemFromStore = MarketUser.Cart.SearchInCart(store,itemName,unitPrice);
             if (itemFromStore == null || quantity > itemFromStore.Quantity)
             {
                 throw new UserException(EditCartItemStatus.NoItemFound,
@@ -275,9 +275,9 @@ namespace SadnaSrc.UserSpot
             return itemFromStore;
         }
 
-        public void AddToCart(string product, string store, int quantity, double unitPrice, string sale)
+        public void AddToCart(string product, string store, int quantity, double unitPrice)
         {
-            MarketUser.Cart.AddToCart(store,product,unitPrice,sale,quantity);
+            MarketUser.Cart.AddToCart(store,product,unitPrice,quantity);
         }
 
         public void Synch()

@@ -29,10 +29,10 @@ namespace UserSpotTests.UseCaseUnitTest
             userServiceGuestSession.EnterSystem();
             userServiceRegisteredSession = null;
             expected = new List<string>();
-            item1 = new CartItem("Health Potion", "X", 1, 5.0, "Immediate").ToString();
-            item2 = new CartItem("Health Potion", "Y", 2, 0.5, "Immediate").ToString();
-            item3 = new CartItem("Health Potion", "Y", 2, 6.0, "Immediate").ToString();
-            item4 = new CartItem("Health Potion", "M", 5, 7.0, "Immediate").ToString();
+            item1 = new CartItem("Health Potion", "X", 1, 5.0).ToString();
+            item2 = new CartItem("Health Potion", "Y", 2, 0.5).ToString();
+            item3 = new CartItem("Health Potion", "Y", 2, 6.0).ToString();
+            item4 = new CartItem("Health Potion", "M", 5, 7.0).ToString();
         }
 
 
@@ -107,25 +107,25 @@ namespace UserSpotTests.UseCaseUnitTest
         private void AddItem1(UserService userService)
         {
             expected.Add(item1);
-            userService.AddToCart("Health Potion", "X", 1, 5.0, "Immediate");
+            userService.AddToCart("Health Potion", "X", 1, 5.0);
         }
 
         private void AddItem2(UserService userService)
         {
             expected.Add(item2);
-            userService.AddToCart("Health Potion", "Y", 2, 0.5, "Immediate");
+            userService.AddToCart("Health Potion", "Y", 2, 0.5);
         }
 
         private void AddItem3(UserService userService)
         {
             expected.Add(item3);
-            userService.AddToCart("Health Potion", "Y", 2, 6.0, "Immediate");
+            userService.AddToCart("Health Potion", "Y", 2, 6.0);
         }
 
         private void AddItem4(UserService userService)
         {
             expected.Add(item4);
-            userService.AddToCart("Health Potion", "M", 5, 7.0, "Immediate");
+            userService.AddToCart("Health Potion", "M", 5, 7.0);
         }
 
         private void AddAllItems(UserService userService)

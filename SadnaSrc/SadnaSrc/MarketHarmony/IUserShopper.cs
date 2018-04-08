@@ -9,7 +9,7 @@ namespace SadnaSrc.MarketHarmony
 {
     public interface IUserShopper
     {
-        void AddToCart(Product product, string store, int quantity, string sale);
+        void AddToCart(Product product, string store, int quantity);
 
         void AddOwnership(string store);
 

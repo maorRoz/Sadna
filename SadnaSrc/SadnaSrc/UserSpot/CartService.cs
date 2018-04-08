@@ -48,12 +48,12 @@ namespace SadnaSrc.UserSpot
 
             return filteredCartStorage.ToArray();
         }
-        public CartItem SearchInCart(string store, string product, double unitPrice, string sale)
+        public CartItem SearchInCart(string store, string product, double unitPrice)
         {
 
             foreach (CartItem item in cartStorage)
             {
-                if (item.Equals(store,product,unitPrice,sale))
+                if (item.Equals(store,product,unitPrice))
                 {
                     return item;
                 }
@@ -93,9 +93,9 @@ namespace SadnaSrc.UserSpot
         }
 
         //TODO: Replace the arguments with product class
-        public void AddToCart(string store,string product,double unitPrice,string sale,int quantity)
+        public void AddToCart(string store,string product,double unitPrice,int quantity)
         {
-            CartItem toAdd = new CartItem(product,store, quantity, unitPrice, sale);
+            CartItem toAdd = new CartItem(product,store, quantity, unitPrice);
             if (cartStorage.Contains(toAdd))
             {
                 EditCartItem(toAdd, quantity);

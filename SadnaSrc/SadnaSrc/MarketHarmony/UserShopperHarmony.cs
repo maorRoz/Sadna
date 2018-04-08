@@ -35,9 +35,9 @@ namespace SadnaSrc.MarketHarmony
         }
 
 
-        public void AddToCart(Product product,string store,int quantity,string sale)
+        public void AddToCart(Product product,string store,int quantity)
         {
-            _userService.AddToCart(product.Name,store,quantity,product.BasePrice,sale);
+            _userService.AddToCart(product.Name,store,quantity,product.BasePrice);
         }
 
         public void AddOwnership(string store)

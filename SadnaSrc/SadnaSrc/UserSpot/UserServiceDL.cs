@@ -250,9 +250,8 @@ namespace SadnaSrc.UserSpot
                 var userItem = new List<object>();
                 userItem.Add(SystemID);
                 userItem.AddRange(item.ToData());
-                InsertTable("CartItem", "SystemID,Name,Store,Quantity,UnitPrice,FinalPrice,SaleType",
-                    new [] { "@idParam", "@nameParam", "@storeParam","@quantityParam","@unitpriceParam","@finalpriceParam",
-                        "@saleParam" }, userItem.ToArray());
+                InsertTable("CartItem", "SystemID,Name,Store,Quantity,UnitPrice,FinalPrice",
+                    new [] { "@idParam", "@nameParam", "@storeParam","@quantityParam","@unitpriceParam","@finalpriceParam"}, userItem.ToArray());
             }
         }
 
@@ -268,7 +267,7 @@ namespace SadnaSrc.UserSpot
                 while (dbReader.Read())
                 {
                     loadedItems.Add(new CartItem(dbReader.GetString(1),
-                        dbReader.GetString(2),dbReader.GetInt32(3),dbReader.GetDouble(4),dbReader.GetString(6)));
+                        dbReader.GetString(2),dbReader.GetInt32(3),dbReader.GetDouble(4)));
                 }
             }
             return loadedItems.ToArray();

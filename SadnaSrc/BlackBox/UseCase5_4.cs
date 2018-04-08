@@ -7,8 +7,8 @@ namespace BlackBox
 	public class UseCase5_4
 	{
 		private IUserBridge _adminBridge;
-		private string userToCheck = "Moshe";
-		private string storeToCheck = "YYY";
+		private string userToCheck = "Arik1";
+		private string storeToCheck = "Y";
 		private readonly string adminName = "Arik1";
 		private readonly string adminPass = "123";
 		private readonly string nonExistingUser = "Pnina";
@@ -31,10 +31,10 @@ namespace BlackBox
 			string[] purchaseUserHistory = res.ReportList;
 			string[] expectedHistory =
 			{
-				"User: Moshe Product: Health Potion Store: XXX Sale: Immediate Quantity: 2 Price: 11.5 Date: Today",
-				"User: Moshe Product: INT Potion Store: YYY Sale: Lottery Quantity: 2 Price: 8 Date: Yesterday",
-				"User: Moshe Product: Mana Potion Store: YYY Sale: Lottery Quantity: 3 Price: 12 Date: Yesterday"
-			};
+                "User: Arik1 Product: Health Potion Store: X Sale: Immediate Quantity: 2 Price: 11.5 Date: Today",
+                "User: Arik1 Product: INT Potion Store: Y Sale: Lottery Quantity: 2 Price: 8 Date: Yesterday",
+			    "User: Arik1 Product: Mana Potion Store: Y Sale: Lottery Quantity: 3 Price: 12 Date: Yesterday"
+            };
 		
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success,res.Status);
 			for (int i = 0; i < purchaseUserHistory.Length; i++)
@@ -52,10 +52,10 @@ namespace BlackBox
 			string[] purchaseUserHistory = res.ReportList;
 			string[] expectedHistory =
 			{
-				"User: Moshe Product: Mana Potion Store: YYY Sale: Lottery Quantity: 3 Price: 12 Date: Yesterday",
-				"User: Moshe Product: INT Potion Store: YYY Sale: Lottery Quantity: 2 Price: 8 Date: Yesterday",
-				"User: MosheYYY Product: STR Potion Store: YYY Sale: Immediate Quantity: 1 Price: 4 Date: Today"
-			};
+                "User: Arik1 Product: Mana Potion Store: Y Sale: Lottery Quantity: 3 Price: 12 Date: Yesterday",
+                "User: Arik1 Product: INT Potion Store: Y Sale: Lottery Quantity: 2 Price: 8 Date: Yesterday",
+			    "User: Arik3 Product: STR Potion Store: Y Sale: Immediate Quantity: 1 Price: 4 Date: Today"
+            };
 			
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, res.Status);
 			for (int i = 0; i < purchaseUserHistory.Length; i++)

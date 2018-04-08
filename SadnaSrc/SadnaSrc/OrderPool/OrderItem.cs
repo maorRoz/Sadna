@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.OrderPool
 {
@@ -24,12 +23,13 @@ namespace SadnaSrc.OrderPool
 
         // TODO add price when there will be getters.
         // TODO might need to change the CartItem to Product once its implemented.
-        public OrderItem(CartItem item)
+        public OrderItem(/*CartItem item */)
         {
-            Store = item.GetStore();
-            Name = item.GetName();
-            Quantity = item.GetQuantity();
-            Price = 5;
+            //TODO: implement this again, you cannot use CartItem here!!!!
+          //  Store = item.GetStore();
+         //   Name = item.GetName();
+        //    Quantity = item.GetQuantity();
+         //   Price = 5;
 
 
         }

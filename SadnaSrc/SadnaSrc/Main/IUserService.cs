@@ -16,8 +16,8 @@ namespace SadnaSrc.Main
 
         MarketAnswer ViewCart();
 
-        MarketAnswer EditCartItem(string store, string product, double unitPrice, string sale, int quantity);
-        MarketAnswer RemoveFromCart(string store, string product, double unitPrice, string sale);
+        MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity);
+        MarketAnswer RemoveFromCart(string store, string product, double unitPrice);
 
         void CleanGuestSession(); // only for tests
         void CleanSession(); // only for tests

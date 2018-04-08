@@ -26,8 +26,8 @@ namespace UserSpotTests.UseCaseUnitTest
             userServiceGuestSession.EnterSystem();
             userServiceRegisteredSession = null;
             expected = new List<CartItem>();
-            item1 = new CartItem("Health Potion", "X", 1, 5.0, "Immediate");
-            item2 = new CartItem("Health Potion", "Y", 2, 0.5, "Immediate");
+            item1 = new CartItem("Health Potion", "X", 1, 5.0);
+            item2 = new CartItem("Health Potion", "Y", 2, 0.5);
         }
 
 
@@ -35,9 +35,9 @@ namespace UserSpotTests.UseCaseUnitTest
         public void RemoveItemFromGuestCartTest()
         {
             AddAllItems(userServiceGuestSession);
-            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceGuestSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
-            Assert.AreEqual(null, userServiceGuestSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0, "Immediate"));
-            Assert.AreEqual(item2, userServiceGuestSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5, "Immediate"));
+            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceGuestSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
+            Assert.AreEqual(null, userServiceGuestSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0));
+            Assert.AreEqual(item2, userServiceGuestSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5));
         }
 
         [TestMethod]
@@ -46,9 +46,9 @@ namespace UserSpotTests.UseCaseUnitTest
             userServiceRegisteredSession = DoEnter();
             AddAllItems(userServiceRegisteredSession);
             userServiceRegisteredSession.SignUp("MaorRemoveItem1", "no-where", "123");
-            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
-            Assert.AreEqual(null, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0, "Immediate"));
-            Assert.AreEqual(item2, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5, "Immediate"));
+            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
+            Assert.AreEqual(null, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0));
+            Assert.AreEqual(item2, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5));
         }
 
 
@@ -57,20 +57,20 @@ namespace UserSpotTests.UseCaseUnitTest
         {
             userServiceRegisteredSession = DoEnter();
             AddAllItems(userServiceRegisteredSession);
-            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
             userServiceRegisteredSession.SignUp("MaorRemoveItem2", "no-where", "123");
-            Assert.AreEqual(null, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0, "Immediate"));
-            Assert.AreEqual(item2, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5, "Immediate"));
-            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5, "Immediate").Status);
-            Assert.AreEqual(null, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0, "Immediate"));
-            Assert.AreEqual(null, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5, "Immediate"));
+            Assert.AreEqual(null, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0));
+            Assert.AreEqual(item2, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5));
+            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5).Status);
+            Assert.AreEqual(null, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0));
+            Assert.AreEqual(null, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5));
         }
 
         [TestMethod]
         public void DidntEnterTest()
         {
             userServiceRegisteredSession = (UserService)marketSession.GetUserService();
-            Assert.AreEqual((int)RemoveFromCartStatus.DidntEnterSystem, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.DidntEnterSystem, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
@@ -79,25 +79,25 @@ namespace UserSpotTests.UseCaseUnitTest
         {
             userServiceRegisteredSession = DoEnter();
             AddItem1(userServiceRegisteredSession);
-            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
-            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
-            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5, "Immediate").Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.Success, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5).Status);
             userServiceRegisteredSession.SignUp("MaorRemoveItem3", "no-where", "123");
-            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
-            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5, "Immediate").Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5).Status);
         }
 
         [TestMethod]
         public void NoItemToRemoveFoundTest2()
         {
             userServiceRegisteredSession = DoEnter();
-            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
-            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5, "Immediate").Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5).Status);
             AddAllItems(userServiceRegisteredSession);
             userServiceRegisteredSession.SignUp("MaorRemoveItem4", "no-where", "123");
             userServiceRegisteredSession.MarketUser.Cart.EmptyCart();
-            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0, "Immediate").Status);
-            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5, "Immediate").Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
+            Assert.AreEqual((int)RemoveFromCartStatus.NoItemFound, userServiceRegisteredSession.RemoveFromCart("Y", "Health Potion", 0.5).Status);
         }
 
         [TestCleanup]
@@ -118,13 +118,13 @@ namespace UserSpotTests.UseCaseUnitTest
         private void AddItem1(UserService userService)
         {
             expected.Add(item1);
-            userService.AddToCart("Health Potion", "X", 1, 5.0, "Immediate");
+            userService.AddToCart("Health Potion", "X", 1, 5.0);
         }
 
         private void AddItem2(UserService userService)
         {
             expected.Add(item2);
-            userService.AddToCart("Health Potion", "Y", 2, 0.5, "Immediate");
+            userService.AddToCart("Health Potion", "Y", 2, 0.5);
         }
 
         private void AddAllItems(UserService userService)
