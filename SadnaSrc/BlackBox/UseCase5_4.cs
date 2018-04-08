@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
 namespace BlackBox
@@ -32,13 +29,13 @@ namespace BlackBox
 			_adminBridge.GetAdminService();
 			MarketAnswer res = _adminBridge.ViewPurchaseHistoryByUser(userToCheck);
 			string[] purchaseUserHistory = res.ReportList;
-			string[] expectedHistory = new string[3];
-			expectedHistory[0] =
-				"User: Moshe Product: Health Potion Store: XXX Sale: Immediate Quantity: 2 Price: 11.5 Date: Today";
-			expectedHistory[1] =
-				"User: Moshe Product: INT Potion Store: YYY Sale: Lottery Quantity: 2 Price: 8 Date: Yesterday";
-			expectedHistory[2] =
-				"User: Moshe Product: Mana Potion Store: YYY Sale: Lottery Quantity: 3 Price: 12 Date: Yesterday";
+			string[] expectedHistory =
+			{
+				"User: Moshe Product: Health Potion Store: XXX Sale: Immediate Quantity: 2 Price: 11.5 Date: Today",
+				"User: Moshe Product: INT Potion Store: YYY Sale: Lottery Quantity: 2 Price: 8 Date: Yesterday",
+				"User: Moshe Product: Mana Potion Store: YYY Sale: Lottery Quantity: 3 Price: 12 Date: Yesterday"
+			};
+		
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success,res.Status);
 			for (int i = 0; i < purchaseUserHistory.Length; i++)
 			{
@@ -53,13 +50,13 @@ namespace BlackBox
 			_adminBridge.GetAdminService();
 			MarketAnswer res = _adminBridge.ViewPurchaseHistoryByStore(storeToCheck);
 			string[] purchaseUserHistory = res.ReportList;
-			string[] expectedHistory = new string[3];
-			expectedHistory[0] =
-				"User: Moshe Product: Mana Potion Store: YYY Sale: Lottery Quantity: 3 Price: 12 Date: Yesterday";
-			expectedHistory[1] =
-				"User: Moshe Product: INT Potion Store: YYY Sale: Lottery Quantity: 2 Price: 8 Date: Yesterday";
-			expectedHistory[2] =
-				"User: MosheYYY Product: STR Potion Store: YYY Sale: Immediate Quantity: 1 Price: 4 Date: Today";
+			string[] expectedHistory =
+			{
+				"User: Moshe Product: Mana Potion Store: YYY Sale: Lottery Quantity: 3 Price: 12 Date: Yesterday",
+				"User: Moshe Product: INT Potion Store: YYY Sale: Lottery Quantity: 2 Price: 8 Date: Yesterday",
+				"User: MosheYYY Product: STR Potion Store: YYY Sale: Immediate Quantity: 1 Price: 4 Date: Today"
+			};
+			
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, res.Status);
 			for (int i = 0; i < purchaseUserHistory.Length; i++)
 			{

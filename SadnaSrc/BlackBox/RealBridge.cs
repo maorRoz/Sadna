@@ -10,7 +10,7 @@ namespace BlackBox
 		private readonly MarketYard _market;
 		private readonly IUserService _userService;
 		private ISystemAdminService _systemAdminService;
-		private IStoreService _storeService;
+		//private IStoreService _storeService;
 
 		public RealBridge()
 		{
@@ -51,7 +51,7 @@ namespace BlackBox
 
 		public void GetStoreService()
 		{
-			_storeService = _market.GetStoreService(_userService);
+			//_storeService = _market.GetStoreService(_userService);
 		}
 
 		public MarketAnswer RemoveUser(string userName)
