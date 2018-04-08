@@ -10,7 +10,7 @@ namespace SadnaSrc.Main
     public interface IUserService
     {
         MarketAnswer EnterSystem();
-        MarketAnswer SignUp(string name,string address,string password);
+        MarketAnswer SignUp(string name,string address,string password,string creditCard);
 
         MarketAnswer SignIn(string name, string password);
 
@@ -35,7 +35,7 @@ namespace SadnaSrc.Main
         DidntEnterSystem,
         SignedUpAlready,
         TakenName,
-        NullEmptyDataGiven,
+        NullEmptyFewDataGiven,
 
     }
 

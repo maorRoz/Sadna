@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using static System.Int32;
 
 namespace SadnaSrc.UserSpot
 {
@@ -32,15 +32,15 @@ namespace SadnaSrc.UserSpot
             return new UserAnswer(EnterSystemStatus.Success,"You've been entered the system successfully!");
         }
 
-        public MarketAnswer SignUp(string name, string address, string password)
+        public MarketAnswer SignUp(string name, string address, string password,string creditCard)
         {
             MarketLog.Log("UserSpot", "User " + systemID + " attempting to sign up to the system...");
             try
             {
-                ApproveSignUp(name, address, password);
+                ApproveSignUp(name, address, password,creditCard);
                 string encryptedPassword = ToEncryptPassword(password);
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + systemID + " data...");
-                MarketUser = userDL.RegisterUser(name, address, encryptedPassword, MarketUser.Cart.GetCartStorage());
+                MarketUser = userDL.RegisterUser(name, address, encryptedPassword, creditCard, MarketUser.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + systemID + " sign up to the system has been successfull!");
                 return new UserAnswer(SignInStatus.Success, "Sign up has been successfull!");
             }
@@ -183,13 +183,18 @@ namespace SadnaSrc.UserSpot
                 "sign in action has been requested by registered user!");
         }
 
-        private void ApproveSignUp(string name, string address, string password)
+        private bool IsValidCreditCard(string creditCard)
+        {
+            return !string.IsNullOrEmpty(creditCard) && creditCard.Length == 8 && TryParse(creditCard,out _);
+        }
+
+        private void ApproveSignUp(string name, string address, string password, string creditCard)
         {
             ApproveGuest("sign up");
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(password) || IsValidCreditCard(creditCard))
             {
-                throw new UserException(SignUpStatus.NullEmptyDataGiven,
-                    "sign up action has been requested while some required fields are still missing!");
+                throw new UserException(SignUpStatus.NullEmptyFewDataGiven,
+                    "sign up action has been requested while some required fields are still missing or invalid!");
             }
         }
 

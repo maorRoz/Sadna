@@ -21,14 +21,14 @@ namespace BlackBox
 		public void RegistrationSucceeded()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.Success, _bridge.SignUp("PninaBashkanski", "miahol susia 12", "123456").Status);
+			Assert.AreEqual((int)SignUpStatus.Success, _bridge.SignUp("PninaBashkanski", "miahol susia 12", "123456","12345678").Status);
 		}
 
 		[TestMethod]
 
 		public void RegistrationWithoutEnteringTheSystem()
 		{
-			Assert.AreEqual((int)SignUpStatus.DidntEnterSystem, _bridge.SignUp("Pnina", "miahol susia 12", "123456").Status);
+			Assert.AreEqual((int)SignUpStatus.DidntEnterSystem, _bridge.SignUp("Pnina", "miahol susia 12", "123456", "12345678").Status);
 		}
 
 		[TestMethod]
@@ -36,10 +36,10 @@ namespace BlackBox
 		public void RegistrationWithATakenName()
 		{
 			_bridge.EnterSystem();
-			_bridge.SignUp("Pnina", "miahol susia 12", "123456");
+			_bridge.SignUp("Pnina", "miahol susia 12", "123456","12345678");
 			_bridge2 = new RealBridge();
 			_bridge2.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.TakenName, _bridge2.SignUp("Pnina", "miahol susia 12", "123456").Status);
+			Assert.AreEqual((int)SignUpStatus.TakenName, _bridge2.SignUp("Pnina", "miahol susia 12", "123456", "12345678").Status);
 		}
 
 		[TestMethod]
@@ -47,8 +47,8 @@ namespace BlackBox
 		public void SignUpMoreThanOnce()
 		{
 			_bridge.EnterSystem();
-			_bridge.SignUp("PninaBas", "mishol susia 8", "123852");
-			Assert.AreEqual((int)SignUpStatus.SignedUpAlready, _bridge.SignUp("PninaBas", "mishol susia 8", "123852").Status);
+			_bridge.SignUp("PninaBas", "mishol susia 8", "123852", "12345678");
+			Assert.AreEqual((int)SignUpStatus.SignedUpAlready, _bridge.SignUp("PninaBas", "mishol susia 8", "123852", "12345678").Status);
 
 		}
 
@@ -57,7 +57,7 @@ namespace BlackBox
 		public void UserNameToSignUpIsNull()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp(null, "miahol susia 12", "123456").Status);	
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp(null, "miahol susia 12", "123456", "12345678").Status);	
 		}
 
 		[TestMethod]
@@ -65,7 +65,7 @@ namespace BlackBox
 		public void AddressToSignUpIsNull()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("Pnina", null, "123456").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", null, "123456", "12345678").Status);
 		}
 
 		[TestMethod]
@@ -73,7 +73,7 @@ namespace BlackBox
 		public void PasswordToSignUpIsNull()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("Pnina", "mishol susia 12", null).Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", "mishol susia 12", null, "12345678").Status);
 		}
 
 		[TestMethod]
@@ -81,7 +81,7 @@ namespace BlackBox
 		public void UserNameAndAddressToSignUpAreNull()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp(null, null, "123456").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp(null, null, "123456", "12345678").Status);
 		}
 
 		[TestMethod]
@@ -89,7 +89,7 @@ namespace BlackBox
 		public void UserNameAndPasswordToSignUpAreNull()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp(null, "mishol susia 12", null).Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp(null, "mishol susia 12", null, "12345678").Status);
 		}
 
 		[TestMethod]
@@ -97,7 +97,7 @@ namespace BlackBox
 		public void AddressAndPasswordToSignUpAreNull()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("Pnina", null, null).Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", null, null, "12345678").Status);
 		}
 
 		[TestMethod]
@@ -105,7 +105,7 @@ namespace BlackBox
 		public void UserNameAddressAndPasswordAreNull()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp(null, null, null).Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp(null, null, null, "12345678").Status);
 		}
 
 
@@ -114,7 +114,7 @@ namespace BlackBox
 		public void UserNameToSignUpIsEmpty()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("", "miahol susia 12", "123456").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("", "miahol susia 12", "123456", "12345678").Status);
 		}
 
 		[TestMethod]
@@ -122,7 +122,7 @@ namespace BlackBox
 		public void AddressToSignUpIsEmpty()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("Pnina", "", "123456").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", "", "123456", "12345678").Status);
 		}
 
 		[TestMethod]
@@ -130,7 +130,7 @@ namespace BlackBox
 		public void PasswordToSignUpIsEmpty()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("Pnina", "mishol susia 12", "").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", "mishol susia 12", "", "12345678").Status);
 		}
 
 		[TestMethod]
@@ -138,7 +138,7 @@ namespace BlackBox
 		public void UserNameAndAddressToSignUpAreEmpty()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("", "", "123456").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("", "", "123456", "12345678").Status);
 		}
 
 		[TestMethod]
@@ -146,22 +146,21 @@ namespace BlackBox
 		public void UserNameAndPasswordToSignUpAreEmpty()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("", "mishol susia 12", "").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("", "mishol susia 12", "", "12345678").Status);
 		}
 
 		[TestMethod]
 		public void AddressAndPasswordToSignUpAreEmpty()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("Pnina", "", "").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("Pnina", "", "", "12345678").Status);
 		}
 
 		[TestMethod]
-
 		public void UserNameAddressAndPasswordAreEmpty()
 		{
 			_bridge.EnterSystem();
-			Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, _bridge.SignUp("", "", "").Status);
+			Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, _bridge.SignUp("", "", "", "12345678").Status);
 		}
 
 

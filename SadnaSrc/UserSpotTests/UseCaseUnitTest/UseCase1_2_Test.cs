@@ -27,57 +27,82 @@ namespace UserSpotTests.UseCaseUnitTest
         [TestMethod]
         public void GoodRegisterTest()
         {
-            DoSignUp("MaorRegister1", "Here 3", "123");
+            DoSignUp("MaorRegister1", "Here 3", "123", "12345678");
             Assert.IsFalse(MarketException.hasErrorRaised());
         }
 
         [TestMethod]
         public void RegisteredUserDataTest1()
         {
-            RegisteredUserDataTest("MaorRegister2", "Here 3", "123");
+            RegisteredUserDataTest("MaorRegister2", "Here 3", "123", "12345678");
         }
 
         [TestMethod]
         public void RegisteredUserDataTest2()
         {
-            RegisteredUserDataTest("MaorRegister3", "Here 3", "maor33maormaor333");
+            RegisteredUserDataTest("MaorRegister3", "Here 3", "maor33maormaor333", "12345678");
         }
 
         [TestMethod]
         public void MissingCredentialsSignUpTest1()
         {
-            MissingCredentialsSignUpTest("MaorRegister4", "Here 3", "");
+            MissingCredentialsSignUpTest("MaorRegister4", "Here 3", "", "12345678");
         }
 
         [TestMethod]
         public void MissingCredentialsSignUpTest2()
         {
-            MissingCredentialsSignUpTest("", "", "");
+            MissingCredentialsSignUpTest("", "", "","");
         }
 
         [TestMethod]
         public void MissingCredentialsSignUpTest3()
         {
-            MissingCredentialsSignUpTest("MaorRegister5", "Here 3", null);
+            MissingCredentialsSignUpTest("MaorRegister5", "Here 3","123", null);
         }
 
         [TestMethod]
         public void MissingCredentialsSignUpTest4()
         {
-            MissingCredentialsSignUpTest(null, null, null);
+            MissingCredentialsSignUpTest("MaorRegister15", "Here 3", "123", null);
         }
 
         [TestMethod]
         public void MissingCredentialsSignUpTest5()
         {
-            MissingCredentialsSignUpTest(null, "Here 3", "");
+            MissingCredentialsSignUpTest("MaorRegister16", "Here 3", "123", "");
         }
+
+        [TestMethod]
+        public void MissingCredentialsSignUpTest6()
+        {
+            MissingCredentialsSignUpTest("MaorRegister17", "Here 3", null, "12345678");
+        }
+
+        [TestMethod]
+        public void MissingCredentialsSignUpTest7()
+        {
+            MissingCredentialsSignUpTest(null, "Here 3","", "12345678");
+        }
+
+        [TestMethod]
+        public void MissingCredentialsSignUpTest8()
+        {
+            MissingCredentialsSignUpTest("MaorRegister18", null, "123", "12345678");
+        }
+
+        [TestMethod]
+        public void MissingCredentialsSignUpTest9()
+        {
+            MissingCredentialsSignUpTest(null, null, null,null);
+        }
+
 
         [TestMethod]
         public void DidntEnteredSystemTest()
         {
             Assert.IsFalse(MarketException.hasErrorRaised());
-            Assert.AreEqual((int) SignUpStatus.DidntEnterSystem, userServiceSession.SignUp("MaorRegister6", "Here 3", "123").Status);
+            Assert.AreEqual((int) SignUpStatus.DidntEnterSystem, userServiceSession.SignUp("MaorRegister6", "Here 3", "123", "12345678").Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
 
         }
@@ -85,7 +110,7 @@ namespace UserSpotTests.UseCaseUnitTest
         [TestMethod]
         public void RegisteredUserCartisEmptyTest()
         {
-            DoSignUp("MaorRegister7", "Here 3", "123");
+            DoSignUp("MaorRegister7", "Here 3", "123", "12345678");
             RegisteredUser registeredUser = (RegisteredUser)userServiceSession.MarketUser;
             Assert.AreEqual(0, registeredUser.Cart.GetCartStorage().Length);
         }
@@ -97,7 +122,7 @@ namespace UserSpotTests.UseCaseUnitTest
             User user = userServiceSession.MarketUser;
             Assert.IsFalse(user.IsRegisteredUser());
             Assert.AreEqual(0, user.Cart.GetCartStorage().Length);
-            Assert.AreEqual((int) SignUpStatus.Success, userServiceSession.SignUp("MaorRegister8", "Here 3", "123").Status);
+            Assert.AreEqual((int) SignUpStatus.Success, userServiceSession.SignUp("MaorRegister8", "Here 3", "123", "12345678").Status);
             user = userServiceSession.MarketUser;
             Assert.IsFalse(user.IsSystemAdmin());
             Assert.IsTrue(user.IsRegisteredUser());
@@ -107,9 +132,9 @@ namespace UserSpotTests.UseCaseUnitTest
         [TestMethod]
         public void SignUpAgainTest()
         {
-            DoSignUp("MaorRegister9", "Here 3", "123");
+            DoSignUp("MaorRegister9", "Here 3", "123", "12345678");
             Assert.IsFalse(MarketException.hasErrorRaised());
-            Assert.AreEqual((int)SignUpStatus.SignedUpAlready, userServiceSession.SignUp("MaorRegister9", "Here 3", "123").Status);
+            Assert.AreEqual((int)SignUpStatus.SignedUpAlready, userServiceSession.SignUp("MaorRegister9", "Here 3", "123", "12345678").Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
 
@@ -117,12 +142,12 @@ namespace UserSpotTests.UseCaseUnitTest
         public void SignUpWithExistedName()
         {
             Assert.IsFalse(MarketException.hasErrorRaised());
-            DoSignUp("MaorRegister10", "Here 3", "123");
+            DoSignUp("MaorRegister10", "Here 3", "123", "12345678");
             Assert.IsFalse(MarketException.hasErrorRaised());
             userServiceSession2 = (UserService)marketSession.GetUserService();
             userServiceSession2.EnterSystem();
             Assert.IsFalse(MarketException.hasErrorRaised());
-            Assert.AreEqual((int)SignUpStatus.TakenName, userServiceSession2.SignUp("MaorRegister10", "Here 3", "123").Status);
+            Assert.AreEqual((int)SignUpStatus.TakenName, userServiceSession2.SignUp("MaorRegister10", "Here 3", "123", "12345678").Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
 
         }
@@ -131,7 +156,7 @@ namespace UserSpotTests.UseCaseUnitTest
         [TestMethod]
         public void PromoteToAdminTest()
         {
-            DoSignUp("MaorRegister11", "Here 3", "123");
+            DoSignUp("MaorRegister11", "Here 3", "123", "12345678");
             RegisteredUser adminUser = (RegisteredUser)userServiceSession.MarketUser;
             object[] expectedData = { adminUser.SystemID, "MaorRegister11", "Here 3", UserService.GetSecuredPassword("123") };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
@@ -154,22 +179,22 @@ namespace UserSpotTests.UseCaseUnitTest
             MarketYard.CleanSession();
         }
 
-        private void DoSignUp(string name, string address, string password)
+        private void DoSignUp(string name, string address, string password,string creditCard)
         {
             userServiceSession.EnterSystem();
-            Assert.AreEqual((int)SignUpStatus.Success, userServiceSession.SignUp(name, address, password).Status);
+            Assert.AreEqual((int)SignUpStatus.Success, userServiceSession.SignUp(name, address, password, creditCard).Status);
         }
 
-        private void MissingCredentialsSignUpTest(string name, string address, string password)
+        private void MissingCredentialsSignUpTest(string name, string address, string password, string creditCard)
         {
             Assert.IsFalse(MarketException.hasErrorRaised());
             userServiceSession.EnterSystem();
-            Assert.AreEqual((int)SignUpStatus.NullEmptyDataGiven, userServiceSession.SignUp(name, address, password).Status);
+            Assert.AreEqual((int)SignUpStatus.NullEmptyFewDataGiven, userServiceSession.SignUp(name, address, password, creditCard).Status);
             Assert.IsTrue(MarketException.hasErrorRaised());
         }
-        private void RegisteredUserDataTest(string name, string address, string password)
+        private void RegisteredUserDataTest(string name, string address, string password, string creditCard)
         {
-            DoSignUp(name, address, password);
+            DoSignUp(name, address, password, creditCard);
             Assert.IsFalse(MarketException.hasErrorRaised());
             RegisteredUser registeredUser = (RegisteredUser)userServiceSession.MarketUser;
             object[] expectedData = { registeredUser.SystemID, name, address, UserService.GetSecuredPassword(password) };

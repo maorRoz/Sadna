@@ -24,10 +24,10 @@ namespace BlackBox
 			_adminBridge = new RealBridge();
 			_signUpBridge1 = new RealBridge();
 			_signUpBridge1.EnterSystem();
-			_signUpBridge1.SignUp(userSoleStoreOwner, "mishol", userSoleStoreOwnerPass);
+			_signUpBridge1.SignUp(userSoleStoreOwner, "mishol", userSoleStoreOwnerPass,"12345678");
 			_signUpBridge2 = new RealBridge();
 			_signUpBridge2.EnterSystem();
-			_signUpBridge2.SignUp(userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass);
+			_signUpBridge2.SignUp(userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass, "12345678");
 			
 		}
 

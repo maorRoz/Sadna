@@ -75,6 +75,12 @@ namespace SadnaSrc.MarketHarmony
                 ((RegisteredUser)_userService.MarketUser).Name : null;
         }
 
+        public string GetCreditCard()
+        {
+            return IsRegisteredUser() ?
+                ((RegisteredUser)_userService.MarketUser).CreditCard : null;
+        }
+
         public void CleanSession()
         {
             _userService.CleanSession();
