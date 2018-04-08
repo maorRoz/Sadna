@@ -33,6 +33,21 @@ namespace BlackBox
 			return _userService.SignIn(name, password);
 		}
 
+		public MarketAnswer ViewCart()
+		{
+			return _userService.ViewCart();
+		}
+
+		public MarketAnswer EditCartItem(string store, string product, double unitPrice, string sale, int quantity)
+		{
+			return _userService.EditCartItem(store, product, unitPrice, sale, quantity);
+		}
+
+		public MarketAnswer RemoveFromCart(string store, string product, double unitPrice, string sale)
+		{
+			return _userService.RemoveFromCart(store, product, unitPrice, sale);
+		}
+
 		public void CleanSession()
 		{
 			_userService.CleanSession();
