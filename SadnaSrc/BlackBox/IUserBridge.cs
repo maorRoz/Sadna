@@ -23,6 +23,13 @@ namespace BlackBox
 		 */
 		MarketAnswer RemoveUser(string userName);
 		void GetAdminService();
+		MarketAnswer ViewPurchaseHistoryByUser(string userName);
+		MarketAnswer ViewPurchaseHistoryByStore(string storeName);
 
+		/*
+		 * StoreSystem
+		 */
+		void GetStoreService();
+		MarketAnswer OpenStore(string name, string store);
 	}
 }

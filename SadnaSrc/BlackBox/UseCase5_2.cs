@@ -7,16 +7,27 @@ namespace BlackBox
 	public class UseCase5_2
 	{
 		private IUserBridge _adminBridge;
+		private IUserBridge _signUpBridge1;
+		private IUserBridge _signUpBridge2;
+		private IUserBridge _signInBridge;
+		private readonly string userSoleStoreOwner = "PninaSoleStoreOwner";
+		private readonly string userNotSoleStoreOwner = "PninaNotSoleStoreOwner";
+		private readonly string userSoleStoreOwnerPass = "789456";
+		private readonly string userNotSoleStoreOwnerPass = "741852";
 		private readonly string adminName = "Arik1";
 		private readonly string adminPass = "123";
-		private readonly string userNameNotSoleOwner = "Arik3";
-		private string userNameSoleOwner = "Arik2";
 
 		[TestInitialize]
 
 		public void MarketBuilder()
 		{
 			_adminBridge = new RealBridge();
+			_signUpBridge1 = new RealBridge();
+			_signUpBridge1.EnterSystem();
+			_signUpBridge1.SignUp(userSoleStoreOwner, "mishol", userSoleStoreOwnerPass);
+			_signUpBridge2 = new RealBridge();
+			_signUpBridge2.EnterSystem();
+			_signUpBridge2.SignUp(userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass);
 			
 		}
 
@@ -26,17 +37,28 @@ namespace BlackBox
 		{
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userNameNotSoleOwner).Status);
+			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userNotSoleStoreOwner).Status);
+			_signInBridge = new RealBridge();
+			_signInBridge.EnterSystem();
+			Assert.AreEqual((int)SignInStatus.NoUserFound,_signInBridge.SignIn(userNotSoleStoreOwner, userNotSoleStoreOwnerPass).Status);
 		}
 
 		[TestMethod]
 
 		public void SuccessDeleteUserSoleOwner()
 		{
-			//TODO: check the store was closed
+			//TODO: open a store.
+			//_adminBridge.GetStoreService();
+			//_adminBridge.OpenStore("newStore", "newPlace");
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userNameNotSoleOwner).Status);
+			_signInBridge = new RealBridge();
+			_signInBridge.EnterSystem();
+			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userSoleStoreOwner).Status);
+			//TODO: try to close a store, this should fail because the store is already closed.
+			
+			Assert.AreEqual((int)SignInStatus.NoUserFound, _signInBridge.SignIn(userSoleStoreOwner, userSoleStoreOwnerPass).Status);
+
 		}
 
 		[TestMethod]
@@ -63,7 +85,7 @@ namespace BlackBox
 		{
 			SignIn("hello", adminPass);
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNameNotSoleOwner).Status);
+			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNotSoleStoreOwner).Status);
 		}
 
 		[TestMethod]
@@ -72,7 +94,7 @@ namespace BlackBox
 		{
 			SignIn(adminName, "852963");
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNameNotSoleOwner).Status);
+			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNotSoleStoreOwnerPass).Status);
 		}
 
 		[TestMethod]
@@ -81,7 +103,7 @@ namespace BlackBox
 		{
 			SignIn("Hello", "852963");
 			_adminBridge.GetAdminService();
-			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNameSoleOwner).Status);
+			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userSoleStoreOwnerPass).Status);
 		}
 
 		private void SignIn(string userName, string password)
@@ -95,7 +117,11 @@ namespace BlackBox
 		public void UserTestCleanUp()
 		{
 			_adminBridge.CleanSession();
-			_adminBridge.CleanMarket();
+			_signUpBridge1.CleanSession();
+			_signUpBridge2.CleanSession();
+			_signInBridge?.CleanSession();
+			_signUpBridge1.CleanMarket();
+
 		}
 	}
 }
