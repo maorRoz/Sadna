@@ -59,6 +59,16 @@ namespace BlackBox
 			return _systemAdminService.RemoveUser(userName);
 		}
 
+		public MarketAnswer ViewPurchaseHistoryByUser(string userName)
+		{
+			return _systemAdminService.ViewPurchaseHistoryByUser(userName);
+		}
+
+		public MarketAnswer ViewPurchaseHistoryByStore(string storeName)
+		{
+			return _systemAdminService.ViewPurchaseHistoryByStore(storeName);
+		}
+
 		//TODO: change this function according to the implementation
 		public MarketAnswer createStore(int id, string address, string status)
 		{
@@ -69,5 +79,7 @@ namespace BlackBox
 		{
 			throw new NotImplementedException();
 		}
+
+
 	}
 }

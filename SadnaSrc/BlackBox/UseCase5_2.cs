@@ -48,12 +48,15 @@ namespace BlackBox
 		public void SuccessDeleteUserSoleOwner()
 		{
 			//TODO: open a store.
+			//_adminBridge.GetStoreService();
+			//_adminBridge.OpenStore("newStore", "newPlace");
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
 			_signInBridge = new RealBridge();
 			_signInBridge.EnterSystem();
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userSoleStoreOwner).Status);
 			//TODO: try to close a store, this should fail because the store is already closed.
+			
 			Assert.AreEqual((int)SignInStatus.NoUserFound, _signInBridge.SignIn(userSoleStoreOwner, userSoleStoreOwnerPass).Status);
 
 		}
