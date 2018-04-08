@@ -14,7 +14,6 @@ namespace SadnaSrc.AdminView
         private int adminSystemID;
         private IUserAdmin _admin;
         private string adminUserName;
-        private bool _isSystemAdmin;
         private SystemAdminServiceDL adminDL;
         public SystemAdminService(IUserAdmin admin)
         {
@@ -24,8 +23,6 @@ namespace SadnaSrc.AdminView
             adminUserName = _admin.GetAdminName();
 
         }
-
-
 
         private void ApproveNotSelfTermination(string userName)
         {
