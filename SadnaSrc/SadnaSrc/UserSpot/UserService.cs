@@ -191,7 +191,7 @@ namespace SadnaSrc.UserSpot
         private void ApproveSignUp(string name, string address, string password, string creditCard)
         {
             ApproveGuest("sign up");
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(password) || IsValidCreditCard(creditCard))
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(password) || !IsValidCreditCard(creditCard))
             {
                 throw new UserException(SignUpStatus.NullEmptyFewDataGiven,
                     "sign up action has been requested while some required fields are still missing or invalid!");

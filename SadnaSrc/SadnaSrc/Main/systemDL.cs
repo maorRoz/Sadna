@@ -131,6 +131,7 @@ namespace SadnaSrc.Main
                                     [Name]          TEXT,
                                     [Address]       TEXT,
                                     [Password]      TEXT,
+                                    [CreditCard]    TEXT,
                                     PRIMARY KEY([SystemID])
                                     )";
         }

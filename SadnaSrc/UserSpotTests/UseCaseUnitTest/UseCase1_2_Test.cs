@@ -176,7 +176,7 @@ namespace UserSpotTests.UseCaseUnitTest
         {
             DoSignUp("MaorRegister11", "Here 3", "123", "12345678");
             RegisteredUser adminUser = (RegisteredUser)userServiceSession.MarketUser;
-            object[] expectedData = { adminUser.SystemID, "MaorRegister11", "Here 3", UserService.GetSecuredPassword("123") };
+            object[] expectedData = { adminUser.SystemID, "MaorRegister11", "Here 3", UserService.GetSecuredPassword("123"),"12345678" };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.IsTrue(adminUser.IsRegisteredUser());
             Assert.IsFalse(adminUser.IsSystemAdmin());
@@ -215,7 +215,7 @@ namespace UserSpotTests.UseCaseUnitTest
             DoSignUp(name, address, password, creditCard);
             Assert.IsFalse(MarketException.hasErrorRaised());
             RegisteredUser registeredUser = (RegisteredUser)userServiceSession.MarketUser;
-            object[] expectedData = { registeredUser.SystemID, name, address, UserService.GetSecuredPassword(password) };
+            object[] expectedData = { registeredUser.SystemID, name, address, UserService.GetSecuredPassword(password),creditCard };
             Assert.IsTrue(expectedData.SequenceEqual(registeredUser.ToData()));
         }
     }

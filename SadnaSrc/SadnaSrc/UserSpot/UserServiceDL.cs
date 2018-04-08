@@ -147,8 +147,8 @@ namespace SadnaSrc.UserSpot
         }
         public void SaveUser(User user)
         {
-            InsertTable("User", "SystemID,Name,Address,Password",
-                new [] { "@idParam", "@nameParam", "@addressParam", "@passParam" }, user.ToData());
+            InsertTable("User", "SystemID,Name,Address,Password,CreditCard",
+                new [] { "@idParam", "@nameParam", "@addressParam", "@passParam","@creditParam" }, user.ToData());
         }
 
         private string[] UserNamesInSystem()
@@ -213,7 +213,7 @@ namespace SadnaSrc.UserSpot
             {
                 while (dbReader.Read())
                 {
-                    return new object[] {dbReader.GetInt32(0), dbReader.GetString(2),dbReader.GetString(3)};
+                    return new object[] {dbReader.GetInt32(0), dbReader.GetString(2),dbReader.GetString(4)};
                 }
 
                 string similarName = FindSimilar(name);
