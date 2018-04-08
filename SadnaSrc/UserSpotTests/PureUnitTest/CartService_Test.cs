@@ -187,6 +187,44 @@ namespace UserSpotTests.PureUnitTest
         }
 
         [TestMethod]
+        public void GetCartStorageFilteredByStoreTest1()
+        {
+            DoSignUpSignIn("MaorCart9", "no-where", "123", "12345678");
+            AddAllItems(userServiceLoggedSession);
+            CartItem[] actual = userServiceLoggedSession.MarketUser.Cart.GetCartStorage("X");
+            expected.Remove(item2);
+            expected.Remove(item3);
+            expected.Remove(item4);
+            Assert.IsTrue(expected.ToArray().SequenceEqual(actual));
+            DoSignIn2Filtered("MaorCart9", "123", "X");
+        }
+
+        [TestMethod]
+        public void GetCartStorageFilteredByStoreTest2()
+        {
+            DoSignUpSignIn("MaorCart10", "no-where", "123", "12345678");
+            AddAllItems(userServiceLoggedSession);
+            CartItem[] actual = userServiceLoggedSession.MarketUser.Cart.GetCartStorage("Y");
+            expected.Remove(item1);
+            expected.Remove(item4);
+            Assert.IsTrue(expected.ToArray().SequenceEqual(actual));
+            DoSignIn2Filtered("MaorCart10", "123", "Y");
+        }
+
+        [TestMethod]
+        public void GetCartStorageFilteredByStoreTest3()
+        {
+            DoSignUpSignIn("MaorCart11", "no-where", "123", "12345678");
+            AddAllItems(userServiceLoggedSession);
+            CartItem[] actual = userServiceLoggedSession.MarketUser.Cart.GetCartStorage("M");
+            expected.Remove(item1);
+            expected.Remove(item2);
+            expected.Remove(item3);
+            Assert.IsTrue(expected.ToArray().SequenceEqual(actual));
+            DoSignIn2Filtered("MaorCart11", "123", "M");
+        }
+
+        [TestMethod]
         public void EmptyCartTest()
         {
             DoSignUpSignIn("MaorCart8", "no-where", "123", "12345678");
@@ -198,6 +236,45 @@ namespace UserSpotTests.PureUnitTest
             AddItem1(userServiceLoggedSession2);
             Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession2.MarketUser.Cart.GetCartStorage()));
         }
+
+
+        [TestMethod]
+        public void EmptyCartFilteredByStoreTest1()
+        {
+            DoSignUpSignIn("MaorCart12", "no-where", "123", "12345678");
+            AddAllItems(userServiceLoggedSession);
+            userServiceLoggedSession.MarketUser.Cart.EmptyCart("X");
+            expected.Remove(item1);
+            Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession.MarketUser.Cart.GetCartStorage()));
+            DoSignIn2("MaorCart12", "123");
+            Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession2.MarketUser.Cart.GetCartStorage()));
+        }
+
+        [TestMethod]
+        public void EmptyCartFilteredByStoreTest2()
+        {
+            DoSignUpSignIn("MaorCart13", "no-where", "123", "12345678");
+            AddAllItems(userServiceLoggedSession);
+            userServiceLoggedSession.MarketUser.Cart.EmptyCart("Y");
+            expected.Remove(item2);
+            expected.Remove(item3);
+            Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession.MarketUser.Cart.GetCartStorage()));
+            DoSignIn2("MaorCart13", "123");
+            Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession2.MarketUser.Cart.GetCartStorage()));
+        }
+        [TestMethod]
+        public void EmptyCartFilteredByStoreTest3()
+        {
+            DoSignUpSignIn("MaorCart14", "no-where", "123", "12345678");
+            AddAllItems(userServiceLoggedSession);
+            userServiceLoggedSession.MarketUser.Cart.EmptyCart("M");
+            expected.Remove(item4);
+            Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession.MarketUser.Cart.GetCartStorage()));
+            DoSignIn2("MaorCart14", "123");
+            Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession2.MarketUser.Cart.GetCartStorage()));
+        }
+
+
 
         [TestCleanup]
         public void CartServiceTestCleanUp()
@@ -237,6 +314,13 @@ namespace UserSpotTests.PureUnitTest
             userServiceLoggedSession2 = DoEnter();
             Assert.AreEqual((int)SignInStatus.Success, userServiceLoggedSession2.SignIn(name, password).Status);
             Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession2.MarketUser.Cart.GetCartStorage()));
+        }
+
+        private void DoSignIn2Filtered(string name, string password,string store)
+        {
+            userServiceLoggedSession2 = DoEnter();
+            Assert.AreEqual((int)SignInStatus.Success, userServiceLoggedSession2.SignIn(name, password).Status);
+            Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession2.MarketUser.Cart.GetCartStorage(store)));
         }
 
         private void DoSignUpSignIn(string name, string address, string password,string creditCard)

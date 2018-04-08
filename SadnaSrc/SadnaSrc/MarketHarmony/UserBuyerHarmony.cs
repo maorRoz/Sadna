@@ -50,6 +50,8 @@ namespace SadnaSrc.MarketHarmony
                 throw new UserException(EditCartItemStatus.NoItemFound,
                     "No item by that info  has been found in the user cart!");
             }
+
+            itemFromStore.Quantity = quantity;
             return CnvertCartItemToOrderItem(itemFromStore);
         }
 

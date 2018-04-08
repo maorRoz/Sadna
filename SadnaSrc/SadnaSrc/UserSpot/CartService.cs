@@ -30,10 +30,16 @@ namespace SadnaSrc.UserSpot
             _userDL = userDL;
         }
 
+        private static CartItem[] SortedCartStorage(CartItem[] storage)
+        {
+            return storage.OrderBy(x => x.Quantity).ToArray();
+        }
+
         public CartItem[] GetCartStorage()
         {
-            return cartStorage.ToArray();
+            return SortedCartStorage(cartStorage.ToArray());
         }
+
 
         public CartItem[] GetCartStorage(string store)
         {
@@ -46,7 +52,7 @@ namespace SadnaSrc.UserSpot
                 }
             }
 
-            return filteredCartStorage.ToArray();
+            return SortedCartStorage(filteredCartStorage.ToArray());
         }
         public CartItem SearchInCart(string store, string product, double unitPrice)
         {
