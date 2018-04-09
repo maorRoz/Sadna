@@ -44,8 +44,26 @@ namespace SadnaSrc.MarketHarmony
         public OrderItem CheckoutItem(string itemName, string store, int quantity, double unitPrice)
         {
             ValidUserEnteredSystem();
-            CartItem userItem = _userService.CheckoutItem(itemName,store,quantity,unitPrice);
-            return CnvertCartItemToOrderItem(userItem);
+            CartItem userItem = _userService.MarketUser.Cart.SearchInCart(store, itemName, unitPrice);
+            return ConvertCartItemToOrderItem(userItem);
+        }
+
+        public void RemoveItemFromCart(string itemName, string store, int quantity, double unitPrice)
+        {
+            CartItem itemFromStore = _userService.MarketUser.Cart.SearchInCart(store, itemName, unitPrice);
+            if (itemFromStore == null || quantity > itemFromStore.Quantity)
+            {
+                throw new UserException(EditCartItemStatus.NoItemFound,
+                    "No item by that info or quantity has been found in the user cart!");
+            }
+            if (quantity == itemFromStore.Quantity)
+            {
+                _userService.MarketUser.Cart.RemoveFromCart(itemFromStore);
+            }
+            else
+            {
+                _userService.MarketUser.Cart.EditCartItem(itemFromStore, -quantity);
+            }
         }
 
         private static OrderItem[] ConvertCartItemsToOrderItems(CartItem[] cart)

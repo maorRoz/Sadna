@@ -32,18 +32,15 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestMakeOrderFromcart()
         {
             try
             {
-                //orderServiceSession.GiveDetails("Moshe", "nahui");
                 Product p = new Product("S1","Bamba",6,"munch");
                 userShopperHarmony.AddToCart(p,"The Red Rock",3);
                 OrderItem[] items = userBuyerHarmony.CheckoutAll();
                 Order o = orderServiceSession.InitOrder(items);
-                //Assert.AreEqual("Moshe", o.GetUserName());
                 Assert.IsNotNull(orderServiceSession.FindOrderItemInOrder(o.GetOrderID(),"The Red Rock","Bamba"));
-                //Assert.IsNotNull(orderServiceSession.GetOrder(o.GetOrderID()));
             }
             catch (MarketException)
             {
