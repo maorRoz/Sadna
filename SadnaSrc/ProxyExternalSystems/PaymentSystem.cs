@@ -9,7 +9,7 @@ namespace ProxyExternalSystems
     public class PaymentSystem
     {
         private bool ans = true;
-        public bool ProccessPayment(List<string> creditCardetails, double price)
+        public bool ProccessPayment(string creditCardetails, double price)
         {
             return ans;
         }

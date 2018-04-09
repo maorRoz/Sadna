@@ -72,14 +72,14 @@ namespace SadnaSrc.Main
             return new OrderService(new UserBuyerHarmony(ref userService), new StoresSyncherHarmony());
         }
 
-        public IPaymentService GetPaymentService(IOrderService orderService)
+        public IPaymentService GetPaymentService()
         {
-            return new PaymentService((OrderService)orderService);
+            return new PaymentService();
         }
 
-        public ISupplyService GetSupplyService(IOrderService orderService)
+        public ISupplyService GetSupplyService()
         {
-            return new SupplyService((OrderService)orderService);
+            return new SupplyService();
         }
 
         public static void CleanSession()
