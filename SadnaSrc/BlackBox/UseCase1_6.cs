@@ -65,6 +65,7 @@ namespace BlackBoxUserTests
 			_bridge.SignIn(userToCheck, userToCheckPassword);
 			//TODO: change a quantity of an item
 			//TODO: call viewCart and compare between expected and received products
+			//TODO: check that the status is success
 			//TODO: change quantity back to what it was before
 			//TODO: print to see it worked
 			//TODO: the last two should probably be a function
@@ -109,7 +110,7 @@ namespace BlackBoxUserTests
 
 		
 		[TestMethod]
-		public void NegativeQuantityInserted()
+		public void NegativeQuantity()
 		{
 			_bridge.EnterSystem();
 			_bridge.SignIn(userToCheck, userToCheckPassword);
@@ -118,7 +119,7 @@ namespace BlackBoxUserTests
 		
 
 		[TestMethod]
-		public void ZeroQuantityInserted()
+		public void ZeroQuantity()
 		{
 			_bridge.EnterSystem();
 			_bridge.SignIn(userToCheck, userToCheckPassword);
@@ -133,7 +134,8 @@ namespace BlackBoxUserTests
 			_bridge.SignIn(userToCheck, userToCheckPassword);
 			//TODO: remove an item
 			//TODO: check the removal was successful
-			//TODO: add the item to the cart
+			//TODO: compare between the expected items and the received items
+			//TODO: add the item back to the cart
 
 		}
 
@@ -176,7 +178,6 @@ namespace BlackBoxUserTests
 		{
 			_bridge.CleanSession();
 			_bridge.CleanMarket();
-
 		}
 
 	}
