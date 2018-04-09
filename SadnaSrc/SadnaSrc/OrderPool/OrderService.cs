@@ -17,14 +17,20 @@ namespace SadnaSrc.OrderPool
     {
         public string UserName { get; set; }
         public string UserAddress { get; set; }
+        public string CreditCard { get; set; }
+
         public List<Order> Orders;
         private readonly OrderPoolDL _orderDL;
         
         private readonly IUserBuyer _buyer;
         private IStoresSyncher _storesSync;
 
+        private SupplyService _supplyService;
+        private PaymentService _paymentService;
+
+
         //only for Unit Tests of developer!!(not for integration or blackbox or real usage)
-        public void LoginBuyer(string userName,string password)
+        public void LoginBuyer(string userName,string password,string creditCard)
         {
             ((UserBuyerHarmony) _buyer).LogInBuyer(UserName, password);
             UserName = userName;
@@ -36,7 +42,8 @@ namespace SadnaSrc.OrderPool
         {
             ((UserBuyerHarmony)_buyer).MakeGuest();
         }
-
+        //TODO: Add payment and supply to the Ctor of ORderService
+        //TODO: Add bootle credit card support (in tests too !!) until Maor finishes his branch (after that get credit card details from buyer)
         public OrderService(IUserBuyer buyer, IStoresSyncher storesSync)
         {
             Orders = new List<Order>();
@@ -46,6 +53,8 @@ namespace SadnaSrc.OrderPool
             UserName = buyer.GetName();
             UserAddress = _buyer.GetAddress();
             _orderDL = new OrderPoolDL();
+
+
         }
 
         private void IsValidUserDetails()
@@ -83,6 +92,7 @@ namespace SadnaSrc.OrderPool
             }
 
             Orders.Add(order);
+            MarketLog.Log("OrderPool", "A new order with items has been created ...");
             return order;
         }
 
@@ -90,6 +100,8 @@ namespace SadnaSrc.OrderPool
         {
             Order order = new Order(RandomOrderID(), UserName);
             Orders.Add(order);
+            MarketLog.Log("OrderPool", "A new order has been created ...");
+
             return order;
         }
 
@@ -151,34 +163,40 @@ namespace SadnaSrc.OrderPool
         public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
         {
             MarketLog.Log("OrderPool","Attempting to buy "+quantity +" "+itemName +" from store "+store+" in immediate sale...");
+            int orderId = 0;
             try
             {
                 IsValidUserDetails();
                 OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
-                throw new NotImplementedException();
-                //TODO: continue this
+                Order order = InitOrder();
+                orderId = order.GetOrderID();
+                order.AddOrderItem(toBuy);
+                _supplyService.CreateDelivery(order);
+                _paymentService.ProccesPayment(order, "");
+                MarketLog.Log("OrderPool", "User " + UserName + " successfully initialized new order " + order.GetOrderID() + ".");
+                return new OrderAnswer(OrderStatus.Success, "Successfully bought item "+itemName);
+
             }
             catch (OrderException e)
             {
-                //TODO: change the ??? with some order id
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute. Error message has been created!");
+                MarketLog.Log("OrderPool", "Order "+orderId+" has failed to execute. Error message has been created!");
                 return new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
             }
             catch (WalleterException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute while communicating with payment system." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.NoPaymentConnection, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute while communicating with supply system." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.NoSupplyConnection, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute. Something is wrong with Store or User." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }
@@ -188,34 +206,34 @@ namespace SadnaSrc.OrderPool
         {
             MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " tickets for lottery sale of " + itemName +
                                        " from store " + store + "...");
+            int orderId = 0;
             try
             {
                 IsValidUserDetails();
                 OrderItem ticketToBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
-                throw new NotImplementedException();
-                //TODO: continue this
+                Order order = InitOrder();
+                orderId = order.GetOrderID();
             }
             catch (OrderException e)
             {
-                //TODO: change the ??? with some order id
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute. Error message has been created!");
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
                 return new OrderAnswer((OrderStatus) e.Status, e.GetErrorMessage());
             }
             catch (WalleterException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute while communicating with payment system." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.NoPaymentConnection, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute while communicating with supply system." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.NoSupplyConnection, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute. Something is wrong with Store or User." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }
@@ -224,34 +242,34 @@ namespace SadnaSrc.OrderPool
         public MarketAnswer BuyAllItemsFromStore(string store)
         {
             MarketLog.Log("OrderPool", "Attempting to buy everything in cart from store " + store + "...");
+            int orderId = 0;
             try
             {
                 IsValidUserDetails();
                 OrderItem[] itemsToBuy = _buyer.CheckoutFromStore(store);
-                throw new NotImplementedException();
-                //TODO: continue this
+                Order order = InitOrder();
+                orderId = order.GetOrderID();
             }
             catch (OrderException e)
             {
-                //TODO: change the ??? with some order id
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute. Error message has been created!");
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
                 return new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
             }
             catch (WalleterException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute while communicating with payment system." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.NoPaymentConnection, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute while communicating with supply system." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.NoSupplyConnection, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute. Something is wrong with Store or User." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }
@@ -260,34 +278,34 @@ namespace SadnaSrc.OrderPool
         public MarketAnswer BuyEverythingFromCart()
         {
             MarketLog.Log("OrderPool", "Attempting to buy everything in cart...");
+            int orderId = 0;
             try
             {
                 IsValidUserDetails();
                 OrderItem[] itemsToBuy = _buyer.CheckoutAll();
-                throw new NotImplementedException();
-                //TODO: continue this
+                Order order = InitOrder();
+                orderId = order.GetOrderID();
             }
             catch (OrderException e)
             {
-                //TODO: change the ??? with some order id
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute. Error message has been created!");
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
                 return new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
             }
             catch (WalleterException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute while communicating with payment system." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.NoPaymentConnection, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute while communicating with supply system." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.NoSupplyConnection, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
-                MarketLog.Log("OrderPool", "Order ??? has failed to execute. Something is wrong with Store or User." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }
