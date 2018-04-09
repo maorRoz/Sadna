@@ -18,10 +18,11 @@ namespace SadnaSrc.SupplyPoint
   
 
         //TODO: change this once info about external systems is available.
-        public void AttachExternalSystem()
+        public MarketAnswer AttachExternalSystem()
         {
             sock = new SupplySystem();
             MarketLog.Log("SupplyPoint", "Connection to external supply system established successfully ! ");
+            return new SupplyAnswer(SupplyStatus.Success, "Connection to external supply system established successfully !");
 
         }
 
@@ -32,7 +33,7 @@ namespace SadnaSrc.SupplyPoint
                 throw new SupplyException(SupplyStatus.NoSupplySystem, "Failed, No supply system found.");
             }
             MarketLog.Log("SupplyPoint", "Attempting to create delivery for order ID: "+ order.GetOrderID());
-            
+            CheckOrderDetails(order);
             // TODO: Find out how the Order Data must reach the delivery system.
             if (sock.ProcessDelivery(order.GetOrderID(), order.GetUserName(), order.GetShippingAddress()))
             {
@@ -40,6 +41,14 @@ namespace SadnaSrc.SupplyPoint
                 return;
             }
             throw new SupplyException(SupplyStatus.SupplySystemError, "Failed, an error in the supply system occured.");
+        }
+
+        public void CheckOrderDetails(Order order)
+        {
+            if (order.GetOrderID() == null || order.GetUserName() == null || order.GetShippingAddress() == null)
+            {
+                throw new SupplyException(SupplyStatus.InvalidOrder,"Failed, Invalid order details");
+            }
         }
 
         public void BreakExternal()

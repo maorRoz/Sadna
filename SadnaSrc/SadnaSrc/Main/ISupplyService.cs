@@ -18,6 +18,7 @@ namespace SadnaSrc.Main
     {
         Success,
         SupplySystemError,
-        NoSupplySystem
+        NoSupplySystem,
+        InvalidOrder
     }
 }

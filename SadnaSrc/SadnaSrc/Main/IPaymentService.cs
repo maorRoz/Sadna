@@ -18,7 +18,9 @@ namespace SadnaSrc.Main
         Success,
         InvalidCreditCardSyntax,
         PaymentSystemError,
-        NoPaymentSystem
+        NoPaymentSystem,
+        InvalidOrder,
+        InvalidData
     }
 
 }
