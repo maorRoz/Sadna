@@ -9,7 +9,7 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.MarketHarmony
 {
-    class UserShopperHarmony : IUserShopper
+    public class UserShopperHarmony : IUserShopper
     {
         private UserService _userService;
         public UserShopperHarmony(ref IUserService userService)
