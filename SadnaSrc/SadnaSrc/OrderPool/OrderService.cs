@@ -19,6 +19,9 @@ namespace SadnaSrc.OrderPool
         public string UserAddress { get; set; }
         public string CreditCard { get; set; }
 
+        private static Random rand = new Random();
+
+
         public List<Order> Orders;
         private readonly OrderPoolDL _orderDL;
         
@@ -35,7 +38,7 @@ namespace SadnaSrc.OrderPool
             ((UserBuyerHarmony) _buyer).LogInBuyer(UserName, password);
             UserName = userName;
             UserAddress = _buyer.GetAddress();
-            //CreditCard = _buyer.GetCreditCard();
+            CreditCard = _buyer.GetCreditCard();
         }
 
         //only for Unit Tests of developer!!(not for integration or blackbox or real usage)
@@ -53,7 +56,7 @@ namespace SadnaSrc.OrderPool
             _paymentService = paymentService;
             UserName = buyer.GetName();
             UserAddress = _buyer.GetAddress();
-            //CreditCard = _buyer.GetCreditCard();
+            CreditCard = _buyer.GetCreditCard();
             _orderDL = new OrderPoolDL();
 
         }
@@ -72,7 +75,8 @@ namespace SadnaSrc.OrderPool
         
         public Order InitOrder(OrderItem[] items)
         {
-            Order order = new Order(RandomOrderID(), UserName);
+            CheckAllItems(items);
+            Order order = new Order(RandomOrderID(), UserName, UserAddress);
             foreach (OrderItem item in items)
             {
                 order.AddOrderItem(item);
@@ -85,7 +89,7 @@ namespace SadnaSrc.OrderPool
 
         public Order InitOrder()
         {
-            Order order = new Order(RandomOrderID(), UserName);
+            Order order = new Order(RandomOrderID(), UserName, UserAddress);
             Orders.Add(order);
             MarketLog.Log("OrderPool", "User " + UserName + " successfully initialized new order " + order.GetOrderID() + ".");
             return order;
@@ -246,7 +250,6 @@ namespace SadnaSrc.OrderPool
             {
                 IsValidUserDetails();
                 OrderItem[] itemsToBuy = _buyer.CheckoutFromStore(store);
-                CheckAllItems(itemsToBuy);
                 Order order = InitOrder(itemsToBuy);                
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
@@ -289,7 +292,6 @@ namespace SadnaSrc.OrderPool
             {
                 IsValidUserDetails();
                 OrderItem[] itemsToBuy = _buyer.CheckoutAll();
-                CheckAllItems(itemsToBuy);
                 Order order = InitOrder(itemsToBuy);
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
@@ -366,10 +368,10 @@ namespace SadnaSrc.OrderPool
 
         private int RandomOrderID()
         {
-            var ret = new Random().Next(100000, 999999);
+            var ret = rand.Next(100000, 999999);
             while (_orderDL.FindOrder(ret) != null)
             {
-                ret = new Random().Next(100000, 999999);
+                ret = rand.Next(100000, 999999);
             }
 
             return ret;
