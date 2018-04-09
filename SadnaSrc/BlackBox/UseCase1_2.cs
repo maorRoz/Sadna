@@ -1,8 +1,9 @@
 ﻿using System;
+using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBox
+namespace BlackBoxUserTests
 {
 	[TestClass]
 	public class UseCase1_2
@@ -13,7 +14,7 @@ namespace BlackBox
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_bridge = new RealBridge();
+			_bridge = Driver.getBridge();
 			_bridge2 = null;
 		}
 		[TestMethod]
@@ -37,7 +38,7 @@ namespace BlackBox
 		{
 			_bridge.EnterSystem();
 			_bridge.SignUp("Pnina", "miahol susia 12", "123456","12345678");
-			_bridge2 = new RealBridge();
+			_bridge2 = Driver.getBridge();
 			_bridge2.EnterSystem();
 			Assert.AreEqual((int)SignUpStatus.TakenName, _bridge2.SignUp("Pnina", "miahol susia 12", "123456", "12345678").Status);
 		}
