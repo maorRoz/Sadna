@@ -26,16 +26,16 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
-	    public MarketAnswer SignUp(string name, string address, string password, string creditCard)
-	    {
-	        if (real != null)
-	        {
-	            return real.SignUp(name, address, password, creditCard);
-	        }
-	        throw new NotImplementedException();
-	    }
+		public MarketAnswer SignUp(string name, string address, string password)
+		{
+			if (real != null)
+			{
+				real.SignUp(name,address,password);
+			}
+			throw new NotImplementedException();
+		}
 
-        public MarketAnswer SignIn(string name, string password)
+		public MarketAnswer SignIn(string name, string password)
 		{
 			if (real != null)
 			{
