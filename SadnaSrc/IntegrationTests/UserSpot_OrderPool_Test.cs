@@ -240,6 +240,113 @@ namespace IntegrationTests
             }
         }
 
+
+        /*
+         * CheckoutItem tests
+         */
+
+        [TestMethod]
+        public void CheckoutSingleItemTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                OrderItem item = userBuyerHarmony.CheckoutItem("Bamba", "The Red Rock", 3, 6.00);
+                string result = getOrderItemString(item);
+                string expected = "18 Bamba, The Red Rock";
+
+                Assert.AreEqual(result, expected);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void CheckoutItemNotInOrderTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                OrderItem item = userBuyerHarmony.CheckoutItem("Coated Peanuts", "24", 1, 10.00);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void CheckoutItemNameErrorTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                OrderItem item = userBuyerHarmony.CheckoutItem("Bomba", "The Red Rock", 3, 6.00);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void CheckoutItemStoreErrorTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                OrderItem item = userBuyerHarmony.CheckoutItem("Bamba", "Teh Red Rok", 3, 6.00);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void CheckoutItemPriceErrorTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                OrderItem item = userBuyerHarmony.CheckoutItem("Bamba", "The Red Rock", 3, 6.90);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void CheckoutItemLargeQuantityTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                OrderItem item = userBuyerHarmony.CheckoutItem("Bamba", "The Red Rock", 999, 6.00);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void CheckoutItemNegativeQuantityTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                OrderItem item = userBuyerHarmony.CheckoutItem("Bamba", "The Red Rock", -1, 6.00);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
         [TestCleanup]
         public void UserOrderTestCleanUp()
         {
@@ -275,10 +382,15 @@ namespace IntegrationTests
             for (int i = 0; i < orderItems.Length; i++)
             {
 
-                result += "" + orderItems[i].Price + " " + orderItems[i].Name + ", " + orderItems[i].Store + ". ";
+                result += getOrderItemString(orderItems[i]) + ". ";
             }
 
             return result;
+        }
+
+        private string getOrderItemString(OrderItem item)
+        {
+            return "" + item.Price + " " + item.Name + ", " + item.Store;
         }
     }
 }
