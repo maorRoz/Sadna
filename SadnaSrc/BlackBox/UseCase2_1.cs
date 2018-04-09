@@ -13,7 +13,7 @@ namespace BlackBox
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_bridgeSignIn = new RealBridge();
+			_bridgeSignIn = Driver.getBridge();
 		}
 
 		[TestMethod]
@@ -199,7 +199,7 @@ namespace BlackBox
 
 		private void SignUp(string name,string address, string password)
 		{
-			_bridgeSignUp = new RealBridge();
+			_bridgeSignUp = Driver.getBridge();
 			_bridgeSignUp.EnterSystem();
 			_bridgeSignUp.SignUp(name,address,password);
 		}

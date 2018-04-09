@@ -18,7 +18,7 @@ namespace BlackBox
 
 		public void MarketBuilder()
 		{
-			_adminBridge = new RealBridge();
+			_adminBridge = Driver.getBridge();
 		}
 
 

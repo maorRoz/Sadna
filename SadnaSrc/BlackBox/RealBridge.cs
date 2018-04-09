@@ -38,14 +38,14 @@ namespace BlackBox
 			return _userService.ViewCart();
 		}
 
-		public MarketAnswer EditCartItem(string store, string product, double unitPrice, string sale, int quantity)
+		public MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity)
 		{
-			return _userService.EditCartItem(store, product, unitPrice, sale, quantity);
+			return _userService.EditCartItem(store, product, unitPrice, quantity);
 		}
 
-		public MarketAnswer RemoveFromCart(string store, string product, double unitPrice, string sale)
+		public MarketAnswer RemoveFromCart(string store, string product, double unitPrice)
 		{
-			return _userService.RemoveFromCart(store, product, unitPrice, sale);
+			return _userService.RemoveFromCart(store, product, unitPrice);
 		}
 
 		public void CleanSession()

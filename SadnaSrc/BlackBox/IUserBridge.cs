@@ -16,8 +16,8 @@ namespace BlackBox
 		MarketAnswer SignUp(string name, string address, string password);
 		MarketAnswer SignIn(string name, string password);
 		MarketAnswer ViewCart();
-		MarketAnswer EditCartItem(string store, string product, double unitPrice, string sale, int quantity);
-		MarketAnswer RemoveFromCart(string store, string product, double unitPrice, string sale);
+		MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity);
+		MarketAnswer RemoveFromCart(string store, string product, double unitPrice);
 		void CleanSession();
 		void CleanMarket();
 

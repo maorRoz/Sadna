@@ -21,11 +21,11 @@ namespace BlackBox
 
 		public void MarketBuilder()
 		{
-			_adminBridge = new RealBridge();
-			_signUpBridge1 = new RealBridge();
+			_adminBridge = Driver.getBridge();
+			_signUpBridge1 = Driver.getBridge();
 			_signUpBridge1.EnterSystem();
 			_signUpBridge1.SignUp(userSoleStoreOwner, "mishol", userSoleStoreOwnerPass);
-			_signUpBridge2 = new RealBridge();
+			_signUpBridge2 = Driver.getBridge();
 			_signUpBridge2.EnterSystem();
 			_signUpBridge2.SignUp(userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass);
 			
@@ -38,7 +38,7 @@ namespace BlackBox
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userNotSoleStoreOwner).Status);
-			_signInBridge = new RealBridge();
+			_signInBridge = Driver.getBridge();
 			_signInBridge.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NoUserFound,_signInBridge.SignIn(userNotSoleStoreOwner, userNotSoleStoreOwnerPass).Status);
 		}
@@ -52,7 +52,7 @@ namespace BlackBox
 			//_adminBridge.OpenStore("newStore", "newPlace");
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService();
-			_signInBridge = new RealBridge();
+			_signInBridge = Driver.getBridge();
 			_signInBridge.EnterSystem();
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userSoleStoreOwner).Status);
 			//TODO: try to close a store, this should fail because the store is already closed.

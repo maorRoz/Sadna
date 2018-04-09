@@ -12,7 +12,7 @@ namespace BlackBoxUserTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_bridge = new RealBridge();
+			_bridge = Driver.getBridge();
 		}
 
 		[TestMethod]
