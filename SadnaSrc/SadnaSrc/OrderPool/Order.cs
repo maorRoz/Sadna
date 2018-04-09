@@ -30,7 +30,7 @@ namespace SadnaSrc.OrderPool
         public Order(int orderId, string userName)
         {
             _userName = userName;
-            _shippingAddress = "default"; // TODO maybe change to other default value
+            _shippingAddress = "default"; 
             _items = new List<OrderItem>();
             _orderId = orderId;
             _date = DateTime.Today;

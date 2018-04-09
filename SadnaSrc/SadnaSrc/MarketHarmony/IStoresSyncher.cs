@@ -9,6 +9,7 @@ using SadnaSrc.OrderPool;
 namespace SadnaSrc.MarketHarmony
 {
     //TODO: improve this class lior/igor!!
+    //TODO: OrderService needs the name of the store
     //integration between OrderPool to StoreCenter 
     public interface IStoresSyncher
     {
