@@ -347,6 +347,97 @@ namespace IntegrationTests
             }
         }
 
+        /*
+         * RemoveItemFromCart tests
+         */
+
+        [TestMethod]
+        public void RemoveItemTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                userBuyerHarmony.RemoveItemFromCart("Bamba","The Red Rock",3,6.00);
+                Assert.IsNull(((UserService)userServiceSession).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00));
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void RemoveItemPartiallyTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                userBuyerHarmony.RemoveItemFromCart("Bamba", "The Red Rock", 2, 6.00);
+                Assert.AreEqual(1,
+                    ((UserService)userServiceSession).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00).Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void RemoveItemLargeQuantityTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                userBuyerHarmony.RemoveItemFromCart("Bamba", "The Red Rock", 999, 6.00);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void RemoveItemNegativeQuantityTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                userBuyerHarmony.RemoveItemFromCart("Bamba", "The Red Rock", -5, 6.00);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void RemoveNonExistantItemTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                userBuyerHarmony.RemoveItemFromCart("Bisli", "The Red Rock", 2, 6.00);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void RemoveItemEmptyCartTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(emptyUser, pass);
+                userBuyerHarmony.RemoveItemFromCart("Bamba", "The Red Rock", 2, 6.00);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
         [TestCleanup]
         public void UserOrderTestCleanUp()
         {

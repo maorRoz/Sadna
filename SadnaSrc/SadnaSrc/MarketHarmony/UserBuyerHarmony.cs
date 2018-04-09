@@ -79,6 +79,11 @@ namespace SadnaSrc.MarketHarmony
             {
                 _userService.MarketUser.Cart.RemoveFromCart(itemFromStore);
             }
+            else if (quantity < 0)
+            {
+                throw new UserException(EditCartItemStatus.NoItemFound,
+                    "Can't remove a negative number of items!");
+            }
             else
             {
                 _userService.MarketUser.Cart.EditCartItem(itemFromStore, -quantity);
