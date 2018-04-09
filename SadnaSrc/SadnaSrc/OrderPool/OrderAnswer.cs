@@ -22,5 +22,15 @@ namespace SadnaSrc.OrderPool
         {
 
         }
+
+        public OrderAnswer(WalleterStatus status, string answer) : base((int)status, answer)
+        {
+
+        }
+
+        public OrderAnswer(SupplyStatus status, string answer) : base((int)status, answer)
+        {
+
+        }
     }
 }

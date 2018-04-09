@@ -58,22 +58,7 @@ namespace SadnaSrc.OrderPool
 
         }
 
-        private void IsValidUserDetails()
-        {
-            if (UserName == null || UserAddress == null || CreditCard == null)
-            {
-                throw new OrderException(OrderStatus.InvalidNameOrAddress,"Cannot proceed with order if no valid user details has been given!");
-            }
-        }
-
-        private void IsValidUserDetails(string userName, string address,string creditCard)
-        {
-            if (userName == null || address == null || creditCard == null)
-            {
-                MarketLog.Log("OrderPool", "User entered name or address which is invalid by the system standards!");
-                throw new  OrderException(GiveDetailsStatus.InvalidNameOrAddress, "User entered invalid name or address into the order");
-            }
-        }
+        
         public MarketAnswer GiveDetails(string userName, string address, string creditCard)
         {
             MarketLog.Log("OrderPool","User entering name and address for later usage in market order. validating data ...");
@@ -169,6 +154,7 @@ namespace SadnaSrc.OrderPool
             {
                 IsValidUserDetails();
                 OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
+                CheckOrderItem(toBuy);
                 Order order = InitOrder();
                 orderId = order.GetOrderID();
                 order.AddOrderItem(toBuy);
@@ -190,13 +176,13 @@ namespace SadnaSrc.OrderPool
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoPaymentConnection, e.GetErrorMessage());
+                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoSupplyConnection, e.GetErrorMessage());
+                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
@@ -216,6 +202,7 @@ namespace SadnaSrc.OrderPool
             {
                 IsValidUserDetails();
                 OrderItem ticketToBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
+                CheckOrderItem(ticketToBuy);
                 Order order = InitOrder();
                 orderId = order.GetOrderID();
                 order.AddOrderItem(ticketToBuy);
@@ -234,13 +221,13 @@ namespace SadnaSrc.OrderPool
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoPaymentConnection, e.GetErrorMessage());
+                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoSupplyConnection, e.GetErrorMessage());
+                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
@@ -259,10 +246,8 @@ namespace SadnaSrc.OrderPool
             {
                 IsValidUserDetails();
                 OrderItem[] itemsToBuy = _buyer.CheckoutFromStore(store);
-                Order order = InitOrder();
-                orderId = order.GetOrderID();
-                for (int i = 0; i< itemsToBuy.Length;i++)
-                     order.AddOrderItem(itemsToBuy[i]);
+                CheckAllItems(itemsToBuy);
+                Order order = InitOrder(itemsToBuy);                
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
@@ -279,13 +264,13 @@ namespace SadnaSrc.OrderPool
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoPaymentConnection, e.GetErrorMessage());
+                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoSupplyConnection, e.GetErrorMessage());
+                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
@@ -304,10 +289,8 @@ namespace SadnaSrc.OrderPool
             {
                 IsValidUserDetails();
                 OrderItem[] itemsToBuy = _buyer.CheckoutAll();
-                Order order = InitOrder();
-                orderId = order.GetOrderID();
-                for (int i = 0; i < itemsToBuy.Length; i++)
-                    order.AddOrderItem(itemsToBuy[i]);
+                CheckAllItems(itemsToBuy);
+                Order order = InitOrder(itemsToBuy);
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
@@ -324,13 +307,13 @@ namespace SadnaSrc.OrderPool
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoPaymentConnection, e.GetErrorMessage());
+                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoSupplyConnection, e.GetErrorMessage());
+                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
@@ -362,13 +345,13 @@ namespace SadnaSrc.OrderPool
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoPaymentConnection, e.GetErrorMessage());
+                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.NoSupplyConnection, e.GetErrorMessage());
+                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
@@ -399,5 +382,38 @@ namespace SadnaSrc.OrderPool
             return refund;
         }
 
+        private void IsValidUserDetails()
+        {
+            if (UserName == null || UserAddress == null || CreditCard == null)
+            {
+                throw new OrderException(OrderStatus.InvalidNameOrAddress, "Cannot proceed with order if no valid user details has been given!");
+            }
+        }
+
+        private void IsValidUserDetails(string userName, string address, string creditCard)
+        {
+            if (userName == null || address == null || creditCard == null)
+            {
+                MarketLog.Log("OrderPool", "User entered name or address which is invalid by the system standards!");
+                throw new OrderException(GiveDetailsStatus.InvalidNameOrAddress, "User entered invalid name or address into the order");
+            }
+        }
+
+        private void CheckOrderItem(OrderItem item)
+        {
+            if (item.Name == null || item.Store == null || item.Quantity == 0)
+            {
+                MarketLog.Log("OrderPool", "User entered item details which are invalid by the system standards!");
+                throw new OrderException(OrderItemStatus.InvalidDetails, "User entered invalid item details");
+            }
+        }
+
+        private void CheckAllItems(OrderItem[] items)
+        {
+            foreach (var item in items)
+            {
+                CheckOrderItem(item);
+            }
+        }
     }
 }

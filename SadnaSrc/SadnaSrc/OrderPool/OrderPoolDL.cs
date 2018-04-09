@@ -111,10 +111,10 @@ namespace SadnaSrc.OrderPool
                 InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
                 
                 //TODO: add this after branch 3982 rebase
-                
+                /*
                 string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@dateParam" };
                 object[] values3 = { order.GetUserName(), item.Store, item.Name, "Immediate", order.GetDate().ToString("dd/MM/yyyy") };
-                InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames3, values3);
+                InsertTable("PurchaseHistory", "OrderID,Store,Name,Price,Quantity", valuesNames3, values3);*/
             }
         }
 
