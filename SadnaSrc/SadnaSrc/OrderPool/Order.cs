@@ -58,6 +58,7 @@ namespace SadnaSrc.OrderPool
 
         private DateTime ParseDate(string dateString)
         {
+
             int days= Int32.Parse(dateString.Substring(0,2));
             int months = Int32.Parse(dateString.Substring(3, 2));
             int years = Int32.Parse(dateString.Substring(6, 4));

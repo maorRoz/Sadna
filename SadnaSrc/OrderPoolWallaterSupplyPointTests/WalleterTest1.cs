@@ -36,7 +36,7 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             try
             {
-                Order order = new Order(123456, "Grove Street");
+                Order order = new Order(123456, "Big Smoke","Grove Street");
                 
                 paymentService.ProccesPayment(order, "12345678");
                 Assert.Fail();
@@ -56,7 +56,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-
             MarketYard.CleanSession();
         }
     }
