@@ -57,7 +57,7 @@ namespace UserSpotTests.UseCaseUnitTest
             Assert.AreEqual((int)EditCartItemStatus.Success, userServiceRegisteredSession.EditCartItem("X", "Health Potion", 5.0, 3).Status);
             item1.ChangeQuantity(3);
             Assert.AreEqual(item1, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0));
-            userServiceRegisteredSession.SignUp("MaorEditItem1", "no-where", "123");
+            userServiceRegisteredSession.SignUp("MaorEditItem1", "no-where", "123","12345678");
             Assert.AreEqual(item1, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0));
             AddItem2(userServiceRegisteredSession);
             Assert.AreEqual((int)EditCartItemStatus.Success, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, 2).Status);
@@ -77,7 +77,7 @@ namespace UserSpotTests.UseCaseUnitTest
             item2.ChangeQuantity(2);
             Assert.AreEqual(item1, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0));
             Assert.AreEqual(item2, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5));
-            userServiceRegisteredSession.SignUp("MaorEditItem2", "no-where", "123");
+            userServiceRegisteredSession.SignUp("MaorEditItem2", "no-where", "123","12345678");
             Assert.AreEqual((int)EditCartItemStatus.Success, userServiceRegisteredSession.EditCartItem("X", "Health Potion", 5.0, -1).Status);
             Assert.AreEqual((int)EditCartItemStatus.Success, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -2).Status);
             item1.ChangeQuantity(-1);
@@ -96,7 +96,7 @@ namespace UserSpotTests.UseCaseUnitTest
             Assert.AreEqual((int)EditCartItemStatus.Success, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -1).Status);
             item2.ChangeQuantity(-1);
             Assert.AreEqual(item2, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5));
-            userServiceRegisteredSession.SignUp("MaorEditItem3", "no-where", "123");
+            userServiceRegisteredSession.SignUp("MaorEditItem3", "no-where", "123","12345678");
             Assert.AreEqual(item1, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0));
             Assert.AreEqual(item2, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5));
             Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -1).Status);
@@ -114,7 +114,7 @@ namespace UserSpotTests.UseCaseUnitTest
             Assert.AreEqual((int)EditCartItemStatus.Success, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -1).Status);
             item2.ChangeQuantity(-1);
             Assert.AreEqual(item2, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5));
-            userServiceRegisteredSession.SignUp("MaorEditItem4", "no-where", "123");
+            userServiceRegisteredSession.SignUp("MaorEditItem4", "no-where", "123","12345678");
             Assert.AreEqual(item1, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("X", "Health Potion", 5.0));
             Assert.AreEqual(item2, userServiceRegisteredSession.MarketUser.Cart.SearchInCart("Y", "Health Potion", 0.5));
             Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -2).Status);
@@ -137,7 +137,7 @@ namespace UserSpotTests.UseCaseUnitTest
             AddItem1(userServiceRegisteredSession);
             Assert.AreEqual((int)EditCartItemStatus.NoItemFound, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -1).Status);
             Assert.AreEqual((int)EditCartItemStatus.NoItemFound, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -2).Status);
-            userServiceRegisteredSession.SignUp("MaorEditItem5", "no-where", "123");
+            userServiceRegisteredSession.SignUp("MaorEditItem5", "no-where", "123", "12345678");
             Assert.AreEqual((int)EditCartItemStatus.NoItemFound, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -1).Status);
             Assert.AreEqual((int)EditCartItemStatus.NoItemFound, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -2).Status);
             Assert.AreEqual((int)EditCartItemStatus.Success, userServiceRegisteredSession.EditCartItem("X", "Health Potion", 5.0, 3).Status);
@@ -150,7 +150,7 @@ namespace UserSpotTests.UseCaseUnitTest
             userServiceRegisteredSession = DoEnter();
             Assert.AreEqual((int)EditCartItemStatus.NoItemFound, userServiceRegisteredSession.EditCartItem("X", "Health Potion", 5.0, -1).Status);
             Assert.AreEqual((int)EditCartItemStatus.NoItemFound, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -2).Status);
-            userServiceRegisteredSession.SignUp("MaorEditItem6", "no-where", "123");
+            userServiceRegisteredSession.SignUp("MaorEditItem6", "no-where", "123", "12345678");
             Assert.AreEqual((int)EditCartItemStatus.NoItemFound, userServiceRegisteredSession.EditCartItem("X", "Health Potion", 5.0, -1).Status);
             Assert.AreEqual((int)EditCartItemStatus.NoItemFound, userServiceRegisteredSession.EditCartItem("Y", "Health Potion", 0.5, -2).Status);
             AddAllItems(userServiceRegisteredSession);

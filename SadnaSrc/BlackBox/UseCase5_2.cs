@@ -24,10 +24,10 @@ namespace BlackBox
 			_adminBridge = Driver.getBridge();
 			_signUpBridge1 = Driver.getBridge();
 			_signUpBridge1.EnterSystem();
-			_signUpBridge1.SignUp(userSoleStoreOwner, "mishol", userSoleStoreOwnerPass);
+			_signUpBridge1.SignUp(userSoleStoreOwner, "mishol", userSoleStoreOwnerPass,"12345678");
 			_signUpBridge2 = Driver.getBridge();
 			_signUpBridge2.EnterSystem();
-			_signUpBridge2.SignUp(userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass);
+			_signUpBridge2.SignUp(userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass, "12345678");
 			
 		}
 

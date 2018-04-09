@@ -23,9 +23,9 @@ namespace BlackBox
 			return _userService.EnterSystem();
 		}
 
-		public MarketAnswer SignUp(string name, string address, string password)
+		public MarketAnswer SignUp(string name, string address, string password, string creditCard)
 		{
-			return _userService.SignUp(name, address, password);
+			return _userService.SignUp(name, address, password, creditCard);
 		}
 
 		public MarketAnswer SignIn(string name, string password)

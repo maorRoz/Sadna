@@ -20,7 +20,7 @@ namespace BlackBox
 
 		public void SignInSucceeded()
 		{
-			SignUp("Shalom", "hatavor","852");
+			SignUp("Shalom", "hatavor","852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.Success , _bridgeSignIn.SignIn("Shalom", "852").Status);
 		}
@@ -29,7 +29,7 @@ namespace BlackBox
 
 		public void DidntEnterSystem()
 		{
-			SignUp("Shalom", "hatavor", "852");
+			SignUp("Shalom", "hatavor", "852", "12345678");
 			Assert.AreEqual((int)SignInStatus.DidntEnterSystem, _bridgeSignIn.SignIn("Shalom", "852").Status);
 		}
 
@@ -38,7 +38,7 @@ namespace BlackBox
 		public void SignInAlready()
 		{
 			_bridgeSignIn.EnterSystem();
-			SignUp("Shalom", "hatavor", "852");
+			SignUp("Shalom", "hatavor", "852", "12345678");
 			_bridgeSignIn.SignIn("Shalom", "852");
 			Assert.AreEqual((int)SignInStatus.SignedInAlready, _bridgeSignIn.SignIn("Shalom", "852").Status);
 		}
@@ -55,7 +55,7 @@ namespace BlackBox
 
 		public void UserNameGivenIsNull()
 		{
-			SignUp("Shalom", "hatavor", "852");
+			SignUp("Shalom", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NullEmptyDataGiven, _bridgeSignIn.SignIn(null, "852").Status);
 		}
@@ -64,7 +64,7 @@ namespace BlackBox
 
 		public void UserNameGivenIsEmpty()
 		{
-			SignUp("Shalom", "hatavor", "852");
+			SignUp("Shalom", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NullEmptyDataGiven, _bridgeSignIn.SignIn("", "852").Status);
 		}
@@ -73,7 +73,7 @@ namespace BlackBox
 
 		public void PasswordGivenIsNull()
 		{
-			SignUp("Shalom", "hatavor", "852");
+			SignUp("Shalom", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NullEmptyDataGiven, _bridgeSignIn.SignIn("Shalom", null).Status);
 		}
@@ -82,7 +82,7 @@ namespace BlackBox
 
 		public void PasswordGivenIsEmpty()
 		{
-			SignUp("Shalom", "hatavor", "852");
+			SignUp("Shalom", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NullEmptyDataGiven, _bridgeSignIn.SignIn("Shalom", "").Status);
 		}
@@ -91,7 +91,7 @@ namespace BlackBox
 
 		public void UserNamePasswordGivenAreNull()
 		{
-			SignUp("Shalom", "hatavor", "852");
+			SignUp("Shalom", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NullEmptyDataGiven, _bridgeSignIn.SignIn(null, null).Status);
 		}
@@ -100,7 +100,7 @@ namespace BlackBox
 
 		public void UserNamePasswordGivenAreEmpty()
 		{
-			SignUp("Shalom", "hatavor", "852");
+			SignUp("Shalom", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NullEmptyDataGiven, _bridgeSignIn.SignIn("", "").Status);
 		}
@@ -109,7 +109,7 @@ namespace BlackBox
 
 		public void FindUserWithErrorUserName2Letters1()
 		{
-			SignUp("shal", "hatavor", "852");
+			SignUp("shal", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("sarl", "852").Status);
 
@@ -119,7 +119,7 @@ namespace BlackBox
 
 		public void FindUserWithErrorUserName2Letters2()
 		{
-			SignUp("shal", "hatavor", "852");
+			SignUp("shal", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("rtal", "852").Status);
 
@@ -129,7 +129,7 @@ namespace BlackBox
 
 		public void FindUserWithErrorUserName2Letters3()
 		{
-			SignUp("shal", "hatavor", "852");
+			SignUp("shal", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("shor", "852").Status);
 
@@ -139,7 +139,7 @@ namespace BlackBox
 
 		public void FindUserWithErrorUserName1Letter1()
 		{
-			SignUp("shal", "hatavor", "852");
+			SignUp("shal", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("ahal", "852").Status);
 
@@ -149,7 +149,7 @@ namespace BlackBox
 
 		public void FindUserWithErrorUserName1Letter2()
 		{
-			SignUp("shal", "hatavor", "852");
+			SignUp("shal", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("saal", "852").Status);
 
@@ -159,7 +159,7 @@ namespace BlackBox
 
 		public void FindUserWithErrorUserName1Letter3()
 		{
-			SignUp("shal", "hatavor", "852");
+			SignUp("shal", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("shol", "852").Status);
 
@@ -169,7 +169,7 @@ namespace BlackBox
 
 		public void FindUserWithErrorUserName1Letter4()
 		{
-			SignUp("shal", "hatavor", "852");
+			SignUp("shal", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.MistakeTipGiven, _bridgeSignIn.SignIn("shar", "852").Status);
 
@@ -179,7 +179,7 @@ namespace BlackBox
 
 		public void FindUserWithErrorUserNameMoreThan2Letters1()
 		{
-			SignUp("shal", "hatavor", "852");
+			SignUp("shal", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NoUserFound, _bridgeSignIn.SignIn("saor", "852").Status);
 
@@ -190,18 +190,18 @@ namespace BlackBox
 
 		public void FindUserWithErrorUserNameMoreThan2Letters2()
 		{
-			SignUp("shal", "hatavor", "852");
+			SignUp("shal", "hatavor", "852", "12345678");
 			_bridgeSignIn.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NoUserFound, _bridgeSignIn.SignIn("horl", "852").Status);
 
 		}
 
 
-		private void SignUp(string name,string address, string password)
+		private void SignUp(string name,string address, string password, string creditCard)
 		{
 			_bridgeSignUp = Driver.getBridge();
 			_bridgeSignUp.EnterSystem();
-			_bridgeSignUp.SignUp(name,address,password);
+			_bridgeSignUp.SignUp(name,address,password,creditCard);
 		}
 
 		

@@ -110,7 +110,7 @@ namespace IntegrationTests
         {
             deletedUserSession = (UserService)marketSession.GetUserService();
             deletedUserSession.EnterSystem();
-            deletedUserSession.SignUp("DeleteMe", "no-where", "123");
+            deletedUserSession.SignUp("DeleteMe", "no-where", "123","12345678");
             ToSignIn(adminName, adminPass);
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             adminServiceSession.RemoveUser("DeleteMe");
@@ -129,7 +129,7 @@ namespace IntegrationTests
             adminServiceSession.RemoveUser(notAdminName);
             deletedUserSession2 = (UserService)marketSession.GetUserService();
             deletedUserSession2.EnterSystem();
-            Assert.AreEqual((int)SignUpStatus.Success, deletedUserSession2.SignUp(notAdminName,"no-where" ,notAdminPass).Status);
+            Assert.AreEqual((int)SignUpStatus.Success, deletedUserSession2.SignUp(notAdminName,"no-where" ,notAdminPass,"12345678").Status);
         }
 
         [TestMethod]

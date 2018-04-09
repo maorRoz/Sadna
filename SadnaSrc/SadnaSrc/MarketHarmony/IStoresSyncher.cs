@@ -12,9 +12,17 @@ namespace SadnaSrc.MarketHarmony
     //integration between OrderPool to StoreCenter 
     public interface IStoresSyncher
     {
+        /// <summary>
+        /// Close a lottery sale in store in case of lottery sold out
+        /// </summary>
         void CloseLottery(); // improve this
+        /// <summary>
+        /// Rmove <paramref name="purchased"/> from store stock
+        /// </summary>
         void RemoveProducts(OrderItem[] purchased);
-
+        /// <summary>
+        /// Validate that <paramref name="toBuy"/> is valid product to buy by the user
+        /// </summary>
         bool IsValid(OrderItem toBuy);
     }
 }
