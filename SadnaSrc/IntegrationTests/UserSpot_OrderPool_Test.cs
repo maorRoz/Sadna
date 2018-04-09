@@ -32,6 +32,10 @@ namespace IntegrationTests
             userBuyerHarmony = new UserBuyerHarmony(ref userServiceSession);
         }
 
+        /*
+         * CheckoutAll tests
+         */
+
         [TestMethod]
         public void CheckoutAllTest()
         {
@@ -80,14 +84,155 @@ namespace IntegrationTests
             }
         }
 
+        /*
+         * CheckoutFromStore tests
+         */
+
         [TestMethod]
-        public void TestMakeOrderFromCartSingleStore()
+        public void CheckoutSingleStoreTest()
+        {
+            try
+            {
+                string result = getSingleStoreItems("24");
+                string expected = "20 OCB, 24. ";
+
+                Assert.AreEqual(result, expected);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void CheckoutNonExistantStoreTest()
+        {
+            try
+            {
+                string result = getSingleStoreItems("The Blue Rock");
+                string expected = "";
+
+                Assert.AreEqual(result, expected);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void CheckoutStoreNotInOrderTest()
+        {
+            try
+            {
+                string result = getSingleStoreItems("Cluckin' Bell");
+                string expected = "";
+
+                Assert.AreEqual(result, expected);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        /*
+         * EmptyCart (all) tests
+         */
+
+        [TestMethod]
+        public void EmptyCartTest()
         {
             try
             {
                 userServiceSession.SignIn(user, pass);
-                OrderItem[] items = userBuyerHarmony.CheckoutFromStore("24");
-                Assert.AreEqual(1, items.Length);
+                userBuyerHarmony.EmptyCart();
+
+                Assert.AreEqual(0, userServiceSession.ViewCart().ReportList.Length);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void EmptyCartAlreadyEmptyTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(emptyUser, pass);
+                userBuyerHarmony.EmptyCart();
+
+                Assert.AreEqual(0, userServiceSession.ViewCart().ReportList.Length);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        /*
+         * EmptyCart (store) tests
+         */
+
+        [TestMethod]
+        public void EmptyCartSingleStoreTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                userBuyerHarmony.EmptyCart("The Red Rock");
+
+                Assert.AreEqual(1, userServiceSession.ViewCart().ReportList.Length);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void EmptyCartNonExistantStoreTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                userBuyerHarmony.EmptyCart("The Blue Rock");
+
+                Assert.AreEqual(3, userServiceSession.ViewCart().ReportList.Length);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void EmptyCartAlreadyEmptySingleStoreTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(emptyUser, pass);
+                userBuyerHarmony.EmptyCart("24");
+
+                Assert.AreEqual(0, userServiceSession.ViewCart().ReportList.Length);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void EmptyCartWithSingleStoreTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(singleItemUser, pass);
+                userBuyerHarmony.EmptyCart("24");
+
+                Assert.AreEqual(0, userServiceSession.ViewCart().ReportList.Length);
             }
             catch (MarketException)
             {
@@ -104,10 +249,26 @@ namespace IntegrationTests
             MarketYard.CleanSession();
         }
 
+        /*
+         * Private helper functions
+         */
+
         private string getItemsFromCart(string username, string password)
         {
             userServiceSession.SignIn(username, password);
             OrderItem[] items = userBuyerHarmony.CheckoutAll();
+            return getOrderString(items);
+        }
+
+        private string getSingleStoreItems(string store)
+        {
+            userServiceSession.SignIn(user, pass);
+            OrderItem[] items = userBuyerHarmony.CheckoutFromStore(store);
+            return getOrderString(items);
+        }
+
+        private string getOrderString(OrderItem[] items)
+        {
             Order o = orderServiceSession.InitOrder(items);
             OrderItem[] orderItems = o.GetItems().ToArray();
             string result = "";
