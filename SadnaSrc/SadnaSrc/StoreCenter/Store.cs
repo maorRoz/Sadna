@@ -380,6 +380,15 @@ namespace SadnaSrc.StoreCenter
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             return handler.DataLayer.GetHistory(this);
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType().Equals(this.GetType()))
+            {
+                return ((Store)obj).SystemId.Equals(SystemId);
+            }
+            return false;
+
+        }
     }
 }
 

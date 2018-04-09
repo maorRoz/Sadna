@@ -47,12 +47,15 @@ namespace SadnaSrc.Main
             }
 
             //TODO : delete this when The Right UseCase is implemented (Except the SystemAdmin since he is mandatory by constraint)
-            string[] thingsToInsertByForce = 
+            string[] thingsToInsertByForce =
             {
                 "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S1','X','Here 4','Active')",
                 "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S2','Y','Here 4','Active')",
                 "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S3','M','Here 4','Active')",
                 "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S4','Cluckin Bell','Los Santos','Active')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P100', 'BOX', 100, 'this is a plastic box')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P101', 'Golden BOX', 1000, 'this is a golden box')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P102', 'DeleteMy BOX', 10, 'this is a trush')",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",

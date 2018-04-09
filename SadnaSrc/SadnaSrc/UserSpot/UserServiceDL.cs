@@ -186,6 +186,7 @@ namespace SadnaSrc.UserSpot
             }
             return same >= -2;
         }
+        
         private string FindSimilar(string name)
         {
             string[] userNames = UserNamesInSystem();

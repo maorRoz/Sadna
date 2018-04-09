@@ -132,8 +132,13 @@ namespace SadnaSrc.StoreCenter
 
         public Store GetStore(string storeID)
         {
-            var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = '" + storeID +"'");
-            return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
+            using (var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = '" + storeID + "'")) {
+                while (dbReader.Read())
+                {
+                    return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
+                }
+                return null;
+            }
         }
 
         private string[] GetStoreStringValues(Store store)
@@ -146,7 +151,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + store.GetStringFromActive() + "'"
             };
         }
-        private string[] GetLotteryManagmentStringValues(LotterySaleManagmentTicket lotterySaleManagementTicket)
+        public string[] GetLotteryManagmentStringValues(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
             return new[]
             {
@@ -191,50 +196,64 @@ namespace SadnaSrc.StoreCenter
 
             return historyData.ToArray();
         }
-        internal StockListItem GetStockListItembyProductID(string product)
+        public StockListItem GetStockListItembyProductID(string product)
         {
             Product _product = GetProductID(product);
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             StockListItem stockListItem = new StockListItem(0, _product, null, 0, "");
-            var dbReader = SelectFromTableWithCondition("Stock", "*", "ProductSystemID = "+_product);
-            stockListItem.SystemId = dbReader.GetString(0);
-            stockListItem.Quantity = dbReader.GetInt32(2);
-            stockListItem.PurchaseWay = handler.GetPurchaseEnumString(dbReader.GetString(4));
+            string DiscountCode = "";
+            using (var dbReader = SelectFromTableWithCondition("Stock", "*", "ProductSystemID = " + _product + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    stockListItem.SystemId = dbReader.GetString(0);
+                    stockListItem.Quantity = dbReader.GetInt32(2);
+                    stockListItem.PurchaseWay = handler.GetPurchaseEnumString(dbReader.GetString(4));
 
-            string DiscountCode = dbReader.GetString(3);
-            var discountReader = SelectFromTableWithCondition("Discount", "*", "DiscountCode = " + DiscountCode);
-            Discount discount = new Discount(DiscountCode, 0, DateTime.Now, DateTime.Now, 0, false);
+                    DiscountCode = dbReader.GetString(3);
+                }
+            }
 
-            
-            discount.discountType = handler.GetdiscountTypeEnumString(discountReader.GetString(1));
-            discount.startDate = DateTime.Parse(discountReader.GetString(2));
-            discount.EndDate = DateTime.Parse(discountReader.GetString(3));
-            discount.DiscountAmount = discountReader.GetInt32(4);
-            discount.Percentages = discountReader.GetBoolean(5);
+            using (var discountReader = SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + DiscountCode + "'"))
+            {
+                Discount discount = new Discount(DiscountCode, 0, DateTime.Now, DateTime.Now, 0, false);
 
-            stockListItem.Discount = discount;
+                while (discountReader.Read())
+                {
+                    discount.discountType = handler.GetdiscountTypeEnumString(discountReader.GetString(1));
+                    discount.startDate = DateTime.Parse(discountReader.GetString(2));
+                    discount.EndDate = DateTime.Parse(discountReader.GetString(3));
+                    discount.DiscountAmount = discountReader.GetInt32(4);
+                    discount.Percentages = discountReader.GetBoolean(5);
+                }
+                stockListItem.Discount = discount;
 
-            
+            }
             return stockListItem;
         }
 
-        internal void AddStore(Store temp)
+        public void AddStore(Store temp)
         {
             InsertTable("Store", "SystemID, Name, Address, IsActive",
                 GetStoreStringValues(temp), GetStoreArray(temp));
         }
 
-        internal void AddLotteryTicket(LotteryTicket lottery)
+        public void AddLotteryTicket(LotteryTicket lottery)
         {
             InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, Status",
                 GetTicketStringValues(lottery), GetTicketValuesArray(lottery));
         }
 
-        internal Product GetProductID(string iD)
+        public Product GetProductID(string iD)
         {
-            var productReader = SelectFromTableWithCondition("Products", "*", "ProductSystemID = " + iD);
-            return new Product(iD, productReader.GetString(1), productReader.GetInt32(2), productReader.GetString(3));
-            
+            using (var productReader = SelectFromTableWithCondition("Products", "*", "SystemID = '" + iD + "'"))
+            {
+                while (productReader.Read()) { 
+                    return new Product(iD, productReader.GetString(1), productReader.GetInt32(2), productReader.GetString(3));
+               }
+            }
+            return null;
+
         }
 
         public string[] GetHistory(Store store)
@@ -258,14 +277,14 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        internal void AddDiscount(Discount discount)
+        public void AddDiscount(Discount discount)
         {
             InsertTable("Discount", "DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount,Percentages ",
                 GetDiscountStringValues(discount), GetDiscountValuesArray(discount));
         }
 
         
-        internal void AddStockListItemToDataBase(StockListItem stockListItem)
+        public void AddStockListItemToDataBase(StockListItem stockListItem)
         {
             AddDiscount(stockListItem.Discount);
             AddProductToDatabase(stockListItem.Product);
@@ -275,17 +294,17 @@ namespace SadnaSrc.StoreCenter
 
        
 
-        internal void RemoveLottery(LotterySaleManagmentTicket lotteryManagment)
+        public void RemoveLottery(LotterySaleManagmentTicket lotteryManagment)
         {
-            DeleteFromTable("LotteryTable", "SystemID = " + lotteryManagment.SystemID);
+            DeleteFromTable("LotteryTable", "SystemID = '" + lotteryManagment.SystemID + "'");
         }
 
-        internal void RemoveStockListItem(StockListItem stockListItem)
+        public void RemoveStockListItem(StockListItem stockListItem)
         {
-            DeleteFromTable("Stock", "StockID = " + stockListItem.SystemId);
+            DeleteFromTable("Stock", "StockID = '" + stockListItem.SystemId + "'");
         }
 
-        internal void EditDiscountInDatabase(Discount discount)
+        public void EditDiscountInDatabase(Discount discount)
         {
             string[] columnNames =
             {
@@ -299,8 +318,8 @@ namespace SadnaSrc.StoreCenter
             UpdateTable("Stock", "DiscountCode = '" + discount.discountCode + "'", columnNames,
                 GetDiscountStringValues(discount), GetDiscountValuesArray(discount));
         }
-
-        internal void EditStore(Store store)
+        
+        public void EditStore(Store store)
         {
 
             string[] columnNames =
@@ -315,14 +334,14 @@ namespace SadnaSrc.StoreCenter
         }
 
 
-        
 
-        internal void RemoveProduct(Product product)
+
+        public void RemoveProduct(Product product)
         {
-            DeleteFromTable("Products", "SystemID" + product.SystemId);
+            DeleteFromTable("Products", "SystemID = '" + product.SystemId+"'");
         }
 
-        internal void EditStockInDatabase(StockListItem stockListItem)
+        public void EditStockInDatabase(StockListItem stockListItem)
         {
             string[] columnNames =
             {
@@ -335,28 +354,29 @@ namespace SadnaSrc.StoreCenter
             UpdateTable("Stock", "StockID = '" + stockListItem.SystemId + "'", columnNames,
                 GetStockListItemStringValues(stockListItem), GetStockListItemArray(stockListItem));
         }
-        
 
-        internal LinkedList<Store> GetAllActiveStores() // all active stores
+
+        public LinkedList<Store> GetAllActiveStores() // all active stores
         {
             LinkedList<Store> result = new LinkedList<Store>();
-            var dbReader = SelectFromTableWithCondition("Store", "*", "IsActive = Active");
-            while (dbReader.Read())
-            {
-                Store store = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
-                result.AddLast(store);
+            using (var dbReader = SelectFromTableWithCondition("Store", "*", "IsActive = 'Active'")) { 
+                while (dbReader.Read())
+                {
+                    Store store = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
+                    result.AddLast(store);
+                }
             }
             return result;
         }
 
-        internal void RemoveDiscount(Discount discount)
+        public void RemoveDiscount(Discount discount)
         {
-            DeleteFromTable("Discount", "DiscountCode = " + discount.discountCode);
+            DeleteFromTable("Discount", "DiscountCode = '" + discount.discountCode + "'");
         }
 
 
 
-        internal void AddLottery(LotterySaleManagmentTicket lotteryManagment)
+        public void AddLottery(LotterySaleManagmentTicket lotteryManagment)
         {
             InsertTable("LotteryTable", "SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, StartDate,EndDate,isActive ",
                 GetLotteryManagmentStringValues(lotteryManagment), GetLotteryManagmentValuesArray(lotteryManagment));
@@ -367,28 +387,34 @@ namespace SadnaSrc.StoreCenter
 
         
 
-        internal LinkedList<string> GetAllStoreProductsID(object systemID)
+        public LinkedList<string> GetAllStoreProductsID(object systemID)
         {
             LinkedList<string> result = new LinkedList<string>();
-            var dbReader = SelectFromTableWithCondition("Stock", "ProductSystemID", "StockID = " +systemID);
-            while (dbReader.Read())
-            {
-                result.AddLast(dbReader.GetString(0));
+            using (var dbReader = SelectFromTableWithCondition("Stock", "ProductSystemID", "StockID = '" + systemID + "'")) { 
+                while (dbReader.Read())
+                {
+                    result.AddLast(dbReader.GetString(0));
+                }
             }
             return result;
         }
 
-        internal LotterySaleManagmentTicket GetLotteryByProductID(string productID)
+        public LotterySaleManagmentTicket GetLotteryByProductID(string productID)
         {
             Product P = GetProductID(productID);
-            var dbReader = SelectFromTableWithCondition("LotteryTable", "*", "ProductSystemID = " + productID);
-            LotterySaleManagmentTicket lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0), P, DateTime.Parse(dbReader.GetString(4)), DateTime.Parse(dbReader.GetString(5)));
-            lotteryManagement.TotalMoneyPayed = dbReader.GetInt32(3);
-            lotteryManagement.IsActive = dbReader.GetBoolean(6);
+            LotterySaleManagmentTicket lotteryManagement = null;
+            using (var dbReader = SelectFromTableWithCondition("LotteryTable", "*", "ProductSystemID = '" + productID + "'"))
+            {
+                while (dbReader.Read()) { 
+                    lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0), P, DateTime.Parse(dbReader.GetString(4)), DateTime.Parse(dbReader.GetString(5)));
+                    lotteryManagement.TotalMoneyPayed = dbReader.GetInt32(3);
+                    lotteryManagement.IsActive = dbReader.GetBoolean(6);
+              }
+            }
             return lotteryManagement;
         }
 
-        internal void EditLotteryInDatabase(LotterySaleManagmentTicket lotteryManagment)
+        public void EditLotteryInDatabase(LotterySaleManagmentTicket lotteryManagment)
         {
             string[] columnNames =
             {
