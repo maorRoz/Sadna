@@ -32,8 +32,6 @@ namespace SadnaSrc.Main
         Success,
         InvalidUser,
         InvalidNameOrAddress,
-        NoSupplyConnection,
-        NoPaymentConnection,
         NoOrderWithID,
 
     }
@@ -42,6 +40,7 @@ namespace SadnaSrc.Main
     {
         Success,
         NoOrderItemInOrder,
-        ItemAlreadyInOrder
+        ItemAlreadyInOrder,
+        InvalidDetails
     }
 }

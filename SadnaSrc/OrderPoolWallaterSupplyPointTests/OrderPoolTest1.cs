@@ -55,16 +55,23 @@ namespace OrderPoolWallaterSupplyPointTests
         }
 
         [TestMethod]
+        public void TestEmptyOrder()
+        {
+            var order = orderService.InitOrder();
+            int id = order.GetOrderID();
+            Assert.AreEqual(0.0,
+                orderService.GetOrder(id).GetPrice());
+        }
+
+        [TestMethod]
         public void TestOrderWithOneItem()
         {
-            OrderItem[] wrap = {item1};
+            OrderItem[] wrap = {item2};
             var order = orderService.InitOrder(wrap);
             int id = order.GetOrderID();
             Assert.AreEqual(7.0,
-                orderService.FindOrderItemInOrder(id, "#9 Large" , "Cluckin Bell").Price);
+                orderService.FindOrderItemInOrder(id, "Cluckin Bell" , "#9 Large").Price);
         }
-
-        //TODO: add more here
 
         [TestMethod]
         public void TestOrderWithItems()
@@ -76,28 +83,70 @@ namespace OrderPoolWallaterSupplyPointTests
                 orderService.GetOrder(id).GetPrice());
         }
 
-       
-
-
-        /*
-        * Interface Tests
-        */
-
+        [TestMethod]
+        public void TestTwoOrders()
+        {
+            OrderItem[] wrap1 = { item1 };
+            var order1 = orderService.InitOrder(wrap1);
+            OrderItem[] wrap2 = { item2, item3 };
+            var order2 = orderService.InitOrder(wrap2);
+            Assert.AreEqual(2,orderService.Orders.Count);
+        }
 
         /*
          * DB Tests
          */
         [TestMethod]
-        public void TestDB()
+        public void TestGetOrderFromDB1()
         {
             OrderItem[] wrap = { item1, item2, item3 };
             var order = orderService.InitOrder(wrap);
             int id = order.GetOrderID();
-
-            orderService.SaveToDB();
+            orderService.SaveOrderToDB(order);
             Assert.AreEqual(25.50,
                 orderService.GetOrderFromDB(id).GetPrice());
         }
+
+        [TestMethod]
+        public void TestGetOrderFromDB2()
+        {
+            OrderItem[] wrap1 = { item1 };
+            var order1 = orderService.InitOrder(wrap1);
+            OrderItem[] wrap2 = { item2, item3 };
+            var order2 = orderService.InitOrder(wrap2);
+            orderService.SaveToDB();
+            double price1 = orderService.GetOrderFromDB(order1.GetOrderID()).GetPrice();
+            double price2 = orderService.GetOrderFromDB(order2.GetOrderID()).GetPrice();
+            Assert.IsTrue(price1 < price2);
+
+        }
+
+        [TestMethod]
+        public void TestRemoveOrderFromDB2()
+        {
+            OrderItem[] wrap1 = { item1 };
+            var order1 = orderService.InitOrder(wrap1);
+            int id = order1.GetOrderID();
+            orderService.SaveToDB();
+            orderService.RemoveOrderFromDB(id);
+            Assert.AreEqual(null,
+                orderService.GetOrderFromDB(id));
+
+        }
+        /*
+        * Interface Tests
+        */
+        //TODO: Test wonk work until Rebase
+        [TestMethod]
+        public void TestImmediateBuy()
+        {
+            orderService.LoginBuyer("Big Smoke","Grove Street");
+            MarketAnswer ans = orderService.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.0);
+            Assert.AreEqual((int)OrderStatus.Success,ans.Status);
+
+        }
+
+
 
 
 
