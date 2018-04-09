@@ -20,17 +20,17 @@ namespace BlackBox
 		{
 			if (real != null)
 			{
-				real.EnterSystem();
+				return real.EnterSystem();
 			}
 
 			throw new NotImplementedException();
 		}
 
-		public MarketAnswer SignUp(string name, string address, string password)
+		public MarketAnswer SignUp(string name, string address, string password, string creditCard)
 		{
 			if (real != null)
 			{
-				real.SignUp(name,address,password);
+				return real.SignUp(name,address,password,creditCard);
 			}
 			throw new NotImplementedException();
 		}
@@ -39,7 +39,7 @@ namespace BlackBox
 		{
 			if (real != null)
 			{
-				real.SignIn(name, password);
+				return real.SignIn(name, password);
 			}
 			throw new NotImplementedException();
 		}
@@ -48,7 +48,7 @@ namespace BlackBox
 		{
 			if (real != null)
 			{
-				real.ViewCart();
+				return real.ViewCart();
 			}
 		
 			throw new NotImplementedException();
@@ -58,7 +58,7 @@ namespace BlackBox
 		{
 			if (real != null)
 			{
-				real.EditCartItem(store, product, unitPrice, quantity);
+				return real.EditCartItem(store, product, unitPrice, quantity);
 			}
 			throw new NotImplementedException();
 		}
@@ -67,7 +67,7 @@ namespace BlackBox
 		{
 			if (real != null)
 			{
-				real.RemoveFromCart(store, product, unitPrice);
+				return real.RemoveFromCart(store, product, unitPrice);
 			}
 			throw new NotImplementedException();
 		}
@@ -78,7 +78,10 @@ namespace BlackBox
 			{
 				real.CleanSession();
 			}
-			throw new NotImplementedException();
+			else
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		public void CleanMarket()
@@ -87,14 +90,17 @@ namespace BlackBox
 			{
 				real.CleanMarket();
 			}
-			throw new NotImplementedException();
+			else
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		public MarketAnswer RemoveUser(string userName)
 		{
 			if (real != null)
 			{
-				real.RemoveUser(userName);
+				return real.RemoveUser(userName);
 			}
 			throw new NotImplementedException();
 		}
@@ -105,14 +111,17 @@ namespace BlackBox
 			{
 				real.GetAdminService();
 			}
-			throw new NotImplementedException();
+			else
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		public MarketAnswer ViewPurchaseHistoryByUser(string userName)
 		{
 			if (real != null)
 			{
-				real.ViewPurchaseHistoryByUser(userName);
+				return real.ViewPurchaseHistoryByUser(userName);
 			}
 			throw new NotImplementedException();
 		}
@@ -121,7 +130,7 @@ namespace BlackBox
 		{
 			if (real != null)
 			{
-				real.ViewPurchaseHistoryByStore(storeName);
+				return real.ViewPurchaseHistoryByStore(storeName);
 			}
 			throw new NotImplementedException();
 		}
@@ -132,14 +141,17 @@ namespace BlackBox
 			{
 				real.GetStoreService();
 			}
-			throw new NotImplementedException();
+			else
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		public MarketAnswer OpenStore(string name, string store)
 		{
 			if (real != null)
 			{
-				real.OpenStore(name, store);
+				return real.OpenStore(name, store);
 			}
 			throw new NotImplementedException();
 		}
