@@ -32,7 +32,7 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void TestMakeOrderFromcart()
+        public void TestMakeOrderFromCart()
         {
             try
             {
@@ -48,14 +48,40 @@ namespace IntegrationTests
             }
         }
 
-        [TestCleanup]
-        public void UserAdminTestCleanUp()
+        [TestMethod]
+        public void TestMakeOrderFromCartSeveralItems()
         {
-            userServiceSession.CleanSession();
+            try
+            {
+                Product p1 = new Product("S1", "Bamba", 6, "munch");
+                Product p2 = new Product("S2", "OCB", 10, "accessories");
+                userShopperHarmony.AddToCart(p1, "The Red Rock", 3);
+                userShopperHarmony.AddToCart(p2, "24", 2);
+                OrderItem[] items = userBuyerHarmony.CheckoutAll();
+                Order o = orderServiceSession.InitOrder(items);
+                OrderItem[] orderItems = o.GetItems().ToArray();
+                string result = "";
+                for (int i=0;i<orderItems.Length;i++)
+                {
+
+                    result += "" + orderItems[i].Price + " " + orderItems[i].Name + ", " + orderItems[i].Store + ". ";
+                }
+                string expected = "20 OCB, 24. 18 Bamba, The Red Rock. ";
+
+                Assert.AreEqual(result,expected);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestCleanup]
+        public void UserOrderTestCleanUp()
+        {
+            userServiceSession.CleanGuestSession();
             orderServiceSession.CleanSession();
-            //storeServiceSession.CleanSession();
             userBuyerHarmony.CleanSession();
-            //userShopperHarmony.
             MarketYard.CleanSession();
         }
     }
