@@ -42,6 +42,26 @@ namespace SadnaSrc.Walleter
 
         }
 
+        public void Refund(double sum, string creditCardetails,string username)
+        {
+            if (sock == null)
+            {
+                throw new WalleterException(WalleterStatus.NoPaymentSystem, "Failed, an error in the payment system occured.");
+            }
+            MarketLog.Log("Walleter", "Attempting to make a refund for user: " + username );
+            if (CheckCreditCard(creditCardetails))
+            {
+                if (sock.ProccessPayment(creditCardetails,  -1 * sum))
+                {
+                    MarketLog.Log("Walleter", "Refund for user: "+ username + " was completed !");
+                    return;
+                }
+                throw new WalleterException(WalleterStatus.PaymentSystemError, "Failed, an error in the payment system occured.");
+            }
+            throw new WalleterException(WalleterStatus.InvalidCreditCardSyntax, "Failed, Invalid credit card details..");
+
+        }
+
         public bool CheckCreditCard(string details)
         {
             int x;
