@@ -15,13 +15,15 @@ namespace SadnaSrc.OrderPool
         public Order FindOrder(int orderId)
         {
             Order order = null;
-            var dbReader = SelectFromTableWithCondition("Orders", "*", "OrderID = " + orderId + "");
-            while (dbReader.Read())
+            using (var dbReader = SelectFromTableWithCondition("Orders", "*", "OrderID = " + orderId + ""))
             {
-                if (dbReader.GetValue(0) != null)
+                while (dbReader.Read())
                 {
-                    order = new Order(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3)
-                    , dbReader.GetString(4),GetAllItems(orderId));
+                    if (dbReader.GetValue(0) != null)
+                    {
+                        order = new Order(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3)
+                            , dbReader.GetString(4), GetAllItems(orderId));
+                    }
                 }
             }
             return order;
@@ -30,14 +32,17 @@ namespace SadnaSrc.OrderPool
         public List<Order> GetAllOrders()
         {
             List<Order> orders = new List<Order>();
-            var dbReader = SelectFromTable("Orders", "*");
-            while (dbReader.Read())
+            using (var dbReader = SelectFromTable("Orders", "*"))
             {
-                if (dbReader.GetValue(0) != null)
+                while (dbReader.Read())
                 {
-                    orders.Add( new Order(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3)
-                        , dbReader.GetString(4), GetAllItems(dbReader.GetInt32(0))));
+                    if (dbReader.GetValue(0) != null)
+                    {
+                        orders.Add(new Order(dbReader.GetInt32(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3)
+                            , dbReader.GetString(4), GetAllItems(dbReader.GetInt32(0))));
+                    }
                 }
+
             }
             return orders;
         }
@@ -45,12 +50,14 @@ namespace SadnaSrc.OrderPool
         public List<OrderItem> GetAllItems(int orderId)
         {
             List<OrderItem> list = new List<OrderItem>();
-            var dbReader = SelectFromTableWithCondition("OrderItem", "*", "OrderID = " + orderId + "");
-            while (dbReader.Read())
+            using (var dbReader = SelectFromTableWithCondition("OrderItem", "*", "OrderID = " + orderId + ""))
             {
-                if (dbReader.GetValue(0) != null)
+                while (dbReader.Read())
                 {
-                    list.Add(new OrderItem(dbReader.GetString(1),dbReader.GetString(2),dbReader.GetDouble(3), dbReader.GetInt32(4)));
+                    if (dbReader.GetValue(0) != null)
+                    {
+                        list.Add(new OrderItem(dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4)));
+                    }
                 }
             }
             return list;
@@ -58,15 +65,16 @@ namespace SadnaSrc.OrderPool
 
         public OrderItem FindOrderItemInOrder(int orderId, string store,string name)
         {
-            var dbReader = SelectFromTableWithCondition("OrderItem", "*", "OrderID = " + orderId + " AND "+
-                                                                          "Store = '" + store + "' AND "+
-                                                                          "Name = '"+ name + "'");
-            while (dbReader.Read())
-            {
-                if (dbReader.GetValue(0) != null)
+            using (var dbReader = SelectFromTableWithCondition("OrderItem", "*", "OrderID = " + orderId + " AND " +
+                                                                          "Store = '" + store + "' AND " +
+                                                                          "Name = '" + name + "'"))
+            {    while (dbReader.Read())
                 {
-                    return new OrderItem(dbReader.GetString(1),dbReader.GetString(2),dbReader.GetDouble(3), dbReader.GetInt32(4));
-                    
+                    if (dbReader.GetValue(0) != null)
+                    {
+                        return new OrderItem(dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4));
+
+                    }
                 }
             }
             return null;
@@ -75,14 +83,17 @@ namespace SadnaSrc.OrderPool
         public List<OrderItem> FindOrderItemsFromStore(string store)
         {
             List<OrderItem> res = new List<OrderItem>();
-            var dbReader = SelectFromTableWithCondition("OrderItem", "*", "Store = '" + store + "'");
-            while (dbReader.Read())
+            using (var dbReader = SelectFromTableWithCondition("OrderItem", "*", "Store = '" + store + "'"))
             {
-                if (dbReader.GetValue(0) != null)
+                while (dbReader.Read())
                 {
-                    res.Add(new OrderItem(dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4)));
+                    if (dbReader.GetValue(0) != null)
+                    {
+                        res.Add(new OrderItem(dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4)));
 
+                    }
                 }
+
             }
             return res;
         }
