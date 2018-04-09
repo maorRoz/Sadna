@@ -11,35 +11,37 @@ namespace SadnaSrc.UserSpot
     {
         public string Name { get; private set; }
         public string Address { get; private set; }
-        private string password;
+        private string _password;
+        public string CreditCard { get; private set; }
 
-        private void InitiateRegisteredUser(string name, string address, string password, CartItem[] savedCart)
+        private void InitiateRegisteredUser(string name, string address, string password, string creditCard, CartItem[] savedCart)
         {
             Name = name;
             Address = address;
-            this.password = password;
+            _password = password;
+            CreditCard = creditCard;
             Cart.EnableCartSave();
             Cart.LoadCart(savedCart);
         }
-        public RegisteredUser(int systemID,string name,string address,string password,CartItem[] guestCart) 
+        public RegisteredUser(int systemID,string name,string address,string password, string creditCard,CartItem[] guestCart) 
             : base(systemID)
         {
-            InitiateRegisteredUser(name, address, password, guestCart);
+            InitiateRegisteredUser(name, address, password, creditCard, guestCart);
             PolicyService.AddStatePolicy(StatePolicy.State.RegisteredUser);
 
         }
 
-        public RegisteredUser(int loadedSystemID, string loadednName, string loadedAddress,
-            string loadedPassword, CartItem[] loadedCart, StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions) 
+        public RegisteredUser(int loadedSystemID, string loadednName, string loadedAddress,string loadedPassword,string loadedcreditCard,
+            CartItem[] loadedCart, StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions) 
             : base(loadedSystemID)
         {
-            InitiateRegisteredUser(loadednName, loadedAddress, loadedPassword, loadedCart);
+            InitiateRegisteredUser(loadednName, loadedAddress, loadedPassword, loadedcreditCard, loadedCart);
             PolicyService.LoadPolicies(loadedStates,loadedStorePermissions);
         }
 
         public override object[] ToData()
         {
-            object[] ret = { SystemID, Name, Address, password };
+            object[] ret = { SystemID, Name, Address, _password, CreditCard };
             return ret;
         }
 

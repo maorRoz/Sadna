@@ -48,7 +48,7 @@ namespace SadnaSrc.UserSpot
 
         public virtual object[] ToData()
         {
-            object[] ret = {SystemID, null, null, null};
+            object[] ret = {SystemID, null, null, null,null};
             return ret;
         }
     }

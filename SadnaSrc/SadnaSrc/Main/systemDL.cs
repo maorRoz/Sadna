@@ -56,12 +56,12 @@ namespace SadnaSrc.Main
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",
-                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70')",
-                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (2,'Arik2','H3','202cb962ac59075b964b07152d234b70')",
-                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (3,'Arik3','H3','202cb962ac59075b964b07152d234b70')",
-                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (4,'Big Smoke','Los Santos','202cb962ac59075b964b07152d234b70')",
-                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (5,'CJ','Los Santos','202cb962ac59075b964b07152d234b70')",
-                "INSERT INTO User (SystemID,Name,Address,Password) VALUES (6,'Ryder','Los Santos','202cb962ac59075b964b07152d234b70')",
+                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (2,'Arik2','H3','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (3,'Arik3','H3','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (4,'Big Smoke','Los Santos','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (5,'CJ','Los Santos','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (6,'Ryder','Los Santos','202cb962ac59075b964b07152d234b70','12345678')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
@@ -131,6 +131,7 @@ namespace SadnaSrc.Main
                                     [Name]          TEXT,
                                     [Address]       TEXT,
                                     [Password]      TEXT,
+                                    [CreditCard]    TEXT,
                                     PRIMARY KEY([SystemID])
                                     )";
         }

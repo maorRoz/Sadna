@@ -57,19 +57,19 @@ namespace SadnaSrc.UserSpot
 
             }
         }
-        public RegisteredUser RegisterUser(string name, string address, string password, CartItem[] guestCart)
+        public RegisteredUser RegisterUser(string name, string address, string password, string creditCard, CartItem[] guestCart)
         {
             if (IsUserNameExist(name))
             {
                 throw new UserException(SignUpStatus.TakenName,"register action has been requested while there" +
                                         " is already a User with the given name in the system!");
             }
-            string[] columnNames = { "Name" , "Address" , "Password" };
-            string[] valuesNames = {"@name", "@address", "@password"};
-            object[] values = {name, address, password};
+            string[] columnNames = { "Name" , "Address" , "Password","CreditCard" };
+            string[] valuesNames = {"@name", "@address", "@password","@card"};
+            object[] values = {name, address, password,creditCard};
             UpdateTable("User","SystemID = "+SystemID, columnNames ,valuesNames,values);
             SaveCartItem(guestCart);
-            return new RegisteredUser(SystemID, name,address,password,guestCart);
+            return new RegisteredUser(SystemID, name,address,password,creditCard,guestCart);
         }
         public void SaveUserStatePolicy(StatePolicy policy)
         {
@@ -147,8 +147,8 @@ namespace SadnaSrc.UserSpot
         }
         public void SaveUser(User user)
         {
-            InsertTable("User", "SystemID,Name,Address,Password",
-                new [] { "@idParam", "@nameParam", "@addressParam", "@passParam" }, user.ToData());
+            InsertTable("User", "SystemID,Name,Address,Password,CreditCard",
+                new [] { "@idParam", "@nameParam", "@addressParam", "@passParam","@creditParam" }, user.ToData());
         }
 
         private string[] UserNamesInSystem()
@@ -213,7 +213,7 @@ namespace SadnaSrc.UserSpot
             {
                 while (dbReader.Read())
                 {
-                    return new object[] {dbReader.GetInt32(0), dbReader.GetString(2)};
+                    return new object[] {dbReader.GetInt32(0), dbReader.GetString(2),dbReader.GetString(4)};
                 }
 
                 string similarName = FindSimilar(name);
@@ -235,7 +235,7 @@ namespace SadnaSrc.UserSpot
             SaveCartItem(guestCart);
 
             return new RegisteredUser(SystemID,name,(string) loadedUserIdAndAddress[1],
-                password, LoadCartItems(), LoadUserStatePolicy(), LoadUserStorePolicies());
+                password,(string) loadedUserIdAndAddress[2], LoadCartItems(), LoadUserStatePolicy(), LoadUserStorePolicies());
         }
 
         public void RemoveCart()

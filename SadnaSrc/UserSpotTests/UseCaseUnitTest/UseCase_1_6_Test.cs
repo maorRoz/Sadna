@@ -54,7 +54,7 @@ namespace UserSpotTests.UseCaseUnitTest
             Assert.AreEqual((int)ViewCartStatus.Success, userServiceRegisteredSession.ViewCart().Status);
             Assert.IsTrue(userServiceRegisteredSession.ViewCart().ReportList.SequenceEqual(expected));
             Assert.IsTrue(userServiceRegisteredSession.ViewCart().ReportList.SequenceEqual(expected));
-            userServiceRegisteredSession.SignUp("MaorViewCart1", "no-where", "123");
+            userServiceRegisteredSession.SignUp("MaorViewCart1", "no-where", "123","12345678");
             AddItem4(userServiceRegisteredSession);
             Assert.AreEqual((int)ViewCartStatus.Success, userServiceRegisteredSession.ViewCart().Status);
             Assert.IsTrue(userServiceRegisteredSession.ViewCart().ReportList.SequenceEqual(expected));

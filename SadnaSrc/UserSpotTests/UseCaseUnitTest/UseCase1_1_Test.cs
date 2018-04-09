@@ -34,7 +34,7 @@ namespace UserSpotTests.UseCaseUnitTest
         [TestMethod]
         public void GuestDataTest()
         {
-            object[] expectedData = { generatedGuest.SystemID, null, null, null };
+            object[] expectedData = { generatedGuest.SystemID, null, null, null,null };
             Assert.IsTrue(expectedData.SequenceEqual(generatedGuest.ToData()));
         }
 

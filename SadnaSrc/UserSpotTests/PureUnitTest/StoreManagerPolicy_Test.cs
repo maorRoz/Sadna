@@ -26,7 +26,7 @@ namespace UserSpotTests.PureUnitTest
         public void MarketBuilder()
         {
             marketSession = MarketYard.Instance;
-            DoSignUp(promoteName, "no-where", promotePassword);
+            DoSignUp(promoteName, "no-where", promotePassword, "12345678");
             userServiceSignInSession = null;
             userServiceSignInSession2 = null;
         }
@@ -563,11 +563,11 @@ namespace UserSpotTests.PureUnitTest
             userServiceSignInSession2.EnterSystem();
             Assert.AreEqual((int)SignInStatus.Success, userServiceSignInSession2.SignIn(name, password).Status);
         }
-        private void DoSignUp(string name, string address, string password)
+        private void DoSignUp(string name, string address, string password,string creditCard)
         {
             userServiceSignUpSession = (UserService)marketSession.GetUserService();
             userServiceSignUpSession.EnterSystem();
-            Assert.AreEqual((int)SignUpStatus.Success, userServiceSignUpSession.SignUp(name, address, password).Status);
+            Assert.AreEqual((int)SignUpStatus.Success, userServiceSignUpSession.SignUp(name, address, password, creditCard).Status);
 
         }
     }

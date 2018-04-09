@@ -13,7 +13,7 @@ namespace SadnaSrc.UserSpot
 
         public string Store { get; }
 
-        public int Quantity { get; private set; }
+        public int Quantity { get; set; }
         public double UnitPrice { get; }
 
         public double FinalPrice => UnitPrice * Quantity;
