@@ -41,6 +41,21 @@ namespace SadnaSrc.StoreCenter
         {
             DataLayer.AddStore(temp);
         }
+
+        public string[] GetStoreInfo(string store)
+        {
+            return DataLayer.GetStoreInfo(store);
+        }
+
+        public string[] GetStoreStockInfo(string store)
+        {
+            return DataLayer.GetStoreStockInfo(store);
+        }
+
+        public Product GetProductFromStore(string store, string productName, int quantity)
+        {
+            return DataLayer.GetProductFromStore(store, productName, quantity);
+        }
         public string PrintEnum(LotteryTicketStatus status)
         {
             switch (status)

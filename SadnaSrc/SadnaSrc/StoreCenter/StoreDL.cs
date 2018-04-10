@@ -483,6 +483,49 @@ namespace SadnaSrc.StoreCenter
             return result;
         }
 
+        public string[] GetStoreInfo(string store)
+        {
+            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Store = '"+store +" AND Status = 'Active'"))
+            {
+                while (dbReader.Read())
+                {
+                    return new [] {dbReader.GetString(1), dbReader.GetString(2)};
+
+                }
+            }
+            throw new StoreException(ViewStoreStatus.NoStore,"There is no active store by the name of " +store);
+        }
+
+        //TODO: fix this
+        public string[] GetStoreStockInfo(string store)
+        {
+            using (var dbReader = SelectFromTableWithCondition("Stock", "Name,Address", " Store = '" + store + " AND Status = 'Active'"))
+            {
+                while (dbReader.Read())
+                {
+                    return new[] { dbReader.GetString(1), dbReader.GetString(2) };
+
+                }
+            }
+            throw new StoreException(ViewStoreStatus.NoStore, "There is no active store by the name of " + store);
+        }
+
+        //TODO: fix this
+        public Product GetProductFromStore(string store, string productName, int quantity)
+        {
+            //TODO : this is bullshit query, fix this
+            using (var dbReader = SelectFromTableWithCondition("Products", "*", " Store = '" + store + " AND Q = 'Active'"))
+            {
+                while (dbReader.Read())
+                {
+                    //TODO: fix this...
+                    return null;
+
+                }
+            }
+            throw new StoreException(AddProductStatus.NoProduct, "There is no product "+productName+" from " + store + "");
+        }
+
         public void RemoveDiscount(Discount discount)
         {
             DeleteFromTable("Discount", "DiscountCode = '" + discount.discountCode + "'");
