@@ -288,13 +288,49 @@ namespace StoreCenterTests
             find = handler.DataLayer.GetLotteryTicket("T3");
             Assert.IsNull(find);
         }
+        [TestMethod]
+        public void getAllTickets()
+        {
+            LinkedList<LotteryTicket> Copy = new LinkedList<LotteryTicket>();
+                LotteryTicket ticket2 = new LotteryTicket(0, 0, "L1", "T2", 0);
+                LotteryTicket ticket1 = new LotteryTicket(0, 0, "L1", "T1", 0); //Exists in DB
+                handler.DataLayer.AddLotteryTicket(ticket2);
+                Copy.AddLast(ticket1);
+                Copy.AddLast(ticket2);
+                LinkedList<LotteryTicket> find = handler.DataLayer.getAllTickets("L1");
+                Assert.AreEqual(Copy.Count, find.Count);
+                LotteryTicket[] findResults = new LotteryTicket[find.Count];
+                find.CopyTo(findResults, 0);
+                LotteryTicket[] CopyResults = new LotteryTicket[Copy.Count];
+                Copy.CopyTo(CopyResults, 0);
+                for (int i = 0; i < findResults.Length; i++)
+                {
+                    Assert.AreEqual(findResults[i], CopyResults[i]);
+                }
+            handler.DataLayer.RemoveLotteryTicket(ticket2);
+        }
+        [TestMethod]
+        public void GetAllStoreProductsID()
+        {
+            LinkedList<string> Copy = new LinkedList<string>();
+            Copy.AddLast("P1");
+            LinkedList<string> find = handler.DataLayer.GetAllStoreProductsID("S1");
+            Assert.AreEqual(Copy.Count, find.Count);
+            string[] findResults = new string[find.Count];
+            find.CopyTo(findResults, 0);
+            string[] CopyResults = new string[Copy.Count];
+            Copy.CopyTo(CopyResults, 0);
+            for (int i = 0; i < findResults.Length; i++)
+            {
+                Assert.AreEqual(findResults[i], CopyResults[i]);
+            }
+        }
 
     }
 }
 //'D1', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true'
 /**
-internal LinkedList<LotteryTicket> getAllTickets(string systemID)    
 private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
 public string[] GetHistory(Store store)
-public LinkedList<string> GetAllStoreProductsID(string systemID)
+
 **/
