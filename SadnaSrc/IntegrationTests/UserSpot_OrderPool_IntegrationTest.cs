@@ -62,7 +62,11 @@ namespace IntegrationTests
             }
         }
 
-        //TODO: Fix the following tests after implementation of OrderPool is complete
+        //TODO: Fix all the following tests after implementation of OrderPool is complete
+
+        /*
+         * Tests for buying single item
+         */
 
         [TestMethod]
         public void CartItemUpdatedAfterBuyTest()
@@ -90,6 +94,76 @@ namespace IntegrationTests
                 orderServiceSession.BuyItemFromImmediate("OCB", "24", 2, 10.00);
                 userServiceSession.SignIn(user, pass);
                 //Assert.IsNull(((UserService)userServiceSession).MarketUser.Cart.SearchInCart("24", "OCB", 10.00));
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void CartUnchangedHighQuantityTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 999, 6.00);
+                userServiceSession.SignIn(user, pass);
+                CartItem item = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
+                //Assert.AreEqual(3,item.Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void CartUnchangedNegativeQuantityTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", -5, 6.00);
+                userServiceSession.SignIn(user, pass);
+                CartItem item = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
+                //Assert.AreEqual(3,item.Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        /*
+         * Tests for buying all items from single store
+         */
+
+        [TestMethod]
+        public void StoreItemsRemovedFromCartTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                orderServiceSession.BuyAllItemsFromStore("The Red Rock");
+                userServiceSession.SignIn(user, pass);
+                //Assert.AreEqual(0, ((UserService)userServiceSession).MarketUser.Cart.GetCartStorage("The Red Rock"));
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void CartUnchangedNonexistantStoreTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                orderServiceSession.BuyAllItemsFromStore("The Blue Rock");
+                userServiceSession.SignIn(user, pass);
+                //Assert.AreEqual(3, ((UserService)userServiceSession).MarketUser.Cart.GetCartStorage());
             }
             catch (MarketException)
             {
