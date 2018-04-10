@@ -57,7 +57,7 @@ namespace SadnaSrc.Main
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P101', 'Golden BOX', 1000, 'this is a golden box')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P102', 'DeleteMy BOX', 10, 'this is a trush')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D101', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true')",
-                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P100', 5, 'D101', 'IMMEDIATE' )",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P100', 5, 'D101', 'Immediate')",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",
@@ -239,8 +239,7 @@ namespace SadnaSrc.Main
                                     [Discount]              TEXT,
                                     [PurchaseWay]           TEXT, CHECK (PurchaseWay IN ('Immediate', 'Lottery')),
                                     PRIMARY KEY([ProductSystemID]),
-                                    FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE,
-                                    FOREIGN KEY([discount]) REFERENCES [Discount]([DiscountCode]) ON DELETE CASCADE
+                                    FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
                                     )";
         }
         

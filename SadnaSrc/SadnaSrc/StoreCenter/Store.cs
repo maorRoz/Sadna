@@ -92,8 +92,6 @@ namespace SadnaSrc.StoreCenter
                 LotteryManagment.InformCancel();
                 handler.DataLayer.RemoveLottery(LotteryManagment);
             }
-            handler.DataLayer.RemoveDiscount(stockListItem.Discount);
-            handler.DataLayer.RemoveProduct(stockListItem.Product);
             handler.DataLayer.RemoveStockListItem(stockListItem);
             return new StoreAnswer(StoreEnum.Success, "product removed");
         }

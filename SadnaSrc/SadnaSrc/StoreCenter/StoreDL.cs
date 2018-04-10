@@ -200,35 +200,17 @@ namespace SadnaSrc.StoreCenter
         {
             Product _product = GetProductID(product);
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            StockListItem stockListItem = new StockListItem(0, _product, null, 0, "");
-            string DiscountCode = "";
-            using (var dbReader = SelectFromTableWithCondition("Stock", "*", "ProductSystemID = " + _product + "'"))
+            StockListItem stockListItem = null;
+            using (var dbReader = SelectFromTableWithCondition("Stock", "*", "ProductSystemID = '" + product + "'"))
             {
                 while (dbReader.Read())
                 {
-                    stockListItem.SystemId = dbReader.GetString(0);
-                    stockListItem.Quantity = dbReader.GetInt32(2);
-                    stockListItem.PurchaseWay = handler.GetPurchaseEnumString(dbReader.GetString(4));
-
-                    DiscountCode = dbReader.GetString(3);
+                    Discount D = GetDiscount(dbReader.GetString(3));
+                    stockListItem = new StockListItem(dbReader.GetInt32(2), _product, GetDiscount(dbReader.GetString(3)), handler.GetPurchaseEnumString(dbReader.GetString(4)), dbReader.GetString(0));
+                    return stockListItem;
                 }
             }
-
-            using (var discountReader = SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + DiscountCode + "'"))
-            {
-                Discount discount = new Discount(DiscountCode, 0, DateTime.Now, DateTime.Now, 0, false);
-
-                while (discountReader.Read())
-                {
-                    discount.discountType = handler.GetdiscountTypeEnumString(discountReader.GetString(1));
-                    discount.startDate = DateTime.Parse(discountReader.GetString(2));
-                    discount.EndDate = DateTime.Parse(discountReader.GetString(3));
-                    discount.DiscountAmount = discountReader.GetInt32(4);
-                    discount.Percentages = (discountReader.GetString(5).Equals("true"));
-                }
-                stockListItem.Discount = discount;
-
-            }
+            
             return stockListItem;
         }
         public Discount GetDiscount(string DiscountCode)
@@ -303,7 +285,10 @@ namespace SadnaSrc.StoreCenter
         
         public void AddStockListItemToDataBase(StockListItem stockListItem)
         {
-            AddDiscount(stockListItem.Discount);
+            if (stockListItem.Discount != null)
+            {
+                AddDiscount(stockListItem.Discount);
+            }
             AddProductToDatabase(stockListItem.Product);
             InsertTable("Stock", "StockID, ProductSystemID, quantity, discount, PurchaseWay",
                    GetStockListItemStringValues(stockListItem), GetStockListItemArray(stockListItem));
@@ -318,6 +303,8 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveStockListItem(StockListItem stockListItem)
         {
+            RemoveDiscount(stockListItem.Discount);
+            RemoveProduct(stockListItem.Product);
             DeleteFromTable("Stock", "StockID = '" + stockListItem.SystemId + "'");
         }
 
@@ -368,7 +355,7 @@ namespace SadnaSrc.StoreCenter
                 "discount",
                 "PurchaseWay"
             };
-            UpdateTable("Stock", "StockID = '" + stockListItem.SystemId + "'", columnNames,
+            UpdateTable("Stock", "ProductSystemID = '" + stockListItem.Product.SystemId + "'", columnNames,
                 GetStockListItemStringValues(stockListItem), GetStockListItemArray(stockListItem));
         }
 

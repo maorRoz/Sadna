@@ -68,8 +68,8 @@ namespace SadnaSrc.StoreCenter
         {
             switch (purchaseEnum)
             {
-                case PurchaseEnum.Immediate: return "IMMEDIATE";
-                case PurchaseEnum.Lottery: return "LOTTERY";
+                case PurchaseEnum.Immediate: return "Immediate";
+                case PurchaseEnum.Lottery: return "Lottery";
                 default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
             }
         }
@@ -83,9 +83,9 @@ namespace SadnaSrc.StoreCenter
         }
         public PurchaseEnum GetPurchaseEnumString(String astring)
         {
-            if (astring == "IMEMIDIATE")
+            if (astring == "Immediate")
                 return PurchaseEnum.Immediate;
-            if (astring == "LOTTERY")
+            if (astring == "Lottery")
                 return PurchaseEnum.Lottery;
             throw new StoreException(1, "Enum not exists");
         }

@@ -132,23 +132,69 @@ namespace StoreCenterTests
             find = handler.DataLayer.GetDiscount("D104");
             Assert.IsTrue(find==null);
         }
+        [TestMethod]
         public void GetStockListItembyProductID()
         {
+            Discount D = handler.DataLayer.GetDiscount("D101");//exist in DL by SQL injection
+            Product P = handler.DataLayer.GetProductID("P100");//exist in DL by SQL injection
+            StockListItem Copy = new StockListItem(5, P, D, PurchaseEnum.Immediate, "S1"); //exist in DL by SQL injection
+            StockListItem find = handler.DataLayer.GetStockListItembyProductID("P100");
+            Assert.IsTrue(Copy.Equals(find));
 
+        }
+        [TestMethod]
+        public void AddStockListItemToDataBase()
+        {
+            Discount discount = new Discount("D105", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
+            Product product = new Product("P110", "BOX", 100, "this is a plastic box");
+            StockListItem Copy = new StockListItem(10, product, discount, PurchaseEnum.Immediate, "S1");
+            StockListItem find = handler.DataLayer.GetStockListItembyProductID("P110");
+            Assert.IsNull(find);
+            handler.DataLayer.AddStockListItemToDataBase(Copy);
+            find = handler.DataLayer.GetStockListItembyProductID("P110");
+            Assert.AreEqual(Copy, find);
+            handler.DataLayer.RemoveStockListItem(Copy);
+        }
+        [TestMethod]
+        public void RemoveStockListItem()
+        {
+            Discount discount = new Discount("D105", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
+            Product product = new Product("P110", "BOX", 100, "this is a plastic box");
+            StockListItem Copy = new StockListItem(10, product, discount, PurchaseEnum.Immediate, "S1");
+            handler.DataLayer.AddStockListItemToDataBase(Copy);
+            StockListItem find = handler.DataLayer.GetStockListItembyProductID("P110");
+            Assert.AreEqual(Copy, find);
+            handler.DataLayer.RemoveStockListItem(Copy);
+            find = handler.DataLayer.GetStockListItembyProductID("P110");
+            Assert.IsNull(find);
+        }
+        [TestMethod]
+        public void EditStockInDatabase()
+        {
+            Discount discount = new Discount("D106", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
+            Product product = new Product("P111", "BOX", 100, "this is a plastic box");
+            StockListItem Copy = new StockListItem(10, product, discount, PurchaseEnum.Immediate, "S1");
+            handler.DataLayer.AddStockListItemToDataBase(Copy);
+            StockListItem find = handler.DataLayer.GetStockListItembyProductID("P111");
+            Assert.AreEqual(Copy, find);
+            Copy.Quantity = 3;
+            Assert.AreNotEqual(Copy, find);
+            handler.DataLayer.EditStockInDatabase(Copy);
+            find = handler.DataLayer.GetStockListItembyProductID("P111");
+            Assert.AreEqual(Copy, find);
+            handler.DataLayer.RemoveStockListItem(Copy);
         }
     }
 }
 //'D101', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true'
 /**
-public void AddStockListItemToDataBase(StockListItem stockListItem)
-public StockListItem GetStockListItembyProductID(string product)
-public void EditStockInDatabase(StockListItem stockListItem)
-public void RemoveStockListItem(StockListItem stockListItem)
+
 
 public void AddLottery(LotterySaleManagmentTicket lotteryManagment)
 public LotterySaleManagmentTicket GetLotteryByProductID(string productID)
 public void EditLotteryInDatabase(LotterySaleManagmentTicket lotteryManagment)
 public void RemoveLottery(LotterySaleManagmentTicket lotteryManagment)
+    
 private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
 public void AddLotteryTicket(LotteryTicket lottery)
 public LinkedList<Store> GetAllActiveStores() // all active stores
