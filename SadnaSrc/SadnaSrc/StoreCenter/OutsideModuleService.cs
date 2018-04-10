@@ -9,7 +9,6 @@ namespace SadnaSrc.StoreCenter
 {
     interface OutsideModuleService
     {
-        LinkedList<Store> GetAllUserStores(User user);
         LinkedList<Store> GetAllStores();
         Store GetStoreByID(int ID); // this one if you need extra help 
         Store GetStoreByID(string ID);

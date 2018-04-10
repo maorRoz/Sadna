@@ -1,6 +1,5 @@
 ﻿using SadnaSrc.Main;
 using SadnaSrc.StoreCenter;
-using SadnaSrc.UserSpot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +29,6 @@ namespace SadnaSrc.StoreCenter
         }
         private ModuleGlobalHandler()
         {
-        //    allStores = new LinkedList<Store>();
             StoreIdCounter = 1;
             globalProductID = 1;
             globalDiscountCode = 1;
@@ -73,32 +71,32 @@ namespace SadnaSrc.StoreCenter
                 default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
             }
         }
-        public discountTypeEnum GetdiscountTypeEnumString(String astring)
+        public discountTypeEnum GetdiscountTypeEnumString(string discountType)
         {
-            if (astring == "HIDDEN")
+            if (discountType == "HIDDEN")
                 return discountTypeEnum.Hidden;
-            if (astring == "VISIBLE")
+            if (discountType == "VISIBLE")
                 return discountTypeEnum.Visible;
             throw new StoreException(1, "Enum value not exists");
         }
-        public PurchaseEnum GetPurchaseEnumString(String astring)
+        public PurchaseEnum GetPurchaseEnumString(string purchaseType)
         {
-            if (astring == "Immediate")
+            if (purchaseType == "Immediate")
                 return PurchaseEnum.Immediate;
-            if (astring == "Lottery")
+            if (purchaseType == "Lottery")
                 return PurchaseEnum.Lottery;
             throw new StoreException(1, "Enum not exists");
         }
 
-        internal LotteryTicketStatus GetLotteryStatusString(string astring)
+        internal LotteryTicketStatus GetLotteryStatusString(string lotteryStatus)
         {
-            if (astring == "CANCEL")
+            if (lotteryStatus == "CANCEL")
                 return LotteryTicketStatus.Cancel;
-            if (astring == "WINNING")
+            if (lotteryStatus == "WINNING")
                 return LotteryTicketStatus.Winning;
-            if (astring == "WAITING")
+            if (lotteryStatus == "WAITING")
                 return LotteryTicketStatus.Waiting;
-            if (astring == "LOSING")
+            if (lotteryStatus == "LOSING")
                 return LotteryTicketStatus.Losing;
             throw new StoreException(1, "Enum not exists");
         }
@@ -136,20 +134,6 @@ namespace SadnaSrc.StoreCenter
             int temp = globalLotteryTicketID;
             globalLotteryTicketID++;
             return "T" + temp;
-        }
-
-        public LinkedList<Store> GetAllUserStores(User user) // this implementation will be change after maor finish his work
-        {
-            LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
-            LinkedList<Store> result = new LinkedList<Store>();
-            foreach (Store store in AllStores)
-            {
-                if (store.IsOwner(user))
-                {
-                    result.AddLast(store);
-                }
-            }
-            return result;
         }
 
         public LinkedList<Store> GetAllStores()

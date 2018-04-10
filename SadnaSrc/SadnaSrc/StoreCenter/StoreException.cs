@@ -17,6 +17,18 @@ namespace SadnaSrc.StoreCenter
         {
         }
 
+        public StoreException(ViewStoreStatus status, string message) : base((int)status, message)
+        {
+        }
+
+        public StoreException(AddProductStatus status, string message) : base((int)status, message)
+        {
+        }
+
+        public StoreException(AddLotteryTicketStatus status, string message) : base((int)status, message)
+        {
+        }
+
         protected override string GetModuleName()
         {
             return "StoreCenter";
