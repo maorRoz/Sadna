@@ -32,7 +32,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer((OpenStoreStatus)e.Status, "Store " + storeName + " creation has been denied. " +
                                                  "something is wrong with adding a new store of that type. . Error message has been created!");
             }
-            catch (MarketException e)
+            catch (MarketException)
             {
                 return new StoreAnswer(OpenStoreStatus.InvalidUser,
                     "User validation as store owner has been failed. only registered users can open new stores. Error message has been created!");
@@ -52,7 +52,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer((ViewStoreStatus)e.Status, "Store . " +
                                               "something is wrong with viewing "+ store + " info by customers . . Error message has been created!");
             }
-            catch (MarketException e)
+            catch (MarketException)
             {
                 return new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. . Error message has been created!");
@@ -72,7 +72,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer((ViewStoreStatus)e.Status, "Store . " +
                                             "something is wrong with viewing " + store + " stock by customers. . Error message has been created!");
             }
-            catch (MarketException e)
+            catch (MarketException)
             {
                 return new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. . Error message has been created!");
@@ -93,7 +93,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer((AddProductStatus)e.Status, "There is no product or store or quantity of that type in the market." +
                                                                   " request has been denied. . Error message has been created!");
             }
-            catch (MarketException e)
+            catch (MarketException)
             {
                 return new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. . Error message has been created!");
@@ -114,7 +114,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer((AddProductStatus)e.Status, "There is no product,ticket,store or quantity of that type in the market." +
                                                                    " request has been denied. . Error message has been created!");
             }
-            catch (MarketException e)
+            catch (MarketException)
             {
                 return new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. . Error message has been created!");
