@@ -25,5 +25,20 @@ namespace SadnaSrc.StoreCenter
             Discount = discount;
             PurchaseWay = purchaseWay;
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != GetType())
+                return false;
+            return Equals((StockListItem)obj);
+        }
+        private bool Equals (StockListItem obj)
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            return (SystemId.Equals(obj.SystemId)) &&
+                (Quantity == obj.Quantity) &&
+                (Product.SystemId == obj.Product.SystemId) &&
+                (Discount.discountCode == obj.Discount.discountCode) &&
+                (handler.PrintEnum(PurchaseWay).Equals(handler.PrintEnum(obj.PurchaseWay)));
+        }
     }
 }

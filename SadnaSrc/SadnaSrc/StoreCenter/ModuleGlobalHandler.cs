@@ -68,8 +68,8 @@ namespace SadnaSrc.StoreCenter
         {
             switch (purchaseEnum)
             {
-                case PurchaseEnum.Immediate: return "HIDDEN";
-                case PurchaseEnum.Lottery: return "VISIBLE";
+                case PurchaseEnum.Immediate: return "IMMEDIATE";
+                case PurchaseEnum.Lottery: return "LOTTERY";
                 default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
             }
         }

@@ -20,18 +20,22 @@ namespace SadnaSrc.StoreCenter
         public string Name { get; set; }
         public string Address { get; set; }
 
-        public Store(string id, string name, string addrss)
+        public Store(string id, string name, string address)
         {
             SystemId = id;
+            Name = name;
+            Address = address;
             stock = new Stock(SystemId);
             PurchasePolicy = new LinkedList<PurchasePolicy>();
             IsActive = true;
         }
 
-        public Store(string id, string name, string addrss, string active)
+        public Store(string id, string name, string address, string active)
         {
             SystemId = id;
             stock = new Stock(SystemId);
+            Name = name;
+            Address = address;
             PurchasePolicy = new LinkedList<PurchasePolicy>();
             GetActiveFromString(active);
         }
@@ -384,7 +388,9 @@ namespace SadnaSrc.StoreCenter
         {
             if (obj.GetType().Equals(this.GetType()))
             {
-                return ((Store)obj).SystemId.Equals(SystemId);
+                return ((Store)obj).SystemId.Equals(SystemId)&&
+                    ((Store)obj).Name.Equals(Name) &&
+                    ((Store)obj).Address.Equals(Address);
             }
             return false;
 
