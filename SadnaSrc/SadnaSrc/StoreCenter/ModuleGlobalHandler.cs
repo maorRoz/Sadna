@@ -29,12 +29,12 @@ namespace SadnaSrc.StoreCenter
         }
         private ModuleGlobalHandler()
         {
-            StoreIdCounter = 1;
-            globalProductID = 1;
-            globalDiscountCode = 1;
-            globalLotteryID = 1;
-            globalLotteryTicketID = 1;
             DataLayer = new StoreDL();
+            StoreIdCounter = DataLayer.FindMaxStoreId();
+            globalProductID = DataLayer.FindMaxProductId();
+            globalDiscountCode = DataLayer.FindMaxDiscountId();
+            globalLotteryID = DataLayer.FindMaxLotteryId();
+            globalLotteryTicketID = DataLayer.FindMaxLotteryTicketId();
         }
 
         public void AddStore(Store temp)
@@ -49,7 +49,7 @@ namespace SadnaSrc.StoreCenter
                 case LotteryTicketStatus.Winning: return "WINNING";
                 case LotteryTicketStatus.Waiting: return "WAITING";
                 case LotteryTicketStatus.Losing: return "LOSING";
-                default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
+                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
             }
 
         }
@@ -59,7 +59,7 @@ namespace SadnaSrc.StoreCenter
             {
                 case discountTypeEnum.Hidden: return "HIDDEN";
                 case discountTypeEnum.Visible: return "VISIBLE";
-                default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
+                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
             }
         }
         public string PrintEnum(PurchaseEnum purchaseEnum)
@@ -68,7 +68,7 @@ namespace SadnaSrc.StoreCenter
             {
                 case PurchaseEnum.Immediate: return "Immediate";
                 case PurchaseEnum.Lottery: return "Lottery";
-                default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
+                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
             }
         }
         public discountTypeEnum GetdiscountTypeEnumString(string discountType)
@@ -77,7 +77,7 @@ namespace SadnaSrc.StoreCenter
                 return discountTypeEnum.Hidden;
             if (discountType == "VISIBLE")
                 return discountTypeEnum.Visible;
-            throw new StoreException(1, "Enum value not exists");
+            throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
         }
         public PurchaseEnum GetPurchaseEnumString(string purchaseType)
         {
@@ -85,7 +85,7 @@ namespace SadnaSrc.StoreCenter
                 return PurchaseEnum.Immediate;
             if (purchaseType == "Lottery")
                 return PurchaseEnum.Lottery;
-            throw new StoreException(1, "Enum not exists");
+            throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
         }
 
         internal LotteryTicketStatus GetLotteryStatusString(string lotteryStatus)
@@ -98,7 +98,7 @@ namespace SadnaSrc.StoreCenter
                 return LotteryTicketStatus.Waiting;
             if (lotteryStatus == "LOSING")
                 return LotteryTicketStatus.Losing;
-            throw new StoreException(1, "Enum not exists");
+            throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
         }
 
 
@@ -107,33 +107,33 @@ namespace SadnaSrc.StoreCenter
          **/
             public string GetProductID()
         {
-            int temp = globalProductID;
+            int currentMaxProductId = globalProductID;
             globalProductID++;
-            return "P" + temp;
+            return "P" + currentMaxProductId;
         }
         public string GetDiscountCode()
         {
-            int temp = globalDiscountCode;
+            int currentMaxDiscountCode = globalDiscountCode;
             globalDiscountCode++;
-            return "D" + temp;
+            return "D" + currentMaxDiscountCode;
         }
         public string GetNextStoreId()
         {
-            int temp = StoreIdCounter;
+            int currentMaxStoreId = StoreIdCounter;
             StoreIdCounter++;
-            return "S" + temp;
+            return "S" + currentMaxStoreId;
         }
         public string GetLottyerID()
         {
-            int temp = globalLotteryID;
+            int currentMaxLotteryId = globalLotteryID;
             globalLotteryID++;
-            return "L" + temp;
+            return "L" + currentMaxLotteryId;
         }
         public string GetLotteryTicketID()
         {
-            int temp = globalLotteryTicketID;
+            int currentMaxLotteryTicketId = globalLotteryTicketID;
             globalLotteryTicketID++;
-            return "T" + temp;
+            return "T" + currentMaxLotteryTicketId;
         }
 
         public LinkedList<Store> GetAllStores()
@@ -142,13 +142,13 @@ namespace SadnaSrc.StoreCenter
             return AllStores;
         }
 
-        public void UpdateQuantityAfterPurches(string storeID, string productID, int quantity)
+        public void UpdateQuantityAfterPurchase(string storeID, string productID, int quantity)
         {
             Store store = DataLayer.GetStore(storeID);
-            if (store ==null) { throw new StoreException(-1, "no such store"); }
+            if (store ==null) { throw new StoreException(StoreSyncStatus.NoStore, "no such store"); }
             Product product = DataLayer.GetProductID(productID);
-            if (product==null) { throw new StoreException(-1, "no such product"); }
-            store.UpdateQuanityAfterPurches(product, quantity);
+            if (product==null) { throw new StoreException(StoreSyncStatus.NoProduct, "no such product"); }
+            store.UpdateQuanityAfterPurchase(product, quantity);
         }
         public Store GetStoreByID(int ID)
         {
