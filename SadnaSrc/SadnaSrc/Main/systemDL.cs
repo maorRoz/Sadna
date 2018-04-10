@@ -63,6 +63,7 @@ namespace SadnaSrc.Main
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",
+                "UPDATE Store SET Status = 'Active' WHERE Name = 'Cluckin Bell'",
                 "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70','12345678')",
                 "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (2,'Arik2','H3','202cb962ac59075b964b07152d234b70','12345678')",
                 "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (3,'Arik3','H3','202cb962ac59075b964b07152d234b70','12345678')",
