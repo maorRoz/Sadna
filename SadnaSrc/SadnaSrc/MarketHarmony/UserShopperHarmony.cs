@@ -25,7 +25,7 @@ namespace SadnaSrc.MarketHarmony
             }
         }
 
-        public void ValidateCanOpenStore()
+        public void ValidateRegistered()
         {
             ValidateCanBrowseMarket();
             if (!_userService.MarketUser.IsRegisteredUser())
@@ -44,6 +44,17 @@ namespace SadnaSrc.MarketHarmony
         {
             ((RegisteredUser) _userService.MarketUser).AddStoreOwnership(store);
 
+        }
+
+
+        public int GetShopperID()
+        {
+            return _userService.MarketUser.SystemID;
+        }
+
+        public string GetShopperName()
+        {
+            return ((RegisteredUser) _userService.MarketUser).Name;
         }
 
         //only for unit tests of StoreCenter shopping session(and not for Integration)

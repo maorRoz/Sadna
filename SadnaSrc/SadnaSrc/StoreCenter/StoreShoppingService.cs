@@ -22,7 +22,7 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "");
             try
             {
-                _shopper.ValidateCanOpenStore();
+                _shopper.ValidateRegistered();
                 MarketLog.Log("StoreCenter", "");
                 Store newStore = new Store(storeLogic.GetNextStoreId(), storeName, address);
                 storeLogic.AddStore(newStore);
