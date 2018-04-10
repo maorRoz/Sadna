@@ -246,8 +246,10 @@ namespace StoreCenterTests
             Copy.AddLast(S);
             S = new Store("S3", "M", "Here 4");
             Copy.AddLast(S);
-            LinkedList<Store> find = handler.DataLayer.GetAllActiveStores();
-            Assert.AreEqual(find.Count, Copy.Count);
+            S = new Store("S4", "Cluckin Bell", "Los Santos");
+            Copy.AddLast(S);
+            LinkedList <Store> find = handler.DataLayer.GetAllActiveStores();
+            Assert.AreEqual(Copy.Count, find.Count);
             Store[] findResults = new Store[find.Count];
             find.CopyTo(findResults, 0);
             Store[] CopyResults = new Store[Copy.Count];
