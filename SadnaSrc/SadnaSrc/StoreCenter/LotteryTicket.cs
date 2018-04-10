@@ -58,7 +58,8 @@ namespace SadnaSrc.StoreCenter
                     obj.LotteryNumber == LotteryNumber &&
                     obj.myID == myID &&
                     handler.PrintEnum(obj.myStatus).Equals(handler.PrintEnum(myStatus))&&
-                    obj.UserID==UserID);
+                    obj.UserID == UserID
+                    );
         }
         public override string ToString()
         {
