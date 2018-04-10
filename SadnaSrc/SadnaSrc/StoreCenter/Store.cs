@@ -359,10 +359,10 @@ namespace SadnaSrc.StoreCenter
             handler.DataLayer.EditStockInDatabase(stockListItem);
             return new StoreAnswer(StoreEnum.Success, "discount remvoed");
         }
-        internal void UpdateQuanityAfterPurches(Product product, int quantity)
+        internal void UpdateQuanityAfterPurchase(Product product, int quantity)
         {
             StockListItem stockListItem = stock.FindstockListItembyProductID(product.SystemId);
-            if (stockListItem == null) throw new StoreException(-1, "Item not found");
+            if (stockListItem == null) throw new StoreException(StoreSyncStatus.NoProduct, "Item not found");
             stockListItem.Quantity = stockListItem.Quantity - quantity;
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             handler.DataLayer.EditStockInDatabase(stockListItem);

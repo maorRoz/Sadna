@@ -9,10 +9,15 @@ namespace SadnaSrc.StoreCenter
 {
     class StoreException : MarketException
     {
-        public StoreException(int status, string message) : base(status, message)
+        public StoreException(MarketError status, string message) : base((int)status, message)
         {
         }
-
+        public StoreException(StoreSyncStatus status, string message) : base((int)status, message)
+        {
+        }
+        public StoreException(OpenStoreStatus status, string message) : base((int)status, message)
+        {
+        }
         public StoreException(ViewPurchaseHistoryStatus status, string message) : base((int)status, message)
         {
         }
