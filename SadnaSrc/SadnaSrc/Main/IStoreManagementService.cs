@@ -17,9 +17,6 @@ namespace SadnaSrc.Main
         MarketAnswer GetProductStockInformation(int ProductID);
         MarketAnswer CloseStore();
 
-        MarketAnswer SetStoreName(string name);
-        MarketAnswer SetStoreAddress(string address);
-
         /**
          * Store Managment, handling products
          **/

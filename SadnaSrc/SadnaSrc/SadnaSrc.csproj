@@ -83,8 +83,10 @@
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
     <Compile Include="Main\SystemDL.cs" />
+    <Compile Include="MarketHarmony\IOrderSyncher.cs" />
     <Compile Include="MarketHarmony\IStoresSyncher.cs" />
     <Compile Include="MarketHarmony\IUserSeller.cs" />
+    <Compile Include="MarketHarmony\OrderSyncherHarmony.cs" />
     <Compile Include="MarketHarmony\StoresSyncherHarmony.cs" />
     <Compile Include="MarketHarmony\UserAdminHarmony.cs" />
     <Compile Include="MarketHarmony\UserBuyerHarmony.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="StoreCenter\StoreDL.cs" />
     <Compile Include="StoreCenter\StoreException.cs" />
     <Compile Include="StoreCenter\StoreService.cs" />
+    <Compile Include="StoreCenter\StoreShoppingService.cs" />
     <Compile Include="SupplyPoint\SupplyAnswer.cs" />
     <Compile Include="SupplyPoint\SupplyException.cs" />
     <Compile Include="SupplyPoint\SupplyService.cs" />
