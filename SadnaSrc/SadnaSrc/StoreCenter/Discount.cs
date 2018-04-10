@@ -74,6 +74,18 @@ namespace SadnaSrc.StoreCenter
             return false;
         }
         public override string ToString() {if(Percentages) return "" + DiscountAmount+"%"; return "" + DiscountAmount; }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -536786706;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(discountCode);
+            hashCode = hashCode * -1521134295 + discountType.GetHashCode();
+            hashCode = hashCode * -1521134295 + startDate.GetHashCode();
+            hashCode = hashCode * -1521134295 + EndDate.GetHashCode();
+            hashCode = hashCode * -1521134295 + DiscountAmount.GetHashCode();
+            hashCode = hashCode * -1521134295 + Percentages.GetHashCode();
+            return hashCode;
+        }
     }
 }
 

@@ -101,5 +101,18 @@ namespace SadnaSrc.StoreCenter
             IsActive = false;
         //call maor method here
         }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 808578065;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemID);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Product>.Default.GetHashCode(Original);
+            hashCode = hashCode * -1521134295 + ProductNormalPrice.GetHashCode();
+            hashCode = hashCode * -1521134295 + TotalMoneyPayed.GetHashCode();
+            hashCode = hashCode * -1521134295 + StartDate.GetHashCode();
+            hashCode = hashCode * -1521134295 + EndDate.GetHashCode();
+            hashCode = hashCode * -1521134295 + IsActive.GetHashCode();
+            return hashCode;
+        }
     }
 }

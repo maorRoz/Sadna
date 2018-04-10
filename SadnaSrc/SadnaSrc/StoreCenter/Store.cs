@@ -392,6 +392,18 @@ namespace SadnaSrc.StoreCenter
             return false;
 
         }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -862772086;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Stock>.Default.GetHashCode(stock);
+            hashCode = hashCode * -1521134295 + EqualityComparer<LinkedList<PurchasePolicy>>.Default.GetHashCode(PurchasePolicy);
+            hashCode = hashCode * -1521134295 + IsActive.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Address);
+            return hashCode;
+        }
     }
 }
 

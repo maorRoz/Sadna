@@ -40,5 +40,16 @@ namespace SadnaSrc.StoreCenter
                 (Discount.discountCode == obj.Discount.discountCode) &&
                 (handler.PrintEnum(PurchaseWay).Equals(handler.PrintEnum(obj.PurchaseWay)));
         }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -125935732;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemId);
+            hashCode = hashCode * -1521134295 + Quantity.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<Product>.Default.GetHashCode(Product);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Discount>.Default.GetHashCode(Discount);
+            hashCode = hashCode * -1521134295 + PurchaseWay.GetHashCode();
+            return hashCode;
+        }
     }
 }
