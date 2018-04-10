@@ -2,12 +2,14 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.Main;
+using System.Collections.Generic;
+
 namespace StoreCenterTests
 {
     [TestClass]
     public class StoreDL
     {
-
+        
         private MarketYard market;
         private ModuleGlobalHandler handler;
         [TestInitialize]
@@ -16,11 +18,12 @@ namespace StoreCenterTests
             market = MarketYard.Instance;
             handler = ModuleGlobalHandler.GetInstance();
         }
+        
         [TestMethod]
         public void GetProductID()
         {
-            Product product = new Product("P100", "BOX", 100, "this is a plastic box"); // THIS exists in DB by SQL injection
-            Product prod = handler.DataLayer.GetProductID("P100");
+            Product product = new Product("P1", "BOX", 100, "this is a plastic box"); // THIS exists in DB by SQL injection
+            Product prod = handler.DataLayer.GetProductID("P1");
             Assert.IsTrue(product.Equals(prod));
         }
         [TestMethod]
@@ -95,8 +98,8 @@ namespace StoreCenterTests
         [TestMethod]
         public void GetDiscount()
         {
-            Discount discount = new Discount("D101", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
-            Discount find = handler.DataLayer.GetDiscount("D101");
+            Discount discount = new Discount("D1", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
+            Discount find = handler.DataLayer.GetDiscount("D1");
             Assert.IsTrue(find.Equals(discount));
         }
         [TestMethod]
@@ -132,16 +135,18 @@ namespace StoreCenterTests
             find = handler.DataLayer.GetDiscount("D104");
             Assert.IsTrue(find==null);
         }
+        
         [TestMethod]
         public void GetStockListItembyProductID()
         {
-            Discount D = handler.DataLayer.GetDiscount("D101");//exist in DL by SQL injection
-            Product P = handler.DataLayer.GetProductID("P100");//exist in DL by SQL injection
+            Discount D = handler.DataLayer.GetDiscount("D1");//exist in DL by SQL injection
+            Product P = handler.DataLayer.GetProductID("P1");//exist in DL by SQL injection
             StockListItem Copy = new StockListItem(5, P, D, PurchaseEnum.Immediate, "S1"); //exist in DL by SQL injection
-            StockListItem find = handler.DataLayer.GetStockListItembyProductID("P100");
-            Assert.IsTrue(Copy.Equals(find));
+            StockListItem find = handler.DataLayer.GetStockListItembyProductID("P1");
+            Assert.AreEqual(Copy, find);
 
         }
+        
         [TestMethod]
         public void AddStockListItemToDataBase()
         {
@@ -187,25 +192,109 @@ namespace StoreCenterTests
         [TestMethod]
         public void GetLotteryByProductID()
         {
-            Product P = handler.DataLayer.GetProductID("P101");//exist in DL by SQL injection
-            LotterySaleManagmentTicket Copy = new LotterySaleManagmentTicket("L100", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018")); //exist in DL by SQL injection
+            Product P = handler.DataLayer.GetProductID("P1");//exist in DL by SQL injection
+            LotterySaleManagmentTicket Copy = new LotterySaleManagmentTicket("L1", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018")); //exist in DL by SQL injection
             LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
             Assert.AreEqual(Copy, find);
         }
+        [TestMethod]
+        public void AddLottery()
+        {
+            Product P = handler.DataLayer.GetProductID("P3");//exist in DL by SQL injection
+            LotterySaleManagmentTicket Copy = new LotterySaleManagmentTicket("L101", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
+            LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
+            Assert.IsNull(find);
+            handler.DataLayer.AddLottery(Copy);
+            find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
+            Assert.AreEqual(Copy, find);
+            handler.DataLayer.RemoveLottery(Copy);
+        }
+        [TestMethod]
+        public void removeLottery()
+        {
+            Product P = handler.DataLayer.GetProductID("P3");//exist in DL by SQL injection
+            LotterySaleManagmentTicket Copy = new LotterySaleManagmentTicket("L102", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
+            handler.DataLayer.AddLottery(Copy);
+            LotterySaleManagmentTicket  find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
+            Assert.AreEqual(Copy, find);
+            handler.DataLayer.RemoveLottery(Copy);
+            find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
+            Assert.IsNull(find);
+        }
+        [TestMethod]
+        public void EditLotteryInDatabase()
+        {
+            Product P = handler.DataLayer.GetProductID("P3");//exist in DL by SQL injection
+            LotterySaleManagmentTicket Copy = new LotterySaleManagmentTicket("L101", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
+            handler.DataLayer.AddLottery(Copy);
+            LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
+            Assert.AreEqual(Copy, find);
+            Copy.TotalMoneyPayed = 50;
+            Assert.AreNotEqual(Copy, find);
+            handler.DataLayer.EditLotteryInDatabase(Copy);
+            find = handler.DataLayer.GetLotteryByProductID("P3");
+            Assert.AreEqual(Copy, find);
+            handler.DataLayer.RemoveLottery(Copy);
+        }
+        [TestMethod]
+        public void GetAllActiveStores()
+        {
+            LinkedList<Store> Copy = new LinkedList<Store>();
+            Store S = new Store("S1", "X", "Here 4"); //Exists in DB
+            Copy.AddLast(S);
+            S = new Store("S2", "Y", "Here 4");
+            Copy.AddLast(S);
+            S = new Store("S3", "M", "Here 4");
+            Copy.AddLast(S);
+            S = new Store("S4", "Cluckin Bell", "Los Santos");
+            Copy.AddLast(S);
+            LinkedList <Store> find = handler.DataLayer.GetAllActiveStores();
+            Assert.AreEqual(Copy.Count, find.Count);
+            Store[] findResults = new Store[find.Count];
+            find.CopyTo(findResults, 0);
+            Store[] CopyResults = new Store[Copy.Count];
+            Copy.CopyTo(CopyResults, 0);
+            for (int i=0; i<findResults.Length; i++)
+            {
+                Assert.AreEqual(findResults[i], CopyResults[i]);
+            }
+        }
+        [TestMethod]
+         public void GetLotteryTicket()
+         {
+             LotteryTicket Copy = new LotteryTicket(0, 0, "L1", "T1",0); //Exists in DB
+             LotteryTicket find = handler.DataLayer.GetLotteryTicket("T1");
+             Assert.AreEqual(Copy, find);
+         }
+         [TestMethod]
+         public void AddLotteryTicket()
+         {
+             LotteryTicket Copy = new LotteryTicket(0, 0, "L1", "T2",0); 
+             LotteryTicket find = handler.DataLayer.GetLotteryTicket("T2");
+             Assert.IsNull(find);
+             handler.DataLayer.AddLotteryTicket(Copy);
+             find = handler.DataLayer.GetLotteryTicket("T2");
+             Assert.AreEqual(find, Copy);
+             handler.DataLayer.RemoveLotteryTicket(Copy);
+         }
+        [TestMethod]
+        public void RemoveLotteryTicket()
+        {
+            LotteryTicket Copy = new LotteryTicket(0, 0, "L1", "T3", 0);
+            handler.DataLayer.AddLotteryTicket(Copy);
+            LotteryTicket find = handler.DataLayer.GetLotteryTicket("T3");
+            Assert.AreEqual(find, Copy);
+            handler.DataLayer.RemoveLotteryTicket(Copy);
+            find = handler.DataLayer.GetLotteryTicket("T3");
+            Assert.IsNull(find);
+        }
+
     }
 }
-//'D101', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true'
+//'D1', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true'
 /**
-
-
-public void AddLottery(LotterySaleManagmentTicket lotteryManagment)
-public LotterySaleManagmentTicket GetLotteryByProductID(string productID)
-public void EditLotteryInDatabase(LotterySaleManagmentTicket lotteryManagment)
-public void RemoveLottery(LotterySaleManagmentTicket lotteryManagment)
-    
+internal LinkedList<LotteryTicket> getAllTickets(string systemID)    
 private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
-public void AddLotteryTicket(LotteryTicket lottery)
-public LinkedList<Store> GetAllActiveStores() // all active stores
 public string[] GetHistory(Store store)
-public LinkedList<string> GetAllStoreProductsID(object systemID)
+public LinkedList<string> GetAllStoreProductsID(string systemID)
 **/

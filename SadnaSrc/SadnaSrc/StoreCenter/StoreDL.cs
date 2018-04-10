@@ -43,7 +43,8 @@ namespace SadnaSrc.StoreCenter
                 lottery.LotteryNumber,
                 lottery.IntervalStart,
                 lottery.IntervalEnd,
-                lottery.myStatus
+                lottery.myStatus,
+                lottery.UserID
             };
         }
 
@@ -91,7 +92,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0));
+                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
                     lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
                     result.AddLast(lottery);
                 }
@@ -108,7 +109,8 @@ namespace SadnaSrc.StoreCenter
                 "'" + lottery.LotteryNumber + "'",
                 "'" + lottery.IntervalStart + "'",
                 "'" + lottery.IntervalEnd + "'",
-                "'" + handler.PrintEnum(lottery.myStatus) + "'"
+                "'" + handler.PrintEnum(lottery.myStatus) + "'",
+                "'" + lottery.UserID + "'"
             };
         }
         private string[] GetDiscountStringValues(Discount discount)
@@ -170,6 +172,9 @@ namespace SadnaSrc.StoreCenter
         }
         public string[] GetLotteryManagmentStringValues(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
+            string isActive = "";
+            if (lotterySaleManagementTicket.IsActive) { isActive = "true"; } else { isActive = "false"; }
+
             return new[]
             {
                  "'" + lotterySaleManagementTicket.SystemID + "'",
@@ -178,7 +183,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + lotterySaleManagementTicket.TotalMoneyPayed + "'",
                 "'" + lotterySaleManagementTicket.StartDate + "'",
                 "'" + lotterySaleManagementTicket.EndDate + "'",
-                "'" + lotterySaleManagementTicket.IsActive + "'"
+                "'" + isActive + "'"
             };
         }
 
@@ -254,9 +259,27 @@ namespace SadnaSrc.StoreCenter
                 GetStoreStringValues(temp), GetStoreArray(temp));
         }
 
+        public LotteryTicket GetLotteryTicket(String TicketID)
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "myID = '" + TicketID + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    LotteryTicket lotty = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
+                    lotty.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
+                    return lotty;
+                }
+            }
+            return null;
+        }
+        public void RemoveLotteryTicket(LotteryTicket lottery)
+        {
+            DeleteFromTable("LotteryTicket", "myID = '" + lottery.myID + "'");
+        }
         public void AddLotteryTicket(LotteryTicket lottery)
         {
-            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, isActive",
+            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, Status, UserID",
                 GetTicketStringValues(lottery), GetTicketValuesArray(lottery));
         }
 
@@ -408,9 +431,6 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-        
-
-        
 
         public LinkedList<string> GetAllStoreProductsID(string systemID)
         {
@@ -433,12 +453,14 @@ namespace SadnaSrc.StoreCenter
                 while (dbReader.Read()) { 
                     lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0), P, DateTime.Parse(dbReader.GetString(4)), DateTime.Parse(dbReader.GetString(5)));
                     lotteryManagement.TotalMoneyPayed = dbReader.GetInt32(3);
-                    lotteryManagement.IsActive = dbReader.GetBoolean(6);
+                    lotteryManagement.IsActive = (dbReader.GetString(6).Equals("true"));
               }
             }
             return lotteryManagement;
         }
-
+        //"INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, 
+        //TotalMoneyPayed, StartDate, EndDate, isActive) VALUES 
+        //('L100', 'P101', 100, 0 ,'01/01/2018', '31/12/2018', 'true')"
         public void EditLotteryInDatabase(LotterySaleManagmentTicket lotteryManagment)
         {
             string[] columnNames =

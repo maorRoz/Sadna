@@ -247,13 +247,13 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer MakeALotteryPurchase(string productName, int moeny)
         {
             //TODO: fix this
-           /* if (ProxyIHavePremmision(user.GetUser()))
+            /*if (ProxyIHavePremmision(user.GetUser()))
             {
                 Product product = store.GetProductById(productName);
                 if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
                 if (moeny > 0)
                 { 
-                LotteryTicket loti = store.MakeALotteryPurchase(productName, moeny);
+                LotteryTicket loti = store.MakeALotteryPurchase(productName, moeny, user.GetUser().SystemID);
                     if (loti==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
                     if (!store.CanPurchaseLottery(product,moeny)) { return new StoreAnswer(StoreEnum.PurchesFail, "purching lottery ticket faild"); }
                     user.GetUser().Cart.AddToCart(store.SystemId, loti.ToString(), moeny, "", 1); //ASK MAOR ABOUT IT                    
