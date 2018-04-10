@@ -58,6 +58,7 @@ namespace SadnaSrc.Main
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P102', 'DeleteMy BOX', 10, 'this is a trush')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D101', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P100', 5, 'D101', 'Immediate')",
+                "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, StartDate, EndDate, isActive) VALUES ('L100', 'P101', 100, 0 ,'01/01/2018', '31/12/2018', 'true')",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",

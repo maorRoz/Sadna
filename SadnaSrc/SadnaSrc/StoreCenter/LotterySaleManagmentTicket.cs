@@ -14,7 +14,6 @@ namespace SadnaSrc.StoreCenter
         public  int TotalMoneyPayed { get; set; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
-        private LinkedList<LotteryTicket> tickets { get;}
         public bool IsActive { get; set; }
 
         public LotterySaleManagmentTicket(string _SystemID, Product _original, DateTime _StartDate, DateTime _EndDate)
@@ -25,7 +24,6 @@ namespace SadnaSrc.StoreCenter
             TotalMoneyPayed = 0;
             StartDate = _StartDate;
             EndDate = _EndDate;
-            tickets = new LinkedList<LotteryTicket>();
             IsActive = true;
         }
         
@@ -48,7 +46,6 @@ namespace SadnaSrc.StoreCenter
                 LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID, handler.GetLotteryTicketID());
                 handler.DataLayer.AddLotteryTicket(lottery);
                 TotalMoneyPayed += moneyPayed;
-                tickets.AddLast(lottery);
                 return lottery;
             }
                 return null;
@@ -67,6 +64,8 @@ namespace SadnaSrc.StoreCenter
             Random r = new Random(DateTime.Now.Millisecond);
             int winningNumber = r.Next(0, ProductNormalPrice);
             LotteryTicket winner = null;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(this.SystemID);
             foreach (LotteryTicket lotter in tickets)
             {
                 if (lotter.IsWinning(winningNumber))

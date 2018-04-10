@@ -82,6 +82,23 @@ namespace SadnaSrc.StoreCenter
                 store.GetStringFromActive()
             };
         }
+
+        internal LinkedList<LotteryTicket> getAllTickets(string systemID)
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "LotteryNumber = '" + systemID + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0));
+                    lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
+                    result.AddLast(lottery);
+                }
+            }
+            return result;
+        }
+
         private string[] GetTicketStringValues(LotteryTicket lottery)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
@@ -440,3 +457,4 @@ namespace SadnaSrc.StoreCenter
 
     }
 }
+ 

@@ -184,6 +184,14 @@ namespace StoreCenterTests
             Assert.AreEqual(Copy, find);
             handler.DataLayer.RemoveStockListItem(Copy);
         }
+        [TestMethod]
+        public void GetLotteryByProductID()
+        {
+            Product P = handler.DataLayer.GetProductID("P101");//exist in DL by SQL injection
+            LotterySaleManagmentTicket Copy = new LotterySaleManagmentTicket("L100", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018")); //exist in DL by SQL injection
+            LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
+            Assert.AreEqual(Copy, find);
+        }
     }
 }
 //'D101', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true'

@@ -90,11 +90,24 @@ namespace SadnaSrc.StoreCenter
             throw new StoreException(1, "Enum not exists");
         }
 
+        internal LotteryTicketStatus GetLotteryStatusString(string astring)
+        {
+            if (astring == "CANCEL")
+                return LotteryTicketStatus.Cancel;
+            if (astring == "WINNING")
+                return LotteryTicketStatus.Winning;
+            if (astring == "WAITING")
+                return LotteryTicketStatus.Waiting;
+            if (astring == "LOSING")
+                return LotteryTicketStatus.Losing;
+            throw new StoreException(1, "Enum not exists");
+        }
+
 
         /**
          * next section is ID handlers
          **/
-        public string GetProductID()
+            public string GetProductID()
         {
             int temp = globalProductID;
             globalProductID++;
