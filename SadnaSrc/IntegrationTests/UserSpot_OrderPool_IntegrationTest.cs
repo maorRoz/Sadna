@@ -64,10 +64,6 @@ namespace IntegrationTests
 
         //TODO: Fix all the following tests after implementation of OrderPool is complete
 
-        /*
-         * Tests for buying single item
-         */
-
         [TestMethod]
         public void CartItemUpdatedAfterBuyTest()
         {
@@ -135,10 +131,6 @@ namespace IntegrationTests
             }
         }
 
-        /*
-         * Tests for buying all items from single store
-         */
-
         [TestMethod]
         public void StoreItemsRemovedFromCartTest()
         {
@@ -164,6 +156,51 @@ namespace IntegrationTests
                 orderServiceSession.BuyAllItemsFromStore("The Blue Rock");
                 userServiceSession.SignIn(user, pass);
                 //Assert.AreEqual(3, ((UserService)userServiceSession).MarketUser.Cart.GetCartStorage());
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void CartIsEmptyAfterBuyTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                orderServiceSession.BuyEverythingFromCart();
+                userServiceSession.SignIn(user, pass);
+                //Assert.AreEqual(0, ((UserService)userServiceSession).MarketUser.Cart.GetCartStorage());
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void GuestWithoutDetailsErrorTest()
+        {
+            try
+            {
+                Assert.AreNotEqual(0, orderServiceSession.BuyEverythingFromCart().Status);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void GiveAlternativeDetailsTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                orderServiceSession.GiveDetails("Moshe", "A");
+                Assert.AreEqual("Moshe", orderServiceSession.UserName);
+                Assert.AreEqual("A",orderServiceSession.UserAddress);
             }
             catch (MarketException)
             {
