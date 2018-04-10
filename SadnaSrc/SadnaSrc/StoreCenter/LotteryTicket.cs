@@ -42,6 +42,21 @@ namespace SadnaSrc.StoreCenter
         {
             myStatus = LotteryTicketStatus.Cancel;
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != GetType())
+                return false;
+            return Equals((LotteryTicket)obj);
+        }
+        private bool Equals(LotteryTicket obj)
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            return (obj.IntervalStart == IntervalStart &&
+                    obj.IntervalEnd == IntervalEnd &&
+                    obj.LotteryNumber == LotteryNumber &&
+                    obj.myID == myID &&
+                    handler.PrintEnum(obj.myStatus).Equals(handler.PrintEnum(myStatus)));
+        }
         public override string ToString()
         {
             return "lottery ticket of Lottery number: " + LotteryNumber + " ticket number is: "+myID+" status: "+myStatus;

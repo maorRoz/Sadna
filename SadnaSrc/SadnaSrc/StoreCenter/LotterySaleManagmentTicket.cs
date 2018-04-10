@@ -80,6 +80,22 @@ namespace SadnaSrc.StoreCenter
             }
             return winner;
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != GetType())
+                return false;
+            return Equals((LotterySaleManagmentTicket)obj);
+        }
+        private bool Equals(LotterySaleManagmentTicket obj)
+        {
+            return (obj.SystemID == SystemID &&
+                    obj.ProductNormalPrice == ProductNormalPrice &&
+                    obj.Original.SystemId == Original.SystemId &&
+                    obj.StartDate.Equals(StartDate) &&
+                    obj.EndDate.Equals(EndDate) &&
+                    obj.TotalMoneyPayed.Equals(TotalMoneyPayed) &&
+                    obj.IsActive == IsActive);
+        }
         internal void InformCancel()
         {
             IsActive = false;

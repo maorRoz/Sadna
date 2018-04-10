@@ -59,6 +59,7 @@ namespace SadnaSrc.Main
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D101', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P100', 5, 'D101', 'Immediate')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, StartDate, EndDate, isActive) VALUES ('L100', 'P101', 100, 0 ,'01/01/2018', '31/12/2018', 'true')",
+                "INSERT INTO LotteryTicket (myID, LotteryID, IntervalStart, IntervalEnd, Status) VALUES('T100', 'L100', 0, 0, 'WAITING')",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'X'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Y'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'M'",
@@ -251,7 +252,7 @@ namespace SadnaSrc.Main
                                     [LotteryID]         TEXT,
                                     [IntervalStart]     INTEGER,
                                     [IntervalEnd]       INTEGER,
-                                    [Status]            TEXT, CHECK (Status IN ('WAITING', 'WINNING', 'LOSING', 'CANCEL')),
+                                    [Status]            TEXT,
                                     PRIMARY KEY([myID]),
                                     FOREIGN KEY([LotteryID]) REFERENCES [LotteryTable]([SystemID]) ON DELETE CASCADE
                                     )";
