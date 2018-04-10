@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\packages\NUnit.3.10.1\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +14,8 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,8 +37,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.DebuggerVisualizers, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.108.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.108.0\lib\net451\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.108.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.108.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.108.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.108.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,20 +69,93 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MarketYard\MarketYard.cs" />
-    <Compile Include="MarketYard\Program.cs" />
+    <Compile Include="AdminView\AdminAnswer.cs" />
+    <Compile Include="AdminView\SystemAdminServiceDL.cs" />
+    <Compile Include="AdminView\AdminException.cs" />
+    <Compile Include="Main\IOrderService.cs" />
+    <Compile Include="Main\IPaymentService.cs" />
+    <Compile Include="Main\IStoreManagementService.cs" />
+    <Compile Include="Main\IStoreShoppingService.cs" />
+    <Compile Include="Main\ISupplyService.cs" />
+    <Compile Include="Main\MarketException.cs" />
+    <Compile Include="Main\MarketLog.cs" />
+    <Compile Include="Main\MarketYard.cs" />
+    <Compile Include="Main\Program.cs" />
+    <Compile Include="Main\MarketAnswer.cs" />
+    <Compile Include="Main\SystemDL.cs" />
+    <Compile Include="MarketHarmony\IStoresSyncher.cs" />
+    <Compile Include="MarketHarmony\IUserSeller.cs" />
+    <Compile Include="MarketHarmony\StoresSyncherHarmony.cs" />
+    <Compile Include="MarketHarmony\UserAdminHarmony.cs" />
+    <Compile Include="MarketHarmony\UserBuyerHarmony.cs" />
+    <Compile Include="MarketHarmony\UserSellerHarmony.cs" />
+    <Compile Include="MarketHarmony\UserShopperHarmony.cs" />
+    <Compile Include="OrderPool\Order.cs" />
+    <Compile Include="OrderPool\OrderAnswer.cs" />
+    <Compile Include="OrderPool\OrderException.cs" />
+    <Compile Include="OrderPool\OrderItem.cs" />
+    <Compile Include="OrderPool\OrderPoolDL.cs" />
+    <Compile Include="OrderPool\OrderService.cs" />
+    <Compile Include="AdminView\PurchaseHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreCenter\OutsideModuleService.cs" />
+    <Compile Include="StoreCenter\LotteryTicket.cs" />
+    <Compile Include="StoreCenter\LotterySaleManagmentTicket.cs" />
+    <Compile Include="StoreCenter\Discount.cs" />
+    <Compile Include="StoreCenter\Product.cs" />
+    <Compile Include="StoreCenter\PurchesPolicy.cs" />
+    <Compile Include="StoreCenter\Stock.cs" />
+    <Compile Include="StoreCenter\StockListItem.cs" />
     <Compile Include="StoreCenter\Store.cs" />
-    <Compile Include="UserSpot\UserPolicy.cs" />
+    <Compile Include="StoreCenter\StoreAnswer.cs" />
+    <Compile Include="StoreCenter\StoreDL.cs" />
+    <Compile Include="StoreCenter\StoreException.cs" />
+    <Compile Include="StoreCenter\StoreService.cs" />
+    <Compile Include="SupplyPoint\SupplyAnswer.cs" />
+    <Compile Include="SupplyPoint\SupplyException.cs" />
+    <Compile Include="SupplyPoint\SupplyService.cs" />
+    <Compile Include="UserSpot\CartService.cs" />
+    <Compile Include="UserSpot\CartItem.cs" />
+    <Compile Include="Main\ISystemAdminService.cs" />
+    <Compile Include="AdminView\SystemAdminService.cs" />
+    <Compile Include="StoreCenter\ModuleGlobalHandler.cs" />
+    <Compile Include="MarketHarmony\IUserAdmin.cs" />
+    <Compile Include="MarketHarmony\IUserBuyer.cs" />
+    <Compile Include="MarketHarmony\IUserShopper.cs" />
+    <Compile Include="UserSpot\User.cs" />
+    <Compile Include="Main\IUserService.cs" />
+    <Compile Include="UserSpot\RegisteredUser.cs" />
+    <Compile Include="UserSpot\StoreManagerPolicy.cs" />
+    <Compile Include="UserSpot\UserAnswer.cs" />
+    <Compile Include="UserSpot\UserException.cs" />
+    <Compile Include="UserSpot\StatePolicy.cs" />
+    <Compile Include="UserSpot\UserPolicyService.cs" />
+    <Compile Include="UserSpot\UserService.cs" />
+    <Compile Include="UserSpot\UserServiceDL.cs" />
+    <Compile Include="Walleter\PaymentService.cs" />
+    <Compile Include="Walleter\WalleterAnswer.cs" />
+    <Compile Include="Walleter\WalleterException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Blackbox Tests\" />
+    <ProjectReference Include="..\ProxyExternalSystems\ProxyExternalSystems.csproj">
+      <Project>{f4484437-aa89-4a9d-994b-36b603202356}</Project>
+      <Name>ProxyExternalSystems</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.10.1\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net451\System.Data.SQLite.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
