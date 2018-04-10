@@ -64,6 +64,15 @@ namespace SadnaSrc.StoreCenter
             }
             return -1;
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType().Equals(GetType()))
+            {
+                return (((Discount)obj).discountCode == discountCode)&&
+                    (((Discount)obj).DiscountAmount == DiscountAmount);
+            }
+            return false;
+        }
         public override string ToString() {if(Percentages) return "" + DiscountAmount+"%"; return "" + DiscountAmount; }
     }
 }
