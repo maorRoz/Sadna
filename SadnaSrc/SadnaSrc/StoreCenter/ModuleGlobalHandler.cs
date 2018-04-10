@@ -68,8 +68,8 @@ namespace SadnaSrc.StoreCenter
         {
             switch (purchaseEnum)
             {
-                case PurchaseEnum.Immediate: return "HIDDEN";
-                case PurchaseEnum.Lottery: return "VISIBLE";
+                case PurchaseEnum.Immediate: return "Immediate";
+                case PurchaseEnum.Lottery: return "Lottery";
                 default: throw new StoreException(1, "Enum value not exists"); //TODO :improve this exception
             }
         }
@@ -83,10 +83,23 @@ namespace SadnaSrc.StoreCenter
         }
         public PurchaseEnum GetPurchaseEnumString(String astring)
         {
-            if (astring == "IMEMIDIATE")
+            if (astring == "Immediate")
                 return PurchaseEnum.Immediate;
-            if (astring == "LOTTERY")
+            if (astring == "Lottery")
                 return PurchaseEnum.Lottery;
+            throw new StoreException(1, "Enum not exists");
+        }
+
+        internal LotteryTicketStatus GetLotteryStatusString(string astring)
+        {
+            if (astring == "CANCEL")
+                return LotteryTicketStatus.Cancel;
+            if (astring == "WINNING")
+                return LotteryTicketStatus.Winning;
+            if (astring == "WAITING")
+                return LotteryTicketStatus.Waiting;
+            if (astring == "LOSING")
+                return LotteryTicketStatus.Losing;
             throw new StoreException(1, "Enum not exists");
         }
 
@@ -94,7 +107,7 @@ namespace SadnaSrc.StoreCenter
         /**
          * next section is ID handlers
          **/
-        public string GetProductID()
+            public string GetProductID()
         {
             int temp = globalProductID;
             globalProductID++;

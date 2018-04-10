@@ -185,7 +185,8 @@ namespace SadnaSrc.UserSpot
 
         private bool IsValidCreditCard(string creditCard)
         {
-            return !string.IsNullOrEmpty(creditCard) && creditCard.Length == 8 && TryParse(creditCard,out _);
+			int _;
+			return !string.IsNullOrEmpty(creditCard) && creditCard.Length == 8 && TryParse(creditCard,out _);
         }
 
         private void ApproveSignUp(string name, string address, string password, string creditCard)
