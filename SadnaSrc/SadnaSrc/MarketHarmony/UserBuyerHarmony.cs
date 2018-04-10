@@ -9,7 +9,7 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.MarketHarmony
 {
-    class UserBuyerHarmony : IUserBuyer
+    public class UserBuyerHarmony : IUserBuyer
     {
         private UserService _userService;
         public UserBuyerHarmony(ref IUserService userService)
@@ -51,8 +51,20 @@ namespace SadnaSrc.MarketHarmony
                     "No item by that info  has been found in the user cart!");
             }
 
+            if (quantity > itemFromStore.Quantity)
+            {
+                throw new UserException(EditCartItemStatus.NoItemFound,
+                    "User doesn't have that amount of this product in the cart!");
+            }
+
+            if (quantity <= 0)
+            {
+                throw new UserException(EditCartItemStatus.NoItemFound,
+                    "Checkout amount needs to be a positive number!");
+            }
+
             itemFromStore.Quantity = quantity;
-            return CnvertCartItemToOrderItem(itemFromStore);
+            return ConvertCartItemToOrderItem(itemFromStore);
         }
 
         public void RemoveItemFromCart(string itemName, string store, int quantity, double unitPrice)
@@ -67,6 +79,11 @@ namespace SadnaSrc.MarketHarmony
             {
                 _userService.MarketUser.Cart.RemoveFromCart(itemFromStore);
             }
+            else if (quantity < 0)
+            {
+                throw new UserException(EditCartItemStatus.NoItemFound,
+                    "Can't remove a negative number of items!");
+            }
             else
             {
                 _userService.MarketUser.Cart.EditCartItem(itemFromStore, -quantity);
@@ -75,13 +92,16 @@ namespace SadnaSrc.MarketHarmony
 
         private static OrderItem[] ConvertCartItemsToOrderItems(CartItem[] cart)
         { 
-            //TODO: implement this
-            return null;
+            OrderItem[] result = new OrderItem[cart.Length];
+            for (int i = 0; i < cart.Length; i++)
+            {
+                result[i] = ConvertCartItemToOrderItem(cart[i]);
+            }
+            return result;
         }
-        private static OrderItem CnvertCartItemToOrderItem(CartItem item)
+        private static OrderItem ConvertCartItemToOrderItem(CartItem item)
         {
-            //TODO: implement this
-            return null;
+            return new OrderItem(item.Store, item.Name, item.FinalPrice, item.Quantity);
         }
 
         private void ValidUserEnteredSystem()
