@@ -14,13 +14,15 @@ namespace SadnaSrc.StoreCenter
         internal string LotteryNumber { get; set; }
         internal string myID { get; set; }
         internal LotteryTicketStatus myStatus { get; set; }
-        public LotteryTicket(int _IntervalStart, int _IntervalEnd, string _LotteryNumber, string _myID)
+        internal int UserID { get; set; }
+        public LotteryTicket(int _IntervalStart, int _IntervalEnd, string _LotteryNumber, string _myID, int _userID)
         {
             LotteryNumber = _LotteryNumber;
             myID = _myID;
             IntervalStart = _IntervalStart;
             IntervalEnd = _IntervalEnd;
             myStatus = LotteryTicketStatus.Waiting;
+            UserID = _userID;
         }
 
         internal bool IsWinning(int winningNumber)
@@ -55,7 +57,8 @@ namespace SadnaSrc.StoreCenter
                     obj.IntervalEnd == IntervalEnd &&
                     obj.LotteryNumber == LotteryNumber &&
                     obj.myID == myID &&
-                    handler.PrintEnum(obj.myStatus).Equals(handler.PrintEnum(myStatus)));
+                    handler.PrintEnum(obj.myStatus).Equals(handler.PrintEnum(myStatus))&&
+                    obj.UserID==UserID);
         }
         public override string ToString()
         {

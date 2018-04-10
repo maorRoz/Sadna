@@ -43,7 +43,8 @@ namespace SadnaSrc.StoreCenter
                 lottery.LotteryNumber,
                 lottery.IntervalStart,
                 lottery.IntervalEnd,
-                lottery.myStatus
+                lottery.myStatus,
+                lottery.UserID
             };
         }
 
@@ -91,7 +92,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0));
+                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
                     lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
                     result.AddLast(lottery);
                 }
@@ -108,7 +109,8 @@ namespace SadnaSrc.StoreCenter
                 "'" + lottery.LotteryNumber + "'",
                 "'" + lottery.IntervalStart + "'",
                 "'" + lottery.IntervalEnd + "'",
-                "'" + handler.PrintEnum(lottery.myStatus) + "'"
+                "'" + handler.PrintEnum(lottery.myStatus) + "'",
+                "'" + lottery.UserID + "'"
             };
         }
         private string[] GetDiscountStringValues(Discount discount)
@@ -264,7 +266,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lotty = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0));
+                    LotteryTicket lotty = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
                     lotty.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
                     return lotty;
                 }
@@ -277,7 +279,7 @@ namespace SadnaSrc.StoreCenter
         }
         public void AddLotteryTicket(LotteryTicket lottery)
         {
-            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, Status",
+            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, Status, UserID",
                 GetTicketStringValues(lottery), GetTicketValuesArray(lottery));
         }
 

@@ -131,7 +131,7 @@ namespace SadnaSrc.StoreCenter
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             return handler.DataLayer.GetLotteryByProductID(p.SystemId);
         }
-        public LotteryTicket MakeALotteryPurchase(string productID, int money)
+        public LotteryTicket MakeALotteryPurchase(string productID, int money, int userID)
         {
             LotteryTicket result = null;
             Product product = stock.GetProductById(productID);
@@ -140,8 +140,7 @@ namespace SadnaSrc.StoreCenter
             LotterySaleManagmentTicket lotteryManagement = handler.DataLayer.GetLotteryByProductID(productID);
             if (CanPurchaseLottery(product, money))
             {
-                result = lotteryManagement.PurchaseALotteryTicket(money);
-
+                result = lotteryManagement.PurchaseALotteryTicket(money, userID);
             }
             return result;
          }

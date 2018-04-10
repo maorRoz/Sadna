@@ -38,12 +38,12 @@ namespace SadnaSrc.StoreCenter
         {
             return ((startDate > DateTime.Now.Date) && (endDate > DateTime.Now.Date) && (endDate > startDate));
         }
-        public LotteryTicket PurchaseALotteryTicket(int moneyPayed)
+        public LotteryTicket PurchaseALotteryTicket(int moneyPayed, int userID)
         {
             if (CanPurchase(moneyPayed))
             {
                 ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID, handler.GetLotteryTicketID());
+                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID, handler.GetLotteryTicketID(), userID);
                 handler.DataLayer.AddLotteryTicket(lottery);
                 TotalMoneyPayed += moneyPayed;
                 return lottery;
