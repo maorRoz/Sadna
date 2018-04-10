@@ -74,6 +74,15 @@ namespace SadnaSrc.UserSpot
             return Store.Equals(store) && Name.Equals(name) && UnitPrice == unitPrice;
         }
 
-
+        public override int GetHashCode()
+        {
+            var hashCode = -609274708;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Store);
+            hashCode = hashCode * -1521134295 + Quantity.GetHashCode();
+            hashCode = hashCode * -1521134295 + UnitPrice.GetHashCode();
+            hashCode = hashCode * -1521134295 + FinalPrice.GetHashCode();
+            return hashCode;
+        }
     }
 }

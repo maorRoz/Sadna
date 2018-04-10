@@ -9,36 +9,12 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class StoreService : IStoreManagementService,IStoreShoppingService
+    public class StoreService : IStoreManagementService
     {
 
      //   UserService user;
         public Store store;
         ModuleGlobalHandler global; //TODO: remove this one
-
-        /// /////////////////////////////////////////////////////////////////////////////////////////
-        //*************************************this function is proxy and will be removed!********///
-        /*   public static User ProxyCreateUser(int number)
-            {
-                return null;
-            }
-            public static bool ProxyIHavePremmision(User number)
-            {
-                return true;
-            }*/
-
-        /// /////////////////////////////////////////////////////////////////////////////////////////
-
-
-        /*  public StoreService(UserService _user, Store _store)
-          {
-              user = _user;
-              store = _store;
-              global = ModuleGlobalHandler.GetInstance();
-          } */
-
-        private IUserShopper _shooper;
-
         private IUserSeller _storeManager;
         private string _storeName;
 
@@ -48,11 +24,6 @@ namespace SadnaSrc.StoreCenter
         //TODO: (maor wrote this) on my opinion, you shouldn't have class who deals with shopping and managing. 
         //TODO: its way too complicated and this class is too big already....
         //TODO: you dont need a class who return only MarketAnswer !!!! this isn't an interface for client. only interface for client need this.
-        public StoreService(IUserShopper shopper)
-        {
-            _shooper = shopper;
-            //TODO: continue this
-        }
 
         public StoreService(IUserSeller storeManager, string storeName)
         {
@@ -61,45 +32,11 @@ namespace SadnaSrc.StoreCenter
             //TODO: continue this
         }
 
-        public MarketAnswer OpenStore(string name, string address)
-        {
-            Store temp = new Store(global.GetNextStoreId(), name, address);
-            global.AddStore(temp);
-            return new StoreAnswer(StoreEnum.Success, "Store " + temp.SystemId + "opend successfully");
-        }
-
-        public MarketAnswer ViewStoreInfo(string store)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer ViewStoreStock(string store)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MarketAnswer AddProductToCart(string productName)
-        {
-            throw new NotImplementedException();
-        }
-
         public MarketAnswer CloseStore()
         {
          //   if (ProxyIHavePremmision(user.GetUser())){ //TODO: fix this
         //        return store.CloseStore();
         //          }
-            return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
-        }
-        public static MarketAnswer StaticCloseStore(string storeString, int ownerOrSystemAdmin) //Maor asked my for this one
-        {
-            //TODO: fix this
-        /*    if (ProxyIHavePremmision(ProxyCreateUser(ownerOrSystemAdmin))){
-                ModuleGlobalHandler global = ModuleGlobalHandler.GetInstance();
-                Store other = global.GetStoreByID(storeString);
-
-                //Need Maor function here!
-                return other.CloseStore();
-            }*/
             return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
         }
 
@@ -294,25 +231,5 @@ namespace SadnaSrc.StoreCenter
             }*/
             return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "you have no premmision to do that");
         }
-
-        public MarketAnswer SetStoreName(string name)
-        {
-            //TODO: fix this
-            /*if (ProxyIHavePremmision(user.GetUser())){
-                return store.SetStoreName(name);
-                }*/
-            return new StoreAnswer(StoreEnum.EditStoreFail, "you have no premmision to do that");
-        }
-
-        public MarketAnswer SetStoreAddress(string address)
-        {
-            //TODO: fix this
-           /* if (ProxyIHavePremmision(user.GetUser()))
-            {
-                return store.SetStoreAddress(address);
-            }*/
-
-            return new StoreAnswer(StoreEnum.EditStoreFail, "you have no premmision to do that");
-    }
     }
 }

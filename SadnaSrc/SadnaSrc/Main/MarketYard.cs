@@ -64,7 +64,7 @@ namespace SadnaSrc.Main
 
         public IStoreShoppingService GetStoreShoppingService(ref IUserService userService)
         {
-            return new StoreService(new UserShopperHarmony(ref userService));
+            return new StoreShoppingService(new UserShopperHarmony(ref userService));
         }
 
         public IOrderService GetOrderService(ref IUserService userService)

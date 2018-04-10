@@ -17,9 +17,6 @@ namespace SadnaSrc.Main
         MarketAnswer GetProductStockInformation(int ProductID);
         MarketAnswer CloseStore();
 
-        MarketAnswer SetStoreName(string name);
-        MarketAnswer SetStoreAddress(string address);
-
         /**
          * Store Managment, handling products
          **/
@@ -68,6 +65,12 @@ namespace SadnaSrc.Main
         PurchesFail,
         SetManagerPermissionsFail,
         EditStoreFail
+    }
+
+    public enum StoreSyncStatus
+    {
+        NoStore,
+        NoProduct
     }
 
     public enum PurchaseEnum { Immediate, Lottery };

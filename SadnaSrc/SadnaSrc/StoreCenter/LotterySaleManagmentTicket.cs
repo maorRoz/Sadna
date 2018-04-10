@@ -65,7 +65,7 @@ namespace SadnaSrc.StoreCenter
             int winningNumber = r.Next(0, ProductNormalPrice);
             LotteryTicket winner = null;
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(this.SystemID);
+            LinkedList<LotteryTicket> tickets = handler.DataLayer.GetAllTickets(this.SystemID);
             foreach (LotteryTicket lotter in tickets)
             {
                 if (lotter.IsWinning(winningNumber))
@@ -100,6 +100,19 @@ namespace SadnaSrc.StoreCenter
         {
             IsActive = false;
         //call maor method here
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 808578065;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemID);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Product>.Default.GetHashCode(Original);
+            hashCode = hashCode * -1521134295 + ProductNormalPrice.GetHashCode();
+            hashCode = hashCode * -1521134295 + TotalMoneyPayed.GetHashCode();
+            hashCode = hashCode * -1521134295 + StartDate.GetHashCode();
+            hashCode = hashCode * -1521134295 + EndDate.GetHashCode();
+            hashCode = hashCode * -1521134295 + IsActive.GetHashCode();
+            return hashCode;
         }
     }
 }
