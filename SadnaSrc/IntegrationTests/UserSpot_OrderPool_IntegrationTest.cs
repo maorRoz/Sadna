@@ -62,6 +62,41 @@ namespace IntegrationTests
             }
         }
 
+        //TODO: Fix the following tests after implementation of OrderPool is complete
+
+        [TestMethod]
+        public void CartItemUpdatedAfterBuyTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 1, 6.00);
+                userServiceSession.SignIn(user, pass);
+                CartItem item = ((UserService) userServiceSession).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
+                //Assert.AreEqual(2,item.Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void CartItemRemovedAfterBuyTest()
+        {
+            try
+            {
+                userServiceSession.SignIn(user, pass);
+                orderServiceSession.BuyItemFromImmediate("OCB", "24", 2, 10.00);
+                userServiceSession.SignIn(user, pass);
+                //Assert.IsNull(((UserService)userServiceSession).MarketUser.Cart.SearchInCart("24", "OCB", 10.00));
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
         [TestCleanup]
         public void UserOrderTestCleanUp()
         {
