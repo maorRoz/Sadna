@@ -261,18 +261,35 @@ namespace StoreCenterTests
             LotteryTicket find = handler.DataLayer.GetLotteryTicket("T100");
             Assert.AreEqual(Copy, find);
         }
+        [TestMethod]
+        public void AddLotteryTicket()
+        {
+            LotteryTicket Copy = new LotteryTicket(0, 0, "L100", "T101"); 
+            LotteryTicket find = handler.DataLayer.GetLotteryTicket("T101");
+            Assert.IsNull(find);
+            handler.DataLayer.AddLotteryTicket(Copy);
+            find = handler.DataLayer.GetLotteryTicket("T101");
+            Assert.AreEqual(find, Copy);
+            handler.DataLayer.RemoveLotteryTicket(Copy);
+        }
+        [TestMethod]
+        public void RemoveLotteryTicket()
+        {
+            LotteryTicket Copy = new LotteryTicket(0, 0, "L100", "T101");
+            handler.DataLayer.AddLotteryTicket(Copy);
+            LotteryTicket find = handler.DataLayer.GetLotteryTicket("T101");
+            Assert.AreEqual(find, Copy);
+            handler.DataLayer.RemoveLotteryTicket(Copy);
+            find = handler.DataLayer.GetLotteryTicket("T101");
+            Assert.IsNull(find);
+        }
 
     }
 }
 //'D101', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true'
 /**
-
-    public LotteryTicket GetLotteryTicket(String lotteryID)
-        public void RemoveLotteryTicket(LotteryTicket lottery)
-        public void AddLotteryTicket(LotteryTicket lottery)
     
 private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
-public void AddLotteryTicket(LotteryTicket lottery)
 public string[] GetHistory(Store store)
 public LinkedList<string> GetAllStoreProductsID(string systemID)
 **/

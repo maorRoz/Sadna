@@ -277,7 +277,7 @@ namespace SadnaSrc.StoreCenter
         }
         public void AddLotteryTicket(LotteryTicket lottery)
         {
-            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, isActive",
+            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, Status",
                 GetTicketStringValues(lottery), GetTicketValuesArray(lottery));
         }
 
