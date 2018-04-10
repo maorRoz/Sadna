@@ -137,7 +137,7 @@ namespace SadnaSrc.StoreCenter
             };
         }
 
-        internal LinkedList<LotteryTicket> getAllTickets(string systemID)
+        internal LinkedList<LotteryTicket> GetAllTickets(string systemID)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();

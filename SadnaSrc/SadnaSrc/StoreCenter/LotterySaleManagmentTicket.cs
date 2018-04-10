@@ -65,7 +65,7 @@ namespace SadnaSrc.StoreCenter
             int winningNumber = r.Next(0, ProductNormalPrice);
             LotteryTicket winner = null;
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(this.SystemID);
+            LinkedList<LotteryTicket> tickets = handler.DataLayer.GetAllTickets(this.SystemID);
             foreach (LotteryTicket lotter in tickets)
             {
                 if (lotter.IsWinning(winningNumber))
