@@ -123,6 +123,21 @@ namespace OrderPoolWallaterSupplyPointTests
         }
 
         [TestMethod]
+        public void TestBrokenItem4()
+        {
+            try
+            {
+                OrderItem[] wrap = { };
+                var order = orderService.InitOrder(wrap);
+                Assert.Fail();
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)OrderItemStatus.InvalidDetails, e.Status);
+            }
+        }
+
+        [TestMethod]
         public void TestOrderWithItems1()
         {
             OrderItem[] wrap = { item1 , item2, item3};
