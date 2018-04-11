@@ -7,11 +7,11 @@ using SadnaSrc.Main;
 
 namespace BlackBox
 {
-	class ProxyBridge : IUserBridge
+	class ProxyUserBridge : IUserBridge
 	{
 		public IUserBridge real;
 
-		public ProxyBridge()
+		public ProxyUserBridge()
 		{
 			real = null;
 		}
@@ -72,6 +72,18 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
+		public IUserService getUserSession()
+		{
+			if (real != null)
+			{
+				return real.getUserSession();
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
+		}
+
 		public void CleanSession()
 		{
 			if (real != null)
@@ -96,86 +108,5 @@ namespace BlackBox
 			}
 		}
 
-		public MarketAnswer RemoveUser(string userName)
-		{
-			if (real != null)
-			{
-				return real.RemoveUser(userName);
-			}
-			throw new NotImplementedException();
-		}
-
-		public void GetAdminService()
-		{
-			if (real != null)
-			{
-				real.GetAdminService();
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-		public MarketAnswer ViewPurchaseHistoryByUser(string userName)
-		{
-			if (real != null)
-			{
-				return real.ViewPurchaseHistoryByUser(userName);
-			}
-			throw new NotImplementedException();
-		}
-
-		public MarketAnswer ViewPurchaseHistoryByStore(string storeName)
-		{
-			if (real != null)
-			{
-				return real.ViewPurchaseHistoryByStore(storeName);
-			}
-			throw new NotImplementedException();
-		}
-
-		public void GetStoreService()
-		{
-			if (real != null)
-			{
-				real.GetStoreShoppingService();
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-		public MarketAnswer OpenStore(string name, string address)
-		{
-			if (real != null)
-			{
-				return real.OpenStore(name, address);
-			}
-			throw new NotImplementedException();
-		}
-
-		public void GetStoreShoppingService()
-		{
-			if (real != null)
-			{
-				real.GetStoreShoppingService();
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-		public MarketAnswer ViewStoreInfo(string store)
-		{
-			if (real != null)
-			{
-				return real.ViewStoreInfo(store);
-			}
-
-			throw new NotImplementedException();
-		}
 	}
 }

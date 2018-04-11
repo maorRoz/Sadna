@@ -62,18 +62,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Driver.cs" />
-    <Compile Include="IUserBridge.cs" />
-    <Compile Include="ProxyBridge.cs" />
-    <Compile Include="RealBridge.cs" />
+    <Compile Include="AdminBlackBoxTests\AdminDriver.cs" />
+    <Compile Include="OrderBlackBoxTests\IOrderBridge.cs" />
+    <Compile Include="OrderBlackBoxTests\OrderDriver.cs" />
+    <Compile Include="OrderBlackBoxTests\ProxyOrderBridge.cs" />
+    <Compile Include="OrderBlackBoxTests\RealOrderBridge.cs" />
+    <Compile Include="StoreBlackBoxTests\StoreDriver.cs" />
+    <Compile Include="UserBlackBoxTests\UserDriver.cs" />
+    <Compile Include="AdminBlackBoxTests\IAdminBridge.cs" />
+    <Compile Include="AdminBlackBoxTests\ProxyAdminBridge.cs" />
+    <Compile Include="AdminBlackBoxTests\RealAdminBridge.cs" />
+    <Compile Include="StoreBlackBoxTests\RealStoreBridge.cs" />
+    <Compile Include="StoreBlackBoxTests\ProxyStoreBridge.cs" />
+    <Compile Include="StoreBlackBoxTests\IStoreBridge.cs" />
+    <Compile Include="UserBlackBoxTests\IUserBridge.cs" />
+    <Compile Include="UserBlackBoxTests\ProxyUserBridge.cs" />
+    <Compile Include="UserBlackBoxTests\RealUserBridge.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UseCase1_2.cs" />
-    <Compile Include="UseCase1_1.cs" />
-    <Compile Include="UseCase1_6.cs" />
-    <Compile Include="UseCase2_1.cs" />
-    <Compile Include="UseCase2_2.cs" />
-    <Compile Include="UseCase5_2.cs" />
-    <Compile Include="UseCase5_4.cs" />
+    <Compile Include="UserBlackBoxTests\UseCase1_2.cs" />
+    <Compile Include="UserBlackBoxTests\UseCase1_1.cs" />
+    <Compile Include="UserBlackBoxTests\UseCase1_6.cs" />
+    <Compile Include="UserBlackBoxTests\UseCase2_1.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase2_2.cs" />
+    <Compile Include="AdminBlackBoxTests\UseCase5_2.cs" />
+    <Compile Include="AdminBlackBoxTests\UseCase5_4.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -85,12 +97,7 @@
       <Name>SadnaSrc</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AdminBlackBoxTests\" />
-    <Folder Include="OrderBlackBoxTests\" />
-    <Folder Include="StoreBlackBoxTests\" />
-    <Folder Include="UserBlackBoxTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

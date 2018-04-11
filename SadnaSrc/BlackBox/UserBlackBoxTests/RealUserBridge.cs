@@ -5,16 +5,12 @@ using SadnaSrc.Main;
 
 namespace BlackBox
 {
-	public class RealBridge : IUserBridge
+	public class RealUserBridge : IUserBridge
 	{
 		private readonly MarketYard _market;
 		private IUserService _userService;
-		private ISystemAdminService _systemAdminService;
-		private IStoreShoppingService _storeShoppingService;
 
-		//private IStoreService _storeService;
-
-		public RealBridge()
+		public RealUserBridge()
 		{
 			_market = MarketYard.Instance;
 			_userService = _market.GetUserService();
@@ -50,6 +46,11 @@ namespace BlackBox
 			return _userService.RemoveFromCart(store, product, unitPrice);
 		}
 
+		public IUserService getUserSession()
+		{
+			return _userService;
+		}
+
 		public void CleanSession()
 		{
 			_userService.CleanSession();
@@ -59,41 +60,6 @@ namespace BlackBox
 		public void CleanMarket()
 		{
 			MarketYard.CleanSession();
-		}
-
-		public void GetAdminService()
-		{
-			_systemAdminService = _market.GetSystemAdminService(_userService);
-		}
-
-		public MarketAnswer RemoveUser(string userName)
-		{
-			return _systemAdminService.RemoveUser(userName);
-		}
-
-		public MarketAnswer ViewPurchaseHistoryByUser(string userName)
-		{
-			return _systemAdminService.ViewPurchaseHistoryByUser(userName);
-		}
-
-		public MarketAnswer ViewPurchaseHistoryByStore(string storeName)
-		{
-			return _systemAdminService.ViewPurchaseHistoryByStore(storeName);
-		}
-
-		public MarketAnswer OpenStore(string name, string address)
-		{
-			return _storeShoppingService.OpenStore(name, address);
-		}
-
-		public void GetStoreShoppingService()
-		{
-			_storeShoppingService = _market.GetStoreShoppingService(ref _userService);
-		}
-
-		public MarketAnswer ViewStoreInfo(string store)
-		{
-			return _storeShoppingService.ViewStoreInfo(store);
 		}
 
 	}

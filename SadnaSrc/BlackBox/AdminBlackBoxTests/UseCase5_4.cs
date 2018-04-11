@@ -7,7 +7,8 @@ namespace BlackBoxAdminTests
 	[TestClass]
 	public class UseCase5_4
 	{
-		private IUserBridge _adminBridge;
+		private IUserBridge _adminSignInBridge;
+		private IAdminBridge _adminBridge;
 		private string userToCheck = "Arik1";
 		private string storeToCheck = "Y";
 		private readonly string adminName = "Arik1";
@@ -19,7 +20,7 @@ namespace BlackBoxAdminTests
 
 		public void MarketBuilder()
 		{
-			_adminBridge = Driver.getBridge();
+			_adminBridge = AdminDriver.getBridge();
 		}
 
 
@@ -27,7 +28,7 @@ namespace BlackBoxAdminTests
 		public void SuccessHistoryPurchaseUser()
 		{
 			SignIn(adminName,adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			MarketAnswer res = _adminBridge.ViewPurchaseHistoryByUser(userToCheck);
 			string[] purchaseUserHistory = res.ReportList;
 			string[] expectedHistory =
@@ -48,7 +49,7 @@ namespace BlackBoxAdminTests
 		public void SuccessHistoryPurchaseStore()
 		{
 			SignIn(adminName, adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			MarketAnswer res = _adminBridge.ViewPurchaseHistoryByStore(storeToCheck);
 			string[] purchaseUserHistory = res.ReportList;
 			string[] expectedHistory =
@@ -70,7 +71,7 @@ namespace BlackBoxAdminTests
 		public void NotAdminWrongUserNameUserHistory()
 		{
 			SignIn("hello", adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
 		}
 
@@ -78,7 +79,7 @@ namespace BlackBoxAdminTests
 		public void NotAdminWrongUserNameStoreHistory()
 		{
 			SignIn("hello", adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
 		}
 
@@ -86,7 +87,7 @@ namespace BlackBoxAdminTests
 		public void NotAdminWrongPasswordStoreHistory()
 		{
 			SignIn(adminName, "852963");
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
 		}
 
@@ -94,7 +95,7 @@ namespace BlackBoxAdminTests
 		public void NotAdminWrongPasswordUserHistory()
 		{
 			SignIn(adminName, "852963");
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
 		}
 
@@ -102,7 +103,7 @@ namespace BlackBoxAdminTests
 		public void NotAdminWrongUserNameAndPasswordStoreHistory()
 		{
 			SignIn("Hello", "852963");
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
 		}
 
@@ -110,7 +111,7 @@ namespace BlackBoxAdminTests
 		public void NotAdminWrongUserNameAndPasswordUserHistory()
 		{
 			SignIn("Hello", "852963");
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
 		}
 
@@ -118,7 +119,7 @@ namespace BlackBoxAdminTests
 		public void UserNotFound()
 		{
 			SignIn(adminName, adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			MarketAnswer res = _adminBridge.ViewPurchaseHistoryByUser(nonExistingUser);
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoUserFound,_adminBridge.ViewPurchaseHistoryByUser(nonExistingUser).Status);
 		}
@@ -127,15 +128,16 @@ namespace BlackBoxAdminTests
 		public void StoreNotFound()
 		{
 			SignIn(adminName, adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			MarketAnswer res = _adminBridge.ViewPurchaseHistoryByStore(nonExistingStore);
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoStoreFound, _adminBridge.ViewPurchaseHistoryByStore(nonExistingStore).Status);
 		}
 
 		private void SignIn(string userName, string password)
 		{
-			_adminBridge.EnterSystem();
-			_adminBridge.SignIn(userName, password);
+			_adminSignInBridge = UserDriver.getBridge();
+			_adminSignInBridge.EnterSystem();
+			_adminSignInBridge.SignIn(userName, password);
 		}
 
 
@@ -143,8 +145,8 @@ namespace BlackBoxAdminTests
 
 		public void UserTestCleanUp()
 		{
-			_adminBridge.CleanSession();
-			_adminBridge.CleanMarket();
+			_adminSignInBridge.CleanSession();
+			_adminSignInBridge.CleanMarket();
 			
 		}
 
