@@ -32,6 +32,11 @@ namespace BlackBox
 			return _storeShoppingService.ViewStoreInfo(store);
 		}
 
+	    public void CleanSession()
+	    {
+		    _storeShoppingService.CleanSeesion();
+        }
 
-	}
+
+}
 }
