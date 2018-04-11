@@ -16,11 +16,14 @@ namespace StoreCenterTests
         private MarketYard market;
         public Store toDeleteStore;
         private ModuleGlobalHandler handler;
+        IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
+            
             market = MarketYard.Instance;
             handler = ModuleGlobalHandler.GetInstance();
+            userService = market.GetUserService();
         }
         [TestMethod]
         public void CheckName()
@@ -34,24 +37,38 @@ namespace StoreCenterTests
             Assert.IsTrue(handler.DataLayer.IsStoreExist("name1test"));
         }
         [TestMethod]
-        public void OpenStoreInterfaceLevel()
+        public void OpenStoreInterfaceLevelSameName()
         {
-                 IUserService userService = market.GetUserService();
-                 StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
-                 liorSession.LoginShoper("Arik1", "123");
-                 Store find = handler.DataLayer.getStorebyName("newStoreName");
-                 Assert.IsNull(find);
-                 MarketAnswer ans = liorSession.OpenStore("newStoreName", "adress");
-                 find = handler.DataLayer.getStorebyName("newStoreName");
-                 Assert.IsNotNull(find);
-                 toDeleteStore = handler.DataLayer.getStorebyName("newStoreName");
-                 Assert.IsNotNull(toDeleteStore);
-                 Assert.AreEqual((int)OpenStoreStatus.Success, ans.Status);
-            //    find = handler.DataLayer.getStorebyName("newStoreName");
-            //    Assert.IsNotNull(find);
-            //   ans = liorSession.OpenStore("newStoreName", "adress");
-            //     Assert.AreEqual(OpenStoreStatus.AlreadyExist, ans.Status);
-
+            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
+            liorSession.LoginShoper("Arik3", "123");
+            MarketAnswer ans = liorSession.OpenStore("newStoreName", "adress");
+            toDeleteStore = handler.DataLayer.getStorebyName("newStoreName");
+            ans = liorSession.OpenStore("newStoreName", "adress");
+            Assert.AreEqual((int)OpenStoreStatus.AlreadyExist, ans.Status);
+        }
+        [TestMethod]
+        public void OpenStoreInterfaceLevelPass()
+        {
+            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
+            liorSession.LoginShoper("Arik3", "123");
+            Store find = handler.DataLayer.getStorebyName("newStoreName");
+            Assert.IsNull(find);
+            MarketAnswer ans = liorSession.OpenStore("newStoreName", "adress");
+            find = handler.DataLayer.getStorebyName("newStoreName");
+            Assert.IsNotNull(find);
+            toDeleteStore = handler.DataLayer.getStorebyName("newStoreName");
+            Assert.IsNotNull(toDeleteStore);
+            Assert.AreEqual((int)OpenStoreStatus.Success, ans.Status);
+        }
+        [TestMethod]
+        public void OpenStoreInterfaceLevelFail()
+        {
+            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
+            liorSession.MakeGuest();
+            Store find = handler.DataLayer.getStorebyName("newStoreName");
+            Assert.IsNull(find);
+            MarketAnswer ans = liorSession.OpenStore("newStoreName", "adress");
+            Assert.AreEqual((int)OpenStoreStatus.InvalidUser, ans.Status);
         }
 
         [TestCleanup]
@@ -61,6 +78,8 @@ namespace StoreCenterTests
             {
                 handler.DataLayer.RemoveStore(toDeleteStore);
             }
+            userService.CleanSession();
+            MarketYard.CleanSession();
         }
     }
 }
