@@ -13,11 +13,23 @@ namespace StoreCenterTests
         
         private MarketYard market;
         private ModuleGlobalHandler handler;
+        private Product toDeleteProduct;
+        private Discount toDeleteDiscount;
+        private Store toDeleteStore;
+        private LotterySaleManagmentTicket toDeleteLottery;
+        private LotteryTicket toDeleteTicket;
+        private StockListItem toDeleteStockItem;
         [TestInitialize]
         public void BuildSupplyPoint()
         {
             market = MarketYard.Instance;
             handler = ModuleGlobalHandler.GetInstance();
+            toDeleteProduct = null;
+            toDeleteDiscount = null;
+            toDeleteStore = null;
+            toDeleteLottery = null;
+            toDeleteTicket = null;
+            toDeleteStockItem = null;
         }
         
         [TestMethod]
@@ -33,8 +45,8 @@ namespace StoreCenterTests
             Product product = new Product("P105", "X", 100, "Exits ForTests Only");
             handler.DataLayer.AddProductToDatabase(product);
             Product find = handler.DataLayer.GetProductID("P105");
+            toDeleteProduct = product;
             Assert.AreEqual(product,find);
-            handler.DataLayer.RemoveProduct(product);
         }
         [TestMethod]
         public void RemoveProductToDatabase()
@@ -55,10 +67,10 @@ namespace StoreCenterTests
             product.BasePrice = 110;
             handler.DataLayer.EditProductInDatabase(product);
             Product find = handler.DataLayer.GetProductID("P105");
+            toDeleteProduct = product;
             Assert.AreEqual("lili",find.Name);
             Assert.AreEqual("momo",find.Description);
             Assert.AreEqual(110,find.BasePrice);
-            handler.DataLayer.RemoveProduct(product);
         }
         [TestMethod]
         public void GetStore()
@@ -73,8 +85,8 @@ namespace StoreCenterTests
             Store copy = new Store("Stest", "X2", "Here 4");
             handler.DataLayer.AddStore(copy);
             Store find = handler.DataLayer.GetStorebyID("Stest");
+            toDeleteStore = find;
             Assert.AreEqual(copy, find);
-            handler.DataLayer.RemoveStore(find);
         }
         [TestMethod]
         public void EditStore()
@@ -84,6 +96,7 @@ namespace StoreCenterTests
 
             handler.DataLayer.AddStore(copy);
             find = handler.DataLayer.GetStorebyID("S9");
+            toDeleteStore = copy;
             Assert.IsTrue(copy.Equals(find));
 
             copy.Name = "mojo";
@@ -93,7 +106,6 @@ namespace StoreCenterTests
             handler.DataLayer.EditStore(copy);
             find = handler.DataLayer.GetStorebyID("S9");
             Assert.AreEqual(copy, find);
-            handler.DataLayer.RemoveStore(find);
         }
 
         [TestMethod]
@@ -109,8 +121,8 @@ namespace StoreCenterTests
             Discount copy = new Discount("D102", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
             handler.DataLayer.AddDiscount(copy);
             Discount find = handler.DataLayer.GetDiscount("D102");
+            toDeleteDiscount = find;
             Assert.AreEqual(copy, find);
-            handler.DataLayer.RemoveDiscount(copy);
         }
         [TestMethod]
         public void EditDiscount()
@@ -118,12 +130,12 @@ namespace StoreCenterTests
            Discount copy = new Discount("D103", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
            handler.DataLayer.AddDiscount(copy);
            Discount find = handler.DataLayer.GetDiscount("D103");
+           toDeleteDiscount = copy;
            Assert.AreEqual(copy, find);
            copy.DiscountAmount = 30;
            handler.DataLayer.EditDiscountInDatabase(copy);
            find = handler.DataLayer.GetDiscount("D103");
            Assert.AreEqual(copy,find);
-           handler.DataLayer.RemoveDiscount(copy);
         }
         [TestMethod]
         public void RemoveDiscount()
@@ -158,8 +170,8 @@ namespace StoreCenterTests
             Assert.IsNull(find);
             handler.DataLayer.AddStockListItemToDataBase(Copy);
             find = handler.DataLayer.GetStockListItembyProductID("P110");
+            toDeleteStockItem = Copy;
             Assert.AreEqual(Copy, find);
-            handler.DataLayer.RemoveStockListItem(Copy);
         }
         [TestMethod]
         public void RemoveStockListItem()
@@ -172,6 +184,7 @@ namespace StoreCenterTests
             Assert.AreEqual(Copy, find);
             handler.DataLayer.RemoveStockListItem(Copy);
             find = handler.DataLayer.GetStockListItembyProductID("P110");
+            toDeleteStockItem = Copy;
             Assert.IsNull(find);
         }
         [TestMethod]
@@ -182,13 +195,13 @@ namespace StoreCenterTests
             StockListItem Copy = new StockListItem(10, product, discount, PurchaseEnum.Immediate, "S1");
             handler.DataLayer.AddStockListItemToDataBase(Copy);
             StockListItem find = handler.DataLayer.GetStockListItembyProductID("P111");
+            toDeleteStockItem = Copy;
             Assert.AreEqual(Copy, find);
             Copy.Quantity = 3;
             Assert.AreNotEqual(Copy, find);
             handler.DataLayer.EditStockInDatabase(Copy);
             find = handler.DataLayer.GetStockListItembyProductID("P111");
             Assert.AreEqual(Copy, find);
-            handler.DataLayer.RemoveStockListItem(Copy);
         }
         [TestMethod]
         public void GetLotteryByProductID()
@@ -204,11 +217,11 @@ namespace StoreCenterTests
             Product P = handler.DataLayer.GetProductID("P3");//exist in DL by SQL injection
             LotterySaleManagmentTicket Copy = new LotterySaleManagmentTicket("L101", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
             LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
+            toDeleteLottery = Copy;
             Assert.IsNull(find);
             handler.DataLayer.AddLottery(Copy);
             find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
             Assert.AreEqual(Copy, find);
-            handler.DataLayer.RemoveLottery(Copy);
         }
         [TestMethod]
         public void removeLottery()
@@ -229,13 +242,13 @@ namespace StoreCenterTests
             LotterySaleManagmentTicket Copy = new LotterySaleManagmentTicket("L101", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
             handler.DataLayer.AddLottery(Copy);
             LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
+            toDeleteLottery = Copy;
             Assert.AreEqual(Copy, find);
             Copy.TotalMoneyPayed = 50;
             Assert.AreNotEqual(Copy, find);
             handler.DataLayer.EditLotteryInDatabase(Copy);
             find = handler.DataLayer.GetLotteryByProductID("P3");
-            Assert.AreEqual(Copy, find);
-            handler.DataLayer.RemoveLottery(Copy);
+            Assert.AreEqual(Copy, find);;
         }
         [TestMethod]
         public void GetAllActiveStores()
@@ -268,11 +281,11 @@ namespace StoreCenterTests
          {
              LotteryTicket Copy = new LotteryTicket(0, 0, "L1", "T2",0); 
              LotteryTicket find = handler.DataLayer.GetLotteryTicket("T2");
+             toDeleteTicket = Copy;
              Assert.IsNull(find);
              handler.DataLayer.AddLotteryTicket(Copy);
              find = handler.DataLayer.GetLotteryTicket("T2");
              Assert.AreEqual(find, Copy);
-             handler.DataLayer.RemoveLotteryTicket(Copy);
          }
         [TestMethod]
         public void RemoveLotteryTicket()
@@ -280,6 +293,7 @@ namespace StoreCenterTests
             LotteryTicket Copy = new LotteryTicket(0, 0, "L1", "T3", 0);
             handler.DataLayer.AddLotteryTicket(Copy);
             LotteryTicket find = handler.DataLayer.GetLotteryTicket("T3");
+            toDeleteTicket = Copy;
             Assert.AreEqual(find, Copy);
             handler.DataLayer.RemoveLotteryTicket(Copy);
             find = handler.DataLayer.GetLotteryTicket("T3");
@@ -323,11 +337,34 @@ namespace StoreCenterTests
             }
         }
 
+        [TestCleanup]
+        public void CleanDb()
+        {
+            if (toDeleteTicket != null)
+            {
+                handler.DataLayer.RemoveLotteryTicket(toDeleteTicket);
+            }
+            if (toDeleteLottery != null)
+            {
+                handler.DataLayer.RemoveLottery(toDeleteLottery);
+            }
+            if (toDeleteDiscount != null)
+            {
+                handler.DataLayer.RemoveDiscount(toDeleteDiscount);
+            }
+            if (toDeleteProduct != null)
+            {
+                handler.DataLayer.RemoveProduct(toDeleteProduct);
+            }
+            if (toDeleteStockItem != null)
+            {
+                handler.DataLayer.RemoveStockListItem(toDeleteStockItem);
+            }
+            if (toDeleteStore != null)
+            {
+                handler.DataLayer.RemoveStore(toDeleteStore);
+            }
+        }
+
     }
 }
-//'D1', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true'
-/**
-private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
-public string[] GetHistory(Store store)
-
-**/

@@ -424,9 +424,12 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveStockListItem(StockListItem stockListItem)
         {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             RemoveDiscount(stockListItem.Discount);
             RemoveProduct(stockListItem.Product);
-            DeleteFromTable("Stock", "StockID = '" + stockListItem.SystemId + "'");
+            DeleteFromTable("Stock", "StockID = '" + stockListItem.SystemId + "' AND ProductSystemID = '"
+                                     +stockListItem.Product.SystemId+"' AND Discount ='"+stockListItem.Discount.discountCode+"' AND PurchaseWay = '"
+                                     + handler.PrintEnum(stockListItem.PurchaseWay)+"'");
         }
 
         public void EditDiscountInDatabase(Discount discount)
