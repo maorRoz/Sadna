@@ -18,7 +18,6 @@ namespace OrderPoolWallaterSupplyPointTests
         private OrderItem item1;
         private OrderItem item2;
         private OrderItem item3;
-        private List<int> orderIDs;
         private IUserService userService;
         private OrderService orderService;
 
@@ -28,12 +27,11 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             market = MarketYard.Instance;
             userService = market.GetUserService();
-            orderService= (OrderService)market.GetOrderService(ref userService); 
-            orderService.LoginBuyer("Big Smoke","123");
-            item1= new OrderItem("Cluckin Bell", "#9", 5.00, 2);
+            orderService= (OrderService)market.GetOrderService(ref userService);
+            orderService.GiveDetails("Big Smoke", "Grove Street", "54238521");
+            item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
             item3 = new OrderItem("Cluckin Bell", "#6 Extra Dip", 8.50, 1);
-            orderIDs = new List<int>();
         }
 
         [TestMethod]
@@ -47,7 +45,7 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             var order = orderService.InitOrder();
             int id = order.GetOrderID();
-            orderIDs.Add(id); Assert.AreEqual(1, orderService.Orders.Count);
+            Assert.AreEqual(1, orderService.Orders.Count);
         }
 
         [TestMethod]
@@ -57,60 +55,296 @@ namespace OrderPoolWallaterSupplyPointTests
         }
 
         [TestMethod]
-        public void TestOrderWithOneItem()
+        public void TestEmptyOrder()
         {
             var order = orderService.InitOrder();
             int id = order.GetOrderID();
-            orderIDs.Add(id);
-            orderService.AddItemToOrder(id, item2.Store, item2.Name, item2.Price, item2.Quantity);
-            Assert.AreEqual(7.0,
-                orderService.FindOrderItemInOrder(id, "Cluckin Bell", "#9 Large").Price);
+            Assert.AreEqual(0.0,
+                orderService.GetOrder(id).GetPrice());
         }
 
         [TestMethod]
-        public void TestOrderWithItems()
+        public void TestOrderWithOneItem()
         {
-            var order = orderService.InitOrder();
+            OrderItem[] wrap = {item2};
+            var order = orderService.InitOrder(wrap);
             int id = order.GetOrderID();
-            orderIDs.Add(id);
+            Assert.AreEqual(7.0,
+                orderService.FindOrderItemInOrder(id, "Cluckin Bell" , "#9 Large").Price);
+        }
 
-            orderService.AddItemToOrder(id, item1.Store, item1.Name, item1.Price, item1.Quantity);
-            orderService.AddItemToOrder(id, item2.Store, item2.Name, item2.Price, item2.Quantity);
-            orderService.AddItemToOrder(id, item3.Store, item3.Name, item3.Price, item3.Quantity);
+
+        [TestMethod]
+        public void TestBrokenItem1()
+        {
+            try
+            {
+                item2 = new OrderItem(null, "#9 Large", 5.0, 2);
+                OrderItem[] wrap = {item2};
+                var order = orderService.InitOrder(wrap);
+                Assert.Fail();
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)OrderItemStatus.InvalidDetails,e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenItem2()
+        {
+            try
+            {
+                item2 = new OrderItem("Cluckin Bell", null, 5.0, 2);
+                OrderItem[] wrap = { item2 };
+                var order = orderService.InitOrder(wrap);
+                Assert.Fail();
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)OrderItemStatus.InvalidDetails, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenItem3()
+        {
+            try
+            {
+                item2 = new OrderItem("Cluckin Bell", "#9", 5.0, 0);
+                OrderItem[] wrap = { item2 };
+                var order = orderService.InitOrder(wrap);
+                Assert.Fail();
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)OrderItemStatus.InvalidDetails, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenItem4()
+        {
+            try
+            {
+                OrderItem[] wrap = { };
+                var order = orderService.InitOrder(wrap);
+                Assert.Fail();
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)OrderItemStatus.InvalidDetails, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestOrderWithItems1()
+        {
+            OrderItem[] wrap = { item1 , item2, item3};
+            var order = orderService.InitOrder(wrap);
+            int id = order.GetOrderID();
             Assert.AreEqual(25.50,
                 orderService.GetOrder(id).GetPrice());
         }
 
         [TestMethod]
-        public void TestDB()
+        public void TestOrderWithItems2()
         {
-            var o = orderService.InitOrder();
-            int id = o.GetOrderID();
-            orderIDs.Add(id);
+            OrderItem[] wrap = { item1, item2, item3 };
+            var order = orderService.InitOrder(wrap);
+            int id = order.GetOrderID();
+            Assert.AreEqual(2,
+                orderService.GetOrder(id).GetOrderItem("#9","Cluckin Bell").Quantity);
+        }
 
-            orderService.AddItemToOrder(id, item1.Store, item1.Name, item1.Price, item1.Quantity);
-            orderService.AddItemToOrder(id, item2.Store, item2.Name, item2.Price, item2.Quantity);
-            orderService.AddItemToOrder(id, item3.Store, item3.Name, item3.Price, item3.Quantity);
+        [TestMethod]
+        public void TestOrderWithItems3()
+        {
+            OrderItem[] wrap = { item1, item2, item3 };
+            var order = orderService.InitOrder(wrap);
+            int id = order.GetOrderID();
+            Assert.AreEqual(2,
+                orderService.GetOrder(id).GetOrderItem("#9", "Cluckin Bell").Quantity);
+        }
 
-            orderService.SaveToDB();
+        [TestMethod]
+        public void TestRemoveItem()
+        {
+            OrderItem[] wrap = { item1, item2, item3 };
+            var order = orderService.InitOrder(wrap);
+            int id = order.GetOrderID();
+            order.RemoveOrderItem(item2);
+            Assert.AreEqual(18.50,
+                orderService.GetOrder(id).GetPrice());
+        }
+
+        [TestMethod]
+        public void TestTwoOrders()
+        {
+            OrderItem[] wrap1 = { item1 };
+            var order1 = orderService.InitOrder(wrap1);
+            OrderItem[] wrap2 = { item2, item3 };
+            var order2 = orderService.InitOrder(wrap2);
+            Assert.AreEqual(2,orderService.Orders.Count);
+        }
+
+        [TestMethod]
+        public void TestThreeOrders()
+        {
+            OrderItem[] wrap1 = { item1 };
+            var order1 = orderService.InitOrder(wrap1);
+            OrderItem[] wrap2 = { item2 };
+            var order2 = orderService.InitOrder(wrap2);
+            OrderItem[] wrap3 = { item3 };
+            var order3 = orderService.InitOrder(wrap3);
+            Assert.AreEqual(3, orderService.Orders.Count);
+        }
+
+        /*
+         * DB Tests
+         */
+        [TestMethod]
+        public void TestGetOrderFromDB1()
+        {
+            OrderItem[] wrap = { item1, item2, item3 };
+            var order = orderService.InitOrder(wrap);
+            int id = order.GetOrderID();
+            orderService.SaveOrderToDB(order);
             Assert.AreEqual(25.50,
                 orderService.GetOrderFromDB(id).GetPrice());
         }
 
         [TestMethod]
-        public void TestOrderRemoveItem()
+        public void TestGetOrderFromDB2()
         {
-            var o = orderService.InitOrder();
-            int id = o.GetOrderID();
-            orderIDs.Add(id);
+            OrderItem[] wrap1 = { item1 };
+            OrderItem[] wrap2 = { item2, item3 };
+            var order1 = orderService.InitOrder(wrap1);
+            var order2 = orderService.InitOrder(wrap2);
 
-            orderService.AddItemToOrder(id, item1.Store, item1.Name, item1.Price, item1.Quantity);
-            orderService.AddItemToOrder(id, item2.Store, item2.Name, item2.Price, item2.Quantity);
-            orderService.AddItemToOrder(id, item3.Store, item3.Name, item3.Price, item3.Quantity);
-            orderService.RemoveItemFromOrder(id,"Cluckin Bell","#6 Extra Dip");
-            Assert.AreEqual(17,
-                orderService.GetOrder(id).GetPrice());
+            try
+            { 
+                orderService.SaveOrderToDB(order1);
+                orderService.SaveOrderToDB(order2);
+                double price1 = orderService.GetOrderFromDB(order1.GetOrderID()).GetPrice();
+                double price2 = orderService.GetOrderFromDB(order2.GetOrderID()).GetPrice();
+                Assert.IsTrue(price1 < price2);
+            }
+            catch (MarketException m)
+            {
+                string s = m.GetErrorMessage();
+            }
+
         }
+
+        [TestMethod]
+        public void TestRemoveOrderFromDB()
+        {
+            OrderItem[] wrap1 = { item1 };
+            var order1 = orderService.InitOrder(wrap1);
+            int id = order1.GetOrderID();
+            orderService.SaveToDB();
+            orderService.RemoveOrderFromDB(id);
+            Assert.AreEqual(null,
+                orderService.GetOrderFromDB(id));
+
+        }
+        /*
+        * Interface Tests
+        */
+        [TestMethod]
+        public void TestDetailsFromUser()  
+        {
+            MarketAnswer ans = orderService.GiveDetails("Big Smoke", "Grove Street", "12345678");
+            Assert.AreEqual((int)OrderStatus.Success, ans.Status);
+
+        }
+
+        [TestMethod]
+        public void TestBadUserDetails1() 
+        {
+            try
+            {
+                orderService.GiveDetails(null, "Grove Street", "12345678");
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBadUserDetails2()
+        {
+            try
+            {
+                orderService.GiveDetails("Big SMoke", null, "12345678");
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBadUserDetails3()
+        {
+            try
+            {
+                orderService.GiveDetails("Big SMoke", "Grove Street", "123478");
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBadUserDetails4()
+        {
+            try
+            {
+                orderService.GiveDetails("Big SMoke", "Grove Street", "asdfghjk");
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBadUserDetails5()
+        {
+            try
+            {
+                orderService.GiveDetails("Big SMoke", "Grove Street", null);
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+
+        //TODO: Test wonk work until Rebase
+        /*   [TestMethod]
+           public void TestImmediateBuy()
+           {
+               orderService.LoginBuyer("Big Smoke","123");
+               MarketAnswer ans = orderService.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.0);
+               Assert.AreEqual((int)OrderStatus.Success,ans.Status);
+
+           }
+           */
+
+
+
+
         [TestCleanup]
         public void UserTestCleanUp()
         {

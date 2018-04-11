@@ -8,9 +8,9 @@ namespace SadnaSrc.Main
 {
     public interface IPaymentService
     {
-        //TODO: you shouldn't let the client get any interaction with this interface, no MarketAnswer is needed here
-        MarketAnswer AttachExternalSystem();
-        MarketAnswer ProccesPayment(int orderId, string address, List<string> details);
+      /*  MarketAnswer AttachExternalSystem();
+        MarketAnswer ProccesPayment(int orderId, string address, List<string> details);*/
+        void BreakExternal();
     }
 
     public enum WalleterStatus
@@ -18,7 +18,9 @@ namespace SadnaSrc.Main
         Success,
         InvalidCreditCardSyntax,
         PaymentSystemError,
-        NoPaymentSystem
+        NoPaymentSystem,
+        InvalidOrder,
+        InvalidData
     }
 
 }

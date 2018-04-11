@@ -30,7 +30,7 @@ namespace SadnaSrc.OrderPool
         public Order(int orderId, string userName)
         {
             _userName = userName;
-            _shippingAddress = "default"; // TODO maybe change to other default value
+            _shippingAddress = "default"; 
             _items = new List<OrderItem>();
             _orderId = orderId;
             _date = DateTime.Today;
@@ -58,6 +58,7 @@ namespace SadnaSrc.OrderPool
 
         private DateTime ParseDate(string dateString)
         {
+
             int days= Int32.Parse(dateString.Substring(0,2));
             int months = Int32.Parse(dateString.Substring(3, 2));
             int years = Int32.Parse(dateString.Substring(6, 4));

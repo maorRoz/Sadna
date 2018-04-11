@@ -424,9 +424,12 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveStockListItem(StockListItem stockListItem)
         {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             RemoveDiscount(stockListItem.Discount);
             RemoveProduct(stockListItem.Product);
-            DeleteFromTable("Stock", "StockID = '" + stockListItem.SystemId + "'");
+            DeleteFromTable("Stock", "StockID = '" + stockListItem.SystemId + "' AND ProductSystemID = '"
+                                     +stockListItem.Product.SystemId+"' AND Discount ='"+stockListItem.Discount.discountCode+"' AND PurchaseWay = '"
+                                     + handler.PrintEnum(stockListItem.PurchaseWay)+"'");
         }
 
         public void EditDiscountInDatabase(Discount discount)
@@ -500,11 +503,11 @@ namespace SadnaSrc.StoreCenter
 
         public string[] GetStoreInfo(string store)
         {
-            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Store = '"+store +" AND Status = 'Active'"))
+            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Name = '"+store +"'AND Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {
-                    return new [] {dbReader.GetString(1), dbReader.GetString(2)};
+                    return new [] {dbReader.GetString(0), dbReader.GetString(1)};
 
                 }
             }

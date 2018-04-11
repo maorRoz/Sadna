@@ -71,6 +71,7 @@ namespace StoreCenterTests
             Assert.AreEqual((int)OpenStoreStatus.InvalidUser, ans.Status);
         }
 
+
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
