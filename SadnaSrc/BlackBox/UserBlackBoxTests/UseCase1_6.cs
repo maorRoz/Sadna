@@ -18,7 +18,7 @@ namespace BlackBoxUserTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_bridge = Driver.getBridge();
+			_bridge = UserDriver.getBridge();
 			//TODO: open a store
 			//TODO: add products to the store
 			//TODO: add products to cart

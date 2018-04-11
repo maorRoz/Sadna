@@ -14,7 +14,7 @@ namespace BlackBoxUserTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_bridge = Driver.getBridge();
+			_bridge = UserDriver.getBridge();
 			_bridge2 = null;
 		}
 		[TestMethod]
@@ -38,7 +38,7 @@ namespace BlackBoxUserTests
 		{
 			_bridge.EnterSystem();
 			_bridge.SignUp("Pnina", "miahol susia 12", "123456","12345678");
-			_bridge2 = Driver.getBridge();
+			_bridge2 = UserDriver.getBridge();
 			_bridge2.EnterSystem();
 			Assert.AreEqual((int)SignUpStatus.TakenName, _bridge2.SignUp("Pnina", "miahol susia 12", "123456", "12345678").Status);
 		}

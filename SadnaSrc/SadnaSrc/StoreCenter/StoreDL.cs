@@ -485,11 +485,11 @@ namespace SadnaSrc.StoreCenter
 
         public string[] GetStoreInfo(string store)
         {
-            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Store = '"+store +" AND Status = 'Active'"))
+            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Name = '"+store +"'AND Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {
-                    return new [] {dbReader.GetString(1), dbReader.GetString(2)};
+                    return new [] {dbReader.GetString(0), dbReader.GetString(1)};
 
                 }
             }
