@@ -27,7 +27,7 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             market = MarketYard.Instance;
             userService = market.GetUserService();
-            orderService= (OrderService)market.GetOrderService(ref userService, market.GetPaymentService(),market.GetSupplyService());
+            orderService= (OrderService)market.GetOrderService(ref userService);
             orderService.GiveDetails("Big Smoke", "Grove Street", "54238521");
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);

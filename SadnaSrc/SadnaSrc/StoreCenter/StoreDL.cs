@@ -322,7 +322,7 @@ namespace SadnaSrc.StoreCenter
             return discount;
         }
 
-        private bool IsStoreExist(string store)
+        public bool IsStoreExist(string store)
         {
             using (var dbReader = SelectFromTableWithCondition("Store", "*", " Name = '" + store + "'"))
             {

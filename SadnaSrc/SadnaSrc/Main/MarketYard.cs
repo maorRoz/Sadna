@@ -67,11 +67,10 @@ namespace SadnaSrc.Main
             return new StoreShoppingService(new UserShopperHarmony(ref userService));
         }
 
-        public IOrderService GetOrderService(ref IUserService userService,
-                                            IPaymentService paymentService, ISupplyService supplyService)
+        public IOrderService GetOrderService(ref IUserService userService)
         {
-            return new OrderService(new UserBuyerHarmony(ref userService), new StoresSyncherHarmony(),(PaymentService)paymentService,
-                                                         (SupplyService)supplyService);
+            return new OrderService(new UserBuyerHarmony(ref userService), new StoresSyncherHarmony(),new PaymentService(),
+                                                         new SupplyService());
         }
 
         public IPaymentService GetPaymentService()
