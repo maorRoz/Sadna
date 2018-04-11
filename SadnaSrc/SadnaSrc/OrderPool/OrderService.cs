@@ -362,6 +362,48 @@ namespace SadnaSrc.OrderPool
                 return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }
         }
+
+        public MarketAnswer SendPackage(string itemName, string store, int quantity)
+        {
+            MarketLog.Log("OrderPool", "Attempting to send package...");
+            int orderId = 0;
+            try
+            {
+                IsValidUserDetails();
+                OrderItem toBuy = _buyer.CheckoutItem("DELIVERY : "+itemName, store, quantity, 1);
+                CheckOrderItem(toBuy);
+                Order order = InitOrder();
+                orderId = order.GetOrderID();
+                order.AddOrderItem(toBuy);
+                _supplyService.CreateDelivery(order);
+                SaveOrderToDB(order);
+                MarketLog.Log("OrderPool", "User " + UserName + " successfully made delivery for item: " + itemName + " X "+quantity);
+                return new OrderAnswer(OrderStatus.Success, "Successfully made delivery for item: " + itemName + " X " + quantity);
+            }
+            catch (OrderException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
+                return new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (WalleterException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
+                                           " Error message has been created!");
+                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (SupplyException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
+                                           " Error message has been created!");
+                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
+                                           " Error message has been created!");
+                return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
+            }
+        }
         /*
          * Private Functions
          */
@@ -412,6 +454,11 @@ namespace SadnaSrc.OrderPool
 
         private void CheckAllItems(OrderItem[] items)
         {
+            if (items.Length == 0)
+            {
+                MarketLog.Log("OrderPool", "User entered empty item list !");
+                throw new OrderException(OrderItemStatus.InvalidDetails, "User entered empty item list");
+            }
             foreach (var item in items)
             {
                 CheckOrderItem(item);

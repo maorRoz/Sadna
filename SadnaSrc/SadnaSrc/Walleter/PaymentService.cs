@@ -69,14 +69,7 @@ namespace SadnaSrc.Walleter
             }
         }
 
-        public void CheckOrderDetails(Order order)
-        {
-            if (order.GetOrderID() == 0 || order.GetPrice() == 0.0)
-            {
-                throw new WalleterException(WalleterStatus.InvalidOrder, "Failed, Invalid order details");
-            }
-        }
-
+      
         public void CheckRefundDetails(double sum, string username)
         {
             if (sum == 0 || username == null)

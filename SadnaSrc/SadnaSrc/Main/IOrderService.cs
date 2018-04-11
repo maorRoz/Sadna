@@ -20,6 +20,7 @@ namespace SadnaSrc.Main
 
         MarketAnswer Refund(double sum);
 
+        MarketAnswer SendPackage(string itemName, string store, int quantity);
     }
 
     public enum GiveDetailsStatus
@@ -32,7 +33,7 @@ namespace SadnaSrc.Main
         Success,
         InvalidUser,
         InvalidNameOrAddress,
-        NoOrderWithID,
+        NoOrderWithID
 
     }
 
