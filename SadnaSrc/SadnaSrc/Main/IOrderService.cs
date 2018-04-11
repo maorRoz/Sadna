@@ -21,6 +21,8 @@ namespace SadnaSrc.Main
         MarketAnswer Refund(double sum);
 
         MarketAnswer SendPackage(string itemName, string store, int quantity);
+
+        MarketAnswer GiveDetails(string userName, string address, string creditCard);
     }
 
     public enum GiveDetailsStatus

@@ -153,6 +153,8 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 paymentService.ProccesPayment(order, "1234ss5678");
+                Assert.Fail();
+
             }
             catch (MarketException e)
             {
@@ -169,6 +171,8 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 paymentService.ProccesPayment(order, "45");
+                Assert.Fail();
+
             }
             catch (MarketException e)
             {
@@ -184,6 +188,8 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 paymentService.ProccesPayment(order, "45");
+                Assert.Fail();
+
             }
             catch (MarketException e)
             {
@@ -200,6 +206,8 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 paymentService.ProccesPayment(order, "12345678");
+                Assert.Fail();
+
             }
             catch (MarketException e)
             {
@@ -223,6 +231,8 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 paymentService.Refund(3.0, "12345678", null);
+                Assert.Fail();
+
             }
             catch (MarketException e)
             {
@@ -237,6 +247,8 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 paymentService.Refund(3.0, "123dd45678", "Big Smoke");
+                Assert.Fail();
+
             }
             catch (MarketException e)
             {
@@ -251,6 +263,8 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 paymentService.Refund(3.0, "8", "Big Smoke");
+                Assert.Fail();
+
             }
             catch (MarketException e)
             {
@@ -266,6 +280,8 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 paymentService.Refund(0, "12345678", "Big Smoke");
+                Assert.Fail();
+
             }
             catch (MarketException e)
             {
@@ -282,6 +298,8 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 paymentService.Refund(3.0, "12345678", "Big Smoke");
+                Assert.Fail();
+
             }
             catch (MarketException e)
             {

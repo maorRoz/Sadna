@@ -188,7 +188,18 @@ namespace OrderPoolWallaterSupplyPointTests
             Assert.AreEqual(2,orderService.Orders.Count);
         }
 
-       
+        [TestMethod]
+        public void TestThreeOrders()
+        {
+            OrderItem[] wrap1 = { item1 };
+            var order1 = orderService.InitOrder(wrap1);
+            OrderItem[] wrap2 = { item2 };
+            var order2 = orderService.InitOrder(wrap2);
+            OrderItem[] wrap3 = { item3 };
+            var order3 = orderService.InitOrder(wrap3);
+            Assert.AreEqual(3, orderService.Orders.Count);
+        }
+
         /*
          * DB Tests
          */
@@ -222,7 +233,6 @@ namespace OrderPoolWallaterSupplyPointTests
             catch (MarketException m)
             {
                 string s = m.GetErrorMessage();
-                string s1 = " the orders are " + order1.GetOrderID() + " " + order2.GetOrderID();
             }
 
         }
@@ -242,16 +252,95 @@ namespace OrderPoolWallaterSupplyPointTests
         /*
         * Interface Tests
         */
-        //TODO: Test wonk work until Rebase
-     /*   [TestMethod]
-        public void TestImmediateBuy()
+        [TestMethod]
+        public void TestDetailsFromUser()  
         {
-            orderService.LoginBuyer("Big Smoke","123");
-            MarketAnswer ans = orderService.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.0);
-            Assert.AreEqual((int)OrderStatus.Success,ans.Status);
+            MarketAnswer ans = orderService.GiveDetails("Big Smoke", "Grove Street", "12345678");
+            Assert.AreEqual((int)OrderStatus.Success, ans.Status);
 
         }
-        */ 
+
+        [TestMethod]
+        public void TestBadUserDetails1() 
+        {
+            try
+            {
+                orderService.GiveDetails(null, "Grove Street", "12345678");
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBadUserDetails2()
+        {
+            try
+            {
+                orderService.GiveDetails("Big SMoke", null, "12345678");
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBadUserDetails3()
+        {
+            try
+            {
+                orderService.GiveDetails("Big SMoke", "Grove Street", "123478");
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBadUserDetails4()
+        {
+            try
+            {
+                orderService.GiveDetails("Big SMoke", "Grove Street", "asdfghjk");
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBadUserDetails5()
+        {
+            try
+            {
+                orderService.GiveDetails("Big SMoke", "Grove Street", null);
+                Assert.Fail();
+            }
+            catch (MarketException m)
+            {
+                Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, m.Status);
+            }
+        }
+
+
+        //TODO: Test wonk work until Rebase
+        /*   [TestMethod]
+           public void TestImmediateBuy()
+           {
+               orderService.LoginBuyer("Big Smoke","123");
+               MarketAnswer ans = orderService.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.0);
+               Assert.AreEqual((int)OrderStatus.Success,ans.Status);
+
+           }
+           */
 
 
 

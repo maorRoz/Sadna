@@ -62,16 +62,7 @@ namespace SadnaSrc.OrderPool
         }
 
         
-        public MarketAnswer GiveDetails(string userName, string address, string creditCard)
-        {
-            MarketLog.Log("OrderPool","User entering name and address for later usage in market order. validating data ...");
-            IsValidUserDetails(userName, address, creditCard);
-            MarketLog.Log("OrderPool", "Validation has been completed. User name and address are valid and been updated");
-            UserName = userName;
-            UserAddress = address;
-            CreditCard = creditCard;
-            return new OrderAnswer(GiveDetailsStatus.Success,"User name and address has been updated successfully!");
-        }
+        
         
         public Order InitOrder(OrderItem[] items)
         {
@@ -156,7 +147,6 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                IsValidUserDetails();
                 OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
                 CheckOrderItem(toBuy);
                 Order order = InitOrder();
@@ -204,7 +194,6 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                IsValidUserDetails();
                 OrderItem ticketToBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
                 CheckOrderItem(ticketToBuy);
                 Order order = InitOrder();
@@ -248,7 +237,6 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                IsValidUserDetails();
                 OrderItem[] itemsToBuy = _buyer.CheckoutFromStore(store);
                 Order order = InitOrder(itemsToBuy);                
                 _supplyService.CreateDelivery(order);
@@ -290,7 +278,6 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                IsValidUserDetails();
                 OrderItem[] itemsToBuy = _buyer.CheckoutAll();
                 Order order = InitOrder(itemsToBuy);
                 _supplyService.CreateDelivery(order);
@@ -331,7 +318,6 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                IsValidUserDetails();
                 Order order = RefundOrder(sum);
                 _paymentService.Refund(sum, CreditCard,UserName);
                 SaveOrderToDB(order);
@@ -369,7 +355,6 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                IsValidUserDetails();
                 OrderItem toBuy = _buyer.CheckoutItem("DELIVERY : "+itemName, store, quantity, 1);
                 CheckOrderItem(toBuy);
                 Order order = InitOrder();
@@ -404,6 +389,17 @@ namespace SadnaSrc.OrderPool
                 return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }
         }
+
+        public MarketAnswer GiveDetails(string userName, string address, string creditCard)
+        {
+            MarketLog.Log("OrderPool", "User entering name and address for later usage in market order. validating data ...");
+            IsValidUserDetails(userName, address, creditCard);
+            MarketLog.Log("OrderPool", "Validation has been completed. User name and address are valid and been updated");
+            UserName = userName;
+            UserAddress = address;
+            CreditCard = creditCard;
+            return new OrderAnswer(GiveDetailsStatus.Success, "User name and address has been updated successfully!");
+        }
         /*
          * Private Functions
          */
@@ -436,7 +432,8 @@ namespace SadnaSrc.OrderPool
 
         private void IsValidUserDetails(string userName, string address, string creditCard)
         {
-            if (userName == null || address == null || creditCard == null)
+            int x;
+            if (userName == null || address == null || creditCard == null || creditCard.Length != 8 || !Int32.TryParse(creditCard, out x))
             {
                 MarketLog.Log("OrderPool", "User entered name or address which is invalid by the system standards!");
                 throw new OrderException(GiveDetailsStatus.InvalidNameOrAddress, "User entered invalid name or address into the order");

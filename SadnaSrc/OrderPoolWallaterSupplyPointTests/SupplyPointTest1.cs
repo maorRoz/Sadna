@@ -41,9 +41,8 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             try
             {
-                List<OrderItem> items = new List<OrderItem>();
-                items.Add(item1);
-                Order order = new Order(123456,"Grove Street");
+                Order order = new Order(123456,"Big Smoke","Grove Street");
+                order.AddOrderItem(item1);
                 supplyService.CreateDelivery(order);
                 Assert.Fail();
             }
@@ -54,18 +53,138 @@ namespace OrderPoolWallaterSupplyPointTests
         }
 
         [TestMethod]
-        public void TestSuccesfulOrder()
+        public void TestCheckOrderDetails()
         {
             supplyService.AttachExternalSystem();
-            Order order = new Order(123456, "Grove Street");
+            Order order = new Order(123456, "Big Smoke", "Grove Street");
+            order.AddOrderItem(item1);
+            supplyService.CheckOrderDetails(order);
+        }
+
+        [TestMethod]
+        public void TestBrokenOrder1()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(123456, null, "Grove Street");
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenOrder2()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(123456, "Big SMoke", null);
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenOrder3()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(12, "Big SMoke", "Grove Street");
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenOrder4()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(122326565, "Big SMoke", "Grove Street");
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenOrder5()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(123456, null, "Grove Street");
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestCreateDelivery()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(123456, "Big Smoke", "Grove Street");
+            order.AddOrderItem(item1);
             supplyService.CreateDelivery(order);
         }
+
+        [TestMethod]
+        public void TestBadDelivery()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(12, "Big Smoke", "Grove Street");
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CreateDelivery(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
 
         [TestMethod]
         public void TestExternalSystemError()
         {
             supplyService.AttachExternalSystem();
-            Order order = new Order(123456, "Grove Street");
+            Order order = new Order(123456, "Big Smoke","Grove Street");
+            order.AddOrderItem(item1);
+
             supplyService.BreakExternal();
             try
             {

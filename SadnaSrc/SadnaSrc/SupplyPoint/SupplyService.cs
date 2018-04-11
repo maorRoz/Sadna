@@ -45,7 +45,10 @@ namespace SadnaSrc.SupplyPoint
 
         public void CheckOrderDetails(Order order)
         {
-            if (order.GetOrderID() == null || order.GetUserName() == null || order.GetShippingAddress() == null)
+            if (order.GetOrderID() < 100000 || order.GetOrderID() > 999999
+                                            || order.GetUserName() == null ||
+                                            order.GetShippingAddress() == null ||
+                                            order.GetItems().Count == 0)
             {
                 throw new SupplyException(SupplyStatus.InvalidOrder,"Failed, Invalid order details");
             }
