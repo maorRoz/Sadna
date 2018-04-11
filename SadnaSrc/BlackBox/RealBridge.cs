@@ -8,8 +8,10 @@ namespace BlackBox
 	public class RealBridge : IUserBridge
 	{
 		private readonly MarketYard _market;
-		private readonly IUserService _userService;
+		private IUserService _userService;
 		private ISystemAdminService _systemAdminService;
+		private IStoreShoppingService _storeShoppingService;
+
 		//private IStoreService _storeService;
 
 		public RealBridge()
@@ -64,11 +66,6 @@ namespace BlackBox
 			_systemAdminService = _market.GetSystemAdminService(_userService);
 		}
 
-		public void GetStoreService()
-		{
-			//_storeService = _market.GetStoreService(_userService);
-		}
-
 		public MarketAnswer RemoveUser(string userName)
 		{
 			return _systemAdminService.RemoveUser(userName);
@@ -84,15 +81,14 @@ namespace BlackBox
 			return _systemAdminService.ViewPurchaseHistoryByStore(storeName);
 		}
 
-		//TODO: change this function according to the implementation
-		public MarketAnswer createStore(int id, string address, string status)
+		public MarketAnswer OpenStore(string name, string address)
 		{
-			return new MarketAnswer(0,"");
+			return _storeShoppingService.OpenStore(name, address);
 		}
 
-		public MarketAnswer OpenStore(string name, string store)
+		public void GetStoreShoppingService()
 		{
-			throw new NotImplementedException();
+			_storeShoppingService = _market.GetStoreShoppingService(ref _userService);
 		}
 
 

@@ -32,7 +32,7 @@ namespace BlackBox
 		/*
 		 * StoreSystem
 		 */
-		void GetStoreService();
-		MarketAnswer OpenStore(string name, string store);
+		void GetStoreShoppingService();
+		MarketAnswer OpenStore(string name, string address);
 	}
 }

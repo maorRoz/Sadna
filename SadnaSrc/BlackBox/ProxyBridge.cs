@@ -139,7 +139,7 @@ namespace BlackBox
 		{
 			if (real != null)
 			{
-				real.GetStoreService();
+				real.GetStoreShoppingService();
 			}
 			else
 			{
@@ -147,13 +147,25 @@ namespace BlackBox
 			}
 		}
 
-		public MarketAnswer OpenStore(string name, string store)
+		public MarketAnswer OpenStore(string name, string address)
 		{
 			if (real != null)
 			{
-				return real.OpenStore(name, store);
+				return real.OpenStore(name, address);
 			}
 			throw new NotImplementedException();
+		}
+
+		public void GetStoreShoppingService()
+		{
+			if (real != null)
+			{
+				real.GetStoreShoppingService();
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }
