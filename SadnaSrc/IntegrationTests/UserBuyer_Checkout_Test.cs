@@ -71,13 +71,11 @@ namespace IntegrationTests
         {
             try
             {
-                string result = getItemsFromCart(emptyUser, pass);
-                string expected = "";
-                Assert.AreEqual(result, expected);
+                getItemsFromCart(emptyUser, pass);
+                Assert.Fail();
             }
             catch (MarketException)
             {
-                Assert.Fail();
             }
         }
 
@@ -105,13 +103,11 @@ namespace IntegrationTests
         {
             try
             {
-                string result = getSingleStoreItems("The Blue Rock");
-                string expected = "";
-                Assert.AreEqual(result, expected);
+                getSingleStoreItems("The Blue Rock");
+                Assert.Fail();
             }
             catch (MarketException)
             {
-                Assert.Fail();
             }
         }
 
@@ -120,13 +116,11 @@ namespace IntegrationTests
         {
             try
             {
-                string result = getSingleStoreItems("Cluckin' Bell");
-                string expected = "";
-                Assert.AreEqual(result, expected);
+                getSingleStoreItems("Cluckin' Bell");
+                Assert.Fail();
             }
             catch (MarketException)
             {
-                Assert.Fail();
             }
         }
 

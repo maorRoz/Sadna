@@ -17,21 +17,16 @@ namespace OrderPoolWallaterSupplyPointTests
         private OrderItem item1;
         private OrderItem item2;
         private OrderItem item3;
-        private IUserService userService;
-        private OrderService orderService;
         private SupplyService supplyService;
 
         [TestInitialize]
         public void BuildSupplyPoint()
         {
             market = MarketYard.Instance;
-            userService = market.GetUserService();
-            orderService = (OrderService)market.GetOrderService(ref userService);
-            orderService.LoginBuyer("Big Smoke","123");
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
             item3 = new OrderItem("Cluckin Bell", "#6 Extra Dip", 8.50, 1);
-            supplyService = new SupplyService(orderService);
+            supplyService = (SupplyService)market.GetSupplyService();
         }
 
         [TestMethod]
@@ -46,9 +41,9 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             try
             {
-                int orderId;
-                orderService.CreateOrder(out orderId);
-                supplyService.CreateDelivery(orderId, "Grove Street");
+                Order order = new Order(123456,"Big Smoke","Grove Street");
+                order.AddOrderItem(item1);
+                supplyService.CreateDelivery(order);
                 Assert.Fail();
             }
             catch (MarketException e)
@@ -58,29 +53,142 @@ namespace OrderPoolWallaterSupplyPointTests
         }
 
         [TestMethod]
-        public void TestSuccesfulOrder()
+        public void TestCheckOrderDetails()
         {
             supplyService.AttachExternalSystem();
-            int orderId;
-            orderService.CreateOrder(out orderId);
-            orderService.AddItemToOrder(orderId, item1.Store, item1.Name, item1.Price, item1.Quantity);
-            orderService.AddItemToOrder(orderId, item2.Store, item2.Name, item2.Price, item2.Quantity);
-            MarketAnswer ans = supplyService.CreateDelivery(orderId, "Grove Street");
-            Assert.AreEqual((int)SupplyStatus.Success, ans.Status);
+            Order order = new Order(123456, "Big Smoke", "Grove Street");
+            order.AddOrderItem(item1);
+            supplyService.CheckOrderDetails(order);
         }
+
+        [TestMethod]
+        public void TestBrokenOrder1()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(123456, null, "Grove Street");
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenOrder2()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(123456, "Big SMoke", null);
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenOrder3()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(12, "Big SMoke", "Grove Street");
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenOrder4()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(122326565, "Big SMoke", "Grove Street");
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestBrokenOrder5()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(123456, null, "Grove Street");
+            try
+            {
+                supplyService.CheckOrderDetails(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
+        [TestMethod]
+        public void TestCreateDelivery()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(123456, "Big Smoke", "Grove Street");
+            order.AddOrderItem(item1);
+            supplyService.CreateDelivery(order);
+        }
+
+        [TestMethod]
+        public void TestBadDelivery()
+        {
+            supplyService.AttachExternalSystem();
+            Order order = new Order(12, "Big Smoke", "Grove Street");
+            order.AddOrderItem(item1);
+            try
+            {
+                supplyService.CreateDelivery(order);
+                Assert.Fail();
+
+            }
+            catch (MarketException e)
+            {
+                Assert.AreEqual((int)SupplyStatus.InvalidOrder, e.Status);
+            }
+        }
+
 
         [TestMethod]
         public void TestExternalSystemError()
         {
             supplyService.AttachExternalSystem();
-            int orderId;
-            orderService.CreateOrder(out orderId);
-            orderService.AddItemToOrder(orderId, item1.Store, item1.Name, item1.Price, item1.Quantity);
-            orderService.AddItemToOrder(orderId, item2.Store, item2.Name, item2.Price, item2.Quantity);
-            supplyService.FuckUpExternal();
+            Order order = new Order(123456, "Big Smoke","Grove Street");
+            order.AddOrderItem(item1);
+
+            supplyService.BreakExternal();
             try
             {
-                MarketAnswer ans = supplyService.CreateDelivery(orderId, "Grove Street");
+                supplyService.CreateDelivery(order);
                 Assert.Fail();
             }
             catch (MarketException e)
@@ -94,7 +202,6 @@ namespace OrderPoolWallaterSupplyPointTests
         public void UserTestCleanUp()
         {
 
-            userService.CleanSession();
             MarketYard.CleanSession();
         }
     }

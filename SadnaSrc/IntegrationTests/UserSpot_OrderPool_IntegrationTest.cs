@@ -202,7 +202,7 @@ namespace IntegrationTests
             try
             {
                 userServiceSession.SignIn(user, pass);
-                orderServiceSession.GiveDetails("Moshe", "A");
+                orderServiceSession.GiveDetails("Moshe", "A", "12345678");
                 Assert.AreEqual("Moshe", orderServiceSession.UserName);
                 Assert.AreEqual("A",orderServiceSession.UserAddress);
             }
