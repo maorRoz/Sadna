@@ -226,7 +226,7 @@ namespace SadnaSrc.StoreCenter
             {
                 _storeManager.CanPromoteStoreOwner();
                 _storeManager.ValidateNotPromotingHimself(otherUser);
-                int j = SetManagersActions(otherUser, actions, 0);
+                int j = privateSetManagersActions(otherUser, actions, 0);
                 if (j == 0)
                     return new StoreAnswer(StoreEnum.Success, "Set Manager Action Succeeded");
                 throw new StoreException(StoreEnum.SetManagerPermissionsFail, "set premission failed");
@@ -243,7 +243,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
             
-        private int SetManagersActions(string otherUser, string actions, int notImportant)
+        private int privateSetManagersActions(string otherUser, string actions)
         {
 
             string notAllowed = "StoreOwner";
