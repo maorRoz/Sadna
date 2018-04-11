@@ -12,9 +12,8 @@ namespace SadnaSrc.StoreCenter
     public class StoreService : IStoreManagementService
     {
 
-     //   UserService user;
         public Store store;
-        ModuleGlobalHandler global; //TODO: remove this one
+        ModuleGlobalHandler global;
         private IUserSeller _storeManager;
         private string _storeName;
 
@@ -29,7 +28,7 @@ namespace SadnaSrc.StoreCenter
         {
             _storeManager = storeManager;
             _storeName = storeName;
-            //TODO: continue this
+            store = global.DataLayer.getStorebyName(storeName);
         }
 
         public MarketAnswer CloseStore()

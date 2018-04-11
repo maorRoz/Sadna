@@ -48,6 +48,19 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
+        internal Store getStorebyName(string storeName)
+        {
+
+            using (var dbReader = SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
+                }
+                return null;
+            }
+        }
+
         public int FindMaxDiscountId()
         {
             using (var dbReader = SelectFromTable("Discount", "*"))
@@ -186,7 +199,7 @@ namespace SadnaSrc.StoreCenter
             };
         }
 
-        public Store GetStore(string storeID)
+        public Store GetStorebyID(string storeID)
         {
             using (var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = '" + storeID + "'")) {
                 while (dbReader.Read())
