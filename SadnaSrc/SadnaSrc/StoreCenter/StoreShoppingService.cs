@@ -12,34 +12,37 @@ namespace SadnaSrc.StoreCenter
     {
         private IUserShopper _shopper;
         private readonly ModuleGlobalHandler storeLogic;
+        private LinkedList<Store> stores;
         public StoreShoppingService(IUserShopper shopper)
         {
             _shopper = shopper;
             storeLogic = ModuleGlobalHandler.GetInstance();
+            stores = new LinkedList<Store>();
         }
         public MarketAnswer OpenStore(string storeName, string address)
         {
-            MarketLog.Log("StoreCenter", "");
+            MarketLog.Log("StoreCenter", "trying to add new store");
             try
             {
                 _shopper.ValidateRegistered();
-                MarketLog.Log("StoreCenter", "");
+                MarketLog.Log("StoreCenter", "premission gained");
                 Store newStore = new Store(storeLogic.GetNextStoreId(), storeName, address);
                 storeLogic.AddStore(newStore);
-                MarketLog.Log("StoreCenter", "");
+                MarketLog.Log("StoreCenter", "store was opened");
                 _shopper.AddOwnership(storeName);
-                MarketLog.Log("StoreCenter", "");
+                stores.AddLast(newStore);
+                MarketLog.Log("StoreCenter", "add myself to the store list");
                 return new StoreAnswer(OpenStoreStatus.Success, "Store " + storeName + " has been opened successfully");
             }
             catch (StoreException e)
             {
-                MarketLog.Log("StoreCenter", "");
+                MarketLog.Log("StoreCenter", "error in opening store");
                 return new StoreAnswer((OpenStoreStatus)e.Status, "Store " + storeName + " creation has been denied. " +
                                                  "something is wrong with adding a new store of that type. Error message has been created!");
             }
             catch (MarketException)
             {
-                MarketLog.Log("StoreCenter", "");
+                MarketLog.Log("StoreCenter", "no premission");
                 return new StoreAnswer(OpenStoreStatus.InvalidUser,
                     "User validation as store owner has been failed. only registered users can open new stores. Error message has been created!");
             }
@@ -64,7 +67,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (MarketException)
             {
-                MarketLog.Log("StoreCenter", "");
+                MarketLog.Log("StoreCenter", "no premission");
                 return new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
@@ -90,7 +93,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (MarketException)
             {
-                MarketLog.Log("StoreCenter", "");
+                MarketLog.Log("StoreCenter", "no premission");
                 return new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
@@ -117,7 +120,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (MarketException)
             {
-                MarketLog.Log("StoreCenter", "");
+                MarketLog.Log("StoreCenter", "no premission");
                 return new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
@@ -144,10 +147,19 @@ namespace SadnaSrc.StoreCenter
             }
             catch (MarketException)
             {
-                MarketLog.Log("StoreCenter", "");
+                MarketLog.Log("StoreCenter", "no premission");
                 return new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
+        }
+
+        public MarketAnswer CleanSeesion()
+        {
+            foreach (Store store in stores)
+            {
+                storeLogic.DataLayer.RemoveStore(store);
+            }
+            return new StoreAnswer(StoreEnum.Success, "All stores deleted");
         }
     }
 }
