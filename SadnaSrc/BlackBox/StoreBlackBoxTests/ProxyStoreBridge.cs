@@ -42,6 +42,11 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
+	    public void CleanSession()
+	    {
+            real?.CleanSession();
+	    } 
+
 
 	}
 }
