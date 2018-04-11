@@ -22,6 +22,8 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer OpenStore(string storeName, string address)
         {
             MarketLog.Log("StoreCenter", "trying to add new store");
+            if (!(storeLogic.IsStoreNameUnique(storeName)))
+            { return new StoreAnswer(OpenStoreStatus.AlreadyExist, "Store name is not uniqe"); }
             try
             {
                 _shopper.ValidateRegistered();

@@ -64,7 +64,7 @@ namespace StoreCenterTests
         public void GetStore()
         {
             Store expected = new Store("S1", "X", "Here 4"); // THIS exists in DB by SQL injection
-            Store find = handler.DataLayer.GetStore("S1");
+            Store find = handler.DataLayer.GetStorebyID("S1");
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
@@ -72,7 +72,7 @@ namespace StoreCenterTests
         {
             Store copy = new Store("Stest", "X2", "Here 4");
             handler.DataLayer.AddStore(copy);
-            Store find = handler.DataLayer.GetStore("Stest");
+            Store find = handler.DataLayer.GetStorebyID("Stest");
             Assert.AreEqual(copy, find);
             handler.DataLayer.RemoveStore(find);
         }
@@ -80,10 +80,10 @@ namespace StoreCenterTests
         public void EditStore()
         {
             Store copy = new Store("S9", "X3", "Here 4");
-            Store find = handler.DataLayer.GetStore("S9");
+            Store find = handler.DataLayer.GetStorebyID("S9");
 
             handler.DataLayer.AddStore(copy);
-            find = handler.DataLayer.GetStore("S9");
+            find = handler.DataLayer.GetStorebyID("S9");
             Assert.IsTrue(copy.Equals(find));
 
             copy.Name = "mojo";
@@ -91,7 +91,7 @@ namespace StoreCenterTests
             Assert.IsFalse(copy.Equals(find));
 
             handler.DataLayer.EditStore(copy);
-            find = handler.DataLayer.GetStore("S9");
+            find = handler.DataLayer.GetStorebyID("S9");
             Assert.AreEqual(copy, find);
             handler.DataLayer.RemoveStore(find);
         }

@@ -24,12 +24,12 @@ namespace StoreCenterTests
         public void CheckName()
         {
             Store A = new Store("SX", "name1test", "here");
-            Store find = handler.DataLayer.GetStoreByName("SX");
+            Store find = handler.DataLayer.getStorebyName("SX");
             Assert.IsNull(find);
-            Assert.IsTrue(handler.CheckStoreNameUnique("SX"));
+            Assert.IsTrue(handler.IsStoreNameUnique("SX"));
             handler.DataLayer.AddStore(A);
-            find = handler.DataLayer.GetStoreByName("SX");
-            Assert.IsFalse(handler.CheckStoreNameUnique("SX"));
+            find = handler.DataLayer.getStorebyName("SX");
+            Assert.IsFalse(handler.IsStoreNameUnique("SX"));
             handler.DataLayer.RemoveStore(A);
         }
     }

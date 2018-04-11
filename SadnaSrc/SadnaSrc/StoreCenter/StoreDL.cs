@@ -48,7 +48,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        internal Store getStorebyName(string storeName)
+        public Store getStorebyName(string storeName)
         {
 
             using (var dbReader = SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "'"))
@@ -100,6 +100,9 @@ namespace SadnaSrc.StoreCenter
                 product.Description
             };
         }
+
+        
+
         private object[] GetTicketValuesArray(LotteryTicket lottery)
         {
 
