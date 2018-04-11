@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.Main;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StoreCenterTests
 {
@@ -24,7 +25,7 @@ namespace StoreCenterTests
         {
             Product product = new Product("P1", "BOX", 100, "this is a plastic box"); // THIS exists in DB by SQL injection
             Product prod = handler.DataLayer.GetProductID("P1");
-            Assert.IsTrue(product.Equals(prod));
+            Assert.AreEqual(product,prod);
         }
         [TestMethod]
         public void AddProductToDatabase()
@@ -32,7 +33,7 @@ namespace StoreCenterTests
             Product product = new Product("P105", "X", 100, "Exits ForTests Only");
             handler.DataLayer.AddProductToDatabase(product);
             Product find = handler.DataLayer.GetProductID("P105");
-            Assert.IsTrue(product.Equals(find));
+            Assert.AreEqual(product,find);
             handler.DataLayer.RemoveProduct(product);
         }
         [TestMethod]
@@ -42,7 +43,7 @@ namespace StoreCenterTests
             handler.DataLayer.AddProductToDatabase(product);
             handler.DataLayer.RemoveProduct(product);
             Product find = handler.DataLayer.GetProductID("P105");
-            Assert.IsTrue(find == null);
+            Assert.IsNull(find);
         }
         [TestMethod]
         public void EditProduct()
@@ -54,45 +55,45 @@ namespace StoreCenterTests
             product.BasePrice = 110;
             handler.DataLayer.EditProductInDatabase(product);
             Product find = handler.DataLayer.GetProductID("P105");
-            Assert.IsTrue(find.Name.Equals("lili"));
-            Assert.IsTrue(find.Description.Equals("momo"));
-            Assert.IsTrue(find.BasePrice == 110);
+            Assert.AreEqual("lili",find.Name);
+            Assert.AreEqual("momo",find.Description);
+            Assert.AreEqual(110,find.BasePrice);
             handler.DataLayer.RemoveProduct(product);
         }
         [TestMethod]
         public void GetStore()
         {
-            Store Copy = new Store("S1", "X", "Here 4"); // THIS exists in DB by SQL injection
+            Store expected = new Store("S1", "X", "Here 4"); // THIS exists in DB by SQL injection
             Store find = handler.DataLayer.GetStore("S1");
-            Assert.IsTrue(Copy.Equals(find));
+            Assert.AreEqual(expected, find);
         }
         [TestMethod]
         public void AddStore() 
         {
-            Store Copy = new Store("Stest", "X", "Here 4");
-            handler.DataLayer.AddStore(Copy);
+            Store copy = new Store("Stest", "X2", "Here 4");
+            handler.DataLayer.AddStore(copy);
             Store find = handler.DataLayer.GetStore("Stest");
-            Assert.IsTrue(Copy.Equals(find));
+            Assert.AreEqual(copy, find);
             handler.DataLayer.RemoveStore(find);
         }
         [TestMethod]
         public void EditStore()
         {
-            Store Copy = new Store("S9", "X", "Here 4");
+            Store copy = new Store("S9", "X3", "Here 4");
             Store find = handler.DataLayer.GetStore("S9");
 
-               handler.DataLayer.AddStore(Copy);
-               find = handler.DataLayer.GetStore("S9");
-               Assert.IsTrue(Copy.Equals(find));
+            handler.DataLayer.AddStore(copy);
+            find = handler.DataLayer.GetStore("S9");
+            Assert.IsTrue(copy.Equals(find));
 
-               Copy.Name = "mojo";
-               Copy.Address = "NOT HERE";
-               Assert.IsFalse(Copy.Equals(find));
+            copy.Name = "mojo";
+            copy.Address = "NOT HERE";
+            Assert.IsFalse(copy.Equals(find));
 
-               handler.DataLayer.EditStore(Copy);
-               find = handler.DataLayer.GetStore("S9");
-               Assert.IsTrue(Copy.Equals(find));
-               handler.DataLayer.RemoveStore(find);
+            handler.DataLayer.EditStore(copy);
+            find = handler.DataLayer.GetStore("S9");
+            Assert.AreEqual(copy, find);
+            handler.DataLayer.RemoveStore(find);
         }
 
         [TestMethod]
@@ -100,29 +101,29 @@ namespace StoreCenterTests
         {
             Discount discount = new Discount("D1", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
             Discount find = handler.DataLayer.GetDiscount("D1");
-            Assert.IsTrue(find.Equals(discount));
+            Assert.AreEqual(discount, find);
         }
         [TestMethod]
         public void AddDiscount()
         {
-            Discount Copy = new Discount("D102", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
-            handler.DataLayer.AddDiscount(Copy);
+            Discount copy = new Discount("D102", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
+            handler.DataLayer.AddDiscount(copy);
             Discount find = handler.DataLayer.GetDiscount("D102");
-            Assert.IsTrue(Copy.Equals(find));
-            handler.DataLayer.RemoveDiscount(Copy);
+            Assert.AreEqual(copy, find);
+            handler.DataLayer.RemoveDiscount(copy);
         }
         [TestMethod]
         public void EditDiscount()
         {
-           Discount Copy = new Discount("D103", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
-           handler.DataLayer.AddDiscount(Copy);
+           Discount copy = new Discount("D103", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
+           handler.DataLayer.AddDiscount(copy);
            Discount find = handler.DataLayer.GetDiscount("D103");
-           Assert.IsTrue(Copy.Equals(find));
-           Copy.DiscountAmount = 30;
-           handler.DataLayer.EditDiscountInDatabase(Copy);
+           Assert.AreEqual(copy, find);
+           copy.DiscountAmount = 30;
+           handler.DataLayer.EditDiscountInDatabase(copy);
            find = handler.DataLayer.GetDiscount("D103");
-           Assert.IsTrue(Copy.Equals(find));
-           handler.DataLayer.RemoveDiscount(Copy);
+           Assert.AreEqual(copy,find);
+           handler.DataLayer.RemoveDiscount(copy);
         }
         [TestMethod]
         public void RemoveDiscount()
@@ -133,7 +134,7 @@ namespace StoreCenterTests
             Assert.IsTrue(Copy.Equals(find));
             handler.DataLayer.RemoveDiscount(Copy);
             find = handler.DataLayer.GetDiscount("D104");
-            Assert.IsTrue(find==null);
+            Assert.IsNull(find);
         }
         
         [TestMethod]
@@ -239,32 +240,28 @@ namespace StoreCenterTests
         [TestMethod]
         public void GetAllActiveStores()
         {
-            LinkedList<Store> Copy = new LinkedList<Store>();
-            Store S = new Store("S1", "X", "Here 4"); //Exists in DB
-            Copy.AddLast(S);
-            S = new Store("S2", "Y", "Here 4");
-            Copy.AddLast(S);
-            S = new Store("S3", "M", "Here 4");
-            Copy.AddLast(S);
-            S = new Store("S4", "Cluckin Bell", "Los Santos");
-            Copy.AddLast(S);
-            LinkedList <Store> find = handler.DataLayer.GetAllActiveStores();
-            Assert.AreEqual(Copy.Count, find.Count);
-            Store[] findResults = new Store[find.Count];
-            find.CopyTo(findResults, 0);
-            Store[] CopyResults = new Store[Copy.Count];
-            Copy.CopyTo(CopyResults, 0);
-            for (int i=0; i<findResults.Length; i++)
+            Store[] expected =
             {
-                Assert.AreEqual(findResults[i], CopyResults[i]);
+                new Store("S1", "X", "Here 4"),
+                new Store("S2", "Y", "Here 4"),
+                new Store("S3", "M", "Here 4"),
+                new Store("S4", "Cluckin Bell", "Los Santos"),
+                new Store("S5", "The Red Rock", "Mivtza Yoav"),
+                new Store("S6", "24", "Mezada"),
+            };
+            Store[] actual = handler.DataLayer.GetAllActiveStores().ToArray();
+            Assert.AreEqual(expected.Length, actual.Length);
+            for (int i=0; i< actual.Length; i++)
+            {
+                Assert.AreEqual(expected[i], actual[i]);
             }
         }
         [TestMethod]
          public void GetLotteryTicket()
          {
-             LotteryTicket Copy = new LotteryTicket(0, 0, "L1", "T1",0); //Exists in DB
+             LotteryTicket copy = new LotteryTicket(0, 0, "L1", "T1",0); //Exists in DB
              LotteryTicket find = handler.DataLayer.GetLotteryTicket("T1");
-             Assert.AreEqual(Copy, find);
+             Assert.AreEqual(copy, find);
          }
          [TestMethod]
          public void AddLotteryTicket()

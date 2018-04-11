@@ -20,15 +20,25 @@ namespace SadnaSrc.MarketHarmony
         /// </summary>
         void AddOwnership(string store);
         /// <summary>
-        /// Validate that the user can open store and has been entered the market
+        /// Validate that the user can do registered user action : open store/join lottery/join auction and has been entered the market
         /// <para /> throw UserException otherwise
         /// </summary>
-        void ValidateCanOpenStore();
+        void ValidateRegistered();
         /// <summary>
         /// Validate that the user entered the market
         /// <para /> throw UserException otherwise
         /// </summary>
         void ValidateCanBrowseMarket();
+        /// <summary>
+        /// Grant shopper system id . 
+        /// <para /> Make assumption that ValidateCanOpenStore() has been called already
+        /// </summary>
+        int GetShopperID();
+        /// <summary>
+        /// Grant shopper name . 
+        /// <para /> Make assumption that ValidateCanOpenStore() has been called already
+        /// </summary>
+        string GetShopperName();
 
     }
 }

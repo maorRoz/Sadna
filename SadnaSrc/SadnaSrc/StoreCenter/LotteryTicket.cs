@@ -65,5 +65,17 @@ namespace SadnaSrc.StoreCenter
         {
             return "lottery ticket of Lottery number: " + LotteryNumber + " ticket number is: "+myID+" status: "+myStatus;
         }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1900018414;
+            hashCode = hashCode * -1521134295 + IntervalStart.GetHashCode();
+            hashCode = hashCode * -1521134295 + IntervalEnd.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(LotteryNumber);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(myID);
+            hashCode = hashCode * -1521134295 + myStatus.GetHashCode();
+            hashCode = hashCode * -1521134295 + UserID.GetHashCode();
+            return hashCode;
+        }
     }
 }

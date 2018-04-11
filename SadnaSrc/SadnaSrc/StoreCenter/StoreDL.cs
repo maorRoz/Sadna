@@ -12,6 +12,59 @@ namespace SadnaSrc.StoreCenter
 {
     public class StoreDL : SystemDL
     {
+        public int FindMaxStoreId()
+        {
+            using (var dbReader = SelectFromTable("Store", "*"))
+            {
+                return FindMaxId(dbReader);
+
+            }
+        }
+
+        public int FindMaxProductId()
+        {
+            using (var dbReader = SelectFromTable("Products", "*"))
+            {
+                return FindMaxId(dbReader);
+
+            }
+        }
+
+        public int FindMaxLotteryId()
+        {
+            using (var dbReader = SelectFromTable("LotteryTable", "*"))
+            {
+                return FindMaxId(dbReader);
+
+            }
+        }
+
+        public int FindMaxLotteryTicketId()
+        {
+            using (var dbReader = SelectFromTable("LotteryTicket", "*"))
+            {
+                return FindMaxId(dbReader);
+
+            }
+        }
+
+        public int FindMaxDiscountId()
+        {
+            using (var dbReader = SelectFromTable("Discount", "*"))
+            {
+                return FindMaxId(dbReader);
+
+            }
+        }
+        private int FindMaxId(SQLiteDataReader dbReader)
+        {
+            int count = 1;
+            while (dbReader.Read())
+            {
+                count++;
+            }
+            return count;
+        }
 
         private object[] GetStockListItemArray(StockListItem stockListItem)
         {
@@ -251,10 +304,23 @@ namespace SadnaSrc.StoreCenter
             }
             return discount;
         }
-        public void AddStore(Store temp)
+
+        private bool IsStoreExist(string store)
         {
+            using (var dbReader = SelectFromTableWithCondition("Store", "*", " Name = '" + store + "'"))
+            {
+                return dbReader.Read();
+            }
+        }
+        public void AddStore(Store toAdd)
+        {
+            if (IsStoreExist(toAdd.Name))
+            {
+                throw new StoreException(OpenStoreStatus.AlreadyExist,"Cannot open another instance of store "+ toAdd.Name 
+                                                             +"Store already exist in the system!");
+            }
             InsertTable("Store", "SystemID, Name, Address, Status",
-                GetStoreStringValues(temp), GetStoreArray(temp));
+                GetStoreStringValues(toAdd), GetStoreArray(toAdd));
         }
 
         public LotteryTicket GetLotteryTicket(String TicketID)
@@ -413,6 +479,49 @@ namespace SadnaSrc.StoreCenter
                 }
             }
             return result;
+        }
+
+        public string[] GetStoreInfo(string store)
+        {
+            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Store = '"+store +" AND Status = 'Active'"))
+            {
+                while (dbReader.Read())
+                {
+                    return new [] {dbReader.GetString(1), dbReader.GetString(2)};
+
+                }
+            }
+            throw new StoreException(ViewStoreStatus.NoStore,"There is no active store by the name of " +store);
+        }
+
+        //TODO: fix this
+        public string[] GetStoreStockInfo(string store)
+        {
+            using (var dbReader = SelectFromTableWithCondition("Stock", "Name,Address", " Store = '" + store + " AND Status = 'Active'"))
+            {
+                while (dbReader.Read())
+                {
+                    return new[] { dbReader.GetString(1), dbReader.GetString(2) };
+
+                }
+            }
+            throw new StoreException(ViewStoreStatus.NoStore, "There is no active store by the name of " + store);
+        }
+
+        //TODO: fix this
+        public Product GetProductFromStore(string store, string productName, int quantity)
+        {
+            //TODO : this is bullshit query, fix this
+            using (var dbReader = SelectFromTableWithCondition("Products", "*", " Store = '" + store + " AND Q = 'Active'"))
+            {
+                while (dbReader.Read())
+                {
+                    //TODO: fix this...
+                    return null;
+
+                }
+            }
+            throw new StoreException(AddProductStatus.NoProduct, "There is no product "+productName+" from " + store + "");
         }
 
         public void RemoveDiscount(Discount discount)

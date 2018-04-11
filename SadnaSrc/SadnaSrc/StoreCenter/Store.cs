@@ -359,10 +359,10 @@ namespace SadnaSrc.StoreCenter
             handler.DataLayer.EditStockInDatabase(stockListItem);
             return new StoreAnswer(StoreEnum.Success, "discount remvoed");
         }
-        internal void UpdateQuanityAfterPurches(Product product, int quantity)
+        internal void UpdateQuanityAfterPurchase(Product product, int quantity)
         {
             StockListItem stockListItem = stock.FindstockListItembyProductID(product.SystemId);
-            if (stockListItem == null) throw new StoreException(-1, "Item not found");
+            if (stockListItem == null) throw new StoreException(StoreSyncStatus.NoProduct, "Item not found");
             stockListItem.Quantity = stockListItem.Quantity - quantity;
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             handler.DataLayer.EditStockInDatabase(stockListItem);
@@ -391,6 +391,18 @@ namespace SadnaSrc.StoreCenter
             }
             return false;
 
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -862772086;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Stock>.Default.GetHashCode(stock);
+            hashCode = hashCode * -1521134295 + EqualityComparer<LinkedList<PurchasePolicy>>.Default.GetHashCode(PurchasePolicy);
+            hashCode = hashCode * -1521134295 + IsActive.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Address);
+            return hashCode;
         }
     }
 }
