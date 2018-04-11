@@ -485,7 +485,7 @@ namespace SadnaSrc.StoreCenter
 
         public string[] GetStoreInfo(string store)
         {
-            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Store = '"+store +" AND Status = 'Active'"))
+            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Name = '"+store +" AND Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {

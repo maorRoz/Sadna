@@ -91,6 +91,10 @@ namespace BlackBox
 			_storeShoppingService = _market.GetStoreShoppingService(ref _userService);
 		}
 
+		public MarketAnswer ViewStoreInfo(string store)
+		{
+			return _storeShoppingService.ViewStoreInfo(store);
+		}
 
 	}
 }

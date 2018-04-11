@@ -20,10 +20,64 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void SuccessInOpeningAStore()
 		{
-			SignUp("Pnina","mishol","7894","1234567");
-			//SignIn("Pnina","7894");
+			//TODO: don't forget to delete the store
+			SignUp("Pnina","mishol","7894","12345678");
 			_bridgeSignUp.GetStoreShoppingService();
-			Assert.AreEqual((int)OpenStoreStatus.Success,_bridgeSignUp.OpenStore("PninaStore", "ben-gurion").Status);
+			//Assert.AreEqual((int)OpenStoreStatus.Success,_bridgeSignUp.OpenStore("PninaStore", "ben-gurion").Status);
+			_bridgeSignUp.GetStoreShoppingService();
+			MarketAnswer storeDetails = _bridgeSignUp.ViewStoreInfo("X");
+			//Assert.AreEqual("hello",storeDetails.ReportList[0]);
+		}
+
+		[TestMethod]
+		public void CheckViewStore()
+		{
+			
+			SignUp("Pnina", "mishol", "7894", "12345678");
+			_bridgeSignUp.GetStoreShoppingService();
+			MarketAnswer storeDetails = _bridgeSignUp.ViewStoreInfo("X");
+			//Assert.AreEqual("hello",storeDetails.ReportList[0]);
+		}
+
+		[TestMethod]
+		public void StoreAlreadyExists()
+		{
+			SignUp("Pnina", "mishol", "7894", "12345678");
+			_bridgeSignUp.GetStoreShoppingService();
+			_bridgeSignUp.OpenStore("PninaStore", "ben-gurion");
+			Assert.AreEqual((int)OpenStoreStatus.AlreadyExist, _bridgeSignUp.OpenStore("PninaStore", "ben-gurion").Status);
+		}
+
+		[TestMethod]
+		public void UserDidntSignUpInvalidCreditCart()
+		{
+			SignUp("Pnina", "mishol", "7894", "12345");
+			_bridgeSignUp.GetStoreShoppingService();
+			Assert.AreEqual((int)OpenStoreStatus.InvalidUser,_bridgeSignUp.OpenStore("PninaStore", "ben-gurion").Status);
+		}
+
+		[TestMethod]
+		public void UserDidntSignUpInvalidUserName()
+		{
+			SignUp("", "mishol", "7894", "12345678");
+			_bridgeSignUp.GetStoreShoppingService();
+			Assert.AreEqual((int) OpenStoreStatus.InvalidUser, _bridgeSignUp.OpenStore("PninaStore", "ben-gurion").Status);
+		}
+
+		[TestMethod]
+		public void UserDidntSignUpInvalidAddress()
+		{
+			SignUp("Pnina", null, "7894", "12345678");
+			_bridgeSignUp.GetStoreShoppingService();
+			Assert.AreEqual((int)OpenStoreStatus.InvalidUser, _bridgeSignUp.OpenStore("PninaStore", "ben-gurion").Status);
+		}
+
+		[TestMethod]
+		public void UserDidntSignUpInvalidPassword()
+		{
+			SignUp("Pnina", "mishol", "", "12345678");
+			_bridgeSignUp.GetStoreShoppingService();
+			Assert.AreEqual((int)OpenStoreStatus.InvalidUser, _bridgeSignUp.OpenStore("PninaStore", "ben-gurion").Status);
 		}
 
 		private void SignUp(string name, string address, string password, string creditCard)
@@ -43,10 +97,9 @@ namespace BlackBoxStoreTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_bridgeSignUp?.CleanSession();
+			_bridgeSignUp.CleanSession();
 			_bridgeSignIn?.CleanSession();
-			_bridgeSignIn?.CleanMarket();
-			//_bridgeSignUp?.CleanMarket();
+			_bridgeSignUp.CleanMarket();
 		}
 
 

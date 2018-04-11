@@ -167,5 +167,15 @@ namespace BlackBox
 				throw new NotImplementedException();
 			}
 		}
+
+		public MarketAnswer ViewStoreInfo(string store)
+		{
+			if (real != null)
+			{
+				return real.ViewStoreInfo(store);
+			}
+
+			throw new NotImplementedException();
+		}
 	}
 }

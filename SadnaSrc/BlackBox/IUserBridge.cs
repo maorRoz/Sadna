@@ -34,5 +34,6 @@ namespace BlackBox
 		 */
 		void GetStoreShoppingService();
 		MarketAnswer OpenStore(string name, string address);
+		MarketAnswer ViewStoreInfo(string store);
 	}
 }
