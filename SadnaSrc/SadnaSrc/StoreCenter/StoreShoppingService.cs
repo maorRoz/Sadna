@@ -8,7 +8,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    class StoreShoppingService : IStoreShoppingService
+    public class StoreShoppingService : IStoreShoppingService
     {
         private IUserShopper _shopper;
         private readonly ModuleGlobalHandler storeLogic;
@@ -18,6 +18,14 @@ namespace SadnaSrc.StoreCenter
             _shopper = shopper;
             storeLogic = ModuleGlobalHandler.GetInstance();
             stores = new LinkedList<Store>();
+        }
+        public void LoginShoper(string userName, string password)
+        {
+            ((UserShopperHarmony)_shopper).LogInShopper(userName, password);
+        }
+        public void MakeGuest()
+        {
+            ((UserShopperHarmony)_shopper).MakeGuest();
         }
         public MarketAnswer OpenStore(string storeName, string address)
         {

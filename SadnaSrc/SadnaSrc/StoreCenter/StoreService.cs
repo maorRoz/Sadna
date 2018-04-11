@@ -30,14 +30,33 @@ namespace SadnaSrc.StoreCenter
             _storeName = storeName;
             store = global.DataLayer.getStorebyName(storeName);
         }
-
+        
         public MarketAnswer CloseStore()
         {
-         //   if (ProxyIHavePremmision(user.GetUser())){ //TODO: fix this
-        //        return store.CloseStore();
-        //          }
+        try
+        {
+            StoreIsNotNull();
+        }
+        catch (Exception)
+        {
+            return new StoreAnswer(StoreEnum.StoreNotExists, "the store is not exists");
+        }
+        try
+        {
+            _storeManager.CanPromoteStoreOwner(); // can do anything
+            return store.CloseStore();
+        }
+        catch (StoreException)
+        {
+            MarketLog.Log("StoreCenter", "closing store failed");
+            return new StoreAnswer(StoreEnum.CloseStoreFail, "Store is not active");
+        }
+        catch (MarketException)
+        {
+            MarketLog.Log("StoreCenter", "closing store failed");
             return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
         }
+    }
 
 
 
@@ -255,6 +274,12 @@ namespace SadnaSrc.StoreCenter
             }
             catch (Exception exe)
             { return -1; }           
+        }
+        private void StoreIsNotNull()
+        {
+            MarketLog.Log("StoreCenter", "checking that the store exists");
+            if (store == null)
+                throw new StoreException(StoreEnum.StoreNotExists, "store not exists");
         }
     }
 }

@@ -64,7 +64,8 @@ namespace SadnaSrc.Main
         ChangePurchaseTypeFail,
         PurchesFail,
         SetManagerPermissionsFail,
-        EditStoreFail
+        EditStoreFail,
+        StoreNotExists
     }
 
     public enum StoreSyncStatus
