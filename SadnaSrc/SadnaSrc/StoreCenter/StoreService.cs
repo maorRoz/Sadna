@@ -226,7 +226,7 @@ namespace SadnaSrc.StoreCenter
             {
                 _storeManager.CanPromoteStoreOwner();
                 _storeManager.ValidateNotPromotingHimself(otherUser);
-                int j = privateSetManagersActions(otherUser, actions, 0);
+                int j = privateSetManagersActions(otherUser, actions);
                 if (j == 0)
                     return new StoreAnswer(StoreEnum.Success, "Set Manager Action Succeeded");
                 throw new StoreException(StoreEnum.SetManagerPermissionsFail, "set premission failed");
