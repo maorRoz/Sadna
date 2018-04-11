@@ -173,12 +173,6 @@ namespace SadnaSrc.StoreCenter
         {
             return DataLayer.GetStorebyID(ID);
         }
-        public bool IsStoreNameUnique(string storeName)
-        {
-            Store S = DataLayer.getStorebyName(storeName);
-            return (S == null);
-        }
-
         public LinkedList<Product> GetAllMarketProducts()
         {
             LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();

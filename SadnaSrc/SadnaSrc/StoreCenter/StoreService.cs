@@ -222,13 +222,39 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer SetManagersActions(string otherUser, string actions)
         {
-            //TODO: fix this
-            /*if (ProxyIHavePremmision(user.GetUser())) { 
+            try
+            {
+                _storeManager.CanPromoteStoreOwner();
+                _storeManager.ValidateNotPromotingHimself(otherUser);
+                int j = SetManagersActions(otherUser, actions, 0);
+                if (j == 0)
+                    return new StoreAnswer(StoreEnum.Success, "Set Manager Action Succeeded");
+                throw new StoreException(StoreEnum.SetManagerPermissionsFail, "set premission failed");
+            }
+            catch (StoreException)
+            {
+                return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "user failed in set premission failed");
+            }
+            catch (MarketException e)
+            {
+                MarketLog.Log("StoreCenter", "User " + _storeManager.GetID() + " has no permission to promote " + otherUser +
+                                  "into store owner in Store" + _storeName + " and therefore has been denied. Error message has been created!");
+                return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "you have no premmision to do that");
+            }
+        }
+            
+        private int SetManagersActions(string otherUser, string actions, int notImportant)
+        {
+
             string notAllowed = "StoreOwner";
-            if (actions.Contains(notAllowed)) { return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "you tryed to make a manager into a store owner"); }
-            throw new NotImplementedException(); //Ask Maor about it
-            }*/
-            return new StoreAnswer(StoreEnum.SetManagerPermissionsFail, "you have no premmision to do that");
+            if (actions.Contains(notAllowed)) { return -1; }
+            try
+            {
+                _storeManager.Promote(otherUser, actions);
+                return 0;
+            }
+            catch (Exception exe)
+            { return -1; }           
         }
     }
 }

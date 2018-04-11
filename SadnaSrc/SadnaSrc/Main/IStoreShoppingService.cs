@@ -18,7 +18,7 @@ namespace SadnaSrc.Main
 
         MarketAnswer AddLotteryTicket(string store, string productName, double amountToPay);
 
-        MarketAnswer CleanSeesion();
+        void CleanSeesion();
     }
 
     public enum OpenStoreStatus
@@ -52,4 +52,5 @@ namespace SadnaSrc.Main
         TooHighSuggestion,
         TooLowSuggestion
     }
+   
 }
