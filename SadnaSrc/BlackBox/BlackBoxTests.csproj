@@ -44,7 +44,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
@@ -68,6 +70,7 @@
     <Compile Include="OrderBlackBoxTests\ProxyOrderBridge.cs" />
     <Compile Include="OrderBlackBoxTests\RealOrderBridge.cs" />
     <Compile Include="StoreBlackBoxTests\StoreDriver.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase1_3.cs" />
     <Compile Include="UserBlackBoxTests\UserDriver.cs" />
     <Compile Include="AdminBlackBoxTests\IAdminBridge.cs" />
     <Compile Include="AdminBlackBoxTests\ProxyAdminBridge.cs" />
