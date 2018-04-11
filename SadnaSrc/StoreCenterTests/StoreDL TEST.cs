@@ -329,12 +329,5 @@ namespace StoreCenterTests
                 Assert.AreEqual(findResults[i], expectedResults[i]);
             }
         }
-
     }
 }
-//'D1', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true'
-/**
-private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
-public string[] GetHistory(Store store)
-
-**/
