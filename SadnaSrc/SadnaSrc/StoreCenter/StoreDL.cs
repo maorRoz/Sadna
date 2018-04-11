@@ -220,6 +220,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + store.GetStringFromActive() + "'"
             };
         }
+
         public string[] GetLotteryManagmentStringValues(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
             string isActive = "";
