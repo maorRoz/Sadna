@@ -48,6 +48,19 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
+        public Store getStorebyName(string storeName)
+        {
+
+            using (var dbReader = SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
+                }
+                return null;
+            }
+        }
+
         public int FindMaxDiscountId()
         {
             using (var dbReader = SelectFromTable("Discount", "*"))
@@ -87,6 +100,9 @@ namespace SadnaSrc.StoreCenter
                 product.Description
             };
         }
+
+        
+
         private object[] GetTicketValuesArray(LotteryTicket lottery)
         {
 
@@ -135,22 +151,6 @@ namespace SadnaSrc.StoreCenter
                 store.Address,
                 store.GetStringFromActive()
             };
-        }
-
-        internal LinkedList<LotteryTicket> GetAllTickets(string systemID)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
-            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "LotteryNumber = '" + systemID + "'"))
-            {
-                while (dbReader.Read())
-                {
-                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
-                    lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
-                    result.AddLast(lottery);
-                }
-            }
-            return result;
         }
 
         private string[] GetTicketStringValues(LotteryTicket lottery)
@@ -202,7 +202,7 @@ namespace SadnaSrc.StoreCenter
             };
         }
 
-        public Store GetStore(string storeID)
+        public Store GetStorebyID(string storeID)
         {
             using (var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = '" + storeID + "'")) {
                 while (dbReader.Read())
@@ -223,6 +223,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + store.GetStringFromActive() + "'"
             };
         }
+
         public string[] GetLotteryManagmentStringValues(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
             string isActive = "";
@@ -258,7 +259,21 @@ namespace SadnaSrc.StoreCenter
                 GetProductStringValues(product), GetProductValuesArray(product));
         }
 
-        
+        public LinkedList<LotteryTicket> getAllTickets(string systemID)
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "LotteryID = '" + systemID + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
+                    lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
+                    result.AddLast(lottery);
+                }
+            }
+            return result;
+        }
 
         private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
         {
@@ -488,11 +503,11 @@ namespace SadnaSrc.StoreCenter
 
         public string[] GetStoreInfo(string store)
         {
-            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Store = '"+store +" AND Status = 'Active'"))
+            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Name = '"+store +"'AND Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {
-                    return new [] {dbReader.GetString(1), dbReader.GetString(2)};
+                    return new [] {dbReader.GetString(0), dbReader.GetString(1)};
 
                 }
             }

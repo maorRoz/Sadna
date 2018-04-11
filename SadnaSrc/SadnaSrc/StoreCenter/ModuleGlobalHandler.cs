@@ -159,7 +159,7 @@ namespace SadnaSrc.StoreCenter
 
         public void UpdateQuantityAfterPurchase(string storeID, string productID, int quantity)
         {
-            Store store = DataLayer.GetStore(storeID);
+            Store store = DataLayer.GetStorebyID(storeID);
             if (store ==null) { throw new StoreException(StoreSyncStatus.NoStore, "no such store"); }
             Product product = DataLayer.GetProductID(productID);
             if (product==null) { throw new StoreException(StoreSyncStatus.NoProduct, "no such product"); }
@@ -171,9 +171,8 @@ namespace SadnaSrc.StoreCenter
         }
         public Store GetStoreByID(string ID)
         {
-            return DataLayer.GetStore(ID);
+            return DataLayer.GetStorebyID(ID);
         }
-        
         public LinkedList<Product> GetAllMarketProducts()
         {
             LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();

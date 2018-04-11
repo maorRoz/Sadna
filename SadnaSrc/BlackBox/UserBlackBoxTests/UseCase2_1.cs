@@ -14,7 +14,7 @@ namespace BlackBoxUserTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_bridgeSignIn = Driver.getBridge();
+			_bridgeSignIn = UserDriver.getBridge();
 		}
 
 		[TestMethod]
@@ -200,7 +200,7 @@ namespace BlackBoxUserTests
 
 		private void SignUp(string name,string address, string password, string creditCard)
 		{
-			_bridgeSignUp = Driver.getBridge();
+			_bridgeSignUp = UserDriver.getBridge();
 			_bridgeSignUp.EnterSystem();
 			_bridgeSignUp.SignUp(name,address,password,creditCard);
 		}

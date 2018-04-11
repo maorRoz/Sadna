@@ -76,7 +76,7 @@ namespace StoreCenterTests
         public void GetStore()
         {
             Store expected = new Store("S1", "X", "Here 4"); // THIS exists in DB by SQL injection
-            Store find = handler.DataLayer.GetStore("S1");
+            Store find = handler.DataLayer.GetStorebyID("S1");
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
@@ -84,7 +84,7 @@ namespace StoreCenterTests
         {
             Store copy = new Store("Stest", "X2", "Here 4");
             handler.DataLayer.AddStore(copy);
-            Store find = handler.DataLayer.GetStore("Stest");
+            Store find = handler.DataLayer.GetStorebyID("Stest");
             toDeleteStore = find;
             Assert.AreEqual(copy, find);
         }
@@ -92,10 +92,10 @@ namespace StoreCenterTests
         public void EditStore()
         {
             Store copy = new Store("S9", "X3", "Here 4");
-            Store find = handler.DataLayer.GetStore("S9");
+            Store find = handler.DataLayer.GetStorebyID("S9");
 
             handler.DataLayer.AddStore(copy);
-            find = handler.DataLayer.GetStore("S9");
+            find = handler.DataLayer.GetStorebyID("S9");
             toDeleteStore = copy;
             Assert.IsTrue(copy.Equals(find));
 
@@ -104,7 +104,7 @@ namespace StoreCenterTests
             Assert.IsFalse(copy.Equals(find));
 
             handler.DataLayer.EditStore(copy);
-            find = handler.DataLayer.GetStore("S9");
+            find = handler.DataLayer.GetStorebyID("S9");
             Assert.AreEqual(copy, find);
         }
 
@@ -298,6 +298,43 @@ namespace StoreCenterTests
             handler.DataLayer.RemoveLotteryTicket(Copy);
             find = handler.DataLayer.GetLotteryTicket("T3");
             Assert.IsNull(find);
+        }
+        [TestMethod]
+        public void getAllTickets()
+        {
+            LinkedList<LotteryTicket> Copy = new LinkedList<LotteryTicket>();
+                LotteryTicket ticket2 = new LotteryTicket(0, 0, "L1", "T2", 0);
+                LotteryTicket ticket1 = new LotteryTicket(0, 0, "L1", "T1", 0); //Exists in DB
+                handler.DataLayer.AddLotteryTicket(ticket2);
+                Copy.AddLast(ticket1);
+                Copy.AddLast(ticket2);
+                LinkedList<LotteryTicket> find = handler.DataLayer.getAllTickets("L1");
+                Assert.AreEqual(Copy.Count, find.Count);
+                LotteryTicket[] findResults = new LotteryTicket[find.Count];
+                find.CopyTo(findResults, 0);
+                LotteryTicket[] CopyResults = new LotteryTicket[Copy.Count];
+                Copy.CopyTo(CopyResults, 0);
+                for (int i = 0; i < findResults.Length; i++)
+                {
+                    Assert.AreEqual(findResults[i], CopyResults[i]);
+                }
+            handler.DataLayer.RemoveLotteryTicket(ticket2);
+        }
+        [TestMethod]
+        public void GetAllStoreProductsID()
+        {
+            LinkedList<string> Copy = new LinkedList<string>();
+            Copy.AddLast("P1");
+            LinkedList<string> find = handler.DataLayer.GetAllStoreProductsID("S1");
+            Assert.AreEqual(Copy.Count, find.Count);
+            string[] findResults = new string[find.Count];
+            find.CopyTo(findResults, 0);
+            string[] CopyResults = new string[Copy.Count];
+            Copy.CopyTo(CopyResults, 0);
+            for (int i = 0; i < findResults.Length; i++)
+            {
+                Assert.AreEqual(findResults[i], CopyResults[i]);
+            }
         }
 
         [TestCleanup]
