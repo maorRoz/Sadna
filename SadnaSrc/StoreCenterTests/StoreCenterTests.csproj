@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="StoreDL TEST.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="OpenStoreTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
