@@ -11,32 +11,17 @@ namespace BlackBoxStoreTests
 		private IUserBridge _bridgeSignUp;
 		private IUserBridge _bridgeSignIn;
 
-		[TestInitialize]
-		public void MarketBuilder()
-		{
-			
-		}
-
 		[TestMethod]
 		public void SuccessInOpeningAStore()
 		{
 			//TODO: don't forget to delete the store
 			SignUp("Pnina","mishol","7894","12345678");
 			_bridgeSignUp.GetStoreShoppingService();
-			//Assert.AreEqual((int)OpenStoreStatus.Success,_bridgeSignUp.OpenStore("PninaStore", "ben-gurion").Status);
-			_bridgeSignUp.GetStoreShoppingService();
-			MarketAnswer storeDetails = _bridgeSignUp.ViewStoreInfo("X");
-			//Assert.AreEqual("hello",storeDetails.ReportList[0]);
-		}
-
-		[TestMethod]
-		public void CheckViewStore()
-		{
-			
-			SignUp("Pnina", "mishol", "7894", "12345678");
-			_bridgeSignUp.GetStoreShoppingService();
-			MarketAnswer storeDetails = _bridgeSignUp.ViewStoreInfo("X");
-			//Assert.AreEqual("hello",storeDetails.ReportList[0]);
+			Assert.AreEqual((int)OpenStoreStatus.Success,_bridgeSignUp.OpenStore("PninaStore", "Ben-Gurion").Status);
+			MarketAnswer storeDetails = _bridgeSignUp.ViewStoreInfo("PninaStore");
+			string expectedAnswer = "StoreName: PninaStore StoreAddress: Ben-Gurion";
+			string receivedAnswer = "StoreName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
+			Assert.AreEqual(expectedAnswer, receivedAnswer);
 		}
 
 		[TestMethod]
@@ -94,6 +79,7 @@ namespace BlackBoxStoreTests
 			_bridgeSignIn.SignIn(name, password);
 		}
 
+		//TODO: don't forget to delete the store
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
