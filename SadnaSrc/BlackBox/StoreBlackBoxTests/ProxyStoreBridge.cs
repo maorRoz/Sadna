@@ -44,7 +44,14 @@ namespace BlackBox
 
 	    public void CleanSession()
 	    {
-            real?.CleanSession();
+		    if (real != null)
+		    {
+			    real.CleanSession();
+		    }
+		    else
+		    {
+				throw new NotImplementedException();
+			}
 	    } 
 
 

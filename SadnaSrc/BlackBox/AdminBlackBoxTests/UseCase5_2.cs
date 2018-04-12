@@ -1,4 +1,5 @@
 ﻿using BlackBox;
+using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
@@ -7,6 +8,7 @@ namespace BlackBoxAdminTests
 	[TestClass]
 	public class UseCase5_2
 	{
+		private IStoreBridge _storeBridge;
 		private IUserBridge _adminSignInBridge;
 		private IAdminBridge _adminBridge;
 		private IUserBridge _signUpBridge1;
@@ -24,13 +26,11 @@ namespace BlackBoxAdminTests
 		public void MarketBuilder()
 		{
 			_adminBridge = AdminDriver.getBridge();
-			_signUpBridge1 = UserDriver.getBridge();
-			_signUpBridge1.EnterSystem();
-			_signUpBridge1.SignUp(userSoleStoreOwner, "mishol", userSoleStoreOwnerPass,"12345678");
-			_signUpBridge2 = UserDriver.getBridge();
-			_signUpBridge2.EnterSystem();
-			_signUpBridge2.SignUp(userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass, "12345678");
-			
+			SignUp(ref _signUpBridge1, userSoleStoreOwner, "mishol", userSoleStoreOwnerPass, "12345678");
+			SignUp(ref _signUpBridge2, userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass, "12345678");
+			_storeBridge = StoreDriver.getBridge();
+			_storeBridge.GetStoreShoppingService(_signUpBridge1.getUserSession());
+			_storeBridge.OpenStore("blah", "blah2");
 		}
 
 		[TestMethod]
@@ -49,9 +49,6 @@ namespace BlackBoxAdminTests
 
 		public void SuccessDeleteUserSoleOwner()
 		{
-			//TODO: open a store.
-			//_adminBridge.GetStoreService();
-			//_adminBridge.OpenStore("newStore", "newPlace");
 			SignIn(adminName, adminPass);
 			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			_signInBridge = UserDriver.getBridge();
@@ -115,6 +112,13 @@ namespace BlackBoxAdminTests
 			_adminSignInBridge.SignIn(userName, password);
 		}
 
+		private void SignUp(ref IUserBridge _userBridge, string userName, string address, string password, string creditCard)
+		{
+			_userBridge = UserDriver.getBridge();
+			_userBridge.EnterSystem();
+			_userBridge.SignUp(userName, address, password, creditCard);
+		}
+
 		[TestCleanup]
 
 		public void UserTestCleanUp()
@@ -123,6 +127,7 @@ namespace BlackBoxAdminTests
 			_signUpBridge1.CleanSession();
 			_signUpBridge2.CleanSession();
 			_signInBridge?.CleanSession();
+			_storeBridge.CleanSession();
 			_signUpBridge1.CleanMarket();
 
 		}
