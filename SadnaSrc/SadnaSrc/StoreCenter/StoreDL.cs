@@ -530,19 +530,22 @@ namespace SadnaSrc.StoreCenter
         }
 
         //TODO: fix this
-        public Product GetProductFromStore(string store, string productName, int quantity)
+        public StockListItem GetProductFromStore(string store, string productName)
         {
             //TODO : this is bullshit query, fix this
+            string productID="";
             using (var dbReader = SelectFromTableWithCondition("Products", "*", " Store = '" + store + " AND Q = 'Active'"))
             {
                 while (dbReader.Read())
                 {
-                    //TODO: fix this...
-                    return null;
+                    productID = dbReader.GetString(1);
 
                 }
             }
-            throw new StoreException(AddProductStatus.NoProduct, "There is no product "+productName+" from " + store + "");
+            if(productID == "")
+                throw new StoreException(AddProductStatus.NoProduct, "There is no product " + productName + " from " + store + "");
+            return GetStockListItembyProductID(productID);
+
         }
 
         public void RemoveDiscount(Discount discount)

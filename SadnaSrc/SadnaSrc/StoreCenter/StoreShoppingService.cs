@@ -113,9 +113,9 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter","");
             try
             {
-                Product porductToFind =  storeLogic.GetProductFromStore(store,productName,quantity);
+                StockListItem porductToFind =  storeLogic.GetProductFromStore(store,productName);
                 MarketLog.Log("StoreCenter", "");
-                _shopper.AddToCart(porductToFind, store,quantity);
+                _shopper.AddToCart(porductToFind.Product, store,quantity);
                 MarketLog.Log("StoreCenter", "");
                 return new StoreAnswer(AddProductStatus.Success, quantity +" "+ productName +" from "+store+ "has been" +
                                                                  " successfully added to the user's cart!");
