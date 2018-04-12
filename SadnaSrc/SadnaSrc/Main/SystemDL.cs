@@ -265,6 +265,7 @@ namespace SadnaSrc.Main
                                     [LotteryID]         TEXT,
                                     [IntervalStart]     INTEGER,
                                     [IntervalEnd]       INTEGER,
+                                    [Cost]              REAL,
                                     [Status]            TEXT,
                                     [UserID]            INTEGER,
                                     PRIMARY KEY([myID]),

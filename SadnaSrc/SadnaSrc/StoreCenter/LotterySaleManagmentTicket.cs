@@ -43,7 +43,7 @@ namespace SadnaSrc.StoreCenter
             if (CanPurchase(moneyPayed))
             {
                 ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID, handler.GetLotteryTicketID(), userID);
+                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID, moneyPayed, handler.GetLotteryTicketID(), userID);
                 handler.DataLayer.AddLotteryTicket(lottery);
                 TotalMoneyPayed += moneyPayed;
                 return lottery;

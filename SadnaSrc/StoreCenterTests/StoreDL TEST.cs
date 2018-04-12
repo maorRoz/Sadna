@@ -279,14 +279,14 @@ namespace StoreCenterTests
         [TestMethod]
          public void GetLotteryTicket()
          {
-             LotteryTicket expected = new LotteryTicket(0, 0, "L1", "T1",0); //Exists in DB
+             LotteryTicket expected = new LotteryTicket(0, 0, "L1",0, "T1",0); //Exists in DB
              LotteryTicket find = handler.DataLayer.GetLotteryTicket("T1");
              Assert.AreEqual(expected, find);
          }
          [TestMethod]
          public void AddLotteryTicket()
          {
-             LotteryTicket expected = new LotteryTicket(0, 0, "L1", "T2",0); 
+             LotteryTicket expected = new LotteryTicket(0, 0, "L1", 0, "T2",0); 
              LotteryTicket find = handler.DataLayer.GetLotteryTicket("T2");
              toDeleteTicket = expected;
              Assert.IsNull(find);
@@ -297,7 +297,7 @@ namespace StoreCenterTests
         [TestMethod]
         public void RemoveLotteryTicket()
         {
-            LotteryTicket expected = new LotteryTicket(0, 0, "L1", "T3", 0);
+            LotteryTicket expected = new LotteryTicket(0, 0, "L1", 0, "T3", 0);
             handler.DataLayer.AddLotteryTicket(expected);
             LotteryTicket find = handler.DataLayer.GetLotteryTicket("T3");
             Assert.AreEqual(expected, find);
@@ -309,8 +309,8 @@ namespace StoreCenterTests
         public void getAllTickets()
         {
             LinkedList<LotteryTicket> expected = new LinkedList<LotteryTicket>();
-                LotteryTicket ticket2 = new LotteryTicket(0, 0, "L1", "T2", 0);
-                LotteryTicket ticket1 = new LotteryTicket(0, 0, "L1", "T1", 0); //Exists in DB
+                LotteryTicket ticket2 = new LotteryTicket(0, 0, "L1", 0, "T2", 0);
+                LotteryTicket ticket1 = new LotteryTicket(0, 0, "L1", 0, "T1", 0); //Exists in DB
                 handler.DataLayer.AddLotteryTicket(ticket2);
                 expected.AddLast(ticket1);
                 expected.AddLast(ticket2);

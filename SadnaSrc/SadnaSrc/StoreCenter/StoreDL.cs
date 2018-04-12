@@ -162,6 +162,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + lottery.LotteryNumber + "'",
                 "'" + lottery.IntervalStart + "'",
                 "'" + lottery.IntervalEnd + "'",
+                "'" + lottery.Cost + "'",
                 "'" + handler.PrintEnum(lottery.myStatus) + "'",
                 "'" + lottery.UserID + "'"
             };
@@ -267,7 +268,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
+                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1),dbReader.GetDouble(4), dbReader.GetString(0), dbReader.GetInt32(5));
                     lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
                     result.AddLast(lottery);
                 }
@@ -340,14 +341,14 @@ namespace SadnaSrc.StoreCenter
                 GetStoreStringValues(toAdd), GetStoreArray(toAdd));
         }
 
-        public LotteryTicket GetLotteryTicket(String TicketID)
+        public LotteryTicket GetLotteryTicket(string ticketID)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "myID = '" + TicketID + "'"))
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "myID = '" + ticketID + "'"))
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lotty = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
+                    LotteryTicket lotty = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetDouble(4), dbReader.GetString(0), dbReader.GetInt32(5));
                     lotty.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
                     return lotty;
                 }
@@ -360,7 +361,7 @@ namespace SadnaSrc.StoreCenter
         }
         public void AddLotteryTicket(LotteryTicket lottery)
         {
-            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, Status, UserID",
+            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID",
                 GetTicketStringValues(lottery), GetTicketValuesArray(lottery));
         }
 

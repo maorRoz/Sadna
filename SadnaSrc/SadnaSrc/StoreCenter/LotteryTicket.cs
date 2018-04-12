@@ -15,12 +15,15 @@ namespace SadnaSrc.StoreCenter
         internal string myID { get; set; }
         internal LotteryTicketStatus myStatus { get; set; }
         internal int UserID { get; set; }
-        public LotteryTicket(int _IntervalStart, int _IntervalEnd, string _LotteryNumber, string _myID, int _userID)
+
+        public double Cost { get; set; }
+        public LotteryTicket(int _IntervalStart, int _IntervalEnd, string _LotteryNumber, double cost ,string _myID, int _userID)
         {
             LotteryNumber = _LotteryNumber;
             myID = _myID;
             IntervalStart = _IntervalStart;
             IntervalEnd = _IntervalEnd;
+            Cost = cost;
             myStatus = LotteryTicketStatus.Waiting;
             UserID = _userID;
         }
