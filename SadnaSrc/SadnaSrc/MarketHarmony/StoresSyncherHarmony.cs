@@ -14,7 +14,7 @@ namespace SadnaSrc.MarketHarmony
         {
 
         }
-        public void CloseLottery()
+        public void CloseLottery(string lottery)
         {
             throw new NotImplementedException();
         }

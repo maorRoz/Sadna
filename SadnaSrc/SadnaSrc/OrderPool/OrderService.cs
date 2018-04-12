@@ -61,9 +61,72 @@ namespace SadnaSrc.OrderPool
 
         }
 
-        
-        
-        
+        public OrderService(IStoresSyncher storesSync, PaymentService paymentService)
+        {
+            _storesSync = storesSync;
+            _paymentService = paymentService;
+            _orderDL = new OrderPoolDL();
+
+        }
+
+        public void RefundAllExpiredLotteries()
+        {
+            MarketLog.Log("OrderPool", "Attempting to refund expired lotteries...");
+            string[] expiredLotteries = _orderDL.GetAllExpiredLotteries();
+            foreach (string lottery in expiredLotteries)
+            {
+                MarketLog.Log("OrderPool", "Attempting to refund lottery "+ lottery+ "...");
+                string[] ticketsToRefund = _orderDL.GetAllTickets(lottery);
+                try
+                {
+                    foreach (string ticket in ticketsToRefund)
+                    {
+                        Refund(ticket);
+                    }
+
+                    _storesSync.CloseLottery(lottery);
+                }
+                catch (OrderException)
+                {
+                    MarketLog.Log("OrderPool", "Refund " + lottery + " has failed to execute. Error message has been created!");
+                }
+                catch (WalleterException)
+                {
+                    MarketLog.Log("OrderPool", "Refund " + lottery + " has failed  to execute." +
+                                        " communication with payment system is inturrepted." +" Error message has been created!");
+                }
+                catch (SupplyException)
+                {
+                    MarketLog.Log("OrderPool", "Refund " + lottery + " has failed  to execute." +
+                                                " communication with supply system is inturrepted." + " Error message has been created!");
+                }
+                catch (MarketException)
+                {
+                    MarketLog.Log("OrderPool", "Refund " + lottery + " has failed to execute. Something is wrong with Store or User." +
+                                                " Error message has been created!");
+                }
+
+            }
+        }
+
+        private void Refund(string ticket)
+        {
+            int orderId = 0;
+            int participantID = _orderDL.GetTicketParticipantID(ticket);
+            string creditCardToRefund = _orderDL.GetCreditCardToRefund(participantID);
+            string nameToRefund = _orderDL.GetNameToRefund(participantID);
+            double sumToRefund = _orderDL.GetSumToRefund(ticket);
+            Order order = RefundOrder(sumToRefund);
+            _paymentService.Refund(sumToRefund, creditCardToRefund, nameToRefund);
+            SaveOrderToDB(order);
+            _orderDL.RemoveTicket(ticket);
+            MarketLog.Log("OrderPool", "User " + nameToRefund + " successfully refunded the sum: " + sumToRefund);
+        }
+
+
+
+
+
         public Order InitOrder(OrderItem[] items)
         {
             CheckAllItems(items);
@@ -286,43 +349,6 @@ namespace SadnaSrc.OrderPool
                 //_storesSync.RemoveProducts(itemsToBuy);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in the cart.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought all the items in the cart.");
-            }
-            catch (OrderException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
-                return new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
-            }
-            catch (WalleterException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
-                                           " Error message has been created!");
-                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
-            }
-            catch (SupplyException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
-                                           " Error message has been created!");
-                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
-            }
-            catch (MarketException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
-                                           " Error message has been created!");
-                return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
-            }
-        }
-
-        public MarketAnswer Refund(double sum)
-        {
-            MarketLog.Log("OrderPool", "Attempting to refund...");
-            int orderId = 0;
-            try
-            {
-                Order order = RefundOrder(sum);
-                _paymentService.Refund(sum, CreditCard,UserName);
-                SaveOrderToDB(order);
-                MarketLog.Log("OrderPool", "User " + UserName + " successfully refunded the sum: "+sum);
-                return new OrderAnswer(OrderStatus.Success, "Successfully refunded the sum: " + sum);
             }
             catch (OrderException e)
             {

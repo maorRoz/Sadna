@@ -16,7 +16,7 @@ namespace SadnaSrc.MarketHarmony
         /// <summary>
         /// Close a lottery sale in store in case of lottery sold out
         /// </summary>
-        void CloseLottery(); // improve this
+        void CloseLottery(string lottery); // improve this
         /// <summary>
         /// Rmove <paramref name="purchased"/> from store stock
         /// </summary>

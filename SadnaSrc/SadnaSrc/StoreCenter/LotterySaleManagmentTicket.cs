@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
         public string SystemID { get; set; }
         public Product Original { get; }
         public int ProductNormalPrice { get;  }
-        public  int TotalMoneyPayed { get; set; }
+        public  double TotalMoneyPayed { get; set; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
         public bool IsActive { get; set; }
@@ -31,19 +31,23 @@ namespace SadnaSrc.StoreCenter
          * will be used by the store
          **/
 
-        public bool CanPurchase(int moneyPayed) {
+        public bool CanPurchase(double moneyPayed) {
             return (TotalMoneyPayed + moneyPayed < ProductNormalPrice);
         }
         public static bool CheckDates(DateTime startDate, DateTime endDate)
         {
             return ((startDate > DateTime.Now.Date) && (endDate > DateTime.Now.Date) && (endDate > startDate));
         }
-        public LotteryTicket PurchaseALotteryTicket(int moneyPayed, int userID)
+        //TODO: fix this
+        public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
         {
             if (CanPurchase(moneyPayed))
             {
+                //TODO: this int thing of interval is really bad, you should do this as precentage from item price
+                //TODO: and make them double
                 ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-                LotteryTicket lottery = new LotteryTicket(TotalMoneyPayed, TotalMoneyPayed+ moneyPayed, SystemID, handler.GetLotteryTicketID(), userID);
+                LotteryTicket lottery = new LotteryTicket(handler.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
+                   (int) (TotalMoneyPayed + moneyPayed), moneyPayed, userID);
                 handler.DataLayer.AddLotteryTicket(lottery);
                 TotalMoneyPayed += moneyPayed;
                 return lottery;
@@ -52,7 +56,7 @@ namespace SadnaSrc.StoreCenter
         }
         public LotteryTicket Dolottery()
         {
-            if (TotalMoneyPayed==ProductNormalPrice)
+            if (TotalMoneyPayed == ProductNormalPrice)
             {
                 return InformAllWinner();
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
@@ -21,8 +22,10 @@ namespace SadnaSrc.Main
         public static MarketYard Instance => _instance ?? (_instance = new MarketYard());
 
         private static SQLiteConnection _dbConnection;
+        public static DateTime MarketDate { get; private set; }
         private MarketYard()
         {
+            MarketDate = new DateTime(9999,12,28);
             InitiateDb();
         }
 
@@ -44,6 +47,14 @@ namespace SadnaSrc.Main
             MarketException.InsertDbConnector(_dbConnection);
             MarketLog.InsertDbConnector(_dbConnection);
 
+        }
+
+        public static void SetDateTime(DateTime marketDate)
+        {
+            if (_instance == null) {return;}
+            MarketDate = marketDate;
+            var refundOrdersService = new OrderService(new StoresSyncherHarmony(), new PaymentService());
+            refundOrdersService.RefundAllExpiredLotteries();
         }
 
 
