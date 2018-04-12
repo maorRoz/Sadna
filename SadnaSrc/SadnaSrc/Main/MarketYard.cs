@@ -59,7 +59,7 @@ namespace SadnaSrc.Main
 
         public IStoreManagementService GetStoreManagementService(IUserService userService,string store)
         {
-            return new StoreService(new UserSellerHarmony(ref userService,store),store);
+            return new StoreManagementService(new UserSellerHarmony(ref userService,store),store);
         }
 
         public IStoreShoppingService GetStoreShoppingService(ref IUserService userService)

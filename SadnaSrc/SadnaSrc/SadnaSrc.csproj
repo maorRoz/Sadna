@@ -112,7 +112,7 @@
     <Compile Include="StoreCenter\StoreAnswer.cs" />
     <Compile Include="StoreCenter\StoreDL.cs" />
     <Compile Include="StoreCenter\StoreException.cs" />
-    <Compile Include="StoreCenter\StoreService.cs" />
+    <Compile Include="StoreCenter\StoreManagementService.cs" />
     <Compile Include="StoreCenter\StoreShoppingService.cs" />
     <Compile Include="SupplyPoint\SupplyAnswer.cs" />
     <Compile Include="SupplyPoint\SupplyException.cs" />

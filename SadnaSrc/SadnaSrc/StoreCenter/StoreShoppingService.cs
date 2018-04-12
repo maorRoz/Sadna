@@ -168,5 +168,46 @@ namespace SadnaSrc.StoreCenter
                 storeLogic.DataLayer.RemoveStore(store);
             }
         }
+        /*
+        public MarketAnswer MakeALotteryPurchase(string productName, int moeny)
+        {
+            //TODO: fix this
+            /*if (ProxyIHavePremmision(user.GetUser()))
+            {
+                Product product = store.GetProductById(productName);
+                if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
+                if (moeny > 0)
+                { 
+                LotteryTicket loti = store.MakeALotteryPurchase(productName, moeny, user.GetUser().SystemID);
+                    if (loti==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
+                    if (!store.CanPurchaseLottery(product,moeny)) { return new StoreAnswer(StoreEnum.PurchesFail, "purching lottery ticket faild"); }
+                    user.GetUser().Cart.AddToCart(store.SystemId, loti.ToString(), moeny, "", 1); //ASK MAOR ABOUT IT                    
+                return new StoreAnswer(StoreEnum.Success, "lottery ticket sold");
+                }
+                return new StoreAnswer(StoreEnum.PurchesFail, "cannot pay non-positie amount of moeny");
+            }*/
+          //  return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
+     //   }
+
+     /*   public MarketAnswer MakeAImmediatePurchase(string productName, int discountCode, int quantity)
+        {
+            //TODO: fix this
+            /*if (ProxyIHavePremmision(user.GetUser()))
+            {
+                Product product = store.MakeAImmediatePurchase(productName, quantity);
+                if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
+                double price = store.GetProductPriceWithDiscountbyDouble(productName, discountCode, quantity);
+                if (price==-1) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
+                user.GetUser().Cart.AddToCart(store.SystemId, product.SystemId, price, "", quantity); //ASK MAOR ABOUT IT
+                return new StoreAnswer(StoreEnum.Success, "product "+ productName+" sold");
+            }*/
+       //     return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
+     //   }
+
+     /*   public MarketAnswer GetProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
+        {
+            return store.GetProductPriceWithDiscount(_product, _DiscountCode, _quantity);
+        }
+        */
     }
 }
