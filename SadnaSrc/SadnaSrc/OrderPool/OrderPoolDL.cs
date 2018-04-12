@@ -167,5 +167,94 @@ namespace SadnaSrc.OrderPool
             object[] values = { price };
             UpdateTable("Orders", "OrderID = " + orderId, columnNames, valuesNames, values);
         }
+
+        public string[] GetAllExpiredLotteries()
+        {
+            List<string> expiredLotteries = new List<string>();
+            using (var dbReader = SelectFromTableWithCondition("LotteryTable", "SystemID,EndDate", "isActive = 'true'"))
+            {
+                while (dbReader.Read())
+                {
+                    string lotteryID = dbReader.GetString(0);
+                    DateTime endDate = dbReader.GetDateTime(1);
+                    if (endDate > MarketYard.MarketDate)
+                    {
+                        expiredLotteries.Add(lotteryID);
+                    }
+                }
+            }
+
+            return expiredLotteries.ToArray();
+        }
+
+        public string[] GetAllTickets(string lottery)
+        {
+            List<string> tickets = new List<string>();
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "myID","LotteryID = '"+lottery +"'"))
+            {
+                while (dbReader.Read())
+                {
+                    tickets.Add(dbReader.GetString(0));
+                }
+            }
+
+            return tickets.ToArray();
+        }
+
+        public int GetTicketParticipantID(string ticket)
+        {
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "UserID", "myID ='" + ticket + "'"))
+            {
+                if (dbReader.Read())
+                {
+                    return dbReader.GetInt32(0);
+                }
+                throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find ticket or user");
+            }
+        }
+
+        public string GetCreditCardToRefund(int userID)
+        {
+            using (var dbReader = SelectFromTableWithCondition("User", "CreditCard", "SystemID ='" + userID + "'"))
+            {
+                if (dbReader.Read())
+                {
+                    return dbReader.GetString(0);
+                }
+                throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find credit card or user");
+            }
+        }
+
+        public string GetNameToRefund(int userID)
+        {
+            using (var dbReader = SelectFromTableWithCondition("User", "Name", "SystemID ='" + userID + "'"))
+            {
+                if (dbReader.Read())
+                {
+                    return dbReader.GetString(0);
+                }
+                throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find name or user");
+            }
+        }
+
+        public double GetSumToRefund(string ticket)
+        {
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "Cost", "myID ='" + ticket + "'"))
+            {
+                if (dbReader.Read())
+                {
+                    return dbReader.GetDouble(0);
+                }
+                throw new OrderException(OrderItemStatus.InvalidDetails,"Cannot find cost or ticket");
+            }
+        }
+
+        public void RemoveTicket(string ticket)
+        {
+            DeleteFromTable("LotteryTicket","myID = '"+ticket+"'");
+        }
+
+
     }
+
 }
