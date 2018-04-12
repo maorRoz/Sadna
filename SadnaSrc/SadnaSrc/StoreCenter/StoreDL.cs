@@ -383,10 +383,10 @@ namespace SadnaSrc.StoreCenter
             {
                 if (!dbReader.Read())
                 {
-                    throw new StoreException(ViewPurchaseHistoryStatus.NoStoreFound, "Couldn't find any store with that ID in history records");
+                    throw new StoreException(ViewStorePurchaseHistoryStatus.InvalidStore, "Couldn't find any store with that ID in history records");
                 }
                 PurchaseHistory[] resultPurchase = GetPurchaseHistory(dbReader);
-                result = new String[resultPurchase.Length];
+                result = new string[resultPurchase.Length];
                 int i = 0;
                 foreach (PurchaseHistory purchaseHistory in resultPurchase)
                 {

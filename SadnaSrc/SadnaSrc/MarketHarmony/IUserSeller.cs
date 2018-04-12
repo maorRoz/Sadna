@@ -42,7 +42,7 @@ namespace SadnaSrc.MarketHarmony
         /// Validate that the user can do that action
         /// <para /> throw UserException otherwise
         /// </summary>
-        void CanManagePurchasePolicy();
+        void CanManageProducts();
         /// <summary>
         /// Validate that the user can do that action
         /// <para /> throw UserException otherwise
