@@ -514,8 +514,23 @@ namespace SadnaSrc.StoreCenter
             }
             throw new StoreException(ViewStoreStatus.NoStore,"There is no active store by the name of " +store);
         }
-
-        //TODO: fix this
+        public Product getProductByNameFromStore(string storeName, string ProductName)
+        {
+            Store store = getStorebyName(storeName);
+            if (store==null) { throw new StoreException(StoreEnum.StoreNotExists, "not exists"); }
+            LinkedList<string> productsID = GetAllStoreProductsID(store.SystemId);
+            foreach (string ID in productsID)
+            {
+                Product product = GetProductID(ID);
+                if (product.Name == ProductName)
+                {
+                    return product;
+                }
+            }
+            
+            return null;
+        }
+        
         public string[] GetStoreStockInfo(string store)
         {
             using (var dbReader = SelectFromTableWithCondition("Stock", "Name,Address", " Store = '" + store + " AND Status = 'Active'"))
@@ -529,22 +544,20 @@ namespace SadnaSrc.StoreCenter
             throw new StoreException(ViewStoreStatus.NoStore, "There is no active store by the name of " + store);
         }
 
-        //TODO: fix this
         public StockListItem GetProductFromStore(string store, string productName)
         {
-            //TODO : this is bullshit query, fix this
-            string productID="";
-            using (var dbReader = SelectFromTableWithCondition("Products", "*", " Store = '" + store + " AND Q = 'Active'"))
+            Product product;
+            try
             {
-                while (dbReader.Read())
-                {
-                    productID = dbReader.GetString(1);
-
-                }
+                product = getProductByNameFromStore(store, productName);
             }
-            if(productID == "")
+            catch
+            {
+                throw new StoreException(StoreEnum.StoreNotExists, "store not exists");
+            }
+            if(product == null)
                 throw new StoreException(AddProductStatus.NoProduct, "There is no product " + productName + " from " + store + "");
-            return GetStockListItembyProductID(productID);
+            return GetStockListItembyProductID(product.SystemId);
 
         }
 
