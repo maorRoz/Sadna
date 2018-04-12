@@ -9,7 +9,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class StoreService : IStoreManagementService
+    public class StoreManagementService : IStoreManagementService
     {
 
         public Store store;
@@ -24,7 +24,7 @@ namespace SadnaSrc.StoreCenter
         //TODO: its way too complicated and this class is too big already....
         //TODO: you dont need a class who return only MarketAnswer !!!! this isn't an interface for client. only interface for client need this.
 
-        public StoreService(IUserSeller storeManager, string storeName)
+        public StoreManagementService(IUserSeller storeManager, string storeName)
         {
             _storeManager = storeManager;
             _storeName = storeName;
@@ -227,6 +227,14 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"
                                              + _storeName + " and therefore has been denied. Error message has been created!");
                 return new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
+            }
+        }
+
+        public void CleanSession()
+        {
+            if (store != null)
+            {
+                global.DataLayer.RemoveStore(store);
             }
         }
 
