@@ -538,7 +538,8 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    productID = dbReader.GetString(1);
+                    if(dbReader.GetString(2) == productName)
+                        productID = dbReader.GetString(1);
 
                 }
             }
