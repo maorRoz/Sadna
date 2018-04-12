@@ -538,11 +538,13 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    if(dbReader.GetString(2) == productName)
-                        productID = dbReader.GetString(1);
+                    if(dbReader.GetString(1) == productName)
+                        productID = dbReader.GetString(0);
 
                 }
             }
+
+            productID.Equals(productName);
             if(productID == "")
                 throw new StoreException(AddProductStatus.NoProduct, "There is no product " + productName + " from " + store + "");
             return GetStockListItembyProductID(productID);
