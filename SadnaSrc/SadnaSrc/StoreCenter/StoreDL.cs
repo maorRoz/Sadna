@@ -268,8 +268,8 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1),dbReader.GetDouble(4), dbReader.GetString(0), dbReader.GetInt32(5));
-                    lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
+                    LotteryTicket lottery = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetInt32(2), dbReader.GetInt32(3),dbReader.GetDouble(4), dbReader.GetInt32(6));
+                    lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(5));
                     result.AddLast(lottery);
                 }
             }
@@ -348,8 +348,8 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lotty = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetDouble(4), dbReader.GetString(0), dbReader.GetInt32(5));
-                    lotty.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
+                    LotteryTicket lotty = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
+                    lotty.myStatus = handler.GetLotteryStatusString(dbReader.GetString(5));
                     return lotty;
                 }
             }

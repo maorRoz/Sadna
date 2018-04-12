@@ -17,7 +17,7 @@ namespace SadnaSrc.StoreCenter
         internal int UserID { get; set; }
 
         public double Cost { get; set; }
-        public LotteryTicket(int _IntervalStart, int _IntervalEnd, string _LotteryNumber, double cost ,string _myID, int _userID)
+        public LotteryTicket(string _myID, string _LotteryNumber, int _IntervalStart, int _IntervalEnd, double cost,  int _userID)
         {
             LotteryNumber = _LotteryNumber;
             myID = _myID;
