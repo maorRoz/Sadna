@@ -219,7 +219,7 @@ namespace SadnaSrc.OrderPool
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
                 OrderItem[] wrap = {toBuy};
-                //_storesSync.RemoveProducts(wrap);
+                _storesSync.RemoveProducts(wrap);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought item "+ itemName + "in an immediate sale.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought item "+itemName);
 
