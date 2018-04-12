@@ -546,15 +546,7 @@ namespace SadnaSrc.StoreCenter
 
         public StockListItem GetProductFromStore(string store, string productName)
         {
-            Product product;
-            try
-            {
-                product = getProductByNameFromStore(store, productName);
-            }
-            catch
-            {
-                throw new StoreException(StoreEnum.StoreNotExists, "store not exists");
-            }
+            Product product = getProductByNameFromStore(store, productName);            
             if(product == null)
                 throw new StoreException(AddProductStatus.NoProduct, "There is no product " + productName + " from " + store + "");
             return GetStockListItembyProductID(product.SystemId);

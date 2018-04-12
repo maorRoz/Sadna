@@ -68,16 +68,7 @@ namespace SadnaSrc.StoreCenter
                 handler.DataLayer.EditStore(this);
                 return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
             }
-            return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is alrady closed");
-        }
-
-        
-        public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            Product product = new Product(handler.GetProductID(), _name, _price, _description);
-            handler.DataLayer.AddStockListItemToDataBase(new StockListItem(quantity, product, null, PurchaseEnum.Immediate, SystemId));
-            return new StoreAnswer(StoreEnum.Success, "product added");
+            return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is already closed");
         }
 
         public MarketAnswer RemoveProduct(string productID)

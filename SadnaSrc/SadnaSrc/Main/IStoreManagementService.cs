@@ -19,9 +19,9 @@ namespace SadnaSrc.Main
          * Products Management
          **/
         MarketAnswer AddProduct(string _name, int _price, string _description, int quantity);
-        MarketAnswer RemoveProduct(string productID);
-        MarketAnswer EditProduct(string productID, string whatToEdit, string newValue);
-        MarketAnswer ChangeProductPurchaseWayToImmediate(string productID);
+        MarketAnswer RemoveProduct(string productName);
+        MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
+        MarketAnswer ChangeProductPurchaseWayToImmediate(string productName);
         MarketAnswer ChangeProductPurchaseWayToLottery(string productID, DateTime startDate, DateTime endDate);
 
         /**
@@ -56,7 +56,8 @@ namespace SadnaSrc.Main
         PurchesFail,
         SetManagerPermissionsFail,
         EditStoreFail,
-        StoreNotExists
+        StoreNotExists,
+        ProductNameNotAvlaiableInShop
     }
 
     public enum ManageStoreStatus

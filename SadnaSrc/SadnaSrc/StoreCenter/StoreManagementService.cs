@@ -137,10 +137,32 @@ namespace SadnaSrc.StoreCenter
         //TODO: fix this
         public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
         {
-            global.DataLayer.IsStoreExist(_storeName);
-            _storeManager.CanManageProducts();
-            //  store.AddProduct(_name, _price, _description, quantity);
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            MarketLog.Log("StoreCenter", "trying to add product to store");
+            MarketLog.Log("StoreCenter", "check if store exists");
+            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            try
+            {
+                MarketLog.Log("StoreCenter", "store exists");
+                MarketLog.Log("StoreCenter", "check if has premmision to add productds");
+                _storeManager.CanManageProducts();
+                MarketLog.Log("StoreCenter", "has premmission");
+                MarketLog.Log("StoreCenter", "check if product name avlaiable in the store" + store.Name);
+                if (!global.IsProductNameAvailableInStore(_storeName, _name))
+                { throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); }
+                MarketLog.Log("StoreCenter", " name is avlaiable");
+                Product product = new Product(global.GetProductID(), _name, _price, _description);
+                global.DataLayer.AddStockListItemToDataBase(new StockListItem(quantity, product, null, PurchaseEnum.Immediate, store.SystemId));
+                MarketLog.Log("StoreCenter", "product added");
+                return new StoreAnswer(StoreEnum.Success, "product added");
+            }
+            catch (StoreException)
+            {
+                return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
+            }
+            catch (MarketException)
+            {
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            }
         }
 
         //TODO: fix this

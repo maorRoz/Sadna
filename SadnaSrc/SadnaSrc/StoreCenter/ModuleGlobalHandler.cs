@@ -56,6 +56,11 @@ namespace SadnaSrc.StoreCenter
         {
             return DataLayer.GetProductFromStore(store, productName);
         }
+        public bool IsProductNameAvailableInStore(string storeName, string productName)
+        {
+                Product P = DataLayer.getProductByNameFromStore(storeName, productName);
+                return (P == null);
+        }
         public string PrintEnum(LotteryTicketStatus status)
         {
             switch (status)
