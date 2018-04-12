@@ -18,8 +18,10 @@ namespace SadnaSrc.MarketHarmony
         {
             _storeService = ModuleGlobalHandler.GetInstance();
         }
+
         public void CloseLottery(string lottery)
         {
+            //TODO: implement once the implementation in the StoreCenter module is complete
             throw new NotImplementedException();
         }
 
