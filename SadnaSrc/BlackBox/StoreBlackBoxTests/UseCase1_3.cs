@@ -70,13 +70,11 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void InvalidUserDidntEnterSystem()
 		{
-
-		}
-
-		[TestMethod]
-		public void InvalidUserUserDidntExist()
-		{
-
+			_userWatchStore = UserDriver.getBridge();
+			_storeBridgeGuest = StoreDriver.getBridge();
+			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
+			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
+			Assert.AreEqual((int)ViewStoreStatus.InvalidUser, storeDetails.Status);
 		}
 
 		private void SignUp(string name, string address, string password, string creditCard)
@@ -86,12 +84,13 @@ namespace BlackBox.StoreBlackBoxTests
 			_bridgeSignUp.SignUp(name, address, password, creditCard);
 		}
 
-		//TODO: don't forget to delete the store
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
 			_bridgeSignUp.CleanSession();
+			_storeBridge.CleanSession();
 			_userWatchStore?.CleanSession();
+			_storeBridgeGuest?.CleanSession();
 			_bridgeSignUp.CleanMarket();
 		}
 
