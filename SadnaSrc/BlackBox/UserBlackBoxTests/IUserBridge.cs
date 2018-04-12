@@ -9,30 +9,15 @@ namespace BlackBox
 {
 	interface IUserBridge
 	{
-		/*
-		 * Regular user
-		 */
 		MarketAnswer EnterSystem();
 		MarketAnswer SignUp(string name, string address, string password, string creditCard);
 		MarketAnswer SignIn(string name, string password);
 		MarketAnswer ViewCart();
 		MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity);
 		MarketAnswer RemoveFromCart(string store, string product, double unitPrice);
+		IUserService getUserSession();
 		void CleanSession();
 		void CleanMarket();
-
-		/*
-		 * Admin system
-		 */
-		MarketAnswer RemoveUser(string userName);
-		void GetAdminService();
-		MarketAnswer ViewPurchaseHistoryByUser(string userName);
-		MarketAnswer ViewPurchaseHistoryByStore(string storeName);
-
-		/*
-		 * StoreSystem
-		 */
-		void GetStoreService();
-		MarketAnswer OpenStore(string name, string store);
+		
 	}
 }

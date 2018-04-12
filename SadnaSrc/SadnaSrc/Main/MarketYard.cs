@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
@@ -21,8 +22,10 @@ namespace SadnaSrc.Main
         public static MarketYard Instance => _instance ?? (_instance = new MarketYard());
 
         private static SQLiteConnection _dbConnection;
+        public static DateTime MarketDate { get; private set; }
         private MarketYard()
         {
+            MarketDate = new DateTime(9999,12,28);
             InitiateDb();
         }
 
@@ -46,6 +49,14 @@ namespace SadnaSrc.Main
 
         }
 
+        public static void SetDateTime(DateTime marketDate)
+        {
+            if (_instance == null) {return;}
+            MarketDate = marketDate;
+            var refundOrdersService = new OrderService(new StoresSyncherHarmony(), new PaymentService());
+            refundOrdersService.RefundAllExpiredLotteries();
+        }
+
 
         public IUserService GetUserService()
         {
@@ -59,7 +70,7 @@ namespace SadnaSrc.Main
 
         public IStoreManagementService GetStoreManagementService(IUserService userService,string store)
         {
-            return new StoreService(new UserSellerHarmony(ref userService,store),store);
+            return new StoreManagementService(new UserSellerHarmony(ref userService,store),store);
         }
 
         public IStoreShoppingService GetStoreShoppingService(ref IUserService userService)
@@ -69,17 +80,18 @@ namespace SadnaSrc.Main
 
         public IOrderService GetOrderService(ref IUserService userService)
         {
-            return new OrderService(new UserBuyerHarmony(ref userService), new StoresSyncherHarmony());
+            return new OrderService(new UserBuyerHarmony(ref userService), new StoresSyncherHarmony(),new PaymentService(),
+                                                         new SupplyService());
         }
 
-        public IPaymentService GetPaymentService(IOrderService orderService)
+        public IPaymentService GetPaymentService()
         {
-            return new PaymentService((OrderService)orderService);
+            return new PaymentService();
         }
 
-        public ISupplyService GetSupplyService(IOrderService orderService)
+        public ISupplyService GetSupplyService()
         {
-            return new SupplyService((OrderService)orderService);
+            return new SupplyService();
         }
 
         public static void CleanSession()

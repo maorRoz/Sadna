@@ -126,7 +126,7 @@ namespace SadnaSrc.MarketHarmony
             CanDoAction(StoreManagerPolicy.StoreAction.PromoteStoreAdmin);
         }
 
-        public void CanManagePurchasePolicy()
+        public void CanManageProducts()
         {
             CanDoAction(StoreManagerPolicy.StoreAction.ManageProducts);
         }

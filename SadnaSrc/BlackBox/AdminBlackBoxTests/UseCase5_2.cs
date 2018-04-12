@@ -7,7 +7,8 @@ namespace BlackBoxAdminTests
 	[TestClass]
 	public class UseCase5_2
 	{
-		private IUserBridge _adminBridge;
+		private IUserBridge _adminSignInBridge;
+		private IAdminBridge _adminBridge;
 		private IUserBridge _signUpBridge1;
 		private IUserBridge _signUpBridge2;
 		private IUserBridge _signInBridge;
@@ -22,11 +23,11 @@ namespace BlackBoxAdminTests
 
 		public void MarketBuilder()
 		{
-			_adminBridge = Driver.getBridge();
-			_signUpBridge1 = Driver.getBridge();
+			_adminBridge = AdminDriver.getBridge();
+			_signUpBridge1 = UserDriver.getBridge();
 			_signUpBridge1.EnterSystem();
 			_signUpBridge1.SignUp(userSoleStoreOwner, "mishol", userSoleStoreOwnerPass,"12345678");
-			_signUpBridge2 = Driver.getBridge();
+			_signUpBridge2 = UserDriver.getBridge();
 			_signUpBridge2.EnterSystem();
 			_signUpBridge2.SignUp(userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass, "12345678");
 			
@@ -37,9 +38,9 @@ namespace BlackBoxAdminTests
 		public void SuccessDeleteUserNotSoleOwner()
 		{
 			SignIn(adminName, adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userNotSoleStoreOwner).Status);
-			_signInBridge = Driver.getBridge();
+			_signInBridge = UserDriver.getBridge();
 			_signInBridge.EnterSystem();
 			Assert.AreEqual((int)SignInStatus.NoUserFound,_signInBridge.SignIn(userNotSoleStoreOwner, userNotSoleStoreOwnerPass).Status);
 		}
@@ -52,8 +53,8 @@ namespace BlackBoxAdminTests
 			//_adminBridge.GetStoreService();
 			//_adminBridge.OpenStore("newStore", "newPlace");
 			SignIn(adminName, adminPass);
-			_adminBridge.GetAdminService();
-			_signInBridge = Driver.getBridge();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
+			_signInBridge = UserDriver.getBridge();
 			_signInBridge.EnterSystem();
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userSoleStoreOwner).Status);
 			//TODO: try to close a store, this should fail because the store is already closed.
@@ -67,7 +68,7 @@ namespace BlackBoxAdminTests
 		public void DeleteMySelf()
 		{
 			SignIn(adminName, adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)RemoveUserStatus.SelfTermination, _adminBridge.RemoveUser(adminName).Status);
 		}
 
@@ -76,7 +77,7 @@ namespace BlackBoxAdminTests
 		public void UserToRemoveWasntFound()
 		{
 			SignIn(adminName, adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)RemoveUserStatus.NoUserFound, _adminBridge.RemoveUser("sdadasdasdasdasdasdas").Status);
 		}
 
@@ -85,7 +86,7 @@ namespace BlackBoxAdminTests
 		public void NoSystemAdmin1()
 		{
 			SignIn("hello", adminPass);
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNotSoleStoreOwner).Status);
 		}
 
@@ -94,7 +95,7 @@ namespace BlackBoxAdminTests
 		public void NoSystemAdmin2()
 		{
 			SignIn(adminName, "852963");
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userNotSoleStoreOwnerPass).Status);
 		}
 
@@ -103,21 +104,22 @@ namespace BlackBoxAdminTests
 		public void NoSystemAdmin3()
 		{
 			SignIn("Hello", "852963");
-			_adminBridge.GetAdminService();
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
 			Assert.AreEqual((int)RemoveUserStatus.NotSystemAdmin, _adminBridge.RemoveUser(userSoleStoreOwnerPass).Status);
 		}
 
 		private void SignIn(string userName, string password)
 		{
-			_adminBridge.EnterSystem();
-			_adminBridge.SignIn(userName, password);
+			_adminSignInBridge = UserDriver.getBridge();
+			_adminSignInBridge.EnterSystem();
+			_adminSignInBridge.SignIn(userName, password);
 		}
 
 		[TestCleanup]
 
 		public void UserTestCleanUp()
 		{
-			_adminBridge.CleanSession();
+			_adminSignInBridge.CleanSession();
 			_signUpBridge1.CleanSession();
 			_signUpBridge2.CleanSession();
 			_signInBridge?.CleanSession();
