@@ -106,7 +106,7 @@ namespace IntegrationTests
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                userServiceSession.SignIn(user , pass);
                 orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 999, 6.00);
                 userServiceSession2.SignIn(user, pass);
                 CartItem item = ((UserService)userServiceSession2).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
