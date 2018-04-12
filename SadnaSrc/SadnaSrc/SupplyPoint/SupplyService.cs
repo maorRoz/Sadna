@@ -14,42 +14,47 @@ namespace SadnaSrc.SupplyPoint
 {
     public class SupplyService : ISupplyService
     {
-        private OrderService _orderService;
         private SupplySystem sock = null;
+  
 
-        public SupplyService(OrderService orderService)
-        {
-            _orderService = orderService;
-        }
-
-        //TODO: you shouldn't let the client get any interaction with this interface, no MarketAnswer is needed here
         //TODO: change this once info about external systems is available.
         public MarketAnswer AttachExternalSystem()
         {
             sock = new SupplySystem();
-            return new SupplyAnswer(SupplyStatus.Success, "Success, External payment system attached.");
+            MarketLog.Log("SupplyPoint", "Connection to external supply system established successfully ! ");
+            return new SupplyAnswer(SupplyStatus.Success, "Connection to external supply system established successfully !");
 
         }
 
-        public MarketAnswer CreateDelivery(int orderId, string address)
+        public void CreateDelivery(Order order)
         {
             if (sock == null)
             {
-                throw new SupplyException(SupplyStatus.NoSupplySystem, "Failed, an error in the supply system occured.");
+                throw new SupplyException(SupplyStatus.NoSupplySystem, "Failed, No supply system found.");
             }
-            Order order = _orderService.GetOrder(orderId);
-            order.SetAddress(address);
+            MarketLog.Log("SupplyPoint", "Attempting to create delivery for order ID: "+ order.GetOrderID());
+            CheckOrderDetails(order);
             // TODO: Find out how the Order Data must reach the delivery system.
-            if (sock.ProcessDelivery(orderId, order.GetUserName(), address))
+            if (sock.ProcessDelivery(order.GetOrderID(), order.GetUserName(), order.GetShippingAddress()))
             {
-                MarketLog.Log("SupplyPoint", "Delivery for order ID: "+ orderId+" was successufully assigned.");
-                return new SupplyAnswer(SupplyStatus.Success, "Success, A new delivery was assigned for the requested order");
+                MarketLog.Log("SupplyPoint", "Delivery for order ID: "+ order.GetOrderID() + " was successufully assigned.");
+                return;
             }
             throw new SupplyException(SupplyStatus.SupplySystemError, "Failed, an error in the supply system occured.");
         }
 
-        // Method for testing only WILL BE REMOVED
-        public void FuckUpExternal()
+        public void CheckOrderDetails(Order order)
+        {
+            if (order.GetOrderID() < 100000 || order.GetOrderID() > 999999
+                                            || order.GetUserName() == null ||
+                                            order.GetShippingAddress() == null ||
+                                            order.GetItems().Count == 0)
+            {
+                throw new SupplyException(SupplyStatus.InvalidOrder,"Failed, Invalid order details");
+            }
+        }
+
+        public void BreakExternal()
         {
             sock.fuckUp();
         }

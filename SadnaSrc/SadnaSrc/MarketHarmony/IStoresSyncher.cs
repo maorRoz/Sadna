@@ -9,13 +9,14 @@ using SadnaSrc.OrderPool;
 namespace SadnaSrc.MarketHarmony
 {
     //TODO: improve this class lior/igor!!
+    //TODO: OrderService needs the name of the store
     //integration between OrderPool to StoreCenter 
     public interface IStoresSyncher
     {
         /// <summary>
         /// Close a lottery sale in store in case of lottery sold out
         /// </summary>
-        void CloseLottery(); // improve this
+        void CloseLottery(string lottery); // improve this
         /// <summary>
         /// Rmove <paramref name="purchased"/> from store stock
         /// </summary>

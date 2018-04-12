@@ -18,16 +18,9 @@ namespace SadnaSrc.Main
 
         MarketAnswer BuyEverythingFromCart();
 
+        MarketAnswer SendPackage(string itemName, string store, int quantity);
 
-        //TODO: i think that the problem start from here.
-        //TODO: maybe its because you thought in the first place that this is something the client should ask from you(Everything in comments).
-       /* MarketAnswer CreateOrder(out int orderId);  
-        MarketAnswer RemoveOrder(int orderId);
-
-        MarketAnswer AddItemToOrder(int orderID, string store, string name, double price, int quantity);
-        MarketAnswer RemoveItemFromOrder(int orderID, string store, string name);*/
-
-
+        MarketAnswer GiveDetails(string userName, string address, string creditCard);
     }
 
     public enum GiveDetailsStatus
@@ -40,9 +33,7 @@ namespace SadnaSrc.Main
         Success,
         InvalidUser,
         InvalidNameOrAddress,
-        NoSupplyConnection,
-        NoPaymentConnection,
-        NoOrderWithID,
+        NoOrderWithID
 
     }
 
@@ -50,6 +41,7 @@ namespace SadnaSrc.Main
     {
         Success,
         NoOrderItemInOrder,
-        ItemAlreadyInOrder
+        ItemAlreadyInOrder,
+        InvalidDetails
     }
 }

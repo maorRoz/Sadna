@@ -48,6 +48,19 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
+        public Store getStorebyName(string storeName)
+        {
+
+            using (var dbReader = SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
+                }
+                return null;
+            }
+        }
+
         public int FindMaxDiscountId()
         {
             using (var dbReader = SelectFromTable("Discount", "*"))
@@ -87,6 +100,9 @@ namespace SadnaSrc.StoreCenter
                 product.Description
             };
         }
+
+        
+
         private object[] GetTicketValuesArray(LotteryTicket lottery)
         {
 
@@ -137,22 +153,6 @@ namespace SadnaSrc.StoreCenter
             };
         }
 
-        internal LinkedList<LotteryTicket> GetAllTickets(string systemID)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
-            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "LotteryNumber = '" + systemID + "'"))
-            {
-                while (dbReader.Read())
-                {
-                    LotteryTicket lottery = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
-                    lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
-                    result.AddLast(lottery);
-                }
-            }
-            return result;
-        }
-
         private string[] GetTicketStringValues(LotteryTicket lottery)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
@@ -162,6 +162,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + lottery.LotteryNumber + "'",
                 "'" + lottery.IntervalStart + "'",
                 "'" + lottery.IntervalEnd + "'",
+                "'" + lottery.Cost + "'",
                 "'" + handler.PrintEnum(lottery.myStatus) + "'",
                 "'" + lottery.UserID + "'"
             };
@@ -202,7 +203,7 @@ namespace SadnaSrc.StoreCenter
             };
         }
 
-        public Store GetStore(string storeID)
+        public Store GetStorebyID(string storeID)
         {
             using (var dbReader = SelectFromTableWithCondition("Store", "*", "SystemID = '" + storeID + "'")) {
                 while (dbReader.Read())
@@ -223,6 +224,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + store.GetStringFromActive() + "'"
             };
         }
+
         public string[] GetLotteryManagmentStringValues(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
             string isActive = "";
@@ -258,7 +260,21 @@ namespace SadnaSrc.StoreCenter
                 GetProductStringValues(product), GetProductValuesArray(product));
         }
 
-        
+        public LinkedList<LotteryTicket> getAllTickets(string systemID)
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "LotteryID = '" + systemID + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    LotteryTicket lottery = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetInt32(2), dbReader.GetInt32(3),dbReader.GetDouble(4), dbReader.GetInt32(6));
+                    lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(5));
+                    result.AddLast(lottery);
+                }
+            }
+            return result;
+        }
 
         private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
         {
@@ -307,7 +323,7 @@ namespace SadnaSrc.StoreCenter
             return discount;
         }
 
-        private bool IsStoreExist(string store)
+        public bool IsStoreExist(string store)
         {
             using (var dbReader = SelectFromTableWithCondition("Store", "*", " Name = '" + store + "'"))
             {
@@ -325,15 +341,15 @@ namespace SadnaSrc.StoreCenter
                 GetStoreStringValues(toAdd), GetStoreArray(toAdd));
         }
 
-        public LotteryTicket GetLotteryTicket(String TicketID)
+        public LotteryTicket GetLotteryTicket(string ticketID)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "myID = '" + TicketID + "'"))
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "*", "myID = '" + ticketID + "'"))
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lotty = new LotteryTicket(dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetString(1), dbReader.GetString(0), dbReader.GetInt32(5));
-                    lotty.myStatus = handler.GetLotteryStatusString(dbReader.GetString(4));
+                    LotteryTicket lotty = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
+                    lotty.myStatus = handler.GetLotteryStatusString(dbReader.GetString(5));
                     return lotty;
                 }
             }
@@ -345,7 +361,7 @@ namespace SadnaSrc.StoreCenter
         }
         public void AddLotteryTicket(LotteryTicket lottery)
         {
-            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd, Status, UserID",
+            InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID",
                 GetTicketStringValues(lottery), GetTicketValuesArray(lottery));
         }
 
@@ -368,10 +384,10 @@ namespace SadnaSrc.StoreCenter
             {
                 if (!dbReader.Read())
                 {
-                    throw new StoreException(ViewPurchaseHistoryStatus.NoStoreFound, "Couldn't find any store with that ID in history records");
+                    throw new StoreException(ViewStorePurchaseHistoryStatus.InvalidStore, "Couldn't find any store with that ID in history records");
                 }
                 PurchaseHistory[] resultPurchase = GetPurchaseHistory(dbReader);
-                result = new String[resultPurchase.Length];
+                result = new string[resultPurchase.Length];
                 int i = 0;
                 foreach (PurchaseHistory purchaseHistory in resultPurchase)
                 {
@@ -409,9 +425,12 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveStockListItem(StockListItem stockListItem)
         {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             RemoveDiscount(stockListItem.Discount);
             RemoveProduct(stockListItem.Product);
-            DeleteFromTable("Stock", "StockID = '" + stockListItem.SystemId + "'");
+            DeleteFromTable("Stock", "StockID = '" + stockListItem.SystemId + "' AND ProductSystemID = '"
+                                     +stockListItem.Product.SystemId+"' AND Discount ='"+stockListItem.Discount.discountCode+"' AND PurchaseWay = '"
+                                     + handler.PrintEnum(stockListItem.PurchaseWay)+"'");
         }
 
         public void EditDiscountInDatabase(Discount discount)
@@ -485,11 +504,11 @@ namespace SadnaSrc.StoreCenter
 
         public string[] GetStoreInfo(string store)
         {
-            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Store = '"+store +" AND Status = 'Active'"))
+            using (var dbReader = SelectFromTableWithCondition("Store","Name,Address"," Name = '"+store +"'AND Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {
-                    return new [] {dbReader.GetString(1), dbReader.GetString(2)};
+                    return new [] {dbReader.GetString(0), dbReader.GetString(1)};
 
                 }
             }
@@ -511,19 +530,22 @@ namespace SadnaSrc.StoreCenter
         }
 
         //TODO: fix this
-        public Product GetProductFromStore(string store, string productName, int quantity)
+        public StockListItem GetProductFromStore(string store, string productName)
         {
             //TODO : this is bullshit query, fix this
+            string productID="";
             using (var dbReader = SelectFromTableWithCondition("Products", "*", " Store = '" + store + " AND Q = 'Active'"))
             {
                 while (dbReader.Read())
                 {
-                    //TODO: fix this...
-                    return null;
+                    productID = dbReader.GetString(1);
 
                 }
             }
-            throw new StoreException(AddProductStatus.NoProduct, "There is no product "+productName+" from " + store + "");
+            if(productID == "")
+                throw new StoreException(AddProductStatus.NoProduct, "There is no product " + productName + " from " + store + "");
+            return GetStockListItembyProductID(productID);
+
         }
 
         public void RemoveDiscount(Discount discount)

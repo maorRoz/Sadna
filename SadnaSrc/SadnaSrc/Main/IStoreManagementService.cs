@@ -8,46 +8,37 @@ namespace SadnaSrc.Main
 {
     public interface IStoreManagementService
     {
+        void CleanSession(); // for tests only
 
         /**
-        * Store Managment, general Actions
-        **/
-        MarketAnswer PromoteToStoreOwner(string someoneToPromoteName);
-        MarketAnswer PromoteToManager(int someoneToPromoteID, string actions);
-        MarketAnswer GetProductStockInformation(int ProductID);
-        MarketAnswer CloseStore();
+         *StoreManagers/StoreOwners Promotion
+         */
+        MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions);
 
         /**
-         * Store Managment, handling products
+         * Products Management
          **/
         MarketAnswer AddProduct(string _name, int _price, string _description, int quantity);
         MarketAnswer RemoveProduct(string productID);
         MarketAnswer EditProduct(string productID, string whatToEdit, string newValue);
-        
-        /**
-         * Store Managment, handling PurchaseWay
-         **/
-
         MarketAnswer ChangeProductPurchaseWayToImmediate(string productID);
         MarketAnswer ChangeProductPurchaseWayToLottery(string productID, DateTime startDate, DateTime endDate);
-        /**
-         * Store Managment, Discounts
-         **/
-        //MarketAnswer EditDiscount();
 
-        MarketAnswer SetManagersActions(string otherUser, string actions);
+        /**
+         * Discounts Management
+         **/
+
         MarketAnswer AddDiscountToProduct(string productID, DateTime _startDate, DateTime _endDate, 
             int _discountAmount,string discountType, bool presenteges);
         MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue);
         MarketAnswer RemoveDiscountFromProduct(string productID);
 
         /**
-         * Store Managment, Purchase
-         **/
-        MarketAnswer MakeALotteryPurchase(string productID, int moeny);
-        MarketAnswer MakeAImmediatePurchase(string productID, int discountCode, int quantity);
-        MarketAnswer GetProductPriceWithDiscount(string productID, int discountCode, int quantity);
-        MarketAnswer GetStoreProducts();
+         * History View
+         */
+
+        MarketAnswer ViewStoreHistory();
+
     }
     public enum StoreEnum
     {
@@ -64,9 +55,24 @@ namespace SadnaSrc.Main
         ChangePurchaseTypeFail,
         PurchesFail,
         SetManagerPermissionsFail,
-        EditStoreFail
+        EditStoreFail,
+        StoreNotExists
     }
 
+    public enum ManageStoreStatus
+    {
+        Success,
+        InvalidStore,
+        InvalidManager
+        
+    }
+
+    public enum ViewStorePurchaseHistoryStatus
+    {
+        Success,
+        InvalidStore,
+        InvalidManager
+    }
     public enum StoreSyncStatus
     {
         NoStore,

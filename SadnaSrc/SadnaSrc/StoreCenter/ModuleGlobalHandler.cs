@@ -52,9 +52,9 @@ namespace SadnaSrc.StoreCenter
             return DataLayer.GetStoreStockInfo(store);
         }
 
-        public Product GetProductFromStore(string store, string productName, int quantity)
+        public StockListItem GetProductFromStore(string store, string productName)
         {
-            return DataLayer.GetProductFromStore(store, productName, quantity);
+            return DataLayer.GetProductFromStore(store, productName);
         }
         public string PrintEnum(LotteryTicketStatus status)
         {
@@ -157,23 +157,32 @@ namespace SadnaSrc.StoreCenter
             return AllStores;
         }
 
-        public void UpdateQuantityAfterPurchase(string storeID, string productID, int quantity)
+        public void UpdateQuantityAfterPurchase(string storeName, string productName, int quantity)
         {
-            Store store = DataLayer.GetStore(storeID);
+            Store store = DataLayer.getStorebyName(storeName);
             if (store ==null) { throw new StoreException(StoreSyncStatus.NoStore, "no such store"); }
-            Product product = DataLayer.GetProductID(productID);
+            Product product = DataLayer.GetProductFromStore(storeName, productName).Product;
             if (product==null) { throw new StoreException(StoreSyncStatus.NoProduct, "no such product"); }
             store.UpdateQuanityAfterPurchase(product, quantity);
         }
+
+        public bool ProductExistsInQuantity(string storeName, string product, int quantity)
+        {
+            Store store = DataLayer.getStorebyName(storeName);
+            if (store == null) { throw new StoreException(StoreSyncStatus.NoStore, "no such store"); }
+
+            StockListItem sli = DataLayer.GetProductFromStore(storeName, product);
+            return sli.Quantity <= quantity;
+        }
+
         public Store GetStoreByID(int ID)
         {
             return GetStoreByID("S" + ID);
         }
         public Store GetStoreByID(string ID)
         {
-            return DataLayer.GetStore(ID);
+            return DataLayer.GetStorebyID(ID);
         }
-        
         public LinkedList<Product> GetAllMarketProducts()
         {
             LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
