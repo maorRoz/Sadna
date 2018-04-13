@@ -81,15 +81,15 @@ namespace SadnaSrc.StoreCenter
 
         private object[] GetStockListItemArray(StockListItem stockListItem)
         {
-            object disobj = "";
+            object discountObject = "";
             if (stockListItem.Discount != null)
-            {  disobj = stockListItem.Discount; }
+            { discountObject = stockListItem.Discount; }
             return new object[]
             {
                 stockListItem.SystemId,
                 stockListItem.Product,
                 stockListItem.Quantity,
-                disobj,
+                discountObject,
                 stockListItem.PurchaseWay
             };
         }
