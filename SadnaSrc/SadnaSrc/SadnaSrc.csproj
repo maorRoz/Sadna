@@ -99,6 +99,7 @@
     <Compile Include="OrderPool\OrderPoolDL.cs" />
     <Compile Include="OrderPool\OrderService.cs" />
     <Compile Include="AdminView\PurchaseHistory.cs" />
+    <Compile Include="OrderPool\StoreOrderTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreCenter\OutsideModuleService.cs" />
     <Compile Include="StoreCenter\LotteryTicket.cs" />
