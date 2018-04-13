@@ -98,6 +98,58 @@ namespace IntegrationTests
         }
 
         [TestMethod]
+        public void IsValidItemTest()
+        {
+            try
+            {
+                Assert.IsTrue(storeSyncherHarmony.IsValid(new OrderItem(store, product1, 6, 10)));
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void IsValidNonExistantItemTest()
+        {
+            try
+            {
+                Assert.IsFalse(storeSyncherHarmony.IsValid(new OrderItem(store, "A" + product1, 6, 10)));
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void IsValidNonExistantStoreTest()
+        {
+            try
+            {
+                Assert.IsFalse(storeSyncherHarmony.IsValid(new OrderItem("A" + store, product1, 6, 10)));
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void IsValidlargeQuantityTest()
+        {
+            try
+            {
+                Assert.IsFalse(storeSyncherHarmony.IsValid(new OrderItem(store, product1, 6, 1000)));
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
         public void UpdateStockAfterPurchaseTest()
         {
             try
