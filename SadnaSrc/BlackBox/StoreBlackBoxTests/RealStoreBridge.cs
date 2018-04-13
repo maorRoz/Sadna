@@ -16,6 +16,8 @@ namespace BlackBox
 		public RealStoreBridge()
 		{
 			_market = MarketYard.Instance;
+			_storeShoppingService = null;
+			_storeManagementService = null;
 		}
 
 		public void GetStoreShoppingService(IUserService userService)
@@ -46,7 +48,8 @@ namespace BlackBox
 
 		public void CleanSession()
 	    {
-		    _storeShoppingService.CleanSeesion();
+		    _storeShoppingService?.CleanSeesion();
+			_storeManagementService?.CleanSession();
         }
 
 
