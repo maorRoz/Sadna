@@ -71,8 +71,11 @@ namespace SadnaSrc.Main
         DiscountGreaterThenProductPrice,
         thereIsAlreadyAnotherDiscount,
         ProductNotFound,
-        DiscountNotFound
-
+        DiscountNotFound,
+        discountAmountIsNegativeOrZero,
+        discountAmountIsNotNumber,
+        precentegesIsNotBoolean,
+        NoLegalAttrebute
     }
     public enum ManageStoreStatus
     {
