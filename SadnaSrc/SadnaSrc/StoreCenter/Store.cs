@@ -308,18 +308,6 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.Success, result);
         }
         
-        internal MarketAnswer AddDiscountToProduct(string productID, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            Discount discount = new Discount(handler.GetDiscountCode(), handler.GetdiscountTypeEnumString(discountType),
-                startDate, endDate,discountAmount, presenteges);
-            StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
-            if (stockListItem == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
-            stockListItem.Discount = discount;
-            handler.DataLayer.AddDiscount(discount);
-            handler.DataLayer.EditStockInDatabase(stockListItem);
-            return new StoreAnswer(StoreEnum.Success, "Discount added");
-        }
         internal MarketAnswer RemoveDiscountFromProduct(string productID)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();

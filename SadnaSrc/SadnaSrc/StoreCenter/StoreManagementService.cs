@@ -287,12 +287,12 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
         }
 
-        //TODO: fix this
+       
         public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
         {
             MarketLog.Log("StoreCenter", "trying to add discount to product in store");
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(DiscountStatus.NoStore, "store not exists"); }
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
@@ -310,7 +310,7 @@ namespace SadnaSrc.StoreCenter
                     throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal"); 
                 }
                 MarketLog.Log("StoreCenter", "check that discount amount is OK");
-                if (presenteges && (discountAmount > 100))
+                if (presenteges && (discountAmount >= 100))
                 {
                     MarketLog.Log("StoreCenter", "discount amount is >=100%");
                     throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100%");
@@ -352,19 +352,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
             }
         }
-        /**
-         *
-         *
-        
-        Discount discount = new Discount(handler.GetDiscountCode(), handler.GetdiscountTypeEnumString(discountType),
-            startDate, endDate,discountAmount, presenteges);
-        StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
-        if (stockListItem == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
-        stockListItem.Discount = discount;
-        handler.DataLayer.AddDiscount(discount);
-        handler.DataLayer.EditStockInDatabase(stockListItem);
-        return new StoreAnswer(StoreEnum.Success, "Discount added");
-*/
+
 
         //  return store.AddDiscountToProduct(productName, startDate, endDate, discountAmount, discountType, presenteges);
 
