@@ -125,7 +125,15 @@ namespace SadnaSrc.StoreCenter
                 StockListItem StockListItem =  storeLogic.GetProductFromStore(store,productName);
                 MarketLog.Log("StoreCenter", "checking that the required quantity is not too big");
                 if (quantity> StockListItem.Quantity)
-                { throw new StoreException(StoreEnum.ProductNotFound, "product is not exists"); }
+                {
+                    MarketLog.Log("StoreCenter", "required quantity is not too big");
+                    throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big"); }
+                MarketLog.Log("StoreCenter", "checking that the required quantity is not negative");
+                if (quantity < 0)
+                {
+                    MarketLog.Log("StoreCenter", "required quantity is negative");
+                    throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
+                }
                 _shopper.AddToCart(StockListItem.Product, store,quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
                 return new StoreAnswer(StoreEnum.Success, quantity +" "+ productName +" from "+store+ "has been" +
