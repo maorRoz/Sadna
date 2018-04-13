@@ -29,7 +29,10 @@ namespace SadnaSrc.StoreCenter
         public StoreException(AddProductStatus status, string message) : base((int)status, message)
         {
         }
-
+        DiscountStatus
+        public StoreException(DiscountStatus status, string message) : base((int)status, message)
+        {
+        }
         public StoreException(AddLotteryTicketStatus status, string message) : base((int)status, message)
         {
         }

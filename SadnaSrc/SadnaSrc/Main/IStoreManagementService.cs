@@ -33,7 +33,6 @@ namespace SadnaSrc.Main
             int _discountAmount,string discountType, bool presenteges);
         MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue);
         MarketAnswer RemoveDiscountFromProduct(string productID);
-
         /**
          * History View
          */
@@ -47,7 +46,6 @@ namespace SadnaSrc.Main
         UpdateStockFail,
         ProductNotFound,
         DiscountNotFound,
-        UpdateDiscountFail,
         UpdateProductFail,
         OpenStoreFail,
         AddStoreOwnerFail,
@@ -63,7 +61,18 @@ namespace SadnaSrc.Main
         quantityIsNegatie,
         QuantityIsTooBig
     }
+    public enum DiscountStatus
+    {
+        Success,
+        NoStore,
+        NoProduct,
+        DatesAreWrong,
+        AmountIsHundredAndpresenteges,
+        DiscountGreaterThenProductPrice,
+        thereIsAlreadyAnotherDiscount,
+        ProductNotFound
 
+    }
     public enum ManageStoreStatus
     {
         Success,

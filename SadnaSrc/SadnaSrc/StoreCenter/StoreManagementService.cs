@@ -179,7 +179,7 @@ namespace SadnaSrc.StoreCenter
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
-                MarketLog.Log("StoreCenter", " check if has premmision to add products");
+                MarketLog.Log("StoreCenter", " check if has premmision to remove products");
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
@@ -214,7 +214,7 @@ namespace SadnaSrc.StoreCenter
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
-                MarketLog.Log("StoreCenter", " check if has premmision to add products");
+                MarketLog.Log("StoreCenter", " check if has premmision to edit products");
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
@@ -290,11 +290,84 @@ namespace SadnaSrc.StoreCenter
         //TODO: fix this
         public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
         {
-            global.DataLayer.IsStoreExist(_storeName);
-            _storeManager.CanDeclareDiscountPolicy();
-            //  return store.AddDiscountToProduct(productName, startDate, endDate, discountAmount, discountType, presenteges);
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            MarketLog.Log("StoreCenter", "trying to add discount to product in store");
+            MarketLog.Log("StoreCenter", "check if store exists");
+            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            try
+            {
+                MarketLog.Log("StoreCenter", " store exists");
+                MarketLog.Log("StoreCenter", " check if has premmision to edit products");
+                _storeManager.CanDeclareDiscountPolicy();
+                MarketLog.Log("StoreCenter", " has premmission");
+                MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
+                Product product = global.DataLayer.getProductByNameFromStore(_storeName, productName);
+                if (product == null) { MarketLog.Log("StoreCenter", "product not exists");
+                    throw new StoreException(StoreEnum.ProductNotFound, "no Such Product"); }
+                MarketLog.Log("StoreCenter", "check if dates are OK");
+                if ((startDate< DateTime.Now)|| (endDate < DateTime.Now) || !(startDate < endDate))
+                {
+                    MarketLog.Log("StoreCenter", "something wrong with the dates");
+                    throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal"); 
+                }
+                MarketLog.Log("StoreCenter", "check that discount amount is OK");
+                if (presenteges && (discountAmount > 100))
+                {
+                    MarketLog.Log("StoreCenter", "discount amount is >=100%");
+                    throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100%");
+                }
+                if (!presenteges && (discountAmount > product.BasePrice)) {
+                    MarketLog.Log("StoreCenter", "discount amount is >= product price");
+                    throw new StoreException(DiscountStatus.DiscountGreaterThenProductPrice, "DiscountAmount is > then product price");
+                }
+                StockListItem stockListItem = global.DataLayer.GetProductFromStore(_storeName, product.Name);
+                MarketLog.Log("StoreCenter", "check that the product don't have another discount");
+                if (stockListItem.Discount!=null)
+                {
+                    MarketLog.Log("StoreCenter", "the product have another discount");
+                    throw new StoreException(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
+                }
+                Discount discount = new Discount(global.GetDiscountCode(), global.GetdiscountTypeEnumString(discountType), startDate,
+                    endDate, discountAmount, presenteges);
+                stockListItem.Discount = discount;
+                global.DataLayer.AddDiscount(discount);
+                global.DataLayer.EditStockInDatabase(stockListItem);
+                MarketLog.Log("StoreCenter", "discount added successfully");
+                return new StoreAnswer(DiscountStatus.Success, "discount added successfully");
+            }
+            catch (StoreException exe)
+            {
+                if (exe.Status==(int)DiscountStatus.AmountIsHundredAndpresenteges)
+                    return new StoreAnswer(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100%");
+                if (exe.Status == (int)DiscountStatus.DiscountGreaterThenProductPrice)
+                    return new StoreAnswer(DiscountStatus.DiscountGreaterThenProductPrice, "DiscountAmount is > then product price");
+                if (exe.Status == (int)DiscountStatus.thereIsAlreadyAnotherDiscount)
+                    return new StoreAnswer(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
+                if (exe.Status == (int)DiscountStatus.DatesAreWrong)
+                    return new StoreAnswer(DiscountStatus.DatesAreWrong, "dates are not leagal");
+                //else
+                return new StoreAnswer(DiscountStatus.ProductNotFound, "product not found");
+            }
+            catch (MarketException)
+            {
+                return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
+            }
         }
+        /**
+         *
+         *
+        
+        Discount discount = new Discount(handler.GetDiscountCode(), handler.GetdiscountTypeEnumString(discountType),
+            startDate, endDate,discountAmount, presenteges);
+        StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
+        if (stockListItem == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
+        stockListItem.Discount = discount;
+        handler.DataLayer.AddDiscount(discount);
+        handler.DataLayer.EditStockInDatabase(stockListItem);
+        return new StoreAnswer(StoreEnum.Success, "Discount added");
+*/
+
+        //  return store.AddDiscountToProduct(productName, startDate, endDate, discountAmount, discountType, presenteges);
+
 
         //TODO: fix this
         public MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue)

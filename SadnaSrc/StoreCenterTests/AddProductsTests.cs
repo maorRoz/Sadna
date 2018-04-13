@@ -50,7 +50,7 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddNewProduct("BOX", 1, "des", 4);
-            Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, ans.Status);
+            Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
         [TestMethod]
         public void addProductWhenquantityisNegative()

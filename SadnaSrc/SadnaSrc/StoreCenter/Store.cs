@@ -164,9 +164,9 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "startDate")
             {
                 DateTime startTime = DateTime.Parse(newValue);
-                if (startTime < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time in the past"); }
+                if (startTime < DateTime.Now.Date) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time in the past"); }
 
-                if (startTime > discount.EndDate) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time that is later then the discount end time"); }
+                if (startTime > discount.EndDate) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time that is later then the discount end time"); }
                 discount.startDate = startTime;
                 result= new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount Start Date become " + startTime);
             }
@@ -174,9 +174,9 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "EndDate")
             {
                 DateTime EndDate = DateTime.Parse(newValue);
-                if (EndDate < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time in the past"); }
+                if (EndDate < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past"); }
 
-                if (EndDate < discount.startDate) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set end time that is sooner then the discount start time"); }
+                if (EndDate < discount.startDate) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set end time that is sooner then the discount start time"); }
                 discount.EndDate = EndDate;
                 result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount End Date become " + EndDate);
             }
@@ -184,20 +184,20 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "DiscountAmount")
             {
                int newintValue = Int32.Parse(newValue);
-               if (discount.Percentages && newintValue > 100) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "DiscountAmount is >= 100, cant make it presenteges"); }
+               if (discount.Percentages && newintValue > 100) { return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100, cant make it presenteges"); }
                 discount.DiscountAmount = newintValue;
                return new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount amount become " + newValue);
             }
             if (whatToEdit == "Percentages")
             {
                 bool newboolValue = Boolean.Parse(newValue);
-                if (newboolValue && discount.DiscountAmount > 100) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "DiscountAmount is >= 100, cant make it presenteges"); }
+                if (newboolValue && discount.DiscountAmount > 100) { return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100, cant make it presenteges"); }
                 discount.Percentages = newboolValue;
                 if (newboolValue)
                     result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount preseneges become true");
                 result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount preseneges become false");
             }
-            if (result==null) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "no leagal attrebute found"); }
+            if (result==null) { return new StoreAnswer(StoreEnum.UpdateStockFail, "no leagal attrebute found"); }
             handler.DataLayer.EditDiscountInDatabase(discount);
             return result;
         }
