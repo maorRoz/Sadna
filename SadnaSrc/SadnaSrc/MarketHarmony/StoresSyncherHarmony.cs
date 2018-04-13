@@ -27,17 +27,18 @@ namespace SadnaSrc.MarketHarmony
             }
         }
 
-        public void UpdateLottery()
+        public void UpdateLottery(string itemName, string store, string username)
         {
             throw new NotImplementedException();
         }
+
 
         public bool IsValid(OrderItem toBuy)
         {
             return _storeService.ProductExistsInQuantity(toBuy.Store, toBuy.Name, toBuy.Quantity);
         }
 
-        public bool IsTicketValid()
+        public bool IsTicketValid(string itemName, string store)
         {
             throw new NotImplementedException();
         }

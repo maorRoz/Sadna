@@ -32,38 +32,44 @@ namespace SadnaSrc.OrderPool
             string[] expiredLotteries = _orderDL.GetAllExpiredLotteries();
             foreach (string lottery in expiredLotteries)
             {
-                MarketLog.Log("OrderPool", "Attempting to refund lottery " + lottery + "...");
-                string[] ticketsToRefund = _orderDL.GetAllTickets(lottery);
-                try
-                {
-                    foreach (string ticket in ticketsToRefund)
-                    {
-                        Refund(ticket);
-                    }
+               RefundLottery(lottery);
+            }
+        }
 
-                }
-                catch (OrderException)
+        public void RefundLottery(string lottery)
+        {
+            MarketLog.Log("OrderPool", "Attempting to refund lottery " + lottery + "...");
+            string[] ticketsToRefund = _orderDL.GetAllTickets(lottery);
+            try
+            {
+                foreach (string ticket in ticketsToRefund)
                 {
-                    MarketLog.Log("OrderPool", "Refund " + lottery + " has failed to execute. Error message has been created!");
-                }
-                catch (WalleterException)
-                {
-                    MarketLog.Log("OrderPool", "Refund " + lottery + " has failed  to execute." +
-                                        " communication with payment system is inturrepted." + " Error message has been created!");
-                }
-                catch (SupplyException)
-                {
-                    MarketLog.Log("OrderPool", "Refund " + lottery + " has failed  to execute." +
-                                                " communication with supply system is inturrepted." + " Error message has been created!");
-                }
-                catch (MarketException)
-                {
-                    MarketLog.Log("OrderPool", "Refund " + lottery + " has failed to execute. Something is wrong with Store or User." +
-                                                " Error message has been created!");
+                    Refund(ticket);
                 }
 
             }
+            catch (OrderException)
+            {
+                MarketLog.Log("OrderPool", "Refund " + lottery + " has failed to execute. Error message has been created!");
+            }
+            catch (WalleterException)
+            {
+                MarketLog.Log("OrderPool", "Refund " + lottery + " has failed  to execute." +
+                                            " communication with payment system is inturrepted." + " Error message has been created!");
+            }
+            catch (SupplyException)
+            {
+                MarketLog.Log("OrderPool", "Refund " + lottery + " has failed  to execute." +
+                                            " communication with supply system is inturrepted." + " Error message has been created!");
+            }
+            catch (MarketException)
+            {
+                MarketLog.Log("OrderPool", "Refund " + lottery + " has failed to execute. Something is wrong with Store or User." +
+                                            " Error message has been created!");
+            }
         }
+
+
 
         private void Refund(string ticket)
         {
@@ -88,6 +94,7 @@ namespace SadnaSrc.OrderPool
                 OrderItem toBuy = new OrderItem("DELIVERY : " + itemName, store, quantity, 1);
                 OrderService.CheckOrderItem(toBuy);
                 Order order = InitOrder(_orderDL.GetNameToRefund(userId));
+                order.SetAddress(_orderDL.GetAddressToSendPackage(userId));
                 orderId = order.GetOrderID();
                 order.AddOrderItem(toBuy);
                 _supplyService.CreateDelivery(order);

@@ -12,10 +12,9 @@ namespace SadnaSrc.MarketHarmony
 
         /// <summary>
         /// Close a lottery sale in store in case of lottery sold out
-        /// TODO: might need to add more arguments
         /// </summary>
         /// 
-        void CloseLottery(string lottery); // improve this
+        void CloseLottery(string productName, string store, int quantity, int winnerId); 
 
 
         /// <summary>

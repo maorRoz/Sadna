@@ -3,31 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.OrderPool;
 
 namespace SadnaSrc.MarketHarmony
 {
     class OrderSyncherHarmony : IOrderSyncher
     {
-        //integration from StoreShoppingService(StoreCenter module) to OrderPool module
+        StoreOrderTools tools;
         public OrderSyncherHarmony()
         {
-
+            tools = new StoreOrderTools();
         }
 
-        void BuyLotteryTicket(string buyerName, string creditCard, double priceToPay)
+        public void CloseLottery(string productName,string store, int quantity, int winnerId)
         {
-            // should not catch OrderException if it occurs(and it should if something wrong with the payment system or the ticket).
-            //its the StoreShoppingService responsibility
-        }
 
-        public void CloseLottery(string lottery)
-        {
-            throw new NotImplementedException();
+            tools.SendPackage(productName,store,quantity,winnerId);
         }
 
         public void CancelLottery(string lottery)
         {
-            throw new NotImplementedException();
+            tools.RefundLottery(lottery);
         }
     }
 }
