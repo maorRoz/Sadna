@@ -6,7 +6,7 @@ using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.UserSpot;
 
-namespace IntegrationTests
+namespace IntegrationTests.StoreSyncher_Integration
 {
     [TestClass]
     public class StoreCenter_OrderPool_IntegrationTest

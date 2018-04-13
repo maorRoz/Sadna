@@ -114,8 +114,8 @@ namespace SadnaSrc.StoreCenter
             try
             {
                 MarketLog.Log("StoreCenter", "checking if store exists");
-                if (!storeLogic.DataLayer.IsStoreExist(store))
-                { throw new StoreException(StoreEnum.StoreNotExists, "store not exists"); }
+                if (!storeLogic.DataLayer.IsStoreExistAndActive(store))
+                { throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
                 MarketLog.Log("StoreCenter", "checking if user has premmisions");
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "checking if product exists");

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.AdminView;
+using SadnaSrc.MarketHarmony;
 using SadnaSrc.Main;
 
 namespace SystemViewTests

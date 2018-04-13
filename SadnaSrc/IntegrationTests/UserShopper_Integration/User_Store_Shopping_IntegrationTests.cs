@@ -8,7 +8,7 @@ using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.UserSpot;
 
-namespace IntegrationTests
+namespace IntegrationTests.UserShopper_Integration
 {
     [TestClass]
     public class User_Store_Shopping_IntegrationTests
@@ -165,7 +165,7 @@ namespace IntegrationTests
             {
                 storeServiceSession.LoginShoper(user, pass);
                 storeServiceSession.AddProductToCart(store2, product2, 2);
-                CartItem expected = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart(store2, product2, 8);
+                CartItem expected = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart(store2, product2, 10);
                 Assert.AreEqual(10, expected.Quantity);
             }
             catch (MarketException)
