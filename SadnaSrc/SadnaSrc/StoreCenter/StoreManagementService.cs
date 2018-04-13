@@ -31,10 +31,6 @@ namespace SadnaSrc.StoreCenter
             global = ModuleGlobalHandler.GetInstance();
             store = global.DataLayer.getStorebyName(storeName);
         }
-        /*public void LoginShoper(string userName, string password)
-        {
-            //((UserSellerHarmony)_storeManager.(userName, password);
-        }*/
 
         public MarketAnswer CloseStore()
         {
@@ -188,10 +184,9 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
                 Product product = global.DataLayer.getProductByNameFromStore(_storeName, productName);
-                if (product == null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no Such Product"); }
+                if (product == null) { MarketLog.Log("StoreCenter", "product not exists"); return new StoreAnswer(StoreEnum.ProductNotFound, "no Such Product"); }
                 MarketLog.Log("StoreCenter", "product exists");
                 StockListItem stockListItem = global.DataLayer.GetProductFromStore(_storeName, productName);
-                MarketLog.Log("StoreCenter", "product exists");
                 if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
                 {
                     LotterySaleManagmentTicket LotteryManagment = global.DataLayer.GetLotteryByProductID(stockListItem.Product.SystemId);
@@ -210,13 +205,66 @@ namespace SadnaSrc.StoreCenter
 
              
 
-        //TODO: fix this
         public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
         {
-            global.DataLayer.IsStoreExist(_storeName);
-            _storeManager.CanManageProducts();
-            //    store.EditProduct(productName, whatToEdit, newValue);
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            StoreAnswer result = null;
+            MarketLog.Log("StoreCenter", "trying to edit product in store");
+            MarketLog.Log("StoreCenter", "check if store exists");
+            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            try
+            {
+                MarketLog.Log("StoreCenter", " store exists");
+                MarketLog.Log("StoreCenter", " check if has premmision to add products");
+                _storeManager.CanManageProducts();
+                MarketLog.Log("StoreCenter", " has premmission");
+                MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
+                Product product = global.DataLayer.getProductByNameFromStore(_storeName, productName);
+                if (product == null) { MarketLog.Log("StoreCenter", "product not exists"); return new StoreAnswer(StoreEnum.ProductNotFound, "no Such Product"); }
+                MarketLog.Log("StoreCenter", "product exists");
+                if (whatToEdit == "Name"|| whatToEdit == "name")
+                {
+                    MarketLog.Log("StoreCenter", "edit name");
+                    MarketLog.Log("StoreCenter","checking if new new is avaliabe");
+                    if(!global.IsProductNameAvailableInStore(_storeName,newValue))
+                    {
+                        throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); 
+                    }
+                    result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
+                    product.Name = newValue;
+                }
+                if (whatToEdit == "BasePrice" || whatToEdit == "basePrice" || whatToEdit == "Baseprice" || whatToEdit == "baseprice")
+                {
+                    MarketLog.Log("StoreCenter", "edit price");
+                    int newBasePrice = Int32.Parse(newValue);
+                    if (newBasePrice <= 0) { return new StoreAnswer(StoreEnum.UpdateProductFail, "price can not be negative"); };
+                    result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " price has been updated to " + newValue);
+                    product.BasePrice = Int32.Parse(newValue);
+                }
+                if (whatToEdit == "Desccription" || whatToEdit == "desccription")
+                {
+                    MarketLog.Log("StoreCenter", "edit description");
+                    result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
+                    product.Description = newValue;
+                }
+                if (result == null) { throw new StoreException(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
+                global.DataLayer.EditProductInDatabase(product);
+                return result;
+            }
+            catch (StoreException exe)
+            {
+                if (exe.Status == (int)StoreEnum.UpdateProductFail)
+                {
+                    MarketLog.Log("StoreCenter", "no leagal attrebute");
+                    return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found");
+                }
+                MarketLog.Log("StoreCenter", "name exists in shop");
+                return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); 
+            }
+            catch (MarketException)
+            {
+                MarketLog.Log("StoreCenter", "no premission");
+                return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
+            }
         }
 
         //TODO: fix this

@@ -230,6 +230,7 @@ namespace SadnaSrc.StoreCenter
             Product product = stock.GetProductById(productID);
             if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock"); }
             if (whatToEdit == "Name") {
+                
                 result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
                 product.Name = newValue;
             }
