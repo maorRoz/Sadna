@@ -37,7 +37,7 @@ namespace SadnaSrc.MarketHarmony
 
         private void ValidateCanManageStore()
         {
-            if(policies == null || policies.Length == 0 && !isSystemAdmin)
+            if(policies == null || (policies.Length == 0 && !isSystemAdmin))
             {
                 throw new UserException(PromoteStoreStatus.NoAuthority,"Cannot manage store "+ _store +"!!");
             }

@@ -68,33 +68,10 @@ namespace SadnaSrc.StoreCenter
                 handler.DataLayer.EditStore(this);
                 return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
             }
-            return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is alrady closed");
+            return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is already closed");
         }
 
-        
-        public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            Product product = new Product(handler.GetProductID(), _name, _price, _description);
-            handler.DataLayer.AddStockListItemToDataBase(new StockListItem(quantity, product, null, PurchaseEnum.Immediate, SystemId));
-            return new StoreAnswer(StoreEnum.Success, "product added");
-        }
-
-        public MarketAnswer RemoveProduct(string productID)
-        {
-            Product product = stock.GetProductById(productID);
-            if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no Such Product"); }
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(productID);
-            if (stockListItem.PurchaseWay==PurchaseEnum.Lottery)
-            {
-                LotterySaleManagmentTicket LotteryManagment = handler.DataLayer.GetLotteryByProductID(productID);
-                LotteryManagment.InformCancel();
-                handler.DataLayer.RemoveLottery(LotteryManagment);
-            }
-            handler.DataLayer.RemoveStockListItem(stockListItem);
-            return new StoreAnswer(StoreEnum.Success, "product removed");
-        }
+   
 
         internal double GetProductPriceWithDiscountbyDouble(string productName, int discountCode, int quantity)
         {
