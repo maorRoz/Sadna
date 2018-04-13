@@ -93,11 +93,11 @@ namespace SadnaSrc.OrderPool
             {
                 OrderItem toBuy = new OrderItem("DELIVERY : " + itemName, store, quantity, 1);
                 OrderService.CheckOrderItem(toBuy);
-                Order order = InitOrder(_orderDL.GetNameToRefund(userId));
-                order.SetAddress(_orderDL.GetAddressToSendPackage(userId));
+                Order order = InitOrder(_orderDL.GetNameToRefund(userId), _orderDL.GetAddressToSendPackage(userId));
                 orderId = order.GetOrderID();
                 order.AddOrderItem(toBuy);
                 _supplyService.CreateDelivery(order);
+                _orderDL.AddOrder(order);
                 MarketLog.Log("OrderPool", "Successfully made delivery for item: " + itemName + " X " + quantity);
             }
             catch (OrderException e)
@@ -121,9 +121,9 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public Order InitOrder(string userName)
+        public Order InitOrder(string userName,string userAddress)
         {
-            Order order = new Order(_orderDL.RandomOrderID(), userName);
+            Order order = new Order(_orderDL.RandomOrderID(), userName, userAddress);
             MarketLog.Log("OrderPool", " successfully initialized new order " + order.GetOrderID() + "for user "+userName+".");
             return order;
         }
@@ -132,6 +132,8 @@ namespace SadnaSrc.OrderPool
         {
             Order refund = new Order(_orderDL.RandomOrderID(), userName);
             refund.AddOrderItem(new OrderItem("", "Refund", -1 * sum, 1));
+            MarketLog.Log("OrderPool", " successfully initialized new order " + refund.GetOrderID() + "for user " + userName + ".");
+
             return refund;
         }
 
