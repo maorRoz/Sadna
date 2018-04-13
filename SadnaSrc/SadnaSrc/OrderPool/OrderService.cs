@@ -308,7 +308,7 @@ namespace SadnaSrc.OrderPool
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
-                //_storesSync.RemoveProducts(itemsToBuy);
+                _storesSync.RemoveProducts(itemsToBuy);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in store :"+store+".");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought all the items in store :" + store + ".");
             }
@@ -349,7 +349,7 @@ namespace SadnaSrc.OrderPool
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
-                //_storesSync.RemoveProducts(itemsToBuy);
+                _storesSync.RemoveProducts(itemsToBuy);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in the cart.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought all the items in the cart.");
             }

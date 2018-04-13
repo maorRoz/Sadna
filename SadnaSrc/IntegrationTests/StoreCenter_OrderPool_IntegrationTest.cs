@@ -188,9 +188,9 @@ namespace IntegrationTests
             {
                 userServiceSession.SignIn("Vadim Chernov", "123");
                 orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
-                orderServiceSession.BuyItemFromImmediate(product1, store1, 10, 6);
+                orderServiceSession.BuyItemFromImmediate(product1, store1, 3, 6);
                 StockListItem itemToCheck = storeServiceSession.GetProductFromStore(store1, product1);
-                Assert.AreEqual(10, itemToCheck.Quantity);
+                Assert.AreEqual(17, itemToCheck.Quantity);
             }
             catch (MarketException)
             {
@@ -206,7 +206,7 @@ namespace IntegrationTests
             {
                 userServiceSession.SignIn("Vova", "123");
                 orderServiceSession.GiveDetails("Vova", "Donkelblum", "12345667");
-                orderServiceSession.BuyItemFromImmediate(product2, store2, 100, 6);
+                orderServiceSession.BuyItemFromImmediate(product2, store2, 8, 6);
             }
             catch (MarketException)
             {
@@ -224,13 +224,83 @@ namespace IntegrationTests
 
         }
 
+        [TestMethod]
+        public void EmptyCartStockUnchangedTest()
+        {
+            try
+            {
+                userServiceSession.SignIn("Arik1", "123");
+                orderServiceSession.GiveDetails("Arik1", "AAA", "12345667");
+                orderServiceSession.BuyItemFromImmediate(product1, store1, 3, 6);
+                Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void BuyAllFromStoreStockUpdateTest()
+        {
+            try
+            {
+                userServiceSession.SignIn("Vadim Chernov", "123");
+                orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
+                orderServiceSession.BuyAllItemsFromStore(store1);
+                Assert.AreEqual(17, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
+                Assert.AreEqual(33, storeServiceSession.GetProductFromStore(store1, "Goldstar").Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void StoreNotExistsStockUnchangedTest()
+        {
+            try
+            {
+                userServiceSession.SignIn("Vadim Chernov", "123");
+                orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
+                orderServiceSession.BuyAllItemsFromStore("A" + store1);
+                Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
+                Assert.AreEqual(36, storeServiceSession.GetProductFromStore(store1, "Goldstar").Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void BuyAllStockUpdateTest()
+        {
+            try
+            {
+                userServiceSession.SignIn("Vadim Chernov", "123");
+                orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
+                orderServiceSession.BuyEverythingFromCart();
+                Assert.AreEqual(17, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
+                Assert.AreEqual(33, storeServiceSession.GetProductFromStore(store1, "Goldstar").Quantity);
+                Assert.AreEqual(98, storeServiceSession.GetProductFromStore(store2, "OCB").Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
             userServiceSession.CleanGuestSession();
             orderServiceSession.CleanSession();
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store1, product1));
+            storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store1, "Goldstar"));
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store2, product2));
+            storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store2, "OCB"));
             MarketYard.CleanSession();
         }
     }
