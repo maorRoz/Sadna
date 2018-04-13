@@ -362,19 +362,69 @@ namespace SadnaSrc.StoreCenter
         {
             global.DataLayer.IsStoreExist(_storeName);
             _storeManager.CanDeclareDiscountPolicy();
-            //     return store.EditDiscount(productID, whatToEdit, newValue);
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
-        }
-
-        //TODO: fix this
-        public MarketAnswer RemoveDiscountFromProduct(string productID)
-        {
-            global.DataLayer.IsStoreExist(_storeName);
-            _storeManager.CanDeclareDiscountPolicy();
             // store.RemoveDiscountFromProduct(productID);
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            return new StoreAnswer(StoreEnum.AddStoreManagerFail, "you have no premmision to do that");
         }
 
+        public MarketAnswer RemoveDiscountFromProduct(string productName)
+        {
+
+            MarketLog.Log("StoreCenter", "trying to remove discount from product in store");
+            MarketLog.Log("StoreCenter", "check if store exists");
+            if (!global.DataLayer.IsStoreExist(_storeName)) {
+                MarketLog.Log("StoreCenter", " store does not exists");
+                throw new StoreException(DiscountStatus.NoStore, "store not exists"); }
+            try
+            {
+                MarketLog.Log("StoreCenter", " store exists");
+                MarketLog.Log("StoreCenter", " check if has premmision to edit products");
+                _storeManager.CanDeclareDiscountPolicy();
+                MarketLog.Log("StoreCenter", " has premmission");
+                MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
+                StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+                if (stockListItem == null)
+                {
+                    MarketLog.Log("StoreCenter", "product does not exists");
+                    throw new StoreException(DiscountStatus.ProductNotFound, "product not found");
+                }
+                MarketLog.Log("StoreCenter", " Product exists");
+                MarketLog.Log("StoreCenter", "checking that the product has a discount");
+                Discount D = stockListItem.Discount;
+                if (D == null)
+                {
+                    MarketLog.Log("StoreCenter", "product does not exists");
+                    throw new StoreException(DiscountStatus.DiscountNotFound, "there is no discount at this product");
+                }
+                stockListItem.Discount = null;
+                global.DataLayer.RemoveDiscount(D);
+                global.DataLayer.EditStockInDatabase(stockListItem);
+                MarketLog.Log("StoreCenter", "discount removed successfully");
+                return new StoreAnswer(DiscountStatus.Success, "discount removed successfully");
+            }
+            catch (StoreException exe)
+            {
+                if (exe.Status==(int)DiscountStatus.ProductNotFound)
+                    return new StoreAnswer(DiscountStatus.ProductNotFound, "product not found");
+                if (exe.Status == (int)DiscountStatus.DiscountNotFound)
+                    return new StoreAnswer(DiscountStatus.DiscountNotFound, "there is no discount at this product");
+
+                return new StoreAnswer(DiscountStatus.NoStore, "store not exists");
+            }
+            catch (MarketException)
+            {
+                return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
+            }
+        }
+        /*
+         *             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
+            if (stockListItem == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
+            Discount discount = stockListItem.Discount;
+            handler.DataLayer.RemoveDiscount(discount);
+            stockListItem.Discount = null;
+            handler.DataLayer.EditStockInDatabase(stockListItem);
+            return new StoreAnswer(StoreEnum.Success, "discount remvoed");
+*/
         public MarketAnswer ViewStoreHistory()
         {
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store purchase history...");
