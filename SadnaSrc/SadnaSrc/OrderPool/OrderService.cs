@@ -59,6 +59,9 @@ namespace SadnaSrc.OrderPool
             CreditCard = _buyer.GetCreditCard();
             _orderDL = new OrderPoolDL();
 
+            _supplyService.AttachExternalSystem();
+            _paymentService.AttachExternalSystem();
+
         }
 
         public OrderService(IStoresSyncher storesSync, PaymentService paymentService)

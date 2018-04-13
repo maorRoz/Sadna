@@ -35,7 +35,9 @@ namespace SadnaSrc.MarketHarmony
 
         public bool IsValid(OrderItem toBuy)
         {
-            return _storeService.ProductExistsInQuantity(toBuy.Store, toBuy.Name, toBuy.Quantity);
+            if(toBuy.Quantity > 0)
+                return _storeService.ProductExistsInQuantity(toBuy.Store, toBuy.Name, toBuy.Quantity);
+            return false;
         }
     }
 }

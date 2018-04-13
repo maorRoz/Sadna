@@ -167,17 +167,15 @@ namespace SadnaSrc.StoreCenter
             Store store = DataLayer.getStorebyName(storeName);
             if (store ==null) { throw new StoreException(StoreSyncStatus.NoStore, "no such store"); }
             StockListItem product = DataLayer.GetProductFromStore(storeName, productName);
-            if (product.Quantity < quantity) { throw new StoreException(StoreSyncStatus.NoProduct, "product doesn't exist in this quantity"); }
+            if (product.Quantity < quantity || quantity <= 0)
+                { throw new StoreException(StoreSyncStatus.NoProduct, "product doesn't exist in this quantity"); }
             store.UpdateQuanityAfterPurchase(product.Product, quantity);
         }
 
         public bool ProductExistsInQuantity(string storeName, string product, int quantity)
         {
-            Store store = DataLayer.getStorebyName(storeName);
-            if (store == null) { throw new StoreException(StoreSyncStatus.NoStore, "no such store"); }
-
             StockListItem sli = DataLayer.GetProductFromStore(storeName, product);
-            return sli.Quantity <= quantity;
+            return sli.Quantity >= quantity;
         }
 
         public Store GetStoreByID(int ID)
