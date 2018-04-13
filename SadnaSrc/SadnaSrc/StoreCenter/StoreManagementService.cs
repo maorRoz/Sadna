@@ -15,7 +15,7 @@ namespace SadnaSrc.StoreCenter
         public Store store;
         ModuleGlobalHandler global;
         private IUserSeller _storeManager;
-        private string _storeName;
+        public string _storeName;
 
 
 
@@ -235,12 +235,14 @@ namespace SadnaSrc.StoreCenter
                 if (whatToEdit == "BasePrice" || whatToEdit == "basePrice" || whatToEdit == "Baseprice" || whatToEdit == "baseprice")
                 {
                     MarketLog.Log("StoreCenter", "edit price");
-                    int newBasePrice = Int32.Parse(newValue);
-                    if (newBasePrice <= 0) { return new StoreAnswer(StoreEnum.UpdateProductFail, "price can not be negative"); };
+                    int newBasePrice;
+                    if (!int.TryParse(newValue, out newBasePrice))
+                    { throw new StoreException(StoreEnum.UpdateProductFail, "value is not leagal"); }
+                    if (newBasePrice <= 0) { return new StoreAnswer(StoreEnum.UpdateProductFail, "price can not be negative"); }
                     result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " price has been updated to " + newValue);
-                    product.BasePrice = Int32.Parse(newValue);
+                    product.BasePrice = newBasePrice;
                 }
-                if (whatToEdit == "Desccription" || whatToEdit == "desccription")
+                if (whatToEdit == "Description" || whatToEdit == "desccription")
                 {
                     MarketLog.Log("StoreCenter", "edit description");
                     result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
@@ -254,7 +256,7 @@ namespace SadnaSrc.StoreCenter
             {
                 if (exe.Status == (int)StoreEnum.UpdateProductFail)
                 {
-                    MarketLog.Log("StoreCenter", "no leagal attrebute");
+                    MarketLog.Log("StoreCenter", "no leagal attrebute or founed non-leagal value");
                     return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found");
                 }
                 MarketLog.Log("StoreCenter", "name exists in shop");
