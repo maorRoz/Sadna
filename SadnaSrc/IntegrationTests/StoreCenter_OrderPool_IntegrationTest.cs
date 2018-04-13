@@ -33,6 +33,70 @@ namespace IntegrationTests
             storeSyncherHarmony = new StoresSyncherHarmony();
         }
 
+        /*
+         * Standalone tests for StoreSyncher functions
+         */
+
+        [TestMethod]
+        public void RemoveProductsTest()
+        {
+            try
+            {
+                OrderItem[] purchased = new OrderItem[] {new OrderItem(store, product1, 6, 10)};
+                storeSyncherHarmony.RemoveProducts(purchased);
+                Assert.AreEqual(10, storeServiceSession.GetProductFromStore(store, product1).Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void RemoveNonExistantProductsTest()
+        {
+            try
+            {
+                OrderItem[] purchased = new OrderItem[] { new OrderItem(store, "A" + product1, 6, 10) };
+                storeSyncherHarmony.RemoveProducts(purchased);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+                Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store, product1).Quantity);
+            }
+        }
+
+        [TestMethod]
+        public void RemoveProductNonExistantStoreTest()
+        {
+            try
+            {
+                OrderItem[] purchased = new OrderItem[] { new OrderItem("A" + store, product1, 6, 10) };
+                storeSyncherHarmony.RemoveProducts(purchased);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+                Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store, product1).Quantity);
+            }
+        }
+
+        [TestMethod]
+        public void RemoveProductLargeQuantityTest()
+        {
+            try
+            {
+                OrderItem[] purchased = new OrderItem[] { new OrderItem("A" + store, product1, 6, 100) };
+                storeSyncherHarmony.RemoveProducts(purchased);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+                Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store, product1).Quantity);
+            }
+        }
+
         [TestMethod]
         public void UpdateStockAfterPurchaseTest()
         {

@@ -529,10 +529,8 @@ namespace SadnaSrc.StoreCenter
             throw new StoreException(ViewStoreStatus.NoStore, "There is no active store by the name of " + store);
         }
 
-        //TODO: fix this
         public StockListItem GetProductFromStore(string store, string productName)
         {
-            //TODO : this is bullshit query, fix this
             string productID="";
             using (var dbReader = SelectFromTableWithCondition("Products", "*", " Store = '" + store + " AND Q = 'Active'"))
             {
