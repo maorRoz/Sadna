@@ -8,7 +8,19 @@ namespace SadnaSrc.MarketHarmony
 {
     interface IOrderSyncher
     {
-        //integration from StoreShoppingService(StoreCenter module) to OrderPool module
-        void BuyLotteryTicket(string buyerName, string creditCard, double priceToPay);
+
+
+        /// <summary>
+        /// Close a lottery sale in store in case of lottery sold out
+        /// </summary>
+        /// 
+        void CloseLottery(string productName, string store, int quantity, int winnerId); 
+
+
+        /// <summary>
+        /// Close a lottery sale in store in case of lottery expires and not sold out
+        /// </summary>
+        void CancelLottery(string lottery);
+
     }
 }
