@@ -67,6 +67,7 @@
     <Compile Include="AdminView_UserSpot_UserAdmin_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreCenter_OrderPool_IntegrationTest.cs" />
+    <Compile Include="User_Store_Shopping_IntegrationTests.cs" />
     <Compile Include="UserSpot_OrderPool_IntegrationTest.cs" />
     <Compile Include="UserBuyer_RemoveItems_Tests.cs" />
     <Compile Include="UserBuyer_Checkout_Test.cs" />

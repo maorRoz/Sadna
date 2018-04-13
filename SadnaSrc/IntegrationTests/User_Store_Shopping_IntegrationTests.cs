@@ -30,6 +30,10 @@ namespace IntegrationTests
             storeServiceSession = (StoreShoppingService)marketSession.GetStoreShoppingService(ref userServiceSession);
         }
 
+        /*
+         * User validation tests
+         */
+
         [TestMethod]
         public void NotEnteredBrowseMarketTest()
         {
@@ -44,12 +48,12 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void EnterSystemTest()
+        public void CanBrowseMarketAsGuestTest()
         {
             try
             {
                 storeServiceSession.MakeGuest();
-                Assert.IsNotNull(((UserService)userServiceSession).MarketUser);
+                userShopperHarmony.ValidateCanBrowseMarket();
             }
             catch (MarketException)
             {
@@ -58,12 +62,70 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void CanBrowseMarketAsGuestTest()
+        public void NotRegisteredUserTest()
         {
             try
             {
-                userShopperHarmony.MakeGuest();
-                userShopperHarmony.ValidateCanBrowseMarket();
+                storeServiceSession.MakeGuest();
+                userShopperHarmony.ValidateRegistered();
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void ValidateRegisteredTest()
+        {
+            try
+            {
+                storeServiceSession.LoginShoper(user, pass);
+                userShopperHarmony.ValidateRegistered();
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void NonExistantUserLoginTest()
+        {
+            try
+            {
+                storeServiceSession.LoginShoper("A" + user, pass);
+                userShopperHarmony.ValidateRegistered();
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void GuestIDTest()
+        {
+            try
+            {
+                storeServiceSession.MakeGuest();
+                Assert.AreEqual(((UserService)userServiceSession).MarketUser.SystemID, userShopperHarmony.GetShopperID());
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void RegUserTest()
+        {
+            try
+            {
+                storeServiceSession.LoginShoper(user, pass);
+                Assert.AreEqual(((UserService)userServiceSession).MarketUser.SystemID, userShopperHarmony.GetShopperID());
+                Assert.AreEqual(((RegisteredUser)((UserService)userServiceSession).MarketUser).Name, 
+                    userShopperHarmony.GetShopperName());
             }
             catch (MarketException)
             {
