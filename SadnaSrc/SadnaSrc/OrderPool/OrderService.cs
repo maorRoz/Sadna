@@ -1,4 +1,4 @@
-﻿using SadnaSrc.UserSpot;
+using SadnaSrc.UserSpot;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -271,7 +271,6 @@ namespace SadnaSrc.OrderPool
                 // TODO: maybe add function here to notify the store of the successful purchase.
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought lottery ticket.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought Lottery ticket ");
-
             }
             catch (OrderException e)
             {
