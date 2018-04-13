@@ -11,6 +11,7 @@ namespace BlackBox
 	{
 		private readonly MarketYard _market;
 		private IStoreShoppingService _storeShoppingService;
+		private IStoreManagementService _storeManagementService;
 
 		public RealStoreBridge()
 		{
@@ -20,6 +21,11 @@ namespace BlackBox
 		public void GetStoreShoppingService(IUserService userService)
 		{
 			_storeShoppingService = _market.GetStoreShoppingService(ref userService);
+		}
+
+		public void GetStoreManagementService(IUserService userService, string store)
+		{
+			_storeManagementService = _market.GetStoreManagementService(userService, store);
 		}
 
 		public MarketAnswer OpenStore(string name, string address)
@@ -32,7 +38,13 @@ namespace BlackBox
 			return _storeShoppingService.ViewStoreInfo(store);
 		}
 
-	    public void CleanSession()
+		public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
+		{
+			return _storeManagementService.PromoteToStoreManager(someoneToPromoteName, actions);
+		}
+
+
+		public void CleanSession()
 	    {
 		    _storeShoppingService.CleanSeesion();
         }
