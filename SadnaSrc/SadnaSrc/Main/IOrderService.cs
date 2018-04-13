@@ -18,8 +18,6 @@ namespace SadnaSrc.Main
 
         MarketAnswer BuyEverythingFromCart();
 
-        MarketAnswer SendPackage(string itemName, string store, int quantity);
-
         MarketAnswer GiveDetails(string userName, string address, string creditCard);
     }
 

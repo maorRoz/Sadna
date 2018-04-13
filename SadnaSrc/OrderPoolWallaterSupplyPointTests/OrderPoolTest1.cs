@@ -331,20 +331,6 @@ namespace OrderPoolWallaterSupplyPointTests
         }
 
 
-        //TODO: Test wonk work until Rebase
-        /*   [TestMethod]
-           public void TestImmediateBuy()
-           {
-               orderService.LoginBuyer("Big Smoke","123");
-               MarketAnswer ans = orderService.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.0);
-               Assert.AreEqual((int)OrderStatus.Success,ans.Status);
-
-           }
-           */
-
-
-
-
         [TestCleanup]
         public void UserTestCleanUp()
         {

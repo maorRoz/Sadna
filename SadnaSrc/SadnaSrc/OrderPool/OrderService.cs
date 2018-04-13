@@ -42,11 +42,13 @@ namespace SadnaSrc.OrderPool
         }
 
         //only for Unit Tests of developer!!(not for integration or blackbox or real usage)
-        public void MakeGuest()
+        public void MakeGuest(string userName, string address, string creditCard)
         {
             ((UserBuyerHarmony)_buyer).MakeGuest();
+            GiveDetails(userName, address, creditCard);
         }
-        //TODO: Add bootle credit card support (in tests too !!) until Maor finishes his branch (after that get credit card details from buyer)
+
+
         public OrderService(IUserBuyer buyer, IStoresSyncher storesSync, PaymentService paymentService, SupplyService supplyService)
         {
             Orders = new List<Order>();
@@ -58,6 +60,9 @@ namespace SadnaSrc.OrderPool
             UserAddress = _buyer.GetAddress();
             CreditCard = _buyer.GetCreditCard();
             _orderDL = new OrderPoolDL();
+
+            _supplyService.AttachExternalSystem();
+            _paymentService.AttachExternalSystem();
 
         }
 
@@ -219,7 +224,7 @@ namespace SadnaSrc.OrderPool
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
                 OrderItem[] wrap = {toBuy};
-                //_storesSync.RemoveProducts(wrap);
+                _storesSync.RemoveProducts(wrap);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought item "+ itemName + "in an immediate sale.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought item "+itemName);
 
@@ -249,7 +254,6 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        //TODO: continue this
         public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
         {
             MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " tickets for lottery sale of " + itemName +
@@ -257,13 +261,15 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                OrderItem ticketToBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
+                OrderItem ticketToBuy = _buyer.CheckoutItem("LOTTERY: "+itemName, store, quantity, unitPrice);
                 CheckOrderItem(ticketToBuy);
                 Order order = InitOrder();
                 orderId = order.GetOrderID();
                 order.AddOrderItem(ticketToBuy);
+                _paymentService.ProccesPayment(order,CreditCard);
                 SaveOrderToDB(order);
                 OrderItem[] wrap = { ticketToBuy };
+                // TODO: maybe add function here to notify the store of the successful purchase.
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought lottery ticket.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought Lottery ticket ");
 
@@ -305,7 +311,7 @@ namespace SadnaSrc.OrderPool
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
-                //_storesSync.RemoveProducts(itemsToBuy);
+                _storesSync.RemoveProducts(itemsToBuy);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in store :"+store+".");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought all the items in store :" + store + ".");
             }
@@ -346,7 +352,7 @@ namespace SadnaSrc.OrderPool
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
-                //_storesSync.RemoveProducts(itemsToBuy);
+                _storesSync.RemoveProducts(itemsToBuy);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in the cart.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought all the items in the cart.");
             }
@@ -374,8 +380,8 @@ namespace SadnaSrc.OrderPool
                 return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }
         }
-
-        public MarketAnswer SendPackage(string itemName, string store, int quantity)
+        // TODO: Before this method is invoked, the right user details must be given to the orderService from the OrderSyncher
+        public void SendPackage(string itemName, string store, int quantity)
         {
             MarketLog.Log("OrderPool", "Attempting to send package...");
             int orderId = 0;
@@ -389,30 +395,25 @@ namespace SadnaSrc.OrderPool
                 _supplyService.CreateDelivery(order);
                 SaveOrderToDB(order);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully made delivery for item: " + itemName + " X "+quantity);
-                return new OrderAnswer(OrderStatus.Success, "Successfully made delivery for item: " + itemName + " X " + quantity);
             }
             catch (OrderException e)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
-                return new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
             }
             catch (WalleterException e)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
-                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
             }
             catch (SupplyException e)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
-                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
                                            " Error message has been created!");
-                return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }
         }
 
