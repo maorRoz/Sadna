@@ -10,20 +10,6 @@ using System.Threading.Tasks;
 
 namespace StoreCenterTests
 {
-    /**
-     * public MarketAnswer RemoveProduct(string productName)
-        {
-
-           
-                if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
-                {
-                    LotterySaleManagmentTicket LotteryManagment = global.DataLayer.GetLotteryByProductID(stockListItem.Product.SystemId);
-                    LotteryManagment.InformCancel();
-                    global.DataLayer.RemoveLottery(LotteryManagment);
-                }
-             
-        }
-    **/
     [TestClass]
     public class RemoveProductTests
     {
@@ -72,7 +58,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddProduct("item", 1, "des", 4);
+            liorSession.AddNewProduct("item", 1, "des", 4);
             MarketAnswer ans = liorSession.RemoveProduct("item");
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }

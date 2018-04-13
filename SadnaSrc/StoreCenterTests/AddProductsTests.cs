@@ -31,7 +31,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
-            MarketAnswer ans = liorSession.AddProduct("name0", 1, "des", 4);
+            MarketAnswer ans = liorSession.AddNewProduct("name0", 1, "des", 4);
             Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status); 
         }
         [TestMethod]
@@ -40,7 +40,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddProduct("name0", 1, "des", 4);
+            MarketAnswer ans = liorSession.AddNewProduct("name0", 1, "des", 4);
             Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
         }
         [TestMethod]
@@ -49,7 +49,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddProduct("BOX", 1, "des", 4);
+            MarketAnswer ans = liorSession.AddNewProduct("BOX", 1, "des", 4);
             Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, ans.Status);
         }
         [TestMethod]
@@ -58,7 +58,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddProduct("item", 1, "des", -4);
+            MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", -4);
             Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
         }
         [TestMethod]
@@ -67,7 +67,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddProduct("item", 1, "des", 4);
+            MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", 4);
             ProductToDelete = handler.DataLayer.GetProductFromStore("X", "item");
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }

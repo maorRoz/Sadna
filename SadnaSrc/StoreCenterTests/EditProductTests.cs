@@ -40,7 +40,7 @@ namespace StoreCenterTests
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditProduct("name0", "Name", "0");
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            Assert.AreEqual((int)ViewStoreStatus.InvalidUser, ans.Status);
         }
         [TestMethod]
         public void EditProductWhenProductIsNotAvailableInStore()
@@ -66,7 +66,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddProduct("GOLD", 5, "NONO", 8);
+            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "Name", "MOMO");
             Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "MOMO");
@@ -79,7 +79,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddProduct("GOLD", 5, "NONO", 8);
+            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "0");
             Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");
@@ -93,7 +93,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddProduct("GOLD", 5, "NONO", 8);
+            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "NotA-Number");
             Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");
@@ -107,7 +107,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddProduct("GOLD", 5, "NONO", 8);
+            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "-4");
             Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");
@@ -121,7 +121,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddProduct("GOLD", 5, "NONO", 8);
+            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "10");
             Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");
@@ -135,7 +135,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddProduct("GOLD", 5, "NONO", 8);
+            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "Description", "MOMO");
             Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");

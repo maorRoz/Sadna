@@ -136,7 +136,7 @@ namespace SadnaSrc.StoreCenter
         }
 
         //TODO: fix this
-        public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
+        public MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity)
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
             MarketLog.Log("StoreCenter", "check if store exists");
@@ -346,6 +346,10 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
+        public MarketAnswer AddQuanitityToProduct(string productName, int quantity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
  
