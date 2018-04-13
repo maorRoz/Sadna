@@ -10,7 +10,7 @@ using SadnaSrc.StoreCenter;
 namespace SadnaSrc.MarketHarmony
 {
     //TODO: improve this class igor/lior/zohar!!!
-    class StoresSyncherHarmony : IStoresSyncher
+    public class StoresSyncherHarmony : IStoresSyncher
     {
 
         private OutsideModuleService _storeService;
