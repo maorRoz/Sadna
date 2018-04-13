@@ -53,7 +53,7 @@ namespace SadnaSrc.Main
         {
             if (_instance == null) {return;}
             MarketDate = marketDate;
-            var refundOrdersService = new OrderService(new StoresSyncherHarmony(), new PaymentService());
+            var refundOrdersService = new StoreOrderTools();
             refundOrdersService.RefundAllExpiredLotteries();
         }
 
@@ -80,18 +80,17 @@ namespace SadnaSrc.Main
 
         public IOrderService GetOrderService(ref IUserService userService)
         {
-            return new OrderService(new UserBuyerHarmony(ref userService), new StoresSyncherHarmony(),new PaymentService(),
-                                                         new SupplyService());
+            return new OrderService(new UserBuyerHarmony(ref userService), new StoresSyncherHarmony());
         }
 
         public IPaymentService GetPaymentService()
         {
-            return new PaymentService();
+            return PaymentService.Instance;
         }
 
         public ISupplyService GetSupplyService()
         {
-            return new SupplyService();
+            return SupplyService.Instance;
         }
 
         public static void CleanSession()
