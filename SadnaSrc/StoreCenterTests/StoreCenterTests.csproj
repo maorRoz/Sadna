@@ -69,6 +69,7 @@
     <Compile Include="AddToCartTests.cs" />
     <Compile Include="EditProductTests.cs" />
     <Compile Include="AddQuanitityTests.cs" />
+    <Compile Include="RemoveDiscountFromProductTests.cs" />
     <Compile Include="RemoveProductTests.cs" />
     <Compile Include="OpenStoreTests.cs" />
     <Compile Include="StoreDL TEST.cs" />

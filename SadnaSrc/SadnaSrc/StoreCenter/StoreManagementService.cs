@@ -368,25 +368,25 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer RemoveDiscountFromProduct(string productName)
         {
-
-            MarketLog.Log("StoreCenter", "trying to remove discount from product in store");
+            try
+            {
+                MarketLog.Log("StoreCenter", "trying to remove discount from product in store");
             MarketLog.Log("StoreCenter", "check if store exists");
             if (!global.DataLayer.IsStoreExist(_storeName)) {
                 MarketLog.Log("StoreCenter", " store does not exists");
                 throw new StoreException(DiscountStatus.NoStore, "store not exists"); }
-            try
-            {
+            
                 MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
                 _storeManager.CanDeclareDiscountPolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
-                StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
-                if (stockListItem == null)
+                if (global.IsProductNameAvailableInStore(_storeName,productName))
                 {
                     MarketLog.Log("StoreCenter", "product does not exists");
                     throw new StoreException(DiscountStatus.ProductNotFound, "product not found");
                 }
+                StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
                 MarketLog.Log("StoreCenter", " Product exists");
                 MarketLog.Log("StoreCenter", "checking that the product has a discount");
                 Discount D = stockListItem.Discount;
