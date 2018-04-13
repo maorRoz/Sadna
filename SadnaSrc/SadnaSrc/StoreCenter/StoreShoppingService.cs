@@ -128,10 +128,10 @@ namespace SadnaSrc.StoreCenter
                 {
                     MarketLog.Log("StoreCenter", "required quantity is not too big");
                     throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big"); }
-                MarketLog.Log("StoreCenter", "checking that the required quantity is not negative");
-                if (quantity < 0)
+                MarketLog.Log("StoreCenter", "checking that the required quantity is not negative or zero");
+                if (quantity <= 0)
                 {
-                    MarketLog.Log("StoreCenter", "required quantity is negative");
+                    MarketLog.Log("StoreCenter", "required quantity is negative or zero");
                     throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
                 }
                 _shopper.AddToCart(StockListItem.Product, store,quantity);

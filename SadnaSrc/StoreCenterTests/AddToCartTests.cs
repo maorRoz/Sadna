@@ -63,6 +63,15 @@ namespace StoreCenterTests
             Assert.AreEqual((int)StoreEnum.QuantityIsTooBig, ans.Status);
         }
         [TestMethod]
+        public void AddToCartWhenQuantityisZero()
+        {
+            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
+            liorSession.MakeGuest();
+            Store find = handler.DataLayer.getStorebyName("X");
+            MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 0);
+            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+        }
+        [TestMethod]
         public void AddToCartWhenQuantityisNegative()
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
