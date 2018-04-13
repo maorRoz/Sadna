@@ -152,16 +152,16 @@ namespace SadnaSrc.StoreCenter
                 { throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); }
                 MarketLog.Log("StoreCenter", " name is avlaiable");
                 MarketLog.Log("StoreCenter", " checking that quanitity is positive");
-                if (quantity < 0) { return new StoreAnswer(StoreEnum.quantityIsNegatie, "negative quantity"); }
+                if (quantity <= 0) { return new StoreAnswer(StoreEnum.quantityIsNegatie, "negative quantity"); }
                 MarketLog.Log("StoreCenter", " quanitity is positive");
                 Product product = new Product(global.GetProductID(), _name, _price, _description);
                 global.DataLayer.AddStockListItemToDataBase(new StockListItem(quantity, product, null, PurchaseEnum.Immediate, store.SystemId));
                 MarketLog.Log("StoreCenter", "product added");
                 return new StoreAnswer(StoreEnum.Success, "product added");
             }
-            catch (StoreException exe)
+            catch (StoreException)
             {
-                return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
+                return new StoreAnswer(StoreEnum.ProductNotFound, "Product Name is already Exists In Shop");
             }
             catch (MarketException)
             {
@@ -348,7 +348,33 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer AddQuanitityToProduct(string productName, int quantity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                MarketLog.Log("StoreCenter", "checking that store exists");
+                if (!global.DataLayer.IsStoreExist(_storeName)) {
+                    MarketLog.Log("StoreCenter", "store not exists");
+                    return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+                MarketLog.Log("StoreCenter", "checking that has premmisions");
+                _storeManager.CanManageProducts();
+                MarketLog.Log("StoreCenter", "checking that Product Exists");
+                if (global.IsProductNameAvailableInStore(_storeName, productName)) {
+                    MarketLog.Log("StoreCenter", "Product Not exists");
+                    return new StoreAnswer(StoreEnum.ProductNotFound, "product not exists"); }               
+                StockListItem stockListItem = global.DataLayer.GetProductFromStore(_storeName,productName);
+                MarketLog.Log("StoreCenter", "checking that quantity is positive");
+                if (quantity <= 0) {
+                    MarketLog.Log("StoreCenter", "quantity is not positive");
+                    return new StoreAnswer(StoreEnum.quantityIsNegatie, "quantity " + quantity + " is less then or equal to 0"); }
+                stockListItem.Quantity += quantity;
+                global.DataLayer.EditStockInDatabase(stockListItem);
+                return new StoreAnswer(StoreEnum.Success, "item " + productName + " added by amound of " + quantity);
+            }
+            catch (MarketException e)
+            {
+                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"
+                                             + _storeName + " and therefore has been denied. Error message has been created!");
+                return new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
+            }
         }
     }
 }

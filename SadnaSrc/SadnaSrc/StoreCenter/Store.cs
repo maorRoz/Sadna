@@ -53,12 +53,6 @@ namespace SadnaSrc.StoreCenter
         }
         //////////////////// this function will be removed after I will have Maor function!//////////////////////
 
-
-        public MarketAnswer PromoteToManager(User currentUser, User someoneToPromote)
-        {    
-               return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a owner of store " + SystemId);
-        }
-
         public MarketAnswer CloseStore()
         {
             if (IsActive)
