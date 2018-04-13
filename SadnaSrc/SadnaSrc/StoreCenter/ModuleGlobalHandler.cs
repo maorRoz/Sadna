@@ -88,37 +88,37 @@ namespace SadnaSrc.StoreCenter
             {
                 case PurchaseEnum.Immediate: return "Immediate";
                 case PurchaseEnum.Lottery: return "Lottery";
-                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+                default: throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists"); 
             }
         }
         public discountTypeEnum GetdiscountTypeEnumString(string discountType)
         {
-            if (discountType == "HIDDEN")
+            if ((discountType == "HIDDEN")|| (discountType == "hidden") || (discountType == "Hidden"))
                 return discountTypeEnum.Hidden;
-            if (discountType == "VISIBLE")
+            if ((discountType == "VISIBLE") || (discountType == "visible") || (discountType == "Visible"))
                 return discountTypeEnum.Visible;
-            throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
         }
         public PurchaseEnum GetPurchaseEnumString(string purchaseType)
         {
-            if (purchaseType == "Immediate")
+            if ((purchaseType == "Immediate")|| (purchaseType == "immediate")|| (purchaseType == "IMMEDIATE"))
                 return PurchaseEnum.Immediate;
-            if (purchaseType == "Lottery")
+            if ((purchaseType == "Lottery")|| (purchaseType == "lottery")|| (purchaseType == "LOTTERY"))
                 return PurchaseEnum.Lottery;
-            throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists"); 
         }
 
         internal LotteryTicketStatus GetLotteryStatusString(string lotteryStatus)
         {
-            if (lotteryStatus == "CANCEL")
+            if ((lotteryStatus == "CANCEL")|| (lotteryStatus == "Cancel")|| (lotteryStatus == "cancel"))
                 return LotteryTicketStatus.Cancel;
-            if (lotteryStatus == "WINNING")
+            if ((lotteryStatus == "WINNING")|| (lotteryStatus == "Winning")|| (lotteryStatus == "winning"))
                 return LotteryTicketStatus.Winning;
-            if (lotteryStatus == "WAITING")
+            if ((lotteryStatus == "WAITING")|| (lotteryStatus == "Waiting")|| (lotteryStatus == "waiting"))
                 return LotteryTicketStatus.Waiting;
-            if (lotteryStatus == "LOSING")
+            if ((lotteryStatus == "LOSING")|| (lotteryStatus == "Losing")|| (lotteryStatus == "losing"))
                 return LotteryTicketStatus.Losing;
-            throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists"); 
         }
 
 

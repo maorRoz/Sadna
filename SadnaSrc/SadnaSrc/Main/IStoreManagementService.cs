@@ -59,7 +59,8 @@ namespace SadnaSrc.Main
         ProductNameNotAvlaiableInShop,
         NoPremmision,
         quantityIsNegatie,
-        QuantityIsTooBig
+        QuantityIsTooBig,
+        EnumValueNotExists
     }
     public enum DiscountStatus
     {

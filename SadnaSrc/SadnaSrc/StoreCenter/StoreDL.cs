@@ -322,7 +322,7 @@ namespace SadnaSrc.StoreCenter
                         DateTime.Parse(discountReader.GetString(2))
                         , DateTime.Parse(discountReader.GetString(3))
                         , discountReader.GetInt32(4),
-                        (discountReader.GetString(5).Equals("true")));
+                        Boolean.Parse(discountReader.GetString(5)));
                 }
             }
             return discount;
@@ -557,6 +557,7 @@ namespace SadnaSrc.StoreCenter
             if (product == null)
                 throw new StoreException(AddProductStatus.NoProduct, "There is no product " + productName + " from " + store + "");
             return GetStockListItembyProductID(product.SystemId);
+            
 
         }
 
@@ -598,7 +599,7 @@ namespace SadnaSrc.StoreCenter
                 {
                     lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0), P, DateTime.Parse(dbReader.GetString(4)), DateTime.Parse(dbReader.GetString(5)));
                     lotteryManagement.TotalMoneyPayed = dbReader.GetInt32(3);
-                    lotteryManagement.IsActive = (dbReader.GetString(6).Equals("true"));
+                    lotteryManagement.IsActive = (Boolean.Parse(dbReader.GetString(6)));
                 }
             }
             return lotteryManagement;
