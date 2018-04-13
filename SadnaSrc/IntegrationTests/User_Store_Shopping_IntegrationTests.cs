@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
@@ -241,6 +242,65 @@ namespace IntegrationTests
                 storeServiceSession.MakeGuest();
                 storeServiceSession.AddProductToCart(store2, product2, -4);
                 Assert.AreEqual(0, userServiceSession.ViewCart().ReportList.Length);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        /*
+         * OpenStore tests
+         */
+
+        [TestMethod]
+        public void OpenStoreAsGuestTest()
+        {
+            try
+            {
+                storeServiceSession.MakeGuest();
+                storeServiceSession.OpenStore("Newstore1", "Nowhere");
+                Assert.IsFalse(((UserService)userServiceSession).MarketUser.HasStorePolicies());
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void OpenStoreTest()
+        {
+            try
+            {
+                storeServiceSession.LoginShoper(user, pass);
+                storeServiceSession.OpenStore("Super Mordoch", "David Elazar");
+                Assert.IsTrue(((UserService) userServiceSession).MarketUser.HasStorePolicies());
+                StoreManagerPolicy[] policies = ((UserService)userServiceSession).MarketUser.GetStoreManagerPolicies("Super Mordoch");
+                bool flag = false;
+                foreach (StoreManagerPolicy policy in policies)
+                {
+                    if (policy.Action == StoreManagerPolicy.StoreAction.StoreOwner)
+                    {
+                        flag = true;
+                    }
+                }
+                Assert.IsTrue(flag);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void OpenStoreAlreadyOpenTest()
+        {
+            try
+            {
+                storeServiceSession.LoginShoper(user, pass);
+                storeServiceSession.OpenStore("The Red Rock", "Mivtza Yoav");
+                Assert.IsFalse(((UserService) userServiceSession).MarketUser.HasStorePolicies());
             }
             catch (MarketException)
             {
