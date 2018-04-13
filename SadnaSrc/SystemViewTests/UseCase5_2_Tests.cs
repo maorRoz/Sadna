@@ -37,7 +37,6 @@ namespace SystemViewTests
         [TestMethod]
         public void RemoveUserNotSoleOwnerTest()
         {
-            //TODO: should check if store has been closed by this operation when StoreCenter Module will be ready
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserNameSoleOwner).Status);
@@ -47,7 +46,6 @@ namespace SystemViewTests
         [TestMethod]
         public void RemoveUserSoleOwnerTest()
         {
-            //TODO: should check if store has been closed by this operation when StoreCenter Module will be ready
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserNameNotSoleOwner).Status);
