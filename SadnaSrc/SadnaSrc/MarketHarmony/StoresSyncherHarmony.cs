@@ -42,5 +42,10 @@ namespace SadnaSrc.MarketHarmony
         {
             throw new NotImplementedException();
         }
+
+        public OrderItem GetItemFromCoupon(string itemName, string store, int quantity, string coupon)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

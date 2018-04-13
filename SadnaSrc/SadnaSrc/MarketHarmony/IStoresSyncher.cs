@@ -34,5 +34,11 @@ namespace SadnaSrc.MarketHarmony
         /// Validate that <paramref name="toBuy"/> is valid product to buy by the user
         /// </summary>
         bool IsTicketValid(string itemName, string store);
+
+
+        /// <summary>
+        /// returns an order item with the updated price after discount, if coupon is invalid return null
+        /// </summary>
+        OrderItem GetItemFromCoupon(string itemName, string store,int quantity, string coupon);
     }
 }

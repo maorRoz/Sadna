@@ -12,6 +12,8 @@ namespace SadnaSrc.Main
     {
         MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice);
 
+        MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, string coupon);
+
         MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity,double unitPrice);
 
         MarketAnswer BuyAllItemsFromStore(string store);
@@ -31,7 +33,7 @@ namespace SadnaSrc.Main
         Success,
         InvalidUser,
         InvalidNameOrAddress,
-        NoOrderWithID
+        InvalidCoupon
 
     }
 

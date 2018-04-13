@@ -205,6 +205,54 @@ namespace SadnaSrc.OrderPool
             }
         }
 
+        public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, string coupon)
+        {
+            MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " " + itemName + " from store " + store + " in immediate sale...");
+            int orderId = 0;
+            try
+            {
+                OrderItem toBuy = _storesSync.GetItemFromCoupon(itemName, store, quantity, coupon);
+                if (toBuy == null)
+                    throw new OrderException(OrderStatus.InvalidCoupon,
+                        "Order has failed to execute. Invalid coupon number!");
+                CheckOrderItem(toBuy);
+                Order order = InitOrder();
+                orderId = order.GetOrderID();
+                order.AddOrderItem(toBuy);
+                _supplyService.CreateDelivery(order);
+                _paymentService.ProccesPayment(order, CreditCard);
+                SaveOrderToDB(order);
+                OrderItem[] wrap = { toBuy };
+                _storesSync.RemoveProducts(wrap);
+                MarketLog.Log("OrderPool", "User " + UserName + " successfully bought item " + itemName + "in an immediate sale.");
+                return new OrderAnswer(OrderStatus.Success, "Successfully bought item " + itemName);
+
+            }
+            catch (OrderException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
+                return new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (WalleterException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
+                                           " Error message has been created!");
+                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (SupplyException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
+                                           " Error message has been created!");
+                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
+                                           " Error message has been created!");
+                return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
+            }
+        }
+
         public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
         {
             MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " tickets for lottery sale of " + itemName +
