@@ -71,21 +71,7 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is already closed");
         }
 
-        public MarketAnswer RemoveProduct(string productID)
-        {
-            Product product = stock.GetProductById(productID);
-            if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no Such Product"); }
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(productID);
-            if (stockListItem.PurchaseWay==PurchaseEnum.Lottery)
-            {
-                LotterySaleManagmentTicket LotteryManagment = handler.DataLayer.GetLotteryByProductID(productID);
-                LotteryManagment.InformCancel();
-                handler.DataLayer.RemoveLottery(LotteryManagment);
-            }
-            handler.DataLayer.RemoveStockListItem(stockListItem);
-            return new StoreAnswer(StoreEnum.Success, "product removed");
-        }
+   
 
         internal double GetProductPriceWithDiscountbyDouble(string productName, int discountCode, int quantity)
         {

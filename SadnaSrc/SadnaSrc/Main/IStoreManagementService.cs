@@ -57,7 +57,10 @@ namespace SadnaSrc.Main
         SetManagerPermissionsFail,
         EditStoreFail,
         StoreNotExists,
-        ProductNameNotAvlaiableInShop
+        ProductNameNotAvlaiableInShop,
+        NoPremmision,
+        quantityIsNegatie,
+        QuantityIsTooBig
     }
 
     public enum ManageStoreStatus

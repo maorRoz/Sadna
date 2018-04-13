@@ -28,35 +28,40 @@ namespace SadnaSrc.StoreCenter
         {
             _storeManager = storeManager;
             _storeName = storeName;
+            global = ModuleGlobalHandler.GetInstance();
             store = global.DataLayer.getStorebyName(storeName);
         }
-        
+        /*public void LoginShoper(string userName, string password)
+        {
+            //((UserSellerHarmony)_storeManager.(userName, password);
+        }*/
+
         public MarketAnswer CloseStore()
         {
-        try
-        {
-            global.DataLayer.IsStoreExist(_storeName);
+            try
+            {
+                global.DataLayer.IsStoreExist(_storeName);
+            }
+            catch (Exception)
+            {
+                return new StoreAnswer(StoreEnum.StoreNotExists, "the store doesn't exists");
+            }
+            try
+            {
+                _storeManager.CanPromoteStoreOwner(); // can do anything
+                return store.CloseStore();
+            }
+            catch (StoreException)
+            {
+                MarketLog.Log("StoreCenter", "closing store failed");
+                return new StoreAnswer(StoreEnum.CloseStoreFail, "Store is not active");
+            }
+            catch (MarketException)
+            {
+                MarketLog.Log("StoreCenter", "closing store failed");
+                return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
+            }
         }
-        catch (Exception)
-        {
-            return new StoreAnswer(StoreEnum.StoreNotExists, "the store doesn't exists");
-        }
-        try
-        {
-            _storeManager.CanPromoteStoreOwner(); // can do anything
-            return store.CloseStore();
-        }
-        catch (StoreException)
-        {
-            MarketLog.Log("StoreCenter", "closing store failed");
-            return new StoreAnswer(StoreEnum.CloseStoreFail, "Store is not active");
-        }
-        catch (MarketException)
-        {
-            MarketLog.Log("StoreCenter", "closing store failed");
-            return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
-        }
-    }
 
 
         private void ValidatePromotionEligible(string actions)
@@ -72,10 +77,10 @@ namespace SadnaSrc.StoreCenter
         }
 
         //TODO: continue this, find store and make sure it is active in DB/with Store class entity
-        public MarketAnswer PromoteToStoreManager(string someoneToPromoteName , string actions)
+        public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
-            MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to grant "+ someoneToPromoteName+
-                                         " manager options in Store" + _storeName +". Validating store activity and existence..");
+            MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to grant " + someoneToPromoteName +
+                                         " manager options in Store" + _storeName + ". Validating store activity and existence..");
             try
             {
                 global.DataLayer.IsStoreExist(_storeName);
@@ -86,20 +91,20 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.Promote(someoneToPromoteName, actions);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " granted " +
                                              someoneToPromoteName + " manager options in Store" + _storeName + "successfully");
-                return new StoreAnswer(PromoteStoreStatus.Success,"promote with manager options has been successful!");
+                return new StoreAnswer(PromoteStoreStatus.Success, "promote with manager options has been successful!");
 
             }
             catch (StoreException e)
             {
-                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " tried to promote others in unavailable Store "+_storeName +
+                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " tried to promote others in unavailable Store " + _storeName +
                                              "and has been denied. Error message has been created!");
                 return new StoreAnswer(PromoteStoreStatus.InvalidStore, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to promote " + someoneToPromoteName +
-                                  "with manager options in Store" + _storeName + " and therefore has been denied. Error message has been created!" );
-                return new StoreAnswer((PromoteStoreStatus)e.Status,e.GetErrorMessage());
+                                  "with manager options in Store" + _storeName + " and therefore has been denied. Error message has been created!");
+                return new StoreAnswer((PromoteStoreStatus)e.Status, e.GetErrorMessage());
             }
 
         }
@@ -142,37 +147,68 @@ namespace SadnaSrc.StoreCenter
             if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
             try
             {
-                MarketLog.Log("StoreCenter", "store exists");
-                MarketLog.Log("StoreCenter", "check if has premmision to add productds");
+                MarketLog.Log("StoreCenter", " store exists");
+                MarketLog.Log("StoreCenter", " check if has premmision to add products");
                 _storeManager.CanManageProducts();
-                MarketLog.Log("StoreCenter", "has premmission");
-                MarketLog.Log("StoreCenter", "check if product name avlaiable in the store" + store.Name);
+                MarketLog.Log("StoreCenter", " has premmission");
+                MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + store.Name);
                 if (!global.IsProductNameAvailableInStore(_storeName, _name))
                 { throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); }
                 MarketLog.Log("StoreCenter", " name is avlaiable");
+                MarketLog.Log("StoreCenter", " checking that quanitity is positive");
+                if (quantity < 0) { return new StoreAnswer(StoreEnum.quantityIsNegatie, "negative quantity"); }
+                MarketLog.Log("StoreCenter", " quanitity is positive");
                 Product product = new Product(global.GetProductID(), _name, _price, _description);
                 global.DataLayer.AddStockListItemToDataBase(new StockListItem(quantity, product, null, PurchaseEnum.Immediate, store.SystemId));
                 MarketLog.Log("StoreCenter", "product added");
                 return new StoreAnswer(StoreEnum.Success, "product added");
             }
-            catch (StoreException)
+            catch (StoreException exe)
             {
                 return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
             }
             catch (MarketException)
             {
-                return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+                MarketLog.Log("StoreCenter", "no premission");
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
 
         //TODO: fix this
         public MarketAnswer RemoveProduct(string productName)
         {
-            global.DataLayer.IsStoreExist(_storeName);
-            _storeManager.CanManageProducts();
-            //   store.RemoveProduct(productName);
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            MarketLog.Log("StoreCenter", "trying to remove product from store");
+            MarketLog.Log("StoreCenter", "check if store exists");
+            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            try
+            {
+                MarketLog.Log("StoreCenter", " store exists");
+                MarketLog.Log("StoreCenter", " check if has premmision to add products");
+                _storeManager.CanManageProducts();
+                MarketLog.Log("StoreCenter", " has premmission");
+                MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
+                Product product = global.DataLayer.getProductByNameFromStore(_storeName, productName);
+                if (product == null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no Such Product"); }
+                MarketLog.Log("StoreCenter", "product exists");
+                StockListItem stockListItem = global.DataLayer.GetProductFromStore(_storeName, productName);
+                MarketLog.Log("StoreCenter", "product exists");
+                if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
+                {
+                    LotterySaleManagmentTicket LotteryManagment = global.DataLayer.GetLotteryByProductID(stockListItem.Product.SystemId);
+                    LotteryManagment.InformCancel();
+                    global.DataLayer.RemoveLottery(LotteryManagment);
+                }
+                global.DataLayer.RemoveStockListItem(stockListItem);
+                return new StoreAnswer(StoreEnum.Success, "product removed");
+            }
+            catch (MarketException)
+            {
+                MarketLog.Log("StoreCenter", "no premission");
+                return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            }
         }
+
+             
 
         //TODO: fix this
         public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
@@ -262,3 +298,4 @@ namespace SadnaSrc.StoreCenter
 
     }
 }
+ 

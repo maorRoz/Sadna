@@ -81,12 +81,15 @@ namespace SadnaSrc.StoreCenter
 
         private object[] GetStockListItemArray(StockListItem stockListItem)
         {
+            object disobj = "";
+            if (stockListItem.Discount != null)
+            {  disobj = stockListItem.Discount; }
             return new object[]
             {
                 stockListItem.SystemId,
                 stockListItem.Product,
                 stockListItem.Quantity,
-                stockListItem.Discount,
+                disobj,
                 stockListItem.PurchaseWay
             };
         }
@@ -193,12 +196,14 @@ namespace SadnaSrc.StoreCenter
         private string[] GetStockListItemStringValues(StockListItem stockListItem)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            string IfDiscountNotExists = "null";
+            if (stockListItem.Discount!=null) { IfDiscountNotExists = "'" + stockListItem.Discount.discountCode + "'"; }
             return new[]
             {
                 "'" + stockListItem.SystemId + "'",
                 "'" + stockListItem.Product.SystemId + "'",
                 "'" + stockListItem.Quantity + "'",
-                "'" + stockListItem.Discount.discountCode + "'",
+                "'" + IfDiscountNotExists + "'",
                 "'" + handler.PrintEnum(stockListItem.PurchaseWay) + "'"
             };
         }
@@ -296,7 +301,6 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    Discount D = GetDiscount(dbReader.GetString(3));
                     stockListItem = new StockListItem(dbReader.GetInt32(2), _product, GetDiscount(dbReader.GetString(3)), handler.GetPurchaseEnumString(dbReader.GetString(4)), dbReader.GetString(0));
                     return stockListItem;
                 }
@@ -426,11 +430,11 @@ namespace SadnaSrc.StoreCenter
         public void RemoveStockListItem(StockListItem stockListItem)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            RemoveDiscount(stockListItem.Discount);
-            RemoveProduct(stockListItem.Product);
-            DeleteFromTable("Stock", "StockID = '" + stockListItem.SystemId + "' AND ProductSystemID = '"
-                                     +stockListItem.Product.SystemId+"' AND Discount ='"+stockListItem.Discount.discountCode+"' AND PurchaseWay = '"
-                                     + handler.PrintEnum(stockListItem.PurchaseWay)+"'");
+            if (stockListItem.Discount != null)
+            {
+                RemoveDiscount(stockListItem.Discount);
+            }
+            RemoveProduct(stockListItem.Product); // the DB will delete the StockListItem due to the conection between of the 2 tables
         }
 
         public void EditDiscountInDatabase(Discount discount)

@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddProductsTests.cs" />
     <Compile Include="OpenStoreTests.cs" />
     <Compile Include="StoreDL TEST.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
