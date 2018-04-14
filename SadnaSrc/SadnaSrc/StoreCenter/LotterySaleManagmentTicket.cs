@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -44,20 +45,15 @@ namespace SadnaSrc.StoreCenter
         {
             return ((startDate > DateTime.Now.Date) && (endDate > DateTime.Now.Date) && (endDate > startDate));
         }
-        //TODO: fix this
         public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
         {
-            if (CanPurchase(moneyPayed))
-            {
-                ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-                LotteryTicket lottery = new LotteryTicket(handler.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
-                   (int) (TotalMoneyPayed + moneyPayed), moneyPayed, userID);
-                handler.DataLayer.AddLotteryTicket(lottery);
-                TotalMoneyPayed += moneyPayed;
-                handler.DataLayer.EditLotteryInDatabase(this);
-                return lottery;
-            }
-                return null;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            LotteryTicket lottery = new LotteryTicket(handler.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
+               (int)(TotalMoneyPayed + moneyPayed), moneyPayed, userID);
+            handler.DataLayer.AddLotteryTicket(lottery);
+            TotalMoneyPayed += moneyPayed;
+            handler.DataLayer.EditLotteryInDatabase(this);
+            return lottery;
         }
         public LotteryTicket Dolottery()
         {
@@ -65,8 +61,7 @@ namespace SadnaSrc.StoreCenter
             {
                 return InformAllWinner();
             }
-            InformCancel();
-            return null; //TODO : think of better return in this case
+            return null;
         }
         private LotteryTicket InformAllWinner()
         {
@@ -107,8 +102,11 @@ namespace SadnaSrc.StoreCenter
         }
         internal void InformCancel()
         {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             IsActive = false;
-        //call maor method here
+            handler.DataLayer.EditLotteryInDatabase(this);
+            OrderSyncherHarmony syncer = new OrderSyncherHarmony();
+            syncer.CancelLottery(SystemID);
         }
 
         public override int GetHashCode()

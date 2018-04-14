@@ -16,8 +16,6 @@ namespace SadnaSrc.Main
 
         MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
-        MarketAnswer AddLotteryTicket(string store, string productName, double amountToPay);
-
         void CleanSeesion();
     }
 
