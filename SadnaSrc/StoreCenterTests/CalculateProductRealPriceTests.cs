@@ -134,6 +134,18 @@ namespace StoreCenterTests
             }
         }
         [TestMethod]
+        public void CalculateWhenDiscountIsNotHidden()
+        {
+            try
+            {
+                handler.CalculateItemPriceWithDiscount("T", "WhiteRabbit", "D6", 2);
+            }
+            catch (StoreException exe)
+            {
+                Assert.AreEqual((int)CalculateEnum.discountIsNotHidden, exe.Status);
+            }
+        }
+        [TestMethod]
         public void CalculateWhenSuccess()
         {
             try

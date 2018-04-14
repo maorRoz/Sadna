@@ -118,7 +118,8 @@ namespace SadnaSrc.Main
         DiscountCodeIsWrong,
         DiscountExpired,
         DiscountNotStarted,
-        quanitityIsNonPositive
+        quanitityIsNonPositive,
+        discountIsNotHidden
     }
 
 

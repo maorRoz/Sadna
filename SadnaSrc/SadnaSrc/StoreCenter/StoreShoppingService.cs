@@ -91,11 +91,13 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("storeCenter", "product not exists");
                 throw new StoreException(StoreEnum.ProductNotFound, "product " + ProductID + " does not exist in Stock");
             }
+            string discount = ""; 
                 string product = stockListItem.Product.ToString();
-                string discount = stockListItem.Discount.ToString();
+            if (stockListItem.Discount != null)
+                discount = stockListItem.Discount.ToString() + " , ";
                 string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
                 string quanitity = stockListItem.Quantity + "";
-                string result = product + " , " + discount + " , " + purchaseWay + " , " + quanitity;
+                string result = product + " , " +discount + purchaseWay + " , " + quanitity;
             return result;
         }
         public MarketAnswer ViewStoreStock(string storename)

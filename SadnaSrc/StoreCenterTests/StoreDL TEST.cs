@@ -268,6 +268,7 @@ namespace StoreCenterTests
                 new Store("S4", "Cluckin Bell", "Los Santos"),
                 new Store("S5", "The Red Rock", "Mivtza Yoav"),
                 new Store("S6", "24", "Mezada"),
+                new Store("S7", "T","wanderland")
             };
             Store[] actual = handler.DataLayer.GetAllActiveStores().ToArray();
             Assert.AreEqual(expected.Length, actual.Length);
@@ -331,6 +332,7 @@ namespace StoreCenterTests
         {
             LinkedList<string> expected = new LinkedList<string>();
             expected.AddLast("P1");
+            expected.AddLast("P2");
             LinkedList<string> find = handler.DataLayer.GetAllStoreProductsID("S1");
             Assert.AreEqual(expected.Count, find.Count);
             string[] findResults = new string[find.Count];

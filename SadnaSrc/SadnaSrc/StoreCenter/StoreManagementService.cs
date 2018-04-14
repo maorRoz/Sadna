@@ -314,7 +314,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
                 Product product = global.DataLayer.getProductByNameFromStore(_storeName, productName);
                 if (product == null) { MarketLog.Log("StoreCenter", "product not exists");
-                    throw new StoreException(StoreEnum.ProductNotFound, "no Such Product"); }
+                    throw new StoreException(DiscountStatus.ProductNotFound, "no Such Product"); }
                 MarketLog.Log("StoreCenter", "check if dates are OK");
                 if ((startDate< DateTime.Now)|| (endDate < DateTime.Now) || !(startDate < endDate))
                 {
