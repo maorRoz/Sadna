@@ -233,7 +233,10 @@ namespace SadnaSrc.OrderPool
                     tickets.Add(dbReader.GetString(0));
                 }
             }
-
+            if (tickets.Count == 0)
+            {
+                throw new OrderException(LotteryOrderStatus.InvalidLotteryID,"Failed, No lottery with ID: "+lottery);
+            }
             return tickets.ToArray();
         }
 
@@ -246,7 +249,7 @@ namespace SadnaSrc.OrderPool
                 {
                     return dbReader.GetInt32(0);
                 }
-                throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find ticket or user");
+                throw new OrderException(LotteryOrderStatus.InvalidLotteryTicket, "Cannot find ticket or user");
             }
         }
 

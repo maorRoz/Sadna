@@ -45,9 +45,9 @@ namespace SadnaSrc.MarketHarmony
             throw new NotImplementedException();
         }
 
-        public OrderItem GetItemFromCoupon(string itemName, string store, int quantity, string coupon)
+        public double GetPriceFromCoupon(string itemName, string store, int quantity, string coupon)
         {
-            throw new NotImplementedException();
+            return _storeService.CalculateItemPriceWithDiscount(store, itemName, coupon, quantity);
         }
     }
 }

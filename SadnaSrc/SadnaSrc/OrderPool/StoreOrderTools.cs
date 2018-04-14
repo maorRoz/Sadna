@@ -43,9 +43,9 @@ namespace SadnaSrc.OrderPool
         public void RefundLottery(string lottery)
         {
             MarketLog.Log("OrderPool", "Attempting to refund lottery " + lottery + "...");
-            string[] ticketsToRefund = _orderDL.GetAllTickets(lottery);
             try
             {
+                string[] ticketsToRefund = _orderDL.GetAllTickets(lottery);
                 foreach (string ticket in ticketsToRefund)
                 {
                     Refund(ticket,lottery);

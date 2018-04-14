@@ -16,6 +16,8 @@ namespace IntegrationTests
     public class OrderSyncher_IntegrationTest
     {
         private IUserService userServiceSession;
+        private OrderService orderServiceSession;
+        private ModuleGlobalHandler storeServiceSession;
         private OrderSyncherHarmony orderSyncherHarmony;
 
         private MarketYard marketSession;
@@ -30,6 +32,8 @@ namespace IntegrationTests
             marketSession = MarketYard.Instance;
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
+            orderServiceSession = (OrderService)marketSession.GetOrderService(ref userServiceSession);
+            storeServiceSession = ModuleGlobalHandler.GetInstance();
             orderSyncherHarmony = new OrderSyncherHarmony();
         }
 
