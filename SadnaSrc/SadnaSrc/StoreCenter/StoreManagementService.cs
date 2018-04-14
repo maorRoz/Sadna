@@ -107,7 +107,7 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-        public MarketAnswer GetStoreProducts()
+      /*  public MarketAnswer GetStoreProducts()
         {
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store stock...");
             try
@@ -135,7 +135,7 @@ namespace SadnaSrc.StoreCenter
                                              + _storeName + " and therefore has been denied. Error message has been created!");
                 return new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
             }
-        }
+        }*/
 
         
         public MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity)

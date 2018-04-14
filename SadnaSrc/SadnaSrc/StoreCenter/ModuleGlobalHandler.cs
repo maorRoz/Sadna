@@ -1,4 +1,5 @@
 ﻿using SadnaSrc.Main;
+using SadnaSrc.MarketHarmony;
 using SadnaSrc.StoreCenter;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,6 @@ namespace SadnaSrc.StoreCenter
         private int globalDiscountCode;
         private int globalLotteryID;
         private int globalLotteryTicketID;
-      //  internal LinkedList<Store> allStores { get; set; }
         public StoreDL DataLayer { get; }
         public static ModuleGlobalHandler GetInstance()
         {
@@ -169,7 +169,8 @@ namespace SadnaSrc.StoreCenter
             StockListItem product = DataLayer.GetProductFromStore(storeName, productName);
             if (product.Quantity < quantity || quantity <= 0)
                 { throw new StoreException(StoreSyncStatus.NoProduct, "product doesn't exist in this quantity"); }
-            store.UpdateQuanityAfterPurchase(product.Product, quantity);
+            product.Quantity -= quantity;
+            DataLayer.EditStockInDatabase(product);
         }
 
         public bool ProductExistsInQuantity(string storeName, string product, int quantity)
@@ -185,16 +186,6 @@ namespace SadnaSrc.StoreCenter
         public Store GetStoreByID(string ID)
         {
             return DataLayer.GetStorebyID(ID);
-        }
-        public LinkedList<Product> GetAllMarketProducts()
-        {
-            LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
-            LinkedList<Product> result = new LinkedList<Product>();
-            foreach (Store store in AllStores)
-            {
-                result = store.AddAllProductsToExistingList(result);
-           }
-            return result;
         }
 
         public double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity)
@@ -221,6 +212,33 @@ namespace SadnaSrc.StoreCenter
             double ans = item.Discount.CalcDiscount(item.Product.BasePrice);
             ans = ans * _quantity;
             return ans;
+        }
+
+        public bool HasActiveLottery(string storeName, string productName, double priceWantToPay)
+        {
+            StockListItem item = DataLayer.GetProductFromStore(storeName, productName);
+            if (item.PurchaseWay != PurchaseEnum.Lottery)
+                return false;
+            LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName,productName);
+            if (Lotto == null)
+                return false;
+            if (!Lotto.IsActive)
+                return false;
+            if (!Lotto.CanPurchase(priceWantToPay))
+                return false;
+            if (!Lotto.checkDatesWhenPurches())
+                return false;
+            return true;
+        }
+
+        public void updateLottery(string storeName, string ProductName, int moenyPayed, string UserName)
+        {
+            LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
+            if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))
+            {
+                OrderSyncherHarmony syncher = new OrderSyncherHarmony();
+                syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, 1, Lotto.getWinnerID());
+            }
         }
     }
 }
