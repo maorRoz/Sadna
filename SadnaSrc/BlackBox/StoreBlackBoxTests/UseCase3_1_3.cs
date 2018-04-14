@@ -3,6 +3,7 @@ using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
+//TODO: change statuses.
 namespace BlackBoxStoreTests
 
 {
@@ -21,6 +22,9 @@ namespace BlackBoxStoreTests
 			_storeBridge = StoreDriver.getBridge();
 			_storeBridge.GetStoreShoppingService(_userBridge.getUserSession());
 			_storeBridge.OpenStore("lokef", "li");
+			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			MarketAnswer result1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
+			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
 			_userBridge2 = null;
 			_storeBridge2 = null;
 		}
@@ -28,9 +32,6 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void SuccessUpdatingProductName()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
 			MarketAnswer result2 = _storeBridge.EditProduct("bamba", "Name", "bamba-osem");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			//TODO: check in the stock to see if the product's name was changed.
@@ -40,9 +41,6 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void SuccessUpdatingBasePrice()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
 			MarketAnswer result2 = _storeBridge.EditProduct("bamba", "BasePrice", "102020");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			//TODO: check in the stock to see if the product's price was changed.
@@ -51,22 +49,14 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void SuccessUpdatingDescription()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
 			MarketAnswer result2 = _storeBridge.EditProduct("bamba", "Description", "nice snack ++");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			//TODO: check in the stock to see if the product's description was changed.
 		}
 
-		//TODO: what about changing the product's qunatity?
-
 		[TestMethod]
 		public void FailUpdatingPriceNegativeNumbers()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
 			MarketAnswer result2 = _storeBridge.EditProduct("bamba", "BasePrice", "-20");
 			Assert.AreEqual((int)StoreEnum.UpdateProductFail, result2.Status);
 			//TODO: check in the stock to see that the product's price wasn't changed.
@@ -75,9 +65,6 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void FailUpdatingInvalidPriceNotAllDigits()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
 			MarketAnswer result2 = _storeBridge.EditProduct("bamba", "BasePrice", "20abc");
 			Assert.AreEqual((int)StoreEnum.UpdateProductFail, result2.Status);
 			//TODO: check in the stock to see that the product's price wasn't changed.
@@ -86,9 +73,6 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void FailUpdatingProductNameIsTaken()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
 			MarketAnswer result2 = _storeBridge.AddNewProduct("bamba200", 100, "bad snack", 10);
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			MarketAnswer result3 = _storeBridge.EditProduct("bamba", "Name", "bamba200");
@@ -99,9 +83,6 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void StoreDoesntExist()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer res1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, res1.Status);
 			_storeBridge2 = StoreDriver.getBridge();
 			_storeBridge2.GetStoreManagementService(_userBridge.getUserSession(), "hahaha");
 			MarketAnswer res2 = _storeBridge2.EditProduct("bamba", "Name", "bamba500");
@@ -113,9 +94,6 @@ namespace BlackBoxStoreTests
 		public void NoPermissionsToEditProduct()
 		{
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer res1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, res1.Status);
 			_storeBridge2 = StoreDriver.getBridge();
 			_storeBridge2.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
 			MarketAnswer res2 = _storeBridge2.EditProduct("bambush", "BasePrice", "100");
@@ -127,21 +105,13 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void ProductToEditWasntFound()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer res1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, res1.Status);
 			MarketAnswer res2 = _storeBridge.EditProduct("bambuuu", "Name", "bambee");
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res2.Status);
-
 		}
-
 
 		[TestMethod]
 		public void ChangeQuantityOfProductSuccessfully()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
 			MarketAnswer result2 = _storeBridge.AddQuanitityToProduct("bamba", 30);
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			//TODO: check in the stock to see if the product's quantity was changed.
@@ -151,15 +121,36 @@ namespace BlackBoxStoreTests
 		public void ChangeProductsQuantityProductNotFound()
 		{
 			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer res = _storeBridge.AddQuanitityToProduct("bamba", 5);
+			MarketAnswer res = _storeBridge.AddQuanitityToProduct("bambuuuu", 5);
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res.Status);
 		}
 
 		[TestMethod]
-		public void changeProductsQuantityQuantityIsNegative()
+		public void ChangeProductsQuantityIsNegative()
 		{
 			//TODO: according to lior, the quantity itself should be more or equal to 0.
 			//TODO: I'm not sure, so check it and them implement this function.
+		}
+
+		[TestMethod]
+		public void ChangeProductsQuantityNoUserPermissions()
+		{
+			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
+			_storeBridge2 = StoreDriver.getBridge();
+			_storeBridge2.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
+			MarketAnswer res2 = _storeBridge2.AddQuanitityToProduct("bamba", 30);
+			//Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
+			//TODO: to complete this when lior changes the statuses.
+			//TODO: to check the product was not edited.
+		}
+
+		[TestMethod]
+		public void ChangeProductsQuantityStoreDoesntExist()
+		{
+			_storeBridge2 = StoreDriver.getBridge();
+			_storeBridge2.GetStoreManagementService(_userBridge.getUserSession(), "hahaha");
+			MarketAnswer res2 = _storeBridge2.AddQuanitityToProduct("bamba", 30);
+			Assert.AreEqual((int)StoreEnum.StoreNotExists, res2.Status);
 		}
 
 		private void SignUp(ref IUserBridge userBridge, string name, string address, string password, string creditCard)

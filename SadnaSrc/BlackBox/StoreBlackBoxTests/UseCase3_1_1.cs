@@ -4,6 +4,7 @@ using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
+//TODO: change statuses.
 namespace BlackBoxStoreTests
 {
 	//TODO: to change the status of store enum when it's ready
@@ -42,7 +43,7 @@ namespace BlackBoxStoreTests
 			_storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
 			MarketAnswer result = _storeBridge.AddNewProduct("bamba", 80, "nice snack", 1);
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, result.Status);
-
+			//TODO: after lior changes the statuses, change this status.
 		}
 
 		[TestMethod]
