@@ -91,11 +91,13 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("storeCenter", "product not exists");
                 throw new StoreException(StoreEnum.ProductNotFound, "product " + ProductID + " does not exist in Stock");
             }
+            string discount = ""; 
                 string product = stockListItem.Product.ToString();
-                string discount = stockListItem.Discount.ToString();
+            if (stockListItem.Discount != null)
+                discount = stockListItem.Discount.ToString() + " , ";
                 string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
                 string quanitity = stockListItem.Quantity + "";
-                string result = product + " , " + discount + " , " + purchaseWay + " , " + quanitity;
+                string result = product + " , " +discount + purchaseWay + " , " + quanitity;
             return result;
         }
         public MarketAnswer ViewStoreStock(string storename)
@@ -207,6 +209,12 @@ namespace SadnaSrc.StoreCenter
         {
             foreach (Store store in stores)
             {
+                LinkedList<string> items = storeLogic.DataLayer.GetAllStoreProductsID(store.SystemId);
+                foreach (string id in items)
+                {
+                    StockListItem item = storeLogic.DataLayer.GetStockListItembyProductID(id);
+                    storeLogic.DataLayer.RemoveStockListItem(item);
+                }
                 storeLogic.DataLayer.RemoveStore(store);
             }
         }

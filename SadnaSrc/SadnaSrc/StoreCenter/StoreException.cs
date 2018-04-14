@@ -9,6 +9,9 @@ namespace SadnaSrc.StoreCenter
 {
     public class StoreException : MarketException
     {
+        public StoreException(CalculateEnum status, string message) : base((int)status, message)
+        {
+        }
         public StoreException(MarketError status, string message) : base((int)status, message)
         {
         }

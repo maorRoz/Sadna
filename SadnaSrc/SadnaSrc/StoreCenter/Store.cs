@@ -66,18 +66,7 @@ namespace SadnaSrc.StoreCenter
         }
 
    
-
-        internal double GetProductPriceWithDiscountbyDouble(string productName, int discountCode, int quantity)
-        {
-            Product p = stock.GetProductById(productName);
-            if (p != null) { 
-            return stock.CalculateSingleItemPrice(p, discountCode, quantity);
-            }
-
-            return -1;
-        }
-
-
+        
         public Product GetProductById(string ID) //will return null if product is not exists
         {
             return stock.GetProductById(ID);
@@ -125,11 +114,6 @@ namespace SadnaSrc.StoreCenter
                 return product;
             }
             return null;
-        }
-        public MarketAnswer GetProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
-        {
-            double result = stock.CalculateSingleItemPrice(stock.GetProductById(_product), _DiscountCode, _quantity);
-            return new StoreAnswer(StoreEnum.Success, "" + result);
         }
         internal bool CanPurchaseImmediate(Product product, int quantity)
         {

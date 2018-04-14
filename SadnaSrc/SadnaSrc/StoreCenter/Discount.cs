@@ -29,41 +29,13 @@ namespace SadnaSrc.StoreCenter
 
         }
         //assume that the User discountCode is the right one, the check is done by the Store itself
-        public double CalcDiscount(int basePrice, int code)
+        public double CalcDiscount(int basePrice)
         {
-            if (discountType == discountTypeEnum.Hidden)
-            {
-                {
-
-                    if ((DateTime.Now.Date < EndDate) && (DateTime.Now.Date > startDate) && (discountCode.Equals(code)))
-                    {
-                        {
-                            if (Percentages)
-                            {
-                                return basePrice * (1 - DiscountAmount);
-                            }
-                            else
-                            {
-                                return basePrice - DiscountAmount;
-                            }
-                        }
-                    }
-                    return basePrice;
-                }
-            }
-            if (discountType == discountTypeEnum.Visible)
-            {
-                if (Percentages)
-                {
-                    return basePrice * (1 - DiscountAmount);
-                }
-                else
-                {
-                    return basePrice - DiscountAmount;
-                }
-            }
-            return -1;
+            if (Percentages)
+                return basePrice * (1 - ((double)DiscountAmount/100));
+            return basePrice - DiscountAmount;
         }
+                
         public override bool Equals(object obj)
         {
             if (obj.GetType().Equals(GetType()))
