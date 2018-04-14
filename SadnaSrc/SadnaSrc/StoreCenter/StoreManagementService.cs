@@ -36,7 +36,7 @@ namespace SadnaSrc.StoreCenter
         {
             try
             {
-                global.DataLayer.IsStoreExist(_storeName);
+                if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
             }
             catch (Exception)
             {
@@ -79,8 +79,8 @@ namespace SadnaSrc.StoreCenter
                                          " manager options in Store" + _storeName + ". Validating store activity and existence..");
             try
             {
-                global.DataLayer.IsStoreExistAndActive(_storeName);
-                ValidatePromotionEligible(actions);
+	            global.DataLayer.ValidateStoreExists(_storeName);
+				ValidatePromotionEligible(actions);
                 _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has been authorized. granting " +
                                              someoneToPromoteName + " manager options in Store" + _storeName + "...");
@@ -110,7 +110,7 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store stock...");
             try
             {
-                global.DataLayer.IsStoreExistAndActive(_storeName);
+                if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
                 _storeManager.CanManageProducts();
                 List<string> productList = new List<string>();
                 foreach (Product product in store.GetAllProducts())
