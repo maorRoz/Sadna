@@ -39,6 +39,11 @@ namespace BlackBox
 			return _storeShoppingService.AddProductToCart(store, productName, quantity);
 		}
 
+		public MarketAnswer ViewStoreStock(string store)
+		{
+			return _storeShoppingService.ViewStoreStock(store);
+		}
+
 		public void CleanSession()
 		{
 			_storeShoppingService?.CleanSeesion();

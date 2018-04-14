@@ -163,11 +163,11 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "product added");
                 return new StoreAnswer(StoreEnum.Success, "product added");
             }
-            catch (StoreException)
+			catch (StoreException)
             {
-                return new StoreAnswer(StoreEnum.ProductNotFound, "Product Name is already Exists In Shop");
+                return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
             }
-            catch (MarketException)
+			catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
                 return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");

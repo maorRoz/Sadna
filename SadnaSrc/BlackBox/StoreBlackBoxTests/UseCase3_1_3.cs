@@ -14,7 +14,6 @@ namespace BlackBoxStoreTests
 		private IStoreManagementBridge _storeManage2;
 		private IUserBridge _userBridge2;
 		private IUserBridge _userBridge;
-		private IStoreShoppingBridge _storeBridge2;
 
 		[TestInitialize]
 		public void MarketBuilder()
@@ -36,7 +35,15 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "Name", "bamba-osem");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
-			//TODO: check in the stock to see if the product's name was changed.
+
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba-osem base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 
 		}
 
@@ -45,7 +52,15 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "BasePrice", "102020");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
-			//TODO: check in the stock to see if the product's price was changed.
+
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 102020 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
@@ -54,6 +69,15 @@ namespace BlackBoxStoreTests
 			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "Description", "nice snack ++");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			//TODO: check in the stock to see if the product's description was changed.
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack ++ , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
+
 		}
 
 		[TestMethod]
@@ -61,7 +85,15 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "BasePrice", "-20");
 			Assert.AreEqual((int)StoreEnum.UpdateProductFail, result2.Status);
-			//TODO: check in the stock to see that the product's price wasn't changed.
+			
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
@@ -69,7 +101,15 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "BasePrice", "20abc");
 			Assert.AreEqual((int)StoreEnum.UpdateProductFail, result2.Status);
-			//TODO: check in the stock to see that the product's price wasn't changed.
+			
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
@@ -80,6 +120,18 @@ namespace BlackBoxStoreTests
 			MarketAnswer result3 = _storeManage1.EditProduct("bamba", "Name", "bamba200");
 			Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, result3.Status);
 			//TODO: check in the stock to see that the product's name wasn't changed.
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult =
+			{
+				" name: bamba base price: 90 description: nice snack , Immediate , 30",
+				" name: bamba200 base price: 100 description: bad snack , Immediate , 10"
+			};
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
@@ -99,9 +151,16 @@ namespace BlackBoxStoreTests
 			_storeManage2 = StoreManagementDriver.getBridge();
 			_storeManage2.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.EditProduct("bambush", "BasePrice", "100");
-			//Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
-			//TODO: to complete this when lior changes the statuses.
-			//TODO: to check the product was not edited.
+			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
+
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
@@ -117,6 +176,15 @@ namespace BlackBoxStoreTests
 			MarketAnswer result2 = _storeManage1.AddQuanitityToProduct("bamba", 30);
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			//TODO: check in the stock to see if the product's quantity was changed.
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 60" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
+
 		}
 
 		[TestMethod]
@@ -126,13 +194,34 @@ namespace BlackBoxStoreTests
 			_storeManage2.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
 			MarketAnswer res = _storeManage2.AddQuanitityToProduct("bambuuuu", 5);
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res.Status);
+			//TODO: check to see that the product quantity wasn't changed
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
 		public void ChangeProductsQuantityIsNegative()
 		{
-			//TODO: according to lior, the quantity itself should be more or equal to 0.
-			//TODO: I'm not sure, so check it and them implement this function.
+			_storeManage2 = StoreManagementDriver.getBridge();
+			_storeManage2.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			MarketAnswer res = _storeManage2.AddQuanitityToProduct("bambuuuu", -10);
+			Assert.AreEqual((int)StoreEnum.ProductNotFound, res.Status);
+			//TODO: check to see that the product quantity wasn't changed
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
+
 		}
 
 		[TestMethod]
@@ -142,9 +231,16 @@ namespace BlackBoxStoreTests
 			_storeManage2 = StoreManagementDriver.getBridge();
 			_storeManage2.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.AddQuanitityToProduct("bamba", 30);
-			//Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
-			//TODO: to complete this when lior changes the statuses.
+			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
 			//TODO: to check the product was not edited.
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
@@ -154,6 +250,15 @@ namespace BlackBoxStoreTests
 			_storeManage2.GetStoreManagementService(_userBridge.getUserSession(), "hahaha");
 			MarketAnswer res2 = _storeManage2.AddQuanitityToProduct("bamba", 30);
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, res2.Status);
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			//didn't succeed in removing the product, there is still one product
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		private void SignUp(ref IUserBridge userBridge, string name, string address, string password, string creditCard)
@@ -163,7 +268,6 @@ namespace BlackBoxStoreTests
 			userBridge.SignUp(name, address, password, creditCard);
 		}
 
-		//TODO: make sure that cleanSession of store deletes the products as well as their stores.
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
@@ -171,7 +275,6 @@ namespace BlackBoxStoreTests
 			_storeManage1.CleanSession();
 			_userBridge2?.CleanSession();
 			_storeBridge.CleanSession();
-			_storeBridge2?.CleanSession();
 			_userBridge.CleanMarket();
 		}
 

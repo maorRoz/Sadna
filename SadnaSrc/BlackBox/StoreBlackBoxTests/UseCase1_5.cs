@@ -5,7 +5,6 @@ using SadnaSrc.Main;
 
 namespace UserBlackBoxTests
 {
-	//TODO: change statuses
 	[TestClass]
 	public class UseCase1_5
 	{
