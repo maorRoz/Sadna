@@ -1,8 +1,9 @@
-﻿using System;
+﻿using BlackBox;
+using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBox.StoreBlackBoxTests
+namespace BlackBoxStoreTests
 {
 	[TestClass]
 	public class UseCase3_1_2
@@ -50,9 +51,11 @@ namespace BlackBox.StoreBlackBoxTests
 			MarketAnswer res1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
 			Assert.AreEqual((int)StoreEnum.Success, res1.Status);
 			_storeBridge2 = StoreDriver.getBridge();
-			_storeBridge2.GetStoreManagementService(_userBridge2.getUserSession(),"lokef");
+			_storeBridge2.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
 			MarketAnswer res2 = _storeBridge2.RemoveProduct("bamba");
 			//Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
+			//TODO: to complete this when lior changes the statuses.
+			//TODO: to check the product was not added.
 		}
 
 		[TestMethod]
@@ -66,6 +69,35 @@ namespace BlackBox.StoreBlackBoxTests
 			MarketAnswer res2 = _storeBridge2.RemoveProduct("bamba");
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, res2.Status);
 		}
+
+		[TestMethod]
+		public void ChangeQuantityOfProductSuccessfully()
+		{
+			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			MarketAnswer result1 = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
+			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
+			MarketAnswer result2 = _storeBridge.AddQuanitityToProduct("bamba", 30);
+			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
+			//TODO: check in the stock to see if the product's quantity was changed.
+		}
+
+		[TestMethod]
+		public void ChangeProductsQuantityProductNotFound()
+		{
+			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			MarketAnswer res = _storeBridge.AddQuanitityToProduct("bamba", 5);
+			Assert.AreEqual((int)StoreEnum.ProductNotFound, res.Status);
+		}
+
+		[TestMethod]
+		public void changeProductsQuantityQuantityIsNegative()
+		{
+			//TODO: according to lior, the quantity itself should be more or equal to 0.
+			//TODO: I'm not sure, so check it and them implement this function.
+		}
+
+
+
 
 		private void SignUp(ref IUserBridge userBridge, string name, string address, string password, string creditCard)
 		{
