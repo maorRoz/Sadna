@@ -17,7 +17,7 @@ namespace SadnaSrc.StoreCenter
         public bool Percentages { get; set; }
 
         //assume that the startDate < EndDate
-        
+
         public Discount(string _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
         {
             discountCode = _discountCode;
@@ -68,24 +68,24 @@ namespace SadnaSrc.StoreCenter
         {
             if (obj.GetType().Equals(GetType()))
             {
-                return (((Discount)obj).discountCode == discountCode)&&
+                return (((Discount)obj).discountCode == discountCode) &&
                     (((Discount)obj).DiscountAmount == DiscountAmount);
             }
             return false;
         }
-        public override string ToString() {if(Percentages) return "" + DiscountAmount+"%"; return "" + DiscountAmount; }
-
-        public override int GetHashCode()
+        public override string ToString()
         {
-            var hashCode = -536786706;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(discountCode);
-            hashCode = hashCode * -1521134295 + discountType.GetHashCode();
-            hashCode = hashCode * -1521134295 + startDate.GetHashCode();
-            hashCode = hashCode * -1521134295 + EndDate.GetHashCode();
-            hashCode = hashCode * -1521134295 + DiscountAmount.GetHashCode();
-            hashCode = hashCode * -1521134295 + Percentages.GetHashCode();
-            return hashCode;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            if (handler.PrintEnum(discountType) == handler.PrintEnum(discountTypeEnum.Hidden))
+                return "discount code: " + discountCode + " type is: hidden";
+            if (Percentages)
+            {
+                return "discount code: " + discountCode + " DiscountAmount: " + DiscountAmount + "%" +
+                      " Start Date: " + startDate + " End Date: " + EndDate;
+            }
+            return "discount code: " + discountCode + " DiscountAmount: " + DiscountAmount +
+             " Start Date: " + startDate + " End Date: " + EndDate;
+
         }
     }
 }
-

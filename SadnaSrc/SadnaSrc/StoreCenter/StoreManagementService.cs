@@ -270,7 +270,7 @@ namespace SadnaSrc.StoreCenter
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
         public void clearSession()
@@ -539,7 +539,7 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"
                                              + _storeName + " and therefore has been denied. Error message has been created!");
-                return new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
+                return new StoreAnswer(StoreEnum.NoPremmision, e.GetErrorMessage());
             }
         }
         private Discount checkIfDiscountExistsPrivateMethod(string productName)
