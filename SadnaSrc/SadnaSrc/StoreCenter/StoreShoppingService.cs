@@ -89,9 +89,10 @@ namespace SadnaSrc.StoreCenter
             {
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "");
-                string[] storeStockInfo = storeLogic.GetStoreStockInfo(store);
+
+                LinkedList<StockListItem> items = new LinkedList<StockListItem>();
                 MarketLog.Log("StoreCenter", "");
-                return new StoreAnswer(ViewStoreStatus.Success, "Store stock has been successfully granted!", storeStockInfo);
+//                return new StoreAnswer(ViewStoreStatus.Success, "Store stock has been successfully granted!", storeStockInfo);
             }
             catch (StoreException e)
             {
@@ -230,3 +231,4 @@ namespace SadnaSrc.StoreCenter
         */
     }
 }
+
