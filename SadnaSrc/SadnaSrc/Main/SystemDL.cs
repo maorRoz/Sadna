@@ -46,7 +46,6 @@ namespace SadnaSrc.Main
                 createTableCommand.ExecuteNonQuery();
             }
 
-            //TODO : delete this when The Right UseCase is implemented (Except the SystemAdmin since he is mandatory by constraint)
             string[] thingsToInsertByForce =
             {
                 "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S1','X','Here 4','Active')",
@@ -64,8 +63,23 @@ namespace SadnaSrc.Main
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P1', 'BOX', 100, 'this is a plastic box')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P2', 'Golden BOX', 1000, 'this is a golden box')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P3', 'DeleteMy BOX', 10, 'this is a trush')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P4', 'Bamba', 6, 'munch')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P5', 'Goldstar', 11, 'beer')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P6', 'OCB', 10, 'accessories')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P7', 'Coated Peanuts', 10, 'munch')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D1', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P1', 5, 'D1', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S2', 'P1', 5, 'D1', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S5', 'P4', 20, 'D1', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S5', 'P5', 36, 'D1', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S6', 'P6', 100, 'D1', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S6', 'P7', 10, 'D1', 'Immediate')",
+                "UPDATE Stock SET Quantity = 5   WHERE ProductSystemID = 'P1' AND StockID = 'S1'",
+                "UPDATE Stock SET Quantity = 5   WHERE ProductSystemID = 'P1' AND StockID = 'S2'",
+                "UPDATE Stock SET Quantity = 20  WHERE ProductSystemID = 'P4' AND StockID = 'S5'",
+                "UPDATE Stock SET Quantity = 36  WHERE ProductSystemID = 'P5' AND StockID = 'S5'",
+                "UPDATE Stock SET Quantity = 100 WHERE ProductSystemID = 'P6' AND StockID = 'S6'",
+                "UPDATE Stock SET Quantity = 10  WHERE ProductSystemID = 'P7' AND StockID = 'S6'",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, StartDate, EndDate, isActive) VALUES ('L1', 'P1', 100, 0 ,'01/01/2018', '31/12/2018', 'true')",
                 "INSERT INTO LotteryTicket (myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID) VALUES('T1', 'L1', 0, 0,0, 'WAITING', 0)",
                 "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70','12345678')",
@@ -96,7 +110,7 @@ namespace SadnaSrc.Main
                 "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (7,'Bamba','The Red Rock',3,6.00,18.00)",
                 "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (7,'Goldstar','The Red Rock',3,11.00,33.00)",
                 "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (7,'OCB','24',2,10.00,20.00)",
-                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (8,'Coated Peanuts','24',1,10.00,10.00)",
+                "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (8,'Coated Peanuts','24',8,10.00,80.00)",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Y','StoreOwner')",

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,19 @@ namespace BlackBox
 			}
 		}
 
+		public void GetStoreManagementService(IUserService userService, string store)
+		{
+			if (real != null)
+			{
+				real.GetStoreManagementService(userService,store);
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
+
+		}
+
 		public MarketAnswer OpenStore(string name, string address)
 		{
 			if (real != null)
@@ -42,9 +56,26 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
-	    public void CleanSession()
+		public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
+		{
+			if (real != null)
+			{
+				return real.PromoteToStoreManager(someoneToPromoteName, actions);
+			}
+			throw new NotImplementedException();
+		}
+
+
+		public void CleanSession()
 	    {
-            real?.CleanSession();
+		    if (real != null)
+		    {
+			    real.CleanSession();
+		    }
+		    else
+		    {
+				throw new NotImplementedException();
+			}
 	    } 
 
 

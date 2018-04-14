@@ -17,7 +17,7 @@ namespace OrderPoolWallaterSupplyPointTests
         private PaymentService paymentService;
 
         [TestInitialize]
-        public void BuildSupplyPoint()
+        public void BuildWalleter()
         {
             market = MarketYard.Instance;       
             paymentService = (PaymentService)market.GetPaymentService();
@@ -31,21 +31,7 @@ namespace OrderPoolWallaterSupplyPointTests
             Assert.AreEqual((int)WalleterStatus.Success, ans.Status);
         }
 
-        [TestMethod]
-        public void TestNoExternalSystem()
-        {
-            try
-            {
-                Order order = new Order(123456, "Big Smoke","Grove Street");
-                
-                paymentService.ProccesPayment(order, "12345678");
-                Assert.Fail();
-            }
-            catch (MarketException e)
-            {
-                Assert.AreEqual((int)WalleterStatus.NoPaymentSystem, e.Status);
-            }
-        }
+       
 
         [TestMethod]
         public void TestCreditCardCheck1()

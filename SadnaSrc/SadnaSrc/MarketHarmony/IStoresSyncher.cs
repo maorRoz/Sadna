@@ -13,17 +13,32 @@ namespace SadnaSrc.MarketHarmony
     //integration between OrderPool to StoreCenter 
     public interface IStoresSyncher
     {
-        /// <summary>
-        /// Close a lottery sale in store in case of lottery sold out
-        /// </summary>
-        void CloseLottery(string lottery); // improve this
+        
         /// <summary>
         /// Rmove <paramref name="purchased"/> from store stock
         /// </summary>
         void RemoveProducts(OrderItem[] purchased);
+
+        /// <summary>
+        /// update the lottery details after the purchase of a ticket
+        /// </summary>
+        void UpdateLottery(string itemName, string store, string username);
+
+
         /// <summary>
         /// Validate that <paramref name="toBuy"/> is valid product to buy by the user
         /// </summary>
         bool IsValid(OrderItem toBuy);
+
+        /// <summary>
+        /// Validate that <paramref name="toBuy"/> is valid product to buy by the user
+        /// </summary>
+        bool IsTicketValid(string itemName, string store);
+
+
+        /// <summary>
+        /// returns an order item with the updated price after discount, if coupon is invalid return null
+        /// </summary>
+        OrderItem GetItemFromCoupon(string itemName, string store,int quantity, string coupon);
     }
 }

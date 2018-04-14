@@ -107,22 +107,41 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: doesn't work really, were too complicated for me(maor)...
         public MarketAnswer AddProductToCart(string store, string productName,int quantity)
         {
-            MarketLog.Log("StoreCenter","");
+            MarketLog.Log("StoreCenter","trying to add something to the cart");
+            
             try
             {
-                StockListItem porductToFind =  storeLogic.GetProductFromStore(store,productName);
-                MarketLog.Log("StoreCenter", "");
-                _shopper.AddToCart(porductToFind.Product, store,quantity);
-                MarketLog.Log("StoreCenter", "");
-                return new StoreAnswer(AddProductStatus.Success, quantity +" "+ productName +" from "+store+ "has been" +
+                MarketLog.Log("StoreCenter", "checking if store exists");
+                if (!storeLogic.DataLayer.IsStoreExistAndActive(store))
+                { throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
+                MarketLog.Log("StoreCenter", "checking if user has premmisions");
+                _shopper.ValidateCanBrowseMarket();
+                MarketLog.Log("StoreCenter", "checking if product exists");
+                if (storeLogic.IsProductNameAvailableInStore(store,productName)) //aka product is NotFiniteNumberException in store
+                { MarketLog.Log("StoreCenter", "Product is not exists in the store");
+                    throw new StoreException(StoreEnum.ProductNotFound, "product is not exists"); }
+                StockListItem StockListItem =  storeLogic.GetProductFromStore(store,productName);
+                MarketLog.Log("StoreCenter", "checking that the required quantity is not too big");
+                if (quantity> StockListItem.Quantity)
+                {
+                    MarketLog.Log("StoreCenter", "required quantity is not too big");
+                    throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big"); }
+                MarketLog.Log("StoreCenter", "checking that the required quantity is not negative or zero");
+                if (quantity <= 0)
+                {
+                    MarketLog.Log("StoreCenter", "required quantity is negative or zero");
+                    throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
+                }
+                _shopper.AddToCart(StockListItem.Product, store,quantity);
+                MarketLog.Log("StoreCenter", "add product successeded");
+                return new StoreAnswer(StoreEnum.Success, quantity +" "+ productName +" from "+store+ "has been" +
                                                                  " successfully added to the user's cart!");
             }
             catch (StoreException e)
             {
-                MarketLog.Log("StoreCenter", "");
+                MarketLog.Log("StoreCenter", "adding to cart failed");
                 return new StoreAnswer((AddProductStatus)e.Status, "There is no product or store or quantity of that type in the market." +
                                                                   " request has been denied. Error message has been created!");
             }
@@ -137,7 +156,7 @@ namespace SadnaSrc.StoreCenter
         //TODO: fix this
         public MarketAnswer AddLotteryTicket(string store, string productName,double amountToPay)
         {
-            MarketLog.Log("StoreCenter", "");
+            MarketLog.Log("StoreCenter", "store error");
             try
             {
                 //PorductToFind =  StoreDL.searchProductInStore(store,productName,"Immediate");

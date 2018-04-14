@@ -53,12 +53,6 @@ namespace SadnaSrc.StoreCenter
         }
         //////////////////// this function will be removed after I will have Maor function!//////////////////////
 
-
-        public MarketAnswer PromoteToManager(User currentUser, User someoneToPromote)
-        {    
-               return new StoreAnswer(StoreEnum.Success, "user " + someoneToPromote + " has been premoted to be a owner of store " + SystemId);
-        }
-
         public MarketAnswer CloseStore()
         {
             if (IsActive)
@@ -68,33 +62,10 @@ namespace SadnaSrc.StoreCenter
                 handler.DataLayer.EditStore(this);
                 return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
             }
-            return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is alrady closed");
+            return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is already closed");
         }
 
-        
-        public MarketAnswer AddProduct(string _name, int _price, string _description, int quantity)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            Product product = new Product(handler.GetProductID(), _name, _price, _description);
-            handler.DataLayer.AddStockListItemToDataBase(new StockListItem(quantity, product, null, PurchaseEnum.Immediate, SystemId));
-            return new StoreAnswer(StoreEnum.Success, "product added");
-        }
-
-        public MarketAnswer RemoveProduct(string productID)
-        {
-            Product product = stock.GetProductById(productID);
-            if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no Such Product"); }
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(productID);
-            if (stockListItem.PurchaseWay==PurchaseEnum.Lottery)
-            {
-                LotterySaleManagmentTicket LotteryManagment = handler.DataLayer.GetLotteryByProductID(productID);
-                LotteryManagment.InformCancel();
-                handler.DataLayer.RemoveLottery(LotteryManagment);
-            }
-            handler.DataLayer.RemoveStockListItem(stockListItem);
-            return new StoreAnswer(StoreEnum.Success, "product removed");
-        }
+   
 
         internal double GetProductPriceWithDiscountbyDouble(string productName, int discountCode, int quantity)
         {
@@ -193,9 +164,9 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "startDate")
             {
                 DateTime startTime = DateTime.Parse(newValue);
-                if (startTime < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time in the past"); }
+                if (startTime < DateTime.Now.Date) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time in the past"); }
 
-                if (startTime > discount.EndDate) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time that is later then the discount end time"); }
+                if (startTime > discount.EndDate) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time that is later then the discount end time"); }
                 discount.startDate = startTime;
                 result= new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount Start Date become " + startTime);
             }
@@ -203,9 +174,9 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "EndDate")
             {
                 DateTime EndDate = DateTime.Parse(newValue);
-                if (EndDate < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set start time in the past"); }
+                if (EndDate < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past"); }
 
-                if (EndDate < discount.startDate) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "can't set end time that is sooner then the discount start time"); }
+                if (EndDate < discount.startDate) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set end time that is sooner then the discount start time"); }
                 discount.EndDate = EndDate;
                 result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount End Date become " + EndDate);
             }
@@ -213,20 +184,20 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "DiscountAmount")
             {
                int newintValue = Int32.Parse(newValue);
-               if (discount.Percentages && newintValue > 100) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "DiscountAmount is >= 100, cant make it presenteges"); }
+               if (discount.Percentages && newintValue > 100) { return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100, cant make it presenteges"); }
                 discount.DiscountAmount = newintValue;
                return new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount amount become " + newValue);
             }
             if (whatToEdit == "Percentages")
             {
                 bool newboolValue = Boolean.Parse(newValue);
-                if (newboolValue && discount.DiscountAmount > 100) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "DiscountAmount is >= 100, cant make it presenteges"); }
+                if (newboolValue && discount.DiscountAmount > 100) { return new StoreAnswer(StoreEnum.UpdateStockFail, "DiscountAmount is >= 100, cant make it presenteges"); }
                 discount.Percentages = newboolValue;
                 if (newboolValue)
                     result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount preseneges become true");
                 result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount preseneges become false");
             }
-            if (result==null) { return new StoreAnswer(StoreEnum.UpdateDiscountFail, "no leagal attrebute found"); }
+            if (result==null) { return new StoreAnswer(StoreEnum.UpdateStockFail, "no leagal attrebute found"); }
             handler.DataLayer.EditDiscountInDatabase(discount);
             return result;
         }
@@ -253,6 +224,7 @@ namespace SadnaSrc.StoreCenter
             Product product = stock.GetProductById(productID);
             if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock"); }
             if (whatToEdit == "Name") {
+                
                 result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
                 product.Name = newValue;
             }
@@ -336,18 +308,6 @@ namespace SadnaSrc.StoreCenter
             return new StoreAnswer(StoreEnum.Success, result);
         }
         
-        internal MarketAnswer AddDiscountToProduct(string productID, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            Discount discount = new Discount(handler.GetDiscountCode(), handler.GetdiscountTypeEnumString(discountType),
-                startDate, endDate,discountAmount, presenteges);
-            StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
-            if (stockListItem == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
-            stockListItem.Discount = discount;
-            handler.DataLayer.AddDiscount(discount);
-            handler.DataLayer.EditStockInDatabase(stockListItem);
-            return new StoreAnswer(StoreEnum.Success, "Discount added");
-        }
         internal MarketAnswer RemoveDiscountFromProduct(string productID)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
