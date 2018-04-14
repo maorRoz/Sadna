@@ -65,7 +65,7 @@ namespace UserBlackBoxTests
 			Assert.AreEqual((int)StoreEnum.Success, res2.Status);
 			MarketAnswer res3 = _storeBridge3.AddProductToCart("BlahStore2", "doritos", 3);
 			Assert.AreEqual((int)StoreEnum.Success, res3.Status);
-			//Lets view to cart to see the product was indeed added.
+			//Lets view to cart to see the products were indeed added.
 			MarketAnswer cartDetails = _bridgeSignUp.ViewCart();
 			string[] cartItemsExpected =
 			{
@@ -92,7 +92,7 @@ namespace UserBlackBoxTests
 			Assert.AreEqual((int)StoreEnum.Success, res2.Status);
 			MarketAnswer res3 = _storeBridge.AddProductToCart("BlahStore2", "doritos", 3);
 			Assert.AreEqual((int)StoreEnum.Success, res3.Status);
-			//Lets view to cart to see the product was indeed added.
+			//Lets view to cart to see the products were indeed added.
 			MarketAnswer cartDetails = _signInBridge.ViewCart();
 			string[] cartItemsExpected =
 			{
@@ -236,9 +236,34 @@ namespace UserBlackBoxTests
 		[TestMethod]
 		public void AddToCartGuestTurnsIntoRegisteredUser()
 		{
+			MarketAnswer res1 = _storeBridge.AddProductToCart("BlahStore", "bisli", 1);
+			Assert.AreEqual((int)StoreEnum.Success, res1.Status);
+			MarketAnswer res2 = _storeBridge.AddProductToCart("BlahStore", "cheaps", 2);
+			Assert.AreEqual((int)StoreEnum.Success, res2.Status);
+			_bridgeSignUp.EnterSystem();
+			_storeBridge3 = StoreDriver.getBridge();
+			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.getUserSession());
+			MarketAnswer res3 = _storeBridge3.AddProductToCart("BlahStore2", "doritos", 3);
+			Assert.AreEqual((int)StoreEnum.Success, res3.Status);
 
+			MarketAnswer res4 = _bridgeSignUp.SignIn("Pninaaa", "777777");
+			Assert.AreEqual((int)SignInStatus.Success,res4.Status);
+			//Lets view to cart to see the products were indeed added.
+			MarketAnswer cartDetails = _bridgeSignUp.ViewCart();
+			string[] cartItemsExpected =
+			{
+				"Name : bisli Store BlahStore Quantity: 1 Unit Price : 200 Final Price: 200",
+				"Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
+				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
 
+			};
 
+			string[] cartItemsReceived = cartDetails.ReportList;
+			//Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
+			for (int i = 0; i < cartItemsReceived.Length; i++)
+			{
+				Assert.AreEqual(cartItemsExpected[i], cartItemsReceived[i]);
+			}
 		}
 
 
