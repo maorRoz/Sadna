@@ -102,6 +102,15 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
+		public MarketAnswer AddProductToCart(string store, string productName, int quantity)
+		{
+			if (real != null)
+			{
+				return real.AddProductToCart(store, productName, quantity);
+			}
+			throw new NotImplementedException();
+		}
+
 		public void CleanSession()
 		{
 			if (real != null)

@@ -75,6 +75,7 @@
     <Compile Include="StoreBlackBoxTests\UseCase3_1_2.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_1_3.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_3.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase1_5.cs" />
     <Compile Include="UserBlackBoxTests\UserDriver.cs" />
     <Compile Include="AdminBlackBoxTests\IAdminBridge.cs" />
     <Compile Include="AdminBlackBoxTests\ProxyAdminBridge.cs" />
