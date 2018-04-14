@@ -59,5 +59,10 @@ namespace SadnaSrc.StoreCenter
              " Start Date: " + startDate + " End Date: " + EndDate;
 
         }
+
+        internal bool checkTime()
+        {
+            return ((startDate.Date < DateTime.Now.Date) && (DateTime.Now.Date < EndDate.Date));
+        }
     }
 }

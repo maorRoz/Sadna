@@ -281,23 +281,72 @@ namespace SadnaSrc.StoreCenter
                 global.DataLayer.RemoveStockListItem(stockListItem);
             }
         }
-        //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productName)
         {
-            global.DataLayer.IsStoreExistAndActive(_storeName);
-            _storeManager.CanManageProducts();
-            //  store.EditStockListItem(productName, "PurchaseWay", "IMMEDIATE");
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            try
+            {
+                MarketLog.Log("StoreCenter", "trying to edit discount from product in store");
+                checkIfStoreExists();
+                MarketLog.Log("StoreCenter", " check if has premmision to edit product purches type");
+                _storeManager.CanManageProducts();
+                MarketLog.Log("StoreCenter", "check if product exists");
+                checkIfProductExists(productName);
+                MarketLog.Log("StoreCenter", "product exists");
+                StockListItem stockList = global.DataLayer.GetProductFromStore(_storeName, productName);
+                if (stockList.PurchaseWay == PurchaseEnum.Lottery)
+                {
+                    LotterySaleManagmentTicket lottery = global.DataLayer.GetLotteryByProductID(stockList.Product.SystemId);
+                    lottery.InformCancel();
+                    global.DataLayer.EditLotteryInDatabase(lottery);
+
+                }
+                stockList.PurchaseWay = PurchaseEnum.Immediate;
+                global.DataLayer.EditStockInDatabase(stockList);
+                return new StoreAnswer(StoreEnum.Success, "purches way changed");
+            }
+            catch (StoreException exe)
+            {
+                return new StoreAnswer(exe);
+            }
         }
 
         //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate)
         {
-            global.DataLayer.IsStoreExistAndActive(_storeName);
-            _storeManager.CanManageProducts();
-            // store.EditStockListItem(productName, "PurchaseWay", "LOTTERY");
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
-        }
+            try
+            {
+                MarketLog.Log("StoreCenter", "check if store exists");
+                checkIfStoreExists();
+                MarketLog.Log("StoreCenter", " check if has premmision to edit products");
+                _storeManager.CanDeclareDiscountPolicy();
+                MarketLog.Log("StoreCenter", " has premmission");
+                MarketLog.Log("StoreCenter", "check if product exists");
+                checkIfProductExists(productName);
+                MarketLog.Log("StoreCenter", "product exists");
+                StockListItem stockListItem = global.DataLayer.GetProductFromStore(_storeName, productName);
+                if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
+                {
+                    MarketLog.Log("StoreCenter", " product has a lottery");
+                    throw new StoreException(ChangeToLotteryEnum.LotteryExists, "product has a lottery");
+                }
+                stockListItem.PurchaseWay = PurchaseEnum.Lottery;
+                global.DataLayer.EditStockInDatabase(stockListItem);
+                LotterySaleManagmentTicket lotterySaleManagmentTicket = new LotterySaleManagmentTicket(global.GetLottyerID(),
+                    _storeName, stockListItem.Product, startDate, endDate);
+                global.DataLayer.AddLottery(lotterySaleManagmentTicket);
+
+                return new StoreAnswer(ChangeToLotteryEnum.Success, "type changed");
+            }
+            catch (StoreException exe)
+            {
+                return new StoreAnswer(exe);
+            }
+            catch (MarketException exe)
+            {
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+            }
+
+            }
 
        
         public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)

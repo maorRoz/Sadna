@@ -110,7 +110,7 @@ namespace SadnaSrc.Main
 	}
     public enum CalculateEnum
     {
-        Susccess,
+        Success,
         StoreNotExists,
         ProductNotFound,
         quantityIsGreaterThenStack,
@@ -120,6 +120,13 @@ namespace SadnaSrc.Main
         DiscountNotStarted,
         quanitityIsNonPositive,
         discountIsNotHidden
+    }
+    public enum ChangeToLotteryEnum
+    {
+        Success,
+        StoreNotExists,
+        ProductNotFound,
+        LotteryExists,
     }
 
 

@@ -162,6 +162,7 @@ namespace SadnaSrc.StoreCenter
                 if (stockListItem.Discount != null)
                 {
                     if (stockListItem.Discount.discountType == discountTypeEnum.Visible)
+                        if (stockListItem.Discount.checkTime())
                         stockListItem.Product.BasePrice = (int)stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
                 }
                 _shopper.AddToCart(stockListItem.Product, store,quantity);
