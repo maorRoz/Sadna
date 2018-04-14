@@ -48,6 +48,11 @@ namespace BlackBox
 			return _storeManagementService.AddQuanitityToProduct(productName, quantity);
 		}
 
+		public MarketAnswer CloseStore()
+		{
+			return _storeManagementService.CloseStore();
+		}
+
 		public void CleanSession()
 		{
 			_storeManagementService?.CleanSession();
