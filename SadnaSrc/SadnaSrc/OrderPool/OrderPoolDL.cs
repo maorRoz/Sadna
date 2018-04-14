@@ -240,10 +240,9 @@ namespace SadnaSrc.OrderPool
             return tickets.ToArray();
         }
 
-        public int GetTicketParticipantID(string ticket,string lottery)
+        public int GetTicketParticipantID(string ticket)
         {
-            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "UserID", "myID ='" + ticket + "' AND" +
-                                                                                          " LotteryID = '"+ lottery +"'"))
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "UserID", "myID ='" + ticket + "'" ))
             {
                 if (dbReader.Read())
                 {
@@ -302,10 +301,9 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public void RemoveTicket(string ticket,string lottery)
+        public void RemoveTicket(string ticket)
         {
-            DeleteFromTable("LotteryTicket", "myID ='" + ticket + "' AND" +
-                                             " LotteryID = '" + lottery + "'");
+            DeleteFromTable("LotteryTicket", "myID ='" + ticket + "'");
         }
 
 

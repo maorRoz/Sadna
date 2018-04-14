@@ -48,7 +48,7 @@ namespace SadnaSrc.OrderPool
                 string[] ticketsToRefund = _orderDL.GetAllTickets(lottery);
                 foreach (string ticket in ticketsToRefund)
                 {
-                    Refund(ticket,lottery);
+                    Refund(ticket);
                 }
 
             }
@@ -75,10 +75,10 @@ namespace SadnaSrc.OrderPool
 
 
 
-        private void Refund(string ticket, string lottery)
+        private void Refund(string ticket)
         {
             int orderId = 0;
-            int participantID = _orderDL.GetTicketParticipantID(ticket, lottery);
+            int participantID = _orderDL.GetTicketParticipantID(ticket);
             string creditCardToRefund = _orderDL.GetCreditCardToRefund(participantID);
             string nameToRefund = _orderDL.GetNameToRefund(participantID);
             double sumToRefund = _orderDL.GetSumToRefund(ticket);
@@ -86,7 +86,7 @@ namespace SadnaSrc.OrderPool
             _paymentService.Refund(sumToRefund, creditCardToRefund, nameToRefund);
             Orders.Add(order);
             _orderDL.AddOrder(order);
-            _orderDL.RemoveTicket(ticket,lottery);
+            _orderDL.RemoveTicket(ticket);
             MarketLog.Log("OrderPool", "User " + nameToRefund + " successfully refunded the sum: " + sumToRefund);
         }
 

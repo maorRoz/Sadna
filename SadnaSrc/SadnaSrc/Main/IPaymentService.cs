@@ -8,9 +8,10 @@ namespace SadnaSrc.Main
 {
     public interface IPaymentService
     {
-      /*  MarketAnswer AttachExternalSystem();
-        MarketAnswer ProccesPayment(int orderId, string address, List<string> details);*/
         void BreakExternal();
+
+        void FixExternal();
+
     }
 
     public enum WalleterStatus

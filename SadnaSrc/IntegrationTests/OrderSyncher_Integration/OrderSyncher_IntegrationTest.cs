@@ -45,7 +45,7 @@ namespace IntegrationTests
             {
                 orderSyncherHarmony.CancelLottery("L2");
                 OrderPoolDL _orderDL = new OrderPoolDL();
-                _orderDL.GetTicketParticipantID("T2", "L2");
+                _orderDL.GetTicketParticipantID("T2");
                 Assert.Fail();
             }
             catch (MarketException e)
