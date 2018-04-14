@@ -108,7 +108,20 @@ namespace SadnaSrc.Main
 		NoUserFound,
 		InvalidPromotion
 	}
-    
+    public enum CalculateEnum
+    {
+        Susccess,
+        StoreNotExists,
+        ProductNotFound,
+        quantityIsGreaterThenStack,
+        ProductHasNoDiscount,
+        DiscountCodeIsWrong,
+        DiscountExpired,
+        DiscountNotStarted,
+        quanitityIsNonPositive,
+        discountIsNotHidden
+    }
+
 
     public enum PurchaseEnum { Immediate, Lottery };
     public enum discountTypeEnum { Hidden, Visible };
