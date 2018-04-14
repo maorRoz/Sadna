@@ -165,7 +165,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException)
             {
-                return new StoreAnswer(StoreEnum.ProductNotFound, "Product Name is already Exists In Shop");
+                return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
             }
             catch (MarketException)
             {
