@@ -137,7 +137,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: fix this
+        
         public MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity)
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
@@ -200,7 +200,7 @@ namespace SadnaSrc.StoreCenter
                 global.DataLayer.RemoveStockListItem(stockListItem);
                 return new StoreAnswer(StoreEnum.Success, "product removed");
             }
-            catch (MarketException)
+            catch (MarketException e)
             {
                 MarketLog.Log("StoreCenter", "no premission");
                 return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
@@ -215,7 +215,8 @@ namespace SadnaSrc.StoreCenter
             StoreAnswer result = null;
             MarketLog.Log("StoreCenter", "trying to edit product in store");
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) {
+                return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
@@ -232,6 +233,7 @@ namespace SadnaSrc.StoreCenter
                     MarketLog.Log("StoreCenter","checking if new new is avaliabe");
                     if(!global.IsProductNameAvailableInStore(_storeName,newValue))
                     {
+                        MarketLog.Log("StoreCenter", "name exists in shop");
                         throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); 
                     }
                     result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
@@ -253,19 +255,14 @@ namespace SadnaSrc.StoreCenter
                     result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
                     product.Description = newValue;
                 }
-                if (result == null) { throw new StoreException(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
+                if (result == null) { MarketLog.Log("StoreCenter", "no leagal attrebute or founed non-leagal value");
+                    throw new StoreException(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
                 global.DataLayer.EditProductInDatabase(product);
                 return result;
             }
             catch (StoreException exe)
             {
-                if (exe.Status == (int)StoreEnum.UpdateProductFail)
-                {
-                    MarketLog.Log("StoreCenter", "no leagal attrebute or founed non-leagal value");
-                    return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found");
-                }
-                MarketLog.Log("StoreCenter", "name exists in shop");
-                return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); 
+                return new StoreAnswer(exe);
             }
             catch (MarketException)
             {
@@ -357,18 +354,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                if (exe.Status==(int)DiscountStatus.discountAmountIsNegativeOrZero)
-                    return new StoreAnswer(DiscountStatus.discountAmountIsNegativeOrZero, "DiscountAmount is >= 100%");
-                if (exe.Status==(int)DiscountStatus.AmountIsHundredAndpresenteges)
-                    return new StoreAnswer(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100%");
-                if (exe.Status == (int)DiscountStatus.DiscountGreaterThenProductPrice)
-                    return new StoreAnswer(DiscountStatus.DiscountGreaterThenProductPrice, "DiscountAmount is > then product price");
-                if (exe.Status == (int)DiscountStatus.thereIsAlreadyAnotherDiscount)
-                    return new StoreAnswer(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
-                if (exe.Status == (int)DiscountStatus.DatesAreWrong)
-                    return new StoreAnswer(DiscountStatus.DatesAreWrong, "dates are not leagal");
-                //else
-                return new StoreAnswer(DiscountStatus.ProductNotFound, "product not found");
+                return new StoreAnswer(exe);
             }
             catch (MarketException)
             {
@@ -417,29 +403,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                if (exe.Status == (int)StoreEnum.EnumValueNotExists)
-                    return new StoreAnswer(StoreEnum.EnumValueNotExists, "discount type is not exists");
-                if (exe.Status == (int)DiscountStatus.AmountIsHundredAndpresenteges)
-                    return new StoreAnswer(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100%");
-                if (exe.Status == (int)DiscountStatus.DiscountGreaterThenProductPrice)
-                    return new StoreAnswer(DiscountStatus.DiscountGreaterThenProductPrice, "DiscountAmount is > then product price");
-                if (exe.Status == (int)DiscountStatus.DatesAreWrong)
-                    return new StoreAnswer(DiscountStatus.DatesAreWrong, "dates are not leagal");
-                if (exe.Status == (int)DiscountStatus.discountAmountIsNegativeOrZero)
-                    return new StoreAnswer(DiscountStatus.discountAmountIsNegativeOrZero, "DiscountAmount is >= 100%");
-                if (exe.Status == (int) DiscountStatus.ProductNotFound)
-                     return new StoreAnswer(DiscountStatus.ProductNotFound, "product not found");
-                if (exe.Status == (int)DiscountStatus.DiscountNotFound)
-                    return new StoreAnswer(DiscountStatus.DiscountNotFound, "discount not found");
-                if (exe.Status == (int)DiscountStatus.NoStore)
-                    return new StoreAnswer(DiscountStatus.NoStore, "store not exists");
-                if (exe.Status == (int)DiscountStatus.discountAmountIsNotNumber)
-                    return new StoreAnswer(DiscountStatus.discountAmountIsNotNumber, "value is not legal");
-                if (exe.Status == (int)DiscountStatus.precentegesIsNotBoolean)
-                    return new StoreAnswer(DiscountStatus.precentegesIsNotBoolean, "value is not legal");
-                if (exe.Status == (int)DiscountStatus.NoLegalAttrebute)
-                    return new StoreAnswer(DiscountStatus.NoLegalAttrebute, "no leagal attrebute found");
-                return null;
+                return new StoreAnswer(exe);
             }
             catch (MarketException)
             {
@@ -469,11 +433,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                if (exe.Status==(int)DiscountStatus.ProductNotFound)
-                    return new StoreAnswer(DiscountStatus.ProductNotFound, "product not found");
-                if (exe.Status == (int)DiscountStatus.DiscountNotFound)
-                    return new StoreAnswer(DiscountStatus.DiscountNotFound, "there is no discount at this product");
-                return new StoreAnswer(DiscountStatus.NoStore, "store not exists");
+                return new StoreAnswer(exe);
             }
             catch (MarketException)
             {

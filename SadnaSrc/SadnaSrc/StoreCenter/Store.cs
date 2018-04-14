@@ -295,18 +295,6 @@ namespace SadnaSrc.StoreCenter
             }
             return result;
         }
-        internal MarketAnswer GetProductStockInformation(string productID)
-        {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            StockListItem stockListItem = stock.FindstockListItembyProductID(productID);
-            if (stockListItem == null) return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
-            string product = stockListItem.Product.ToString();
-            string discount = stockListItem.Discount.ToString();
-            string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
-            string quanitity = stockListItem.Quantity + "";
-            string result = product + " , " + discount + " , " + purchaseWay + " , " + quanitity;
-            return new StoreAnswer(StoreEnum.Success, result);
-        }
         
         internal MarketAnswer RemoveDiscountFromProduct(string productID)
         {
