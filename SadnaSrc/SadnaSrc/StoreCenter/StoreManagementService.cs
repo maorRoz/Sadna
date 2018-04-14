@@ -293,7 +293,7 @@ namespace SadnaSrc.StoreCenter
         {
             MarketLog.Log("StoreCenter", "trying to add discount to product in store");
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.DataLayer.IsStoreExistAndActive(_storeName))) { return new StoreAnswer(DiscountStatus.NoStore, "store not exists"); }
+            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) { return new StoreAnswer(DiscountStatus.NoStore, "store not exists"); }
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
