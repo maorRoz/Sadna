@@ -12,6 +12,7 @@ namespace BlackBox
 		MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity);
 		MarketAnswer RemoveProduct(string productName);
 		MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
+		MarketAnswer AddQuanitityToProduct(string productName, int quantity);
 		void CleanSession();
 	}
 }
