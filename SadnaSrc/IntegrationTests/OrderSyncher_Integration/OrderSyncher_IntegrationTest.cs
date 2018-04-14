@@ -50,7 +50,7 @@ namespace IntegrationTests
             }
             catch (MarketException e)
             {
-                Assert.AreEqual((int)OrderItemStatus.InvalidDetails, e.Status);
+                Assert.AreEqual((int)LotteryOrderStatus.InvalidLotteryTicket, e.Status);
             }
         }
 
