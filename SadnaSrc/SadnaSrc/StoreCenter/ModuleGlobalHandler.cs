@@ -197,6 +197,20 @@ namespace SadnaSrc.StoreCenter
             return result;
         }
 
-       
+        public double CalculateItemPriceWithDiscount(string storeName, string productName, int _DiscountCode, int _quantity)
+        {
+            if (!DataLayer.IsStoreExist(storeName))
+                return -1;
+            if (IsProductNameAvailableInStore(storeName, productName))
+                return -1;
+            StockListItem item = DataLayer.GetProductFromStore(storeName, productName);
+            if (_quantity > item.Quantity)
+                return -1;
+                if( item.Discount != null)
+                {
+                    return item.Discount.CalcDiscount(item.Product.BasePrice, _DiscountCode) * _quantity;
+                }
+            return item.Product.BasePrice * _quantity;
+        }
     }
 }

@@ -33,36 +33,32 @@ namespace SadnaSrc.StoreCenter
         {
             if (discountType == discountTypeEnum.Hidden)
             {
+                if ((DateTime.Now.Date < EndDate) && (DateTime.Now.Date > startDate) && (discountCode.Equals(code)))
                 {
-
-                    if ((DateTime.Now.Date < EndDate) && (DateTime.Now.Date > startDate) && (discountCode.Equals(code)))
                     {
+                        if (Percentages)
                         {
-                            if (Percentages)
-                            {
-                                return basePrice * (1 - DiscountAmount);
-                            }
-                            else
-                            {
-                                return basePrice - DiscountAmount;
-                            }
+                            return basePrice * (1 - DiscountAmount);
+                        }
+                        else
+                        {
+                            return basePrice - DiscountAmount;
                         }
                     }
-                    return basePrice;
                 }
-            }
-            if (discountType == discountTypeEnum.Visible)
-            {
-                if (Percentages)
+                if (discountType == discountTypeEnum.Visible)
                 {
-                    return basePrice * (1 - DiscountAmount);
+                    if (Percentages)
+                    {
+                        return basePrice * (1 - DiscountAmount);
+                    }
+                    else
+                    {
+                        return basePrice - DiscountAmount;
+                    }
                 }
-                else
-                {
-                    return basePrice - DiscountAmount;
-                }
+                return basePrice;
             }
-            return -1;
         }
         public override bool Equals(object obj)
         {
