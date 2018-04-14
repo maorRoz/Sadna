@@ -365,7 +365,7 @@ namespace SadnaSrc.StoreCenter
                 if (product == null) { MarketLog.Log("StoreCenter", "product not exists");
                     throw new StoreException(DiscountStatus.ProductNotFound, "no Such Product"); }
                 MarketLog.Log("StoreCenter", "check if dates are OK");
-                if ((startDate< DateTime.Now.Date)|| (endDate < DateTime.Now.Date) || !(startDate < endDate))
+                if ((startDate< MarketYard.MarketDate)|| (endDate < MarketYard.MarketDate) || !(startDate < endDate))
                 {
                     MarketLog.Log("StoreCenter", "something wrong with the dates");
                     throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal"); 
@@ -603,7 +603,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "date format is not legal");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal");
             }
-            if (startTime.Date < DateTime.Now.Date)
+            if (startTime.Date < MarketYard.MarketDate)
             {
                 MarketLog.Log("StoreCenter", "can't set start time in the past");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "can't set start time in the past");
@@ -681,7 +681,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "date format is not legal");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal");
             }
-            if (EndDate.Date < DateTime.Now.Date)
+            if (EndDate.Date < MarketYard.MarketDate)
             {
                 MarketLog.Log("StoreCenter", "can't set end time in the past");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time in the past");

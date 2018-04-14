@@ -175,7 +175,7 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "EndDate")
             {
                 DateTime EndDate = DateTime.Parse(newValue);
-                if (EndDate < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past"); }
+                if (EndDate < MarketYard.MarketDate) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past"); }
 
                 if (EndDate < discount.startDate) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set end time that is sooner then the discount start time"); }
                 discount.EndDate = EndDate;

@@ -62,7 +62,8 @@ namespace SadnaSrc.StoreCenter
 
         internal bool checkTime()
         {
-            return ((startDate.Date < DateTime.Now.Date) && (DateTime.Now.Date < EndDate.Date));
+            return ((startDate.Date < 
+                ard.MarketDate) && (MarketYard.MarketDate < EndDate.Date));
         }
     }
 }

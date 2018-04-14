@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -39,11 +40,11 @@ namespace SadnaSrc.StoreCenter
         }
         public bool checkDatesWhenPurches()
         {
-            return ((StartDate.Date <= DateTime.Now.Date) && (EndDate.Date >= DateTime.Now.Date));
+            return ((StartDate.Date <= MarketYard.MarketDate) && (EndDate.Date >= MarketYard.MarketDate));
         }
         public static bool CheckDates(DateTime startDate, DateTime endDate)
         {
-            return ((startDate > DateTime.Now.Date) && (endDate > DateTime.Now.Date) && (endDate > startDate));
+            return ((startDate > MarketYard.MarketDate) && (endDate > MarketYard.MarketDate) && (endDate > startDate));
         }
         public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
         {

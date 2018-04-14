@@ -205,9 +205,10 @@ namespace SadnaSrc.StoreCenter
                 throw new StoreException(CalculateEnum.DiscountCodeIsWrong, "discount code is wrong");
             if (item.Discount.discountType!=discountTypeEnum.Hidden)
                 throw new StoreException(CalculateEnum.discountIsNotHidden, "discount Is Not Hiddeng");
-            if (DateTime.Now.Date < item.Discount.startDate.Date)
+            if (
+                ard.MarketDate < item.Discount.startDate.Date)
                 throw new StoreException(CalculateEnum.DiscountNotStarted, "Discount Time Not Started Yet");
-            if (DateTime.Now.Date > item.Discount.EndDate.Date)
+            if (MarketYard.MarketDate > item.Discount.EndDate.Date)
                 throw new StoreException(CalculateEnum.DiscountExpired, "discount expired");
             double ans = item.Discount.CalcDiscount(item.Product.BasePrice);
             ans = ans * _quantity;
