@@ -173,7 +173,7 @@ namespace SadnaSrc.StoreCenter
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(ViewStoreStatus.InvalidUser,
+                return new StoreAnswer(StoreEnum.NoPremmision,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
         }
