@@ -87,8 +87,10 @@ namespace SadnaSrc.StoreCenter
                 ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
                 StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(ProductID);
             if (stockListItem == null)
+            {
                 MarketLog.Log("storeCenter", "product not exists");
-            { throw new StoreException(StoreEnum.ProductNotFound, "product " + ProductID + " does not exist in Stock"); }
+                throw new StoreException(StoreEnum.ProductNotFound, "product " + ProductID + " does not exist in Stock");
+            }
                 string product = stockListItem.Product.ToString();
                 string discount = stockListItem.Discount.ToString();
                 string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
@@ -123,7 +125,7 @@ namespace SadnaSrc.StoreCenter
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(ViewStoreStatus.InvalidUser,
+                return new StoreAnswer(StoreEnum.NoPremmision,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
         }
