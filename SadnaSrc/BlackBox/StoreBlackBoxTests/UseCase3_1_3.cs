@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace BlackBox.StoreBlackBoxTests
 {
 	[TestClass]
-	public class UnitTest1
+	public class UseCase3_1_3
 	{
 		[TestMethod]
 		public void TestMethod1()

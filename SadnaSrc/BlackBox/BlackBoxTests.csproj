@@ -70,9 +70,10 @@
     <Compile Include="OrderBlackBoxTests\ProxyOrderBridge.cs" />
     <Compile Include="OrderBlackBoxTests\RealOrderBridge.cs" />
     <Compile Include="StoreBlackBoxTests\StoreDriver.cs" />
-    <Compile Include="StoreBlackBoxTests\UnitTest1.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase1_3.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_1_1.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase3_1_2.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase3_1_3.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_3.cs" />
     <Compile Include="UserBlackBoxTests\UserDriver.cs" />
     <Compile Include="AdminBlackBoxTests\IAdminBridge.cs" />
