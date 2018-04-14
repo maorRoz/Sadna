@@ -92,7 +92,8 @@ namespace SadnaSrc.StoreCenter
 
                 LinkedList<StockListItem> items = new LinkedList<StockListItem>();
                 MarketLog.Log("StoreCenter", "");
-//                return new StoreAnswer(ViewStoreStatus.Success, "Store stock has been successfully granted!", storeStockInfo);
+                //                return new StoreAnswer(ViewStoreStatus.Success, "Store stock has been successfully granted!", storeStockInfo);
+                return null;
             }
             catch (StoreException e)
             {

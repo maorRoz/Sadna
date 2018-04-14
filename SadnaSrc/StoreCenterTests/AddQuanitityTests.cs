@@ -43,7 +43,7 @@ namespace StoreCenterTests
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 1);
-            Assert.AreEqual((int)ViewStoreStatus.InvalidUser, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
         }
         [TestMethod]
         public void AddQuanitiyWhenProductIsNotAvailableInStore()

@@ -42,7 +42,7 @@ namespace StoreCenterTests
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
-            Assert.AreEqual((int)ViewStoreStatus.InvalidUser, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
         }
         [TestMethod]
         public void addDisocuntWhenProductNotExists()
