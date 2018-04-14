@@ -8,12 +8,11 @@ using SadnaSrc.UserSpot;
 namespace IntegrationTests.UserSeller_Integration
 {
     [TestClass]
-    public class User_Store_Managing_IntegrationTests
+    public class Promote_ManageProducts_IntegrationTests
     {
         private IUserService userServiceSession;
         private IUserService userServiceSession2;
         private StoreManagementService storeServiceSession;
-        private UserSellerHarmony userSellerHarmony;
         private MarketYard marketSession;
 
         private string store = "The Red Rock";
@@ -39,7 +38,6 @@ namespace IntegrationTests.UserSeller_Integration
             userServiceSession2 = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
             userServiceSession2.EnterSystem();
-            userSellerHarmony = new UserSellerHarmony(ref userServiceSession, store);
             storeServiceSession =
                 (StoreManagementService) marketSession.GetStoreManagementService(userServiceSession, store);
         }

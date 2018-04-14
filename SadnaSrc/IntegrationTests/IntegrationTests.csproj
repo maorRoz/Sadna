@@ -67,7 +67,8 @@
     <Compile Include="UserAdmin_Integration\AdminView_UserSpot_UserAdmin_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreSyncher_Integration\StoreCenter_OrderPool_IntegrationTest.cs" />
-    <Compile Include="UserSeller_Integration\User_Store_Managing_IntegrationTests.cs" />
+    <Compile Include="UserSeller_Integration\ManageDiscounts_ViewHistory_IntegrationTests.cs" />
+    <Compile Include="UserSeller_Integration\Promote_ManageProducts_IntegrationTests.cs" />
     <Compile Include="UserSeller_Integration\UserSeller_Promote_Tests.cs" />
     <Compile Include="UserSeller_Integration\UserSeller_ActionValidation_Tests.cs" />
     <Compile Include="UserShopper_Integration\User_Store_Shopping_IntegrationTests.cs" />
