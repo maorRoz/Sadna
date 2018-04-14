@@ -21,6 +21,8 @@ namespace SadnaSrc.Main
         MarketAnswer BuyEverythingFromCart();
 
         MarketAnswer GiveDetails(string userName, string address, string creditCard);
+
+        void CleanSession();
     }
 
     public enum GiveDetailsStatus

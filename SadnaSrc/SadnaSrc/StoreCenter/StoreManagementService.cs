@@ -79,7 +79,7 @@ namespace SadnaSrc.StoreCenter
                                          " manager options in Store" + _storeName + ". Validating store activity and existence..");
             try
             {
-                global.DataLayer.IsStoreExist(_storeName);
+                global.DataLayer.IsStoreExistAndActive(_storeName);
                 ValidatePromotionEligible(actions);
                 _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has been authorized. granting " +
@@ -110,7 +110,7 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store stock...");
             try
             {
-                global.DataLayer.IsStoreExist(_storeName);
+                global.DataLayer.IsStoreExistAndActive(_storeName);
                 _storeManager.CanManageProducts();
                 List<string> productList = new List<string>();
                 foreach (Product product in store.GetAllProducts())
@@ -140,7 +140,7 @@ namespace SadnaSrc.StoreCenter
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists or active"); }
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
@@ -175,7 +175,7 @@ namespace SadnaSrc.StoreCenter
         {
             MarketLog.Log("StoreCenter", "trying to remove product from store");
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists or active"); }
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
@@ -207,10 +207,11 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
         {
+
             StoreAnswer result = null;
             MarketLog.Log("StoreCenter", "trying to edit product in store");
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
@@ -272,7 +273,7 @@ namespace SadnaSrc.StoreCenter
         //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productName)
         {
-            global.DataLayer.IsStoreExist(_storeName);
+            global.DataLayer.IsStoreExistAndActive(_storeName);
             _storeManager.CanManageProducts();
             //  store.EditStockListItem(productName, "PurchaseWay", "IMMEDIATE");
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
@@ -281,7 +282,7 @@ namespace SadnaSrc.StoreCenter
         //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate)
         {
-            global.DataLayer.IsStoreExist(_storeName);
+            global.DataLayer.IsStoreExistAndActive(_storeName);
             _storeManager.CanManageProducts();
             // store.EditStockListItem(productName, "PurchaseWay", "LOTTERY");
             return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
@@ -292,7 +293,7 @@ namespace SadnaSrc.StoreCenter
         {
             MarketLog.Log("StoreCenter", "trying to add discount to product in store");
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(DiscountStatus.NoStore, "store not exists"); }
+            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) { return new StoreAnswer(DiscountStatus.NoStore, "store not exists"); }
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
@@ -434,7 +435,6 @@ namespace SadnaSrc.StoreCenter
                     if (EndDate.Date < DateTime.Now.Date) {
                         MarketLog.Log("StoreCenter", "can't set end time in the past");
                         throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time in the past"); }
-
                     if (EndDate.Date < discount.startDate.Date) {
                         MarketLog.Log("StoreCenter", "can't set end time that is sooner then the discount start time");
                         throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time that is sooner then the discount start time"); }
@@ -522,6 +522,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
             }
         }
+
          
 
             public MarketAnswer RemoveDiscountFromProduct(string productName)
@@ -565,7 +566,6 @@ namespace SadnaSrc.StoreCenter
                     return new StoreAnswer(DiscountStatus.ProductNotFound, "product not found");
                 if (exe.Status == (int)DiscountStatus.DiscountNotFound)
                     return new StoreAnswer(DiscountStatus.DiscountNotFound, "there is no discount at this product");
-
                 return new StoreAnswer(DiscountStatus.NoStore, "store not exists");
             }
             catch (MarketException)
@@ -578,7 +578,7 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store purchase history...");
             try
             {
-                global.DataLayer.IsStoreExist(_storeName);
+                global.DataLayer.IsStoreExistAndActive(_storeName);
                 _storeManager.CanViewPurchaseHistory();
                 var historyReport = global.DataLayer.GetHistory(store);
                 return new StoreAnswer(ViewStorePurchaseHistoryStatus.Success, "View purchase history has been successful!", historyReport);
