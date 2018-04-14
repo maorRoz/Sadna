@@ -90,13 +90,13 @@ namespace SadnaSrc.OrderPool
             MarketLog.Log("OrderPool", "User " + nameToRefund + " successfully refunded the sum: " + sumToRefund);
         }
 
-        public void SendPackage(string itemName, string store, int quantity,int userId)
+        public void SendPackage(string itemName, string store,int userId)
         {
             MarketLog.Log("OrderPool", "Attempting to send package...");
             int orderId = 0;
             try
             {
-                OrderItem toBuy = new OrderItem("DELIVERY : " + itemName, store, quantity, 1);
+                OrderItem toBuy = new OrderItem("DELIVERY : " + itemName, store, 1, 1);
                 OrderService.CheckOrderItem(toBuy);
                 Order order = InitOrder(_orderDL.GetNameToRefund(userId), _orderDL.GetAddressToSendPackage(userId));
                 orderId = order.GetOrderID();
@@ -104,7 +104,7 @@ namespace SadnaSrc.OrderPool
                 _supplyService.CreateDelivery(order);
                 Orders.Add(order);
                 _orderDL.AddOrder(order);
-                MarketLog.Log("OrderPool", "Successfully made delivery for item: " + itemName + " X " + quantity);
+                MarketLog.Log("OrderPool", "Successfully made delivery for item: " + itemName);
             }
             catch (OrderException e)
             {
