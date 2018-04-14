@@ -82,27 +82,52 @@ namespace SadnaSrc.StoreCenter
         }
 
         //TODO: doesn't work really, were too complicated for me (maor)...
-        public MarketAnswer ViewStoreStock(string store)
+        private string GetProductStockInformation(string ProductID)
         {
-            MarketLog.Log("StoreCenter", "");
+                ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+                StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(ProductID);
+            if (stockListItem == null)
+            {
+                MarketLog.Log("storeCenter", "product not exists");
+                throw new StoreException(StoreEnum.ProductNotFound, "product " + ProductID + " does not exist in Stock");
+            }
+            string discount = ""; 
+                string product = stockListItem.Product.ToString();
+            if (stockListItem.Discount != null)
+                discount = stockListItem.Discount.ToString() + " , ";
+                string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
+                string quanitity = stockListItem.Quantity + "";
+                string result = product + " , " +discount + purchaseWay + " , " + quanitity;
+            return result;
+        }
+        public MarketAnswer ViewStoreStock(string storename)
+        {
+            MarketLog.Log("StoreCenter", "checking store stack");
             try
             {
                 _shopper.ValidateCanBrowseMarket();
-                MarketLog.Log("StoreCenter", "");
-                string[] storeStockInfo = storeLogic.GetStoreStockInfo(store);
-                MarketLog.Log("StoreCenter", "");
-                return new StoreAnswer(ViewStoreStatus.Success, "Store stock has been successfully granted!", storeStockInfo);
+                MarketLog.Log("StoreCenter", "check if store exists");
+                if (!storeLogic.DataLayer.IsStoreExistAndActive(storename))
+                {   MarketLog.Log("StoreCenter", "store do not exists");
+                    throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
+                Store store = storeLogic.DataLayer.getStorebyName(storename);
+                LinkedList<string> result = new LinkedList<string>();
+                LinkedList<string> IDS = storeLogic.DataLayer.GetAllStoreProductsID(store.SystemId);
+                foreach (string item in IDS)
+                {
+                    result.AddLast(GetProductStockInformation(item));
+                }
+                string[] resultArray = new string[result.Count];
+                result.CopyTo(resultArray, 0);
+                return new StoreAnswer(StoreEnum.Success,"", resultArray);
             }
             catch (StoreException e)
-            {
-                MarketLog.Log("StoreCenter", "");
-                return new StoreAnswer((ViewStoreStatus)e.Status, "Store . " +
-                                            "something is wrong with viewing " + store + " stock by customers. Error message has been created!");
+            {   return new StoreAnswer(e);
             }
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(ViewStoreStatus.InvalidUser,
+                return new StoreAnswer(StoreEnum.NoPremmision,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
         }
@@ -184,6 +209,12 @@ namespace SadnaSrc.StoreCenter
         {
             foreach (Store store in stores)
             {
+                LinkedList<string> items = storeLogic.DataLayer.GetAllStoreProductsID(store.SystemId);
+                foreach (string id in items)
+                {
+                    StockListItem item = storeLogic.DataLayer.GetStockListItembyProductID(id);
+                    storeLogic.DataLayer.RemoveStockListItem(item);
+                }
                 storeLogic.DataLayer.RemoveStore(store);
             }
         }
@@ -230,3 +261,4 @@ namespace SadnaSrc.StoreCenter
         */
     }
 }
+

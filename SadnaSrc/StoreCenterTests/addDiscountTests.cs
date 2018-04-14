@@ -42,7 +42,7 @@ namespace StoreCenterTests
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
-            Assert.AreEqual((int)ViewStoreStatus.InvalidUser, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
         }
         [TestMethod]
         public void addDisocuntWhenProductNotExists()
@@ -106,6 +106,24 @@ namespace StoreCenterTests
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 100, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
+        }
+        [TestMethod]
+        public void addDiscountWhenDiscountAmountNegative()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), -5, "HIDDEN", false);
+            Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
+        }
+        [TestMethod]
+        public void addDiscountWhenDiscountAmountIsZero()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 0, "HIDDEN", false);
+            Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
         }
         [TestMethod]
         public void addDiscountWhenDiscountAmountIsMoreThenProductPrice()

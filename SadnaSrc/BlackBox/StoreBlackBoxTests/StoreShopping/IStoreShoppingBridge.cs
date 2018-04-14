@@ -2,13 +2,12 @@
 
 namespace BlackBox
 {
-	interface IStoreBridge
+	interface IStoreShoppingBridge
 	{
 		void GetStoreShoppingService(IUserService userService);
-		void GetStoreManagementService(IUserService userService, string store);
 		MarketAnswer OpenStore(string name, string address);
 		MarketAnswer ViewStoreInfo(string store);
-		MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions);
+		MarketAnswer AddProductToCart(string store, string productName, int quantity);
 		void CleanSession();
 	}
 }

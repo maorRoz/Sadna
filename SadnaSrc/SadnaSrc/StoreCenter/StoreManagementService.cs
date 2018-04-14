@@ -16,8 +16,8 @@ namespace SadnaSrc.StoreCenter
         ModuleGlobalHandler global;
         private IUserSeller _storeManager;
         public string _storeName;
-
-
+        private LinkedList<StockListItem> stockListItemToRemove;
+        private LinkedList<Discount> discountsToRemvoe;
 
 
         //TODO: (maor wrote this) on my opinion, you shouldn't have class who deals with shopping and managing. 
@@ -30,6 +30,8 @@ namespace SadnaSrc.StoreCenter
             _storeName = storeName;
             global = ModuleGlobalHandler.GetInstance();
             store = global.DataLayer.getStorebyName(storeName);
+            stockListItemToRemove = new LinkedList<StockListItem>();
+            discountsToRemvoe = new LinkedList<Discount>();
         }
 
         public MarketAnswer CloseStore()
@@ -135,7 +137,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: fix this
+        
         public MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity)
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
@@ -155,7 +157,9 @@ namespace SadnaSrc.StoreCenter
                 if (quantity <= 0) { return new StoreAnswer(StoreEnum.quantityIsNegatie, "negative quantity"); }
                 MarketLog.Log("StoreCenter", " quanitity is positive");
                 Product product = new Product(global.GetProductID(), _name, _price, _description);
-                global.DataLayer.AddStockListItemToDataBase(new StockListItem(quantity, product, null, PurchaseEnum.Immediate, store.SystemId));
+                StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, store.SystemId);
+                global.DataLayer.AddStockListItemToDataBase(stockListItem);
+                stockListItemToRemove.AddLast(stockListItem);
                 MarketLog.Log("StoreCenter", "product added");
                 return new StoreAnswer(StoreEnum.Success, "product added");
             }
@@ -196,10 +200,10 @@ namespace SadnaSrc.StoreCenter
                 global.DataLayer.RemoveStockListItem(stockListItem);
                 return new StoreAnswer(StoreEnum.Success, "product removed");
             }
-            catch (MarketException)
+            catch (MarketException e)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
 
@@ -211,7 +215,8 @@ namespace SadnaSrc.StoreCenter
             StoreAnswer result = null;
             MarketLog.Log("StoreCenter", "trying to edit product in store");
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) {
+                return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
             try
             {
                 MarketLog.Log("StoreCenter", " store exists");
@@ -228,6 +233,7 @@ namespace SadnaSrc.StoreCenter
                     MarketLog.Log("StoreCenter","checking if new new is avaliabe");
                     if(!global.IsProductNameAvailableInStore(_storeName,newValue))
                     {
+                        MarketLog.Log("StoreCenter", "name exists in shop");
                         throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); 
                     }
                     result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
@@ -249,27 +255,32 @@ namespace SadnaSrc.StoreCenter
                     result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
                     product.Description = newValue;
                 }
-                if (result == null) { throw new StoreException(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
+                if (result == null) { MarketLog.Log("StoreCenter", "no leagal attrebute or founed non-leagal value");
+                    throw new StoreException(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
                 global.DataLayer.EditProductInDatabase(product);
                 return result;
             }
             catch (StoreException exe)
             {
-                if (exe.Status == (int)StoreEnum.UpdateProductFail)
-                {
-                    MarketLog.Log("StoreCenter", "no leagal attrebute or founed non-leagal value");
-                    return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found");
-                }
-                MarketLog.Log("StoreCenter", "name exists in shop");
-                return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); 
+                return new StoreAnswer(exe);
             }
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
-
+        public void clearSession()
+        {
+            foreach (Discount discount in discountsToRemvoe)
+            {
+                global.DataLayer.RemoveDiscount(discount);
+            }
+            foreach (StockListItem stockListItem in stockListItemToRemove)
+            {
+                global.DataLayer.RemoveStockListItem(stockListItem);
+            }
+        }
         //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productName)
         {
@@ -303,7 +314,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
                 Product product = global.DataLayer.getProductByNameFromStore(_storeName, productName);
                 if (product == null) { MarketLog.Log("StoreCenter", "product not exists");
-                    throw new StoreException(StoreEnum.ProductNotFound, "no Such Product"); }
+                    throw new StoreException(DiscountStatus.ProductNotFound, "no Such Product"); }
                 MarketLog.Log("StoreCenter", "check if dates are OK");
                 if ((startDate< DateTime.Now)|| (endDate < DateTime.Now) || !(startDate < endDate))
                 {
@@ -315,6 +326,11 @@ namespace SadnaSrc.StoreCenter
                 {
                     MarketLog.Log("StoreCenter", "discount amount is >=100%");
                     throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100%");
+                }
+                if (discountAmount <= 0)
+                {
+                    MarketLog.Log("StoreCenter", "discount amount <=0");
+                    throw new StoreException(DiscountStatus.discountAmountIsNegativeOrZero, "DiscountAmount is >= 100%");
                 }
                 if (!presenteges && (discountAmount > product.BasePrice)) {
                     MarketLog.Log("StoreCenter", "discount amount is >= product price");
@@ -331,51 +347,99 @@ namespace SadnaSrc.StoreCenter
                     endDate, discountAmount, presenteges);
                 stockListItem.Discount = discount;
                 global.DataLayer.AddDiscount(discount);
+                discountsToRemvoe.AddLast(discount);
                 global.DataLayer.EditStockInDatabase(stockListItem);
                 MarketLog.Log("StoreCenter", "discount added successfully");
                 return new StoreAnswer(DiscountStatus.Success, "discount added successfully");
             }
             catch (StoreException exe)
             {
-                if (exe.Status==(int)DiscountStatus.AmountIsHundredAndpresenteges)
-                    return new StoreAnswer(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100%");
-                if (exe.Status == (int)DiscountStatus.DiscountGreaterThenProductPrice)
-                    return new StoreAnswer(DiscountStatus.DiscountGreaterThenProductPrice, "DiscountAmount is > then product price");
-                if (exe.Status == (int)DiscountStatus.thereIsAlreadyAnotherDiscount)
-                    return new StoreAnswer(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
-                if (exe.Status == (int)DiscountStatus.DatesAreWrong)
-                    return new StoreAnswer(DiscountStatus.DatesAreWrong, "dates are not leagal");
-                //else
-                return new StoreAnswer(DiscountStatus.ProductNotFound, "product not found");
+                return new StoreAnswer(exe);
             }
             catch (MarketException)
             {
-                return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+            }
+        }
+        public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
+        {
+
+            StoreAnswer result = null;
+            try
+            {
+                MarketLog.Log("StoreCenter", "trying to edit discount from product in store");
+                checkIfStoreExists();
+                MarketLog.Log("StoreCenter", " check if has premmision to edit products");
+                _storeManager.CanDeclareDiscountPolicy();
+                MarketLog.Log("StoreCenter", " has premmission");
+                checkIfProductExists(productName);
+                Discount discount = checkIfDiscountExistsPrivateMethod(productName);
+                if ((whatToEdit == "discountType")|| (whatToEdit == "DiscountType")|| (whatToEdit == "discounttype")|| (whatToEdit == "DISCOUNTTYPE"))
+                {
+                    discount = editDiscountdiscyoutTypePrivateMethod(discount, newValue, out result, productName);
+
+                }
+                if ((whatToEdit == "startDate")|| (whatToEdit == "start Date")|| (whatToEdit == "StartDate") || (whatToEdit == "Start Date") || (whatToEdit == "startdate") || (whatToEdit == "start date")|| (whatToEdit == "STARTDATE")|| (whatToEdit == "START DATE"))
+                {
+                    discount = editDiscountStartDatePrivateMethod(discount, newValue, out result, productName);
+                }
+
+                if ((whatToEdit == "EndDate")||(whatToEdit =="end Date")|| (whatToEdit == "enddate")|| (whatToEdit == "End Date")|| (whatToEdit == "end date")|| (whatToEdit == "ENDDATE")|| (whatToEdit == "END DATE"))
+                {
+                    discount = editDiscountEndDatePrivateMethod(discount, newValue, out result, productName);
+                }
+
+                if ((whatToEdit == "DiscountAmount")|| (whatToEdit == "Discount Amount")|| (whatToEdit == "discount amount")|| (whatToEdit == "discountamount")|| (whatToEdit == "DISCOUNTAMOUNT")|| (whatToEdit == "DISCOUNT AMOUNT"))
+                {
+                    discount = editDiscountDiscountAmountPrivateMehtod(discount, newValue, out result, productName);
+                }
+                if ((whatToEdit == "Percentages")|| (whatToEdit == "percentages")|| (whatToEdit == "PERCENTAGES"))
+                {
+                    discount = editDiscountPercentagesPrivateMehtod(discount, newValue, out result, productName);
+                }
+                if (result == null) { throw new StoreException(DiscountStatus.NoLegalAttrebute, "no leagal attrebute found"); }
+                global.DataLayer.EditDiscountInDatabase(discount);
+                return result;
+            }
+            catch (StoreException exe)
+            {
+                return new StoreAnswer(exe);
+            }
+            catch (MarketException)
+            {
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
 
 
-        //  return store.AddDiscountToProduct(productName, startDate, endDate, discountAmount, discountType, presenteges);
-
-
-        //TODO: fix this
-        public MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue)
+        public MarketAnswer RemoveDiscountFromProduct(string productName)
         {
-            global.DataLayer.IsStoreExistAndActive(_storeName);
-            _storeManager.CanDeclareDiscountPolicy();
-            //     return store.EditDiscount(productID, whatToEdit, newValue);
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            try
+            {
+                MarketLog.Log("StoreCenter", "trying to remove discount from product in store");
+                 MarketLog.Log("StoreCenter", "check if store exists");
+                checkIfStoreExists();
+                MarketLog.Log("StoreCenter", " check if has premmision to edit products");
+                _storeManager.CanDeclareDiscountPolicy();
+                MarketLog.Log("StoreCenter", " has premmission");
+                checkIfProductExists(productName);
+                Discount D = checkIfDiscountExistsPrivateMethod(productName);
+               StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+                stockListItem.Discount = null;
+                global.DataLayer.RemoveDiscount(D);
+                global.DataLayer.EditStockInDatabase(stockListItem);
+                MarketLog.Log("StoreCenter", "discount removed successfully");
+                return new StoreAnswer(DiscountStatus.Success, "discount removed successfully");
+            }
+            catch (StoreException exe)
+            {
+                return new StoreAnswer(exe);
+            }
+            catch (MarketException)
+            {
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+            }
         }
-
-        //TODO: fix this
-        public MarketAnswer RemoveDiscountFromProduct(string productID)
-        {
-            global.DataLayer.IsStoreExistAndActive(_storeName);
-            _storeManager.CanDeclareDiscountPolicy();
-            // store.RemoveDiscountFromProduct(productID);
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
-        }
-
         public MarketAnswer ViewStoreHistory()
         {
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store purchase history...");
@@ -435,9 +499,157 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"
                                              + _storeName + " and therefore has been denied. Error message has been created!");
-                return new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
+                return new StoreAnswer(StoreEnum.NoPremmision, e.GetErrorMessage());
             }
         }
+        private Discount checkIfDiscountExistsPrivateMethod(string productName)
+        {
+            StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+            MarketLog.Log("StoreCenter", " Product exists");
+            MarketLog.Log("StoreCenter", "checking that the product has a discount");
+            Discount discount = stockListItem.Discount;
+            if (discount == null)
+            {
+                MarketLog.Log("StoreCenter", "product does not exists");
+                throw new StoreException(DiscountStatus.DiscountNotFound, "there is no discount at this product");
+            }
+            MarketLog.Log("StoreCenter", " check what you want to edit");
+            return discount;
+        }
+        private void checkIfProductExists(string productName)
+        {
+            MarketLog.Log("StoreCenter", " check if product name exists in the store " + store.Name);
+            if (global.IsProductNameAvailableInStore(_storeName, productName))
+            {
+                MarketLog.Log("StoreCenter", "product does not exists");
+                throw new StoreException(DiscountStatus.ProductNotFound, "product not found");
+            }
+        }
+        private Discount editDiscountdiscyoutTypePrivateMethod(Discount discount, string newValue, out StoreAnswer result, string productName)
+        {
+            MarketLog.Log("StoreCenter", " edit discount type");
+            discount.discountType = global.GetdiscountTypeEnumString(newValue);
+            MarketLog.Log("StoreCenter", " discount type changed successfully");
+            result = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount type become " + newValue);
+            return discount;
+        }
+        private void checkIfStoreExists()
+        {
+            MarketLog.Log("StoreCenter", "check if store exists");
+            if (!global.DataLayer.IsStoreExist(_storeName))
+            {
+                MarketLog.Log("StoreCenter", " store does not exists");
+                throw new StoreException(DiscountStatus.NoStore, "store not exists");
+            }
+            MarketLog.Log("StoreCenter", " store exists");
+        }
+        private Discount editDiscountStartDatePrivateMethod(Discount discount, string newValue, out StoreAnswer result, string productName)
+        {
+
+            MarketLog.Log("StoreCenter", " edit start date");
+            MarketLog.Log("StoreCenter", " checking that the start date is legal");
+            DateTime startTime = DateTime.MaxValue;
+            if (!DateTime.TryParse(newValue, out startTime))
+            {
+                MarketLog.Log("StoreCenter", "date format is not legal");
+                throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal");
+            }
+            if (startTime.Date < DateTime.Now.Date)
+            {
+                MarketLog.Log("StoreCenter", "can't set start time in the past");
+                throw new StoreException(DiscountStatus.DatesAreWrong, "can't set start time in the past");
+            }
+
+            if (startTime.Date >= discount.EndDate.Date)
+            {
+                MarketLog.Log("StoreCenter", "can't set start time that is later then the discount end time");
+                throw new StoreException(DiscountStatus.DatesAreWrong, "can't set start time that is later then the discount end time");
+            }
+            discount.startDate = startTime;
+            MarketLog.Log("StoreCenter", " start date changed successfully");
+            result = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount Start Date become " + startTime);
+            return discount;
+        }
+        private Discount editDiscountPercentagesPrivateMehtod(Discount discount, string newValue, out StoreAnswer result, string productName)
+        {
+            MarketLog.Log("StoreCenter", "try to edit precenteges");
+            bool newboolValue = true;
+            if (!Boolean.TryParse(newValue, out newboolValue))
+            {
+                MarketLog.Log("StoreCenter", "value is not legal");
+                throw new StoreException(DiscountStatus.precentegesIsNotBoolean, "value is not legal");
+            }
+            MarketLog.Log("StoreCenter", "checking that the discount amount is fit to precenteges");
+            if ((newboolValue) && (discount.DiscountAmount >= 100))
+            {
+                MarketLog.Log("StoreCenter", "DiscountAmount is >= 100, cant make it presenteges");
+                throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100, cant make it presenteges");
+            }
+            discount.Percentages = newboolValue;
+            if (newboolValue)
+                result = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become true");
+            result = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become false");
+            return discount;
+        }
+        private Discount editDiscountDiscountAmountPrivateMehtod(Discount discount, string newValue, out StoreAnswer result, string productName)
+        {
+
+            MarketLog.Log("StoreCenter", " edit discount amount");
+            int newintValue = 0;
+            if (!Int32.TryParse(newValue, out newintValue))
+            {
+                MarketLog.Log("StoreCenter", "value is not legal");
+                throw new StoreException(DiscountStatus.discountAmountIsNotNumber, "value is not legal");
+            }
+            if ((discount.Percentages) && (newintValue >= 100))
+            {
+                MarketLog.Log("StoreCenter", "DiscountAmount is >= 100, cant make it presenteges");
+                throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100, cant make it presenteges");
+            }
+            if ((!discount.Percentages) && (newintValue > global.DataLayer.getProductByNameFromStore(_storeName, productName).BasePrice))
+            {
+                MarketLog.Log("StoreCenter", "discount amount is >= product price");
+                throw new StoreException(DiscountStatus.DiscountGreaterThenProductPrice, "DiscountAmount is > then product price");
+            }
+            if (newintValue <= 0)
+            {
+                MarketLog.Log("StoreCenter", "discount amount <=0");
+                throw new StoreException(DiscountStatus.discountAmountIsNegativeOrZero, "DiscountAmount is >= 100%");
+            }
+            discount.DiscountAmount = newintValue;
+            MarketLog.Log("StoreCenter", "discount amount set to " + newintValue);
+            result = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount amount become " + newValue);
+            return discount;
+        }
+        private Discount editDiscountEndDatePrivateMethod(Discount discount, string newValue, out StoreAnswer result, string productName)
+        {
+
+            MarketLog.Log("StoreCenter", " edit start date");
+            MarketLog.Log("StoreCenter", " checking that the start date is legal");
+            DateTime EndDate = DateTime.MaxValue;
+            if (!DateTime.TryParse(newValue, out EndDate))
+            {
+                MarketLog.Log("StoreCenter", "date format is not legal");
+                throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal");
+            }
+            if (EndDate.Date < DateTime.Now.Date)
+            {
+                MarketLog.Log("StoreCenter", "can't set end time in the past");
+                throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time in the past");
+            }
+            if (EndDate.Date < discount.startDate.Date)
+            {
+                MarketLog.Log("StoreCenter", "can't set end time that is sooner then the discount start time");
+                throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time that is sooner then the discount start time");
+            }
+            discount.EndDate = EndDate;
+            MarketLog.Log("StoreCenter", " start date changed successfully");
+            result = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount End Date become " + EndDate);
+            return discount;
+        }
+
+
+
     }
 }
  

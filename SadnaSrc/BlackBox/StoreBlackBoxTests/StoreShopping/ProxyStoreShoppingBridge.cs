@@ -8,9 +8,9 @@ using SadnaSrc.Main;
 
 namespace BlackBox
 {
-	class ProxyStoreBridge : IStoreBridge
+	class ProxyStoreShoppingBridge : IStoreShoppingBridge
 	{
-		public IStoreBridge real;
+		public IStoreShoppingBridge real;
 
 		public void GetStoreShoppingService(IUserService userService)
 		{
@@ -22,19 +22,6 @@ namespace BlackBox
 			{
 				throw new NotImplementedException();
 			}
-		}
-
-		public void GetStoreManagementService(IUserService userService, string store)
-		{
-			if (real != null)
-			{
-				real.GetStoreManagementService(userService,store);
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
-
 		}
 
 		public MarketAnswer OpenStore(string name, string address)
@@ -56,28 +43,26 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
-		public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
+		
+		public MarketAnswer AddProductToCart(string store, string productName, int quantity)
 		{
 			if (real != null)
 			{
-				return real.PromoteToStoreManager(someoneToPromoteName, actions);
+				return real.AddProductToCart(store, productName, quantity);
 			}
 			throw new NotImplementedException();
 		}
 
-
 		public void CleanSession()
-	    {
-		    if (real != null)
-		    {
-			    real.CleanSession();
-		    }
-		    else
-		    {
+		{
+			if (real != null)
+			{
+				real.CleanSession();
+			}
+			else
+			{
 				throw new NotImplementedException();
 			}
-	    } 
-
-
+		}
 	}
 }
