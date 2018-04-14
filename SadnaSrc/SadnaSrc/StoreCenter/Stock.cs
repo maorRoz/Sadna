@@ -56,19 +56,7 @@ namespace SadnaSrc.StoreCenter
         }
 
 
-        public double CalculateSingleItemPrice(Product _product, int _DiscountCode, int _quantity)
-        {
-            StockListItem item = FindByProduct(_product);
-            if (item != null)
-            {
-                if (_quantity < item.Quantity && item.Discount != null)
-                {
-                    return item.Discount.CalcDiscount(item.Product.BasePrice, _DiscountCode) * _quantity;
-                }
-                return item.Product.BasePrice * _quantity;
-            }
-            return -1;
-        }
+        
         /**
 * assume that the product is in the list
 **/

@@ -11,6 +11,7 @@ namespace SadnaSrc.StoreCenter
     public class StoreAnswer : MarketAnswer
     {
         public StoreAnswer(StoreEnum status, string answer) : base((int)status, answer) { }
+        public StoreAnswer(StoreEnum status, string answer, string[] report) : base((int)status, answer, report) { }
         public StoreAnswer(PromoteStoreStatus status, string answer) : base((int)status, answer) { }
         public StoreAnswer(DiscountStatus status, string answer) : base((int)status, answer) { }
         public StoreAnswer(OpenStoreStatus status, string answer) : base((int)status, answer) { }
@@ -28,5 +29,6 @@ namespace SadnaSrc.StoreCenter
         public StoreAnswer(ManageStoreStatus status, string answer) : base((int)status, answer) { }
 
         public StoreAnswer(ManageStoreStatus status,string answer, string[] report) : base((int)status,answer, report) { }
+        public StoreAnswer(StoreException e) : base((int)e.Status, e.Message) { }
     }
 }

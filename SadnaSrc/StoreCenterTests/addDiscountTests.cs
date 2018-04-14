@@ -108,6 +108,24 @@ namespace StoreCenterTests
             Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
         }
         [TestMethod]
+        public void addDiscountWhenDiscountAmountNegative()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), -5, "HIDDEN", false);
+            Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
+        }
+        [TestMethod]
+        public void addDiscountWhenDiscountAmountIsZero()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 0, "HIDDEN", false);
+            Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
+        }
+        [TestMethod]
         public void addDiscountWhenDiscountAmountIsMoreThenProductPrice()
         {
             userService.EnterSystem();

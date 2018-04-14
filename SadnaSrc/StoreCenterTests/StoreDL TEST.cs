@@ -268,6 +268,7 @@ namespace StoreCenterTests
                 new Store("S4", "Cluckin Bell", "Los Santos"),
                 new Store("S5", "The Red Rock", "Mivtza Yoav"),
                 new Store("S6", "24", "Mezada"),
+                new Store("S7", "T","wanderland")
             };
             Store[] actual = handler.DataLayer.GetAllActiveStores().ToArray();
             Assert.AreEqual(expected.Length, actual.Length);

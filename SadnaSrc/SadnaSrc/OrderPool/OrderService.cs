@@ -177,7 +177,6 @@ namespace SadnaSrc.OrderPool
                 _buyer.RemoveItemFromCart(itemName, store, quantity, unitPrice);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought item "+ itemName + "in an immediate sale.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought item "+itemName);
-
             }
             catch (OrderException e)
             {
@@ -204,16 +203,23 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, string coupon)
+        public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
         {
             MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " " + itemName + " from store " + store + " in immediate sale...");
             int orderId = 0;
             try
             {
-                OrderItem toBuy = _storesSync.GetItemFromCoupon(itemName, store, quantity, coupon);
-                if (toBuy == null)
-                    throw new OrderException(OrderStatus.InvalidCoupon,
-                        "Order has failed to execute. Invalid coupon number!");
+                OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
+                try
+                {
+                    double newPrice = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
+                }
+                catch (MarketException e)
+                {
+                    MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store." +
+                                               " Error message has been created!");
+                    return new OrderAnswer(OrderStatus.InvalidCoupon, e.GetErrorMessage());
+                }
                 CheckOrderItem(toBuy);
                 Order order = InitOrder();
                 orderId = order.GetOrderID();
@@ -246,7 +252,7 @@ namespace SadnaSrc.OrderPool
             }
             catch (MarketException e)
             {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with User." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }

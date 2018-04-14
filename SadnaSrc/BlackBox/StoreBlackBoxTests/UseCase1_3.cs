@@ -1,21 +1,22 @@
 ﻿using System;
+using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBox.StoreBlackBoxTests
+namespace BlackBoxStoreTests
 {
 	[TestClass]
 	public class UseCase1_3
 	{
 		private IUserBridge _bridgeSignUp;
-		private IStoreBridge _storeBridge;
-		private IStoreBridge _storeBridgeGuest;
+		private IStoreShoppingBridge _storeBridge;
+		private IStoreShoppingBridge _storeBridgeGuest;
 		private IUserBridge _userWatchStore;
 
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_storeBridge = StoreDriver.getBridge();
+			_storeBridge = StoreShoppingDriver.getBridge();
 			SignUp("Pnina", "mishol", "7894", "12345678");
 			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.Success, _storeBridge.OpenStore("OOF", "BASA").Status);
@@ -28,7 +29,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_userWatchStore = UserDriver.getBridge();
 			_userWatchStore.EnterSystem();
-			_storeBridgeGuest = StoreDriver.getBridge();
+			_storeBridgeGuest = StoreShoppingDriver.getBridge();
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
 			Assert.AreEqual((int)ViewStoreStatus.Success,storeDetails.Status);
@@ -53,7 +54,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_userWatchStore = UserDriver.getBridge();
 			_userWatchStore.EnterSystem();
-			_storeBridgeGuest = StoreDriver.getBridge();
+			_storeBridgeGuest = StoreShoppingDriver.getBridge();
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOFA");
 			Assert.AreEqual((int)ViewStoreStatus.NoStore, storeDetails.Status);
@@ -71,7 +72,7 @@ namespace BlackBox.StoreBlackBoxTests
 		public void InvalidUserDidntEnterSystem()
 		{
 			_userWatchStore = UserDriver.getBridge();
-			_storeBridgeGuest = StoreDriver.getBridge();
+			_storeBridgeGuest = StoreShoppingDriver.getBridge();
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
 			Assert.AreEqual((int)ViewStoreStatus.InvalidUser, storeDetails.Status);

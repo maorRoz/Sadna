@@ -12,20 +12,18 @@ namespace SadnaSrc.UserSpot
         private List<CartItem> cartStorage;
         private static UserServiceDL _userDL;
         private bool _toSave;
-        private int _systemID;
 
         public CartService(int systemID)
         {
             cartStorage = new List<CartItem>();
             _toSave = false;
-            _systemID = systemID;
         }
 
         public void EnableCartSave()
         {
             _toSave = true;
         }
-        public static void EstablishServiceDL(UserServiceDL userDL)
+        public void EstablishServiceDL(UserServiceDL userDL)
         {
             _userDL = userDL;
         }

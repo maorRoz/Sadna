@@ -88,37 +88,37 @@ namespace SadnaSrc.StoreCenter
             {
                 case PurchaseEnum.Immediate: return "Immediate";
                 case PurchaseEnum.Lottery: return "Lottery";
-                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+                default: throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists"); 
             }
         }
         public discountTypeEnum GetdiscountTypeEnumString(string discountType)
         {
-            if (discountType == "HIDDEN")
+            if ((discountType == "HIDDEN")|| (discountType == "hidden") || (discountType == "Hidden"))
                 return discountTypeEnum.Hidden;
-            if (discountType == "VISIBLE")
+            if ((discountType == "VISIBLE") || (discountType == "visible") || (discountType == "Visible"))
                 return discountTypeEnum.Visible;
-            throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
         }
         public PurchaseEnum GetPurchaseEnumString(string purchaseType)
         {
-            if (purchaseType == "Immediate")
+            if ((purchaseType == "Immediate")|| (purchaseType == "immediate")|| (purchaseType == "IMMEDIATE"))
                 return PurchaseEnum.Immediate;
-            if (purchaseType == "Lottery")
+            if ((purchaseType == "Lottery")|| (purchaseType == "lottery")|| (purchaseType == "LOTTERY"))
                 return PurchaseEnum.Lottery;
-            throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists"); 
         }
 
         internal LotteryTicketStatus GetLotteryStatusString(string lotteryStatus)
         {
-            if (lotteryStatus == "CANCEL")
+            if ((lotteryStatus == "CANCEL")|| (lotteryStatus == "Cancel")|| (lotteryStatus == "cancel"))
                 return LotteryTicketStatus.Cancel;
-            if (lotteryStatus == "WINNING")
+            if ((lotteryStatus == "WINNING")|| (lotteryStatus == "Winning")|| (lotteryStatus == "winning"))
                 return LotteryTicketStatus.Winning;
-            if (lotteryStatus == "WAITING")
+            if ((lotteryStatus == "WAITING")|| (lotteryStatus == "Waiting")|| (lotteryStatus == "waiting"))
                 return LotteryTicketStatus.Waiting;
-            if (lotteryStatus == "LOSING")
+            if ((lotteryStatus == "LOSING")|| (lotteryStatus == "Losing")|| (lotteryStatus == "losing"))
                 return LotteryTicketStatus.Losing;
-            throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists"); 
         }
 
 
@@ -193,10 +193,34 @@ namespace SadnaSrc.StoreCenter
             foreach (Store store in AllStores)
             {
                 result = store.AddAllProductsToExistingList(result);
-            }
+           }
             return result;
         }
 
-       
+        public double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity)
+        {
+            if (!DataLayer.IsStoreExist(storeName))
+                throw new StoreException(CalculateEnum.StoreNotExists, "store not exists");
+            if (IsProductNameAvailableInStore(storeName, productName))
+                throw new StoreException(CalculateEnum.ProductNotFound, "Product Not Found");
+            StockListItem item = DataLayer.GetProductFromStore(storeName, productName);
+            if (_quantity > item.Quantity)
+                throw new StoreException(CalculateEnum.quantityIsGreaterThenStack, "quantity Is Greater Then Stack");
+            if (_quantity <= 0)
+                throw new StoreException(CalculateEnum.quanitityIsNonPositive, "quanitity is <=0");
+            if (item.Discount == null)
+                throw new StoreException(CalculateEnum.ProductHasNoDiscount, "product has no discount");
+            if (item.Discount.discountCode != _DiscountCode)
+                throw new StoreException(CalculateEnum.DiscountCodeIsWrong, "discount code is wrong");
+            if (item.Discount.discountType!=discountTypeEnum.Hidden)
+                throw new StoreException(CalculateEnum.discountIsNotHidden, "discount Is Not Hiddeng");
+            if (DateTime.Now.Date < item.Discount.startDate.Date)
+                throw new StoreException(CalculateEnum.DiscountNotStarted, "Discount Time Not Started Yet");
+            if (DateTime.Now.Date > item.Discount.EndDate.Date)
+                throw new StoreException(CalculateEnum.DiscountExpired, "discount expired");
+            double ans = item.Discount.CalcDiscount(item.Product.BasePrice);
+            ans = ans * _quantity;
+            return ans;
+        }
     }
 }
