@@ -1,9 +1,11 @@
 ﻿using System;
+using BlackBox;
+using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
-namespace BlackBox.StoreBlackBoxTests
+namespace BlackBoxStoreTests
 {
 	[TestClass]
 	public class UseCase3_3
