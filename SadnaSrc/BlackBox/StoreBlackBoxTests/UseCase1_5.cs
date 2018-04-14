@@ -1,6 +1,5 @@
 ﻿using System;
 using BlackBox;
-using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
@@ -12,9 +11,12 @@ namespace UserBlackBoxTests
 	{
 		private IUserBridge _signInBridge;
 		private IUserBridge _bridgeSignUp;
-		private IStoreBridge _storeBridge;
-		private IStoreBridge _storeBridge2;
-		private IStoreBridge _storeBridge3;
+		private IStoreShoppingBridge _storeBridge;
+		private IStoreShoppingBridge _storeBridge2;
+		private IStoreShoppingBridge _storeBridge3;
+		private IStoreManagementBridge _storeManage1;
+		private IStoreManagementBridge _storeManage2;
+
 
 		[TestInitialize]
 		public void MarketBuilder()
@@ -36,28 +38,30 @@ namespace UserBlackBoxTests
 
 		private void CreateStore1AndProducts()
 		{
-			_storeBridge = StoreDriver.getBridge();
+			_storeBridge = StoreShoppingDriver.getBridge();
 			_storeBridge.GetStoreShoppingService(_signInBridge.getUserSession());
 			_storeBridge.OpenStore("BlahStore", "BlahStreet");
-			_storeBridge.GetStoreManagementService(_signInBridge.getUserSession(), "BlahStore");
-			_storeBridge.AddNewProduct("bisli", 200, "yammy!", 5);
-			_storeBridge.AddNewProduct("cheaps", 20, "yammy2!", 80);
+			_storeManage1 = StoreManagementDriver.getBridge();
+			_storeManage1.GetStoreManagementService(_signInBridge.getUserSession(), "BlahStore");
+			_storeManage1.AddNewProduct("bisli", 200, "yammy!", 5);
+			_storeManage1.AddNewProduct("cheaps", 20, "yammy2!", 80);
 		}
 
 		private void CreateStore2AndProducts()
 		{
-			_storeBridge2 = StoreDriver.getBridge();
+			_storeBridge2 = StoreShoppingDriver.getBridge();
 			_storeBridge2.GetStoreShoppingService(_signInBridge.getUserSession());
 			_storeBridge2.OpenStore("BlahStore2", "BlahStreet2");
-			_storeBridge2.GetStoreManagementService(_signInBridge.getUserSession(), "BlahStore2");
-			_storeBridge2.AddNewProduct("doritos", 30, "yammy3!", 30);
+			_storeManage2 = StoreManagementDriver.getBridge();
+			_storeManage2.GetStoreManagementService(_signInBridge.getUserSession(), "BlahStore2");
+			_storeManage2.AddNewProduct("doritos", 30, "yammy3!", 30);
 		}
 
 		[TestMethod]
 		public void SuccessAddingProductToCartGuest()
 		{
 			_bridgeSignUp.EnterSystem();
-			_storeBridge3 = StoreDriver.getBridge();
+			_storeBridge3 = StoreShoppingDriver.getBridge();
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStore", "bisli", 1);
 			Assert.AreEqual((int)StoreEnum.Success,res1.Status);
@@ -115,7 +119,7 @@ namespace UserBlackBoxTests
 		public void StoreDoesntExistGuest()
 		{
 			_bridgeSignUp.EnterSystem();
-			_storeBridge3 = StoreDriver.getBridge();
+			_storeBridge3 = StoreShoppingDriver.getBridge();
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStoreIhsa", "bisli", 1);
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, res1.Status);
@@ -142,7 +146,7 @@ namespace UserBlackBoxTests
 		public void ProductWantedWasntFoundGuest()
 		{
 			_bridgeSignUp.EnterSystem();
-			_storeBridge3 = StoreDriver.getBridge();
+			_storeBridge3 = StoreShoppingDriver.getBridge();
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStore", "bisli852", 1);
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res1.Status);
@@ -169,7 +173,7 @@ namespace UserBlackBoxTests
 		public void ProductQuantityTooBigGuest()
 		{
 			_bridgeSignUp.EnterSystem();
-			_storeBridge3 = StoreDriver.getBridge();
+			_storeBridge3 = StoreShoppingDriver.getBridge();
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStore", "bisli", 10);
 			Assert.AreEqual((int)StoreEnum.QuantityIsTooBig, res1.Status);
@@ -196,7 +200,7 @@ namespace UserBlackBoxTests
 		public void ProductQuantityNegativeGuest()
 		{
 			_bridgeSignUp.EnterSystem();
-			_storeBridge3 = StoreDriver.getBridge();
+			_storeBridge3 = StoreShoppingDriver.getBridge();
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStore", "bisli", -5);
 			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, res1.Status);
@@ -223,7 +227,7 @@ namespace UserBlackBoxTests
 		public void AddToCartInvalidUser()
 		{
 			//User didn't enter the system
-			_storeBridge3 = StoreDriver.getBridge();
+			_storeBridge3 = StoreShoppingDriver.getBridge();
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStore", "bisli", 1);
 			//TODO: when lior fixes the states - this should be invalid user
@@ -241,7 +245,7 @@ namespace UserBlackBoxTests
 			MarketAnswer res2 = _storeBridge.AddProductToCart("BlahStore", "cheaps", 2);
 			Assert.AreEqual((int)StoreEnum.Success, res2.Status);
 			_bridgeSignUp.EnterSystem();
-			_storeBridge3 = StoreDriver.getBridge();
+			_storeBridge3 = StoreShoppingDriver.getBridge();
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			MarketAnswer res3 = _storeBridge3.AddProductToCart("BlahStore2", "doritos", 3);
 			Assert.AreEqual((int)StoreEnum.Success, res3.Status);
@@ -273,7 +277,9 @@ namespace UserBlackBoxTests
 			_signInBridge.CleanSession();
 			_bridgeSignUp.CleanSession();
 			_storeBridge.CleanSession();
-			_storeBridge.CleanSession();
+			_storeManage1.CleanSession();
+			_storeBridge2.CleanSession();
+			_storeManage2.CleanSession();
 			_storeBridge3?.CleanSession();
 			_bridgeSignUp.CleanMarket();
 		}
