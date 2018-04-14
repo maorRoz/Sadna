@@ -23,16 +23,16 @@ namespace SadnaSrc.Main
         MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
         MarketAnswer AddQuanitityToProduct(string productName, int quantity);
         MarketAnswer ChangeProductPurchaseWayToImmediate(string productName);
-        MarketAnswer ChangeProductPurchaseWayToLottery(string productID, DateTime startDate, DateTime endDate);
+        MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate);
 
         /**
          * Discounts Management
          **/
 
-        MarketAnswer AddDiscountToProduct(string productID, DateTime _startDate, DateTime _endDate, 
+        MarketAnswer AddDiscountToProduct(string productName, DateTime _startDate, DateTime _endDate, 
             int _discountAmount,string discountType, bool presenteges);
-        MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue);
-        MarketAnswer RemoveDiscountFromProduct(string productID);
+        MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue);
+        MarketAnswer RemoveDiscountFromProduct(string productName);
         /**
          * History View
          */
@@ -59,7 +59,8 @@ namespace SadnaSrc.Main
         ProductNameNotAvlaiableInShop,
         NoPremmision,
         quantityIsNegatie,
-        QuantityIsTooBig
+        QuantityIsTooBig,
+        EnumValueNotExists
     }
     public enum DiscountStatus
     {
@@ -70,8 +71,12 @@ namespace SadnaSrc.Main
         AmountIsHundredAndpresenteges,
         DiscountGreaterThenProductPrice,
         thereIsAlreadyAnotherDiscount,
-        ProductNotFound
-
+        ProductNotFound,
+        DiscountNotFound,
+        discountAmountIsNegativeOrZero,
+        discountAmountIsNotNumber,
+        precentegesIsNotBoolean,
+        NoLegalAttrebute
     }
     public enum ManageStoreStatus
     {
