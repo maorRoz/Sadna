@@ -11,16 +11,20 @@ namespace IntegrationTests.UserSeller_Integration
     public class UserSeller_Promote_Tests
     {
         private IUserService userServiceSession;
+        private IUserService userServiceSession2;
         private UserSellerHarmony userSellerHarmony;
         private MarketYard marketSession;
 
         private string store = "The Red Rock";
         private string owner = "Vova";
         private string manager = "Vadim Chernov";
-        private string sysadmin = "Arik1";
+        private string manager2 = "Big Smoke";
         private string shopper = "Arik2";
         private string pass = "123";
-        private string storeAction = "ViewPurchaseHistory";
+        private string storeAction1 = "ViewPurchaseHistory";
+        private string storeAction2 = "ManageProducts";
+        private string storeAction3 = "PromoteStoreAdmin";
+        private string storeAction4 = "DeclareDiscountPolicy";
         private string storeOwner = "StoreOwner";
 
         [TestInitialize]
@@ -28,7 +32,9 @@ namespace IntegrationTests.UserSeller_Integration
         {
             marketSession = MarketYard.Instance;
             userServiceSession = (UserService) marketSession.GetUserService();
+            userServiceSession2 = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
+            userServiceSession2.EnterSystem();
             userSellerHarmony = new UserSellerHarmony(ref userServiceSession, store);
         }
 
@@ -37,11 +43,13 @@ namespace IntegrationTests.UserSeller_Integration
         {
             try
             {
-                userSellerHarmony.Promote(shopper, storeAction);
+                SignInAndPromote("guset", shopper, storeAction1);
                 Assert.Fail();
             }
             catch (MarketException)
             {
+                userServiceSession2.SignIn(shopper, pass);
+                Assert.AreEqual(0, ((UserService) userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
             }
         }
 
@@ -50,11 +58,13 @@ namespace IntegrationTests.UserSeller_Integration
         {
             try
             {
-                userSellerHarmony.Promote(manager, storeAction);
+                SignInAndPromote("guset", manager, storeAction1);
                 Assert.Fail();
             }
             catch (MarketException)
             {
+                userServiceSession2.SignIn(manager, pass);
+                Assert.AreEqual(2, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
             }
         }
 
@@ -63,24 +73,152 @@ namespace IntegrationTests.UserSeller_Integration
         {
             try
             {
-                userSellerHarmony.Promote(owner, storeAction);
+                SignInAndPromote("guset", owner, storeAction1);
                 Assert.Fail();
             }
             catch (MarketException)
             {
+                userServiceSession2.SignIn(owner, pass);
+                Assert.AreEqual(1, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
             }
         }
 
         [TestMethod]
-        public void GuestTryPromoteSysAdmin()
+        public void OwnerPromoteShopper()
         {
             try
             {
-                userSellerHarmony.Promote(sysadmin, storeAction);
+                SignInAndPromote(owner, shopper, storeAction1);
+                Assert.AreEqual(1, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
+                Assert.AreEqual(StoreManagerPolicy.StoreAction.ViewPurchaseHistory,
+                    ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store)[0].Action);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void OwnerPromoteManager()
+        {
+            try
+            {
+                SignInAndPromote(owner, manager, storeAction1);
+                Assert.AreEqual(1, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
+                Assert.AreEqual(StoreManagerPolicy.StoreAction.ViewPurchaseHistory,
+                    ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store)[0].Action);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void OwnerPromoteHimself()
+        {
+            try
+            {
+                SignInAndPromote(owner, owner, storeAction1);
                 Assert.Fail();
             }
             catch (MarketException)
             {
+                userServiceSession2.SignIn(owner, pass);
+                Assert.AreEqual(1, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
+            }
+        }
+
+        [TestMethod]
+        public void ManagerPromoteShopperFail()
+        {
+            try
+            {
+                SignInAndPromote(manager, shopper, storeAction1);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+                userServiceSession2.SignIn(shopper, pass);
+                Assert.AreEqual(0, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
+            }
+        }
+
+        [TestMethod]
+        public void ManagerPromoteOtherManagerFail()
+        {
+            try
+            {
+                SignInAndPromote(manager, manager2, storeAction1);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+                userServiceSession2.SignIn(manager2, pass);
+                Assert.AreEqual(1, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
+            }
+        }
+
+        [TestMethod]
+        public void ManagerPromoteShopper()
+        {
+            try
+            {
+                SignInAndPromote(manager, shopper, storeAction2);
+                Assert.AreEqual(1, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
+                Assert.AreEqual(StoreManagerPolicy.StoreAction.ManageProducts,
+                    ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store)[0].Action);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void ManagerPromoteOtherManager()
+        {
+            try
+            {
+                SignInAndPromote(manager, manager2, storeAction2);
+                Assert.AreEqual(1, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
+                Assert.AreEqual(StoreManagerPolicy.StoreAction.ManageProducts,
+                    ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store)[0].Action);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void ManagerPromoteHimself()
+        {
+            try
+            {
+                SignInAndPromote(manager, manager, storeAction1);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+                userServiceSession2.SignIn(manager, pass);
+                Assert.AreEqual(2, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
+            }
+        }
+
+        [TestMethod]
+        public void ManagerPromoteOwner()
+        {
+            try
+            {
+                SignInAndPromote(manager, owner, storeAction1);
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+                userServiceSession2.SignIn(owner, pass);
+                Assert.AreEqual(1, ((UserService)userServiceSession2).MarketUser.GetStoreManagerPolicies(store).Length);
             }
         }
 
@@ -88,7 +226,17 @@ namespace IntegrationTests.UserSeller_Integration
         public void StoreOrderTestCleanUp()
         {
             userServiceSession.CleanSession();
+            userServiceSession2.CleanSession();
             MarketYard.CleanSession();
+        }
+
+        private void SignInAndPromote(string promoter, string toPromote, string action)
+        {
+            if(promoter!="guest")
+                userServiceSession.SignIn(promoter, pass);
+            userSellerHarmony.Promote(toPromote, action);
+            userServiceSession2.SignIn(toPromote, pass);
+
         }
     }
 }

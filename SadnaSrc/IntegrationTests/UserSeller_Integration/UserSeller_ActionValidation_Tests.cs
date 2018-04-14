@@ -199,10 +199,10 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(manager, pass);
                 userSellerHarmony.CanDeclareDiscountPolicy();
+                Assert.Fail();
             }
             catch (MarketException)
             {
-                Assert.Fail();
             }
         }
 
@@ -213,10 +213,10 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(manager, pass);
                 userSellerHarmony.CanPromoteStoreAdmin();
-                Assert.Fail();
             }
             catch (MarketException)
             {
+                Assert.Fail();
             }
         }
 
