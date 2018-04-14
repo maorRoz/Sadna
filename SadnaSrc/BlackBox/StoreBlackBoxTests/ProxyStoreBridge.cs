@@ -28,7 +28,7 @@ namespace BlackBox
 		{
 			if (real != null)
 			{
-				real.GetStoreManagementService(userService,store);
+				real.GetStoreManagementService(userService, store);
 			}
 			else
 			{
@@ -65,18 +65,44 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
+		public MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity)
+		{
+			if (real != null)
+			{
+				return real.AddNewProduct(_name, _price, _description, quantity);
+			}
+			throw new NotImplementedException();
+		}
+
+		public MarketAnswer RemoveProduct(string productName)
+		{
+			if (real != null)
+			{
+				return real.RemoveProduct(productName);
+			}
+			throw new NotImplementedException();
+		}
+
+		public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
+		{
+			if (real != null)
+			{
+				return real.EditProduct(productName, whatToEdit, newValue);
+			}
+			throw new NotImplementedException();
+		}
 
 		public void CleanSession()
-	    {
-		    if (real != null)
-		    {
-			    real.CleanSession();
-		    }
-		    else
-		    {
+		{
+			if (real != null)
+			{
+				real.CleanSession();
+			}
+			else
+			{
 				throw new NotImplementedException();
 			}
-	    } 
+		}
 
 
 	}
