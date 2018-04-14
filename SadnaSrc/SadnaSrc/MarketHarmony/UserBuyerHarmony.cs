@@ -63,8 +63,7 @@ namespace SadnaSrc.MarketHarmony
                     "Checkout amount needs to be a positive number!");
             }
 
-            itemFromStore.Quantity = quantity;
-            return ConvertCartItemToOrderItem(itemFromStore);
+            return ConvertCartItemToOrderItem(itemFromStore, quantity);
         }
 
         public void RemoveItemFromCart(string itemName, string store, int quantity, double unitPrice)
@@ -95,13 +94,13 @@ namespace SadnaSrc.MarketHarmony
             OrderItem[] result = new OrderItem[cart.Length];
             for (int i = 0; i < cart.Length; i++)
             {
-                result[i] = ConvertCartItemToOrderItem(cart[i]);
+                result[i] = ConvertCartItemToOrderItem(cart[i], cart[i].Quantity);
             }
             return result;
         }
-        private static OrderItem ConvertCartItemToOrderItem(CartItem item)
+        private static OrderItem ConvertCartItemToOrderItem(CartItem item, int quantity)
         {
-            return new OrderItem(item.Store, item.Name, item.FinalPrice, item.Quantity);
+            return new OrderItem(item.Store, item.Name, item.FinalPrice, quantity);
         }
 
         private void ValidUserEnteredSystem()

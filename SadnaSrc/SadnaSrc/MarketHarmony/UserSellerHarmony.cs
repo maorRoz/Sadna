@@ -9,9 +9,10 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.MarketHarmony
 {
-    class UserSellerHarmony : IUserSeller
+    public class UserSellerHarmony : IUserSeller
     {
-        private readonly StoreManagerPolicy[] policies;
+        private IUserService _user;
+        private StoreManagerPolicy[] policies;
         private bool isSystemAdmin;
         private readonly string _store;
         private string managerName;
@@ -19,24 +20,31 @@ namespace SadnaSrc.MarketHarmony
 
         public UserSellerHarmony(ref IUserService userService, string store)
         {
+            _user = userService;
             _store = store;
             policies = null;
             isSystemAdmin = false;
             managerID = -1;
-            var user = ((UserService) userService).MarketUser;
-            if (user == null) {return;}
+            GetUserDetails();
+        }
+
+        private void GetUserDetails()
+        {
+            var user = ((UserService)_user).MarketUser;
+            if (user == null) { return; }
 
             managerID = user.SystemID;
-            policies = user.GetStoreManagerPolicies(store);
+            policies = user.GetStoreManagerPolicies(_store);
             isSystemAdmin = user.IsSystemAdmin();
             if (user.IsRegisteredUser())
             {
-                managerName = ((RegisteredUser) user).Name;
+                managerName = ((RegisteredUser)user).Name;
             }
         }
 
         private void ValidateCanManageStore()
         {
+            GetUserDetails();
             if(policies == null || (policies.Length == 0 && !isSystemAdmin))
             {
                 throw new UserException(PromoteStoreStatus.NoAuthority,"Cannot manage store "+ _store +"!!");
@@ -68,6 +76,7 @@ namespace SadnaSrc.MarketHarmony
 
         public void Promote(string userName, string permissions)
         {
+            ValidateCanManageStore();
             ValidateNotPromotingHimself(userName);
             List<StoreManagerPolicy.StoreAction> actions = new List<StoreManagerPolicy.StoreAction>();
             var permissionsArray = permissions.Split(',').Distinct().ToArray();

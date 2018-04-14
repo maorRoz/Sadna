@@ -16,13 +16,9 @@ namespace SadnaSrc.StoreCenter
         ModuleGlobalHandler global;
         private IUserSeller _storeManager;
         public string _storeName;
+
         private LinkedList<StockListItem> stockListItemToRemove;
         private LinkedList<Discount> discountsToRemvoe;
-
-
-        //TODO: (maor wrote this) on my opinion, you shouldn't have class who deals with shopping and managing. 
-        //TODO: its way too complicated and this class is too big already....
-        //TODO: you dont need a class who return only MarketAnswer !!!! this isn't an interface for client. only interface for client need this.
 
         public StoreManagementService(IUserSeller storeManager, string storeName)
         {
@@ -74,7 +70,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: continue this, find store and make sure it is active in DB/with Store class entity
         public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to grant " + someoneToPromoteName +
@@ -137,7 +132,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-
         public MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity)
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
@@ -174,7 +168,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: fix this
         public MarketAnswer RemoveProduct(string productName)
         {
             MarketLog.Log("StoreCenter", "trying to remove product from store");
@@ -477,6 +470,12 @@ namespace SadnaSrc.StoreCenter
         {
             if (store != null)
             {
+                LinkedList<string> items = global.DataLayer.GetAllStoreProductsID(store.SystemId);
+                foreach (string id in items)
+                {
+                    StockListItem item = global.DataLayer.GetStockListItembyProductID(id);
+                    global.DataLayer.RemoveStockListItem(item);
+                }
                 global.DataLayer.RemoveStore(store);
             }
         }
