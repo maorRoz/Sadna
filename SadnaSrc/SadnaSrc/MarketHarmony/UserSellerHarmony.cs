@@ -9,7 +9,7 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.MarketHarmony
 {
-    class UserSellerHarmony : IUserSeller
+    public class UserSellerHarmony : IUserSeller
     {
         private readonly StoreManagerPolicy[] policies;
         private bool isSystemAdmin;
