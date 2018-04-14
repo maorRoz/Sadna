@@ -318,7 +318,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (discountReader.Read())
                 {
-                    discount = new Discount(DiscountCode, handler.GetdiscountTypeEnumString(discountReader.GetString(1)),
+                        discount = new Discount(DiscountCode, handler.GetdiscountTypeEnumString(discountReader.GetString(1)),
                         DateTime.Parse(discountReader.GetString(2))
                         , DateTime.Parse(discountReader.GetString(3))
                         , discountReader.GetInt32(4),
