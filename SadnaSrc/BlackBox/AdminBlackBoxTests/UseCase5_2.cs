@@ -1,5 +1,4 @@
 ﻿using BlackBox;
-using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
@@ -8,7 +7,7 @@ namespace BlackBoxAdminTests
 	[TestClass]
 	public class UseCase5_2
 	{
-		private IStoreBridge _storeBridge;
+		private IStoreShoppingBridge _storeBridge;
 		private IUserBridge _adminSignInBridge;
 		private IAdminBridge _adminBridge;
 		private IUserBridge _signUpBridge1;
@@ -28,7 +27,7 @@ namespace BlackBoxAdminTests
 			_adminBridge = AdminDriver.getBridge();
 			SignUp(ref _signUpBridge1, userSoleStoreOwner, "mishol", userSoleStoreOwnerPass, "12345678");
 			SignUp(ref _signUpBridge2, userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass, "12345678");
-			_storeBridge = StoreDriver.getBridge();
+			_storeBridge = StoreShoppingDriver.getBridge();
 			_storeBridge.GetStoreShoppingService(_signUpBridge1.getUserSession());
 			_storeBridge.OpenStore("blah", "blah2");
 		}

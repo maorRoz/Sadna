@@ -11,7 +11,7 @@ namespace SadnaSrc.UserSpot
     public class UserServiceDL : SystemDL
     {
 
-        private int SystemID { get; set; }
+        public int SystemID { get; set; }
 
 
         private List<int> GetAllSystemIDs()
