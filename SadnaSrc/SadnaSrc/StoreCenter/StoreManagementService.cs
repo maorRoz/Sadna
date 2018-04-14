@@ -138,7 +138,7 @@ namespace SadnaSrc.StoreCenter
         }*/
 
         
-        public MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity)
+        public MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity)
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
             MarketLog.Log("StoreCenter", "check if store exists");
@@ -242,8 +242,8 @@ namespace SadnaSrc.StoreCenter
                 if (whatToEdit == "BasePrice" || whatToEdit == "basePrice" || whatToEdit == "Baseprice" || whatToEdit == "baseprice")
                 {
                     MarketLog.Log("StoreCenter", "edit price");
-                    int newBasePrice;
-                    if (!int.TryParse(newValue, out newBasePrice))
+                    double newBasePrice;
+                    if (!double.TryParse(newValue, out newBasePrice))
                     { throw new StoreException(StoreEnum.UpdateProductFail, "value is not leagal"); }
                     if (newBasePrice <= 0) { return new StoreAnswer(StoreEnum.UpdateProductFail, "price can not be negative"); }
                     result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " price has been updated to " + newValue);

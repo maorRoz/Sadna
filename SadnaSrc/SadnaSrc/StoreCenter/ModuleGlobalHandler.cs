@@ -231,7 +231,7 @@ namespace SadnaSrc.StoreCenter
             return true;
         }
 
-        public void updateLottery(string storeName, string ProductName, int moenyPayed, string UserName)
+        public void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName)
         {
             LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
             if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))

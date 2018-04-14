@@ -394,7 +394,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (productReader.Read())
                 {
-                    return new Product(iD, productReader.GetString(1), productReader.GetInt32(2), productReader.GetString(3));
+                    return new Product(iD, productReader.GetString(1), productReader.GetDouble(2), productReader.GetString(3));
                 }
             }
             return null;

@@ -12,7 +12,7 @@ namespace SadnaSrc.StoreCenter
     {
         public string SystemID { get; set; }
         public Product Original { get; }
-        public int ProductNormalPrice { get;  }
+        public double ProductNormalPrice { get;  }
         public string storeName { get; set; }
         public  double TotalMoneyPayed { get; set; }
         public DateTime StartDate { get; }
@@ -60,14 +60,19 @@ namespace SadnaSrc.StoreCenter
         {
             if (TotalMoneyPayed == ProductNormalPrice)
             {
-                return InformAllWinner();
+                return InformAllWinner(Random());
             }
             return null;
         }
-        private LotteryTicket InformAllWinner()
+        private int Random()
         {
+
             Random r = new Random(DateTime.Now.Millisecond);
-            int winningNumber = r.Next(0, ProductNormalPrice);
+            int winningNumber = r.Next(0, (int)ProductNormalPrice);
+            return winningNumber;
+        }
+        private LotteryTicket InformAllWinner(int winningNumber)
+        {
             LotteryTicket winner = null;
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(this.SystemID);
@@ -122,7 +127,7 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + IsActive.GetHashCode();
             return hashCode;
         }
-        internal bool updateLottery(int moneyPayed, int userID)
+        internal bool updateLottery(double moneyPayed, int userID)
         {
             LotteryTicket lotteryTicket = PurchaseALotteryTicket(moneyPayed, userID);
             if (TotalMoneyPayed == ProductNormalPrice)
@@ -132,7 +137,7 @@ namespace SadnaSrc.StoreCenter
 
         internal int getWinnerID()
         {
-            return InformAllWinner().UserID;
+            return InformAllWinner(Random()).UserID;
         }
     }
 }

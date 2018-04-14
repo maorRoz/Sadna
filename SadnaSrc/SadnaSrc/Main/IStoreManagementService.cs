@@ -18,7 +18,7 @@ namespace SadnaSrc.Main
         /**
          * Products Management
          **/
-        MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity);
+        MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity);
         MarketAnswer RemoveProduct(string productName);
         MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
         MarketAnswer AddQuanitityToProduct(string productName, int quantity);

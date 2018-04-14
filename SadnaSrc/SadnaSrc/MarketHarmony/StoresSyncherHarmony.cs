@@ -27,9 +27,10 @@ namespace SadnaSrc.MarketHarmony
             }
         }
 
-        public void UpdateLottery(string itemName, string store, string username)
+        public void UpdateLottery(string itemName, string store,double moenyPayed, string username)
         {
-            throw new NotImplementedException();
+            ModuleGlobalHandler globalHandler = ModuleGlobalHandler.GetInstance();
+            globalHandler.updateLottery(itemName, store, moenyPayed, username);
         }
 
 
