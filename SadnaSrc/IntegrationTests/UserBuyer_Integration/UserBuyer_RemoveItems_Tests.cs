@@ -7,7 +7,7 @@ using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.UserSpot;
 
-namespace IntegrationTests
+namespace IntegrationTests.UserBuyer_Integration
 {
     [TestClass]
     public class UserBuyer_RemoveItems_Tests
