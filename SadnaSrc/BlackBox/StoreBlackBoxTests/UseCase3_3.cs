@@ -87,7 +87,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_storeBridge.GetStoreManagementService(_bridgeSignUp.getUserSession(), "mahar");
 			MarketAnswer res = _storeBridge.PromoteToStoreManager("eurovision", "StoreOwner");
-			Assert.AreEqual((int)PromoteStoreStatus.InvalidStore, res.Status);
+			Assert.AreEqual((int)StoreEnum.StoreNotExists, res.Status);
 		}
 
 		private void SignUp(ref IUserBridge userBridge,string name, string address, string password, string creditCard)
