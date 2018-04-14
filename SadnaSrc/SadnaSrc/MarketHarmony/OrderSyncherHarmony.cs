@@ -17,7 +17,6 @@ namespace SadnaSrc.MarketHarmony
 
         public void CloseLottery(string productName,string store, int quantity, int winnerId)
         {
-
             tools.SendPackage(productName,store,quantity,winnerId);
         }
 

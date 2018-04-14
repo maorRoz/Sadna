@@ -27,7 +27,7 @@ namespace SadnaSrc.MarketHarmony
             }
         }
 
-        public void UpdateLottery(string itemName, string store, string username)
+        public void UpdateLottery(string itemName, string store, string username, double price)
         {
             throw new NotImplementedException();
         }
