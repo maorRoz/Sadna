@@ -218,7 +218,7 @@ namespace IntegrationTests.UserAdmin_Integration
         [TestCleanup]
         public void UserAdminTestCleanUp()
         {
-            userServiceSession.CleanGuestSession();
+            userServiceSession.CleanSession();
             deletedUserSession?.CleanSession();
             deletedUserSession2?.CleanSession();
             storeShoppingService?.CleanSeesion();
