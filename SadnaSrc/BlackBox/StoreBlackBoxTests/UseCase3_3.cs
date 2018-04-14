@@ -87,15 +87,23 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_storeBridge.GetStoreManagementService(_bridgeSignUp.getUserSession(), "mahar");
 			MarketAnswer res = _storeBridge.PromoteToStoreManager("eurovision", "StoreOwner");
-			Assert.AreEqual((int)StoreEnum.StoreNotExists, res.Status);
+			Assert.AreEqual((int)PromoteStoreStatus.InvalidStore, res.Status);
+		}
+
+		[TestMethod]
+		public void NotOwnerTriesToPromoteToOwner()
+		{
+			_storeBridge.GetStoreManagementService(_userToPromoteBridge.getUserSession(),"basush");
+			MarketAnswer res = _storeBridge.PromoteToStoreManager("blah", "StoreOwner");
+			Assert.AreEqual((int)PromoteStoreStatus.NoAuthority,res.Status);
+
 		}
 
 		private void SignUp(ref IUserBridge userBridge,string name, string address, string password, string creditCard)
 		{
 			userBridge = UserDriver.getBridge();
 			userBridge.EnterSystem();
-			MarketAnswer ans = userBridge.SignUp(name, address, password, creditCard);
-			Assert.AreEqual((int)SignUpStatus.Success,ans.Status);
+			userBridge.SignUp(name, address, password, creditCard);
 		}
 
 		private void SignIn(string name, string password)
@@ -108,12 +116,13 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_storeBridge?.CleanSession();
+			_storeBridge.CleanSession();
 			_bridgeSignUp.CleanSession();
-			_userToPromoteBridge?.CleanSession();
-			_userToPromoteBridge2?.CleanSession();
+			_userToPromoteBridge.CleanSession();
+			_userToPromoteBridge2.CleanSession();
 			_promoteBridge?.CleanSession();
 			_signInBridge?.CleanSession();
+			_adminBridge?.CleanSession();
 			_bridgeSignUp.CleanMarket();
 		}
 	}

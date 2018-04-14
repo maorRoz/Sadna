@@ -328,6 +328,14 @@ namespace SadnaSrc.StoreCenter
             return discount;
         }
 
+	    public void ValidateStoreExists(string store)
+	    {
+		    if (!IsStoreExist(store))
+		    {
+			    throw new StoreException(MarketError.LogicError, "store not found");
+		    }   
+	    }
+
         public bool IsStoreExist(string store)
         {
             using (var dbReader = SelectFromTableWithCondition("Store", "*", " Name = '" + store + "'"))

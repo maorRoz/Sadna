@@ -79,8 +79,8 @@ namespace SadnaSrc.StoreCenter
                                          " manager options in Store" + _storeName + ". Validating store activity and existence..");
             try
             {
-                if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
-                ValidatePromotionEligible(actions);
+	            global.DataLayer.ValidateStoreExists(_storeName);
+				ValidatePromotionEligible(actions);
                 _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has been authorized. granting " +
                                              someoneToPromoteName + " manager options in Store" + _storeName + "...");

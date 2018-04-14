@@ -93,7 +93,18 @@ namespace SadnaSrc.Main
         NoProduct
     }
 
-    public enum PurchaseEnum { Immediate, Lottery };
+	public enum PromoteStoreStatus
+	{
+		Success,
+		InvalidStore,
+		PromoteSelf,
+		PromotionOutOfReach,
+		NoAuthority,
+		NoUserFound,
+		InvalidPromotion
+	}
+
+	public enum PurchaseEnum { Immediate, Lottery };
     public enum discountTypeEnum { Hidden, Visible };
     public enum LotteryTicketStatus { Waiting, Winning, Losing, Cancel };
 }

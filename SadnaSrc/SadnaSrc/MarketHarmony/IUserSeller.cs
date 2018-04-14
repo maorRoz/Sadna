@@ -60,14 +60,5 @@ namespace SadnaSrc.MarketHarmony
         void CanViewPurchaseHistory();
 
     }
-    public enum PromoteStoreStatus
-    {
-        Success,
-        InvalidStore,
-        PromoteSelf,
-        PromotionOutOfReach,
-        NoAuthority,
-        NoUserFound,
-        InvalidPromotion
-    }
+
 }
