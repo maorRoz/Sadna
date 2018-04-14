@@ -17,13 +17,6 @@ namespace SadnaSrc.StoreCenter
         private IUserSeller _storeManager;
         public string _storeName;
 
-
-
-
-        //TODO: (maor wrote this) on my opinion, you shouldn't have class who deals with shopping and managing. 
-        //TODO: its way too complicated and this class is too big already....
-        //TODO: you dont need a class who return only MarketAnswer !!!! this isn't an interface for client. only interface for client need this.
-
         public StoreManagementService(IUserSeller storeManager, string storeName)
         {
             _storeManager = storeManager;
@@ -72,7 +65,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: continue this, find store and make sure it is active in DB/with Store class entity
         public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to grant " + someoneToPromoteName +
@@ -135,7 +127,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: fix this
         public MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity)
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
@@ -170,7 +161,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: fix this
         public MarketAnswer RemoveProduct(string productName)
         {
             MarketLog.Log("StoreCenter", "trying to remove product from store");
