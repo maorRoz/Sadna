@@ -7,7 +7,7 @@ using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.UserSpot;
 
-namespace IntegrationTests
+namespace IntegrationTests.UserBuyer_Integration
 {
     [TestClass]
     public class UserBuyer_Checkout_Test
@@ -57,7 +57,7 @@ namespace IntegrationTests
             try
             {
                 string result = getItemsFromCart(singleItemUser, pass);
-                string expected = "10 Coated Peanuts, 24. ";
+                string expected = "80 Coated Peanuts, 24. ";
                 Assert.AreEqual(result, expected);
             }
             catch (MarketException)

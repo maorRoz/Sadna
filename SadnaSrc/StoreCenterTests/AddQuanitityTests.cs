@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace StoreCenterTests
 {
     [TestClass]
-    public class AddProductsTests
+    public class AddQuantityTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
@@ -25,50 +25,64 @@ namespace StoreCenterTests
             handler = ModuleGlobalHandler.GetInstance();
             userService = market.GetUserService();
         }
-        [TestMethod]
-        public void addProductWhenStoreNotExists()
+
+
+[TestMethod]
+        public void AddQuanitityWhenStoreNotExists()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
-            MarketAnswer ans = liorSession.AddNewProduct("name0", 1, "des", 4);
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status); 
+            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 1);
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenHasNoPremmision()
+        public void AddQuanitityWhenHasNoPremmision()
         {
             userService.EnterSystem();
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("name0", 1, "des", 4);
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 1);
+            Assert.AreEqual((int)ViewStoreStatus.InvalidUser, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenProductNameIsNotAvailableInStore()
+        public void AddQuanitiyWhenProductIsNotAvailableInStore()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("BOX", 1, "des", 4);
+            MarketAnswer ans = liorSession.AddQuanitityToProduct("LOX", 1);
             Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenquantityisNegative()
+        public void AddQuanitiyWhenQuantityIsNegative()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", -4);
+            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", -1);
             Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
         }
         [TestMethod]
-        public void addProductSuccess()
+        public void AddQuanitiyWhenQuantityIsZero()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", 4);
-            ProductToDelete = handler.DataLayer.GetProductFromStore("X", "item");
+            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 0);
+            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+        }
+        [TestMethod]
+        public void AddQuanitiySuccess()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            liorSession.AddNewProduct("new", 5, "MOMO", 5);
+            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "new");
+            MarketAnswer ans = liorSession.AddQuanitityToProduct("new", 10);
+            StockListItem find = handler.GetProductFromStore(liorSession._storeName, "new");
+            Assert.AreEqual(find.Quantity, 15);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 

@@ -12,7 +12,7 @@ namespace SadnaSrc.StoreCenter
     {
         public StoreAnswer(StoreEnum status, string answer) : base((int)status, answer) { }
         public StoreAnswer(PromoteStoreStatus status, string answer) : base((int)status, answer) { }
-
+        public StoreAnswer(DiscountStatus status, string answer) : base((int)status, answer) { }
         public StoreAnswer(OpenStoreStatus status, string answer) : base((int)status, answer) { }
 
         public StoreAnswer(ViewStoreStatus status, string answer, string[] storeReport) : base((int)status, answer,storeReport) { }

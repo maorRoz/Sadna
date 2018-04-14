@@ -11,6 +11,20 @@ namespace SadnaSrc.OrderPool
 
     class OrderPoolDL : SystemDL
     {
+        private static Random rand = new Random();
+
+
+        public int RandomOrderID()
+        {
+            var ret = rand.Next(100000, 999999);
+            while (FindOrder(ret) != null)
+            {
+                ret = rand.Next(100000, 999999);
+            }
+
+            return ret;
+        }
+
 
         public Order FindOrder(int orderId)
         {
@@ -110,7 +124,6 @@ namespace SadnaSrc.OrderPool
                 object[] values2 = { order.GetOrderID(), item.Store, item.Name, item.Price,item.Quantity };
                 InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
                 
-                //TODO: add this after branch 3982 rebase
                 /*
                 string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@dateParam" };
                 object[] values3 = { order.GetUserName(), item.Store, item.Name, "Immediate", order.GetDate().ToString("dd/MM/yyyy") };
@@ -130,7 +143,6 @@ namespace SadnaSrc.OrderPool
                 object[] values2 = { order.GetOrderID(), item.Store, item.Name, item.Price, item.Quantity };
                 InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
 
-                //TODO: add this after branch 3982 rebase
                 /*
                 string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@dateParam" };
                 object[] values3 = { order.GetUserName(), item.Store, item.Name, SaleType, order.GetDate().ToString("dd/MM/yyyy") };
@@ -187,6 +199,26 @@ namespace SadnaSrc.OrderPool
             return expiredLotteries.ToArray();
         }
 
+        public string[] GetLottery(string lottery)
+        {
+            List<string> expiredLotteries = new List<string>();
+            using (var dbReader = SelectFromTableWithCondition("LotteryTable", "SystemID,EndDate", "isActive = 'true'"))
+            {
+                while (dbReader.Read())
+                {
+                    string lotteryID = dbReader.GetString(0);
+                    DateTime endDate = dbReader.GetDateTime(1);
+                    if (endDate > MarketYard.MarketDate)
+                    {
+                        expiredLotteries.Add(lotteryID);
+                    }
+                }
+            }
+
+            return expiredLotteries.ToArray();
+        }
+
+
         public string[] GetAllTickets(string lottery)
         {
             List<string> tickets = new List<string>();
@@ -236,6 +268,19 @@ namespace SadnaSrc.OrderPool
                 throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find name or user");
             }
         }
+
+        public string GetAddressToSendPackage(int userID)
+        {
+            using (var dbReader = SelectFromTableWithCondition("User", "Name", "SystemID ='" + userID + "'"))
+            {
+                if (dbReader.Read())
+                {
+                    return dbReader.GetString(0);
+                }
+                throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find name or user");
+            }
+        }
+
 
         public double GetSumToRefund(string ticket)
         {

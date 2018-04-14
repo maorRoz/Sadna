@@ -13,6 +13,10 @@ namespace SadnaSrc.Walleter
     {
         private PaymentSystem sock;
 
+        private static PaymentService _instance;
+
+        public static PaymentService Instance => _instance ?? (_instance = new PaymentService());
+
 
         //TODO: change this once info about external systems is available.
         public MarketAnswer AttachExternalSystem()

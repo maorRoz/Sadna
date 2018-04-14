@@ -15,9 +15,13 @@ namespace SadnaSrc.SupplyPoint
     public class SupplyService : ISupplyService
     {
         private SupplySystem sock = null;
-  
 
-        //TODO: change this once info about external systems is available.
+
+        private static SupplyService _instance;
+
+        public static SupplyService Instance => _instance ?? (_instance = new SupplyService());
+
+
         public MarketAnswer AttachExternalSystem()
         {
             sock = new SupplySystem();

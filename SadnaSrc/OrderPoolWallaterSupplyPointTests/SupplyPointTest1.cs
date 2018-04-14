@@ -29,6 +29,7 @@ namespace OrderPoolWallaterSupplyPointTests
             supplyService = (SupplyService)market.GetSupplyService();
         }
 
+
         [TestMethod]
         public void TestExternalSystemAttachment()
         {
@@ -36,21 +37,7 @@ namespace OrderPoolWallaterSupplyPointTests
             Assert.AreEqual((int)SupplyStatus.Success, ans.Status);
         }
 
-        [TestMethod]
-        public void TestNoExternalSystem()
-        {
-            try
-            {
-                Order order = new Order(123456,"Big Smoke","Grove Street");
-                order.AddOrderItem(item1);
-                supplyService.CreateDelivery(order);
-                Assert.Fail();
-            }
-            catch (MarketException e)
-            {
-                Assert.AreEqual((int)SupplyStatus.NoSupplySystem, e.Status);
-            }
-        }
+       
 
         [TestMethod]
         public void TestCheckOrderDetails()

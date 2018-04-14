@@ -7,7 +7,7 @@ using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.UserSpot;
 
-namespace IntegrationTests
+namespace IntegrationTests.UserBuyer_Integration
 {
     [TestClass]
     public class UserSpot_OrderPool_IntegrationTest
@@ -106,7 +106,7 @@ namespace IntegrationTests
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                userServiceSession.SignIn(user , pass);
                 orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 999, 6.00);
                 userServiceSession2.SignIn(user, pass);
                 CartItem item = ((UserService)userServiceSession2).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);

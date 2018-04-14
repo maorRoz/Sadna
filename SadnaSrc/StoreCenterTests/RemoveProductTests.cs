@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace StoreCenterTests
 {
     [TestClass]
-    public class AddProductsTests
+    public class RemoveProductTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
@@ -26,49 +26,40 @@ namespace StoreCenterTests
             userService = market.GetUserService();
         }
         [TestMethod]
-        public void addProductWhenStoreNotExists()
+        public void RemoveProductWhenStoreNotExists()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
-            MarketAnswer ans = liorSession.AddNewProduct("name0", 1, "des", 4);
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status); 
+            MarketAnswer ans = liorSession.RemoveProduct("BOX");
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenHasNoPremmision()
+        public void RemoveProdutWhenHasNoPremmision()
         {
             userService.EnterSystem();
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("name0", 1, "des", 4);
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            MarketAnswer ans = liorSession.RemoveProduct("BOX");
+            Assert.AreEqual((int)ViewStoreStatus.InvalidUser, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenProductNameIsNotAvailableInStore()
+        public void RemoveProductWhenProductNotExists()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("BOX", 1, "des", 4);
+            MarketAnswer ans = liorSession.RemoveProduct("notExists");
             Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenquantityisNegative()
+        public void RemoveProductSuccess()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", -4);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
-        }
-        [TestMethod]
-        public void addProductSuccess()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", 4);
-            ProductToDelete = handler.DataLayer.GetProductFromStore("X", "item");
+            liorSession.AddNewProduct("item", 1, "des", 4);
+            MarketAnswer ans = liorSession.RemoveProduct("item");
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 

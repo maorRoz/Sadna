@@ -6,7 +6,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SadnaSrc.AdminView;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -335,6 +335,14 @@ namespace SadnaSrc.StoreCenter
                 return dbReader.Read();
             }
         }
+
+        public bool IsStoreExistAndActive(string store)
+        {
+            using (var dbReader = SelectFromTableWithCondition("Store", "*", " Name = '" + store + "' AND Status = 'Active'"))
+            {
+                return dbReader.Read();
+            }
+        }
         public void AddStore(Store toAdd)
         {
             if (IsStoreExist(toAdd.Name))
@@ -511,7 +519,7 @@ namespace SadnaSrc.StoreCenter
 
         public string[] GetStoreInfo(string store)
         {
-            using (var dbReader = SelectFromTableWithCondition("Store", "Name,Address", " Name = '" + store + "'AND Status = 'Active'"))
+            using (var dbReader = SelectFromTableWithCondition("Store", "Name,Address", " Name = '" + store + "' AND Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {
