@@ -9,7 +9,7 @@ using SadnaSrc.Main;
 namespace SadnaSrc.OrderPool
 {
 
-    class OrderPoolDL : SystemDL
+    public class OrderPoolDL : SystemDL
     {
         private static Random rand = new Random();
 
@@ -123,15 +123,15 @@ namespace SadnaSrc.OrderPool
                 string[] valuesNames2 = { "@orderidParam", "@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
                 object[] values2 = { order.GetOrderID(), item.Store, item.Name, item.Price,item.Quantity };
                 InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
-                
-                /*
-                string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@dateParam" };
-                object[] values3 = { order.GetUserName(), item.Store, item.Name, "Immediate", order.GetDate().ToString("dd/MM/yyyy") };
-                InsertTable("PurchaseHistory", "OrderID,Store,Name,Price,Quantity", valuesNames3, values3);*/
+
+
+                string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@quantityParam", "@priceParam", "@dateParam" };
+                object[] values3 = { order.GetUserName(), item.Name, item.Store, "Immediate", item.Quantity, item.Price, order.GetDate().ToString("dd/MM/yyyy") };
+                InsertTable("PurchaseHistory", "UserName,Product,Store,SaleType,Quantity,Price,Date", valuesNames3, values3);
             }
         }
 
-        public void AddOrder(Order order, string SaleType)
+        public void AddOrder(Order order, string saleType)
         {
             string[] valuesNames = { "@orderidParam", "@nameParam", "@addressParam", "@priceParam", "@dateParam" };
             object[] values = order.ToData();
@@ -143,17 +143,21 @@ namespace SadnaSrc.OrderPool
                 object[] values2 = { order.GetOrderID(), item.Store, item.Name, item.Price, item.Quantity };
                 InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
 
-                /*
-                string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@dateParam" };
-                object[] values3 = { order.GetUserName(), item.Store, item.Name, SaleType, order.GetDate().ToString("dd/MM/yyyy") };
-                InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames3, values3);*/
+                
+                string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@quantityParam", "@priceParam", "@dateParam" };
+                object[] values3 = { order.GetUserName(), item.Name, item.Store, saleType,item.Quantity,item.Price, order.GetDate().ToString("dd/MM/yyyy") };
+                InsertTable("PurchaseHistory", "UserName,Product,Store,SaleType,Quantity,Price,Date", valuesNames3, values3);
             }
 
         }
 
         public void RemoveOrder(int orderId)
         {
-            
+            List<OrderItem> items = GetAllItems(orderId);
+            foreach (OrderItem item in items)
+            {
+                DeleteFromTable("PurchaseHistory", "Product = '" + item.Name +"' AND Store = '"+ item.Store +"'");
+            }
             DeleteFromTable("OrderItem", "OrderID = " + orderId);
             DeleteFromTable("Orders", "OrderID = " + orderId);
 
@@ -233,9 +237,10 @@ namespace SadnaSrc.OrderPool
             return tickets.ToArray();
         }
 
-        public int GetTicketParticipantID(string ticket)
+        public int GetTicketParticipantID(string ticket,string lottery)
         {
-            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "UserID", "myID ='" + ticket + "'"))
+            using (var dbReader = SelectFromTableWithCondition("LotteryTicket", "UserID", "myID ='" + ticket + "' AND" +
+                                                                                          " LotteryID = '"+ lottery +"'"))
             {
                 if (dbReader.Read())
                 {
@@ -294,9 +299,10 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public void RemoveTicket(string ticket)
+        public void RemoveTicket(string ticket,string lottery)
         {
-            DeleteFromTable("LotteryTicket","myID = '"+ticket+"'");
+            DeleteFromTable("LotteryTicket", "myID ='" + ticket + "' AND" +
+                                             " LotteryID = '" + lottery + "'");
         }
 
 
