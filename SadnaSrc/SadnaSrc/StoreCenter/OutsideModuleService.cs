@@ -15,7 +15,7 @@ namespace SadnaSrc.StoreCenter
         LinkedList<Product> GetAllMarketProducts(); // you will need it. I don't know how to return it by MarketAnswer
         void UpdateQuantityAfterPurchase(string store, string product, int quantity);
         bool ProductExistsInQuantity(string storeName, string product, int quantity);
-        double CalculateItemPriceWithDiscount(string storeName, string productName, int _DiscountCode, int _quantity)
+        double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity);
 
     }
 }

@@ -207,6 +207,12 @@ namespace SadnaSrc.StoreCenter
         {
             foreach (Store store in stores)
             {
+                LinkedList<string> items = storeLogic.DataLayer.GetAllStoreProductsID(store.SystemId);
+                foreach (string id in items)
+                {
+                    StockListItem item = storeLogic.DataLayer.GetStockListItembyProductID(id);
+                    storeLogic.DataLayer.RemoveStockListItem(item);
+                }
                 storeLogic.DataLayer.RemoveStore(store);
             }
         }
