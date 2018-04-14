@@ -175,12 +175,16 @@ namespace IntegrationTests.UserAdmin_Integration
             string[] actualHistory = adminServiceSession.ViewPurchaseHistoryByUser("Arik1").ReportList;
             string[] expectedHistory =
             {
+                new PurchaseHistory("Arik1", "Goldstar","The Red Rock", "Immediate",5,55, DateTime.Now.ToShortDateString()).ToString(),
                 new PurchaseHistory("Arik1", "Health Potion", "X", "Immediate",2,11.5, "Today").ToString(),
                 new PurchaseHistory("Arik1", "INT Potion","Y", "Lottery",2,8.0, "Yesterday").ToString(),
-                new PurchaseHistory("Arik1", "Mana Potion", "Y", "Lottery",3,12.0, "Yesterday").ToString(),
-                new PurchaseHistory("Arik1", "GoldStar","The Red Rock", "Immediate",5,27.5, "Today").ToString(),
+                new PurchaseHistory("Arik1", "Mana Potion", "Y", "Lottery",3,12.0, "Yesterday").ToString()
             };
-        //    Assert.AreEqual(expectedHistory, actualHistory);
+            Assert.AreEqual(expectedHistory.Length, actualHistory.Length);
+            for (int i = 0; i < expectedHistory.Length; i++)
+            {
+                Assert.AreEqual(expectedHistory[i], actualHistory[i]);
+            }
         }
 
 
@@ -199,9 +203,13 @@ namespace IntegrationTests.UserAdmin_Integration
             string[] expectedHistory =
             {
                 new PurchaseHistory("Arik1", "Health Potion","X", "Immediate",2,11.5, "Today").ToString(),
-                new PurchaseHistory("Arik1", "BOX", "X", "Immediate", 3, 100, "Today").ToString(),
+                new PurchaseHistory("Arik1", "BOX", "X", "Immediate", 3, 300, DateTime.Now.ToShortDateString()).ToString(),
             };
-        //    Assert.AreEqual(expectedHistory,actualHistory);
+            Assert.AreEqual(expectedHistory.Length,actualHistory.Length);
+            for (int i = 0; i < expectedHistory.Length; i++)
+            {
+                Assert.AreEqual(expectedHistory[i],actualHistory[i]);
+            }
         }
 
 
