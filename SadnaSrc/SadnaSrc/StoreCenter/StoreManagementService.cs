@@ -521,6 +521,7 @@ namespace SadnaSrc.StoreCenter
             {
                 return new StoreAnswer(ViewStoreStatus.InvalidUser, "you have no premmision to do that");
             }
+        }
 
          
 
