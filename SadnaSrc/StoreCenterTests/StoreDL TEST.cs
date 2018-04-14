@@ -332,7 +332,6 @@ namespace StoreCenterTests
         {
             LinkedList<string> expected = new LinkedList<string>();
             expected.AddLast("P1");
-            expected.AddLast("P2");
             LinkedList<string> find = handler.DataLayer.GetAllStoreProductsID("S1");
             Assert.AreEqual(expected.Count, find.Count);
             string[] findResults = new string[find.Count];
