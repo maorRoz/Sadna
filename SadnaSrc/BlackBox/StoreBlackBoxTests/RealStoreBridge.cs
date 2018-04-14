@@ -65,6 +65,11 @@ namespace BlackBox
 			return _storeManagementService.AddQuanitityToProduct(productName, quantity);
 		}
 
+		public MarketAnswer AddProductToCart(string store, string productName, int quantity)
+		{
+			return _storeShoppingService.AddProductToCart(store, productName, quantity);
+		}
+
 		public void CleanSession()
 		{
 			_storeShoppingService?.CleanSeesion();
