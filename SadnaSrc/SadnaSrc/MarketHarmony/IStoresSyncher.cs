@@ -22,7 +22,8 @@ namespace SadnaSrc.MarketHarmony
         /// <summary>
         /// update the lottery details after the purchase of a ticket
         /// </summary>
-        void UpdateLottery(string itemName, string store, string username, double price);
+        void UpdateLottery(string itemName, string store,double moenyPayed, string username);
+
 
 
         /// <summary>

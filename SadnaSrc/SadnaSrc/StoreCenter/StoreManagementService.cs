@@ -102,7 +102,7 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-        public MarketAnswer GetStoreProducts()
+      /*  public MarketAnswer GetStoreProducts()
         {
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store stock...");
             try
@@ -130,9 +130,10 @@ namespace SadnaSrc.StoreCenter
                                              + _storeName + " and therefore has been denied. Error message has been created!");
                 return new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
             }
-        }
+        }*/
 
-        public MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity)
+        
+        public MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity)
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
             MarketLog.Log("StoreCenter", "check if store exists");
@@ -237,8 +238,8 @@ namespace SadnaSrc.StoreCenter
                 if (whatToEdit == "BasePrice" || whatToEdit == "basePrice" || whatToEdit == "Baseprice" || whatToEdit == "baseprice")
                 {
                     MarketLog.Log("StoreCenter", "edit price");
-                    int newBasePrice;
-                    if (!int.TryParse(newValue, out newBasePrice))
+                    double newBasePrice;
+                    if (!double.TryParse(newValue, out newBasePrice))
                     { throw new StoreException(StoreEnum.UpdateProductFail, "value is not leagal"); }
                     if (newBasePrice <= 0) { return new StoreAnswer(StoreEnum.UpdateProductFail, "price can not be negative"); }
                     result = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " price has been updated to " + newValue);
@@ -279,23 +280,72 @@ namespace SadnaSrc.StoreCenter
                 global.DataLayer.RemoveStockListItem(stockListItem);
             }
         }
-        //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productName)
         {
-            global.DataLayer.IsStoreExistAndActive(_storeName);
-            _storeManager.CanManageProducts();
-            //  store.EditStockListItem(productName, "PurchaseWay", "IMMEDIATE");
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
+            try
+            {
+                MarketLog.Log("StoreCenter", "trying to edit discount from product in store");
+                checkIfStoreExists();
+                MarketLog.Log("StoreCenter", " check if has premmision to edit product purches type");
+                _storeManager.CanManageProducts();
+                MarketLog.Log("StoreCenter", "check if product exists");
+                checkIfProductExists(productName);
+                MarketLog.Log("StoreCenter", "product exists");
+                StockListItem stockList = global.DataLayer.GetProductFromStore(_storeName, productName);
+                if (stockList.PurchaseWay == PurchaseEnum.Lottery)
+                {
+                    LotterySaleManagmentTicket lottery = global.DataLayer.GetLotteryByProductID(stockList.Product.SystemId);
+                    lottery.InformCancel();
+                    global.DataLayer.EditLotteryInDatabase(lottery);
+
+                }
+                stockList.PurchaseWay = PurchaseEnum.Immediate;
+                global.DataLayer.EditStockInDatabase(stockList);
+                return new StoreAnswer(StoreEnum.Success, "purches way changed");
+            }
+            catch (StoreException exe)
+            {
+                return new StoreAnswer(exe);
+            }
         }
 
         //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate)
         {
-            global.DataLayer.IsStoreExistAndActive(_storeName);
-            _storeManager.CanManageProducts();
-            // store.EditStockListItem(productName, "PurchaseWay", "LOTTERY");
-            return new StoreAnswer(StoreEnum.UpdateStockFail, "you have no premmision to do that");
-        }
+            try
+            {
+                MarketLog.Log("StoreCenter", "check if store exists");
+                checkIfStoreExists();
+                MarketLog.Log("StoreCenter", " check if has premmision to edit products");
+                _storeManager.CanDeclareDiscountPolicy();
+                MarketLog.Log("StoreCenter", " has premmission");
+                MarketLog.Log("StoreCenter", "check if product exists");
+                checkIfProductExists(productName);
+                MarketLog.Log("StoreCenter", "product exists");
+                StockListItem stockListItem = global.DataLayer.GetProductFromStore(_storeName, productName);
+                if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
+                {
+                    MarketLog.Log("StoreCenter", " product has a lottery");
+                    throw new StoreException(ChangeToLotteryEnum.LotteryExists, "product has a lottery");
+                }
+                stockListItem.PurchaseWay = PurchaseEnum.Lottery;
+                global.DataLayer.EditStockInDatabase(stockListItem);
+                LotterySaleManagmentTicket lotterySaleManagmentTicket = new LotterySaleManagmentTicket(global.GetLottyerID(),
+                    _storeName, stockListItem.Product, startDate, endDate);
+                global.DataLayer.AddLottery(lotterySaleManagmentTicket);
+
+                return new StoreAnswer(ChangeToLotteryEnum.Success, "type changed");
+            }
+            catch (StoreException exe)
+            {
+                return new StoreAnswer(exe);
+            }
+            catch (MarketException exe)
+            {
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+            }
+
+            }
 
 
         public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
@@ -317,7 +367,7 @@ namespace SadnaSrc.StoreCenter
                     throw new StoreException(DiscountStatus.ProductNotFound, "no Such Product");
                 }
                 MarketLog.Log("StoreCenter", "check if dates are OK");
-                if ((startDate < DateTime.Now) || (endDate < DateTime.Now) || !(startDate < endDate))
+                if ((startDate< MarketYard.MarketDate)|| (endDate < MarketYard.MarketDate) || !(startDate < endDate))
                 {
                     MarketLog.Log("StoreCenter", "something wrong with the dates");
                     throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal");
@@ -568,7 +618,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "date format is not legal");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal");
             }
-            if (startTime.Date < DateTime.Now.Date)
+            if (startTime.Date < MarketYard.MarketDate)
             {
                 MarketLog.Log("StoreCenter", "can't set start time in the past");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "can't set start time in the past");
@@ -646,7 +696,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "date format is not legal");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal");
             }
-            if (EndDate.Date < DateTime.Now.Date)
+            if (EndDate.Date < MarketYard.MarketDate)
             {
                 MarketLog.Log("StoreCenter", "can't set end time in the past");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time in the past");

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -10,13 +12,14 @@ namespace SadnaSrc.StoreCenter
     {
         public string SystemID { get; set; }
         public Product Original { get; }
-        public int ProductNormalPrice { get;  }
+        public double ProductNormalPrice { get;  }
+        public string storeName { get; set; }
         public  double TotalMoneyPayed { get; set; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
         public bool IsActive { get; set; }
 
-        public LotterySaleManagmentTicket(string _SystemID, Product _original, DateTime _StartDate, DateTime _EndDate)
+        public LotterySaleManagmentTicket(string _SystemID, string _storeName, Product _original, DateTime _StartDate, DateTime _EndDate)
         {
             SystemID = _SystemID;
             Original = _original;
@@ -24,6 +27,7 @@ namespace SadnaSrc.StoreCenter
             TotalMoneyPayed = 0;
             StartDate = _StartDate;
             EndDate = _EndDate;
+            storeName = _storeName;
             IsActive = true;
         }
         
@@ -32,41 +36,43 @@ namespace SadnaSrc.StoreCenter
          **/
 
         public bool CanPurchase(double moneyPayed) {
-            return (TotalMoneyPayed + moneyPayed < ProductNormalPrice);
+            return (TotalMoneyPayed + moneyPayed <= ProductNormalPrice);
+        }
+        public bool checkDatesWhenPurches()
+        {
+            return ((StartDate.Date <= MarketYard.MarketDate) && (EndDate.Date >= MarketYard.MarketDate));
         }
         public static bool CheckDates(DateTime startDate, DateTime endDate)
         {
-            return ((startDate > DateTime.Now.Date) && (endDate > DateTime.Now.Date) && (endDate > startDate));
+            return ((startDate > MarketYard.MarketDate) && (endDate > MarketYard.MarketDate) && (endDate > startDate));
         }
-        //TODO: fix this
         public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
         {
-            if (CanPurchase(moneyPayed))
-            {
-                //TODO: this int thing of interval is really bad, you should do this as precentage from item price
-                //TODO: and make them double
-                ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-                LotteryTicket lottery = new LotteryTicket(handler.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
-                   (int) (TotalMoneyPayed + moneyPayed), moneyPayed, userID);
-                handler.DataLayer.AddLotteryTicket(lottery);
-                TotalMoneyPayed += moneyPayed;
-                return lottery;
-            }
-                return null;
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            LotteryTicket lottery = new LotteryTicket(handler.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
+               (int)(TotalMoneyPayed + moneyPayed), moneyPayed, userID);
+            handler.DataLayer.AddLotteryTicket(lottery);
+            TotalMoneyPayed += moneyPayed;
+            handler.DataLayer.EditLotteryInDatabase(this);
+            return lottery;
         }
         public LotteryTicket Dolottery()
         {
             if (TotalMoneyPayed == ProductNormalPrice)
             {
-                return InformAllWinner();
+                return InformAllWinner(Random());
             }
-            InformCancel();
-            return null; //TODO : think of better return in this case
+            return null;
         }
-        private LotteryTicket InformAllWinner()
+        private int Random()
         {
+
             Random r = new Random(DateTime.Now.Millisecond);
-            int winningNumber = r.Next(0, ProductNormalPrice);
+            int winningNumber = r.Next(0, (int)ProductNormalPrice);
+            return winningNumber;
+        }
+        private LotteryTicket InformAllWinner(int winningNumber)
+        {
             LotteryTicket winner = null;
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(this.SystemID);
@@ -102,8 +108,11 @@ namespace SadnaSrc.StoreCenter
         }
         internal void InformCancel()
         {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             IsActive = false;
-        //call maor method here
+            handler.DataLayer.EditLotteryInDatabase(this);
+            OrderSyncherHarmony syncer = new OrderSyncherHarmony();
+            syncer.CancelLottery(SystemID);
         }
 
         public override int GetHashCode()
@@ -117,6 +126,18 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + EndDate.GetHashCode();
             hashCode = hashCode * -1521134295 + IsActive.GetHashCode();
             return hashCode;
+        }
+        internal bool updateLottery(double moneyPayed, int userID)
+        {
+            LotteryTicket lotteryTicket = PurchaseALotteryTicket(moneyPayed, userID);
+            if (TotalMoneyPayed == ProductNormalPrice)
+                return true;
+            return false;
+        }
+
+        internal int getWinnerID()
+        {
+            return InformAllWinner(Random()).UserID;
         }
     }
 }
