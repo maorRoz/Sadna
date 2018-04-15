@@ -42,7 +42,7 @@ namespace SadnaSrc.StoreCenter
         }
         public override string ToString()
         {
-            return "SystemId: "+ SystemId +" name: " + Name+" base price: "+BasePrice+ " description: "+ Description;
+            return " name: " + Name+" base price: "+BasePrice+ " description: "+ Description;
         }
 
         public override int GetHashCode()

@@ -107,8 +107,6 @@ namespace BlackBoxUserTests
 			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridge.EditCartItem("M", "Gun", 50, 5).Status);
 		}
 
-
-
 		
 		[TestMethod]
 		public void NegativeQuantity()

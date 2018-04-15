@@ -58,7 +58,7 @@ namespace BlackBoxStoreTests
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOFA");
 			Assert.AreEqual((int)ViewStoreStatus.NoStore, storeDetails.Status);
-
+			Assert.AreEqual(null, storeDetails.ReportList);
 		}
 
 		[TestMethod]
@@ -66,6 +66,7 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("OOFA");
 			Assert.AreEqual((int)ViewStoreStatus.NoStore, storeDetails.Status);
+			Assert.AreEqual(null, storeDetails.ReportList);
 		}
 
 		[TestMethod]
@@ -76,6 +77,7 @@ namespace BlackBoxStoreTests
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
 			Assert.AreEqual((int)ViewStoreStatus.InvalidUser, storeDetails.Status);
+			Assert.AreEqual(null, storeDetails.ReportList);
 		}
 
 		private void SignUp(string name, string address, string password, string creditCard)

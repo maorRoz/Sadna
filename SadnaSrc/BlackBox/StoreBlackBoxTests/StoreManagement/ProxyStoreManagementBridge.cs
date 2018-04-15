@@ -70,6 +70,15 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
+		public MarketAnswer CloseStore()
+		{
+			if (real != null)
+			{
+				return real.CloseStore();
+			}
+			throw new NotImplementedException();
+		}
+
 		public void CleanSession()
 		{
 			if (real != null)

@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-//TODO: change statuses.
 namespace BlackBoxStoreTests
 {
 	[TestClass]
@@ -34,7 +33,9 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer result2 = _storeManage1.RemoveProduct("bamba");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
-			//TODO: check in the stock to see if the product was indeed removed.
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			Assert.AreEqual(0, actualResult.Length);
 		}
 
 		[TestMethod]
@@ -46,15 +47,23 @@ namespace BlackBoxStoreTests
 		}
 
 		[TestMethod]
-		public void NoPermissionsToAddAProduct()
+		public void NoPermissionsToRemoveAProduct()
 		{
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
 			_storeManage2 = StoreManagementDriver.getBridge();
 			_storeManage2.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.RemoveProduct("bamba");
-			//Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
-			//TODO: to complete this when lior changes the statuses.
-			//TODO: to check the product was not added.
+			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			//didn't succeed in removing the product, there is still one product
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
+
 		}
 
 		[TestMethod]
@@ -64,6 +73,15 @@ namespace BlackBoxStoreTests
 			_storeManage2.GetStoreManagementService(_userBridge.getUserSession(), "hahaha");
 			MarketAnswer res2 = _storeManage2.RemoveProduct("bamba");
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, res2.Status);
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			//didn't succeed in removing the product, there is still one product
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 
