@@ -6,13 +6,13 @@ using SadnaSrc.Main;
 namespace BlackBoxStoreTests
 {
 
-	[TestClass]
-	public class UseCase3_1_1
-	{
-		private IStoreShoppingBridge _storeBridge;
-		private IStoreManagementBridge _storeManage1;
-		private IUserBridge _userBridge2;
-		private IUserBridge _userBridge;
+    [TestClass]
+    public class UseCase3_1_1
+    {
+        private IStoreShoppingBridge _storeBridge;
+        private IStoreManagementBridge _storeManage1;
+        private IUserBridge _userBridge2;
+        private IUserBridge _userBridge;
 
 		[TestInitialize]
 		public void MarketBuilder()
@@ -127,22 +127,22 @@ namespace BlackBoxStoreTests
 			}
 		}
 
-		private void SignUp(ref IUserBridge userBridge, string name, string address, string password, string creditCard)
-		{
-			userBridge = UserDriver.getBridge();
-			userBridge.EnterSystem();
-			userBridge.SignUp(name, address, password, creditCard);
-		}
+        private void SignUp(ref IUserBridge userBridge, string name, string address, string password, string creditCard)
+        {
+            userBridge = UserDriver.getBridge();
+            userBridge.EnterSystem();
+            userBridge.SignUp(name, address, password, creditCard);
+        }
 
-		[TestCleanup]
-		public void UserTestCleanUp()
-		{
-			_userBridge.CleanSession();
-			_userBridge2?.CleanSession();
-			_storeBridge.CleanSession();
-			_storeManage1.CleanSession();
-			_userBridge.CleanMarket();
-		}
+        [TestCleanup]
+        public void UserTestCleanUp()
+        {
+            _userBridge.CleanSession();
+            _userBridge2?.CleanSession();
+            _storeBridge.CleanSession();
+            _storeManage1.CleanSession();
+            _userBridge.CleanMarket();
+        }
 
-	}
+    }
 }

@@ -4,17 +4,17 @@ using SadnaSrc.Main;
 
 namespace BlackBoxStoreTests
 {
-	[TestClass]
-	public class UseCase2_2
-	{
-		private IUserBridge _bridgeSignUp;
-		private IStoreShoppingBridge _storeBridge;
+    [TestClass]
+    public class UseCase2_2
+    {
+        private IUserBridge _bridgeSignUp;
+        private IStoreShoppingBridge _storeBridge;
 
-		[TestInitialize]
-		public void MarketBuilder()
-		{
-			_storeBridge = StoreShoppingDriver.getBridge();
-		}
+        [TestInitialize]
+        public void MarketBuilder()
+        {
+            _storeBridge = StoreShoppingDriver.getBridge();
+        }
 
 		[TestMethod]
 		public void SuccessInOpeningAStore()
@@ -70,22 +70,22 @@ namespace BlackBoxStoreTests
 			Assert.AreEqual((int)OpenStoreStatus.InvalidUser, _storeBridge.OpenStore("PninaStore", "ben-gurion").Status);
 		}
 
-		private void SignUp(string name, string address, string password, string creditCard)
-		{
-			_bridgeSignUp = UserDriver.getBridge();
-			_bridgeSignUp.EnterSystem();
-			_bridgeSignUp.SignUp(name, address, password, creditCard);
-		}
+        private void SignUp(string name, string address, string password, string creditCard)
+        {
+            _bridgeSignUp = UserDriver.getBridge();
+            _bridgeSignUp.EnterSystem();
+            _bridgeSignUp.SignUp(name, address, password, creditCard);
+        }
 
-		//TODO: don't forget to delete the store
-		[TestCleanup]
-		public void UserTestCleanUp()
-		{
-		    _storeBridge.CleanSession();
-			_bridgeSignUp.CleanSession();
-			_bridgeSignUp.CleanMarket();
-		}
+        //TODO: don't forget to delete the store
+        [TestCleanup]
+        public void UserTestCleanUp()
+        {
+            _storeBridge.CleanSession();
+            _bridgeSignUp.CleanSession();
+            _bridgeSignUp.CleanMarket();
+        }
 
 
-	}
+    }
 }

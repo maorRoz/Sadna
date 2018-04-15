@@ -1,4 +1,4 @@
-﻿using BlackBox;
+using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 

@@ -29,13 +29,13 @@ namespace SadnaSrc.StoreCenter
 
         }
         //assume that the User discountCode is the right one, the check is done by the Store itself
-        public double CalcDiscount(int basePrice)
+        public double CalcDiscount(double basePrice)
         {
             if (Percentages)
-                return basePrice * (1 - ((double)DiscountAmount/100));
+                return basePrice * (1 - ((double)DiscountAmount / 100));
             return basePrice - DiscountAmount;
         }
-                
+
         public override bool Equals(object obj)
         {
             if (obj.GetType().Equals(GetType()))
@@ -58,6 +58,11 @@ namespace SadnaSrc.StoreCenter
             return "discount code: " + discountCode + " DiscountAmount: " + DiscountAmount +
              " Start Date: " + startDate + " End Date: " + EndDate;
 
+        }
+
+        internal bool checkTime()
+        {
+            return ((startDate.Date < MarketYard.MarketDate) && (MarketYard.MarketDate < EndDate.Date));
         }
     }
 }

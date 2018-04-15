@@ -5,14 +5,14 @@ using SadnaSrc.Main;
 
 namespace BlackBoxStoreTests
 {
-	[TestClass]
-	public class UseCase1_3
-	{
-		private IUserBridge _bridgeSignUp;
-		private IStoreShoppingBridge _storeBridge;
-		private IStoreShoppingBridge _storeBridgeGuest;
-		private IUserBridge _userWatchStore;
-
+    [TestClass]
+    public class UseCase1_3
+    {
+        private IUserBridge _bridgeSignUp;
+        private IStoreShoppingBridge _storeBridge;
+        private IStoreShoppingBridge _storeBridgeGuest;
+        private IUserBridge _userWatchStore;
+      
 		[TestInitialize]
 		public void MarketBuilder()
 		{
@@ -37,17 +37,17 @@ namespace BlackBoxStoreTests
 			string receivedAnswer = "StoreName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
 			Assert.AreEqual(expectedAnswer, receivedAnswer);
 
-		}
+        }
 
-		[TestMethod]
-		public void RegisteredUserViewStore()
-		{
-			MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("OOF");
-			Assert.AreEqual((int)ViewStoreStatus.Success, storeDetails.Status);
-			string expectedAnswer = "StoreName: OOF StoreAddress: BASA";
-			string receivedAnswer = "StoreName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
-			Assert.AreEqual(expectedAnswer, receivedAnswer);
-		}
+        [TestMethod]
+        public void RegisteredUserViewStore()
+        {
+            MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("OOF");
+            Assert.AreEqual((int)ViewStoreStatus.Success, storeDetails.Status);
+            string expectedAnswer = "StoreName: OOF StoreAddress: BASA";
+            string receivedAnswer = "StoreName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
+            Assert.AreEqual(expectedAnswer, receivedAnswer);
+        }
 
 		[TestMethod]
 		public void NoStoreExistsGuestViewStore()
@@ -61,14 +61,13 @@ namespace BlackBoxStoreTests
 			Assert.AreEqual(null, storeDetails.ReportList);
 		}
 
-		[TestMethod]
-		public void NoStoreExistsRegisteredUserViewStore()
-		{
-			MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("OOFA");
-			Assert.AreEqual((int)ViewStoreStatus.NoStore, storeDetails.Status);
-			Assert.AreEqual(null, storeDetails.ReportList);
-		}
-
+        [TestMethod]
+        public void NoStoreExistsRegisteredUserViewStore()
+        {
+            MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("OOFA");
+            Assert.AreEqual((int)ViewStoreStatus.NoStore, storeDetails.Status);
+            Assert.AreEqual(null, storeDetails.ReportList);
+        }
 		[TestMethod]
 		public void InvalidUserDidntEnterSystem()
 		{
@@ -80,22 +79,22 @@ namespace BlackBoxStoreTests
 			Assert.AreEqual(null, storeDetails.ReportList);
 		}
 
-		private void SignUp(string name, string address, string password, string creditCard)
-		{
-			_bridgeSignUp = UserDriver.getBridge();
-			_bridgeSignUp.EnterSystem();
-			_bridgeSignUp.SignUp(name, address, password, creditCard);
-		}
+        private void SignUp(string name, string address, string password, string creditCard)
+        {
+            _bridgeSignUp = UserDriver.getBridge();
+            _bridgeSignUp.EnterSystem();
+            _bridgeSignUp.SignUp(name, address, password, creditCard);
+        }
 
-		[TestCleanup]
-		public void UserTestCleanUp()
-		{
-			_bridgeSignUp.CleanSession();
-			_storeBridge.CleanSession();
-			_userWatchStore?.CleanSession();
-			_storeBridgeGuest?.CleanSession();
-			_bridgeSignUp.CleanMarket();
-		}
+        [TestCleanup]
+        public void UserTestCleanUp()
+        {
+            _bridgeSignUp.CleanSession();
+            _storeBridge.CleanSession();
+            _userWatchStore?.CleanSession();
+            _storeBridgeGuest?.CleanSession();
+            _bridgeSignUp.CleanMarket();
+        }
 
-	}
+    }
 }

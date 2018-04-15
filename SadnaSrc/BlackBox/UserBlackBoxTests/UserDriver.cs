@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace BlackBox
 {
-	class UserDriver
-	{
-		public static IUserBridge getBridge()
-		{
-			ProxyUserBridge bridge = new ProxyUserBridge();
-			bridge.real = new RealUserBridge();
-			return bridge;
-		}
-	}
+    class UserDriver
+    {
+        public static IUserBridge getBridge()
+        {
+            ProxyUserBridge bridge = new ProxyUserBridge();
+            bridge.real = new RealUserBridge();
+            return bridge;
+        }
+    }
 }
