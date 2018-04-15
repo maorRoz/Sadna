@@ -55,8 +55,10 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
+                    return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2),
+                        dbReader.GetString(3));
                 }
+
                 return null;
             }
         }
@@ -69,6 +71,7 @@ namespace SadnaSrc.StoreCenter
 
             }
         }
+
         private int FindMaxId(SQLiteDataReader dbReader)
         {
             int count = 1;
@@ -76,6 +79,7 @@ namespace SadnaSrc.StoreCenter
             {
                 count++;
             }
+
             return count;
         }
 
@@ -83,7 +87,10 @@ namespace SadnaSrc.StoreCenter
         {
             object discountObject = "";
             if (stockListItem.Discount != null)
-            { discountObject = stockListItem.Discount; }
+            {
+                discountObject = stockListItem.Discount;
+            }
+
             return new object[]
             {
                 stockListItem.SystemId,
@@ -93,6 +100,7 @@ namespace SadnaSrc.StoreCenter
                 stockListItem.PurchaseWay
             };
         }
+
         private object[] GetProductValuesArray(Product product)
         {
             return new object[]
@@ -132,6 +140,7 @@ namespace SadnaSrc.StoreCenter
                 discount.Percentages
             };
         }
+
         private object[] GetLotteryManagmentValuesArray(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
             return new object[]
@@ -150,7 +159,8 @@ namespace SadnaSrc.StoreCenter
         public void EditLotteryTicketInDatabase(LotteryTicket lotter)
         {
 
-            string[] columnNames = {
+            string[] columnNames =
+            {
                 "myID",
                 "LotteryID",
                 "IntervalStart",
@@ -188,19 +198,21 @@ namespace SadnaSrc.StoreCenter
                 "'" + lottery.UserID + "'"
             };
         }
+
         private string[] GetDiscountStringValues(Discount discount)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             return new[]
             {
                 "'" + discount.discountCode + "'",
-                 "'" + handler.PrintEnum(discount.discountType) + "'",
+                "'" + handler.PrintEnum(discount.discountType) + "'",
                 "'" + discount.startDate + "'",
                 "'" + discount.EndDate + "'",
                 "'" + discount.DiscountAmount + "'",
                 "'" + discount.Percentages + "'"
             };
         }
+
         private string[] GetProductStringValues(Product product)
         {
             return new[]
@@ -211,11 +223,16 @@ namespace SadnaSrc.StoreCenter
                 "'" + product.Description + "'"
             };
         }
+
         private string[] GetStockListItemStringValues(StockListItem stockListItem)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             string IfDiscountNotExists = "null";
-            if (stockListItem.Discount != null) { IfDiscountNotExists = stockListItem.Discount.discountCode; }
+            if (stockListItem.Discount != null)
+            {
+                IfDiscountNotExists = stockListItem.Discount.discountCode;
+            }
+
             return new[]
             {
                 "'" + stockListItem.SystemId + "'",
@@ -232,8 +249,10 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
+                    return new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2),
+                        dbReader.GetString(3));
                 }
+
                 return null;
             }
         }
@@ -252,11 +271,18 @@ namespace SadnaSrc.StoreCenter
         public string[] GetLotteryManagmentStringValues(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
             string isActive = "";
-            if (lotterySaleManagementTicket.IsActive) { isActive = "true"; } else { isActive = "false"; }
+            if (lotterySaleManagementTicket.IsActive)
+            {
+                isActive = "true";
+            }
+            else
+            {
+                isActive = "false";
+            }
 
             return new[]
             {
-                 "'" + lotterySaleManagementTicket.SystemID + "'",
+                "'" + lotterySaleManagementTicket.SystemID + "'",
                 "'" + lotterySaleManagementTicket.Original.SystemId + "'",
                 "'" + lotterySaleManagementTicket.ProductNormalPrice + "'",
                 "'" + lotterySaleManagementTicket.TotalMoneyPayed + "'",
@@ -273,9 +299,11 @@ namespace SadnaSrc.StoreCenter
             InsertTable("Products", "SystemID, name, BasePrice, description",
                 GetProductStringValues(product), GetProductValuesArray(product));
         }
+
         public void EditProductInDatabase(Product product)
         {
-            string[] columnNames = {
+            string[] columnNames =
+            {
                 "SystemID",
                 "name",
                 "BasePrice",
@@ -293,11 +321,13 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lottery = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
+                    LotteryTicket lottery = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1),
+                        dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
                     lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(5));
                     result.AddLast(lottery);
                 }
             }
+
             return result;
         }
 
@@ -312,6 +342,7 @@ namespace SadnaSrc.StoreCenter
 
             return historyData.ToArray();
         }
+
         public StockListItem GetStockListItembyProductID(string product)
         {
             Product _product = GetProductID(product);
@@ -321,39 +352,45 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    stockListItem = new StockListItem(dbReader.GetInt32(2), _product, GetDiscount(dbReader.GetString(3)), handler.GetPurchaseEnumString(dbReader.GetString(4)), dbReader.GetString(0));
+                    stockListItem = new StockListItem(dbReader.GetInt32(2), _product,
+                        GetDiscount(dbReader.GetString(3)), handler.GetPurchaseEnumString(dbReader.GetString(4)),
+                        dbReader.GetString(0));
                     return stockListItem;
                 }
             }
 
             return stockListItem;
         }
+
         public Discount GetDiscount(string DiscountCode)
         {
             Discount discount = null;
 
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            using (var discountReader = SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + DiscountCode + "'"))
+            using (var discountReader =
+                SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + DiscountCode + "'"))
             {
                 while (discountReader.Read())
                 {
-                        discount = new Discount(DiscountCode, handler.GetdiscountTypeEnumString(discountReader.GetString(1)),
+                    discount = new Discount(DiscountCode,
+                        handler.GetdiscountTypeEnumString(discountReader.GetString(1)),
                         DateTime.Parse(discountReader.GetString(2))
                         , DateTime.Parse(discountReader.GetString(3))
                         , discountReader.GetInt32(4),
                         Boolean.Parse(discountReader.GetString(5)));
                 }
             }
+
             return discount;
         }
 
-	    public void ValidateStoreExists(string store)
-	    {
-		    if (!IsStoreExist(store))
-		    {
-			    throw new StoreException(MarketError.LogicError, "store not found");
-		    }   
-	    }
+        public void ValidateStoreExists(string store)
+        {
+            if (!IsStoreExist(store))
+            {
+                throw new StoreException(MarketError.LogicError, "store not found");
+            }
+        }
 
         public bool IsStoreExist(string store)
         {
@@ -365,18 +402,22 @@ namespace SadnaSrc.StoreCenter
 
         public bool IsStoreExistAndActive(string store)
         {
-            using (var dbReader = SelectFromTableWithCondition("Store", "*", " Name = '" + store + "' AND Status = 'Active'"))
+            using (var dbReader =
+                SelectFromTableWithCondition("Store", "*", " Name = '" + store + "' AND Status = 'Active'"))
             {
                 return dbReader.Read();
             }
         }
+
         public void AddStore(Store toAdd)
         {
             if (IsStoreExist(toAdd.Name))
             {
-                throw new StoreException(OpenStoreStatus.AlreadyExist, "Cannot open another instance of store " + toAdd.Name
+                throw new StoreException(OpenStoreStatus.AlreadyExist,
+                    "Cannot open another instance of store " + toAdd.Name
                                                              + "Store already exist in the system!");
             }
+
             InsertTable("Store", "SystemID, Name, Address, Status",
                 GetStoreStringValues(toAdd), GetStoreArray(toAdd));
         }
@@ -388,17 +429,21 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    LotteryTicket lotty = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
+                    LotteryTicket lotty = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1),
+                        dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
                     lotty.myStatus = handler.GetLotteryStatusString(dbReader.GetString(5));
                     return lotty;
                 }
             }
+
             return null;
         }
+
         public void RemoveLotteryTicket(LotteryTicket lottery)
         {
             DeleteFromTable("LotteryTicket", "myID = '" + lottery.myID + "'");
         }
+
         public void AddLotteryTicket(LotteryTicket lottery)
         {
             InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID",
@@ -411,9 +456,11 @@ namespace SadnaSrc.StoreCenter
             {
                 while (productReader.Read())
                 {
-                    return new Product(iD, productReader.GetString(1), productReader.GetDouble(2), productReader.GetString(3));
+                    return new Product(iD, productReader.GetString(1), productReader.GetDouble(2),
+                        productReader.GetString(3));
                 }
             }
+
             return null;
 
         }
@@ -425,8 +472,10 @@ namespace SadnaSrc.StoreCenter
             {
                 if (!dbReader.Read())
                 {
-                    throw new StoreException(ViewStorePurchaseHistoryStatus.InvalidStore, "Couldn't find any store with that ID in history records");
+                    throw new StoreException(ViewStorePurchaseHistoryStatus.InvalidStore,
+                        "Couldn't find any store with that ID in history records");
                 }
+
                 PurchaseHistory[] resultPurchase = GetPurchaseHistory(dbReader);
                 result = new string[resultPurchase.Length];
                 int i = 0;
@@ -435,6 +484,7 @@ namespace SadnaSrc.StoreCenter
                     result[i] = purchaseHistory.ToString();
                     i++;
                 }
+
                 return result;
             }
         }
@@ -452,9 +502,10 @@ namespace SadnaSrc.StoreCenter
             {
                 AddDiscount(stockListItem.Discount);
             }
+
             AddProductToDatabase(stockListItem.Product);
             InsertTable("Stock", "StockID, ProductSystemID, quantity, discount, PurchaseWay",
-                   GetStockListItemStringValues(stockListItem), GetStockListItemArray(stockListItem));
+                GetStockListItemStringValues(stockListItem), GetStockListItemArray(stockListItem));
         }
 
 
@@ -471,7 +522,9 @@ namespace SadnaSrc.StoreCenter
             {
                 RemoveDiscount(stockListItem.Discount);
             }
-            RemoveProduct(stockListItem.Product); // the DB will delete the StockListItem due to the conection between of the 2 tables
+
+            RemoveProduct(stockListItem
+                .Product); // the DB will delete the StockListItem due to the conection between of the 2 tables
         }
 
         public void EditDiscountInDatabase(Discount discount)
@@ -537,29 +590,38 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    Store store = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2), dbReader.GetString(3));
+                    Store store = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2),
+                        dbReader.GetString(3));
                     result.AddLast(store);
                 }
             }
+
             return result;
         }
 
         public string[] GetStoreInfo(string store)
         {
-            using (var dbReader = SelectFromTableWithCondition("Store", "Name,Address", " Name = '" + store + "' AND Status = 'Active'"))
+            using (var dbReader = SelectFromTableWithCondition("Store", "Name,Address",
+                " Name = '" + store + "' AND Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {
-                    return new[] { dbReader.GetString(0), dbReader.GetString(1) };
+                    return new[] {dbReader.GetString(0), dbReader.GetString(1)};
 
                 }
             }
+
             throw new StoreException(ViewStoreStatus.NoStore, "There is no active store by the name of " + store);
         }
+
         public Product getProductByNameFromStore(string storeName, string ProductName)
         {
             Store store = getStorebyName(storeName);
-            if (store == null) { throw new StoreException(StoreEnum.StoreNotExists, "not exists"); }
+            if (store == null)
+            {
+                throw new StoreException(StoreEnum.StoreNotExists, "not exists");
+            }
+
             LinkedList<string> productsID = GetAllStoreProductsID(store.SystemId);
             foreach (string ID in productsID)
             {
@@ -575,14 +637,16 @@ namespace SadnaSrc.StoreCenter
 
         public string[] GetStoreStockInfo(string store)
         {
-            using (var dbReader = SelectFromTableWithCondition("Stock", "Name,Address", " Store = '" + store + " AND Status = 'Active'"))
+            using (var dbReader = SelectFromTableWithCondition("Stock", "Name,Address",
+                " Store = '" + store + " AND Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {
-                    return new[] { dbReader.GetString(1), dbReader.GetString(2) };
+                    return new[] {dbReader.GetString(1), dbReader.GetString(2)};
 
                 }
             }
+
             throw new StoreException(ViewStoreStatus.NoStore, "There is no active store by the name of " + store);
         }
 
@@ -590,9 +654,10 @@ namespace SadnaSrc.StoreCenter
         {
             Product product = getProductByNameFromStore(store, productName);
             if (product == null)
-                throw new StoreException(AddProductStatus.NoProduct, "There is no product " + productName + " from " + store + "");
+                throw new StoreException(AddProductStatus.NoProduct,
+                    "There is no product " + productName + " from " + store + "");
             return GetStockListItembyProductID(product.SystemId);
-            
+
 
         }
 
@@ -605,7 +670,8 @@ namespace SadnaSrc.StoreCenter
 
         public void AddLottery(LotterySaleManagmentTicket lotteryManagment)
         {
-            InsertTable("LotteryTable", "SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName ,StartDate,EndDate,IsActive ",
+            InsertTable("LotteryTable",
+                "SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName ,StartDate,EndDate,IsActive ",
                 GetLotteryManagmentStringValues(lotteryManagment), GetLotteryManagmentValuesArray(lotteryManagment));
 
         }
@@ -614,20 +680,24 @@ namespace SadnaSrc.StoreCenter
         public LinkedList<string> GetAllStoreProductsID(string systemID)
         {
             LinkedList<string> result = new LinkedList<string>();
-            using (var dbReader = SelectFromTableWithCondition("Stock", "ProductSystemID", "StockID = '" + systemID + "'"))
+            using (var dbReader =
+                SelectFromTableWithCondition("Stock", "ProductSystemID", "StockID = '" + systemID + "'"))
             {
                 while (dbReader.Read())
                 {
                     result.AddLast(dbReader.GetString(0));
                 }
             }
+
             return result;
         }
+
         public LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName)
         {
             Product P = getProductByNameFromStore(storeName, productName);
             return GetLotteryByProductID(P.SystemId);
         }
+
         public int getUserIDFromUserName(string userName)
         {
             using (var dbReader = SelectFromTableWithCondition("User", "SystemID", "Name = '" + userName + "'"))
@@ -636,26 +706,32 @@ namespace SadnaSrc.StoreCenter
                 {
                     return dbReader.GetInt32(0);
                 }
+
                 return -1;
             }
-            
+
         }
+
         public LotterySaleManagmentTicket GetLotteryByProductID(string productID)
         {
             Product P = GetProductID(productID);
             LotterySaleManagmentTicket lotteryManagement = null;
-            using (var dbReader = SelectFromTableWithCondition("LotteryTable", "*", "ProductSystemID = '" + productID + "'"))
+            using (var dbReader =
+                SelectFromTableWithCondition("LotteryTable", "*", "ProductSystemID = '" + productID + "'"))
             {
                 while (dbReader.Read())
                 {
-                    lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0),dbReader.GetString(4), P, DateTime.Parse(dbReader.GetString(5)), DateTime.Parse(dbReader.GetString(6)));
+                    lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0), dbReader.GetString(4), P,
+                        DateTime.Parse(dbReader.GetString(5)), DateTime.Parse(dbReader.GetString(6)));
                     lotteryManagement.TotalMoneyPayed = dbReader.GetInt32(3);
-                    
+
                     lotteryManagement.IsActive = (Boolean.Parse(dbReader.GetString(7)));
                 }
             }
+
             return lotteryManagement;
         }
+
         //"INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, 
         //TotalMoneyPayed, StartDate, EndDate, isActive) VALUES 
         //('L100', 'P101', 100, 0 ,'01/01/2018', '31/12/2018', 'true')"

@@ -32,10 +32,10 @@ namespace SadnaSrc.StoreCenter
         public double CalcDiscount(double basePrice)
         {
             if (Percentages)
-                return basePrice * (1 - ((double)DiscountAmount/100));
+                return basePrice * (1 - ((double)DiscountAmount / 100));
             return basePrice - DiscountAmount;
         }
-                
+
         public override bool Equals(object obj)
         {
             if (obj.GetType().Equals(GetType()))

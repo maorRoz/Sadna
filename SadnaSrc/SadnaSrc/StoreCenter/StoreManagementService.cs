@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class StoreManagementService : IStoreManagementService
     {
-        
+
         public Store store;
         ModuleGlobalHandler global;
         private IUserSeller _storeManager;
@@ -56,7 +56,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
             }
         }
-        
+
 
         private void ValidatePromotionEligible(string actions)
         {
@@ -102,35 +102,34 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-      /*  public MarketAnswer GetStoreProducts()
-        {
-            MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store stock...");
-            try
-            {
-                if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
-                _storeManager.CanManageProducts();
-                List<string> productList = new List<string>();
-                foreach (Product product in store.GetAllProducts())
-                {
-                    productList.Add(product.ToString());
-                }
-
-                return new StoreAnswer(ManageStoreStatus.Success, "Stock report has been successfully fetched!",
-                    productList.ToArray());
-            }
-            catch (StoreException e)
-            {
-                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " tried to view stock in unavailable Store " + _storeName +
-                                             "and has been denied. Error message has been created!");
-                return new StoreAnswer(ManageStoreStatus.InvalidStore, e.GetErrorMessage());
-            }
-            catch (MarketException e)
-            {
-                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view stock in Store"
-                                             + _storeName + " and therefore has been denied. Error message has been created!");
-                return new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
-            }
-        }*/
+        /*  public MarketAnswer GetStoreProducts()
+          {
+              MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store stock...");
+              try
+              {
+                  if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
+                  _storeManager.CanManageProducts();
+                  List<string> productList = new List<string>();
+                  foreach (Product product in store.GetAllProducts())
+                  {
+                      productList.Add(product.ToString());
+                  }
+                  return new StoreAnswer(ManageStoreStatus.Success, "Stock report has been successfully fetched!",
+                      productList.ToArray());
+              }
+              catch (StoreException e)
+              {
+                  MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " tried to view stock in unavailable Store " + _storeName +
+                                               "and has been denied. Error message has been created!");
+                  return new StoreAnswer(ManageStoreStatus.InvalidStore, e.GetErrorMessage());
+              }
+              catch (MarketException e)
+              {
+                  MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view stock in Store"
+                                               + _storeName + " and therefore has been denied. Error message has been created!");
+                  return new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
+              }
+          }*/
 
         public MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity)
         {
@@ -157,11 +156,11 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "product added");
                 return new StoreAnswer(StoreEnum.Success, "product added");
             }
-			catch (StoreException)
+            catch (StoreException)
             {
                 return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
             }
-			catch (MarketException)
+            catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
                 return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
@@ -351,7 +350,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
 
-            }
+        }
 
 
         public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
@@ -373,7 +372,7 @@ namespace SadnaSrc.StoreCenter
                     throw new StoreException(DiscountStatus.ProductNotFound, "no Such Product");
                 }
                 MarketLog.Log("StoreCenter", "check if dates are OK");
-                if ((startDate< MarketYard.MarketDate)|| (endDate < MarketYard.MarketDate) || !(startDate < endDate))
+                if ((startDate < MarketYard.MarketDate) || (endDate < MarketYard.MarketDate) || !(startDate < endDate))
                 {
                     MarketLog.Log("StoreCenter", "something wrong with the dates");
                     throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal");
