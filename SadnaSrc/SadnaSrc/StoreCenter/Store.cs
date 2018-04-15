@@ -159,13 +159,7 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "startDate")
             {
                 DateTime startTime = DateTime.Parse(newValue);
-                if (startTime < 
-                
-    
-    
-    
-    
-    .Date) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time in the past"); }
+                if (startTime < DateTime.Now.Date) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time in the past"); }
 
                 if (startTime > discount.EndDate) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time that is later then the discount end time"); }
                 discount.startDate = startTime;
