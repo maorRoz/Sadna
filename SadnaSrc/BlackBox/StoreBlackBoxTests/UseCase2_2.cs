@@ -1,5 +1,4 @@
 ﻿using BlackBox;
-using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
@@ -9,12 +8,12 @@ namespace BlackBoxStoreTests
 	public class UseCase2_2
 	{
 		private IUserBridge _bridgeSignUp;
-		private IStoreBridge _storeBridge;
+		private IStoreShoppingBridge _storeBridge;
 
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_storeBridge = StoreDriver.getBridge();
+			_storeBridge = StoreShoppingDriver.getBridge();
 		}
 
 		[TestMethod]

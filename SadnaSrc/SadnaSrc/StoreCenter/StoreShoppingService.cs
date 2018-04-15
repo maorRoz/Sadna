@@ -65,12 +65,12 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "");
                 string[] storeInfo = storeLogic.GetStoreInfo(store);
                 MarketLog.Log("StoreCenter", "");
-                return new StoreAnswer(ViewStoreStatus.Success,"Store info has been successfully granted!", storeInfo);
+                return new StoreAnswer(ViewStoreStatus.Success, "Store info has been successfully granted!", storeInfo);
             }
             catch (StoreException e)
             {
                 MarketLog.Log("StoreCenter", "");
-                return new StoreAnswer((ViewStoreStatus)e.Status, "Something is wrong with viewing "+ store + 
+                return new StoreAnswer((ViewStoreStatus)e.Status, "Something is wrong with viewing " + store +
                                                                   " info by customers . Error message has been created!");
             }
             catch (MarketException)
@@ -84,20 +84,20 @@ namespace SadnaSrc.StoreCenter
         //TODO: doesn't work really, were too complicated for me (maor)...
         private string GetProductStockInformation(string ProductID)
         {
-                ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-                StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(ProductID);
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(ProductID);
             if (stockListItem == null)
             {
                 MarketLog.Log("storeCenter", "product not exists");
                 throw new StoreException(StoreEnum.ProductNotFound, "product " + ProductID + " does not exist in Stock");
             }
-            string discount = ""; 
-                string product = stockListItem.Product.ToString();
+            string discount = "";
+            string product = stockListItem.Product.ToString();
             if (stockListItem.Discount != null)
                 discount = stockListItem.Discount.ToString() + " , ";
-                string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
-                string quanitity = stockListItem.Quantity + "";
-                string result = product + " , " +discount + purchaseWay + " , " + quanitity;
+            string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
+            string quanitity = stockListItem.Quantity + "";
+            string result = product + " , " + discount + purchaseWay + " , " + quanitity;
             return result;
         }
         public MarketAnswer ViewStoreStock(string storename)
@@ -108,8 +108,10 @@ namespace SadnaSrc.StoreCenter
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "check if store exists");
                 if (!storeLogic.DataLayer.IsStoreExistAndActive(storename))
-                {   MarketLog.Log("StoreCenter", "store do not exists");
-                    throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
+                {
+                    MarketLog.Log("StoreCenter", "store do not exists");
+                    throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active");
+                }
                 Store store = storeLogic.DataLayer.getStorebyName(storename);
                 LinkedList<string> result = new LinkedList<string>();
                 LinkedList<string> IDS = storeLogic.DataLayer.GetAllStoreProductsID(store.SystemId);
@@ -119,10 +121,11 @@ namespace SadnaSrc.StoreCenter
                 }
                 string[] resultArray = new string[result.Count];
                 result.CopyTo(resultArray, 0);
-                return new StoreAnswer(StoreEnum.Success,"", resultArray);
+                return new StoreAnswer(StoreEnum.Success, "", resultArray);
             }
             catch (StoreException e)
-            {   return new StoreAnswer(e);
+            {
+                return new StoreAnswer(e);
             }
             catch (MarketException)
             {
@@ -132,10 +135,10 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        public MarketAnswer AddProductToCart(string store, string productName,int quantity)
+        public MarketAnswer AddProductToCart(string store, string productName, int quantity)
         {
-            MarketLog.Log("StoreCenter","trying to add something to the cart");
-            
+            MarketLog.Log("StoreCenter", "trying to add something to the cart");
+
             try
             {
                 MarketLog.Log("StoreCenter", "checking if store exists");
@@ -152,7 +155,8 @@ namespace SadnaSrc.StoreCenter
                 if (quantity> stockListItem.Quantity)
                 {
                     MarketLog.Log("StoreCenter", "required quantity is not too big");
-                    throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big"); }
+                    throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big");
+                }
                 MarketLog.Log("StoreCenter", "checking that the required quantity is not negative or zero");
                 if (quantity <= 0)
                 {
@@ -167,7 +171,7 @@ namespace SadnaSrc.StoreCenter
                 }
                 _shopper.AddToCart(stockListItem.Product, store,quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
-                return new StoreAnswer(StoreEnum.Success, quantity +" "+ productName +" from "+store+ "has been" +
+                return new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
                                                                  " successfully added to the user's cart!");
             }
             catch (StoreException e)
@@ -185,17 +189,17 @@ namespace SadnaSrc.StoreCenter
         }
 
         //TODO: fix this
-        public MarketAnswer AddLotteryTicket(string store, string productName,double amountToPay)
+        public MarketAnswer AddLotteryTicket(string store, string productName, double amountToPay)
         {
             MarketLog.Log("StoreCenter", "store error");
             try
             {
                 //PorductToFind =  StoreDL.searchProductInStore(store,productName,"Immediate");
-               // MarketLog.Log("StoreCenter", "");
+                // MarketLog.Log("StoreCenter", "");
                 //  _shopper.AddToCart(productName,store,quantity);
-               // MarketLog.Log("StoreCenter", "");
+                // MarketLog.Log("StoreCenter", "");
                 return new StoreAnswer(AddLotteryTicketStatus.Success, amountToPay + "has been paid to a " + productName + " lottery ticket" +
-                                                                       " from " + store + "has been" +" successfully!");
+                                                                       " from " + store + "has been" + " successfully!");
             }
             catch (StoreException e)
             {
@@ -243,29 +247,28 @@ namespace SadnaSrc.StoreCenter
                 }
                 return new StoreAnswer(StoreEnum.PurchesFail, "cannot pay non-positie amount of moeny");
             }*/
-          //  return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
-     //   }
+        //  return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
+        //   }
 
-     /*   public MarketAnswer MakeAImmediatePurchase(string productName, int discountCode, int quantity)
-        {
-            //TODO: fix this
-            /*if (ProxyIHavePremmision(user.GetUser()))
-            {
-                Product product = store.MakeAImmediatePurchase(productName, quantity);
-                if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
-                double price = store.GetProductPriceWithDiscountbyDouble(productName, discountCode, quantity);
-                if (price==-1) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
-                user.GetUser().Cart.AddToCart(store.SystemId, product.SystemId, price, "", quantity); //ASK MAOR ABOUT IT
-                return new StoreAnswer(StoreEnum.Success, "product "+ productName+" sold");
-            }*/
-       //     return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
-     //   }
+        /*   public MarketAnswer MakeAImmediatePurchase(string productName, int discountCode, int quantity)
+           {
+               //TODO: fix this
+               /*if (ProxyIHavePremmision(user.GetUser()))
+               {
+                   Product product = store.MakeAImmediatePurchase(productName, quantity);
+                   if (product==null) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
+                   double price = store.GetProductPriceWithDiscountbyDouble(productName, discountCode, quantity);
+                   if (price==-1) { return new StoreAnswer(StoreEnum.ProductNotFound, "no such product"); }
+                   user.GetUser().Cart.AddToCart(store.SystemId, product.SystemId, price, "", quantity); //ASK MAOR ABOUT IT
+                   return new StoreAnswer(StoreEnum.Success, "product "+ productName+" sold");
+               }*/
+        //     return new StoreAnswer(StoreEnum.PurchesFail, "you have no premmision to do that");
+        //   }
 
-     /*   public MarketAnswer GetProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
-        {
-            return store.GetProductPriceWithDiscount(_product, _DiscountCode, _quantity);
-        }
-        */
+        /*   public MarketAnswer GetProductPriceWithDiscount(string _product, int _DiscountCode, int _quantity)
+           {
+               return store.GetProductPriceWithDiscount(_product, _DiscountCode, _quantity);
+           }
+           */
     }
 }
-

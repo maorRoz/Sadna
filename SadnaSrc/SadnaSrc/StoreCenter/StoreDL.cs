@@ -337,7 +337,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (discountReader.Read())
                 {
-                    discount = new Discount(DiscountCode, handler.GetdiscountTypeEnumString(discountReader.GetString(1)),
+                        discount = new Discount(DiscountCode, handler.GetdiscountTypeEnumString(discountReader.GetString(1)),
                         DateTime.Parse(discountReader.GetString(2))
                         , DateTime.Parse(discountReader.GetString(3))
                         , discountReader.GetInt32(4),
@@ -421,7 +421,7 @@ namespace SadnaSrc.StoreCenter
         public string[] GetHistory(Store store)
         {
             string[] result;
-            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + store.SystemId + "'"))
+            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + store.Name + "'"))
             {
                 if (!dbReader.Read())
                 {

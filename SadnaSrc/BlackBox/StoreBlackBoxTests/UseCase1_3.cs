@@ -1,6 +1,5 @@
 ﻿using System;
 using BlackBox;
-using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
@@ -10,14 +9,14 @@ namespace BlackBoxStoreTests
 	public class UseCase1_3
 	{
 		private IUserBridge _bridgeSignUp;
-		private IStoreBridge _storeBridge;
-		private IStoreBridge _storeBridgeGuest;
+		private IStoreShoppingBridge _storeBridge;
+		private IStoreShoppingBridge _storeBridgeGuest;
 		private IUserBridge _userWatchStore;
 
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_storeBridge = StoreDriver.getBridge();
+			_storeBridge = StoreShoppingDriver.getBridge();
 			SignUp("Pnina", "mishol", "7894", "12345678");
 			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.Success, _storeBridge.OpenStore("OOF", "BASA").Status);
@@ -30,7 +29,7 @@ namespace BlackBoxStoreTests
 		{
 			_userWatchStore = UserDriver.getBridge();
 			_userWatchStore.EnterSystem();
-			_storeBridgeGuest = StoreDriver.getBridge();
+			_storeBridgeGuest = StoreShoppingDriver.getBridge();
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
 			Assert.AreEqual((int)ViewStoreStatus.Success,storeDetails.Status);
@@ -55,11 +54,11 @@ namespace BlackBoxStoreTests
 		{
 			_userWatchStore = UserDriver.getBridge();
 			_userWatchStore.EnterSystem();
-			_storeBridgeGuest = StoreDriver.getBridge();
+			_storeBridgeGuest = StoreShoppingDriver.getBridge();
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOFA");
 			Assert.AreEqual((int)ViewStoreStatus.NoStore, storeDetails.Status);
-
+			Assert.AreEqual(null, storeDetails.ReportList);
 		}
 
 		[TestMethod]
@@ -67,16 +66,18 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("OOFA");
 			Assert.AreEqual((int)ViewStoreStatus.NoStore, storeDetails.Status);
+			Assert.AreEqual(null, storeDetails.ReportList);
 		}
 
 		[TestMethod]
 		public void InvalidUserDidntEnterSystem()
 		{
 			_userWatchStore = UserDriver.getBridge();
-			_storeBridgeGuest = StoreDriver.getBridge();
+			_storeBridgeGuest = StoreShoppingDriver.getBridge();
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
 			Assert.AreEqual((int)ViewStoreStatus.InvalidUser, storeDetails.Status);
+			Assert.AreEqual(null, storeDetails.ReportList);
 		}
 
 		private void SignUp(string name, string address, string password, string creditCard)

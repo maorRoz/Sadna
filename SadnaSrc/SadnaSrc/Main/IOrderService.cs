@@ -46,4 +46,11 @@ namespace SadnaSrc.Main
         ItemAlreadyInOrder,
         InvalidDetails
     }
+
+    public enum LotteryOrderStatus
+    {
+        Success,
+        InvalidLotteryID,
+        InvalidLotteryTicket
+    }
 }

@@ -86,5 +86,10 @@ namespace SadnaSrc.Walleter
         {
             sock.fuckUp();
         }
+
+        public void FixExternal()
+        {
+            sock.fuckDown();
+        }
     }
 }

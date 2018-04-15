@@ -8,7 +8,11 @@ namespace BlackBoxAdminTests
 	public class UseCase5_4
 	{
 		private IUserBridge _adminSignInBridge;
+		private IUserBridge _userBridge;
 		private IAdminBridge _adminBridge;
+		private IStoreShoppingBridge _storeShopping;
+		private IStoreManagementBridge _managerBridge;
+		private IOrderBridge _orderBridge;
 		private string userToCheck = "Arik1";
 		private string storeToCheck = "Y";
 		private readonly string adminName = "Arik1";
@@ -21,6 +25,25 @@ namespace BlackBoxAdminTests
 		public void MarketBuilder()
 		{
 			_adminBridge = AdminDriver.getBridge();
+			_storeShopping = StoreShoppingDriver.getBridge();
+			//SignUp(ref _userBridge, "Pnina", "misholSusia", "852852", "77777777");
+			_userBridge = UserDriver.getBridge();
+			_userBridge.EnterSystem();
+			_userBridge.SignUp("Pnina", "misholSusia", "852852", "77777777");
+
+
+			_storeShopping.GetStoreShoppingService(_userBridge.getUserSession());
+			_storeShopping.OpenStore("blahblah", "blah");
+			_managerBridge = StoreManagementDriver.getBridge();
+			_managerBridge.GetStoreManagementService(_userBridge.getUserSession(),"blahblah");
+			_managerBridge.AddNewProduct("hello", 10, "nice product", 8);
+			_managerBridge.AddNewProduct("hello2", 20, "nice product2", 20);
+			_storeShopping.AddProductToCart("blahblah", "hello", 5);
+			_storeShopping.AddProductToCart("blahblah", "hello2", 10);
+			_orderBridge = OrderDriver.getBridge();
+			_orderBridge.GetOrderService(_userBridge.getUserSession());
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("hello", "blahblah", 2, 10);
+			Assert.AreEqual(OrderStatus.Success, res.Status);
 		}
 
 
@@ -133,6 +156,13 @@ namespace BlackBoxAdminTests
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoStoreFound, _adminBridge.ViewPurchaseHistoryByStore(nonExistingStore).Status);
 		}
 
+		private void SignUp(ref IUserBridge _userBridge, string userName, string address, string password, string creditCard)
+		{
+			_userBridge = UserDriver.getBridge();
+			_userBridge.EnterSystem();
+			_userBridge.SignUp(userName, address, password, creditCard);
+		}
+
 		private void SignIn(string userName, string password)
 		{
 			_adminSignInBridge = UserDriver.getBridge();
@@ -141,7 +171,7 @@ namespace BlackBoxAdminTests
 		}
 
 
-		[TestCleanup]
+	/*	[TestCleanup]
 
 		public void UserTestCleanUp()
 		{
@@ -149,7 +179,7 @@ namespace BlackBoxAdminTests
 			_adminSignInBridge.CleanMarket();
 			
 		}
-
+		*/
 
 	}
 }

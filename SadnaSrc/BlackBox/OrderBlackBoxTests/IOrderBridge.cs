@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SadnaSrc.Main;
 
-namespace BlackBox.OrderBlackBoxTests
+namespace BlackBox
 {
 	interface IOrderBridge
 	{
+		void GetOrderService(IUserService userService);
+		MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice);
+		MarketAnswer BuyEverythingFromCart();
+		MarketAnswer GiveDetails(string userName, string address, string creditCard);
+		void CleanSession();
+
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using BlackBox;
-using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
@@ -8,7 +7,8 @@ namespace BlackBoxAdminTests
 	[TestClass]
 	public class UseCase5_2
 	{
-		private IStoreBridge _storeBridge;
+		private IStoreShoppingBridge _storeBridge;
+		private IStoreManagementBridge _managerBridge;
 		private IUserBridge _adminSignInBridge;
 		private IAdminBridge _adminBridge;
 		private IUserBridge _signUpBridge1;
@@ -28,9 +28,10 @@ namespace BlackBoxAdminTests
 			_adminBridge = AdminDriver.getBridge();
 			SignUp(ref _signUpBridge1, userSoleStoreOwner, "mishol", userSoleStoreOwnerPass, "12345678");
 			SignUp(ref _signUpBridge2, userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass, "12345678");
-			_storeBridge = StoreDriver.getBridge();
+			_storeBridge = StoreShoppingDriver.getBridge();
 			_storeBridge.GetStoreShoppingService(_signUpBridge1.getUserSession());
 			_storeBridge.OpenStore("blah", "blah2");
+			_managerBridge = null;
 		}
 
 		[TestMethod]
@@ -55,7 +56,10 @@ namespace BlackBoxAdminTests
 			_signInBridge.EnterSystem();
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userSoleStoreOwner).Status);
 			//TODO: try to close a store, this should fail because the store is already closed.
-			
+			_managerBridge = StoreManagementDriver.getBridge();
+			_managerBridge.GetStoreManagementService(_adminSignInBridge.getUserSession(),"blah");
+			MarketAnswer res = _managerBridge.CloseStore();
+			Assert.AreEqual((int)StoreEnum.CloseStoreFail, res.Status);
 			Assert.AreEqual((int)SignInStatus.NoUserFound, _signInBridge.SignIn(userSoleStoreOwner, userSoleStoreOwnerPass).Status);
 
 		}
@@ -128,6 +132,7 @@ namespace BlackBoxAdminTests
 			_signUpBridge2.CleanSession();
 			_signInBridge?.CleanSession();
 			_storeBridge.CleanSession();
+			_managerBridge?.CleanSession();
 			_signUpBridge1.CleanMarket();
 
 		}

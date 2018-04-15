@@ -8,9 +8,10 @@ namespace SadnaSrc.Main
 {
     public interface ISupplyService
     {
-        /*    MarketAnswer AttachExternalSystem();
-            MarketAnswer CreateDelivery(int OrderId, string address);*/
+
         void BreakExternal();
+
+        void FixExternal();
 
     }
 
