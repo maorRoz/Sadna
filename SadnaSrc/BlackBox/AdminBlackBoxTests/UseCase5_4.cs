@@ -1,4 +1,5 @@
-﻿using BlackBox;
+﻿using System;
+using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
@@ -124,8 +125,8 @@ namespace BlackBoxAdminTests
 			string[] purchaseUserHistory = res.ReportList;
 			string[] expectedHistory =
 			{
-				"User: Pnina Product: Goodbye Store: blahblah2 Sale: Immediate Quantity: 2 Price: 30 Date: 15/04/2018",
-				"User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 50 Date: 15/04/2018"
+				"User: Pnina Product: Goodbye Store: blahblah2 Sale: Immediate Quantity: 2 Price: 30 Date: "+DateTime.Now.Date.ToString("d"),
+				"User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 50 Date: "+DateTime.Now.Date.ToString("d")
 			};
 		
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success,res.Status);
@@ -144,9 +145,9 @@ namespace BlackBoxAdminTests
 			string[] purchaseUserHistory = res.ReportList;
 			string[] expectedHistory =
 			{
-				"User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 50 Date: 15/04/2018",
-				"User: Maor Product: hello2 Store: blahblah Sale: Immediate Quantity: 2 Price: 100 Date: 15/04/2018"
-            };
+				"User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 50 Date: "+DateTime.Now.Date.ToString("d"),
+				"User: Maor Product: hello2 Store: blahblah Sale: Immediate Quantity: 2 Price: 100 Date: "+DateTime.Now.Date.ToString("d")
+			};
 			
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, res.Status);
 			for (int i = 0; i < purchaseUserHistory.Length; i++)
