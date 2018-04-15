@@ -212,7 +212,7 @@ namespace SadnaSrc.OrderPool
                 OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
                 try
                 {
-                    double newPrice = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
+                    toBuy.Price = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
                 }
                 catch (MarketException e)
                 {
