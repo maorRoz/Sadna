@@ -258,6 +258,7 @@ namespace SadnaSrc.OrderPool
             }
         }
 
+
         public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
         {
             MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " tickets for lottery sale of " + itemName +

@@ -12,10 +12,12 @@ namespace SadnaSrc.StoreCenter
         LinkedList<Store> GetAllStores();
         Store GetStoreByID(int ID); // this one if you need extra help 
         Store GetStoreByID(string ID);
-        LinkedList<Product> GetAllMarketProducts(); // you will need it. I don't know how to return it by MarketAnswer
         void UpdateQuantityAfterPurchase(string store, string product, int quantity);
         bool ProductExistsInQuantity(string storeName, string product, int quantity);
         double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity);
+
+        bool HasActiveLottery(string storeName, string productName, double priceWantToPay);
+        void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName);
 
     }
 }
