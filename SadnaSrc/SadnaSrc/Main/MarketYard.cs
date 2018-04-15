@@ -25,7 +25,7 @@ namespace SadnaSrc.Main
         public static DateTime MarketDate { get; private set; }
         private MarketYard()
         {
-            MarketDate = new DateTime(9999,12,28);
+            MarketDate = new DateTime(2018, 4, 14);
             InitiateDb();
         }
 

@@ -68,6 +68,11 @@
     <Compile Include="AddProductsTests.cs" />
     <Compile Include="AddToCartTests.cs" />
     <Compile Include="CalculateProductRealPriceTests.cs" />
+    <Compile Include="ChangeProductPurchaseWayToImmediateTests.cs" />
+    <Compile Include="ChangeProductPurchesWayToLotteryTests.cs" />
+    <Compile Include="DoLotteryTests.cs" />
+    <Compile Include="LotteryTests.cs" />
+    <Compile Include="ViewStoreInfoTests.cs" />
     <Compile Include="ViewStoreStockTests.cs" />
     <Compile Include="EditDiscountTests.cs" />
     <Compile Include="EditProductTests.cs" />

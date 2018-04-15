@@ -30,5 +30,6 @@ namespace SadnaSrc.StoreCenter
 
         public StoreAnswer(ManageStoreStatus status,string answer, string[] report) : base((int)status,answer, report) { }
         public StoreAnswer(StoreException e) : base((int)e.Status, e.Message) { }
+        public StoreAnswer(ChangeToLotteryEnum status, string answer) : base((int)status, answer) { }
     }
 }

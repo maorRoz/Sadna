@@ -140,11 +140,29 @@ namespace SadnaSrc.StoreCenter
                 lotterySaleManagementTicket.Original.SystemId,
                 lotterySaleManagementTicket.ProductNormalPrice,
                 lotterySaleManagementTicket.TotalMoneyPayed,
+                lotterySaleManagementTicket.storeName,
                 lotterySaleManagementTicket.StartDate,
                 lotterySaleManagementTicket.EndDate,
                 lotterySaleManagementTicket.IsActive
             };
         }
+
+        public void EditLotteryTicketInDatabase(LotteryTicket lotter)
+        {
+
+            string[] columnNames = {
+                "myID",
+                "LotteryID",
+                "IntervalStart",
+                "IntervalEnd",
+                "Cost",
+                "Status",
+                "UserID"
+            };
+            UpdateTable("LotteryTicket", "myID = '" + lotter.myID + "'", columnNames,
+                GetTicketStringValues(lotter), GetTicketValuesArray(lotter));
+        }
+
         private object[] GetStoreArray(Store store)
         {
             return new object[]
@@ -242,6 +260,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + lotterySaleManagementTicket.Original.SystemId + "'",
                 "'" + lotterySaleManagementTicket.ProductNormalPrice + "'",
                 "'" + lotterySaleManagementTicket.TotalMoneyPayed + "'",
+                "'" + lotterySaleManagementTicket.storeName + "'",
                 "'" + lotterySaleManagementTicket.StartDate + "'",
                 "'" + lotterySaleManagementTicket.EndDate + "'",
                 "'" + isActive + "'"
@@ -392,7 +411,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (productReader.Read())
                 {
-                    return new Product(iD, productReader.GetString(1), productReader.GetInt32(2), productReader.GetString(3));
+                    return new Product(iD, productReader.GetString(1), productReader.GetDouble(2), productReader.GetString(3));
                 }
             }
             return null;
@@ -586,7 +605,7 @@ namespace SadnaSrc.StoreCenter
 
         public void AddLottery(LotterySaleManagmentTicket lotteryManagment)
         {
-            InsertTable("LotteryTable", "SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, StartDate,EndDate,IsActive ",
+            InsertTable("LotteryTable", "SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName ,StartDate,EndDate,IsActive ",
                 GetLotteryManagmentStringValues(lotteryManagment), GetLotteryManagmentValuesArray(lotteryManagment));
 
         }
@@ -604,7 +623,23 @@ namespace SadnaSrc.StoreCenter
             }
             return result;
         }
-
+        public LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName)
+        {
+            Product P = getProductByNameFromStore(storeName, productName);
+            return GetLotteryByProductID(P.SystemId);
+        }
+        public int getUserIDFromUserName(string userName)
+        {
+            using (var dbReader = SelectFromTableWithCondition("User", "SystemID", "Name = '" + userName + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    return dbReader.GetInt32(0);
+                }
+                return -1;
+            }
+            
+        }
         public LotterySaleManagmentTicket GetLotteryByProductID(string productID)
         {
             Product P = GetProductID(productID);
@@ -613,9 +648,10 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0), P, DateTime.Parse(dbReader.GetString(4)), DateTime.Parse(dbReader.GetString(5)));
+                    lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0),dbReader.GetString(4), P, DateTime.Parse(dbReader.GetString(5)), DateTime.Parse(dbReader.GetString(6)));
                     lotteryManagement.TotalMoneyPayed = dbReader.GetInt32(3);
-                    lotteryManagement.IsActive = (Boolean.Parse(dbReader.GetString(6)));
+                    
+                    lotteryManagement.IsActive = (Boolean.Parse(dbReader.GetString(7)));
                 }
             }
             return lotteryManagement;
@@ -631,6 +667,7 @@ namespace SadnaSrc.StoreCenter
                 "ProductSystemID",
                 "ProductNormalPrice",
                 "TotalMoneyPayed",
+                "storeName",
                 "StartDate",
                 "EndDate",
                 "IsActive"
