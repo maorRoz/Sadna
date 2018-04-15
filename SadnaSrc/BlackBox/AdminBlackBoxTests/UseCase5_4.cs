@@ -147,7 +147,6 @@ namespace BlackBoxAdminTests
                 "User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 50 Date: 15/04/2018",
                 "User: Maor Product: hello2 Store: blahblah Sale: Immediate Quantity: 2 Price: 100 Date: 15/04/2018"
             };
-
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, res.Status);
             for (int i = 0; i < purchaseUserHistory.Length; i++)
             {
@@ -274,4 +273,99 @@ namespace BlackBoxAdminTests
 
 
     }
+}
+			
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, res.Status);
+			for (int i = 0; i < purchaseUserHistory.Length; i++)
+			{
+				Assert.AreEqual(expectedHistory[i], purchaseUserHistory[i]);
+			}
+
+		}
+
+		[TestMethod]
+		public void NotAdminWrongUserNameUserHistory()
+		{
+			SignIn("hello", adminPass);
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
+		}
+
+		[TestMethod]
+		public void NotAdminWrongUserNameStoreHistory()
+		{
+			SignIn("hello", adminPass);
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
+		}
+
+		[TestMethod]
+		public void NotAdminWrongPasswordStoreHistory()
+		{
+			SignIn(adminName, "852963");
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
+		}
+
+		[TestMethod]
+		public void NotAdminWrongPasswordUserHistory()
+		{
+			SignIn(adminName, "852963");
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
+		}
+
+		[TestMethod]
+		public void NotAdminWrongUserNameAndPasswordStoreHistory()
+		{
+			SignIn("Hello", "852963");
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByStore(storeToCheck).Status);
+		}
+
+		[TestMethod]
+		public void NotAdminWrongUserNameAndPasswordUserHistory()
+		{
+			SignIn("Hello", "852963");
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, _adminBridge.ViewPurchaseHistoryByUser(userToCheck).Status);
+		}
+
+		[TestMethod]
+		public void UserNotFound()
+		{
+			SignIn(adminName, adminPass);
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
+			MarketAnswer res = _adminBridge.ViewPurchaseHistoryByUser(nonExistingUser);
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoUserFound,_adminBridge.ViewPurchaseHistoryByUser(nonExistingUser).Status);
+		}
+
+		[TestMethod]
+		public void StoreNotFound()
+		{
+			SignIn(adminName, adminPass);
+			_adminBridge.GetAdminService(_adminSignInBridge.getUserSession());
+			MarketAnswer res = _adminBridge.ViewPurchaseHistoryByStore(nonExistingStore);
+			Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoStoreFound, _adminBridge.ViewPurchaseHistoryByStore(nonExistingStore).Status);
+		}
+
+		private void SignIn(string userName, string password)
+		{
+			_adminSignInBridge = UserDriver.getBridge();
+			_adminSignInBridge.EnterSystem();
+			_adminSignInBridge.SignIn(userName, password);
+		}
+
+
+		[TestCleanup]
+
+		public void UserTestCleanUp()
+		{
+			_adminSignInBridge.CleanSession();
+			_adminSignInBridge.CleanMarket();
+			
+		}
+
+
+	}
 }
