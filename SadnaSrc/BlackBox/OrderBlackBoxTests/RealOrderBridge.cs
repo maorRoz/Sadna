@@ -35,7 +35,7 @@ namespace BlackBox
 
 		public void CleanSession()
 		{
-			throw new NotImplementedException();
+			_orderService.CleanSession();
 		}
 	}
 }
