@@ -17,7 +17,6 @@ namespace IntegrationTests.FullCycle_Integration
         private IUserService userServiceSession2;
         private ISystemAdminService sysadminSession;
         private StoreShoppingService storeServiceSession;
-        private StoreManagementService storeManagementSession;
         private OrderService orderServiceSession;
         private MarketYard marketSession;
 
