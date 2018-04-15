@@ -39,7 +39,7 @@ namespace StoreCenterTests
         public void addDiscountWhenHasNoPremission()
         {
             userService.EnterSystem();
-            userService.SignIn("Big Smoke", "123");
+            userService.SignIn("CJ", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
             Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);

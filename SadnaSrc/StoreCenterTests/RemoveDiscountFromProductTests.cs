@@ -25,6 +25,7 @@ namespace StoreCenterTests
             handler = ModuleGlobalHandler.GetInstance();
             userService = market.GetUserService();
         }
+        //ignore this line
         [TestMethod]
         public void RemoveDiscountWhenStoreNotExists()
         {
@@ -32,7 +33,7 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
             MarketAnswer ans = liorSession.RemoveDiscountFromProduct("BOX");
-            Assert.AreEqual((int)DiscountStatus.NoStore, ans.Status);
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
         }
         [TestMethod]
         public void RemoveDiscountWhenHasNoPremmision()
@@ -50,7 +51,7 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.RemoveDiscountFromProduct("notExists");
-            Assert.AreEqual((int)DiscountStatus.ProductNotFound, ans.Status);
+            Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
         public void RemoveDiscountWhenDiscountNotExists()
         {

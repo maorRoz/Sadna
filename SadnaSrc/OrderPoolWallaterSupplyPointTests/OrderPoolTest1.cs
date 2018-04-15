@@ -203,39 +203,6 @@ namespace OrderPoolWallaterSupplyPointTests
         /*
          * DB Tests
          */
-        [TestMethod]
-        public void TestGetOrderFromDB1()
-        {
-            OrderItem[] wrap = { item1, item2, item3 };
-            var order = orderService.InitOrder(wrap);
-            int id = order.GetOrderID();
-            orderService.SaveOrderToDB(order);
-            Assert.AreEqual(25.50,
-                orderService.GetOrderFromDB(id).GetPrice());
-        }
-
-        [TestMethod]
-        public void TestGetOrderFromDB2()
-        {
-            OrderItem[] wrap1 = { item1 };
-            OrderItem[] wrap2 = { item2, item3 };
-            var order1 = orderService.InitOrder(wrap1);
-            var order2 = orderService.InitOrder(wrap2);
-
-            try
-            { 
-                orderService.SaveOrderToDB(order1);
-                orderService.SaveOrderToDB(order2);
-                double price1 = orderService.GetOrderFromDB(order1.GetOrderID()).GetPrice();
-                double price2 = orderService.GetOrderFromDB(order2.GetOrderID()).GetPrice();
-                Assert.IsTrue(price1 < price2);
-            }
-            catch (MarketException m)
-            {
-                string s = m.GetErrorMessage();
-            }
-
-        }
 
         [TestMethod]
         public void TestRemoveOrderFromDB()

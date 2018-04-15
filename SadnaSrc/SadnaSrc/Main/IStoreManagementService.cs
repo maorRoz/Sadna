@@ -18,7 +18,7 @@ namespace SadnaSrc.Main
         /**
          * Products Management
          **/
-        MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity);
+        MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity);
         MarketAnswer RemoveProduct(string productName);
         MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
         MarketAnswer AddQuanitityToProduct(string productName, int quantity);
@@ -38,6 +38,7 @@ namespace SadnaSrc.Main
          */
 
         MarketAnswer ViewStoreHistory();
+	    MarketAnswer CloseStore();
 
     }
     public enum StoreEnum
@@ -110,7 +111,7 @@ namespace SadnaSrc.Main
 	}
     public enum CalculateEnum
     {
-        Susccess,
+        Success,
         StoreNotExists,
         ProductNotFound,
         quantityIsGreaterThenStack,
@@ -120,6 +121,14 @@ namespace SadnaSrc.Main
         DiscountNotStarted,
         quanitityIsNonPositive,
         discountIsNotHidden
+    }
+    public enum ChangeToLotteryEnum
+    {
+        Success,
+        StoreNotExists,
+        ProductNotFound,
+        LotteryExists,
+        DatesAreWrong,
     }
 
 

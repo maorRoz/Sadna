@@ -64,9 +64,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FullCycle_Integration\FullCycle_ImmediateBuy_IntegrationTest.cs" />
+    <Compile Include="OrderSyncher_Integration\OrderSyncher_IntegrationTest.cs" />
     <Compile Include="UserAdmin_Integration\AdminView_UserSpot_UserAdmin_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreSyncher_Integration\StoreCenter_OrderPool_IntegrationTest.cs" />
+    <Compile Include="UserSeller_Integration\ManageDiscounts_ViewHistory_IntegrationTests.cs" />
+    <Compile Include="UserSeller_Integration\Promote_ManageProducts_IntegrationTests.cs" />
+    <Compile Include="UserSeller_Integration\UserSeller_Promote_Tests.cs" />
+    <Compile Include="UserSeller_Integration\UserSeller_ActionValidation_Tests.cs" />
     <Compile Include="UserShopper_Integration\User_Store_Shopping_IntegrationTests.cs" />
     <Compile Include="UserBuyer_Integration\UserSpot_OrderPool_IntegrationTest.cs" />
     <Compile Include="UserBuyer_Integration\UserBuyer_RemoveItems_Tests.cs" />
@@ -82,10 +88,7 @@
       <Name>SadnaSrc</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="OrderSyncher_Integration\" />
-    <Folder Include="UserSeller_Integration\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

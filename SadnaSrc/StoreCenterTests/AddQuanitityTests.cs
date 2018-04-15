@@ -27,7 +27,7 @@ namespace StoreCenterTests
         }
 
 
-[TestMethod]
+        [TestMethod]
         public void AddQuanitityWhenStoreNotExists()
         {
             userService.EnterSystem();

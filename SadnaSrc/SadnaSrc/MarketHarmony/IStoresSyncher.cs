@@ -22,7 +22,7 @@ namespace SadnaSrc.MarketHarmony
         /// <summary>
         /// update the lottery details after the purchase of a ticket
         /// </summary>
-        void UpdateLottery(string itemName, string store, string username);
+        void UpdateLottery(string itemName, string store,double moenyPayed, string username);
 
 
         /// <summary>
@@ -33,12 +33,12 @@ namespace SadnaSrc.MarketHarmony
         /// <summary>
         /// Validate that <paramref name="toBuy"/> is valid product to buy by the user
         /// </summary>
-        bool IsTicketValid(string itemName, string store);
+        bool IsTicketValid(string itemName, string store, double wantToPay);
 
 
         /// <summary>
         /// returns an order item with the updated price after discount, if coupon is invalid return null
         /// </summary>
-        OrderItem GetItemFromCoupon(string itemName, string store,int quantity, string coupon);
+        double GetPriceFromCoupon(string itemName, string store, int quantity, string coupon);
     }
 }

@@ -41,7 +41,7 @@ namespace StoreCenterTests
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             Store find = handler.DataLayer.getStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 6);
-            Assert.AreEqual((int)ViewStoreStatus.InvalidUser, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
         }
         [TestMethod]
         public void AddToCartWhenProductIsNotExistsInStore()

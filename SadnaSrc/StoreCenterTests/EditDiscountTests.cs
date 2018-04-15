@@ -33,7 +33,7 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
             MarketAnswer ans = liorSession.EditDiscount("BOX", "DiscountAmount", "10");
-            Assert.AreEqual((int)DiscountStatus.NoStore, ans.Status);
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
         }
         [TestMethod]
         public void EditDiscountWhenHasNoPremmision()
@@ -51,7 +51,7 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditDiscount("notExists", "DiscountAmount", "10");
-            Assert.AreEqual((int)DiscountStatus.ProductNotFound, ans.Status);
+            Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
         [TestMethod]
         public void EditDiscountWhenDiscountNotExists()

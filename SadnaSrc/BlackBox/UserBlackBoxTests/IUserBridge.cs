@@ -15,7 +15,7 @@ namespace BlackBox
 		MarketAnswer ViewCart();
 		MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity);
 		MarketAnswer RemoveFromCart(string store, string product, double unitPrice);
-		IUserService getUserSession();
+		IUserService GetUserSession();
 		void CleanSession();
 		void CleanMarket();
 		

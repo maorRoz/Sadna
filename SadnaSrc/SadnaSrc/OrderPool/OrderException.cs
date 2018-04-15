@@ -20,6 +20,9 @@ namespace SadnaSrc.OrderPool
         {
         }
 
+        public OrderException(LotteryOrderStatus status, string message) : base((int)status, message)
+        {
+        }
 
         protected override string GetModuleName()
         {

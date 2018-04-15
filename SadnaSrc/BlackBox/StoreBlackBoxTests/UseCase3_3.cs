@@ -29,7 +29,7 @@ namespace BlackBoxStoreTests
 			SignUp(ref _userToPromoteBridge,"eurovision","France","852963","78945678");
 			SignUp(ref _userToPromoteBridge2,"blah","NotNice","98989","88888888");
 			_storeBridge = StoreShoppingDriver.getBridge();
-			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
+			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			MarketAnswer res =_storeBridge.OpenStore("basush", "rezahhhhh");
 			Assert.AreEqual((int)OpenStoreStatus.Success,res.Status);
 			_storeManager1 = StoreManagementDriver.getBridge();
@@ -42,13 +42,13 @@ namespace BlackBoxStoreTests
 		public void StoreOwnerSucceededPromote()
 		{
 
-			_storeManager1.GetStoreManagementService(_bridgeSignUp.getUserSession(), "basush");
+			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "basush");
 			MarketAnswer res = _storeManager1.PromoteToStoreManager("eurovision", "StoreOwner");
 			Assert.AreEqual((int)PromoteStoreStatus.Success, res.Status);
 			//check if eurovision can promote someone himself - if not, he is not an owner
 			SignIn("eurovision", "852963");
 			_storeManager2 = StoreManagementDriver.getBridge();
-			_storeManager2.GetStoreManagementService(_signInBridge.getUserSession(),"basush");
+			_storeManager2.GetStoreManagementService(_signInBridge.GetUserSession(),"basush");
 			Assert.AreEqual((int)PromoteStoreStatus.Success, _storeManager2.PromoteToStoreManager("blah", "StoreOwner").Status);
 		}
 
@@ -58,13 +58,13 @@ namespace BlackBoxStoreTests
 			_adminBridge = UserDriver.getBridge();
 			_adminBridge.EnterSystem();
 			_adminBridge.SignIn(adminName, adminPass);
-			_storeManager1.GetStoreManagementService(_adminBridge.getUserSession(),"basush");
+			_storeManager1.GetStoreManagementService(_adminBridge.GetUserSession(),"basush");
 			MarketAnswer res = _storeManager1.PromoteToStoreManager("eurovision", "StoreOwner");
 			Assert.AreEqual((int)PromoteStoreStatus.Success, res.Status);
 			//check if eurovision can promote someone himself - if not, he is not an owner
 			SignIn("eurovision", "852963");
 			_storeManager2 = StoreManagementDriver.getBridge();
-			_storeManager2.GetStoreManagementService(_signInBridge.getUserSession(), "basush");
+			_storeManager2.GetStoreManagementService(_signInBridge.GetUserSession(), "basush");
 			Assert.AreEqual((int)PromoteStoreStatus.Success, _storeManager2.PromoteToStoreManager("blah", "StoreOwner").Status);
 
 		}
@@ -72,7 +72,7 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void PromotesHimselfToOwner()
 		{
-			_storeManager1.GetStoreManagementService(_bridgeSignUp.getUserSession(), "basush");
+			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "basush");
 			MarketAnswer res = _storeManager1.PromoteToStoreManager("LAMA", "StoreOwner");
 			Assert.AreEqual((int)PromoteStoreStatus.PromoteSelf, res.Status);
 		}
@@ -80,7 +80,7 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void NoUserFoundToPromote()
 		{
-			_storeManager1.GetStoreManagementService(_bridgeSignUp.getUserSession(), "basush");
+			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "basush");
 			MarketAnswer res = _storeManager1.PromoteToStoreManager("euro", "StoreOwner");
 			Assert.AreEqual((int)PromoteStoreStatus.NoUserFound, res.Status);
 		}
@@ -88,7 +88,7 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void InvalidStore()
 		{
-			_storeManager1.GetStoreManagementService(_bridgeSignUp.getUserSession(), "mahar");
+			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "mahar");
 			MarketAnswer res = _storeManager1.PromoteToStoreManager("eurovision", "StoreOwner");
 			Assert.AreEqual((int)PromoteStoreStatus.InvalidStore, res.Status);
 		}
@@ -96,7 +96,7 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void NotOwnerTriesToPromoteToOwner()
 		{
-			_storeManager1.GetStoreManagementService(_userToPromoteBridge.getUserSession(),"basush");
+			_storeManager1.GetStoreManagementService(_userToPromoteBridge.GetUserSession(),"basush");
 			MarketAnswer res = _storeManager1.PromoteToStoreManager("blah", "StoreOwner");
 			Assert.AreEqual((int)PromoteStoreStatus.NoAuthority,res.Status);
 

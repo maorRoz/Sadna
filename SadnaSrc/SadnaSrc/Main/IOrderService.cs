@@ -12,12 +12,12 @@ namespace SadnaSrc.Main
     {
         MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice);
 
-        MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, string coupon);
+        MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon);
 
         MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity,double unitPrice);
 
         MarketAnswer BuyAllItemsFromStore(string store);
-
+        
         MarketAnswer BuyEverythingFromCart();
 
         MarketAnswer GiveDetails(string userName, string address, string creditCard);
@@ -45,5 +45,12 @@ namespace SadnaSrc.Main
         NoOrderItemInOrder,
         ItemAlreadyInOrder,
         InvalidDetails
+    }
+
+    public enum LotteryOrderStatus
+    {
+        Success,
+        InvalidLotteryID,
+        InvalidLotteryTicket
     }
 }

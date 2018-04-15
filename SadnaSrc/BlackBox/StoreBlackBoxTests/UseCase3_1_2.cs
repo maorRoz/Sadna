@@ -1,8 +1,7 @@
-﻿using BlackBox;
+using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-//TODO: change statuses.
 namespace BlackBoxStoreTests
 {
 	[TestClass]
@@ -19,10 +18,10 @@ namespace BlackBoxStoreTests
 		{
 			SignUp(ref _userBridge, "Pnina", "lo kef", "777777", "88888888");
 			_storeBridge = StoreShoppingDriver.getBridge();
-			_storeBridge.GetStoreShoppingService(_userBridge.getUserSession());
+			_storeBridge.GetStoreShoppingService(_userBridge.GetUserSession());
 			_storeBridge.OpenStore("lokef", "li");
 			_storeManage1 = StoreManagementDriver.getBridge();
-			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer res1 = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			Assert.AreEqual((int)StoreEnum.Success, res1.Status);
 			_userBridge2 = null;
@@ -34,36 +33,55 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer result2 = _storeManage1.RemoveProduct("bamba");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
-			//TODO: check in the stock to see if the product was indeed removed.
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			Assert.AreEqual(0, actualResult.Length);
 		}
 
 		[TestMethod]
 		public void ProductNotFoundInTheStore()
 		{
-			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer res = _storeManage1.RemoveProduct("bambuu");
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res.Status);
 		}
 
 		[TestMethod]
-		public void NoPermissionsToAddAProduct()
+		public void NoPermissionsToRemoveAProduct()
 		{
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
 			_storeManage2 = StoreManagementDriver.getBridge();
-			_storeManage2.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
+			_storeManage2.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.RemoveProduct("bamba");
-			//Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
-			//TODO: to complete this when lior changes the statuses.
-			//TODO: to check the product was not added.
+			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			//didn't succeed in removing the product, there is still one product
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
+
 		}
 
 		[TestMethod]
 		public void NoSuchStore()
 		{
 			_storeManage2 = StoreManagementDriver.getBridge();
-			_storeManage2.GetStoreManagementService(_userBridge.getUserSession(), "hahaha");
+			_storeManage2.GetStoreManagementService(_userBridge.GetUserSession(), "hahaha");
 			MarketAnswer res2 = _storeManage2.RemoveProduct("bamba");
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, res2.Status);
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			//didn't succeed in removing the product, there is still one product
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 
