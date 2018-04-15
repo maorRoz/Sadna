@@ -311,12 +311,12 @@ namespace StoreCenterTests
         [TestMethod]
         public void AddLotteryTicket()
         {
-            LotteryTicket expected = new LotteryTicket("T2", "L1", 0, 0, 0, 0); ;
-            LotteryTicket find = handler.DataLayer.GetLotteryTicket("T2");
+            LotteryTicket expected = new LotteryTicket("T15", "L1", 0, 0, 0, 0); ;
+            LotteryTicket find = handler.DataLayer.GetLotteryTicket("T15");
             toDeleteTicket = expected;
             Assert.IsNull(find);
             handler.DataLayer.AddLotteryTicket(expected);
-            find = handler.DataLayer.GetLotteryTicket("T2");
+            find = handler.DataLayer.GetLotteryTicket("T15");
             Assert.AreEqual(expected, find);
         }
         [TestMethod]

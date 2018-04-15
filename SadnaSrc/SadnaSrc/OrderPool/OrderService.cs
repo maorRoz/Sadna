@@ -212,7 +212,7 @@ namespace SadnaSrc.OrderPool
                 OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
                 try
                 {
-                    double newPrice = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
+                    toBuy.Price = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
                 }
                 catch (MarketException e)
                 {
@@ -412,9 +412,12 @@ namespace SadnaSrc.OrderPool
 
         private void GetUserDetailsFromBuyer()
         {
-            UserName = _buyer.GetName();
-            UserAddress = _buyer.GetAddress();
-            CreditCard = _buyer.GetCreditCard();
+            if (_buyer.GetName() != null)
+            {
+                UserName = _buyer.GetName();
+                UserAddress = _buyer.GetAddress();
+                CreditCard = _buyer.GetCreditCard();
+            }    
         }
 
         private void IsValidUserDetails(string userName, string address, string creditCard)
