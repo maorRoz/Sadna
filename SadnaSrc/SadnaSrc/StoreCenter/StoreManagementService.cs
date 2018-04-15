@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class StoreManagementService : IStoreManagementService
     {
-
+        
         public Store store;
         ModuleGlobalHandler global;
         private IUserSeller _storeManager;
@@ -60,7 +60,7 @@ namespace SadnaSrc.StoreCenter
                 return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
             }
         }
-
+        
 
         private void ValidatePromotionEligible(string actions)
         {
@@ -308,6 +308,10 @@ namespace SadnaSrc.StoreCenter
             {
                 return new StoreAnswer(exe);
             }
+            catch (MarketException exe)
+            {
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+            }
         }
 
         //TODO: fix this
@@ -318,7 +322,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "check if store exists");
                 checkIfStoreExists();
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
-                _storeManager.CanDeclareDiscountPolicy();
+                _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", "check if product exists");
                 checkIfProductExists(productName);
@@ -329,6 +333,9 @@ namespace SadnaSrc.StoreCenter
                     MarketLog.Log("StoreCenter", " product has a lottery");
                     throw new StoreException(ChangeToLotteryEnum.LotteryExists, "product has a lottery");
                 }
+                MarketLog.Log("StoreCenter", "check if dates are OK");
+                if (startDate.Date > endDate.Date)
+                    throw new StoreException(ChangeToLotteryEnum.DatesAreWrong, "start date is lated then end date");
                 stockListItem.PurchaseWay = PurchaseEnum.Lottery;
                 global.DataLayer.EditStockInDatabase(stockListItem);
                 LotterySaleManagmentTicket lotterySaleManagmentTicket = new LotterySaleManagmentTicket(global.GetLottyerID(),
@@ -577,7 +584,7 @@ namespace SadnaSrc.StoreCenter
             if (global.IsProductNameAvailableInStore(_storeName, productName))
             {
                 MarketLog.Log("StoreCenter", "product does not exists");
-                throw new StoreException(DiscountStatus.ProductNotFound, "product not found");
+                throw new StoreException(StoreEnum.ProductNotFound, "product not found");
             }
         }
         private Discount editDiscountdiscyoutTypePrivateMethod(Discount discount, string newValue, out StoreAnswer result, string productName)
@@ -594,7 +601,7 @@ namespace SadnaSrc.StoreCenter
             if (!global.DataLayer.IsStoreExist(_storeName))
             {
                 MarketLog.Log("StoreCenter", " store does not exists");
-                throw new StoreException(DiscountStatus.NoStore, "store not exists");
+                throw new StoreException(StoreEnum.StoreNotExists, "store not exists");
             }
             MarketLog.Log("StoreCenter", " store exists");
         }

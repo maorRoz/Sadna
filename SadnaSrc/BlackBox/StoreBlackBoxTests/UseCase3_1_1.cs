@@ -42,7 +42,7 @@ namespace BlackBoxStoreTests
 			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
 			_storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
 			MarketAnswer result = _storeBridge.AddNewProduct("bamba", 80, "nice snack", 1);
-			Assert.AreEqual((int)StoreEnum.ProductNotFound, result.Status);
+			Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, result.Status);
 			//TODO: after lior changes the statuses, change this status.
 		}
 

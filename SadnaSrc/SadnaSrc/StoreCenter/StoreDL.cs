@@ -146,6 +146,23 @@ namespace SadnaSrc.StoreCenter
                 lotterySaleManagementTicket.IsActive
             };
         }
+
+        public void EditLotteryTicketInDatabase(LotteryTicket lotter)
+        {
+
+            string[] columnNames = {
+                "myID",
+                "LotteryID",
+                "IntervalStart",
+                "IntervalEnd",
+                "Cost",
+                "Status",
+                "UserID"
+            };
+            UpdateTable("LotteryTicket", "myID = '" + lotter.myID + "'", columnNames,
+                GetTicketStringValues(lotter), GetTicketValuesArray(lotter));
+        }
+
         private object[] GetStoreArray(Store store)
         {
             return new object[]
@@ -606,7 +623,7 @@ namespace SadnaSrc.StoreCenter
             }
             return result;
         }
-        public LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string productName, string storeName)
+        public LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName)
         {
             Product P = getProductByNameFromStore(storeName, productName);
             return GetLotteryByProductID(P.SystemId);

@@ -64,6 +64,14 @@ namespace SadnaSrc.StoreCenter
             }
             return null;
         }
+        public LotteryTicket Dolottery(int numberForTests)
+        {
+            if (TotalMoneyPayed == ProductNormalPrice)
+            {
+                return InformAllWinner(numberForTests);
+            }
+            return null;
+        }
         private int Random()
         {
 
@@ -87,6 +95,7 @@ namespace SadnaSrc.StoreCenter
                 {
                     lotter.RunLosing();
                 }
+                handler.DataLayer.EditLotteryTicketInDatabase(lotter);
             }
             return winner;
         }

@@ -216,13 +216,29 @@ namespace SadnaSrc.StoreCenter
 
         public bool HasActiveLottery(string storeName, string productName, double priceWantToPay)
         {
-            StockListItem item = DataLayer.GetProductFromStore(storeName, productName);
+            LotterySaleManagmentTicket Lotto;
+            StockListItem item;
+            try
+            {
+                item = DataLayer.GetProductFromStore(storeName, productName);
+            }
+            catch(Exception)
+            { return false; }
+            if (item == null)
+                return false;
             if (item.PurchaseWay != PurchaseEnum.Lottery)
                 return false;
-            LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName,productName);
+            try
+            {
+                Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, productName);
+            }
+            catch (Exception)
+            { return false; }
             if (Lotto == null)
                 return false;
             if (!Lotto.IsActive)
+                return false;
+            if (priceWantToPay <= 0)
                 return false;
             if (!Lotto.CanPurchase(priceWantToPay))
                 return false;

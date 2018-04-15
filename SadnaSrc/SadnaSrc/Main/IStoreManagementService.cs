@@ -127,6 +127,7 @@ namespace SadnaSrc.Main
         StoreNotExists,
         ProductNotFound,
         LotteryExists,
+        DatesAreWrong,
     }
 
 

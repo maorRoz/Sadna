@@ -71,6 +71,17 @@ namespace StoreCenterTests
             Assert.AreEqual(1,find);
         }
         [TestMethod]
+        public void EditLotteryTicketInDatabase()
+        {
+            toDeleteTicket = new LotteryTicket("T99", "L4", 0, 1, 1, 5);
+            handler.DataLayer.AddLotteryTicket(toDeleteTicket);
+            toDeleteTicket.myStatus = LotteryTicketStatus.Cancel;
+            handler.DataLayer.EditLotteryTicketInDatabase(toDeleteTicket);
+            LotteryTicket find = handler.DataLayer.GetLotteryTicket("T99");
+            Assert.AreEqual(toDeleteTicket, find);
+        }
+
+        [TestMethod]
         public void EditProduct()
         {
             Product product = new Product("P105", "X", 100, "Exits ForTests Only");
