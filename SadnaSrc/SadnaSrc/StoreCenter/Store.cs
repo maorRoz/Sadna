@@ -72,9 +72,10 @@ namespace SadnaSrc.StoreCenter
         }
     }
 }
-//////////////////// this function will be removed after I will have Maor function!//////////////////////
+        //////////////////// this function will be removed after I will have Maor function!//////////////////////
 /*
         
+
    
         
         public Product GetProductById(string ID) //will return null if product is not exists
@@ -138,6 +139,9 @@ namespace SadnaSrc.StoreCenter
                     GetLotterySale(product) != null &&
                     GetLotterySale(product).CanPurchase(amountOfMoney);
         }
+
+
+
         public MarketAnswer EditDiscount(string productID, string whatToEdit, string newValue)
         {
             StoreAnswer result = null;
@@ -146,6 +150,7 @@ namespace SadnaSrc.StoreCenter
             if (product == null) { return new StoreAnswer(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock"); };
                 Discount discount = stock.GetProductDiscount(product);
             if (discount == null) { return new StoreAnswer(StoreEnum.DiscountNotFound, "product " + product.ToString() + " has no discount"); };
+
             if (whatToEdit == "discountType")
             {
                 discount.discountType = handler.GetdiscountTypeEnumString(newValue);
@@ -154,13 +159,8 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "startDate")
             {
                 DateTime startTime = DateTime.Parse(newValue);
-                if (startTime < 
-                
-    
-    
-    
-    
-    .Date) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time in the past"); }
+                if (startTime < DateTime.Now.Date) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time in the past"); }
+
                 if (startTime > discount.EndDate) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time that is later then the discount end time"); }
                 discount.startDate = startTime;
                 result= new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount Start Date become " + startTime);
@@ -170,6 +170,7 @@ namespace SadnaSrc.StoreCenter
             {
                 DateTime EndDate = DateTime.Parse(newValue);
                 if (EndDate < MarketYard.MarketDate) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past"); }
+
                 if (EndDate < discount.startDate) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set end time that is sooner then the discount start time"); }
                 discount.EndDate = EndDate;
                 result = new StoreAnswer(StoreEnum.Success, "item " + product.ToString() + " discount End Date become " + EndDate);
@@ -195,6 +196,7 @@ namespace SadnaSrc.StoreCenter
             handler.DataLayer.EditDiscountInDatabase(discount);
             return result;
         }
+
         internal MarketAnswer SetStoreAddress(string _address)
         {
             Address = _address;
@@ -202,6 +204,7 @@ namespace SadnaSrc.StoreCenter
             handler.DataLayer.EditStore(this);
             return new StoreAnswer(StoreEnum.Success, "Store Address changed");
         }
+
         internal MarketAnswer SetStoreName(string _name)
         {
             Address = _name;
@@ -209,6 +212,7 @@ namespace SadnaSrc.StoreCenter
             handler.DataLayer.EditStore(this);
             return new StoreAnswer(StoreEnum.Success, "Store Address changed");
         }
+
         public MarketAnswer EditProduct (string productID, string whatToEdit, string newValue)
         {
             StoreAnswer result = null;
@@ -267,6 +271,7 @@ namespace SadnaSrc.StoreCenter
                 else { 
                 stockListItem.PurchaseWay = purchaseEnum;
                 result = new StoreAnswer(StoreEnum.Success, "item " + stockListItem.Product.SystemId + " added PurchaseWay of" + newValue);
+
                 }
             }
             if (result == null) { return new StoreAnswer(StoreEnum.UpdateProductFail, "no leagal attrebute found"); }
@@ -321,4 +326,5 @@ namespace SadnaSrc.StoreCenter
         }
         
 }
+
 */

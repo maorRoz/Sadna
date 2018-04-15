@@ -147,14 +147,12 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "checking if user has premmisions");
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "checking if product exists");
-                if (storeLogic.IsProductNameAvailableInStore(store, productName)) //aka product is NotFiniteNumberException in store
-                {
-                    MarketLog.Log("StoreCenter", "Product is not exists in the store");
-                    throw new StoreException(StoreEnum.ProductNotFound, "product is not exists");
-                }
-                StockListItem stockListItem = storeLogic.GetProductFromStore(store, productName);
+                if (storeLogic.IsProductNameAvailableInStore(store,productName)) //aka product is NotFiniteNumberException in store
+                { MarketLog.Log("StoreCenter", "Product is not exists in the store");
+                    throw new StoreException(StoreEnum.ProductNotFound, "product is not exists"); }
+                StockListItem stockListItem =  storeLogic.GetProductFromStore(store,productName);
                 MarketLog.Log("StoreCenter", "checking that the required quantity is not too big");
-                if (quantity > stockListItem.Quantity)
+                if (quantity> stockListItem.Quantity)
                 {
                     MarketLog.Log("StoreCenter", "required quantity is not too big");
                     throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big");
@@ -169,9 +167,9 @@ namespace SadnaSrc.StoreCenter
                 {
                     if (stockListItem.Discount.discountType == discountTypeEnum.Visible)
                         if (stockListItem.Discount.checkTime())
-                            stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
+                        stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
                 }
-                _shopper.AddToCart(stockListItem.Product, store, quantity);
+                _shopper.AddToCart(stockListItem.Product, store,quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
                 return new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
                                                                  " successfully added to the user's cart!");
@@ -216,7 +214,7 @@ namespace SadnaSrc.StoreCenter
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
         }
-
+        
 
         public void CleanSeesion()
         {

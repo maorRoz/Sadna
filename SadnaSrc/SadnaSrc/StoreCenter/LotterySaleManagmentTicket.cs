@@ -12,9 +12,9 @@ namespace SadnaSrc.StoreCenter
     {
         public string SystemID { get; set; }
         public Product Original { get; }
-        public double ProductNormalPrice { get; }
+        public double ProductNormalPrice { get;  }
         public string storeName { get; set; }
-        public double TotalMoneyPayed { get; set; }
+        public  double TotalMoneyPayed { get; set; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
         public bool IsActive { get; set; }
@@ -30,13 +30,12 @@ namespace SadnaSrc.StoreCenter
             storeName = _storeName;
             IsActive = true;
         }
-
+        
         /** 
          * will be used by the store
          **/
 
-        public bool CanPurchase(double moneyPayed)
-        {
+        public bool CanPurchase(double moneyPayed) {
             return (TotalMoneyPayed + moneyPayed <= ProductNormalPrice);
         }
         public bool checkDatesWhenPurches()

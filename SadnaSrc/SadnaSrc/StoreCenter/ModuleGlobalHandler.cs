@@ -58,8 +58,8 @@ namespace SadnaSrc.StoreCenter
         }
         public bool IsProductNameAvailableInStore(string storeName, string productName)
         {
-            Product P = DataLayer.getProductByNameFromStore(storeName, productName);
-            return (P == null);
+                Product P = DataLayer.getProductByNameFromStore(storeName, productName);
+                return (P == null);
         }
         public string PrintEnum(LotteryTicketStatus status)
         {
@@ -88,12 +88,12 @@ namespace SadnaSrc.StoreCenter
             {
                 case PurchaseEnum.Immediate: return "Immediate";
                 case PurchaseEnum.Lottery: return "Lottery";
-                default: throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
+                default: throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists"); 
             }
         }
         public discountTypeEnum GetdiscountTypeEnumString(string discountType)
         {
-            if ((discountType == "HIDDEN") || (discountType == "hidden") || (discountType == "Hidden"))
+            if ((discountType == "HIDDEN")|| (discountType == "hidden") || (discountType == "Hidden"))
                 return discountTypeEnum.Hidden;
             if ((discountType == "VISIBLE") || (discountType == "visible") || (discountType == "Visible"))
                 return discountTypeEnum.Visible;
@@ -101,31 +101,31 @@ namespace SadnaSrc.StoreCenter
         }
         public PurchaseEnum GetPurchaseEnumString(string purchaseType)
         {
-            if ((purchaseType == "Immediate") || (purchaseType == "immediate") || (purchaseType == "IMMEDIATE"))
+            if ((purchaseType == "Immediate")|| (purchaseType == "immediate")|| (purchaseType == "IMMEDIATE"))
                 return PurchaseEnum.Immediate;
-            if ((purchaseType == "Lottery") || (purchaseType == "lottery") || (purchaseType == "LOTTERY"))
+            if ((purchaseType == "Lottery")|| (purchaseType == "lottery")|| (purchaseType == "LOTTERY"))
                 return PurchaseEnum.Lottery;
-            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
+            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists"); 
         }
 
         internal LotteryTicketStatus GetLotteryStatusString(string lotteryStatus)
         {
-            if ((lotteryStatus == "CANCEL") || (lotteryStatus == "Cancel") || (lotteryStatus == "cancel"))
+            if ((lotteryStatus == "CANCEL")|| (lotteryStatus == "Cancel")|| (lotteryStatus == "cancel"))
                 return LotteryTicketStatus.Cancel;
-            if ((lotteryStatus == "WINNING") || (lotteryStatus == "Winning") || (lotteryStatus == "winning"))
+            if ((lotteryStatus == "WINNING")|| (lotteryStatus == "Winning")|| (lotteryStatus == "winning"))
                 return LotteryTicketStatus.Winning;
-            if ((lotteryStatus == "WAITING") || (lotteryStatus == "Waiting") || (lotteryStatus == "waiting"))
+            if ((lotteryStatus == "WAITING")|| (lotteryStatus == "Waiting")|| (lotteryStatus == "waiting"))
                 return LotteryTicketStatus.Waiting;
-            if ((lotteryStatus == "LOSING") || (lotteryStatus == "Losing") || (lotteryStatus == "losing"))
+            if ((lotteryStatus == "LOSING")|| (lotteryStatus == "Losing")|| (lotteryStatus == "losing"))
                 return LotteryTicketStatus.Losing;
-            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
+            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists"); 
         }
 
 
         /**
          * next section is ID handlers
          **/
-        public string GetProductID()
+            public string GetProductID()
         {
             int currentMaxProductId = globalProductID;
             globalProductID++;
@@ -165,10 +165,10 @@ namespace SadnaSrc.StoreCenter
         public void UpdateQuantityAfterPurchase(string storeName, string productName, int quantity)
         {
             Store store = DataLayer.getStorebyName(storeName);
-            if (store == null) { throw new StoreException(StoreSyncStatus.NoStore, "no such store"); }
+            if (store ==null) { throw new StoreException(StoreSyncStatus.NoStore, "no such store"); }
             StockListItem product = DataLayer.GetProductFromStore(storeName, productName);
             if (product.Quantity < quantity || quantity <= 0)
-            { throw new StoreException(StoreSyncStatus.NoProduct, "product doesn't exist in this quantity"); }
+                { throw new StoreException(StoreSyncStatus.NoProduct, "product doesn't exist in this quantity"); }
             product.Quantity -= quantity;
             DataLayer.EditStockInDatabase(product);
         }
@@ -203,7 +203,7 @@ namespace SadnaSrc.StoreCenter
                 throw new StoreException(CalculateEnum.ProductHasNoDiscount, "product has no discount");
             if (item.Discount.discountCode != _DiscountCode)
                 throw new StoreException(CalculateEnum.DiscountCodeIsWrong, "discount code is wrong");
-            if (item.Discount.discountType != discountTypeEnum.Hidden)
+            if (item.Discount.discountType!=discountTypeEnum.Hidden)
                 throw new StoreException(CalculateEnum.discountIsNotHidden, "discount Is Not Hiddeng");
             if (MarketYard.MarketDate < item.Discount.startDate.Date)
                 throw new StoreException(CalculateEnum.DiscountNotStarted, "Discount Time Not Started Yet");
@@ -222,7 +222,7 @@ namespace SadnaSrc.StoreCenter
             {
                 item = DataLayer.GetProductFromStore(storeName, productName);
             }
-            catch (Exception)
+            catch(Exception)
             { return false; }
             if (item == null)
                 return false;
@@ -253,7 +253,7 @@ namespace SadnaSrc.StoreCenter
             if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))
             {
                 OrderSyncherHarmony syncher = new OrderSyncherHarmony();
-                syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID());
+                syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, 1, Lotto.getWinnerID());
             }
         }
     }

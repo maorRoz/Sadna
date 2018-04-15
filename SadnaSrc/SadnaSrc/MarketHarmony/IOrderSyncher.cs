@@ -14,7 +14,7 @@ namespace SadnaSrc.MarketHarmony
         /// Close a lottery sale in store in case of lottery sold out
         /// </summary>
         /// 
-        void CloseLottery(string productName, string store, int winnerId);
+        void CloseLottery(string productName, string store, int winnerId); 
 
 
         /// <summary>

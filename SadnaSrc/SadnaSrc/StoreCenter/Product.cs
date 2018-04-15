@@ -38,11 +38,11 @@ namespace SadnaSrc.StoreCenter
 
         private bool Equals(Product obj)
         {
-            return ((SystemId == obj.SystemId) & (Name == obj.Name) & (BasePrice == obj.BasePrice));
+            return ((SystemId == obj.SystemId)&(Name== obj.Name) & (BasePrice == obj.BasePrice));
         }
         public override string ToString()
         {
-            return " name: " + Name + " base price: " + BasePrice + " description: " + Description;
+            return " name: " + Name+" base price: "+BasePrice+ " description: "+ Description;
         }
 
         public override int GetHashCode()
@@ -57,3 +57,4 @@ namespace SadnaSrc.StoreCenter
         }
     }
 }
+
