@@ -33,7 +33,7 @@ namespace SadnaSrc.MarketHarmony
         /// <summary>
         /// Validate that <paramref name="toBuy"/> is valid product to buy by the user
         /// </summary>
-        bool IsTicketValid(string itemName, string store);
+        bool IsTicketValid(string itemName, string store, double wantToPay);
 
 
         /// <summary>
