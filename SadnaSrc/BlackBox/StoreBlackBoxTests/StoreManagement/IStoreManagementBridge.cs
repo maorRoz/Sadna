@@ -11,7 +11,7 @@ namespace BlackBox
 	{
 		void GetStoreManagementService(IUserService userService, string store);
 		MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions);
-		MarketAnswer AddNewProduct(string _name, int _price, string _description, int quantity);
+		MarketAnswer AddNewProduct(string name, int price, string description, int quantity);
 		MarketAnswer RemoveProduct(string productName);
 		MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
 		MarketAnswer AddQuanitityToProduct(string productName, int quantity);

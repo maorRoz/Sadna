@@ -20,10 +20,10 @@ namespace BlackBoxStoreTests
 		{
 			SignUp(ref _userBridge, "Pnina", "lo kef", "777777", "88888888");
 			_storeBridge = StoreShoppingDriver.getBridge();
-			_storeBridge.GetStoreShoppingService(_userBridge.getUserSession());
+			_storeBridge.GetStoreShoppingService(_userBridge.GetUserSession());
 			_storeBridge.OpenStore("lokef", "li");
 			_storeManage1 = StoreManagementDriver.getBridge();
-			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result1 = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			Assert.AreEqual((int)StoreEnum.Success, result1.Status);
 			_userBridge2 = null;
@@ -138,7 +138,7 @@ namespace BlackBoxStoreTests
 		public void StoreDoesntExist()
 		{
 			_storeManage2 = StoreManagementDriver.getBridge();
-			_storeManage2.GetStoreManagementService(_userBridge.getUserSession(), "hahaha");
+			_storeManage2.GetStoreManagementService(_userBridge.GetUserSession(), "hahaha");
 			MarketAnswer res2 = _storeManage2.EditProduct("bamba", "Name", "bamba500");
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, res2.Status);
 
@@ -149,7 +149,7 @@ namespace BlackBoxStoreTests
 		{
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
 			_storeManage2 = StoreManagementDriver.getBridge();
-			_storeManage2.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
+			_storeManage2.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.EditProduct("bambush", "BasePrice", "100");
 			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
 
@@ -191,7 +191,7 @@ namespace BlackBoxStoreTests
 		public void ChangeProductsQuantityProductNotFound()
 		{
 			_storeManage2 = StoreManagementDriver.getBridge();
-			_storeManage2.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage2.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer res = _storeManage2.AddQuanitityToProduct("bambuuuu", 5);
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res.Status);
 			//TODO: check to see that the product quantity wasn't changed
@@ -209,7 +209,7 @@ namespace BlackBoxStoreTests
 		public void ChangeProductsQuantityIsNegative()
 		{
 			_storeManage2 = StoreManagementDriver.getBridge();
-			_storeManage2.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage2.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer res = _storeManage2.AddQuanitityToProduct("bambuuuu", -10);
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res.Status);
 			//TODO: check to see that the product quantity wasn't changed
@@ -229,7 +229,7 @@ namespace BlackBoxStoreTests
 		{
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
 			_storeManage2 = StoreManagementDriver.getBridge();
-			_storeManage2.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
+			_storeManage2.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.AddQuanitityToProduct("bamba", 30);
 			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
 			//TODO: to check the product was not edited.
@@ -247,7 +247,7 @@ namespace BlackBoxStoreTests
 		public void ChangeProductsQuantityStoreDoesntExist()
 		{
 			_storeManage2 = StoreManagementDriver.getBridge();
-			_storeManage2.GetStoreManagementService(_userBridge.getUserSession(), "hahaha");
+			_storeManage2.GetStoreManagementService(_userBridge.GetUserSession(), "hahaha");
 			MarketAnswer res2 = _storeManage2.AddQuanitityToProduct("bamba", 30);
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, res2.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");

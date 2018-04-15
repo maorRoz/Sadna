@@ -21,7 +21,7 @@ namespace BlackBoxStoreTests
 		{
 			//TODO: don't forget to delete the store
 			SignUp("Pnina","mishol","7894","12345678");
-			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
+			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.Success, _storeBridge.OpenStore("PninaStore", "Ben-Gurion").Status);
 			MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("PninaStore");
 			string expectedAnswer = "StoreName: PninaStore StoreAddress: Ben-Gurion";
@@ -33,7 +33,7 @@ namespace BlackBoxStoreTests
 		public void StoreAlreadyExists()
 		{
 			SignUp("Pnina", "mishol", "7894", "12345678");
-			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
+			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			_storeBridge.OpenStore("PninaStore", "ben-gurion");
 			Assert.AreEqual((int)OpenStoreStatus.AlreadyExist, _storeBridge.OpenStore("PninaStore", "ben-gurion").Status);
 		}
@@ -42,7 +42,7 @@ namespace BlackBoxStoreTests
 		public void UserDidntSignUpInvalidCreditCart()
 		{
 			SignUp("Pnina", "mishol", "7894", "12345");
-			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
+			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.InvalidUser, _storeBridge.OpenStore("PninaStore", "ben-gurion").Status);
 		}
 
@@ -50,7 +50,7 @@ namespace BlackBoxStoreTests
 		public void UserDidntSignUpInvalidUserName()
 		{
 			SignUp("", "mishol", "7894", "12345678");
-			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
+			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int) OpenStoreStatus.InvalidUser, _storeBridge.OpenStore("PninaStore", "ben-gurion").Status);
 		}
 
@@ -58,7 +58,7 @@ namespace BlackBoxStoreTests
 		public void UserDidntSignUpInvalidAddress()
 		{
 			SignUp("Pnina", null, "7894", "12345678");
-			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
+			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.InvalidUser, _storeBridge.OpenStore("PninaStore", "ben-gurion").Status);
 		}
 
@@ -66,7 +66,7 @@ namespace BlackBoxStoreTests
 		public void UserDidntSignUpInvalidPassword()
 		{
 			SignUp("Pnina", "mishol", "", "12345678");
-			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
+			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.InvalidUser, _storeBridge.OpenStore("PninaStore", "ben-gurion").Status);
 		}
 

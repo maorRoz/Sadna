@@ -72,11 +72,11 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
-		public IUserService getUserSession()
+		public IUserService GetUserSession()
 		{
 			if (real != null)
 			{
-				return real.getUserSession();
+				return real.GetUserSession();
 			}
 			else
 			{

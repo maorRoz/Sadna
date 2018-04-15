@@ -18,7 +18,7 @@ namespace BlackBoxStoreTests
 		{
 			_storeBridge = StoreShoppingDriver.getBridge();
 			SignUp("Pnina", "mishol", "7894", "12345678");
-			_storeBridge.GetStoreShoppingService(_bridgeSignUp.getUserSession());
+			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.Success, _storeBridge.OpenStore("OOF", "BASA").Status);
 			_userWatchStore = null;
 			_storeBridgeGuest = null;
@@ -30,7 +30,7 @@ namespace BlackBoxStoreTests
 			_userWatchStore = UserDriver.getBridge();
 			_userWatchStore.EnterSystem();
 			_storeBridgeGuest = StoreShoppingDriver.getBridge();
-			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
+			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.GetUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
 			Assert.AreEqual((int)ViewStoreStatus.Success,storeDetails.Status);
 			string expectedAnswer = "StoreName: OOF StoreAddress: BASA";
@@ -55,7 +55,7 @@ namespace BlackBoxStoreTests
 			_userWatchStore = UserDriver.getBridge();
 			_userWatchStore.EnterSystem();
 			_storeBridgeGuest = StoreShoppingDriver.getBridge();
-			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
+			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.GetUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOFA");
 			Assert.AreEqual((int)ViewStoreStatus.NoStore, storeDetails.Status);
 			Assert.AreEqual(null, storeDetails.ReportList);
@@ -74,7 +74,7 @@ namespace BlackBoxStoreTests
 		{
 			_userWatchStore = UserDriver.getBridge();
 			_storeBridgeGuest = StoreShoppingDriver.getBridge();
-			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.getUserSession());
+			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.GetUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
 			Assert.AreEqual((int)ViewStoreStatus.InvalidUser, storeDetails.Status);
 			Assert.AreEqual(null, storeDetails.ReportList);

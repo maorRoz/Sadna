@@ -19,7 +19,7 @@ namespace BlackBoxStoreTests
 		{
 			SignUp(ref _userBridge, "Pnina", "lo kef", "777777", "88888888");
 			_storeBridge = StoreShoppingDriver.getBridge();
-			_storeBridge.GetStoreShoppingService(_userBridge.getUserSession());
+			_storeBridge.GetStoreShoppingService(_userBridge.GetUserSession());
 			_storeBridge.OpenStore("lokef", "li");
 			_storeManage1 = StoreManagementDriver.getBridge();
 			_userBridge2 = null;
@@ -28,7 +28,7 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void SuccessAddingProductToStore()
 		{
-			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			Assert.AreEqual((int)StoreEnum.Success, result.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
@@ -44,7 +44,7 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void ProductAlreadyExistsInStore()
 		{
-			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			_storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 1);
 			Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, result.Status);
@@ -54,7 +54,7 @@ namespace BlackBoxStoreTests
 		public void NoPermissionsToAddAProduct()
 		{
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
-			_storeManage1.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
+			_storeManage1.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			Assert.AreEqual((int)StoreEnum.NoPremmision, res.Status);
 		}
@@ -62,7 +62,7 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void QuantityOfProductAddedIsNegative()
 		{
-			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", -1);
 			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
 		}
@@ -70,7 +70,7 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void QuantityOfProductAddedIsZero()
 		{
-			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 0);
 			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
 		}
@@ -78,7 +78,7 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void StoreDoesntExist()
 		{
-			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lamaaaa");
+			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lamaaaa");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 0);
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, result.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
