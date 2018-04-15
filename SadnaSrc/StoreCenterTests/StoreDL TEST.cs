@@ -57,6 +57,30 @@ namespace StoreCenterTests
             Product find = handler.DataLayer.GetProductID("P105");
             Assert.IsNull(find);
         }
+
+        [TestMethod]
+        public void getUserIdByUserNameFail()
+        {
+            int find = handler.DataLayer.getUserIDFromUserName("mmm");
+            Assert.AreEqual(-1, find);
+        }
+        [TestMethod]
+        public void getUserIdByUserNameSuccess()
+        {
+            int find = handler.DataLayer.getUserIDFromUserName("Arik1");
+            Assert.AreEqual(1,find);
+        }
+        [TestMethod]
+        public void EditLotteryTicketInDatabase()
+        {
+            toDeleteTicket = new LotteryTicket("T99", "L4", 0, 1, 1, 5);
+            handler.DataLayer.AddLotteryTicket(toDeleteTicket);
+            toDeleteTicket.myStatus = LotteryTicketStatus.Cancel;
+            handler.DataLayer.EditLotteryTicketInDatabase(toDeleteTicket);
+            LotteryTicket find = handler.DataLayer.GetLotteryTicket("T99");
+            Assert.AreEqual(toDeleteTicket, find);
+        }
+
         [TestMethod]
         public void EditProduct()
         {
@@ -214,7 +238,7 @@ namespace StoreCenterTests
         public void GetLotteryByProductID()
         {
             Product P = handler.DataLayer.GetProductID("P1");//exist in DL by SQL injection
-            LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L1", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018")); //exist in DL by SQL injection
+            LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L1", "X", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018")); //exist in DL by SQL injection
             LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
             Assert.AreEqual(expected, find);
         }
@@ -222,7 +246,7 @@ namespace StoreCenterTests
         public void AddLottery()
         {
             Product P = handler.DataLayer.GetProductID("P3");//exist in DL by SQL injection
-            LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L101", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
+            LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L101", "X", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
             LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
             toDeleteLottery = expected;
             Assert.IsNull(find);
@@ -234,7 +258,7 @@ namespace StoreCenterTests
         public void removeLottery()
         {
             Product P = handler.DataLayer.GetProductID("P3");//exist in DL by SQL injection
-            LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L102", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
+            LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L102", "X", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
             handler.DataLayer.AddLottery(expected);
             LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
             Assert.AreEqual(expected, find);
@@ -246,7 +270,7 @@ namespace StoreCenterTests
         public void EditLotteryInDatabase()
         {
             Product P = handler.DataLayer.GetProductID("P3");//exist in DL by SQL injection
-            LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L101", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
+            LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L101", "X", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
             handler.DataLayer.AddLottery(expected);
             LotterySaleManagmentTicket find = handler.DataLayer.GetLotteryByProductID(P.SystemId);
             toDeleteLottery = expected;

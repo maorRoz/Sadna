@@ -157,7 +157,6 @@ namespace IntegrationTests.UserShopper_Integration
             }
         }
 
-        //This test fails because the user's cart isn't automatically loaded on sign in
         [TestMethod]
         public void AddExistingItemToCartTest()
         {
@@ -299,8 +298,8 @@ namespace IntegrationTests.UserShopper_Integration
             try
             {
                 storeServiceSession.LoginShoper(user, pass);
-                storeServiceSession.OpenStore("The Red Rock", "Mivtza Yoav");
-                Assert.IsFalse(((UserService) userServiceSession).MarketUser.HasStorePolicies());
+                storeServiceSession.OpenStore("24", "Mezada");
+                Assert.AreEqual(0, ((UserService) userServiceSession).MarketUser.GetStoreManagerPolicies("24").Length);
             }
             catch (MarketException)
             {

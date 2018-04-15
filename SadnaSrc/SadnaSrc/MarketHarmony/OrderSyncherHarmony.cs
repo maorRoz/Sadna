@@ -7,7 +7,7 @@ using SadnaSrc.OrderPool;
 
 namespace SadnaSrc.MarketHarmony
 {
-    class OrderSyncherHarmony : IOrderSyncher
+    public class OrderSyncherHarmony : IOrderSyncher
     {
         StoreOrderTools tools;
         public OrderSyncherHarmony()
@@ -15,15 +15,19 @@ namespace SadnaSrc.MarketHarmony
             tools = new StoreOrderTools();
         }
 
-        public void CloseLottery(string productName,string store, int quantity, int winnerId)
+        public void CloseLottery(string productName,string store, int winnerId)
         {
-
-            tools.SendPackage(productName,store,quantity,winnerId);
+            tools.SendPackage(productName,store,winnerId);
         }
 
         public void CancelLottery(string lottery)
         {
             tools.RefundLottery(lottery);
+        }
+
+        public void CleanOrderSyncherSession()
+        {
+            tools.CleanSession();
         }
     }
 }

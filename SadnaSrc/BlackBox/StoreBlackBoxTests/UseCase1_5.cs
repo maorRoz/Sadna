@@ -5,7 +5,6 @@ using SadnaSrc.Main;
 
 namespace UserBlackBoxTests
 {
-	//TODO: change statuses
 	[TestClass]
 	public class UseCase1_5
 	{
@@ -231,7 +230,7 @@ namespace UserBlackBoxTests
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.getUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStore", "bisli", 1);
 			//TODO: when lior fixes the states - this should be invalid user
-			//Assert.AreEqual((int)StoreEnum.NoPremmision, res1.Status);
+			Assert.AreEqual((int)StoreEnum.NoPremmision, res1.Status);
 			//the user can't even watch his cart until entering the system
 			MarketAnswer cartDetails = _bridgeSignUp.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.DidntEnterSystem ,cartDetails.Status);

@@ -9,12 +9,12 @@ namespace SadnaSrc.StoreCenter
 {
     public class LotteryTicket
     {
-        internal int IntervalStart { get; set; }
-        internal int IntervalEnd { get; set; }
-        internal string LotteryNumber { get; set; }
-        internal string myID { get; set; }
-        internal LotteryTicketStatus myStatus { get; set; }
-        internal int UserID { get; set; }
+        public int IntervalStart { get; set; }
+        public int IntervalEnd { get; set; }
+        public string LotteryNumber { get; set; }
+        public string myID { get; set; }
+        public LotteryTicketStatus myStatus { get; set; }
+        public int UserID { get; set; }
 
         public double Cost { get; set; }
         public LotteryTicket(string _myID, string _LotteryNumber, int _IntervalStart, int _IntervalEnd, double cost,  int _userID)

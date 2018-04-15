@@ -39,10 +39,8 @@ namespace SadnaSrc.OrderPool
             _buyer = buyer;
             _storesSync = storesSync;
             _supplyService = SupplyService.Instance;
-            _paymentService = PaymentService.Instance; 
-            UserName = buyer.GetName();
-            UserAddress = _buyer.GetAddress();
-            CreditCard = _buyer.GetCreditCard();
+            _paymentService = PaymentService.Instance;
+            GetUserDetailsFromBuyer();
             _orderDL = new OrderPoolDL();
 
             _supplyService.AttachExternalSystem();
@@ -71,9 +69,7 @@ namespace SadnaSrc.OrderPool
         public void LoginBuyer(string userName, string password)
         {
             ((UserBuyerHarmony)_buyer).LogInBuyer(UserName, password);
-            UserName = userName;
-            UserAddress = _buyer.GetAddress();
-            CreditCard = _buyer.GetCreditCard();
+            GetUserDetailsFromBuyer();
         }
 
         //only for Unit Tests of developer!!(not for integration or blackbox or real usage)
@@ -85,6 +81,7 @@ namespace SadnaSrc.OrderPool
 
         public Order InitOrder(OrderItem[] items)
         {
+            GetUserDetailsFromBuyer();
             CheckAllItems(items);
             Order order = new Order(_orderDL.RandomOrderID(), UserName, UserAddress);
             foreach (OrderItem item in items)
@@ -99,6 +96,7 @@ namespace SadnaSrc.OrderPool
 
         public Order InitOrder()
         {
+            GetUserDetailsFromBuyer();
             Order order = new Order(_orderDL.RandomOrderID(), UserName, UserAddress);
             Orders.Add(order);
             MarketLog.Log("OrderPool", "User " + UserName + " successfully initialized new order " + order.GetOrderID() + ".");
@@ -176,9 +174,9 @@ namespace SadnaSrc.OrderPool
                 SaveOrderToDB(order);
                 OrderItem[] wrap = {toBuy};
                 _storesSync.RemoveProducts(wrap);
+                _buyer.RemoveItemFromCart(itemName, store, quantity, unitPrice);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought item "+ itemName + "in an immediate sale.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought item "+itemName);
-
             }
             catch (OrderException e)
             {
@@ -205,16 +203,23 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, string coupon)
+        public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
         {
             MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " " + itemName + " from store " + store + " in immediate sale...");
             int orderId = 0;
             try
             {
-                OrderItem toBuy = _storesSync.GetItemFromCoupon(itemName, store, quantity, coupon);
-                if (toBuy == null)
-                    throw new OrderException(OrderStatus.InvalidCoupon,
-                        "Order has failed to execute. Invalid coupon number!");
+                OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
+                try
+                {
+                    double newPrice = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
+                }
+                catch (MarketException e)
+                {
+                    MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store." +
+                                               " Error message has been created!");
+                    return new OrderAnswer(OrderStatus.InvalidCoupon, e.GetErrorMessage());
+                }
                 CheckOrderItem(toBuy);
                 Order order = InitOrder();
                 orderId = order.GetOrderID();
@@ -247,11 +252,12 @@ namespace SadnaSrc.OrderPool
             }
             catch (MarketException e)
             {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with User." +
                                            " Error message has been created!");
                 return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
             }
         }
+
 
         public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
         {
@@ -310,6 +316,7 @@ namespace SadnaSrc.OrderPool
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
                 _storesSync.RemoveProducts(itemsToBuy);
+                _buyer.EmptyCart(store);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in store :"+store+".");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought all the items in store :" + store + ".");
             }
@@ -351,6 +358,7 @@ namespace SadnaSrc.OrderPool
                 _paymentService.ProccesPayment(order, CreditCard);
                 SaveOrderToDB(order);
                 _storesSync.RemoveProducts(itemsToBuy);
+                _buyer.EmptyCart();
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in the cart.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought all the items in the cart.");
             }
@@ -400,6 +408,13 @@ namespace SadnaSrc.OrderPool
             {
                 throw new OrderException(OrderStatus.InvalidNameOrAddress, "Cannot proceed with order if no valid user details has been given!");
             }
+        }
+
+        private void GetUserDetailsFromBuyer()
+        {
+            UserName = _buyer.GetName();
+            UserAddress = _buyer.GetAddress();
+            CreditCard = _buyer.GetCreditCard();
         }
 
         private void IsValidUserDetails(string userName, string address, string creditCard)

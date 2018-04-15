@@ -35,6 +35,7 @@ namespace SadnaSrc.UserSpot
                 _userDL.DeleteUserStorePolicy(userName, new StoreManagerPolicy(store, oldAction));
             }
 
+
             if (actionsToAdd.Contains(StoreManagerPolicy.StoreAction.StoreOwner))
             {
                 actionsToAdd = new []{ StoreManagerPolicy.StoreAction.StoreOwner };

@@ -8,6 +8,7 @@ namespace BlackBox
 		MarketAnswer OpenStore(string name, string address);
 		MarketAnswer ViewStoreInfo(string store);
 		MarketAnswer AddProductToCart(string store, string productName, int quantity);
+		MarketAnswer ViewStoreStock(string store);
 		void CleanSession();
 	}
 }

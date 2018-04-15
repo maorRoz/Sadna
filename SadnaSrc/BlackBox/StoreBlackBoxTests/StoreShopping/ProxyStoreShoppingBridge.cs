@@ -53,6 +53,15 @@ namespace BlackBox
 			throw new NotImplementedException();
 		}
 
+		public MarketAnswer ViewStoreStock(string store)
+		{
+			if (real != null)
+			{
+				return real.ViewStoreStock(store);
+			}
+			throw new NotImplementedException();
+		}
+
 		public void CleanSession()
 		{
 			if (real != null)

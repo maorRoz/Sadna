@@ -3,14 +3,11 @@ using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-//TODO: change statuses.
 namespace BlackBoxStoreTests
 {
-	//TODO: to change the status of store enum when it's ready
-	//TODO: pay attention, dear pnina to ProductNofFound and NotAvailableProductName
-	//TODO: which appear to be the same.
+
 	[TestClass]
-	public class UseCase3_1
+	public class UseCase3_1_1
 	{
 		private IStoreShoppingBridge _storeBridge;
 		private IStoreManagementBridge _storeManage1;
@@ -34,17 +31,23 @@ namespace BlackBoxStoreTests
 			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			Assert.AreEqual((int)StoreEnum.Success, result.Status);
-			//TODO: check in the stock to see if the product was indeed added.
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30"};
+			Assert.AreEqual(expectedResult.Length,actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
 		public void ProductAlreadyExistsInStore()
 		{
-			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			_storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
-			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 1);
-			Assert.AreEqual((int)StoreEnum.ProductNotFound, result.Status);
-			//TODO: after lior changes the statuses, change this status.
+			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
+			MarketAnswer result = _storeBridge.AddNewProduct("bamba", 80, "nice snack", 1);
+			Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, result.Status);
 		}
 
 		[TestMethod]
@@ -78,6 +81,15 @@ namespace BlackBoxStoreTests
 			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lamaaaa");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 0);
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, result.Status);
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			//didn't succeed in removing the product, there is still one product
+			string[] expectedResult = { };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		private void SignUp(ref IUserBridge userBridge, string name, string address, string password, string creditCard)
@@ -87,7 +99,6 @@ namespace BlackBoxStoreTests
 			userBridge.SignUp(name, address, password, creditCard);
 		}
 
-		//TODO: make sure that cleanSession of store deletes the products as well as their stores.
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
