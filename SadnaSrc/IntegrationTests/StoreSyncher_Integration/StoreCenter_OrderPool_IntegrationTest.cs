@@ -177,6 +177,45 @@ namespace IntegrationTests.StoreSyncher_Integration
             }
         }
 
+        [TestMethod]
+        public void GetPriceFromCouponTest()
+        {
+            try
+            {
+                Assert.AreEqual(60, storeSyncherHarmony.GetPriceFromCoupon("Pizza","The Red Rock", 2, "D1"));
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void GetPriceFromWrongCouponTest()
+        {
+            try
+            {
+                storeSyncherHarmony.GetPriceFromCoupon("Pizza", "The Red Rock", 2, "D3");
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
+        [TestMethod]
+        public void GetPriceFromNoCouponTest()
+        {
+            try
+            {
+                storeSyncherHarmony.GetPriceFromCoupon("Bamba", "The Red Rock", 2, "D3");
+                Assert.Fail();
+            }
+            catch (MarketException)
+            {
+            }
+        }
+
         /*
          * Actual integration tests
          */
@@ -275,6 +314,51 @@ namespace IntegrationTests.StoreSyncher_Integration
         }
 
         [TestMethod]
+        public void GetItemWithCouponTest()
+        {
+            try
+            {
+                userServiceSession.SignIn("CJ", "123");
+                orderServiceSession.BuyItemWithCoupon("Pizza", "The Red Rock", 2, 60.00, "D1");
+                Assert.AreEqual(8, storeServiceSession.GetProductFromStore("The Red Rock", "Pizza").Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void GetItemWrongCouponTest()
+        {
+            try
+            {
+                userServiceSession.SignIn("CJ", "123");
+                orderServiceSession.BuyItemWithCoupon("Pizza", "The Red Rock", 2, 60.00, "D6");
+                Assert.AreEqual(10, storeServiceSession.GetProductFromStore("The Red Rock", "Pizza").Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void GetItemWithNoCouponTest()
+        {
+            try
+            {
+                userServiceSession.SignIn("Vadim Chernov", "123");
+                orderServiceSession.BuyItemWithCoupon("Bamba", "The Red Rock", 2, 6.00, "D6");
+                Assert.AreEqual(20, storeServiceSession.GetProductFromStore("The Red Rock", "Bamba").Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
         public void BuyAllStockUpdateTest()
         {
             try
@@ -299,6 +383,7 @@ namespace IntegrationTests.StoreSyncher_Integration
             orderServiceSession.CleanSession();
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store1, product1));
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store1, "Goldstar"));
+            storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store1, "Pizza"));
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store2, product2));
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store2, "OCB"));
             MarketYard.CleanSession();

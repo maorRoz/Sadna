@@ -14,7 +14,6 @@ namespace SadnaSrc.StoreCenter
     public class Store
     {
         public string SystemId { get; }
-        private Stock stock { get;}
         private LinkedList<PurchasePolicy> PurchasePolicy;
         public bool IsActive { get; set; }
         public string Name { get; set; }
@@ -25,7 +24,6 @@ namespace SadnaSrc.StoreCenter
             SystemId = id;
             Name = name;
             Address = address;
-            stock = new Stock(SystemId);
             PurchasePolicy = new LinkedList<PurchasePolicy>();
             IsActive = true;
         }
@@ -33,7 +31,6 @@ namespace SadnaSrc.StoreCenter
         public Store(string id, string name, string address, string active)
         {
             SystemId = id;
-            stock = new Stock(SystemId);
             Name = name;
             Address = address;
             PurchasePolicy = new LinkedList<PurchasePolicy>();
@@ -51,8 +48,6 @@ namespace SadnaSrc.StoreCenter
         {
             return IsActive ? "Active" : "InActive";
         }
-        //////////////////// this function will be removed after I will have Maor function!//////////////////////
-
         public MarketAnswer CloseStore()
         {
             if (IsActive)
@@ -64,6 +59,22 @@ namespace SadnaSrc.StoreCenter
             }
             return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is already closed");
         }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType().Equals(this.GetType()))
+            {
+                return ((Store)obj).SystemId.Equals(SystemId) &&
+                    ((Store)obj).Name.Equals(Name) &&
+                    ((Store)obj).Address.Equals(Address);
+            }
+            return false;
+
+        }
+    }
+}
+        //////////////////// this function will be removed after I will have Maor function!//////////////////////
+/*
+        
 
    
         
@@ -148,7 +159,13 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "startDate")
             {
                 DateTime startTime = DateTime.Parse(newValue);
-                if (startTime < DateTime.Now.Date) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time in the past"); }
+                if (startTime < 
+                
+    
+    
+    
+    
+    .Date) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time in the past"); }
 
                 if (startTime > discount.EndDate) { return new StoreAnswer(DiscountStatus.DatesAreWrong, "can't set start time that is later then the discount end time"); }
                 discount.startDate = startTime;
@@ -158,7 +175,7 @@ namespace SadnaSrc.StoreCenter
             if (whatToEdit == "EndDate")
             {
                 DateTime EndDate = DateTime.Parse(newValue);
-                if (EndDate < DateTime.Now.Date) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past"); }
+                if (EndDate < MarketYard.MarketDate) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set start time in the past"); }
 
                 if (EndDate < discount.startDate) { return new StoreAnswer(StoreEnum.UpdateStockFail, "can't set end time that is sooner then the discount start time"); }
                 discount.EndDate = EndDate;
@@ -252,7 +269,7 @@ namespace SadnaSrc.StoreCenter
                 }
                 if (purchaseEnum == PurchaseEnum.Lottery)
                 {
-                    LotterySaleManagmentTicket lotteryManagment = new LotterySaleManagmentTicket(handler.GetLottyerID(), stockListItem.Product, DateTime.Now, DateTime.MaxValue);
+                    LotterySaleManagmentTicket lotteryManagment = new LotterySaleManagmentTicket(handler.GetLottyerID(), Name, stockListItem.Product, DateTime.Now, DateTime.MaxValue);
                     handler.DataLayer.AddLottery(lotteryManagment);
                     stockListItem.PurchaseWay = purchaseEnum;
                     result = new StoreAnswer(StoreEnum.Success, "item " + stockListItem.Product.SystemId + " added PurchaseWay of Lottery, yet, you should change it's values");
@@ -313,29 +330,7 @@ namespace SadnaSrc.StoreCenter
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             return handler.DataLayer.GetHistory(this);
         }
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType().Equals(this.GetType()))
-            {
-                return ((Store)obj).SystemId.Equals(SystemId)&&
-                    ((Store)obj).Name.Equals(Name) &&
-                    ((Store)obj).Address.Equals(Address);
-            }
-            return false;
-
-        }
-
-        public override int GetHashCode()
-        {
-            var hashCode = -862772086;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemId);
-            hashCode = hashCode * -1521134295 + EqualityComparer<Stock>.Default.GetHashCode(stock);
-            hashCode = hashCode * -1521134295 + EqualityComparer<LinkedList<PurchasePolicy>>.Default.GetHashCode(PurchasePolicy);
-            hashCode = hashCode * -1521134295 + IsActive.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Address);
-            return hashCode;
-        }
-    }
+        
 }
 
+*/
