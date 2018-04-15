@@ -45,10 +45,10 @@ namespace BlackBox
             return _userService.RemoveFromCart(store, product, unitPrice);
         }
 
-        public IUserService GetUserSession()
-        {
-            return _userService;
-        }
+		public IUserService GetUserSession()
+		{
+			return _userService;
+		}
 
         public void CleanSession()
         {
