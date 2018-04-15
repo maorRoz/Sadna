@@ -402,7 +402,7 @@ namespace SadnaSrc.StoreCenter
         public string[] GetHistory(Store store)
         {
             string[] result;
-            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + store.SystemId + "'"))
+            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + store.Name + "'"))
             {
                 if (!dbReader.Read())
                 {

@@ -28,6 +28,7 @@ namespace IntegrationTests.UserSeller_Integration
         private string storeAction4 = "DeclareDiscountPolicy";
         private string storeOwner = "StoreOwner";
         private string existingProduct = "Bamba";
+        private string existingProduct2 = "Goldstar";
 
         [TestInitialize]
         public void MarketBuilder()
@@ -42,7 +43,7 @@ namespace IntegrationTests.UserSeller_Integration
         }
 
         /*
-         * Add Product tests
+         * Add Discount tests
          */
 
         [TestMethod]
@@ -79,7 +80,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndAddDiscount(manager2, existingProduct);
-                Assert.AreEqual("D2",
+                Assert.AreEqual("D7",
                     ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct).Discount.discountCode);
             }
             catch (MarketException)
@@ -94,8 +95,132 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndAddDiscount(owner, existingProduct);
-                Assert.AreEqual("D3",
+                Assert.AreEqual("D8",
                     ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct).Discount.discountCode);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        /*
+         * Edit Discount tests
+         */
+
+        [TestMethod]
+        public void GuestEditDiscount()
+        {
+            try
+            {
+                SignInAndEditDiscount("guest", existingProduct2);
+                Assert.AreEqual(50, 
+                    ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void ManagerEditDiscount()
+        {
+            try
+            {
+                SignInAndEditDiscount(manager, existingProduct2);
+                Assert.AreEqual(50,
+                    ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void ManagerEditDiscount2()
+        {
+            try
+            {
+                SignInAndEditDiscount(manager2, existingProduct2);
+                Assert.AreEqual(2,
+                    ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void OwnerEditDiscount()
+        {
+            try
+            {
+                SignInAndEditDiscount(owner, existingProduct2);
+                Assert.AreEqual(2,
+                    ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        /*
+         * Remove Discount tests
+         */
+
+        [TestMethod]
+        public void GuestRemoveDiscount()
+        {
+            try
+            {
+                SignInAndRemoveDiscount("guest", existingProduct2);
+                Assert.IsNotNull(ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct2).Discount);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void ManagerRemoveDiscount()
+        {
+            try
+            {
+                SignInAndRemoveDiscount(manager, existingProduct2);
+                Assert.IsNotNull(ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct2).Discount);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void ManagerRemoveDiscount2()
+        {
+            try
+            {
+                SignInAndRemoveDiscount(manager2, existingProduct2);
+                Assert.IsNull(ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct2).Discount);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void OwnerRemoveDiscount()
+        {
+            try
+            {
+                SignInAndRemoveDiscount(owner, existingProduct2);
+                Assert.IsNull(ModuleGlobalHandler.GetInstance().GetProductFromStore(store, existingProduct2).Discount);
             }
             catch (MarketException)
             {
@@ -198,6 +323,18 @@ namespace IntegrationTests.UserSeller_Integration
             storeServiceSession.AddDiscountToProduct(product, new DateTime(2018, 5, 12), new DateTime(2018, 6, 20), 5,
                 "VISIBLE", false);
 
+        }
+
+        private void SignInAndEditDiscount(string user, string product)
+        {
+            SignIn(user);
+            storeServiceSession.EditDiscount(product, "DiscountAmount", "2");
+        }
+
+        private void SignInAndRemoveDiscount(string user, string product)
+        {
+            SignIn(user);
+            storeServiceSession.RemoveDiscountFromProduct(product);
         }
 
         private void SignInAndEditProduct(string user, string product)
