@@ -16,7 +16,7 @@ namespace SadnaSrc.StoreCenter
         public StoreAnswer(DiscountStatus status, string answer) : base((int)status, answer) { }
         public StoreAnswer(OpenStoreStatus status, string answer) : base((int)status, answer) { }
 
-        public StoreAnswer(ViewStoreStatus status, string answer, string[] storeReport) : base((int)status, answer,storeReport) { }
+        public StoreAnswer(ViewStoreStatus status, string answer, string[] storeReport) : base((int)status, answer, storeReport) { }
         public StoreAnswer(ViewStoreStatus status, string answer) : base((int)status, answer) { }
 
         public StoreAnswer(ViewStorePurchaseHistoryStatus status, string answer, string[] storeReport) : base((int)status, answer, storeReport) { }
@@ -28,7 +28,7 @@ namespace SadnaSrc.StoreCenter
 
         public StoreAnswer(ManageStoreStatus status, string answer) : base((int)status, answer) { }
 
-        public StoreAnswer(ManageStoreStatus status,string answer, string[] report) : base((int)status,answer, report) { }
+        public StoreAnswer(ManageStoreStatus status, string answer, string[] report) : base((int)status, answer, report) { }
         public StoreAnswer(StoreException e) : base((int)e.Status, e.Message) { }
         public StoreAnswer(ChangeToLotteryEnum status, string answer) : base((int)status, answer) { }
     }

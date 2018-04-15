@@ -17,7 +17,7 @@ namespace SadnaSrc.StoreCenter
         public int UserID { get; set; }
 
         public double Cost { get; set; }
-        public LotteryTicket(string _myID, string _LotteryNumber, int _IntervalStart, int _IntervalEnd, double cost,  int _userID)
+        public LotteryTicket(string _myID, string _LotteryNumber, int _IntervalStart, int _IntervalEnd, double cost, int _userID)
         {
             LotteryNumber = _LotteryNumber;
             myID = _myID;
@@ -60,13 +60,13 @@ namespace SadnaSrc.StoreCenter
                     obj.IntervalEnd == IntervalEnd &&
                     obj.LotteryNumber == LotteryNumber &&
                     obj.myID == myID &&
-                    handler.PrintEnum(obj.myStatus).Equals(handler.PrintEnum(myStatus))&&
+                    handler.PrintEnum(obj.myStatus).Equals(handler.PrintEnum(myStatus)) &&
                     obj.UserID == UserID
                     );
         }
         public override string ToString()
         {
-            return "lottery ticket of Lottery number: " + LotteryNumber + " ticket number is: "+myID+" status: "+myStatus;
+            return "lottery ticket of Lottery number: " + LotteryNumber + " ticket number is: " + myID + " status: " + myStatus;
         }
 
         public override int GetHashCode()
