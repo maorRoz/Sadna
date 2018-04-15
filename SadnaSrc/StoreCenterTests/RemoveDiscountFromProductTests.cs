@@ -25,6 +25,7 @@ namespace StoreCenterTests
             handler = ModuleGlobalHandler.GetInstance();
             userService = market.GetUserService();
         }
+        //ignore this line
         [TestMethod]
         public void RemoveDiscountWhenStoreNotExists()
         {
