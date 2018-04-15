@@ -38,6 +38,7 @@ namespace SadnaSrc.Main
          */
 
         MarketAnswer ViewStoreHistory();
+	    MarketAnswer CloseStore();
 
     }
     public enum StoreEnum

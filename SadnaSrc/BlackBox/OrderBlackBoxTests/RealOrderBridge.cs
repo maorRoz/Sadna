@@ -20,7 +20,7 @@ namespace BlackBox
 
 		public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
 		{
-			throw new NotImplementedException();
+			return _orderService.BuyItemFromImmediate(itemName, store, quantity,unitPrice);
 		}
 
 		public MarketAnswer BuyEverythingFromCart()
