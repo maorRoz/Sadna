@@ -334,9 +334,10 @@ namespace StoreCenterTests
         public void getAllTickets()
         {
             LinkedList<LotteryTicket> expected = new LinkedList<LotteryTicket>();
-            LotteryTicket ticket2 = new LotteryTicket("T2", "L1", 0, 0, 0, 0); ;
             LotteryTicket ticket1 = new LotteryTicket("T1", "L1", 0, 0, 0, 0); ; //Exists in DB
+            LotteryTicket ticket2 = new LotteryTicket("T3", "L1", 0, 0, 0, 0);
             handler.DataLayer.AddLotteryTicket(ticket2);
+            toDeleteTicket = ticket2;
             expected.AddLast(ticket1);
             expected.AddLast(ticket2);
             LinkedList<LotteryTicket> find = handler.DataLayer.getAllTickets("L1");
@@ -349,7 +350,6 @@ namespace StoreCenterTests
             {
                 Assert.AreEqual(findResults[i], expectedResults[i]);
             }
-            handler.DataLayer.RemoveLotteryTicket(ticket2);
         }
         [TestMethod]
         public void GetAllStoreProductsID()
