@@ -15,6 +15,7 @@ namespace IntegrationTests.FullCycle_Integration
     {
         private IUserService userServiceSession;
         private IUserService userServiceSession2;
+        private IUserService userServiceSession3;
         private ISystemAdminService sysadminSession;
         private StoreShoppingService storeServiceSession;
         private OrderService orderServiceSession;
@@ -32,7 +33,9 @@ namespace IntegrationTests.FullCycle_Integration
             marketSession = MarketYard.Instance;
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession2 = (UserService)marketSession.GetUserService();
+            userServiceSession3 = (UserService)marketSession.GetUserService();
             userServiceSession2.EnterSystem();
+            userServiceSession3.EnterSystem();
             userServiceSession2.SignIn(sysadmin, pass);
             sysadminSession = marketSession.GetSystemAdminService(userServiceSession2);
             userServiceSession.EnterSystem();
@@ -73,6 +76,28 @@ namespace IntegrationTests.FullCycle_Integration
                 string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[1];
                 Assert.AreEqual(PurchaseString(user), actual);
 
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void BuyItemTestEverything()
+        {
+            try
+            {
+                storeServiceSession.LoginShoper(user, pass);
+                Assert.AreEqual(8, ((UserService) userServiceSession).MarketUser.SystemID);
+                storeServiceSession.AddProductToCart(store, product, 3);
+                CartItem expected = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart(store, product, 11);
+                Assert.AreEqual(3, expected.Quantity);
+                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11);
+                userServiceSession3.SignIn(user, pass);
+                Assert.IsNull(((UserService)userServiceSession3).MarketUser.Cart.SearchInCart(store, product, 11));
+                StockListItem itemToCheck = ModuleGlobalHandler.GetInstance().GetProductFromStore(store, product);
+                Assert.AreEqual(33, itemToCheck.Quantity);
             }
             catch (MarketException)
             {
