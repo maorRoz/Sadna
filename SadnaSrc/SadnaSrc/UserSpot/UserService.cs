@@ -41,6 +41,7 @@ namespace SadnaSrc.UserSpot
                 string encryptedPassword = ToEncryptPassword(password);
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + systemID + " data...");
                 MarketUser = userDL.RegisterUser(name, address, encryptedPassword, creditCard, MarketUser.Cart.GetCartStorage());
+                MarketUser.Cart.EstablishServiceDL(userDL);
                 MarketLog.Log("UserSpot", "User " + systemID + " sign up to the system has been successfull!");
                 return new UserAnswer(SignInStatus.Success, "Sign up has been successfull!");
             }
@@ -62,8 +63,10 @@ namespace SadnaSrc.UserSpot
                                           + systemID + " into the system...");
                 MarketUser = userDL.LoadUser(name, encryptedPassword, MarketUser.Cart.GetCartStorage());
                 systemID = MarketUser.SystemID;
+                MarketUser.Cart.EstablishServiceDL(userDL);
                 MarketLog.Log("UserSpot", "User " + oldID + " sign in to the system has been successfull!");
                 MarketLog.Log("UserSpot", "User " + oldID + " is now recognized as Registered User " + systemID);
+                Synch();
                 return new UserAnswer(SignInStatus.Success, "Sign in has been successful!");
 
             }
@@ -256,7 +259,8 @@ namespace SadnaSrc.UserSpot
         {
             UserException.SetUser(systemID);
             UserPolicyService.EstablishServiceDL(userDL);
-            CartService.EstablishServiceDL(userDL);
+            MarketUser?.Cart.EstablishServiceDL(userDL);
+            
         }
         public void CleanGuestSession()
         {

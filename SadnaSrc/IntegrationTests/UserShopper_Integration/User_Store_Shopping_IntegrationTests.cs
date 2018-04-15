@@ -157,7 +157,6 @@ namespace IntegrationTests.UserShopper_Integration
             }
         }
 
-        //This test fails because the user's cart isn't automatically loaded on sign in
         [TestMethod]
         public void AddExistingItemToCartTest()
         {

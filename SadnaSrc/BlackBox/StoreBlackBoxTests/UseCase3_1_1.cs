@@ -1,6 +1,5 @@
 ﻿using System;
 using BlackBox;
-using BlackBox.StoreBlackBoxTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
@@ -13,7 +12,8 @@ namespace BlackBoxStoreTests
 	[TestClass]
 	public class UseCase3_1
 	{
-		private IStoreBridge _storeBridge;
+		private IStoreShoppingBridge _storeBridge;
+		private IStoreManagementBridge _storeManage1;
 		private IUserBridge _userBridge2;
 		private IUserBridge _userBridge;
 
@@ -21,17 +21,18 @@ namespace BlackBoxStoreTests
 		public void MarketBuilder()
 		{
 			SignUp(ref _userBridge, "Pnina", "lo kef", "777777", "88888888");
-			_storeBridge = StoreDriver.getBridge();
+			_storeBridge = StoreShoppingDriver.getBridge();
 			_storeBridge.GetStoreShoppingService(_userBridge.getUserSession());
 			_storeBridge.OpenStore("lokef", "li");
+			_storeManage1 = StoreManagementDriver.getBridge();
 			_userBridge2 = null;
 		}
 
 		[TestMethod]
 		public void SuccessAddingProductToStore()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
+			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			Assert.AreEqual((int)StoreEnum.Success, result.Status);
 			//TODO: check in the stock to see if the product was indeed added.
 		}
@@ -39,9 +40,9 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void ProductAlreadyExistsInStore()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			_storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			MarketAnswer result = _storeBridge.AddNewProduct("bamba", 80, "nice snack", 1);
+			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			_storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
+			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 1);
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, result.Status);
 			//TODO: after lior changes the statuses, change this status.
 		}
@@ -50,32 +51,32 @@ namespace BlackBoxStoreTests
 		public void NoPermissionsToAddAProduct()
 		{
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
-			_storeBridge.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
-			MarketAnswer res = _storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
+			_storeManage1.GetStoreManagementService(_userBridge2.getUserSession(), "lokef");
+			MarketAnswer res = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			Assert.AreEqual((int)StoreEnum.NoPremmision, res.Status);
 		}
 
 		[TestMethod]
 		public void QuantityOfProductAddedIsNegative()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result = _storeBridge.AddNewProduct("bamba", 80, "nice snack", -1);
+			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", -1);
 			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
 		}
 
 		[TestMethod]
 		public void QuantityOfProductAddedIsZero()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			MarketAnswer result = _storeBridge.AddNewProduct("bamba", 80, "nice snack", 0);
+			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 0);
 			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
 		}
 
 		[TestMethod]
 		public void StoreDoesntExist()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lamaaaa");
-			MarketAnswer result = _storeBridge.AddNewProduct("bamba", 80, "nice snack", 0);
+			_storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lamaaaa");
+			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 0);
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, result.Status);
 		}
 
@@ -93,6 +94,7 @@ namespace BlackBoxStoreTests
 			_userBridge.CleanSession();
 			_userBridge2?.CleanSession();
 			_storeBridge.CleanSession();
+			_storeManage1.CleanSession();
 			_userBridge.CleanMarket();
 		}
 

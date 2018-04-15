@@ -62,5 +62,10 @@ namespace SadnaSrc.SupplyPoint
         {
             sock.fuckUp();
         }
+
+        public void FixExternal()
+        {
+            sock.fuckDown();
+        }
     }
 }
