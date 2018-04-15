@@ -48,6 +48,12 @@ namespace BlackBoxStoreTests
 			_storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 1);
 			Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, result.Status);
+
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			
+			Assert.AreEqual(1, actualResult.Length);
+		
 		}
 
 		[TestMethod]
@@ -57,6 +63,16 @@ namespace BlackBoxStoreTests
 			_storeManage1.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
 			Assert.AreEqual((int)StoreEnum.NoPremmision, res.Status);
+
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+
+			string[] expectedResult = { };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
@@ -65,6 +81,16 @@ namespace BlackBoxStoreTests
 			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", -1);
 			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
+
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+
+			string[] expectedResult = { };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
@@ -73,6 +99,15 @@ namespace BlackBoxStoreTests
 			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 0);
 			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
+			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
+			string[] actualResult = stockAnswer.ReportList;
+			
+			string[] expectedResult = { };
+			Assert.AreEqual(expectedResult.Length, actualResult.Length);
+			for (int i = 0; i < actualResult.Length; i++)
+			{
+				Assert.AreEqual(expectedResult[i], actualResult[i]);
+			}
 		}
 
 		[TestMethod]
@@ -83,7 +118,7 @@ namespace BlackBoxStoreTests
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, result.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
-			//didn't succeed in removing the product, there is still one product
+			
 			string[] expectedResult = { };
 			Assert.AreEqual(expectedResult.Length, actualResult.Length);
 			for (int i = 0; i < actualResult.Length; i++)
