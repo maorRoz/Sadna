@@ -253,7 +253,7 @@ namespace SadnaSrc.StoreCenter
             if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))
             {
                 OrderSyncherHarmony syncher = new OrderSyncherHarmony();
-                syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, 1, Lotto.getWinnerID());
+             //   syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, 1, Lotto.getWinnerID());
             }
         }
     }

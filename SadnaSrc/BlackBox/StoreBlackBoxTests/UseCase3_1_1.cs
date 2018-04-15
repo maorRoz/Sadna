@@ -44,9 +44,9 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void ProductAlreadyExistsInStore()
 		{
-			_storeBridge.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
-			_storeBridge.AddNewProduct("bamba", 90, "nice snack", 30);
-			MarketAnswer result = _storeBridge.AddNewProduct("bamba", 80, "nice snack", 1);
+		    _storeManage1.GetStoreManagementService(_userBridge.getUserSession(), "lokef");
+		    _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
+			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 1);
 			Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, result.Status);
 		}
 
