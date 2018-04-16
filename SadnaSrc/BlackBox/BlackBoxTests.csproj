@@ -69,6 +69,7 @@
     <Compile Include="OrderBlackBoxTests\OrderDriver.cs" />
     <Compile Include="OrderBlackBoxTests\ProxyOrderBridge.cs" />
     <Compile Include="OrderBlackBoxTests\RealOrderBridge.cs" />
+    <Compile Include="OrderBlackBoxTests\UseCase1_7.cs" />
     <Compile Include="StoreBlackBoxTests\StoreManagement\IStoreManagementBridge.cs" />
     <Compile Include="StoreBlackBoxTests\StoreManagement\ProxyStoreManagementBridge.cs" />
     <Compile Include="StoreBlackBoxTests\StoreManagement\RealStoreManagementBridge.cs" />

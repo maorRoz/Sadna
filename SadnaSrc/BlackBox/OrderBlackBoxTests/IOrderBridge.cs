@@ -8,6 +8,10 @@ namespace BlackBox
 		MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice);
 		MarketAnswer BuyEverythingFromCart();
 		MarketAnswer GiveDetails(string userName, string address, string creditCard);
+		void DisableSupplySystem();
+		void DisablePaymentSystem();
+		void EnableSupplySystem();
+		void EnablePaymentSystem();
 		void CleanSession();
 
 	}
