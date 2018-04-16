@@ -10,22 +10,14 @@ namespace BlackBox.BlackBoxAdminTests
     {
         private IUserBridge _userBridge;
         private IUserBridge _userBridge2;
-        private IUserBridge _ownerBridge;
-        private IAdminBridge _adminBridge;
         private IStoreShoppingBridge _storeShopping;
         private IStoreShoppingBridge _storeShopping2;
         private IStoreManagementBridge _managerBridge;
-        private IStoreManagementBridge _managerBridge2;
         private IStoreManagementBridge _ownerStoreBridge;
         private IOrderBridge _orderBridge;
         private IOrderBridge _orderBridge2;
-        private string storeOwner = "Pnina";
-        private string ownerPass = "852852";
-        private string shopper = "Maor";
         private string storeToCheck1 = "blahblah";
         private string storeToCheck2 = "blahblah2";
-        private readonly string nonExistingUser = "Bore";
-        private readonly string nonExistingStore = "Ben-Gurion";
 
         [TestInitialize]
 
@@ -38,7 +30,6 @@ namespace BlackBox.BlackBoxAdminTests
             CreateStoreBlahblah();
             CreateStoreBlahblah2();
             AddProductsToBlahblah();
-            AddProductsToBlahblah2();
             User1AddToCart();
             User2AddToCart();
             User1MakeOrder();
@@ -64,21 +55,11 @@ namespace BlackBox.BlackBoxAdminTests
         private void User2AddToCart()
         {
             _storeShopping2.AddProductToCart("blahblah", "hello2", 5);
-            _storeShopping2.AddProductToCart("blahblah2", "Goodbye2", 10);
         }
 
         private void User1AddToCart()
         {
             _storeShopping.AddProductToCart("blahblah", "hello", 5);
-            _storeShopping.AddProductToCart("blahblah2", "Goodbye", 3);
-        }
-
-        private void AddProductsToBlahblah2()
-        {
-            _managerBridge2 = StoreManagementDriver.getBridge();
-            _managerBridge2.GetStoreManagementService(_userBridge2.GetUserSession(), "blahblah2");
-            _managerBridge2.AddNewProduct("Goodbye", 10, "nice product", 8);
-            _managerBridge2.AddNewProduct("Goodbye2", 20, "nice product2", 20);
         }
 
         private void AddProductsToBlahblah()
@@ -119,9 +100,9 @@ namespace BlackBox.BlackBoxAdminTests
         }
 
         [TestMethod]
-        public void SuccessHistoryPurchaseStore()
+        public void SuccessHistoryPurchase()
         {
-            OwnerSignIn(storeOwner, ownerPass, storeToCheck1);
+            _ownerStoreBridge.GetStoreManagementService(_userBridge.GetUserSession(), storeToCheck1);
             MarketAnswer res = _ownerStoreBridge.ViewStoreHistory();
             string[] purchaseUserHistory = res.ReportList;
             string[] expectedHistory =
@@ -138,60 +119,24 @@ namespace BlackBox.BlackBoxAdminTests
 
         }
 
-        /*[TestMethod]
-        public void NotAdminWrongUserNameStoreHistory()
+        [TestMethod]
+        public void FailHistoryPurchaseNotOwner()
         {
-            SignIn("hello", adminPass);
-            _adminBridge.GetAdminService(_ownerSignInBridge.GetUserSession());
-            MarketAnswer res = _adminBridge.ViewPurchaseHistoryByStore(storeToCheck);
-            Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, res.Status);
+            _ownerStoreBridge.GetStoreManagementService(_userBridge2.GetUserSession(), storeToCheck1);
+            MarketAnswer res = _ownerStoreBridge.ViewStoreHistory();
+            Assert.AreEqual((int)ManageStoreStatus.InvalidManager, res.Status);
             Assert.IsNull(res.ReportList);
 
         }
 
         [TestMethod]
-        public void NotAdminWrongPasswordStoreHistory()
+        public void SuccessStoreWithNoHistory()
         {
-            SignIn(adminName, "852963");
-            _adminBridge.GetAdminService(_ownerSignInBridge.GetUserSession());
-            MarketAnswer res = _adminBridge.ViewPurchaseHistoryByStore(storeToCheck);
-            Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, res.Status);
-            Assert.IsNull(res.ReportList);
+            _ownerStoreBridge.GetStoreManagementService(_userBridge2.GetUserSession(), storeToCheck2);
+            MarketAnswer res = _ownerStoreBridge.ViewStoreHistory();
+            Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, res.Status);
+            Assert.AreEqual(0, res.ReportList.Length);
 
-        }
-
-        [TestMethod]
-        public void NotAdminWrongUserNameAndPasswordStoreHistory()
-        {
-            SignIn("Hello", "852963");
-            _adminBridge.GetAdminService(_ownerSignInBridge.GetUserSession());
-            MarketAnswer res = _adminBridge.ViewPurchaseHistoryByStore(storeToCheck);
-            Assert.AreEqual((int)ViewPurchaseHistoryStatus.NotSystemAdmin, res.Status);
-            Assert.IsNull(res.ReportList);
-        }
-
-        [TestMethod]
-        public void StoreNotFound()
-        {
-            SignIn(adminName, adminPass);
-            _adminBridge.GetAdminService(_ownerSignInBridge.GetUserSession());
-            MarketAnswer res = _adminBridge.ViewPurchaseHistoryByStore(nonExistingStore);
-            Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoStoreFound, _adminBridge.ViewPurchaseHistoryByStore(nonExistingStore).Status);
-        }*/
-
-        private void SignUp(ref IUserBridge _userBridge, string userName, string address, string password, string creditCard)
-        {
-            _userBridge = UserDriver.getBridge();
-            _userBridge.EnterSystem();
-            _userBridge.SignUp(userName, address, password, creditCard);
-        }
-
-        private void OwnerSignIn(string userName, string password, string store)
-        {
-            _ownerBridge = UserDriver.getBridge();
-            _ownerBridge.EnterSystem();
-            _ownerBridge.SignIn(userName, password);
-            _ownerStoreBridge.GetStoreManagementService(_ownerBridge.GetUserSession(), store);
         }
 
 
@@ -199,17 +144,15 @@ namespace BlackBox.BlackBoxAdminTests
 
         public void UserTestCleanUp()
         {
-            _ownerBridge.CleanSession();
             _userBridge.CleanSession();
             _userBridge2.CleanSession();
             _storeShopping.CleanSession();
             _storeShopping2.CleanSession();
             _managerBridge.CleanSession();
-            _managerBridge2.CleanSession();
             _orderBridge.CleanSession();
             _orderBridge2?.CleanSession();
             _ownerStoreBridge.CleanSession();
-            _ownerBridge.CleanMarket();
+            _userBridge.CleanMarket();
 
         }
 
