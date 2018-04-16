@@ -470,12 +470,6 @@ namespace SadnaSrc.StoreCenter
             string[] result;
             using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + store.Name + "'"))
             {
-                if (!dbReader.Read())
-                {
-                    throw new StoreException(ViewStorePurchaseHistoryStatus.InvalidStore,
-                        "Couldn't find any store with that ID in history records");
-                }
-
                 PurchaseHistory[] resultPurchase = GetPurchaseHistory(dbReader);
                 result = new string[resultPurchase.Length];
                 int i = 0;
@@ -606,7 +600,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    return new[] {dbReader.GetString(0), dbReader.GetString(1)};
+                    return new[] { dbReader.GetString(0), dbReader.GetString(1) };
 
                 }
             }
@@ -642,7 +636,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    return new[] {dbReader.GetString(1), dbReader.GetString(2)};
+                    return new[] { dbReader.GetString(1), dbReader.GetString(2) };
 
                 }
             }
