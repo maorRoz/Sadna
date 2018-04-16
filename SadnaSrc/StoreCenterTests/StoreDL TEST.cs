@@ -294,7 +294,7 @@ namespace StoreCenterTests
                 new Store("S6", "24", "Mezada"),
                 new Store("S7", "T","wanderland")
             };
-            Store[] actual = handler.DataLayer.GetAllActiveStores().ToArray();
+            Store[] actual = handler.DataLayer.GetAllActiveStores().OrderBy(x=>x.SystemId).ToArray();
             Assert.AreEqual(expected.Length, actual.Length);
             for (int i = 0; i < actual.Length; i++)
             {
