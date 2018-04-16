@@ -37,6 +37,15 @@ namespace BlackBox.OrderBlackBoxTests
 			throw new NotImplementedException();
 		}
 
+		public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
+		{
+			if (real != null)
+			{
+				return real.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon);
+			}
+			throw new NotImplementedException();
+		}
+
 
 		public MarketAnswer GiveDetails(string userName, string address, string creditCard)
 		{

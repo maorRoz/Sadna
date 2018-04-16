@@ -49,7 +49,7 @@ namespace SadnaSrc.StoreCenter
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             if (handler.PrintEnum(discountType) == handler.PrintEnum(discountTypeEnum.Hidden))
-                return " type is: hidden";
+                return "type is: hidden";
             if (Percentages)
             {
                 return "DiscountAmount: " + DiscountAmount + "%" +
