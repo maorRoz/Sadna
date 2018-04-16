@@ -51,6 +51,8 @@ namespace SadnaSrc.OrderPool
                     Refund(ticket);
                 }
 
+                _orderDL.CancelLottery(lottery);
+
             }
             catch (OrderException)
             {
