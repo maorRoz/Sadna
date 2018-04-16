@@ -115,7 +115,8 @@ namespace BlackBox.OrderBlackBoxTests
 			_buyerRegisteredUserBridge.SignUp("Shalom", "Bye", "555", "55555555");
 			_shoppingBridge2 = StoreShoppingDriver.getBridge();
 			_shoppingBridge2.GetStoreShoppingService(_buyerRegisteredUserBridge.GetUserSession());
-			_shoppingBridge2.AddProductToCart("Yalla", "Tea", 7);
+			MarketAnswer res2 = _shoppingBridge2.AddProductToCart("Yalla", "Tea", 7);
+			Assert.AreEqual((int)StoreEnum.QuantityIsTooBig, res2.Status);
 			_shoppingBridge2.AddProductToCart("HAHAHA", "Coffee", 3);
 		}
 
@@ -193,11 +194,11 @@ namespace BlackBox.OrderBlackBoxTests
 		}
 
 		[TestMethod]
-		public void FailPurchaseProductOutOfStock()
+		public void FailPurchaseProductBuyMoreThanExistsInCart()
 		{
-			AddProductOutOfStock();
+			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
-			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 10);
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 100, 10);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
 			//TODO: check nothing had changed
 			CheckHistoryNullCartSameStockNotChangedRegisterUser();

@@ -234,11 +234,11 @@ namespace BlackBox.OrderBlackBoxTests
 
 
 		[TestMethod]
-		public void FailPurchaseProductOutOfStock()
+		public void FailPurchaseProductBuyMoreThanExistsInCart()
 		{
-			AddProductOutOfStock();
+			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
-			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea","Yalla",2,10);
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea","Yalla",2100,10);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
 			//TODO: purchase history is null
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
