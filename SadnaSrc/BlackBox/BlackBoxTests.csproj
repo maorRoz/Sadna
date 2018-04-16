@@ -78,13 +78,16 @@
     <Compile Include="StoreBlackBoxTests\StoreManagement\StoreManagementDriver.cs" />
     <Compile Include="StoreBlackBoxTests\StoreShopping\IStoreShoppingBridge.cs" />
     <Compile Include="StoreBlackBoxTests\StoreShopping\StoreShoppingDriver.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase3_2_2.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase1_3.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_1_1.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_1_2.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_1_3.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase3_4.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_3.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase1_5.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase8_1.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase8_3.cs" />
     <Compile Include="UserBlackBoxTests\UseCase1_6_1.cs" />
     <Compile Include="UserBlackBoxTests\UseCase1_6_2.cs" />
     <Compile Include="UserBlackBoxTests\UserDriver.cs" />

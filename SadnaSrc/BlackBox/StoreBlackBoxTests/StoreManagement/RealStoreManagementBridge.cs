@@ -55,27 +55,32 @@ namespace BlackBox
             return _storeManagementService.AddQuanitityToProduct(productName, quantity);
         }
 
+        public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate,
+            int discountAmount, string discountType, bool presenteges)
+        {
+            return _storeManagementService.AddDiscountToProduct(productName, startDate, endDate, discountAmount,
+                discountType, presenteges);
+        }
+
+        public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
+        {
+            return _storeManagementService.EditDiscount(productName, whatToEdit, newValue);
+        }
+
+        public MarketAnswer RemoveDiscountFromProduct(string productName)
+        {
+            return _storeManagementService.RemoveDiscountFromProduct(productName);
+        }
+
+        public MarketAnswer ViewStoreHistory()
+        {
+            return _storeManagementService.ViewStoreHistory();
+        }
+
         public MarketAnswer CloseStore()
         {
             return _storeManagementService.CloseStore();
         }
-
-	    public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount,
-		    string discountType, bool presenteges)
-	    {
-		    return _storeManagementService.AddDiscountToProduct(productName, startDate, endDate, discountAmount, discountType,
-			    presenteges);
-	    }
-
-	    public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
-	    {
-		    return _storeManagementService.EditDiscount(productName, whatToEdit, newValue);
-	    }
-
-	    public MarketAnswer RemoveDiscountFromProduct(string productName)
-	    {
-		    return _storeManagementService.RemoveDiscountFromProduct(productName);
-	    }
 
 	    public void CleanSession()
         {
