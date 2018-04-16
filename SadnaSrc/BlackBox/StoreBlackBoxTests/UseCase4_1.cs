@@ -384,7 +384,7 @@ namespace BlackBox.StoreBlackBoxTests
 		}
 
 
-		/*[TestCleanup]
+		[TestCleanup]
 		public void UserTestCleanUp()
 		{
 			_storeBridge.CleanSession();
@@ -398,6 +398,6 @@ namespace BlackBox.StoreBlackBoxTests
 			_guestBridge?.CleanSession();
 			_orderBridge?.CleanSession();
 			_bridgeSignUp.CleanMarket();
-		}*/
+		}
 	}
 }
