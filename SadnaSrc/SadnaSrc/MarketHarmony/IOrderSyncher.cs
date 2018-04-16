@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.MarketHarmony
 {
-    interface IOrderSyncher
+    public interface IOrderSyncher
     {
 
 

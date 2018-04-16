@@ -117,6 +117,8 @@ namespace SadnaSrc.OrderPool
             {
                 _orderDL.RemoveOrder(order.GetOrderID());
             }
+
+            _storesSync.CleanSession();
             _buyer.CleanSession();
         }
 

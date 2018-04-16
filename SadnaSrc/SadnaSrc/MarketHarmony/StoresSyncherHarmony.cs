@@ -13,9 +13,11 @@ namespace SadnaSrc.MarketHarmony
     {
 
         private OutsideModuleService _storeService;
+        private IOrderSyncher orderSyncher;
         public StoresSyncherHarmony()
         {
             _storeService = ModuleGlobalHandler.GetInstance();
+            orderSyncher = new OrderSyncherHarmony();
         }
 
         public void RemoveProducts(OrderItem[] purchased)
@@ -29,7 +31,7 @@ namespace SadnaSrc.MarketHarmony
         public void UpdateLottery(string itemName, string store,double moenyPayed, string username)
         {
             ModuleGlobalHandler globalHandler = ModuleGlobalHandler.GetInstance();
-            globalHandler.updateLottery(store, itemName, moenyPayed, username);
+            globalHandler.updateLottery(store, itemName, moenyPayed, username, orderSyncher);
         }
 
 
@@ -51,6 +53,11 @@ namespace SadnaSrc.MarketHarmony
         public double GetPriceFromCoupon(string itemName, string store, int quantity, string coupon)
         {
             return _storeService.CalculateItemPriceWithDiscount(store, itemName, coupon, quantity);
+        }
+
+        public void CleanSession()
+        {
+            orderSyncher.CleanSession();
         }
     }
 }

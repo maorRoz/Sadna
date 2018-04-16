@@ -247,12 +247,11 @@ namespace SadnaSrc.StoreCenter
             return true;
         }
 
-        public void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName)
+        public void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher)
         {
             LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
             if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))
             {
-                OrderSyncherHarmony syncher = new OrderSyncherHarmony();
                 syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID());
             }
         }
