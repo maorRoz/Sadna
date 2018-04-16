@@ -75,17 +75,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_shoppingBridge2.AddProductToCart("HAHAHA", "Coffee", 3);
 		}
 
-		private void AddProductOutOfStock()
-		{
-			_buyerRegisteredUserBridge = UserDriver.getBridge();
-			_buyerRegisteredUserBridge.EnterSystem();
-			_buyerRegisteredUserBridge.SignUp("Shalom", "Bye", "555", "55555555");
-			_shoppingBridge2 = StoreShoppingDriver.getBridge();
-			_shoppingBridge2.GetStoreShoppingService(_buyerRegisteredUserBridge.GetUserSession());
-			_shoppingBridge2.AddProductToCart("Yalla", "Tea", 7);
-			_shoppingBridge2.AddProductToCart("HAHAHA", "Coffee", 3);
-		}
-
 		[TestMethod]
 		public void SuccessBuyingProductsRegisterUser()
 		{

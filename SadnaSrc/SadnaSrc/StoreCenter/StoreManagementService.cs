@@ -372,7 +372,7 @@ namespace SadnaSrc.StoreCenter
                     throw new StoreException(DiscountStatus.ProductNotFound, "no Such Product");
                 }
                 MarketLog.Log("StoreCenter", "check if dates are OK");
-                if ((startDate < MarketYard.MarketDate) || (endDate < MarketYard.MarketDate) || !(startDate < endDate))
+                if ((startDate < MarketYard.MarketDate) || !(startDate < endDate))
                 {
                     MarketLog.Log("StoreCenter", "something wrong with the dates");
                     throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal");
