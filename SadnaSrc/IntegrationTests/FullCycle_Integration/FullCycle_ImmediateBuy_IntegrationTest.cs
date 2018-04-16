@@ -110,6 +110,7 @@ namespace IntegrationTests.FullCycle_Integration
         {
             userServiceSession.CleanSession();
             userServiceSession2.CleanSession();
+            userServiceSession3.CleanSession();
             orderServiceSession.CleanSession();
             storeServiceSession.CleanSeesion();
             MarketYard.CleanSession();

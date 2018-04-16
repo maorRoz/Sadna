@@ -9,11 +9,16 @@ namespace BlackBox
 		MarketAnswer BuyEverythingFromCart();
 		MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon);
 		MarketAnswer GiveDetails(string userName, string address, string creditCard);
-		void DisableSupplySystem();
+
+        MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice);
+        void DisableSupplySystem();
 		void DisablePaymentSystem();
 		void EnableSupplySystem();
 		void EnablePaymentSystem();
-		void CleanSession();
+
+	    void Cheat(int cheatCode);
+	    void CleanSession();
+
 
 	}
 }

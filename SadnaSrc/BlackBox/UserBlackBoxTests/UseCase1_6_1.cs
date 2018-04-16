@@ -1,8 +1,9 @@
 ﻿using System;
+using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBox.UserBlackBoxTests
+namespace BlackBox.BlackBoxUserTests
 {
 	[TestClass]
 	public class UseCase1_6_1

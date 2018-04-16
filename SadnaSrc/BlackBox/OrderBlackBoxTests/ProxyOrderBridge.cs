@@ -37,6 +37,14 @@ namespace BlackBox.OrderBlackBoxTests
 			throw new NotImplementedException();
 		}
 
+	    public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
+	    {
+	        if (real != null)
+	        {
+	            return real.BuyLotteryTicket(itemName, store, quantity, unitPrice);
+	        }
+	        throw new NotImplementedException();
+        }
 		public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
 		{
 			if (real != null)
@@ -46,8 +54,7 @@ namespace BlackBox.OrderBlackBoxTests
 			throw new NotImplementedException();
 		}
 
-
-		public MarketAnswer GiveDetails(string userName, string address, string creditCard)
+        public MarketAnswer GiveDetails(string userName, string address, string creditCard)
 		{
 			if (real != null)
 			{
@@ -106,8 +113,19 @@ namespace BlackBox.OrderBlackBoxTests
 			}
 		}
 
+	    public void Cheat(int cheatCode)
+	    {
+	        if (real != null)
+	        {
+	            real.Cheat(cheatCode);
+	        }
+	        else
+	        {
+	            throw new NotImplementedException();
+	        }
+	    }
 
-		public void CleanSession()
+        public void CleanSession()
 		{
 			if (real != null)
 			{

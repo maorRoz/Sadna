@@ -43,6 +43,13 @@ namespace BlackBox
             return _storeManagementService.EditProduct(productName, whatToEdit, newValue);
         }
 
+
+        public MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
+            DateTime endDate)
+        {
+            return _storeManagementService.AddNewLottery(_name,_price,_description, startDate, endDate);
+        }
+
         public MarketAnswer AddQuanitityToProduct(string productName, int quantity)
         {
             return _storeManagementService.AddQuanitityToProduct(productName, quantity);

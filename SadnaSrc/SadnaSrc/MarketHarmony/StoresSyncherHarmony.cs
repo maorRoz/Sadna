@@ -28,10 +28,10 @@ namespace SadnaSrc.MarketHarmony
             }
         }
 
-        public void UpdateLottery(string itemName, string store,double moenyPayed, string username)
+        public void UpdateLottery(string itemName, string store,double moenyPayed, string username,int cheatCode)
         {
             ModuleGlobalHandler globalHandler = ModuleGlobalHandler.GetInstance();
-            globalHandler.updateLottery(store, itemName, moenyPayed, username, orderSyncher);
+            globalHandler.updateLottery(store, itemName, moenyPayed, username, orderSyncher,cheatCode);
         }
 
 

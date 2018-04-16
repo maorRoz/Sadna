@@ -59,6 +59,15 @@ namespace BlackBox
             }
             throw new NotImplementedException();
         }
+        public MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
+            DateTime endDate)
+        {
+            if (real != null)
+            {
+                return real.AddNewLottery(_name, _price,_description, startDate, endDate);
+            }
+            throw new NotImplementedException();
+        }
 
         public MarketAnswer AddQuanitityToProduct(string productName, int quantity)
         {

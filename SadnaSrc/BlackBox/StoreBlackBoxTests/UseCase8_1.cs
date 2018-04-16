@@ -3,7 +3,7 @@ using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace StoreBlackBoxTests
+namespace BlackBox.BlackBoxStoreTests
 {
 	[TestClass]
 	public class UseCase8_1
@@ -36,7 +36,6 @@ namespace StoreBlackBoxTests
 		[TestMethod]
 		public void AddDiscountAndReceiveItInOrderSuccessfully()
 		{
-			//check there is no discount for ouch
 			CheckNoDiscountAdded();
 
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("14/04/2018"), Convert.ToDateTime("20/04/2018"), 10,"VISIBLE",false);
@@ -285,6 +284,7 @@ namespace StoreBlackBoxTests
 		{
 			MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
 			_userBuyer?.CleanSession();
+            _userAdmin?.CleanSession();
 			_storeOwnerUserBridge.CleanSession();
 			_storeShoppingBridge.CleanSession();
 			_storeShoppingBridge2?.CleanSession();

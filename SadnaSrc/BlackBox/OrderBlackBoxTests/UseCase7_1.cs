@@ -1,10 +1,11 @@
 ﻿using System;
+using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBox.OrderBlackBoxTests
+namespace OrderBlackBoxTests
 {
-//TODO: in this class, the emphasis is on the puchase from the cart and that it was immediate
+// in this class, the emphasis is on the puchase from the cart and that it was immediate
 	[TestClass]
 	public class UseCase7_1
 	{
@@ -272,16 +273,13 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.DisablePaymentSystem();
 			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
-			//TODO: check nothing has changed
 			CheckHistoryNullCartSameStockNotChangedRegisterUser();
 		}
 
 		private void CheckHistoryNullCartSameStockNotChangedRegisterUser()
 		{
-			//TODO: check the purchase history is null
 			MarketAnswer purhcaseHistory = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(purhcaseHistory.ReportList);
-			//TODO: check that the cart still contains all its products
 			MarketAnswer cartDetails = _buyerRegisteredUserBridge.ViewCart();
 			string[] received = cartDetails.ReportList;
 			string[] expected =
@@ -296,7 +294,6 @@ namespace BlackBox.OrderBlackBoxTests
 				Assert.AreEqual(expected[i], received[i]);
 			}
 
-			//TODO: check the store's stock stayed the same
 			MarketAnswer stock1 = _shoppingBridge.ViewStoreStock("Yalla");
 			string[] expectedYallaStock =
 			{
@@ -314,7 +311,6 @@ namespace BlackBox.OrderBlackBoxTests
 
 		private void CheckCartSameStockNotChangedGuest()
 		{
-			//TODO: check that the cart still contains all its products
 			MarketAnswer cartDetails = _buyerGuestBridge.ViewCart();
 			string[] received = cartDetails.ReportList;
 			string[] expected =

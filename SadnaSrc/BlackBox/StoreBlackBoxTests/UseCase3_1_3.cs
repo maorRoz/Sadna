@@ -2,8 +2,7 @@ using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-
-namespace BlackBoxStoreTests
+namespace BlackBox.BlackBoxStoreTests
 
 {
 	[TestClass]

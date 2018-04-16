@@ -18,7 +18,7 @@ namespace SadnaSrc.StoreCenter
         double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity);
 
         bool HasActiveLottery(string storeName, string productName, double priceWantToPay);
-        void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher);
+        void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher,int cheatCode);
 
     }
 }

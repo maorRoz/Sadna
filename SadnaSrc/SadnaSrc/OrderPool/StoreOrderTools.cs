@@ -51,6 +51,8 @@ namespace SadnaSrc.OrderPool
                     Refund(ticket);
                 }
 
+                _orderDL.CancelLottery(lottery);
+
             }
             catch (OrderException)
             {
@@ -82,10 +84,10 @@ namespace SadnaSrc.OrderPool
             string creditCardToRefund = _orderDL.GetCreditCardToRefund(participantID);
             string nameToRefund = _orderDL.GetNameToRefund(participantID);
             double sumToRefund = _orderDL.GetSumToRefund(ticket);
-            Order order = RefundOrder(sumToRefund, nameToRefund, ticket);
+            Order order = RefundOrder(sumToRefund, nameToRefund, ticket); // should be ticket later
             _paymentService.Refund(sumToRefund, creditCardToRefund, nameToRefund);
             Orders.Add(order);
-            _orderDL.AddOrder(order);
+            _orderDL.AddOrder(order,"Lottery");
             _orderDL.RemoveTicket(ticket);
             MarketLog.Log("OrderPool", "User " + nameToRefund + " successfully refunded the sum: " + sumToRefund);
         }
@@ -96,14 +98,14 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                OrderItem toBuy = new OrderItem("DELIVERY : " + itemName, store, 1, 1);
+                OrderItem toBuy = new OrderItem(store, "DELIVERY : " + itemName, 1, 1);
                 OrderService.CheckOrderItem(toBuy);
                 Order order = InitOrder(_orderDL.GetNameToRefund(userId), _orderDL.GetAddressToSendPackage(userId));
                 orderId = order.GetOrderID();
                 order.AddOrderItem(toBuy);
                 _supplyService.CreateDelivery(order);
                 Orders.Add(order);
-                _orderDL.AddOrder(order);
+                _orderDL.AddOrder(order,"Lottery");
                 MarketLog.Log("OrderPool", "Successfully made delivery for item: " + itemName);
             }
             catch (OrderException e)
@@ -137,7 +139,7 @@ namespace SadnaSrc.OrderPool
         private Order RefundOrder(double sum,string userName,string ticket)
         {
             Order refund = new Order(_orderDL.RandomOrderID(), userName);
-            refund.AddOrderItem(new OrderItem("---", "REFUND: "+ticket, -1 * sum, 1)); 
+            refund.AddOrderItem(new OrderItem("---", "REFUND: Lottery Ticket", -1 * sum, 1)); 
             MarketLog.Log("OrderPool", " successfully initialized new order " + refund.GetOrderID() + "for user " + userName + ".");
 
             return refund;
