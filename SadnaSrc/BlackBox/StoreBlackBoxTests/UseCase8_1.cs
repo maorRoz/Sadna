@@ -36,7 +36,7 @@ namespace BlackBox.BlackBoxStoreTests
 		[TestMethod]
 		public void AddDiscountAndReceiveItInOrderSuccessfully()
 		{
-			//check there is no discount for ouchCheckNoDiscountAdded();
+			CheckNoDiscountAdded();
 
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("14/04/2018"), Convert.ToDateTime("20/04/2018"), 10,"VISIBLE",false);
 			Assert.AreEqual((int)DiscountStatus.Success,res.Status);
