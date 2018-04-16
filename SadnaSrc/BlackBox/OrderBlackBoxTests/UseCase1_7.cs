@@ -164,8 +164,8 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails(null, "MisholGuest", "77777777");
-			MarketAnswer order = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1);
-			Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, order.Status);
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 			//TODO: check there is nothing in the puchase history
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
@@ -177,8 +177,8 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails("PninaGuest", null, "77777777");
-			MarketAnswer order = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1);
-			Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, order.Status);
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 			//TODO: check there is nothing in the puchase history
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
@@ -190,8 +190,8 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails("PninaGuest", "MisholGuest", "");
-			MarketAnswer order = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1);
-			Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, order.Status);
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 			//TODO: check there is nothing in the puchase history
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
@@ -202,8 +202,8 @@ namespace BlackBox.OrderBlackBoxTests
 		{
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
-			MarketAnswer order = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1);
-			Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, order.Status);
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 			//TODO: check there is nothing in the puchase history
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
@@ -215,7 +215,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			_orderBridge.DisableSupplySystem();
-			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1);
+			MarketAnswer res = _orderBridge.BuyEverythingFromCart();
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
 			//TODO: check there is nothing in the puchase history
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
