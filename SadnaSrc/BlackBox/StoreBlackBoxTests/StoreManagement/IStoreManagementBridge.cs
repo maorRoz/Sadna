@@ -20,6 +20,7 @@ namespace BlackBox
 			int discountAmount, string discountType, bool presenteges);
 		MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue);
 		MarketAnswer RemoveDiscountFromProduct(string productName);
+    MarketAnswer ViewStoreHistory();
 		void CleanSession();
 	}
 }
