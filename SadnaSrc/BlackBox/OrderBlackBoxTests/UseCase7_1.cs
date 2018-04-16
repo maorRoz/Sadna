@@ -108,18 +108,6 @@ namespace BlackBox.OrderBlackBoxTests
 
 		}
 
-		private void AddProductOutOfStock()
-		{
-			_buyerRegisteredUserBridge = UserDriver.getBridge();
-			_buyerRegisteredUserBridge.EnterSystem();
-			_buyerRegisteredUserBridge.SignUp("Shalom", "Bye", "555", "55555555");
-			_shoppingBridge2 = StoreShoppingDriver.getBridge();
-			_shoppingBridge2.GetStoreShoppingService(_buyerRegisteredUserBridge.GetUserSession());
-			MarketAnswer res2 = _shoppingBridge2.AddProductToCart("Yalla", "Tea", 7);
-			Assert.AreEqual((int)StoreEnum.QuantityIsTooBig, res2.Status);
-			_shoppingBridge2.AddProductToCart("HAHAHA", "Coffee", 3);
-		}
-
 
 		[TestMethod]
 		public void SuccessBuyingProductsRegisterUser()
