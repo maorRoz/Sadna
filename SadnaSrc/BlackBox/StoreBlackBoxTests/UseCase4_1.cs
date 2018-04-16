@@ -16,6 +16,7 @@ namespace BlackBox.StoreBlackBoxTests
 		private IStoreManagementBridge _storeManager2;
 		private IUserBridge _adminBridge;
 		private IUserBridge _guestBridge;
+		private IOrderBridge _orderBridge;
 
 		private readonly string adminName = "Arik1";
 		private readonly string adminPass = "123";
@@ -43,6 +44,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_signInBridge = null;
 			_adminBridge = null;
 			_guestBridge = null;
+			_orderBridge = null;
 		}
 
 
@@ -310,12 +312,37 @@ namespace BlackBox.StoreBlackBoxTests
 
 			if (permissions[3])
 			{
+				CreateOrder();
+
+				MarketAnswer purchaseHistory = _storeManager2.ViewStoreHistory();
+				string[] received = purchaseHistory.ReportList;
+				string[] expected =
+				{
+					"User: Odin Product: Yolo Store: Volcano Sale: Immediate Quantity: 2 Price: 10 Date: " +
+					DateTime.Now.Date.ToString("d"),
+				};
+
+				Assert.AreEqual(expected.Length, received.Length);
+				for (int i = 0; i < received.Length; i++)
+				{
+					Assert.AreEqual(expected[i],received[i]);
+				}
 
 			}
 			else
 			{
-
+				CreateOrder();
+				Assert.AreEqual((int)ManageStoreStatus.InvalidManager, _storeManager2.ViewStoreHistory().Status);
 			}
+		}
+
+		private void CreateOrder()
+		{
+			_storeManager1.AddNewProduct("Yolo", 5, "Once", 10);
+			_storeBridge.AddProductToCart("Volcano", "Yolo", 2);
+			_orderBridge = OrderDriver.getBridge();
+			_orderBridge.GetOrderService(_bridgeSignUp.GetUserSession());
+			_orderBridge.BuyEverythingFromCart();
 		}
 
 		private void CheckProductEditedInStock()
@@ -357,7 +384,7 @@ namespace BlackBox.StoreBlackBoxTests
 		}
 
 
-		[TestCleanup]
+		/*[TestCleanup]
 		public void UserTestCleanUp()
 		{
 			_storeBridge.CleanSession();
@@ -369,7 +396,8 @@ namespace BlackBox.StoreBlackBoxTests
 			_signInBridge?.CleanSession();
 			_adminBridge?.CleanSession();
 			_guestBridge?.CleanSession();
+			_orderBridge?.CleanSession();
 			_bridgeSignUp.CleanMarket();
-		}
+		}*/
 	}
 }
