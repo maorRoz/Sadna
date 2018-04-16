@@ -166,7 +166,7 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GiveDetails(null, "MisholGuest", "77777777");
 			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
-			//TODO: check cart stayed the same
+			//TODO: all the tests for checking stock and cart are in 7.1
 
 		}
 
@@ -178,8 +178,7 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GiveDetails("PninaGuest", null, "77777777");
 			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
-			//TODO: check cart stayed the same
-
+			//TODO: all the tests for checking stock and cart are in 7.1
 		}
 
 		[TestMethod]
@@ -190,9 +189,7 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GiveDetails("PninaGuest", "MisholGuest", "");
 			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
-			//TODO: check there is nothing in the puchase history
-			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
-			Assert.IsNull(history.ReportList);
+			//TODO: all the tests for checking stock and cart are in 7.1
 		}
 
 		[TestMethod]
@@ -202,7 +199,7 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
-			
+			//TODO: all the tests for checking stock and cart are in 7.1
 		}
 
 		[TestMethod]
@@ -216,7 +213,7 @@ namespace BlackBox.OrderBlackBoxTests
 			//TODO: check there is nothing in the puchase history
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
-
+			//TODO: all the tests for checking stock and cart are in 7.1
 		}
 
 		[TestMethod]
@@ -230,6 +227,7 @@ namespace BlackBox.OrderBlackBoxTests
 			//TODO: check there is nothing in the puchase history
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
+			//TODO: all the tests for checking stock and cart are in 7.1
 		}
 
 
@@ -243,6 +241,7 @@ namespace BlackBox.OrderBlackBoxTests
 			//TODO: purchase history is null
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
+			//TODO: all the tests for checking stock and cart are in 7.1
 		}
 
 		[TestCleanup]
