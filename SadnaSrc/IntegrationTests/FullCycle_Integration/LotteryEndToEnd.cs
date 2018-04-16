@@ -90,8 +90,8 @@ namespace StoreCenterTests
             {
                 handler.DataLayer.RemoveLottery(LotteryToDelete);
             }
-            userService.CleanSession();
             orderService.CleanSession();
+            userService.CleanSession();
             managementService.CleanSession();
             otherUser.CleanSession();
             MarketYard.CleanSession();

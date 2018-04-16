@@ -116,13 +116,12 @@ namespace SadnaSrc.StoreCenter
                     obj.TotalMoneyPayed.Equals(TotalMoneyPayed) &&
                     obj.IsActive == IsActive);
         }
-        internal void InformCancel()
+        internal void InformCancel(IOrderSyncher syncher)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             IsActive = false;
             handler.DataLayer.EditLotteryInDatabase(this);
-            OrderSyncherHarmony syncer = new OrderSyncherHarmony();
-            syncer.CancelLottery(SystemID);
+            syncher.CancelLottery(SystemID);
         }
 
         public override int GetHashCode()

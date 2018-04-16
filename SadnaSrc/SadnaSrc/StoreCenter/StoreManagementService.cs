@@ -16,7 +16,7 @@ namespace SadnaSrc.StoreCenter
         ModuleGlobalHandler global;
         private IUserSeller _storeManager;
         public string _storeName;
-
+        private IOrderSyncher syncher;
         private LinkedList<StockListItem> stockListItemToRemove;
         private LinkedList<Discount> discountsToRemvoe;
 
@@ -28,6 +28,7 @@ namespace SadnaSrc.StoreCenter
             store = global.DataLayer.getStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();
+            syncher = new OrderSyncherHarmony();
         }
 
         public MarketAnswer CloseStore()
@@ -186,7 +187,7 @@ namespace SadnaSrc.StoreCenter
                 if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
                 {
                     LotterySaleManagmentTicket LotteryManagment = global.DataLayer.GetLotteryByProductID(stockListItem.Product.SystemId);
-                    LotteryManagment.InformCancel();
+                    LotteryManagment.InformCancel(syncher);
                     global.DataLayer.RemoveLottery(LotteryManagment);
                 }
                 global.DataLayer.RemoveStockListItem(stockListItem);
@@ -293,7 +294,7 @@ namespace SadnaSrc.StoreCenter
                 if (stockList.PurchaseWay == PurchaseEnum.Lottery)
                 {
                     LotterySaleManagmentTicket lottery = global.DataLayer.GetLotteryByProductID(stockList.Product.SystemId);
-                    lottery.InformCancel();
+                    lottery.InformCancel(syncher);
                     global.DataLayer.EditLotteryInDatabase(lottery);
 
                 }
@@ -532,6 +533,8 @@ namespace SadnaSrc.StoreCenter
                 }
                 global.DataLayer.RemoveStore(store);
             }
+
+            syncher.CleanSession();
         }
 
         public MarketAnswer AddQuanitityToProduct(string productName, int quantity)

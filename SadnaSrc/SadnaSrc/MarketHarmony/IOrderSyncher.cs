@@ -22,5 +22,7 @@ namespace SadnaSrc.MarketHarmony
         /// </summary>
         void CancelLottery(string lottery);
 
+        void CleanSession();
+
     }
 }
