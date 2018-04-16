@@ -20,15 +20,9 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_storeOwnerUserBridge = UserDriver.getBridge();
-			_storeOwnerUserBridge.EnterSystem();
-			_storeOwnerUserBridge.SignUp("Pnina", "Mishol", "7777", "77777777");
-			_storeShoppingBridge = StoreShoppingDriver.getBridge();
-			_storeShoppingBridge.GetStoreShoppingService(_storeOwnerUserBridge.GetUserSession());
-			_storeShoppingBridge.OpenStore("Toy", "notYour");
-			_storeManagementBridge = StoreManagementDriver.getBridge();
-			_storeManagementBridge.GetStoreManagementService(_storeOwnerUserBridge.GetUserSession(), "Toy");
-			_storeManagementBridge.AddNewProduct("Ouch", 30, "Ouchouch", 6);
+
+			SignUp(ref _storeOwnerUserBridge, "Pnina", "Mishol", "7777", "77777777");
+			OpenStoreAndProducts();
 			_storeShoppingBridge2 = null;
 			_storeManagementBridge2 = null;
 			_userBuyer = null;
@@ -36,6 +30,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_orderBridge = null;
 
 		}
+
 
 		[TestMethod]
 		public void AddDiscountAndReceiveItInOrderSuccessfully()
@@ -60,19 +55,16 @@ namespace BlackBox.StoreBlackBoxTests
 				Assert.AreEqual(expectedStock[i], receivedStock[i]);
 			}
 
-			_userBuyer = UserDriver.getBridge();
-			_userBuyer.EnterSystem();
-			_userBuyer.SignUp("Vika", "Arad", "5555", "55555555");
+			
+			SignUp(ref _userBuyer, "Vika", "Arad", "5555", "55555555");
+
 			_storeShoppingBridge2 = StoreShoppingDriver.getBridge();
 			_storeShoppingBridge2.GetStoreShoppingService(_userBuyer.GetUserSession());
 			_storeShoppingBridge2.AddProductToCart("Toy", "Ouch", 3);
 
-			_orderBridge = OrderDriver.getBridge();
-			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
-			_orderBridge.BuyEverythingFromCart();
-			SignInAdmin("Arik1", "123");
-			_userAdminBridge = AdminDriver.getBridge();
-			_userAdminBridge.GetAdminService(_userAdmin.GetUserSession());
+			CreateOrder();
+
+			SignInAdminSystem();
 			MarketAnswer purchaseHistory = _userAdminBridge.ViewPurchaseHistoryByUser("Vika");
 			
 			//make sure the price presented is after the discount
@@ -87,9 +79,8 @@ namespace BlackBox.StoreBlackBoxTests
 			{
 				Assert.AreEqual(purchaseExpected[i],purchaseReceived[i]);
 			}
-
 		}
-
+		
 		[TestMethod]
 		public void AddDiscountAndDontReceiveItBecauseDatePassed()
 		{
@@ -115,16 +106,14 @@ namespace BlackBox.StoreBlackBoxTests
 				Assert.AreEqual(expectedStock[i], receivedStock[i]);
 			}
 
-			_userBuyer = UserDriver.getBridge();
-			_userBuyer.EnterSystem();
-			_userBuyer.SignUp("Vika", "Arad", "5555", "55555555");
+			SignUp(ref _userBuyer, "Vika", "Arad", "5555", "55555555");
+
 			_storeShoppingBridge2 = StoreShoppingDriver.getBridge();
 			_storeShoppingBridge2.GetStoreShoppingService(_userBuyer.GetUserSession());
 			_storeShoppingBridge2.AddProductToCart("Toy", "Ouch", 3);
 
-			_orderBridge = OrderDriver.getBridge();
-			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
-			_orderBridge.BuyEverythingFromCart();
+			CreateOrder();
+
 			SignInAdmin("Arik1", "123");
 			_userAdminBridge = AdminDriver.getBridge();
 			_userAdminBridge.GetAdminService(_userAdmin.GetUserSession());
@@ -239,10 +228,30 @@ namespace BlackBox.StoreBlackBoxTests
 			CheckNoDiscountAdded();
 
 			//create a new discount
-			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", true);
+			_storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", true);
 			Assert.AreEqual((int)DiscountStatus.thereIsAlreadyAnotherDiscount, _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", true).Status);
 
 
+		}
+
+		[TestMethod]
+		public void AddDiscountFailedNoUserPermissions()
+		{
+			SignUp(ref _userBuyer, "Vika", "Arad", "5555", "55555555");
+			_storeManagementBridge2 = StoreManagementDriver.getBridge();
+			_storeManagementBridge2.GetStoreManagementService(_userBuyer.GetUserSession(),"Toy");
+			MarketAnswer res = _storeManagementBridge2.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", true);
+			Assert.AreEqual((int)StoreEnum.NoPremmision, res.Status);
+		}
+
+		private void OpenStoreAndProducts()
+		{
+			_storeShoppingBridge = StoreShoppingDriver.getBridge();
+			_storeShoppingBridge.GetStoreShoppingService(_storeOwnerUserBridge.GetUserSession());
+			_storeShoppingBridge.OpenStore("Toy", "notYour");
+			_storeManagementBridge = StoreManagementDriver.getBridge();
+			_storeManagementBridge.GetStoreManagementService(_storeOwnerUserBridge.GetUserSession(), "Toy");
+			_storeManagementBridge.AddNewProduct("Ouch", 30, "Ouchouch", 6);
 		}
 
 		private void SignUp(ref IUserBridge userBridge, string name, string address, string password, string creditCard)
@@ -274,6 +283,21 @@ namespace BlackBox.StoreBlackBoxTests
 				Assert.AreEqual(expectedStock1[i], receivedStock1[i]);
 			}
 		}
+
+		private void SignInAdminSystem()
+		{
+			SignInAdmin("Arik1", "123");
+			_userAdminBridge = AdminDriver.getBridge();
+			_userAdminBridge.GetAdminService(_userAdmin.GetUserSession());
+		}
+
+		private void CreateOrder()
+		{
+			_orderBridge = OrderDriver.getBridge();
+			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
+			_orderBridge.BuyEverythingFromCart();
+		}
+
 
 		[TestCleanup]
 		public void UserTestCleanUp()
