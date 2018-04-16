@@ -69,7 +69,7 @@ namespace SadnaSrc.StoreCenter
                 case LotteryTicketStatus.Winning: return "WINNING";
                 case LotteryTicketStatus.Waiting: return "WAITING";
                 case LotteryTicketStatus.Losing: return "LOSING";
-                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); 
             }
 
         }
@@ -79,7 +79,7 @@ namespace SadnaSrc.StoreCenter
             {
                 case discountTypeEnum.Hidden: return "HIDDEN";
                 case discountTypeEnum.Visible: return "VISIBLE";
-                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); 
             }
         }
         public string PrintEnum(PurchaseEnum purchaseEnum)

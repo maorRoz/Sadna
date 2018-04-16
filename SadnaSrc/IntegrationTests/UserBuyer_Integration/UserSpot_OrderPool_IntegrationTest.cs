@@ -66,7 +66,6 @@ namespace IntegrationTests.UserBuyer_Integration
             }
         }
 
-        //TODO: Fix all the following tests after implementation of OrderPool is complete
 
         [TestMethod]
         public void CartItemUpdatedAfterBuyTest()

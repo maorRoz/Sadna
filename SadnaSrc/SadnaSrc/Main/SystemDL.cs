@@ -254,13 +254,12 @@ namespace SadnaSrc.Main
                                     [UnitPrice]     REAL,
                                     [FinalPrice]    REAL,
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice])
                                     )";
 
-            //TODO:                                     FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
         }
 
-        //TODO: this table is bad and should be deleted once OrderPool DB is finally ready
         private static string CreatePurchaseHistoryTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [PurchaseHistory] (
@@ -273,10 +272,6 @@ namespace SadnaSrc.Main
                                     [Date]          TEXT,
                                     PRIMARY KEY([UserName],[Product],[Store],[SaleType],[Date])
                                     )";
-            //TODO: add this to the string :   FOREIGN KEY([UserName])        REFERENCES [Product]([Name]), 
-            //TODO: add this to the string :   FOREIGN KEY([Product])        REFERENCES [Product]([Name]), 
-            //TODO: add this to the string :   FOREIGN KEY([Store])        REFERENCES [Product]([Name]), 
-            //TODO: add this to the string :   FOREIGN KEY([SaleType])        REFERENCES something of sale table...? 
         }
 
         private static string CreateProductTable()
@@ -369,8 +364,6 @@ namespace SadnaSrc.Main
                                     
                                     PRIMARY KEY([OrderID],[Store],[Name])
                                     )";
-            //TODO: add this to the string :   FOREIGN KEY([Name])        REFERENCES [Product]([Name]), 
-            //TODO: and this                   FOREIGN KEY([Store])        REFERENCES [Store]([Name]),
         }
         protected void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
         {

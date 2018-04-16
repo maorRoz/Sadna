@@ -43,36 +43,36 @@ namespace StoreCenterTests
             tickets = new LinkedList<LotteryTicket>();
         }
         [TestMethod]
-        public void lotteryEndToEndNoLotto()
+        public void LotteryEndToEndNoLotto()
         {
             orderService = market.GetOrderService(ref userService);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             orderService.BuyLotteryTicket("name", "T", 1, 50);
             tickets = handler.DataLayer.getAllTickets("L100");
             Assert.AreEqual(1, tickets.Count);
-            LotteryTicket ticket = tickets.First<LotteryTicket>();
+            LotteryTicket ticket = tickets.First();
             Assert.AreEqual(LotteryTicketStatus.Waiting, ticket.myStatus);
         }
         [TestMethod]
-        public void lotteryEndToEndOneWinner()
+        public void LotteryEndToEndOneWinner()
         {
             orderService = market.GetOrderService(ref userService);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             orderService.BuyLotteryTicket("name", "T", 1, 100);
             tickets = handler.DataLayer.getAllTickets("L100");
             Assert.AreEqual(1, tickets.Count);
-            LotteryTicket ticket = tickets.First<LotteryTicket>();
+            LotteryTicket ticket = tickets.First();
             Assert.AreEqual(LotteryTicketStatus.Winning, ticket.myStatus);
         }
         [TestMethod]
-        public void lotteryEndToEndCancelLotto()
+        public void LotteryEndToEndCancelLotto()
         {
             orderService = market.GetOrderService(ref userService);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             orderService.BuyLotteryTicket("name", "T", 1, 50);
             tickets = handler.DataLayer.getAllTickets("L100");
             Assert.AreEqual(1, tickets.Count);
-            LotteryTicket ticket = tickets.First<LotteryTicket>();
+            LotteryTicket ticket = tickets.First();
             Assert.AreEqual(LotteryTicketStatus.Waiting, ticket.myStatus);
             managementService.ChangeProductPurchaseWayToImmediate("name");
             LinkedList<LotteryTicket> noLotterys = handler.DataLayer.getAllTickets("L100");

@@ -96,7 +96,6 @@ namespace SadnaSrc.UserSpot
             cartStorage = filteredStorage;
         }
 
-        //TODO: Replace the arguments with product class
         public void AddToCart(string store,string product,double unitPrice,int quantity)
         {
             CartItem toAdd = new CartItem(product,store, quantity, unitPrice);

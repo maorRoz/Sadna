@@ -137,7 +137,7 @@ namespace SadnaSrc.OrderPool
         private Order RefundOrder(double sum,string userName,string ticket)
         {
             Order refund = new Order(_orderDL.RandomOrderID(), userName);
-            refund.AddOrderItem(new OrderItem("---", "REFUND: "+ticket, -1 * sum, 1)); //TODO need store name for refund item
+            refund.AddOrderItem(new OrderItem("---", "REFUND: "+ticket, -1 * sum, 1)); 
             MarketLog.Log("OrderPool", " successfully initialized new order " + refund.GetOrderID() + "for user " + userName + ".");
 
             return refund;

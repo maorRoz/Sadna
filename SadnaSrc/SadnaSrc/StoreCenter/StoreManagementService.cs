@@ -311,7 +311,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate)
         {
             try
