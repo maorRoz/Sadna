@@ -30,7 +30,7 @@ namespace SadnaSrc.MarketHarmony
         public void UpdateLottery(string itemName, string store,double moenyPayed, string username)
         {
             ModuleGlobalHandler globalHandler = ModuleGlobalHandler.GetInstance();
-            globalHandler.updateLottery(itemName, store, moenyPayed, username);
+            globalHandler.updateLottery(store, itemName, moenyPayed, username);
         }
 
 
@@ -41,9 +41,12 @@ namespace SadnaSrc.MarketHarmony
             return false;
         }
 
-        public bool IsTicketValid(string itemName, string store, double wantToPay)
+        public void ValidateTicket(string itemName, string store, double wantToPay)
         {
-            return _storeService.HasActiveLottery(store, itemName, wantToPay);
+            if (_storeService.HasActiveLottery(store, itemName, wantToPay))
+            {
+                throw new OrderException(GiveDetailsStatus.InvalidNameOrAddress, "problem"); 
+            }
         }
 
         public double GetPriceFromCoupon(string itemName, string store, int quantity, string coupon)
