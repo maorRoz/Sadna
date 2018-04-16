@@ -140,25 +140,16 @@ namespace BlackBox.StoreBlackBoxTests
 			}
 
 
-			CreateOrderWithCoupon(coupon);
+			CreateOrderWithCouponInvalidCoupon(coupon);
 
 			SignInAdmin("Arik1", "123");
 			_userAdminBridge = AdminDriver.getBridge();
 			_userAdminBridge.GetAdminService(_userAdmin.GetUserSession());
 			MarketAnswer purchaseHistory = _userAdminBridge.ViewPurchaseHistoryByUser("Vika");
 
-			//make sure the price presented is without the discount
+			//make sure the purchase didn't complete
 			string[] purchaseReceived = purchaseHistory.ReportList;
-			string[] purchaseExpected =
-			{
-				"User: Vika Product: Ouch Store: Toy Sale: Immediate Quantity: 3 Price: 90 Date: " +
-				DateTime.Now.Date.ToString("d"),
-			};
-			Assert.AreEqual(purchaseExpected.Length, purchaseReceived.Length);
-			for (int i = 0; i < purchaseReceived.Length; i++)
-			{
-				Assert.AreEqual(purchaseExpected[i], purchaseReceived[i]);
-			}
+			Assert.IsNull(purchaseReceived);
 		}
 
 		[TestMethod]
@@ -311,7 +302,15 @@ namespace BlackBox.StoreBlackBoxTests
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
 			MarketAnswer res =_orderBridge.BuyItemWithCoupon("Ouch", "Toy", 2, 30, coupon);
-			Assert.AreEqual(0,res.Status);
+			Assert.AreEqual((int)OrderStatus.Success,res.Status);
+		}
+
+		private void CreateOrderWithCouponInvalidCoupon(string coupon)
+		{
+			_orderBridge = OrderDriver.getBridge();
+			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
+			MarketAnswer res = _orderBridge.BuyItemWithCoupon("Ouch", "Toy", 2, 30, coupon);
+			Assert.AreEqual((int)OrderStatus.InvalidCoupon, res.Status);
 		}
 
 
