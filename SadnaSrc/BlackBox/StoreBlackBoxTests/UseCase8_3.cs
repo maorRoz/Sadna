@@ -1,8 +1,9 @@
 ﻿using System;
+using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBox.StoreBlackBoxTests
+namespace StoreBlackBoxTests
 {
 	[TestClass]
 	public class UseCase8_3
@@ -28,6 +29,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_userBuyer = null;
 			_userAdminBridge = null;
 			_orderBridge = null;
+			_userAdmin = null;
 		}
 
 
@@ -325,6 +327,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManagementBridge.CleanSession();
 			_storeManagementBridge2?.CleanSession();
 			_orderBridge?.CleanSession();
+			_userAdmin?.CleanSession();
 			_storeOwnerUserBridge.CleanMarket();
 		}
 		

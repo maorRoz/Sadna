@@ -2,7 +2,7 @@ using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-//TODO: change statuses.
+
 namespace BlackBoxStoreTests
 
 {
