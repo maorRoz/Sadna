@@ -188,34 +188,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: fix this
-        public MarketAnswer AddLotteryTicket(string store, string productName, double amountToPay)
-        {
-            MarketLog.Log("StoreCenter", "store error");
-            try
-            {
-                //PorductToFind =  StoreDL.searchProductInStore(store,productName,"Immediate");
-                // MarketLog.Log("StoreCenter", "");
-                //  _shopper.AddToCart(productName,store,quantity);
-                // MarketLog.Log("StoreCenter", "");
-                return new StoreAnswer(AddLotteryTicketStatus.Success, amountToPay + "has been paid to a " + productName + " lottery ticket" +
-                                                                       " from " + store + "has been" + " successfully!");
-            }
-            catch (StoreException e)
-            {
-                MarketLog.Log("StoreCenter", "");
-                return new StoreAnswer((AddProductStatus)e.Status, "There is no product,ticket,store or quantity of that type in the market." +
-                                                                   " request has been denied. Error message has been created!");
-            }
-            catch (MarketException)
-            {
-                MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(ViewStoreStatus.InvalidUser,
-                    "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
-            }
-        }
-
-
         public void CleanSeesion()
         {
             foreach (Store store in stores)

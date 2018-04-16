@@ -42,9 +42,9 @@ namespace SadnaSrc.MarketHarmony
 
         public void ValidateTicket(string itemName, string store, double wantToPay)
         {
-            if (_storeService.HasActiveLottery(store, itemName, wantToPay))
+            if (!_storeService.HasActiveLottery(store, itemName, wantToPay))
             {
-                throw new OrderException(GiveDetailsStatus.InvalidNameOrAddress, "problem"); 
+                throw new OrderException(GiveDetailsStatus.InvalidNameOrAddress, "no lottery is on going! cannot get ticket from expired or unavailable lottery"); 
             }
         }
 

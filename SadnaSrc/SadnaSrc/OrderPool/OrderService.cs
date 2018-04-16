@@ -274,6 +274,7 @@ namespace SadnaSrc.OrderPool
                 order.AddOrderItem(ticketToBuy);
                 _paymentService.ProccesPayment(order,CreditCard);
                 SaveOrderToDB(order);
+                _storesSync.UpdateLottery(itemName, store, unitPrice, UserName);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought lottery ticket.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought Lottery ticket ");
             }

@@ -90,10 +90,6 @@ namespace StoreCenterTests
             {
                 handler.DataLayer.RemoveLottery(LotteryToDelete);
             }
-            foreach (LotteryTicket tick in tickets)
-            {
-                handler.DataLayer.RemoveLotteryTicket(tick);
-            }
             userService.CleanSession();
             orderService.CleanSession();
             managementService.CleanSession();

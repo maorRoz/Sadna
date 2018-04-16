@@ -254,12 +254,11 @@ namespace SadnaSrc.Main
                                     [UnitPrice]     REAL,
                                     [FinalPrice]    REAL,
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
-                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice])
                                     )";
 
         }
-
+        //                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
         private static string CreatePurchaseHistoryTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [PurchaseHistory] (
