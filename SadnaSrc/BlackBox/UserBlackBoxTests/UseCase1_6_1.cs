@@ -204,8 +204,6 @@ namespace BlackBox.UserBlackBoxTests
 			}
 
 		}
-
-		//TODO: add another test for a guest
 		[TestMethod]
 		public void NoItemFoundChangeQuantityUnitPriceRegisteredUser()
 		{

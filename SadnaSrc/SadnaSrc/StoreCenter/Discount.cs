@@ -49,20 +49,20 @@ namespace SadnaSrc.StoreCenter
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             if (handler.PrintEnum(discountType) == handler.PrintEnum(discountTypeEnum.Hidden))
-                return "discount code: " + discountCode + " type is: hidden";
+                return " type is: hidden";
             if (Percentages)
             {
-                return "discount code: " + discountCode + " DiscountAmount: " + DiscountAmount + "%" +
-                      " Start Date: " + startDate + " End Date: " + EndDate;
+                return "DiscountAmount: " + DiscountAmount + "%" +
+                      " Start Date: " + startDate.Date.ToString("d") + " End Date: " + EndDate.Date.ToString("d") + " type is: visible";
             }
-            return "discount code: " + discountCode + " DiscountAmount: " + DiscountAmount +
-             " Start Date: " + startDate + " End Date: " + EndDate;
+            return "DiscountAmount: " + DiscountAmount +
+             " Start Date: " + startDate.Date.ToString("d") + " End Date: " + EndDate.Date.ToString("d") + " type is: visible";
 
         }
 
         internal bool checkTime()
         {
-            return ((startDate.Date < MarketYard.MarketDate) && (MarketYard.MarketDate < EndDate.Date));
+            return ((startDate.Date <= MarketYard.MarketDate) && (MarketYard.MarketDate <= EndDate.Date));
         }
     }
 }

@@ -19,7 +19,6 @@ namespace BlackBoxStoreTests
 		[TestMethod]
 		public void SuccessInOpeningAStore()
 		{
-			//TODO: don't forget to delete the store
 			SignUp("Pnina","mishol","7894","12345678");
 			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.Success, _storeBridge.OpenStore("PninaStore", "Ben-Gurion").Status);
@@ -76,8 +75,6 @@ namespace BlackBoxStoreTests
             _bridgeSignUp.EnterSystem();
             _bridgeSignUp.SignUp(name, address, password, creditCard);
         }
-
-        //TODO: don't forget to delete the store
         [TestCleanup]
         public void UserTestCleanUp()
         {

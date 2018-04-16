@@ -38,7 +38,6 @@ namespace SadnaSrc.SupplyPoint
             }
             MarketLog.Log("SupplyPoint", "Attempting to create delivery for order ID: "+ order.GetOrderID());
             CheckOrderDetails(order);
-            // TODO: Find out how the Order Data must reach the delivery system.
             if (sock.ProcessDelivery(order.GetOrderID(), order.GetUserName(), order.GetShippingAddress()))
             {
                 MarketLog.Log("SupplyPoint", "Delivery for order ID: "+ order.GetOrderID() + " was successufully assigned.");

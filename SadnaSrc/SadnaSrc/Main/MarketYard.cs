@@ -54,7 +54,7 @@ namespace SadnaSrc.Main
             if (_instance == null) {return;}
             MarketDate = marketDate;
             var refundOrdersService = new StoreOrderTools();
-            refundOrdersService.RefundAllExpiredLotteries();
+            //refundOrdersService.RefundAllExpiredLotteries();
         }
 
 

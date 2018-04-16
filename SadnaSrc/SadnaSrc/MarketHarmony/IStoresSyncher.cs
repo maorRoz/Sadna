@@ -8,9 +8,6 @@ using SadnaSrc.OrderPool;
 
 namespace SadnaSrc.MarketHarmony
 {
-    //TODO: improve this class lior/igor!!
-    //TODO: OrderService needs the name of the store
-    //integration between OrderPool to StoreCenter 
     public interface IStoresSyncher
     {
         
@@ -33,12 +30,14 @@ namespace SadnaSrc.MarketHarmony
         /// <summary>
         /// Validate that <paramref name="toBuy"/> is valid product to buy by the user
         /// </summary>
-        bool IsTicketValid(string itemName, string store, double wantToPay);
+        void ValidateTicket(string itemName, string store, double wantToPay);
 
 
         /// <summary>
         /// returns an order item with the updated price after discount, if coupon is invalid return null
         /// </summary>
         double GetPriceFromCoupon(string itemName, string store, int quantity, string coupon);
+
+        void CleanSession();
     }
 }

@@ -121,7 +121,35 @@ namespace BlackBox
             throw new NotImplementedException();
         }
 
-        public void CleanSession()
+	    public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount,
+		    string discountType, bool presenteges)
+	    {
+		    if (real != null)
+		    {
+			    return real.AddDiscountToProduct(productName, startDate, endDate, discountAmount, discountType, presenteges);
+		    }
+			throw new NotImplementedException();
+	    }
+
+	    public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
+	    {
+		    if (real != null)
+		    {
+			    return real.EditDiscount(productName, whatToEdit, newValue);
+		    }
+			throw new NotImplementedException();
+	    }
+
+	    public MarketAnswer RemoveDiscountFromProduct(string productName)
+	    {
+		    if (real != null)
+		    {
+			    return real.RemoveDiscountFromProduct(productName);
+		    }
+		    throw new NotImplementedException();
+		}
+
+	    public void CleanSession()
         {
             if (real != null)
             {

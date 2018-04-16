@@ -16,7 +16,7 @@ namespace SadnaSrc.StoreCenter
         ModuleGlobalHandler global;
         private IUserSeller _storeManager;
         public string _storeName;
-
+        private IOrderSyncher syncher;
         private LinkedList<StockListItem> stockListItemToRemove;
         private LinkedList<Discount> discountsToRemvoe;
 
@@ -28,6 +28,7 @@ namespace SadnaSrc.StoreCenter
             store = global.DataLayer.getStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();
+            syncher = new OrderSyncherHarmony();
         }
 
         public MarketAnswer CloseStore()
@@ -186,7 +187,7 @@ namespace SadnaSrc.StoreCenter
                 if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
                 {
                     LotterySaleManagmentTicket LotteryManagment = global.DataLayer.GetLotteryByProductID(stockListItem.Product.SystemId);
-                    LotteryManagment.InformCancel();
+                    LotteryManagment.InformCancel(syncher);
                     global.DataLayer.RemoveLottery(LotteryManagment);
                 }
                 global.DataLayer.RemoveStockListItem(stockListItem);
@@ -293,7 +294,7 @@ namespace SadnaSrc.StoreCenter
                 if (stockList.PurchaseWay == PurchaseEnum.Lottery)
                 {
                     LotterySaleManagmentTicket lottery = global.DataLayer.GetLotteryByProductID(stockList.Product.SystemId);
-                    lottery.InformCancel();
+                    lottery.InformCancel(syncher);
                     global.DataLayer.EditLotteryInDatabase(lottery);
 
                 }
@@ -311,7 +312,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate)
         {
             try
@@ -372,7 +372,7 @@ namespace SadnaSrc.StoreCenter
                     throw new StoreException(DiscountStatus.ProductNotFound, "no Such Product");
                 }
                 MarketLog.Log("StoreCenter", "check if dates are OK");
-                if ((startDate < MarketYard.MarketDate) || (endDate < MarketYard.MarketDate) || !(startDate < endDate))
+                if ((startDate < MarketYard.MarketDate) || !(startDate < endDate))
                 {
                     MarketLog.Log("StoreCenter", "something wrong with the dates");
                     throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal");
@@ -533,6 +533,8 @@ namespace SadnaSrc.StoreCenter
                 }
                 global.DataLayer.RemoveStore(store);
             }
+
+            syncher.CleanSession();
         }
 
         public MarketAnswer AddQuanitityToProduct(string productName, int quantity)
