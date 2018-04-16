@@ -136,30 +136,24 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void AddDiscountFailedNoStore()
 		{
-			//check there is no discount for ouch
 			CheckNoDiscountAdded();
 
-			//add the discount
 			_storeManagementBridge2 = StoreManagementDriver.getBridge();
 			_storeManagementBridge2.GetStoreManagementService(_storeOwnerUserBridge.GetUserSession(),"StoreNotExists");
 			MarketAnswer res = _storeManagementBridge2.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", false);
 			Assert.AreEqual((int)DiscountStatus.NoStore, res.Status);
 
-			//check that the product in the stock doesn't have a discout
 			CheckNoDiscountAdded();
 		}
 
 		[TestMethod]
 		public void AddDiscountFailedProductNotFound()
 		{
-			//check there is no discount for ouch
 			CheckNoDiscountAdded();
 
-			//add the discount
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Oucheeeee", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", false);
 			Assert.AreEqual((int)DiscountStatus.ProductNotFound, res.Status);
 
-			//check that the product in the stock doesn't have a discout
 			CheckNoDiscountAdded();
 
 		}
@@ -167,56 +161,44 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void AddDiscountFailedDatesAreWrong()
 		{
-			//check there is no discount for ouch
 			CheckNoDiscountAdded();
 
-			//add the discount
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("13/04/2018"), 10, "VISIBLE", false);
 			Assert.AreEqual((int)DiscountStatus.DatesAreWrong, res.Status);
 
-			//check that the product in the stock doesn't have a discout
 			CheckNoDiscountAdded();
 		}
 
 		[TestMethod]
 		public void AddDiscountFailedPrecentagesTooBig()
 		{
-			//check there is no discount for ouch
 			CheckNoDiscountAdded();
 
-			//add the discount
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 120, "VISIBLE", true);
 			Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges ,res.Status);
 
-			//check that the product in the stock doesn't have a discout
 			CheckNoDiscountAdded();
 		}
 
 		[TestMethod]
 		public void AddDiscountFailedAmountIsNegativeOrZero()
 		{
-			//check there is no discount for ouch
 			CheckNoDiscountAdded();
 
-			//add the discount
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), -5, "VISIBLE", false);
 			Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, res.Status);
 
-			//check that the product in the stock doesn't have a discout
 			CheckNoDiscountAdded();
 		}
 
 		[TestMethod]
 		public void AddDiscountFailedDiscountGreaterThanProductPrice()
 		{
-			//check there is no discount for ouch
 			CheckNoDiscountAdded();
 
-			//add the discount
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 50, "VISIBLE", false);
 			Assert.AreEqual((int)DiscountStatus.DiscountGreaterThenProductPrice, res.Status);
 
-			//check that the product in the stock doesn't have a discout
 			CheckNoDiscountAdded();
 		}
 
@@ -224,10 +206,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void AddDiscountFailedNotherDiscountAlreadyExists()
 		{
-			//check there is no discount for ouch
 			CheckNoDiscountAdded();
 
-			//create a new discount
 			_storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", true);
 			Assert.AreEqual((int)DiscountStatus.thereIsAlreadyAnotherDiscount, _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", true).Status);
 
