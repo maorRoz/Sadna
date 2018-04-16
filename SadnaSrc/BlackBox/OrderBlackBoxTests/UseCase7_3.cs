@@ -155,12 +155,12 @@ namespace BlackBox.OrderBlackBoxTests
             string[] expectedHistoryFirstBuyer =
             {
                 "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("d"),
-                "User: Shalom1 Product: REFUND: T3 Store: --- Sale: Lottery Quantity: 1 Price: -4 Date: "+DateTime.Now.Date.ToString("d")
+                "User: Shalom1 Product: REFUND: Lottery Ticket Store: --- Sale: Lottery Quantity: 1 Price: -4 Date: "+DateTime.Now.Date.ToString("d")
             };
             string[] expectedHistorySecondBuyer =
             {
                 "User: Shalom2 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("d"),
-                "User: Shalom2 Product: REFUND: T4 Store: --- Sale: Lottery Quantity: 1 Price: -4 Date: "+DateTime.Now.Date.ToString("d")
+                "User: Shalom2 Product: REFUND: Lottery Ticket Store: --- Sale: Lottery Quantity: 1 Price: -4 Date: "+DateTime.Now.Date.ToString("d")
             };
             string[] actualHistoryFirstBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom1").ReportList;
             string[] actualHistorySecondBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom2").ReportList;

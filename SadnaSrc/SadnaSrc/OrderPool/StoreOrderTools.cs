@@ -84,7 +84,7 @@ namespace SadnaSrc.OrderPool
             string creditCardToRefund = _orderDL.GetCreditCardToRefund(participantID);
             string nameToRefund = _orderDL.GetNameToRefund(participantID);
             double sumToRefund = _orderDL.GetSumToRefund(ticket);
-            Order order = RefundOrder(sumToRefund, nameToRefund, ticket);
+            Order order = RefundOrder(sumToRefund, nameToRefund, ticket); // should be ticket later
             _paymentService.Refund(sumToRefund, creditCardToRefund, nameToRefund);
             Orders.Add(order);
             _orderDL.AddOrder(order,"Lottery");
@@ -139,7 +139,7 @@ namespace SadnaSrc.OrderPool
         private Order RefundOrder(double sum,string userName,string ticket)
         {
             Order refund = new Order(_orderDL.RandomOrderID(), userName);
-            refund.AddOrderItem(new OrderItem("---", "REFUND: "+ticket, -1 * sum, 1)); 
+            refund.AddOrderItem(new OrderItem("---", "REFUND: Lottery Ticket", -1 * sum, 1)); 
             MarketLog.Log("OrderPool", " successfully initialized new order " + refund.GetOrderID() + "for user " + userName + ".");
 
             return refund;
