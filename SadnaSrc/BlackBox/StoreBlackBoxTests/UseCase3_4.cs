@@ -13,13 +13,14 @@ namespace BlackBoxStoreTests
 		private IUserBridge _bridgeSignUp;
 		private IUserBridge _userToPromoteBridge;
 		private IUserBridge _userToPromoteBridge2;
-		private IUserBridge _signInBridge;
-		private IStoreShoppingBridge _storeBridge;
+	    private IUserBridge _signInBridge;
+        private IStoreShoppingBridge _storeBridge;
 		private IStoreManagementBridge _storeManager1;
 		private IStoreManagementBridge _storeManager2;
-		private IUserBridge _ownerBridge;
-		
-		private readonly string adminName = "Arik1";
+		private IUserBridge _adminBridge;
+	    private IUserBridge _guestBridge;
+
+        private readonly string adminName = "Arik1";
 		private readonly string adminPass = "123";
 
 	    private readonly string storeAction1 = "PromoteStoreAdmin";
@@ -42,15 +43,19 @@ namespace BlackBoxStoreTests
 			_storeManager1 = StoreManagementDriver.getBridge();
             _storeManager2 = null;
 			_signInBridge = null;
-		    _ownerBridge = null;
-		}
+		    _adminBridge = null;
+		    _guestBridge = null;
+        }
 
+        /*
+         * Store owner tests
+         */
 		[TestMethod]
 		public void StoreOwnerSucceededPromotePromoteStoreAdmin()
 		{
 
 			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "Volcano");
-		    TryPromote("Thor", storeAction1);
+		    TryPromote("Thor", storeAction1, true);
             AssertActions(new bool[]{true, false, false, false});
         }
 
@@ -59,7 +64,7 @@ namespace BlackBoxStoreTests
 	    {
 
 	        _storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "Volcano");
-	        TryPromote("Thor", storeAction2);
+	        TryPromote("Thor", storeAction2, true);
 	        AssertActions(new bool[] { false, true, false, false });
         }
 
@@ -67,7 +72,7 @@ namespace BlackBoxStoreTests
 	    public void StoreOwnerSucceededPromoteDeclareDiscountPolicy()
 	    {
 	        _storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "Volcano");
-            TryPromote("Thor", storeAction3);
+            TryPromote("Thor", storeAction3, true);
 	        AssertActions(new bool[] { false, false, true, false });
         }
 
@@ -75,75 +80,233 @@ namespace BlackBoxStoreTests
 	    public void StoreOwnerSucceededPromoteViewPurchaseHistory()
 	    {
 	        _storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "Volcano");
-            TryPromote("Thor", storeAction4);
+            TryPromote("Thor", storeAction4, true);
 	        AssertActions(new bool[] { false, false, false, true });
         }
 
-        /*[TestMethod]
-		public void AdminSystemSucceededPromote()
-		{
-		    _ownerBridge = UserDriver.getBridge();
-		    _ownerBridge.EnterSystem();
-		    _ownerBridge.SignIn(adminName, adminPass);
-			_storeManager1.GetStoreManagementService(_ownerBridge.GetUserSession(),"basush");
-			MarketAnswer res = _storeManager1.PromoteToStoreManager("eurovision", "StoreOwner");
-			Assert.AreEqual((int)PromoteStoreStatus.Success, res.Status);
-			//check if eurovision can promote someone himself - if not, he is not an owner
-			SignIn("eurovision", "852963");
-			_storeManager2 = StoreManagementDriver.getBridge();
-			_storeManager2.GetStoreManagementService(_signInBridge.GetUserSession(), "basush");
-			Assert.AreEqual((int)PromoteStoreStatus.Success, _storeManager2.PromoteToStoreManager("blah", "StoreOwner").Status);
+	    [TestMethod]
+	    public void StoreOwnerSucceededPromoteMultipleActions1()
+	    {
+	        _storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction2+","+storeAction3, true);
+	        AssertActions(new bool[] { false, true, true, false });
+	    }
 
-		}
+	    [TestMethod]
+	    public void StoreOwnerSucceededPromoteMultipleActions2()
+	    {
+	        _storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1 + "," + storeAction2 + "," + storeAction3, true);
+	        AssertActions(new bool[] { true, true, true, false });
+	    }
 
-		[TestMethod]
-		public void PromotesHimselfToOwner()
-		{
-			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "basush");
-			MarketAnswer res = _storeManager1.PromoteToStoreManager("LAMA", "StoreOwner");
-			Assert.AreEqual((int)PromoteStoreStatus.PromoteSelf, res.Status);
-		}
+        [TestMethod]
+	    public void StoreOwnerSucceededPromoteAllActions()
+	    {
+	        _storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1 + "," + storeAction2 + "," + storeAction3 + "," + storeAction4, true);
+	        AssertActions(new bool[] { true, true, true, true });
+	    }
 
-		[TestMethod]
-		public void NoUserFoundToPromote()
-		{
-			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "basush");
-			MarketAnswer res = _storeManager1.PromoteToStoreManager("euro", "StoreOwner");
-			Assert.AreEqual((int)PromoteStoreStatus.NoUserFound, res.Status);
-		}
+        /*
+         * System admin tests
+         */
 
-		[TestMethod]
-		public void InvalidStore()
-		{
-			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "mahar");
-			MarketAnswer res = _storeManager1.PromoteToStoreManager("eurovision", "StoreOwner");
-			Assert.AreEqual((int)PromoteStoreStatus.InvalidStore, res.Status);
-		}
+	    [TestMethod]
+	    public void AdminSucceededPromotePromoteStoreAdmin()
+	    {
+            AdminSignIn();
+	        _storeManager1.GetStoreManagementService(_adminBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1, true);
+	        AssertActions(new bool[] { true, false, false, false });
+	    }
 
-		[TestMethod]
-		public void NotOwnerTriesToPromoteToOwner()
-		{
-			_storeManager1.GetStoreManagementService(_userToPromoteBridge.GetUserSession(),"basush");
-			MarketAnswer res = _storeManager1.PromoteToStoreManager("blah", "StoreOwner");
-			Assert.AreEqual((int)PromoteStoreStatus.NoAuthority,res.Status);
+	    [TestMethod]
+	    public void AdminSucceededPromoteManageProducts()
+	    {
+	        AdminSignIn();
+            _storeManager1.GetStoreManagementService(_adminBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction2, true);
+	        AssertActions(new bool[] { false, true, false, false });
+	    }
 
-		}*/
+	    [TestMethod]
+	    public void AdminSucceededPromoteDeclareDiscountPolicy()
+	    {
+	        AdminSignIn();
+            _storeManager1.GetStoreManagementService(_adminBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction3, true);
+	        AssertActions(new bool[] { false, false, true, false });
+	    }
 
-        private void SignUp(ref IUserBridge userBridge,string name, string address, string password, string creditCard)
-		{
-			userBridge = UserDriver.getBridge();
-			userBridge.EnterSystem();
-			userBridge.SignUp(name, address, password, creditCard);
-		}
+	    [TestMethod]
+	    public void AdminSucceededPromoteViewPurchaseHistory()
+	    {
+	        AdminSignIn();
+            _storeManager1.GetStoreManagementService(_adminBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction4, true);
+	        AssertActions(new bool[] { false, false, false, true });
+	    }
 
-		private void SignIn(string name, string password)
-		{
-			_signInBridge = UserDriver.getBridge();
-			_signInBridge.EnterSystem();
-			_signInBridge.SignIn(name, password);
-		}
+	    [TestMethod]
+	    public void AdminSucceededPromoteMultipleActions1()
+	    {
+	        AdminSignIn();
+            _storeManager1.GetStoreManagementService(_adminBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction2 + "," + storeAction3, true);
+	        AssertActions(new bool[] { false, true, true, false });
+	    }
 
-		[TestCleanup]
+	    [TestMethod]
+	    public void AdminSucceededPromoteMultipleActions2()
+	    {
+	        AdminSignIn();
+	        _storeManager1.GetStoreManagementService(_adminBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1 + "," + storeAction2 + "," + storeAction4, true);
+	        AssertActions(new bool[] { true, true, false, true });
+	    }
+
+        [TestMethod]
+	    public void AdminSucceededPromoteAllActions()
+	    {
+	        AdminSignIn();
+            _storeManager1.GetStoreManagementService(_adminBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1 + "," + storeAction2 + "," + storeAction3 + "," + storeAction4, true);
+	        AssertActions(new bool[] { true, true, true, true });
+	    }
+
+	    /*
+         * Regular user tests
+         */
+
+	    [TestMethod]
+	    public void ShopperFailedPromotePromoteStoreAdmin()
+	    {
+
+	        _storeManager1.GetStoreManagementService(_userToPromoteBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void ShopperFailedPromoteManageProducts()
+	    {
+
+	        _storeManager1.GetStoreManagementService(_userToPromoteBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction2, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void ShopperFailedPromoteDeclareDiscountPolicy()
+	    {
+	        _storeManager1.GetStoreManagementService(_userToPromoteBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction3, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void ShopperFailedPromoteViewPurchaseHistory()
+	    {
+	        _storeManager1.GetStoreManagementService(_userToPromoteBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction4, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void ShopperFailedPromoteMultipleActions1()
+	    {
+	        _storeManager1.GetStoreManagementService(_userToPromoteBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction2 + "," + storeAction3, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void ShopperFailedPromoteMultipleActions2()
+	    {
+	        _storeManager1.GetStoreManagementService(_userToPromoteBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction2 + "," + storeAction3 + "," + storeAction4, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+        [TestMethod]
+	    public void ShopperFailedPromoteAllActions()
+	    {
+	        _storeManager1.GetStoreManagementService(_userToPromoteBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1 + "," + storeAction2 + "," + storeAction3 + "," + storeAction4, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    /*
+         * Guest tests
+         */
+
+	    [TestMethod]
+	    public void GuestFailedPromotePromoteStoreAdmin()
+	    {
+            GuestEnter();
+	        _storeManager1.GetStoreManagementService(_guestBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void GuestFailedPromoteManageProducts()
+	    {
+	        GuestEnter();
+            _storeManager1.GetStoreManagementService(_guestBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction2, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void GuestFailedPromoteDeclareDiscountPolicy()
+	    {
+	        GuestEnter();
+            _storeManager1.GetStoreManagementService(_guestBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction3, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void GuestFailedPromoteViewPurchaseHistory()
+	    {
+	        GuestEnter();
+            _storeManager1.GetStoreManagementService(_guestBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction4, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void GuestFailedPromoteMultipleActions1()
+	    {
+	        GuestEnter();
+            _storeManager1.GetStoreManagementService(_guestBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction2 + "," + storeAction3, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+	    [TestMethod]
+	    public void GuestFailedPromoteMultipleActions2()
+	    {
+	        GuestEnter();
+	        _storeManager1.GetStoreManagementService(_guestBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1 + "," + storeAction3 + "," + storeAction3, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+        [TestMethod]
+	    public void GuestFailedPromoteAllActions()
+	    {
+	        GuestEnter();
+            _storeManager1.GetStoreManagementService(_guestBridge.GetUserSession(), "Volcano");
+	        TryPromote("Thor", storeAction1 + "," + storeAction2 + "," + storeAction3 + "," + storeAction4, false);
+	        AssertActions(new bool[] { false, false, false, false });
+	    }
+
+        
+
+        [TestCleanup]
 		public void UserTestCleanUp()
 		{
 			_storeBridge.CleanSession();
@@ -153,15 +316,49 @@ namespace BlackBoxStoreTests
 			_storeManager1.CleanSession();
 			_storeManager2?.CleanSession();
 			_signInBridge?.CleanSession();
-		    _ownerBridge?.CleanSession();
-			_bridgeSignUp.CleanMarket();
+		    _adminBridge?.CleanSession();
+		    _guestBridge?.CleanSession();
+            _bridgeSignUp.CleanMarket();
 		}
 
-	    private void TryPromote(string toPromote, string actions)
-	    {
+        /*
+         * Private helper functions
+         */
 
+	    private void SignUp(ref IUserBridge userBridge, string name, string address, string password, string creditCard)
+	    {
+	        userBridge = UserDriver.getBridge();
+	        userBridge.EnterSystem();
+	        userBridge.SignUp(name, address, password, creditCard);
+	    }
+
+	    private void SignIn(string name, string password)
+	    {
+	        _signInBridge = UserDriver.getBridge();
+	        _signInBridge.EnterSystem();
+	        _signInBridge.SignIn(name, password);
+	    }
+
+	    private void AdminSignIn()
+	    {
+	        _adminBridge = UserDriver.getBridge();
+	        _adminBridge.EnterSystem();
+	        _adminBridge.SignIn(adminName, adminPass);
+	    }
+
+	    private void GuestEnter()
+	    {
+	        _guestBridge = UserDriver.getBridge();
+	        _guestBridge.EnterSystem();
+	    }
+
+        private void TryPromote(string toPromote, string actions, bool success)
+	    {
 	        MarketAnswer res = _storeManager1.PromoteToStoreManager(toPromote, actions);
-	        Assert.AreEqual((int)PromoteStoreStatus.Success, res.Status);
+            if(success)
+	            Assert.AreEqual((int)PromoteStoreStatus.Success, res.Status);
+            else
+                Assert.AreEqual((int)PromoteStoreStatus.NoAuthority, res.Status);
 	        SignIn(toPromote, "121112");
 	        _storeManager2 = StoreManagementDriver.getBridge();
 	        _storeManager2.GetStoreManagementService(_signInBridge.GetUserSession(), "Volcano");
