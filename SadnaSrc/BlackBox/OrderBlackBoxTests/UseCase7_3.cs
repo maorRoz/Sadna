@@ -178,19 +178,39 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void LotteryFailGuest()
         {
-
+            _buyerGuestBridge = UserDriver.getBridge();
+            _buyerGuestBridge.EnterSystem();
+            _orderBridge1 = OrderDriver.getBridge();
+            _orderBridge1.GetOrderService(_buyerGuestBridge.GetUserSession());
+            Assert.AreEqual((int)OrderStatus.InvalidUser, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
         }
 
         [TestMethod]
         public void FailPurchaseLotterySupplySystemCollapsed()
         {
-
+            MakeRegisteredShopper1();
+            _orderBridge1.DisableSupplySystem();
+            Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
+            string[] expectedHistoryFirstBuyer =
+            {
+                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("d"),
+            };
+            string[] actualHistoryFirstBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom1").ReportList;
+            Assert.AreEqual(expectedHistoryFirstBuyer.Length,actualHistoryFirstBuyer.Length);
+            for (int i = 0; i < expectedHistoryFirstBuyer.Length; i++)
+            {
+                Assert.AreEqual(expectedHistoryFirstBuyer[i],actualHistoryFirstBuyer[i]);
+            }
         }
 
         [TestMethod]
         public void FailPurchaseLotteryPaymentSystemCollapsed()
         {
-
+            MakeRegisteredShopper1();
+            _orderBridge1.DisablePaymentSystem();
+            Assert.AreEqual((int)WalleterStatus.PaymentSystemError, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
+            string[] actualHistoryFirstBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom1").ReportList;
+            Assert.IsNull(actualHistoryFirstBuyer);
         }
 
         [TestCleanup]

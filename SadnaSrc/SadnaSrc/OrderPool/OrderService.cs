@@ -280,6 +280,7 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
+                _buyer.ValidateRegisteredUser();
                 _storesSync.ValidateTicket(itemName, store, unitPrice);
                 OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
                 CheckOrderItem(ticketToBuy);

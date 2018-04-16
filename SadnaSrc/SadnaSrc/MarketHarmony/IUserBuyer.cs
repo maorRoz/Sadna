@@ -57,6 +57,12 @@ namespace SadnaSrc.MarketHarmony
         /// <param name="unitPrice"> The unit price of the product </param>
         void RemoveItemFromCart(string itemName, string store, int quantity, double unitPrice);
 
+
+        /// <summary>
+        /// throw exception if user arn't registered to the system
+        /// </summary>
+        void ValidateRegisteredUser();
+
         /// <summary>
         /// Return registered user address or null if not registered
         /// </summary>
