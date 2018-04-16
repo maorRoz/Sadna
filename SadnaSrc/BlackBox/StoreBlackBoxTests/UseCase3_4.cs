@@ -402,7 +402,7 @@ namespace BlackBoxStoreTests
             }
 
 	        if (permissions[3])
-	            Assert.AreEqual((int)ManageStoreStatus.InvalidStore, _storeManager2.ViewStoreHistory().Status);
+	            Assert.AreEqual((int)ManageStoreStatus.Success, _storeManager2.ViewStoreHistory().Status);
             else
 	            Assert.AreEqual((int)ManageStoreStatus.InvalidManager, _storeManager2.ViewStoreHistory().Status);
         }
