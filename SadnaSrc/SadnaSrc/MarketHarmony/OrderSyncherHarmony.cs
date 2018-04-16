@@ -25,7 +25,7 @@ namespace SadnaSrc.MarketHarmony
             tools.RefundLottery(lottery);
         }
 
-        public void CleanOrderSyncherSession()
+        public void CleanSession()
         {
             tools.CleanSession();
         }

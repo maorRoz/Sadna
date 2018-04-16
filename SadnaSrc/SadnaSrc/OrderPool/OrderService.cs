@@ -117,6 +117,8 @@ namespace SadnaSrc.OrderPool
             {
                 _orderDL.RemoveOrder(order.GetOrderID());
             }
+
+            _storesSync.CleanSession();
             _buyer.CleanSession();
         }
 
@@ -266,15 +268,15 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                OrderItem ticketToBuy = _buyer.CheckoutItem("LOTTERY: "+itemName, store, quantity, unitPrice);
+                _storesSync.ValidateTicket(itemName, store, unitPrice);
+                OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
                 CheckOrderItem(ticketToBuy);
                 Order order = InitOrder();
                 orderId = order.GetOrderID();
                 order.AddOrderItem(ticketToBuy);
                 _paymentService.ProccesPayment(order,CreditCard);
                 SaveOrderToDB(order);
-                OrderItem[] wrap = { ticketToBuy };
-                // TODO: maybe add function here to notify the store of the successful purchase.
+                _storesSync.UpdateLottery(itemName, store, unitPrice, UserName);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought lottery ticket.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought Lottery ticket ");
             }

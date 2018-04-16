@@ -69,7 +69,7 @@ namespace SadnaSrc.StoreCenter
                 case LotteryTicketStatus.Winning: return "WINNING";
                 case LotteryTicketStatus.Waiting: return "WAITING";
                 case LotteryTicketStatus.Losing: return "LOSING";
-                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); 
             }
 
         }
@@ -79,7 +79,7 @@ namespace SadnaSrc.StoreCenter
             {
                 case discountTypeEnum.Hidden: return "HIDDEN";
                 case discountTypeEnum.Visible: return "VISIBLE";
-                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); //TODO :improve this exception
+                default: throw new StoreException(MarketError.LogicError, "Enum value not exists"); 
             }
         }
         public string PrintEnum(PurchaseEnum purchaseEnum)
@@ -247,12 +247,11 @@ namespace SadnaSrc.StoreCenter
             return true;
         }
 
-        public void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName)
+        public void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher)
         {
             LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
             if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))
             {
-                OrderSyncherHarmony syncher = new OrderSyncherHarmony();
                 syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID());
             }
         }

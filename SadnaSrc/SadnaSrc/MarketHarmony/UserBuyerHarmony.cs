@@ -15,7 +15,6 @@ namespace SadnaSrc.MarketHarmony
         public UserBuyerHarmony(ref IUserService userService)
         {
             _userService = (UserService) userService;
-            //TODO: we should do something about user which hasn't entered the system here
         }
 
         public OrderItem[] CheckoutAll()

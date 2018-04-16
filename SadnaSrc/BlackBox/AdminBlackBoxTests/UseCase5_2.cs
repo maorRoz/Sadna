@@ -55,7 +55,6 @@ namespace BlackBoxAdminTests
 			_signInBridge = UserDriver.getBridge();
 			_signInBridge.EnterSystem();
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userSoleStoreOwner).Status);
-			//TODO: try to close a store, this should fail because the store is already closed.
 			_managerBridge = StoreManagementDriver.getBridge();
 			_managerBridge.GetStoreManagementService(_adminSignInBridge.GetUserSession(),"blah");
 			MarketAnswer res = _managerBridge.CloseStore();

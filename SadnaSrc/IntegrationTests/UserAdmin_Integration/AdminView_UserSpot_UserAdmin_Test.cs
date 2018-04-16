@@ -161,7 +161,6 @@ namespace IntegrationTests.UserAdmin_Integration
         }
 
 
-        //TODO: release the test when purchase history has been added after successfull buy
         [TestMethod]
         public void UserReportTest()
         {
@@ -187,8 +186,6 @@ namespace IntegrationTests.UserAdmin_Integration
             }
         }
 
-
-        //TODO: release the test when purchase history has been added after successfull buy
         [TestMethod]
         public void StoreReportTest()
         {

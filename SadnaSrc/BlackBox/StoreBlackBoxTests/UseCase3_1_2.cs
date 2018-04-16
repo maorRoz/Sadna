@@ -92,7 +92,6 @@ namespace BlackBoxStoreTests
 			userBridge.SignUp(name, address, password, creditCard);
 		}
 
-		//TODO: make sure that cleanSession of store deletes the products as well as their stores.
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
