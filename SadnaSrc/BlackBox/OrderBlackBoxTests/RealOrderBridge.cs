@@ -36,8 +36,6 @@ namespace BlackBox
 	    {
 	        return _orderService.BuyLotteryTicket(itemName, store, quantity, unitPrice);
 	    }
-
-        public MarketAnswer GiveDetails(string userName, string address, string creditCard)
 		public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
 		{
 			return _orderService.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon);
