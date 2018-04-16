@@ -37,6 +37,7 @@ namespace BlackBox.OrderBlackBoxTests
 			throw new NotImplementedException();
 		}
 
+
 		public MarketAnswer GiveDetails(string userName, string address, string creditCard)
 		{
 			if (real != null)
@@ -45,6 +46,57 @@ namespace BlackBox.OrderBlackBoxTests
 			}
 			throw new NotImplementedException();
 		}
+
+		public void DisableSupplySystem()
+		{
+			if (real != null)
+			{
+				real.DisableSupplySystem();
+			}
+
+			else
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		public void DisablePaymentSystem()
+		{
+			if (real != null)
+			{
+				real.DisablePaymentSystem();
+			}
+
+			else
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		public void EnableSupplySystem()
+		{
+			if (real != null)
+			{
+				real.EnableSupplySystem();
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		public void EnablePaymentSystem()
+		{
+			if (real != null)
+			{
+				real.EnablePaymentSystem();
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
+		}
+
 
 		public void CleanSession()
 		{

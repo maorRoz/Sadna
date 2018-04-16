@@ -390,13 +390,23 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer GiveDetails(string userName, string address, string creditCard)
         {
-            MarketLog.Log("OrderPool", "User entering name and address for later usage in market order. validating data ...");
-            IsValidUserDetails(userName, address, creditCard);
-            MarketLog.Log("OrderPool", "Validation has been completed. User name and address are valid and been updated");
-            UserName = userName;
-            UserAddress = address;
-            CreditCard = creditCard;
-            return new OrderAnswer(GiveDetailsStatus.Success, "User name and address has been updated successfully!");
+	        try
+	        {
+		        MarketLog.Log("OrderPool",
+			        "User entering name and address for later usage in market order. validating data ...");
+		        IsValidUserDetails(userName, address, creditCard);
+		        MarketLog.Log("OrderPool", "Validation has been completed. User name and address are valid and been updated");
+		        UserName = userName;
+		        UserAddress = address;
+		        CreditCard = creditCard;
+		        return new OrderAnswer(GiveDetailsStatus.Success, "User name and address has been updated successfully!");
+	        }
+	        catch (OrderException)
+	        {
+		        return new OrderAnswer(GiveDetailsStatus.InvalidNameOrAddress,"blah");
+
+	        }
+            
         }
         /*
          * Private Functions
