@@ -400,14 +400,18 @@ namespace SadnaSrc.StoreCenter
                     MarketLog.Log("StoreCenter", "the product have another discount");
                     throw new StoreException(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
                 }
-                Discount discount = new Discount(global.GetDiscountCode(), global.GetdiscountTypeEnumString(discountType), startDate,
+
+	            string dicoundCode = global.GetDiscountCode();
+
+				Discount discount = new Discount(dicoundCode, global.GetdiscountTypeEnumString(discountType), startDate,
                     endDate, discountAmount, presenteges);
                 stockListItem.Discount = discount;
                 global.DataLayer.AddDiscount(discount);
                 discountsToRemvoe.AddLast(discount);
                 global.DataLayer.EditStockInDatabase(stockListItem);
                 MarketLog.Log("StoreCenter", "discount added successfully");
-                return new StoreAnswer(DiscountStatus.Success, "discount added successfully");
+	            string[] coupon = {dicoundCode};
+                return new StoreAnswer(DiscountStatus.Success, "discount added successfully", coupon);
             }
             catch (StoreException exe)
             {
