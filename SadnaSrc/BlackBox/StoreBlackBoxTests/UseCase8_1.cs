@@ -29,7 +29,7 @@ namespace StoreBlackBoxTests
 			_userBuyer = null;
 			_userAdminBridge = null;
 			_orderBridge = null;
-
+			_userAdmin = null;
 		}
 
 
@@ -291,6 +291,7 @@ namespace StoreBlackBoxTests
 			_storeManagementBridge.CleanSession();
 			_storeManagementBridge2?.CleanSession();
 			_orderBridge?.CleanSession();
+			_userAdmin?.CleanSession();
 			_storeOwnerUserBridge.CleanMarket();
 		}
 	}
