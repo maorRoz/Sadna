@@ -87,7 +87,7 @@ namespace SadnaSrc.OrderPool
             Order order = RefundOrder(sumToRefund, nameToRefund, ticket);
             _paymentService.Refund(sumToRefund, creditCardToRefund, nameToRefund);
             Orders.Add(order);
-            _orderDL.AddOrder(order);
+            _orderDL.AddOrder(order,"Lottery");
             _orderDL.RemoveTicket(ticket);
             MarketLog.Log("OrderPool", "User " + nameToRefund + " successfully refunded the sum: " + sumToRefund);
         }
@@ -98,14 +98,14 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                OrderItem toBuy = new OrderItem("DELIVERY : " + itemName, store, 1, 1);
+                OrderItem toBuy = new OrderItem(store, "DELIVERY : " + itemName, 1, 1);
                 OrderService.CheckOrderItem(toBuy);
                 Order order = InitOrder(_orderDL.GetNameToRefund(userId), _orderDL.GetAddressToSendPackage(userId));
                 orderId = order.GetOrderID();
                 order.AddOrderItem(toBuy);
                 _supplyService.CreateDelivery(order);
                 Orders.Add(order);
-                _orderDL.AddOrder(order);
+                _orderDL.AddOrder(order,"Lottery");
                 MarketLog.Log("OrderPool", "Successfully made delivery for item: " + itemName);
             }
             catch (OrderException e)

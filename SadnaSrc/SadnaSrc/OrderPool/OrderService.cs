@@ -31,6 +31,8 @@ namespace SadnaSrc.OrderPool
         private SupplyService _supplyService;
         private PaymentService _paymentService;
 
+        private int cheatCode = -1;
+
 
 
         public OrderService(IUserBuyer buyer, IStoresSyncher storesSync)
@@ -122,9 +124,19 @@ namespace SadnaSrc.OrderPool
             _buyer.CleanSession();
         }
 
+        public void Cheat(int cheatResult)
+        {
+            cheatCode = cheatResult;
+        }
+
         public void SaveOrderToDB(Order order)
         {   
             _orderDL.AddOrder(order);
+        }
+
+        public void SaveOrderToDB(Order order, string saleType)
+        {
+            _orderDL.AddOrder(order,saleType);
         }
 
         public void RemoveOrderFromDB(int orderId)
@@ -275,8 +287,8 @@ namespace SadnaSrc.OrderPool
                 orderId = order.GetOrderID();
                 order.AddOrderItem(ticketToBuy);
                 _paymentService.ProccesPayment(order,CreditCard);
-                SaveOrderToDB(order);
-                _storesSync.UpdateLottery(itemName, store, unitPrice, UserName);
+                SaveOrderToDB(order,"Lottery");
+                _storesSync.UpdateLottery(itemName, store, unitPrice, UserName, cheatCode);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought lottery ticket.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought Lottery ticket ");
             }

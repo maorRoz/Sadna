@@ -32,7 +32,12 @@ namespace BlackBox
 			return _orderService.BuyEverythingFromCart();
 		}
 
-		public MarketAnswer GiveDetails(string userName, string address, string creditCard)
+	    public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
+	    {
+	        return _orderService.BuyLotteryTicket(itemName, store, quantity, unitPrice);
+	    }
+
+        public MarketAnswer GiveDetails(string userName, string address, string creditCard)
 		{
 			return _orderService.GiveDetails(userName, address, creditCard);
 		}
@@ -61,5 +66,10 @@ namespace BlackBox
 		{
 			_orderService.CleanSession();
 		}
-	}
+
+	    public void Cheat(int cheatCode)
+	    {
+	        _orderService.Cheat(cheatCode);
+	    }
+    }
 }

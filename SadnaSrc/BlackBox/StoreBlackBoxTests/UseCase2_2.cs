@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBoxStoreTests
+namespace BlackBox.BlackBoxStoreTests
 {
     [TestClass]
     public class UseCase2_2

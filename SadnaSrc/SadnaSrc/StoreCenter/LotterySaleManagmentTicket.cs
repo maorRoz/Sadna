@@ -84,7 +84,7 @@ namespace SadnaSrc.StoreCenter
         {
             LotteryTicket winner = null;
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(this.SystemID);
+            LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(SystemID);
             foreach (LotteryTicket lotter in tickets)
             {
                 if (lotter.IsWinning(winningNumber))
@@ -144,9 +144,14 @@ namespace SadnaSrc.StoreCenter
             return false;
         }
 
-        internal int getWinnerID()
+        internal int getWinnerID(int cheatCode)
         {
-            return InformAllWinner(Random()).UserID;
+            int winnerResult = Random();
+            if (cheatCode != -1)
+            {
+                winnerResult = cheatCode;
+            }
+            return InformAllWinner(winnerResult).UserID;
         }
     }
 }
