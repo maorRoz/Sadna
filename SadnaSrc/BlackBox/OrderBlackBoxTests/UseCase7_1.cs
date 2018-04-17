@@ -3,7 +3,7 @@ using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace OrderBlackBoxTests
+namespace BlackBox.OrderBlackBoxTests
 {
 // in this class, the emphasis is on the puchase from the cart and that it was immediate
 	[TestClass]

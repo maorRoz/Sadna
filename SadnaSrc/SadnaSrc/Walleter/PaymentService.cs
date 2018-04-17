@@ -20,7 +20,7 @@ namespace SadnaSrc.Walleter
         public MarketAnswer AttachExternalSystem()
         {
             sock = new PaymentSystem();
-            MarketLog.Log("SupplyPoint", "Connection to external payment system established successfully ! ");
+            MarketLog.Log("Walleter", "Connection to external payment system established successfully ! ");
             return new WalleterAnswer(WalleterStatus.Success, "Connection to external payment system established successfully !");
 
         }
