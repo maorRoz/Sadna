@@ -2,8 +2,7 @@ using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-//TODO: change statuses.
-namespace BlackBoxStoreTests
+namespace BlackBox.BlackBoxStoreTests
 
 {
 	[TestClass]
@@ -68,7 +67,6 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "Description", "nice snack ++");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
-			//TODO: check in the stock to see if the product's description was changed.
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			string[] expectedResult = { " name: bamba base price: 90 description: nice snack ++ , Immediate , 30" };
@@ -119,7 +117,6 @@ namespace BlackBoxStoreTests
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			MarketAnswer result3 = _storeManage1.EditProduct("bamba", "Name", "bamba200");
 			Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, result3.Status);
-			//TODO: check in the stock to see that the product's name wasn't changed.
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			string[] expectedResult =
@@ -175,7 +172,6 @@ namespace BlackBoxStoreTests
 		{
 			MarketAnswer result2 = _storeManage1.AddQuanitityToProduct("bamba", 30);
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
-			//TODO: check in the stock to see if the product's quantity was changed.
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 60" };
@@ -194,7 +190,6 @@ namespace BlackBoxStoreTests
 			_storeManage2.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer res = _storeManage2.AddQuanitityToProduct("bambuuuu", 5);
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res.Status);
-			//TODO: check to see that the product quantity wasn't changed
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
@@ -212,7 +207,6 @@ namespace BlackBoxStoreTests
 			_storeManage2.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer res = _storeManage2.AddQuanitityToProduct("bambuuuu", -10);
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res.Status);
-			//TODO: check to see that the product quantity wasn't changed
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
@@ -232,7 +226,6 @@ namespace BlackBoxStoreTests
 			_storeManage2.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.AddQuanitityToProduct("bamba", 30);
 			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
-			//TODO: to check the product was not edited.
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };

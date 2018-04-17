@@ -88,7 +88,7 @@ namespace SadnaSrc.Main
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D6', 'VISIBLE', '01/01/2018', '1/03/2020', 50, 'false')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P1', 5, 'D1', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S2', 'P1', 5, 'D1', 'Immediate')",
-                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S5', 'P4', 20, 'NULL', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S5', 'P4', 20, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S5', 'P5', 36, 'D1', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S6', 'P6', 100, 'D1', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S6', 'P7', 10, 'D1', 'Immediate')",
@@ -114,8 +114,10 @@ namespace SadnaSrc.Main
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L2', 'P15', 200, 0 , 'T' ,'01/01/2018', '31/12/2018', 'false')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L3', 'P16', 200, 0 , 'T' ,'01/01/2018', '31/12/2018', 'true')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L4', 'P17', 200, 0 , 'T' ,'01/01/2017', '31/12/2017', 'true')",
+                "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L5', 'P17', 200, 0 , 'T' ,'01/01/2017', '31/12/2017', 'true')",
+                "UPDATE LotteryTable SET IsActive = 'true'   WHERE SystemID = 'L4'",
+                "UPDATE LotteryTable SET IsActive = 'true'   WHERE SystemID = 'L5'",
                 "INSERT INTO LotteryTicket (myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID) VALUES('T1', 'L1', 0, 0,0, 'WAITING', 0)",
-                "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, StartDate, EndDate, isActive) VALUES ('L2', 'P7', 8, 2 ,'01/01/2018', '31/12/2018', 'true')",
                 "INSERT INTO LotteryTicket (myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID) VALUES('T2', 'L2', 0, 0,2, 'WAITING', 8)",
                 "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70','12345678')",
                 "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (2,'Arik2','H3','202cb962ac59075b964b07152d234b70','12345678')",
@@ -257,10 +259,8 @@ namespace SadnaSrc.Main
                                     PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice])
                                     )";
 
-            //TODO:                                     FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
         }
-
-        //TODO: this table is bad and should be deleted once OrderPool DB is finally ready
+        //                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
         private static string CreatePurchaseHistoryTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [PurchaseHistory] (
@@ -273,10 +273,6 @@ namespace SadnaSrc.Main
                                     [Date]          TEXT,
                                     PRIMARY KEY([UserName],[Product],[Store],[SaleType],[Date])
                                     )";
-            //TODO: add this to the string :   FOREIGN KEY([UserName])        REFERENCES [Product]([Name]), 
-            //TODO: add this to the string :   FOREIGN KEY([Product])        REFERENCES [Product]([Name]), 
-            //TODO: add this to the string :   FOREIGN KEY([Store])        REFERENCES [Product]([Name]), 
-            //TODO: add this to the string :   FOREIGN KEY([SaleType])        REFERENCES something of sale table...? 
         }
 
         private static string CreateProductTable()
@@ -369,8 +365,6 @@ namespace SadnaSrc.Main
                                     
                                     PRIMARY KEY([OrderID],[Store],[Name])
                                     )";
-            //TODO: add this to the string :   FOREIGN KEY([Name])        REFERENCES [Product]([Name]), 
-            //TODO: and this                   FOREIGN KEY([Store])        REFERENCES [Store]([Name]),
         }
         protected void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
         {

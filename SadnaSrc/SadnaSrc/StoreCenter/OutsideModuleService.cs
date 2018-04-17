@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -17,7 +18,7 @@ namespace SadnaSrc.StoreCenter
         double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity);
 
         bool HasActiveLottery(string storeName, string productName, double priceWantToPay);
-        void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName);
+        void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher,int cheatCode);
 
     }
 }

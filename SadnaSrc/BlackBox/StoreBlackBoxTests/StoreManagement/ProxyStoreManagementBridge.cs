@@ -59,12 +59,63 @@ namespace BlackBox
             }
             throw new NotImplementedException();
         }
+        public MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
+            DateTime endDate)
+        {
+            if (real != null)
+            {
+                return real.AddNewLottery(_name, _price,_description, startDate, endDate);
+            }
+            throw new NotImplementedException();
+        }
 
         public MarketAnswer AddQuanitityToProduct(string productName, int quantity)
         {
             if (real != null)
             {
                 return real.AddQuanitityToProduct(productName, quantity);
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate,
+            int discountAmount, string discountType, bool presenteges)
+        {
+            if (real != null)
+            {
+                return real.AddDiscountToProduct(productName, startDate, endDate, discountAmount,
+                    discountType, presenteges);
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer ViewStoreHistory()
+        {
+            if (real != null)
+            {
+                return real.ViewStoreHistory();
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
+        {
+            if (real != null)
+            {
+                return real.EditDiscount(productName, whatToEdit, newValue);
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer RemoveDiscountFromProduct(string productName)
+        {
+            if (real != null)
+            {
+                return real.RemoveDiscountFromProduct(productName);
             }
 
             throw new NotImplementedException();
@@ -79,7 +130,7 @@ namespace BlackBox
             throw new NotImplementedException();
         }
 
-        public void CleanSession()
+	    public void CleanSession()
         {
             if (real != null)
             {

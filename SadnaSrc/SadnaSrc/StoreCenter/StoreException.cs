@@ -9,6 +9,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class StoreException : MarketException
     {
+        private string storeName = "???";
         public StoreException(CalculateEnum status, string message) : base((int)status, message)
         {
         }
@@ -55,8 +56,7 @@ namespace SadnaSrc.StoreCenter
 
         protected override string WrapErrorMessageForDb(string message)
         {
-            // TODO: implement a better message wrapper like in UserException
-            return " " + message;
+            return "User " + storeName + " Error: " + message;
         }
     }
 }

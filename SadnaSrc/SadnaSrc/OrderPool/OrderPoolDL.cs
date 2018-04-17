@@ -192,8 +192,8 @@ namespace SadnaSrc.OrderPool
                 while (dbReader.Read())
                 {
                     string lotteryID = dbReader.GetString(0);
-                    DateTime endDate = dbReader.GetDateTime(1);
-                    if (endDate > MarketYard.MarketDate)
+                    DateTime endDate = Convert.ToDateTime(dbReader.GetString(1));
+                    if (endDate < MarketYard.MarketDate)
                     {
                         expiredLotteries.Add(lotteryID);
                     }
@@ -201,6 +201,13 @@ namespace SadnaSrc.OrderPool
             }
 
             return expiredLotteries.ToArray();
+        }
+
+        public void CancelLottery(string lottery)
+        {
+            UpdateTable("LotteryTable", "SystemID = '" + lottery + "'",
+                new[] {"IsActive"},new []{"@status"},new object []{"false"});
+
         }
 
         public string[] GetLottery(string lottery)
@@ -232,10 +239,6 @@ namespace SadnaSrc.OrderPool
                 {
                     tickets.Add(dbReader.GetString(0));
                 }
-            }
-            if (tickets.Count == 0)
-            {
-                throw new OrderException(LotteryOrderStatus.InvalidLotteryID,"Failed, No lottery with ID: "+lottery);
             }
             return tickets.ToArray();
         }

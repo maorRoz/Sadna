@@ -31,6 +31,8 @@ namespace SadnaSrc.OrderPool
         private SupplyService _supplyService;
         private PaymentService _paymentService;
 
+        private int cheatCode = -1;
+
 
 
         public OrderService(IUserBuyer buyer, IStoresSyncher storesSync)
@@ -117,12 +119,24 @@ namespace SadnaSrc.OrderPool
             {
                 _orderDL.RemoveOrder(order.GetOrderID());
             }
+
+            _storesSync.CleanSession();
             _buyer.CleanSession();
+        }
+
+        public void Cheat(int cheatResult)
+        {
+            cheatCode = cheatResult;
         }
 
         public void SaveOrderToDB(Order order)
         {   
             _orderDL.AddOrder(order);
+        }
+
+        public void SaveOrderToDB(Order order, string saleType)
+        {
+            _orderDL.AddOrder(order,saleType);
         }
 
         public void RemoveOrderFromDB(int orderId)
@@ -266,15 +280,16 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                OrderItem ticketToBuy = _buyer.CheckoutItem("LOTTERY: "+itemName, store, quantity, unitPrice);
+                _buyer.ValidateRegisteredUser();
+                _storesSync.ValidateTicket(itemName, store, unitPrice);
+                OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
                 CheckOrderItem(ticketToBuy);
                 Order order = InitOrder();
                 orderId = order.GetOrderID();
                 order.AddOrderItem(ticketToBuy);
                 _paymentService.ProccesPayment(order,CreditCard);
-                SaveOrderToDB(order);
-                OrderItem[] wrap = { ticketToBuy };
-                // TODO: maybe add function here to notify the store of the successful purchase.
+                SaveOrderToDB(order,"Lottery");
+                _storesSync.UpdateLottery(itemName, store, unitPrice, UserName, cheatCode);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought lottery ticket.");
                 return new OrderAnswer(OrderStatus.Success, "Successfully bought Lottery ticket ");
             }
@@ -390,13 +405,23 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer GiveDetails(string userName, string address, string creditCard)
         {
-            MarketLog.Log("OrderPool", "User entering name and address for later usage in market order. validating data ...");
-            IsValidUserDetails(userName, address, creditCard);
-            MarketLog.Log("OrderPool", "Validation has been completed. User name and address are valid and been updated");
-            UserName = userName;
-            UserAddress = address;
-            CreditCard = creditCard;
-            return new OrderAnswer(GiveDetailsStatus.Success, "User name and address has been updated successfully!");
+	        try
+	        {
+		        MarketLog.Log("OrderPool",
+			        "User entering name and address for later usage in market order. validating data ...");
+		        IsValidUserDetails(userName, address, creditCard);
+		        MarketLog.Log("OrderPool", "Validation has been completed. User name and address are valid and been updated");
+		        UserName = userName;
+		        UserAddress = address;
+		        CreditCard = creditCard;
+		        return new OrderAnswer(GiveDetailsStatus.Success, "User name and address has been updated successfully!");
+	        }
+	        catch (OrderException)
+	        {
+		        return new OrderAnswer(GiveDetailsStatus.InvalidNameOrAddress,"blah");
+
+	        }
+            
         }
         /*
          * Private Functions

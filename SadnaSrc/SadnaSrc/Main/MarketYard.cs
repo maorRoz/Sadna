@@ -20,6 +20,7 @@ namespace SadnaSrc.Main
         private static MarketYard _instance;
 
         public static MarketYard Instance => _instance ?? (_instance = new MarketYard());
+        private static StoreOrderTools refundLotteriesService;
 
         private static SQLiteConnection _dbConnection;
         public static DateTime MarketDate { get; private set; }
@@ -27,6 +28,7 @@ namespace SadnaSrc.Main
         {
             MarketDate = new DateTime(2018, 4, 14);
             InitiateDb();
+            refundLotteriesService = new StoreOrderTools();
         }
 
         private void InitiateDb()
@@ -53,8 +55,7 @@ namespace SadnaSrc.Main
         {
             if (_instance == null) {return;}
             MarketDate = marketDate;
-            var refundOrdersService = new StoreOrderTools();
-            refundOrdersService.RefundAllExpiredLotteries();
+            refundLotteriesService.RefundAllExpiredLotteries();
         }
 
 
@@ -99,6 +100,7 @@ namespace SadnaSrc.Main
             {
                 return;
             }
+            refundLotteriesService.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
             Exit();

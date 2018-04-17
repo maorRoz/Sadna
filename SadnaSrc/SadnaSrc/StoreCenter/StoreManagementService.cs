@@ -16,7 +16,7 @@ namespace SadnaSrc.StoreCenter
         ModuleGlobalHandler global;
         private IUserSeller _storeManager;
         public string _storeName;
-
+        private IOrderSyncher syncher;
         private LinkedList<StockListItem> stockListItemToRemove;
         private LinkedList<Discount> discountsToRemvoe;
 
@@ -28,6 +28,7 @@ namespace SadnaSrc.StoreCenter
             store = global.DataLayer.getStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();
+            syncher = new OrderSyncherHarmony();
         }
 
         public MarketAnswer CloseStore()
@@ -167,6 +168,53 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
+        public MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
+            DateTime endDate)
+        {
+            MarketLog.Log("StoreCenter", "trying to add product to store");
+            MarketLog.Log("StoreCenter", "check if store exists");
+            if (!global.DataLayer.IsStoreExistAndActive(_storeName))
+            {
+                return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists or active");
+            }
+
+            try
+            {
+                MarketLog.Log("StoreCenter", " store exists");
+                MarketLog.Log("StoreCenter", " check if has premmision to add products");
+                _storeManager.CanManageProducts();
+                MarketLog.Log("StoreCenter", " has premmission");
+                MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + store.Name);
+                if (!global.IsProductNameAvailableInStore(_storeName, _name))
+                {
+                    throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop,
+                        "Product Name is already Exists In Shop");
+                }
+
+                Product product = new Product(global.GetProductID(), _name, _price, _description);
+                StockListItem stockListItem = new StockListItem(1, product, null, PurchaseEnum.Lottery, store.SystemId);
+                global.DataLayer.AddStockListItemToDataBase(stockListItem);
+                stockListItemToRemove.AddLast(stockListItem);
+                LotterySaleManagmentTicket lotterySaleManagmentTicket = new LotterySaleManagmentTicket(
+                    global.GetLottyerID(),
+                    _storeName, stockListItem.Product, startDate, endDate);
+                global.DataLayer.AddLottery(lotterySaleManagmentTicket);
+
+                MarketLog.Log("StoreCenter", "product added");
+                return new StoreAnswer(StoreEnum.Success, "product added");
+            }
+            catch (StoreException)
+            {
+                return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop,
+                    "Product Name is already Exists In Shop");
+            }
+            catch (MarketException)
+            {
+                MarketLog.Log("StoreCenter", "no premission");
+                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+            }
+        }
+
         public MarketAnswer RemoveProduct(string productName)
         {
             MarketLog.Log("StoreCenter", "trying to remove product from store");
@@ -186,7 +234,7 @@ namespace SadnaSrc.StoreCenter
                 if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
                 {
                     LotterySaleManagmentTicket LotteryManagment = global.DataLayer.GetLotteryByProductID(stockListItem.Product.SystemId);
-                    LotteryManagment.InformCancel();
+                    LotteryManagment.InformCancel(syncher);
                     global.DataLayer.RemoveLottery(LotteryManagment);
                 }
                 global.DataLayer.RemoveStockListItem(stockListItem);
@@ -293,7 +341,7 @@ namespace SadnaSrc.StoreCenter
                 if (stockList.PurchaseWay == PurchaseEnum.Lottery)
                 {
                     LotterySaleManagmentTicket lottery = global.DataLayer.GetLotteryByProductID(stockList.Product.SystemId);
-                    lottery.InformCancel();
+                    lottery.InformCancel(syncher);
                     global.DataLayer.EditLotteryInDatabase(lottery);
 
                 }
@@ -311,7 +359,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        //TODO: fix this
         public MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate)
         {
             try
@@ -372,7 +419,7 @@ namespace SadnaSrc.StoreCenter
                     throw new StoreException(DiscountStatus.ProductNotFound, "no Such Product");
                 }
                 MarketLog.Log("StoreCenter", "check if dates are OK");
-                if ((startDate < MarketYard.MarketDate) || (endDate < MarketYard.MarketDate) || !(startDate < endDate))
+                if ((startDate < MarketYard.MarketDate) || !(startDate < endDate))
                 {
                     MarketLog.Log("StoreCenter", "something wrong with the dates");
                     throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal");
@@ -400,14 +447,18 @@ namespace SadnaSrc.StoreCenter
                     MarketLog.Log("StoreCenter", "the product have another discount");
                     throw new StoreException(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
                 }
-                Discount discount = new Discount(global.GetDiscountCode(), global.GetdiscountTypeEnumString(discountType), startDate,
+
+	            string dicoundCode = global.GetDiscountCode();
+
+				Discount discount = new Discount(dicoundCode, global.GetdiscountTypeEnumString(discountType), startDate,
                     endDate, discountAmount, presenteges);
                 stockListItem.Discount = discount;
                 global.DataLayer.AddDiscount(discount);
                 discountsToRemvoe.AddLast(discount);
                 global.DataLayer.EditStockInDatabase(stockListItem);
                 MarketLog.Log("StoreCenter", "discount added successfully");
-                return new StoreAnswer(DiscountStatus.Success, "discount added successfully");
+	            string[] coupon = {dicoundCode};
+                return new StoreAnswer(DiscountStatus.Success, "discount added successfully", coupon);
             }
             catch (StoreException exe)
             {
@@ -533,6 +584,8 @@ namespace SadnaSrc.StoreCenter
                 }
                 global.DataLayer.RemoveStore(store);
             }
+
+            syncher.CleanSession();
         }
 
         public MarketAnswer AddQuanitityToProduct(string productName, int quantity)

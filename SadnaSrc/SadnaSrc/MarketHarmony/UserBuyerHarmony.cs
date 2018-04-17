@@ -15,7 +15,6 @@ namespace SadnaSrc.MarketHarmony
         public UserBuyerHarmony(ref IUserService userService)
         {
             _userService = (UserService) userService;
-            //TODO: we should do something about user which hasn't entered the system here
         }
 
         public OrderItem[] CheckoutAll()
@@ -109,6 +108,15 @@ namespace SadnaSrc.MarketHarmony
             {
                 throw new UserException(EditCartItemStatus.DidntEnterSystem,
                     "Cannot let User which hasn't entered the system to Purchase items from store!");
+            }
+        }
+
+        public void ValidateRegisteredUser()
+        {
+            if (!IsRegisteredUser())
+            {
+                throw new UserException(EditCartItemStatus.DidntEnterSystem,
+                    "Cannot let User which hasn't registerd to the system to Purchase items of that kind!");
             }
         }
         private bool IsRegisteredUser()

@@ -2,7 +2,7 @@ using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBoxStoreTests
+namespace BlackBox.BlackBoxStoreTests
 {
 	[TestClass]
 	public class UseCase3_1_2
@@ -92,7 +92,6 @@ namespace BlackBoxStoreTests
 			userBridge.SignUp(name, address, password, creditCard);
 		}
 
-		//TODO: make sure that cleanSession of store deletes the products as well as their stores.
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{

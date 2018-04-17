@@ -84,7 +84,7 @@ namespace SadnaSrc.StoreCenter
         {
             LotteryTicket winner = null;
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(this.SystemID);
+            LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(SystemID);
             foreach (LotteryTicket lotter in tickets)
             {
                 if (lotter.IsWinning(winningNumber))
@@ -116,13 +116,12 @@ namespace SadnaSrc.StoreCenter
                     obj.TotalMoneyPayed.Equals(TotalMoneyPayed) &&
                     obj.IsActive == IsActive);
         }
-        internal void InformCancel()
+        internal void InformCancel(IOrderSyncher syncher)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
             IsActive = false;
             handler.DataLayer.EditLotteryInDatabase(this);
-            OrderSyncherHarmony syncer = new OrderSyncherHarmony();
-            syncer.CancelLottery(SystemID);
+            syncher.CancelLottery(SystemID);
         }
 
         public override int GetHashCode()
@@ -145,9 +144,14 @@ namespace SadnaSrc.StoreCenter
             return false;
         }
 
-        internal int getWinnerID()
+        internal int getWinnerID(int cheatCode)
         {
-            return InformAllWinner(Random()).UserID;
+            int winnerResult = Random();
+            if (cheatCode != -1)
+            {
+                winnerResult = cheatCode;
+            }
+            return InformAllWinner(winnerResult).UserID;
         }
     }
 }
