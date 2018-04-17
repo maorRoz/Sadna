@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBox.BlackBoxUserTests
+namespace BlackBox.UserBlackBoxTests
 {
 
     [TestClass]
