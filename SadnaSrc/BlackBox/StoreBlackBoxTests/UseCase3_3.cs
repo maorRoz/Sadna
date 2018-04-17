@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
-namespace BlackBox.BlackBoxStoreTests
+namespace BlackBox.StoreBlackBoxTests
 {
 	[TestClass]
 	public class UseCase3_3
