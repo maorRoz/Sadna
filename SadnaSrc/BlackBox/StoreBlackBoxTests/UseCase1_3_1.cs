@@ -30,10 +30,7 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void GuestViewStock()
 		{
-			_userWatchStock = UserDriver.getBridge();
-			_userWatchStock.EnterSystem();
-			_storeBridgeGuest = StoreShoppingDriver.getBridge();
-			_storeBridgeGuest.GetStoreShoppingService(_userWatchStock.GetUserSession());
+			UserWatchStockInitialize();
 			MarketAnswer stockDetails = _storeBridgeGuest.ViewStoreStock("OOF");
 			WatchStockAndCompare(stockDetails);
 		}
@@ -47,13 +44,37 @@ namespace BlackBox.StoreBlackBoxTests
 		}
 
 		[TestMethod]
-		public void NoStoreExistsGuestViewStore()
+		public void NoStoreExistsGuestViewStock()
+		{
+			UserWatchStockInitialize();
+			MarketAnswer stockDetails = _storeBridgeGuest.ViewStoreStock("OOFA");
+			Assert.AreEqual((int)StoreEnum.StoreNotExists, stockDetails.Status);
+			Assert.IsNull(stockDetails.ReportList);
+		}
+
+		[TestMethod]
+		public void InvalidUserDidntEnterSystem()
+		{
+			_userWatchStock = UserDriver.getBridge();
+			_storeBridgeGuest = StoreShoppingDriver.getBridge();
+			_storeBridgeGuest.GetStoreShoppingService(_userWatchStock.GetUserSession());
+			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
+			Assert.AreEqual((int)ViewStoreStatus.InvalidUser, storeDetails.Status);
+			Assert.AreEqual(null, storeDetails.ReportList);
+		}
+
+		private void UserWatchStockInitialize()
 		{
 			_userWatchStock = UserDriver.getBridge();
 			_userWatchStock.EnterSystem();
 			_storeBridgeGuest = StoreShoppingDriver.getBridge();
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStock.GetUserSession());
-			MarketAnswer stockDetails = _storeBridgeGuest.ViewStoreStock("OOFA");
+		}
+
+		[TestMethod]
+		public void NoStoreExistsRegisteredUserViewStock()
+		{
+			MarketAnswer stockDetails = _storeBridge.ViewStoreStock("OOFA");
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, stockDetails.Status);
 			Assert.IsNull(stockDetails.ReportList);
 		}
