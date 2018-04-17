@@ -600,7 +600,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    return new[] {dbReader.GetString(0), dbReader.GetString(1)};
+                    return new[] { dbReader.GetString(0), dbReader.GetString(1) };
 
                 }
             }
@@ -636,7 +636,7 @@ namespace SadnaSrc.StoreCenter
             {
                 while (dbReader.Read())
                 {
-                    return new[] {dbReader.GetString(1), dbReader.GetString(2)};
+                    return new[] { dbReader.GetString(1), dbReader.GetString(2) };
 
                 }
             }

@@ -78,6 +78,8 @@
     <Compile Include="StoreBlackBoxTests\StoreManagement\StoreManagementDriver.cs" />
     <Compile Include="StoreBlackBoxTests\StoreShopping\IStoreShoppingBridge.cs" />
     <Compile Include="StoreBlackBoxTests\StoreShopping\StoreShoppingDriver.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase3_7.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase1_3_1.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_2_2.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase1_3.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_1_1.cs" />
