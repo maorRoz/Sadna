@@ -10,7 +10,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class StoreDL : SystemDL
+    public class StoreDL : MarketSqlite
     {
         public int FindMaxStoreId()
         {

@@ -45,7 +45,7 @@ namespace SadnaSrc.Main
 
             var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON",_dbConnection);
             makeFK.ExecuteNonQuery();
-            SystemDL.InsertDbConnector(_dbConnection);
+            MarketSqlite.InsertDbConnector(_dbConnection);
             MarketException.InsertDbConnector(_dbConnection);
             MarketLog.InsertDbConnector(_dbConnection);
 

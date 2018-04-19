@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Common;
 using System.Data.SQLite;
+using System.Data.SQLite.EF6;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
-    public class SystemDL
+    public class MarketSqlite : DbConfiguration
     {
-        private static SQLiteConnection _dbConnection;
 
-        protected SystemDL()
+        protected MarketSqlite(SQLiteConnection dbConnection)
         {
-        }
-        public static void InsertDbConnector(SQLiteConnection dbConnection)
-        {
-            _dbConnection = dbConnection;
-            CreateTables();
+            SetProviderFactory("System.Data.SQLite", SQLiteFactory.Instance);
+            SetProviderFactory("System.Data.SQLite.EF6", SQLiteProviderFactory.Instance);
+            SetProviderServices("System.Data.SQLite", (DbProviderServices)SQLiteProviderFactory.Instance.GetService(typeof(DbProviderServices)));
+            CreateTables(dbConnection);
         }
 
-        private static void CreateTables()
+        private static void CreateTables(SQLiteConnection dbConnection)
         {
             string[] createTableStrings = {
                 CreateSystemLogTable(),
@@ -42,7 +43,7 @@ namespace SadnaSrc.Main
 
             for (var i = 0; i < createTableStrings.Length; i++)
             {
-                var createTableCommand = new SQLiteCommand(createTableStrings[i], _dbConnection);
+                var createTableCommand = new SQLiteCommand(createTableStrings[i], dbConnection);
                 createTableCommand.ExecuteNonQuery();
             }
 
@@ -168,10 +169,10 @@ namespace SadnaSrc.Main
             };
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
-                var insertStoreCommand = new SQLiteCommand(thingsToInsertByForce[i], _dbConnection);
+                var insertCommand = new SQLiteCommand(thingsToInsertByForce[i], dbConnection);
                 try
                 {
-                    insertStoreCommand.ExecuteNonQuery();
+                    insertCommand.ExecuteNonQuery();
                 }
                 catch (Exception)
                 {

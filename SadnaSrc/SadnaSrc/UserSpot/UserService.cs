@@ -12,24 +12,19 @@ namespace SadnaSrc.UserSpot
     {
         public User MarketUser { get; private set; }
         private readonly UserServiceDL userDL;
-        private int systemID;
-        private int oldID;
 
         public UserService()
         {
             userDL = new UserServiceDL();
             MarketUser = null;
-            systemID = userDL.GetSystemID();
-            oldID = systemID;
             Synch();
         }
 
         public MarketAnswer EnterSystem()
         {
-            MarketLog.Log("UserSpot", "User " + systemID + " attempting to enter the system...");
-            MarketUser = new User(systemID);
-            MarketLog.Log("UserSpot","User "+systemID+" has entered the system!");
-            return new UserAnswer(EnterSystemStatus.Success,"You've been entered the system successfully!");
+            EnterSystemSlave slave = new EnterSystemSlave();
+            MarketUser = slave.EnterSystem();
+            return slave.Answer;
         }
 
         public MarketAnswer SignUp(string name, string address, string password,string creditCard)

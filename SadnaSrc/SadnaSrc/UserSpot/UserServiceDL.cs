@@ -8,7 +8,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    public class UserServiceDL : SystemDL
+    public class UserServiceDL : MarketSqlite
     {
 
         public int SystemID { get; set; }

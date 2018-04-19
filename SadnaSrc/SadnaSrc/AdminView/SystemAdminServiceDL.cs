@@ -10,7 +10,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
 {
-    class SystemAdminServiceDL : SystemDL
+    class SystemAdminServiceDL : MarketSqlite
     {
 
         public string[] FindSolelyOwnedStores()
