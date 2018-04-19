@@ -13,16 +13,35 @@ namespace SadnaSrc.Main
     public class MarketSqlite : DbConfiguration
     {
 
-        protected MarketSqlite(SQLiteConnection dbConnection)
+        public MarketSqlite()
         {
             SetProviderFactory("System.Data.SQLite", SQLiteFactory.Instance);
             SetProviderFactory("System.Data.SQLite.EF6", SQLiteProviderFactory.Instance);
             SetProviderServices("System.Data.SQLite", (DbProviderServices)SQLiteProviderFactory.Instance.GetService(typeof(DbProviderServices)));
-            CreateTables(dbConnection);
+            CreateTables();
         }
-
-        private static void CreateTables(SQLiteConnection dbConnection)
+        private SQLiteConnection InitiateDb()
         {
+            var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
+            programPath = programPath.Replace("\\bin\\Debug", "");
+            string[] programPathParts = programPath.Split('\\');
+            programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
+            programPath = string.Join("\\", programPathParts);
+            var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
+
+            var dbConnection = new SQLiteConnection(dbPath);
+             dbConnection.Open();
+
+            var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON", dbConnection);
+            makeFK.ExecuteNonQuery();
+            return dbConnection;
+            // MarketException.InsertDbConnector(_dbConnection);
+            //  MarketLog.InsertDbConnector(_dbConnection);
+
+        }
+        private void CreateTables()
+        {
+            SQLiteConnection dbConnection = InitiateDb();
             string[] createTableStrings = {
                 CreateSystemLogTable(),
                 CreateSystemErrorsTable(),
@@ -179,6 +198,8 @@ namespace SadnaSrc.Main
                     //dont care
                 }
             }
+
+            dbConnection.Close();
         }
 
 
@@ -226,7 +247,7 @@ namespace SadnaSrc.Main
                                     )";
         }
 
-    private static string CreateUserStatePolicyTable()
+        private static string CreateUserStatePolicyTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [StatePolicy] (
                                     [SystemID]      INTEGER,
@@ -367,7 +388,7 @@ namespace SadnaSrc.Main
                                     PRIMARY KEY([OrderID],[Store],[Name])
                                     )";
         }
-        protected void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
+     /*   protected void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
         {
             var insertRequest = "INSERT INTO "+table+" ("+ tableColumns + ") VALUES ("+ string.Join(",", valuesNames)
                                 + ")";
@@ -443,7 +464,7 @@ namespace SadnaSrc.Main
         protected SQLiteDataReader freeStyleSelect(string cmd)
         {
             return new SQLiteCommand(cmd, _dbConnection).ExecuteReader();
-        }
+        }*/
 
-    }
+    } 
 }

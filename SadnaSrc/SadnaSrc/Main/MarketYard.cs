@@ -27,28 +27,8 @@ namespace SadnaSrc.Main
         private MarketYard()
         {
             MarketDate = new DateTime(2018, 4, 14);
-            InitiateDb();
+            var dbCreator = new MarketSqlite();
             refundLotteriesService = new StoreOrderTools();
-        }
-
-        private void InitiateDb()
-        {
-            var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
-            programPath = programPath.Replace("\\bin\\Debug", "");
-            string[] programPathParts = programPath.Split('\\');
-            programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
-            programPath = string.Join("\\", programPathParts);
-            var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
-
-            _dbConnection = new SQLiteConnection(dbPath);
-            _dbConnection.Open();
-
-            var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON",_dbConnection);
-            makeFK.ExecuteNonQuery();
-            MarketSqlite.InsertDbConnector(_dbConnection);
-            MarketException.InsertDbConnector(_dbConnection);
-            MarketLog.InsertDbConnector(_dbConnection);
-
         }
 
         public static void SetDateTime(DateTime marketDate)
@@ -103,12 +83,7 @@ namespace SadnaSrc.Main
             refundLotteriesService.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
-            Exit();
             _instance = null;
-        }
-        public static void Exit()
-        {
-            _dbConnection.Close();
         }
     }
 }
