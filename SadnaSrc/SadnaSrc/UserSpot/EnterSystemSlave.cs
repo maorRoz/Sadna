@@ -13,6 +13,8 @@ namespace SadnaSrc.UserSpot
         private readonly UserServiceDL userDB;
         public UserAnswer Answer { get; private set; }
 
+        private static readonly Random random = new Random();
+
         public EnterSystemSlave()
         {
             userDB = UserServiceDL.Instance;
@@ -33,7 +35,6 @@ namespace SadnaSrc.UserSpot
 
         private int GenerateSystemID()
         {
-            var random = new Random();
             var newID = random.Next(1000, 10000);
             int[] savedIDs = userDB.GetAllSystemIDs();
             while (savedIDs.Contains(newID))
