@@ -32,6 +32,18 @@ namespace SadnaSrc.UserSpot
             return storage.OrderBy(x => x.Quantity).ToArray();
         }
 
+        public string[] GetCartStorageToString()
+        {
+            var itemRecords = new List<string>();
+            CartItem[] currentStorage = GetCartStorage();
+            foreach (CartItem item in currentStorage)
+            {
+                itemRecords.Add(item.ToString());
+            }
+
+            return itemRecords.ToArray();
+        }
+
         public CartItem[] GetCartStorage()
         {
             return SortedCartStorage(cartStorage.ToArray());

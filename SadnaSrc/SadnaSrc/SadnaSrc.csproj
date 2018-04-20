@@ -125,7 +125,9 @@
     <Compile Include="MarketHarmony\IUserAdmin.cs" />
     <Compile Include="MarketHarmony\IUserBuyer.cs" />
     <Compile Include="MarketHarmony\IUserShopper.cs" />
+    <Compile Include="UserSpot\EditCartItemSlave.cs" />
     <Compile Include="UserSpot\EnterSystemSlave.cs" />
+    <Compile Include="UserSpot\RemoveFromCartSlave.cs" />
     <Compile Include="UserSpot\SignInSlave.cs" />
     <Compile Include="UserSpot\SignUpSlave.cs" />
     <Compile Include="UserSpot\User.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="UserSpot\UserSecurityService.cs" />
     <Compile Include="UserSpot\UserService.cs" />
     <Compile Include="UserSpot\UserServiceDL.cs" />
+    <Compile Include="UserSpot\ViewCartSlave.cs" />
     <Compile Include="Walleter\PaymentService.cs" />
     <Compile Include="Walleter\WalleterAnswer.cs" />
     <Compile Include="Walleter\WalleterException.cs" />
