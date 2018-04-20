@@ -17,7 +17,7 @@ namespace SadnaSrc.AdminView
         private SystemAdminServiceDL adminDL;
         public SystemAdminService(IUserAdmin admin)
         {
-            adminDL = new SystemAdminServiceDL();
+            adminDL = SystemAdminServiceDL.Instance;
             _admin = admin; 
             adminSystemID = _admin.GetAdminSystemID();
             adminUserName = _admin.GetAdminName();

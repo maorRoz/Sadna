@@ -9,12 +9,15 @@ namespace SadnaSrc.UserSpot
 {
     public class CartService
     {
+        private int _userID;
         private List<CartItem> cartStorage;
-        private static UserServiceDL _userDL;
+        private UserServiceDL userDB;
         private bool _toSave;
 
-        public CartService(int systemID)
+        public CartService(int userID)
         {
+            _userID = userID;
+            userDB = UserServiceDL.Instance;
             cartStorage = new List<CartItem>();
             _toSave = false;
         }
@@ -22,10 +25,6 @@ namespace SadnaSrc.UserSpot
         public void EnableCartSave()
         {
             _toSave = true;
-        }
-        public void EstablishServiceDL(UserServiceDL userDL)
-        {
-            _userDL = userDL;
         }
 
         private static CartItem[] SortedCartStorage(CartItem[] storage)
@@ -76,7 +75,7 @@ namespace SadnaSrc.UserSpot
         public void EmptyCart()
         {
             cartStorage.Clear();
-            _userDL.RemoveCart();
+            userDB.RemoveCart(_userID);
         }
 
         public void EmptyCart(string store)
@@ -86,7 +85,7 @@ namespace SadnaSrc.UserSpot
             {
                 if (_toSave && item.Store.Equals(store))
                 {
-                    _userDL.RemoveCartItem(item);
+                    userDB.RemoveCartItem(_userID, item);
                 }
                 else
                 {
@@ -108,7 +107,7 @@ namespace SadnaSrc.UserSpot
                 cartStorage.Add(toAdd);
                 if (_toSave)
                 {
-                    _userDL.SaveCartItem(new []{toAdd});
+                    userDB.SaveCartItem(_userID,new[]{toAdd});
                 }
             }            
         }
@@ -121,7 +120,7 @@ namespace SadnaSrc.UserSpot
                 item.ChangeQuantity(quantity);
                 if (_toSave)
                 {
-                    _userDL.UpdateCartItemQuantity(item);
+                    userDB.UpdateCartItemQuantity(item);
                 }
             }
         }
@@ -135,7 +134,7 @@ namespace SadnaSrc.UserSpot
                 cartStorage.Remove(item);
                 if (_toSave)
                 {
-                    _userDL.RemoveCartItem(item);
+                    userDB.RemoveCartItem(_userID,item);
                 }
                 break;
             }

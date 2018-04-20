@@ -15,9 +15,9 @@ namespace SadnaSrc.UserSpot
         public int SystemID { get; }
         public User(int systemID)
         {
-            PolicyService = new UserPolicyService();
-            Cart = new CartService(systemID);
             SystemID = systemID;
+            PolicyService = new UserPolicyService(SystemID);
+            Cart = new CartService(SystemID);
         }
 
         public bool IsRegisteredUser()

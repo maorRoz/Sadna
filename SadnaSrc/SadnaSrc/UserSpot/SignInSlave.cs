@@ -33,7 +33,6 @@ namespace SadnaSrc.UserSpot
                 MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest "
                                           + _guest.SystemID + " into the system...");
                 User loggedUser = userDB.LoadUser(name, encryptedPassword, _guest.Cart.GetCartStorage());
-                loggedUser.Cart.EstablishServiceDL(userDB);
                 MarketLog.Log("UserSpot", "User " + _guest.SystemID + " sign in to the system has been successfull!");
                 MarketLog.Log("UserSpot", "User " + _guest.SystemID + " is now recognized as Registered User " + loggedUser.SystemID);
                 Answer = new UserAnswer(SignInStatus.Success, "Sign in has been successful!");

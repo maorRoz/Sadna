@@ -30,8 +30,10 @@ namespace SadnaSrc.UserSpot
             {
                 ApproveSignUp(name, address, password, creditCard);
                 string encryptedPassword = UserSecurityService.ToEncryptPassword(_guest.SystemID,password);
-                MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + _guest.SystemID + " data...");
-                RegisteredUser newRegistered = userDB.RegisterUser(name, address, encryptedPassword, creditCard, _guest.Cart.GetCartStorage());
+                MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User "
+                                          + _guest.SystemID + " data...");
+                RegisteredUser newRegistered = userDB.RegisterUser(_guest.SystemID,name, address, encryptedPassword,
+                    creditCard, _guest.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + newRegistered.SystemID + " sign up to the system has been successfull!");
                 Answer = new UserAnswer(SignInStatus.Success, "Sign up has been successfull!");
                 return newRegistered;

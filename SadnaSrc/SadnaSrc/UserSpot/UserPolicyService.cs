@@ -10,29 +10,31 @@ namespace SadnaSrc.UserSpot
 {
     public class UserPolicyService
     {
-        private static UserServiceDL _userDL;
+        private readonly UserServiceDL _userDB;
         public List<StoreManagerPolicy> StorePolicies { get; }
         public List<StatePolicy> StatesPolicies { get; }
 
-        public UserPolicyService()
+        private int _userID;
+        public UserPolicyService(int userID)
         {
+            _userID = userID;
+            _userDB = UserServiceDL.Instance;
             StatesPolicies = new List<StatePolicy>();
             StorePolicies = new List<StoreManagerPolicy>();
         }
+      
 
-        public static void EstablishServiceDL(UserServiceDL userDL)
-        {
-            _userDL = userDL;
-        }       
+        //TODO: fix this, it shouldn't be static at all
         public static void PromoteStorePolicies(string userName,string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
-            if (!_userDL.IsUserNameExist(userName))
+            var userDB = UserServiceDL.Instance;
+            if (!userDB.IsUserNameExist(userName))
             {
                 throw new UserException(PromoteStoreStatus.NoUserFound, "No user by the name '" + userName + " has been found for promotion!");
             }
             foreach (StoreManagerPolicy.StoreAction oldAction in Enum.GetValues(typeof(StoreManagerPolicy.StoreAction)))
             {
-                _userDL.DeleteUserStorePolicy(userName, new StoreManagerPolicy(store, oldAction));
+                userDB.DeleteUserStorePolicy(userName, new StoreManagerPolicy(store, oldAction));
             }
 
 
@@ -43,14 +45,14 @@ namespace SadnaSrc.UserSpot
 
             foreach (StoreManagerPolicy.StoreAction action in actionsToAdd)
             {
-                _userDL.SaveUserStorePolicy(userName,new StoreManagerPolicy(store,action));
+                userDB.SaveUserStorePolicy(userName,new StoreManagerPolicy(store,action));
             }
             
         }
 
         public void AddStatePolicy(StatePolicy.State state)
         {
-            _userDL.SaveUserStatePolicy(new StatePolicy(state));
+            _userDB.SaveUserStatePolicy(_userID,new StatePolicy(state));
             StatesPolicies.Add(new StatePolicy(state));
         }
 
@@ -75,7 +77,7 @@ namespace SadnaSrc.UserSpot
             StoreManagerPolicy storeOwnershipPermission =
                 new StoreManagerPolicy(store, StoreManagerPolicy.StoreAction.StoreOwner);
             StorePolicies.Add(storeOwnershipPermission);
-            _userDL.SaveUserStorePolicy(storeOwnershipPermission);
+            _userDB.SaveUserStorePolicy(_userID, storeOwnershipPermission);
         }
 
         public void LoadPolicies(StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions)

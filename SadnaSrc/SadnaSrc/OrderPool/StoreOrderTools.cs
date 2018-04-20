@@ -20,7 +20,7 @@ namespace SadnaSrc.OrderPool
 
         public StoreOrderTools()
         {
-            _orderDL = new OrderPoolDL();
+            _orderDL = OrderPoolDL.Instance;
             _supplyService = SupplyService.Instance;
             _paymentService = PaymentService.Instance;
 

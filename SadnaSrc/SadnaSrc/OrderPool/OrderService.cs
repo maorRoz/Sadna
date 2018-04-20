@@ -43,7 +43,7 @@ namespace SadnaSrc.OrderPool
             _supplyService = SupplyService.Instance;
             _paymentService = PaymentService.Instance;
             GetUserDetailsFromBuyer();
-            _orderDL = new OrderPoolDL();
+            _orderDL = OrderPoolDL.Instance;
 
             _supplyService.AttachExternalSystem();
             _paymentService.AttachExternalSystem();
@@ -54,7 +54,7 @@ namespace SadnaSrc.OrderPool
         {
             _storesSync = storesSync;
             _paymentService = paymentService;
-            _orderDL = new OrderPoolDL();
+            _orderDL = OrderPoolDL.Instance;
 
         }
 

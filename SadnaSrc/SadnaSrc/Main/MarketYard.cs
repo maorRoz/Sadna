@@ -84,5 +84,10 @@ namespace SadnaSrc.Main
             MarketException.RemoveErrors();
             _instance = null;
         }
+
+        public static void Exit()
+        {
+            MarketDB.Instance.Exit();
+        }
     }
 }

@@ -297,7 +297,6 @@ namespace UserSpotTests.PureUnitTest
         {
             userServiceRegisteredSession = DoEnter();
             Assert.AreEqual((int)SignUpStatus.Success, userServiceRegisteredSession.SignUp(name, address, password, creditCard).Status);
-            userServiceRegisteredSession.Synch();
             Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceRegisteredSession.MarketUser.Cart.GetCartStorage()));
 
         }

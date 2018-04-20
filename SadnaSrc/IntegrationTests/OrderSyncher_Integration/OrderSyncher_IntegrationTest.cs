@@ -44,7 +44,7 @@ namespace IntegrationTests
             try
             {
                 orderSyncherHarmony.CancelLottery("L2");
-                OrderPoolDL _orderDL = new OrderPoolDL();
+                OrderPoolDL _orderDL = OrderPoolDL.Instance;
                 _orderDL.GetTicketParticipantID("T2");
                 Assert.Fail();
             }
