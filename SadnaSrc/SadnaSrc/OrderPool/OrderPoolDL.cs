@@ -9,7 +9,7 @@ using SadnaSrc.Main;
 namespace SadnaSrc.OrderPool
 {
 
-    public class OrderPoolDL : MarketSqlite
+    public class OrderPoolDL : MarketDB
     {
         private static Random rand = new Random();
 

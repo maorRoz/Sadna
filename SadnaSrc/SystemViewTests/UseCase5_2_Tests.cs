@@ -96,7 +96,7 @@ namespace SystemViewTests
         [TestCleanup]
         public void AdminTestCleanUp()
         {
-            userServiceSession.CleanGuestSession();
+            userServiceSession.CleanSession();
             MarketYard.CleanSession();
         }
 

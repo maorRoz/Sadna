@@ -20,14 +20,13 @@ namespace SadnaSrc.Main
         private static MarketYard _instance;
 
         public static MarketYard Instance => _instance ?? (_instance = new MarketYard());
+
         private static StoreOrderTools refundLotteriesService;
 
-        private static SQLiteConnection _dbConnection;
         public static DateTime MarketDate { get; private set; }
         private MarketYard()
         {
             MarketDate = new DateTime(2018, 4, 14);
-            var dbCreator = new MarketSqlite();
             refundLotteriesService = new StoreOrderTools();
         }
 

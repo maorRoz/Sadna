@@ -8,16 +8,23 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    public class UserServiceDL : MarketSqlite
+    public class UserServiceDL
     {
 
-        public int SystemID { get; set; }
+        private static UserServiceDL _instance;
 
+        public static UserServiceDL Instance => _instance ?? (_instance = new UserServiceDL());
+
+        private MarketDB dbConnection;
+        private UserServiceDL()
+        {
+            dbConnection = MarketDB.Instance;
+        }
 
         private List<int> GetAllSystemIDs()
         {
             var ids = new List<int>();
-            using (var dbReader = SelectFromTable("User", "SystemID"))
+            using (var dbReader = dbConnection.SelectFromTable("User", "SystemID"))
             {
                 while (dbReader.Read())
                 {
@@ -30,7 +37,7 @@ namespace SadnaSrc.UserSpot
 
             return ids;
         }
-        private void GenerateSystemID()
+        public int GenerateSystemID()
         {
             int newID = new Random().Next(1000, 10000);
             List<int> savedIDs = GetAllSystemIDs();
@@ -39,19 +46,12 @@ namespace SadnaSrc.UserSpot
                 newID = new Random().Next(1000, 10000);
             }
 
-            SystemID = newID;
-        }
-
-        public int GetSystemID()
-        {
-            GenerateSystemID();
-            SaveUser(new User(SystemID));
-            return SystemID;
+            return newID;
         }
 
         public bool IsUserNameExist(string name)
          {
-            using (var dbReader = SelectFromTableWithCondition("User", "*", "Name = '" + name + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "*", "Name = '" + name + "'"))
             {
                 return dbReader.Read();
 
@@ -67,7 +67,7 @@ namespace SadnaSrc.UserSpot
             string[] columnNames = { "Name" , "Address" , "Password","CreditCard" };
             string[] valuesNames = {"@name", "@address", "@password","@card"};
             object[] values = {name, address, password,creditCard};
-            UpdateTable("User","SystemID = "+SystemID, columnNames ,valuesNames,values);
+            dbConnection.UpdateTable("User","SystemID = "+SystemID, columnNames ,valuesNames,values);
             SaveCartItem(guestCart);
             return new RegisteredUser(SystemID, name,address,password,creditCard,guestCart);
         }
@@ -80,7 +80,7 @@ namespace SadnaSrc.UserSpot
 
         private int GetIDFromUserName(string userName)
         {
-            using (var dbReader = SelectFromTableWithCondition("User", "SystemID", "Name = '" + userName + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "SystemID", "Name = '" + userName + "'"))
             {
                 if (dbReader.Read())
                 {
@@ -118,7 +118,7 @@ namespace SadnaSrc.UserSpot
         private StatePolicy[] LoadUserStatePolicy()
         {
             List<StatePolicy> loadedStatesPolicies = new List<StatePolicy>();
-            using (var dbReader = SelectFromTableWithCondition("StatePolicy", "State", "SystemID = " + SystemID))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("StatePolicy", "State", "SystemID = " + SystemID))
             {
                 while (dbReader.Read())
                 {
@@ -132,7 +132,7 @@ namespace SadnaSrc.UserSpot
         private StoreManagerPolicy[] LoadUserStorePolicies()
         {
             List<StoreManagerPolicy> loadedStorePolicies = new List<StoreManagerPolicy>();
-            using (var dbReader = SelectFromTableWithCondition("StoreManagerPolicy", "*", "SystemID = " + SystemID))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("StoreManagerPolicy", "*", "SystemID = " + SystemID))
             {
                 while (dbReader.Read())
                 {
@@ -154,7 +154,7 @@ namespace SadnaSrc.UserSpot
         private string[] UserNamesInSystem()
         {
             List<string> userNames = new List<string>();
-            using (var dbReader = SelectFromTable("User", "Name"))
+            using (var dbReader = dbConnection.SelectFromTable("User", "Name"))
             {
                 while (dbReader.Read())
                 {
@@ -210,7 +210,7 @@ namespace SadnaSrc.UserSpot
 
         private object[] FindRegisteredUserData(string name, string password)
         {
-            using (var dbReader = SelectFromTableWithCondition("User", "*", "name = '" + name + "' AND password = '"+ password +"'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "*", "name = '" + name + "' AND password = '"+ password +"'"))
             {
                 while (dbReader.Read())
                 {
@@ -241,7 +241,7 @@ namespace SadnaSrc.UserSpot
 
         public void RemoveCart()
         {
-            DeleteFromTable("CartItem","SystemID = "+SystemID);
+            dbConnection.DeleteFromTable("CartItem","SystemID = "+SystemID);
         }
 
         public void SaveCartItem(CartItem[] cart)
@@ -251,19 +251,19 @@ namespace SadnaSrc.UserSpot
                 var userItem = new List<object>();
                 userItem.Add(SystemID);
                 userItem.AddRange(item.ToData());
-                InsertTable("CartItem", "SystemID,Name,Store,Quantity,UnitPrice,FinalPrice",
+                dbConnection.InsertTable("CartItem", "SystemID,Name,Store,Quantity,UnitPrice,FinalPrice",
                     new [] { "@idParam", "@nameParam", "@storeParam","@quantityParam","@unitpriceParam","@finalpriceParam"}, userItem.ToArray());
             }
         }
 
         public void RemoveCartItem(CartItem item)
         {
-            DeleteFromTable("CartItem", "SystemID = "+SystemID +" AND "+ item.GetDbIdentifier());
+            dbConnection.DeleteFromTable("CartItem", "SystemID = "+SystemID +" AND "+ item.GetDbIdentifier());
         }
         private CartItem[] LoadCartItems()
         {
             List<CartItem> loadedItems = new List<CartItem>();
-            using (var dbReader = SelectFromTableWithCondition("CartItem", "*", "SystemID = " + SystemID))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("CartItem", "*", "SystemID = " + SystemID))
             {
                 while (dbReader.Read())
                 {
@@ -279,12 +279,12 @@ namespace SadnaSrc.UserSpot
             string[] columnNames = { "Quantity", "FinalPrice"};
             string[] valuesNames = { "@quantity", "@price"};
             object[] values = { item.Quantity,item.FinalPrice};
-            UpdateTable("CartItem", item.GetDbIdentifier(), columnNames, valuesNames, values);
+            dbConnection.UpdateTable("CartItem", item.GetDbIdentifier(), columnNames, valuesNames, values);
         }
 
         public void DeleteUser(int toDeleteID)
         {
-            DeleteFromTable("User", "SystemID = " + toDeleteID);
+            dbConnection.DeleteFromTable("User", "SystemID = " + toDeleteID);
         }
 
     }

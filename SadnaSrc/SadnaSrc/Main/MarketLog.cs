@@ -10,13 +10,7 @@ namespace SadnaSrc.Main
 {
     public class MarketLog
     {
-        private static SQLiteConnection _dbConnection;
         private static List<string> publishedLogsIDs;
-        public static void InsertDbConnector(SQLiteConnection dbConnection)
-        {
-            _dbConnection = dbConnection;
-            publishedLogsIDs = new List<string>();
-        }
 
         private static string GenerateLogID()
         {
@@ -25,47 +19,24 @@ namespace SadnaSrc.Main
         }
         public static void Log(string moduleName, string description)
         {
-            var insertRequest = "INSERT INTO System_Log (LogID,Date,ModuleName,Description) VALUES (@idValue,@dateValue,@moduleParam,@descriptionParam)";
-            var commandDb = new SQLiteCommand(insertRequest, _dbConnection);
             string logID = GenerateLogID();
-            commandDb.Parameters.AddWithValue("@idValue", logID);
-            commandDb.Parameters.AddWithValue("@dateValue", DateTime.Now);
-            commandDb.Parameters.AddWithValue("@moduleParam", moduleName);
-            commandDb.Parameters.AddWithValue("@descriptionParam", description);
-            try
-            {
-                commandDb.ExecuteNonQuery();
-                publishedLogsIDs.Add(logID);
-
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Problem occured in the attempt to communicate with the DB, returned error message :" + e.Message);
-            }
+            InsertLog(logID,moduleName,description);
+            publishedLogsIDs.Add(logID);
         }
 
-        public static string[] GetLogs()
+        private static void InsertLog(string logID, string moduleName, string description)
         {
-            return publishedLogsIDs.ToArray();
+            var dbConnection = MarketDB.Instance;
+            dbConnection.InsertTable("System_Log", "LogID,Date,ModuleName,Description",
+                new[] { "@idValue", "@dateValue", "@moduleParam", "@descriptionParam" },
+                new object[] { logID, DateTime.Now, moduleName, description });
         }
         public static void RemoveLogs()
         {
-            foreach (string logID in publishedLogsIDs)
+            var dbConnection = MarketDB.Instance;
+            foreach (var logID in publishedLogsIDs)
             {
-                var deleteRequest = "DELETE FROM System_Log WHERE LogID LIKE '%" + logID +"%'";
-                var commandDb = new SQLiteCommand(deleteRequest, _dbConnection);
-                try
-                {
-                    commandDb.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(
-                        "Problem occured in the attempt to communicate with the DB, returned error message :" +
-                        e.Message);
-                    break;
-                }
+                dbConnection.DeleteFromTable("System_Log","LogID = '"+logID+"'");
             }
             publishedLogsIDs.Clear();
         }

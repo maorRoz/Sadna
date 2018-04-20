@@ -57,7 +57,7 @@ namespace IntegrationTests
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanGuestSession();
+            userServiceSession.CleanSession();
             orderSyncherHarmony.CleanSession();
             MarketYard.CleanSession();
         }

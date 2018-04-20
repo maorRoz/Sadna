@@ -11,70 +11,71 @@ namespace SadnaSrc.UserSpot
     public class UserService : IUserService
     {
         public User MarketUser { get; private set; }
-        private readonly UserServiceDL userDL;
+        private int guestID;
+        private int currentID;
 
         public UserService()
         {
-            userDL = new UserServiceDL();
             MarketUser = null;
-            Synch();
         }
 
         public MarketAnswer EnterSystem()
         {
             EnterSystemSlave slave = new EnterSystemSlave();
             MarketUser = slave.EnterSystem();
+            currentID = MarketUser.SystemID;
+            guestID = MarketUser.SystemID;
             return slave.Answer;
         }
 
         public MarketAnswer SignUp(string name, string address, string password,string creditCard)
         {
-            MarketLog.Log("UserSpot", "User " + systemID + " attempting to sign up to the system...");
+            MarketLog.Log("UserSpot", "User " + currentID + " attempting to sign up to the system...");
             try
             {
                 ApproveSignUp(name, address, password,creditCard);
                 string encryptedPassword = ToEncryptPassword(password);
-                MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + systemID + " data...");
+                MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + currentID + " data...");
                 MarketUser = userDL.RegisterUser(name, address, encryptedPassword, creditCard, MarketUser.Cart.GetCartStorage());
                 MarketUser.Cart.EstablishServiceDL(userDL);
-                MarketLog.Log("UserSpot", "User " + systemID + " sign up to the system has been successfull!");
+                MarketLog.Log("UserSpot", "User " + currentID + " sign up to the system has been successfull!");
                 return new UserAnswer(SignInStatus.Success, "Sign up has been successfull!");
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + systemID + " has failed to sign up. Error message has been created!");
+                MarketLog.Log("UserSpot", "User " + currentID + " has failed to sign up. Error message has been created!");
                 return new UserAnswer((SignUpStatus)e.Status, e.GetErrorMessage());
             }
         }
 
         public MarketAnswer SignIn(string name, string password)
         {
-            MarketLog.Log("UserSpot", "User " + systemID + " attempting to sign in the system...");
+            MarketLog.Log("UserSpot", "User " + currentID + " attempting to sign in the system...");
             try
             {
                 ApproveSignIn(name, password);
                 string encryptedPassword = ToEncryptPassword(password);
                 MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest "
-                                          + systemID + " into the system...");
+                                          + currentID + " into the system...");
                 MarketUser = userDL.LoadUser(name, encryptedPassword, MarketUser.Cart.GetCartStorage());
-                systemID = MarketUser.SystemID;
+                currentID = MarketUser.SystemID;
                 MarketUser.Cart.EstablishServiceDL(userDL);
-                MarketLog.Log("UserSpot", "User " + oldID + " sign in to the system has been successfull!");
-                MarketLog.Log("UserSpot", "User " + oldID + " is now recognized as Registered User " + systemID);
+                MarketLog.Log("UserSpot", "User " + guestID + " sign in to the system has been successfull!");
+                MarketLog.Log("UserSpot", "User " + guestID + " is now recognized as Registered User " + currentID);
                 Synch();
                 return new UserAnswer(SignInStatus.Success, "Sign in has been successful!");
 
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + systemID + " has failed to sign in. Error message has been created!");
+                MarketLog.Log("UserSpot", "User " + currentID + " has failed to sign in. Error message has been created!");
                 return new UserAnswer((SignInStatus)e.Status, e.GetErrorMessage());
             }
         }
 
         public MarketAnswer ViewCart()
         {
-            MarketLog.Log("UserSpot", "User " + systemID + " attempting to view his cart...");
+            MarketLog.Log("UserSpot", "User " + currentID + " attempting to view his cart...");
             try
             {
                 ApproveEnetered("ViewCart");
@@ -84,13 +85,13 @@ namespace SadnaSrc.UserSpot
                     itemRecords.Add(item.ToString());
                 }
 
-                MarketLog.Log("UserSpot", "User " + systemID + " has successfully retrieved his cart info...");
+                MarketLog.Log("UserSpot", "User " + currentID + " has successfully retrieved his cart info...");
                 return new UserAnswer(ViewCartStatus.Success, "View of the user's cart has been granted successfully!",
                     itemRecords.ToArray());
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + systemID + " has failed to View Cart. Error message has been created!");
+                MarketLog.Log("UserSpot", "User " + currentID + " has failed to View Cart. Error message has been created!");
                 return new UserAnswer((ViewCartStatus) e.Status, e.GetErrorMessage(),null);
             }
 
@@ -98,19 +99,19 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity)
         {
-            MarketLog.Log("UserSpot", "User " + systemID + " attempting to edit his cart item: " +product + " from store: "+ store + " ...");
+            MarketLog.Log("UserSpot", "User " + currentID + " attempting to edit his cart item: " +product + " from store: "+ store + " ...");
             try
             {
                 CartItem toEdit = ApproveModifyCart("EditCartItem", store, product, unitPrice);
 
-                MarketLog.Log("UserSpot","User " + systemID + " found cart item: " + product + " from store: " + store +". proceeding for the edit...");
+                MarketLog.Log("UserSpot","User " + currentID + " found cart item: " + product + " from store: " + store +". proceeding for the edit...");
                 MarketUser.Cart.EditCartItem(toEdit, quantity);
-                MarketLog.Log("UserSpot","User " + systemID + "successfully edited cart item: " + product + " from store: " + store +" ...");
+                MarketLog.Log("UserSpot","User " + currentID + "successfully edited cart item: " + product + " from store: " + store +" ...");
                 return new UserAnswer(EditCartItemStatus.Success, "Edit Cart Item has been successful!");
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot","User " + systemID + " has failed to Edit Cart Item. Error message has been created!");
+                MarketLog.Log("UserSpot","User " + currentID + " has failed to Edit Cart Item. Error message has been created!");
                 return new UserAnswer((EditCartItemStatus) e.Status, e.GetErrorMessage());
             }
 
@@ -118,20 +119,20 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer RemoveFromCart(string store, string product, double unitPrice)
         {
-            MarketLog.Log("UserSpot", "User " + systemID + " attempting to remove his cart item: " + product + " from store: " + store + " ...");
+            MarketLog.Log("UserSpot", "User " + currentID + " attempting to remove his cart item: " + product + " from store: " + store + " ...");
             try
             {
                 CartItem toRemove = ApproveModifyCart("RemoveFromCart", store, product, unitPrice);
 
-                MarketLog.Log("UserSpot","User " + systemID + " found cart item: " + product + " from store: " + store +". proceeding for the removal...");
+                MarketLog.Log("UserSpot","User " + currentID + " found cart item: " + product + " from store: " + store +". proceeding for the removal...");
                 MarketUser.Cart.RemoveFromCart(toRemove);
-                MarketLog.Log("UserSpot","User " + systemID + "successfully removed cart item: " + product + " from store: " + store +" ...");
+                MarketLog.Log("UserSpot","User " + currentID + "successfully removed cart item: " + product + " from store: " + store +" ...");
                 return new UserAnswer(RemoveFromCartStatus.Success, "Remove Cart Item has been successful!");
             }
             catch (UserException e)
             {
                 MarketLog.Log("UserSpot",
-                    "User " + systemID + " has failed to Edit Cart Item. Error message has been created!");
+                    "User " + currentID + " has failed to Edit Cart Item. Error message has been created!");
                 return new UserAnswer((RemoveFromCartStatus) e.Status, e.GetErrorMessage());
             }
         }
@@ -216,9 +217,9 @@ namespace SadnaSrc.UserSpot
         }
         private string ToEncryptPassword(string password)
         {
-            MarketLog.Log("UserSpot", "encrypting User " + systemID + " password for security measures...");
+            MarketLog.Log("UserSpot", "encrypting User " + currentID + " password for security measures...");
             string encryptedPassword = GetSecuredPassword(password);
-            MarketLog.Log("UserSpot", "User " + systemID + " password has been encrypted successfully!");
+            MarketLog.Log("UserSpot", "User " + currentID + " password has been encrypted successfully!");
             return encryptedPassword;
         }
 
@@ -250,23 +251,19 @@ namespace SadnaSrc.UserSpot
             MarketUser.Cart.AddToCart(store,product,unitPrice,quantity);
         }
 
-        public void Synch()
+     /*   public void Synch()
         {
-            UserException.SetUser(systemID);
+            UserException.SetUser(currentID);
             UserPolicyService.EstablishServiceDL(userDL);
             MarketUser?.Cart.EstablishServiceDL(userDL);
             
-        }
-        public void CleanGuestSession()
-        {
-            Synch();
-            userDL.DeleteUser(oldID);
-        }
+        }*/
 
         public void CleanSession()
         {
-            CleanGuestSession();
-            userDL.DeleteUser(systemID);
+            var userDB = UserServiceDL.Instance;
+            userDB.DeleteUser(guestID);
+            userDB.DeleteUser(currentID);
         }
 
     }

@@ -379,7 +379,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanGuestSession();
+            userServiceSession.CleanSession();
             orderServiceSession.CleanSession();
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store1, product1));
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store1, "Goldstar"));

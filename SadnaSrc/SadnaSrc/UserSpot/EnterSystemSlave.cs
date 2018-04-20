@@ -10,20 +10,25 @@ namespace SadnaSrc.UserSpot
     class EnterSystemSlave
     {
 
-        private readonly UserServiceDL userDL;
+        private readonly UserServiceDL userDB;
         public UserAnswer Answer { get; private set; }
 
         public EnterSystemSlave()
         {
+            userDB = UserServiceDL.Instance;
             Answer = null;
         }
         public User EnterSystem()
         {
             MarketLog.Log("UserSpot", "New User attempting to enter the system...");
-            int systemID = userDL.GetSystemID();
-            MarketLog.Log("UserSpot", "User " + systemID + " has entered the system!");
+            User newGuest  = new User(userDB.GenerateSystemID());
+            MarketLog.Log("UserSpot", "User " + newGuest.SystemID + " has entered the system! " +
+                                      "attempting to save the user entry...");
+            userDB.SaveUser(newGuest);
+            MarketLog.Log("UserSpot", "User " + newGuest.SystemID + " has been saved successfully as new " +
+                                      "guest entry in the system!");
             Answer = new UserAnswer(EnterSystemStatus.Success, "You've been entered the system successfully!");
-            return new User(systemID);
+            return newGuest;
         }
     }
 }

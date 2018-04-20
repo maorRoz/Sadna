@@ -82,7 +82,7 @@
     <Compile Include="Main\MarketYard.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
-    <Compile Include="Main\MarketSqlite.cs" />
+    <Compile Include="Main\MarketDB.cs" />
     <Compile Include="MarketHarmony\IOrderSyncher.cs" />
     <Compile Include="MarketHarmony\IStoresSyncher.cs" />
     <Compile Include="MarketHarmony\IUserSeller.cs" />
@@ -126,6 +126,7 @@
     <Compile Include="MarketHarmony\IUserBuyer.cs" />
     <Compile Include="MarketHarmony\IUserShopper.cs" />
     <Compile Include="UserSpot\EnterSystemSlave.cs" />
+    <Compile Include="UserSpot\SignUpSlave.cs" />
     <Compile Include="UserSpot\User.cs" />
     <Compile Include="Main\IUserService.cs" />
     <Compile Include="UserSpot\RegisteredUser.cs" />

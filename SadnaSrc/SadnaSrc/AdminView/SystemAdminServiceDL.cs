@@ -10,9 +10,18 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
 {
-    class SystemAdminServiceDL : MarketSqlite
+    class SystemAdminServiceDL
     {
 
+        private static SystemAdminServiceDL _instance;
+
+        public static SystemAdminServiceDL Instance => _instance ?? (_instance = new SystemAdminServiceDL());
+
+        private MarketDB dbConnection;
+        private SystemAdminServiceDL()
+        {
+            dbConnection = MarketDB.Instance;
+        }
         public string[] FindSolelyOwnedStores()
         {
             List<string> solelyOwnedStores = new List<string>();
@@ -21,7 +30,7 @@ namespace SadnaSrc.AdminView
                         WHERE Action = 'StoreOwner') AS T2 ON T1.Name = T2.Store
                         WHERE T2.Store IS NULL";
 
-            using (var dbReader = freeStyleSelect(cmd))
+            using (var dbReader = dbConnection.freeStyleSelect(cmd))
             {
                 while(dbReader.Read())
                 {
@@ -35,12 +44,12 @@ namespace SadnaSrc.AdminView
 
         public void CloseStore(string store)
         {
-            UpdateTable("Store", "Name = '"+store+"'",new[] {"Status"},new[] {"@stat"},new object[] {"Inactive"});
+            dbConnection.UpdateTable("Store", "Name = '"+store+"'",new[] {"Status"},new[] {"@stat"},new object[] {"Inactive"});
         }
 
         public void IsUserExist(string userName)
         {
-            using (var dbReader = SelectFromTableWithCondition("User", "*", "Name = '" + userName +"'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "*", "Name = '" + userName +"'"))
             {
                 if (!dbReader.Read())
                 {
@@ -51,7 +60,7 @@ namespace SadnaSrc.AdminView
 
         public void IsUserNameExistInHistory(string userName)
         {
-            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "UserName = '" + userName +"'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", "UserName = '" + userName +"'"))
             {
                 if (!dbReader.Read())
                 {
@@ -62,7 +71,7 @@ namespace SadnaSrc.AdminView
 
         public void IsStoreExistInHistory(string storeName)
         {
-            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + storeName +"'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + storeName +"'"))
             {
                 if (!dbReader.Read())
                 {
@@ -73,7 +82,7 @@ namespace SadnaSrc.AdminView
 
         public void DeleteUser(string userName)
         {
-            DeleteFromTable("User", "Name = '" + userName +"'");
+            dbConnection.DeleteFromTable("User", "Name = '" + userName +"'");
         }
 
         private string[] GetPurchaseHistory(SQLiteDataReader dbReader)
@@ -90,7 +99,7 @@ namespace SadnaSrc.AdminView
         }
         public string[] GetPurchaseHistory(string field, string givenValue)
         {
-            using (var dbReader = SelectFromTableWithCondition("PurchaseHistory", "*", field + " = '" + givenValue + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", field + " = '" + givenValue + "'"))
             {
                 return GetPurchaseHistory(dbReader);
             }

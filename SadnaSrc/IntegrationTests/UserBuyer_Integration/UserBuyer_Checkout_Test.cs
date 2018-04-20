@@ -232,7 +232,7 @@ namespace IntegrationTests.UserBuyer_Integration
         [TestCleanup]
         public void UserOrderTestCleanUp()
         {
-            userServiceSession.CleanGuestSession();
+            userServiceSession.CleanSession();
             orderServiceSession.CleanSession();
             userBuyerHarmony.CleanSession();
             MarketYard.CleanSession();
