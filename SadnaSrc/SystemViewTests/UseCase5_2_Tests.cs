@@ -26,25 +26,16 @@ namespace SystemViewTests
         }
 
         [TestMethod]
-        public void RemoveUserTest()
+        public void RemoveUserSoleOwnerTest()
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserNameSoleOwner).Status);
-            Assert.IsFalse(MarketException.hasErrorRaised());
+
         }
 
         [TestMethod]
         public void RemoveUserNotSoleOwnerTest()
-        {
-            DoSignInToAdmin();
-            adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserNameSoleOwner).Status);
-
-        }
-
-        [TestMethod]
-        public void RemoveUserSoleOwnerTest()
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);

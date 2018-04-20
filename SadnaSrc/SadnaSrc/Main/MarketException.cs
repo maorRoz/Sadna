@@ -21,7 +21,7 @@ namespace SadnaSrc.Main
         public int  Status { get; }
         public MarketException(int status,string message)
         {
-            initiateException(message);
+            InitiateException(message);
             Status = status;
 
         }
@@ -29,10 +29,10 @@ namespace SadnaSrc.Main
         public MarketException(MarketError error,string message)
         {
             Status = (int)error;
-            initiateException(message);
+            InitiateException(message);
         }
 
-        private void initiateException(string message)
+        private void InitiateException(string message)
         {
             string errorID = GenerateErrorID();
             InsertError(errorID);

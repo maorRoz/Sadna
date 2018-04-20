@@ -78,7 +78,7 @@ namespace SadnaSrc.Main
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Cluckin Bell'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'The Red Rock'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = '24'",
-                "UPDATE Store SET Status = 'Active' WHERE Name = '24'",
+                "UPDATE Store SET Status = 'Active' WHERE Name = 'T'",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P1', 'BOX', 100, 'this is a plastic box')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P2', 'Golden BOX', 1000, 'this is a golden box')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P3', 'DeleteMy BOX', 10, 'this is a trush')",
