@@ -35,6 +35,7 @@ namespace SadnaSrc.UserSpot
                 string encryptedPassword = UserSecurityService.ToEncryptPassword(_guest.SystemID,password);
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User "
                                           + currentID + " data...");
+                ValidateUserNotExist(name);
                 RegisteredUser newRegistered = userDB.RegisterUser(_guest.SystemID,name, address, encryptedPassword,
                     creditCard, _guest.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + newRegistered.SystemID + " sign up to the system has been successfull!");
@@ -46,6 +47,15 @@ namespace SadnaSrc.UserSpot
                 MarketLog.Log("UserSpot", "User " + currentID + " has failed to sign up. Error message has been created!");
                 Answer = new UserAnswer((SignUpStatus)e.Status, e.GetErrorMessage());
                 return _guest;
+            }
+        }
+
+        private void ValidateUserNotExist(string userName)
+        {
+            if (userDB.IsUserNameExist(userName))
+            {
+                throw new UserException(SignUpStatus.TakenName, currentID + " register action has been requested while " +
+                                                "there is already a User with the given name '"+userName+"' in the system!");
             }
         }
 

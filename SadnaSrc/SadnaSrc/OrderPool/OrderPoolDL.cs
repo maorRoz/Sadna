@@ -251,7 +251,7 @@ namespace SadnaSrc.OrderPool
             }
             return tickets.ToArray();
         }
-
+        //TODO: remove exception usage from here
         public int GetTicketParticipantID(string ticket)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "UserID", "myID ='" + ticket + "'" ))
@@ -263,7 +263,7 @@ namespace SadnaSrc.OrderPool
                 throw new OrderException(LotteryOrderStatus.InvalidLotteryTicket, "Cannot find ticket or user");
             }
         }
-
+        //TODO: remove exception usage from here
         public string GetCreditCardToRefund(int userID)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "CreditCard", "SystemID ='" + userID + "'"))
@@ -275,7 +275,7 @@ namespace SadnaSrc.OrderPool
                 throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find credit card or user");
             }
         }
-
+        //TODO: remove exception usage from here
         public string GetNameToRefund(int userID)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "Name", "SystemID ='" + userID + "'"))
@@ -287,7 +287,7 @@ namespace SadnaSrc.OrderPool
                 throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find name or user");
             }
         }
-
+        //TODO: remove exception usage from here
         public string GetAddressToSendPackage(int userID)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "Name", "SystemID ='" + userID + "'"))
@@ -300,7 +300,7 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-
+        //TODO: remove exception usage from here
         public double GetSumToRefund(string ticket)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "Cost", "myID ='" + ticket + "'"))

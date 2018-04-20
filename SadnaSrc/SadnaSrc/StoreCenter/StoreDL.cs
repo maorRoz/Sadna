@@ -397,7 +397,7 @@ namespace SadnaSrc.StoreCenter
 
             return discount;
         }
-
+        //TODO: remove exception usage from here
         public void ValidateStoreExists(string store)
         {
             if (!IsStoreExist(store))
@@ -422,7 +422,7 @@ namespace SadnaSrc.StoreCenter
                 return dbReader.Read();
             }
         }
-
+        //TODO: remove exception usage from here
         public void AddStore(Store toAdd)
         {
             if (IsStoreExist(toAdd.Name))
@@ -606,7 +606,7 @@ namespace SadnaSrc.StoreCenter
 
             return result;
         }
-
+        //TODO: remove exception usage from here
         public string[] GetStoreInfo(string store)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "Name,Address",
@@ -621,7 +621,7 @@ namespace SadnaSrc.StoreCenter
 
             throw new StoreException(ViewStoreStatus.NoStore, "There is no active store by the name of " + store);
         }
-
+        //TODO: remove exception usage from here
         public Product getProductByNameFromStore(string storeName, string ProductName)
         {
             Store store = getStorebyName(storeName);
@@ -642,7 +642,7 @@ namespace SadnaSrc.StoreCenter
 
             return null;
         }
-
+        //TODO: remove exception usage from here
         public string[] GetStoreStockInfo(string store)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "Name,Address",
@@ -657,7 +657,7 @@ namespace SadnaSrc.StoreCenter
 
             throw new StoreException(ViewStoreStatus.NoStore, "There is no active store by the name of " + store);
         }
-
+        //TODO: remove exception usage from here
         public StockListItem GetProductFromStore(string store, string productName)
         {
             Product product = getProductByNameFromStore(store, productName);
@@ -739,10 +739,6 @@ namespace SadnaSrc.StoreCenter
 
             return lotteryManagement;
         }
-
-        //"INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, 
-        //TotalMoneyPayed, StartDate, EndDate, isActive) VALUES 
-        //('L100', 'P101', 100, 0 ,'01/01/2018', '31/12/2018', 'true')"
         public void EditLotteryInDatabase(LotterySaleManagmentTicket lotteryManagment)
         {
             string[] columnNames =

@@ -26,6 +26,7 @@ namespace SadnaSrc.UserSpot
             guestID = _guest?.SystemID ?? -1;
         }
 
+
         public User SignIn(string name, string password)
         {
             MarketLog.Log("UserSpot", "User " + guestID + " attempting to sign in the system...");
@@ -35,7 +36,8 @@ namespace SadnaSrc.UserSpot
                 string encryptedPassword = UserSecurityService.ToEncryptPassword(_guest.SystemID,password);
                 MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest "
                                           + guestID + " into the system...");
-                User loggedUser = userDB.LoadUser(name, encryptedPassword, _guest.Cart.GetCartStorage());
+                object[] userData = ValidateUserExist(name, encryptedPassword);
+                User loggedUser = userDB.LoadUser(userData, _guest.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + loggedUser.SystemID + " sign in to the system has been successfull!");
                 MarketLog.Log("UserSpot", "User " + loggedUser.SystemID + " is now recognized as Registered User "
                                           + loggedUser.SystemID);
@@ -50,6 +52,48 @@ namespace SadnaSrc.UserSpot
                 Answer = new UserAnswer((SignInStatus) e.Status, e.GetErrorMessage());
                 return _guest;
             }
+        }
+
+        private string FindSimilarUserName(string name)
+        {
+            string[] userNames = userDB.UserNamesInSystem();
+            string similarName = "";
+            foreach (string userName in userNames)
+            {
+                if (name.Equals(userName))
+                {
+                    similarName = "";
+                    break;
+                }
+
+                if (MarketMistakeService.IsSimilar(name, userName))
+                {
+                    similarName = userName;
+                }
+            }
+
+            return similarName;
+        }
+
+
+
+
+        private object[] ValidateUserExist(string userName,string password)
+        {
+            var loadedData = userDB.FindRegisteredUserData(userName, password);
+            if (loadedData != null)
+            {
+                return loadedData;
+            }
+            string similarName = FindSimilarUserName(userName);
+            if (similarName.Length > 0)
+            {
+                throw new UserException(SignInStatus.MistakeTipGiven, "No user were found by that name, " +
+                                                                      "have you meant to enter '" + similarName + "'?");
+            }
+            throw new UserException(SignInStatus.NoUserFound, "sign in action has been requested while there" +
+                                                              " is no User with the given name or password in the system! ");
+
         }
         private void ApproveEnetered()
         {

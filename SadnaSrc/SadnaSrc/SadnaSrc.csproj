@@ -70,6 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminView\AdminAnswer.cs" />
+    <Compile Include="AdminView\AdminViewPurchaseHistorySlave.cs" />
+    <Compile Include="AdminView\RemoveUserSlave.cs" />
     <Compile Include="AdminView\SystemAdminServiceDL.cs" />
     <Compile Include="AdminView\AdminException.cs" />
     <Compile Include="Main\IOrderService.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Main\MarketException.cs" />
     <Compile Include="Main\MarketLog.cs" />
     <Compile Include="Main\MarketYard.cs" />
+    <Compile Include="Main\MarketMistakeService.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
     <Compile Include="Main\MarketDB.cs" />

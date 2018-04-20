@@ -50,11 +50,6 @@ namespace SadnaSrc.UserSpot
         }
         public RegisteredUser RegisterUser(int userID,string name, string address, string password, string creditCard, CartItem[] guestCart)
         {
-            if (IsUserNameExist(name))
-            {
-                throw new UserException(SignUpStatus.TakenName,"register action has been requested while there" +
-                                        " is already a User with the given name in the system!");
-            }
             string[] columnNames = { "Name" , "Address" , "Password","CreditCard" };
             string[] valuesNames = {"@name", "@address", "@password","@card"};
             object[] values = {name, address, password,creditCard};
@@ -77,11 +72,8 @@ namespace SadnaSrc.UserSpot
                 {
                     return dbReader.GetInt32(0);
                 }
+                return -1;
             }
-
-            throw new UserException(MarketError.DbError,
-                    "No user by the name " + userName + " has been found in the db");
-            
         }
 
         public void SaveUserStorePolicy(string userName,StoreManagerPolicy policy)
@@ -143,9 +135,9 @@ namespace SadnaSrc.UserSpot
             userIDs.Add(user.SystemID);
         }
 
-        private string[] UserNamesInSystem()
+        public string[] UserNamesInSystem()
         {
-            List<string> userNames = new List<string>();
+            var userNames = new List<string>();
             using (var dbReader = dbConnection.SelectFromTable("User", "Name"))
             {
                 while (dbReader.Read())
@@ -157,78 +149,32 @@ namespace SadnaSrc.UserSpot
                 }
 
             }
-
             return userNames.ToArray();
         }
 
-        private bool IsSimilar(string str1, string str2)
-        {
-            if (str1.Length != str2.Length)
-            {
-                return false;
-            }
-
-            int same = 0;
-            for (int i = 0; i < str1.Length; i++)
-            {
-                if (str1[i] != str2[i])
-                {
-                    same--;
-                }
-            }
-            return same >= -2;
-        }
-        
-        private string FindSimilar(string name)
-        {
-            string[] userNames = UserNamesInSystem();
-            string similarName = "";
-            foreach (string userName in userNames)
-            {
-                if (name.Equals(userName))
-                {
-                    similarName = "";
-                    break;
-                }
-
-                if (IsSimilar(name, userName))
-                {
-                    similarName = userName;
-                }
-            }
-
-            return similarName;
-        }
-
-        private object[] FindRegisteredUserData(string name, string password)
+        public object[] FindRegisteredUserData(string name, string password)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "*", "name = '" + name + "' AND password = '"+ password +"'"))
             {
-                while (dbReader.Read())
+                if(dbReader.Read())
                 {
-                    return new object[] {dbReader.GetInt32(0), dbReader.GetString(2),dbReader.GetString(4)};
+                    return new object[] {dbReader.GetInt32(0),dbReader.GetString(1), dbReader.GetString(2),
+                        dbReader.GetString(3),dbReader.GetString(4)};
                 }
 
-                string similarName = FindSimilar(name);
-                if (similarName.Length > 0)
-                {
-                    throw new UserException(SignInStatus.MistakeTipGiven, "No user were found by that name, " +
-                                                                      "have you meant to enter " + similarName + "?");
-                }
-                throw new UserException(SignInStatus.NoUserFound,"sign in action has been requested while there" +
-                                        " is no User with the given name or password in the system! ");
-
+                return null;
             }
         }
-        public RegisteredUser LoadUser(string name, string password, CartItem[] guestCart)
+        public RegisteredUser LoadUser(object[] userData, CartItem[] guestCart)
         {
-            object[] loadedUserIdAndAddress = FindRegisteredUserData(name, password);
-            var loadedID = (int) loadedUserIdAndAddress[0];
-            var loadedAddress = (string) loadedUserIdAndAddress[1];
-            var loadedCreditCard = (string) loadedUserIdAndAddress[2];
+            var loadedID = (int)userData[0];
+            var loadedName = (string)userData[1];
+            var loadedAddress = (string)userData[2];
+            var loadedPassword = (string)userData[3];
+            var loadedCreditCard = (string)userData[4];
             SaveCartItem(loadedID, guestCart);
 
-            return new RegisteredUser(loadedID, name, loadedAddress,password, loadedCreditCard, 
+            return new RegisteredUser(loadedID, loadedName, loadedAddress, loadedPassword, loadedCreditCard, 
                 LoadCartItems(loadedID), LoadUserStatePolicy(loadedID), LoadUserStorePolicies(loadedID));
         }
 
