@@ -10,7 +10,7 @@ namespace SadnaSrc.UserSpot
 {
     class SignUpSlave
     {
-        private readonly UserServiceDL userDB;
+        private readonly UserDL userDB;
 
         private readonly User _guest;
 
@@ -20,7 +20,7 @@ namespace SadnaSrc.UserSpot
 
         public SignUpSlave(User guest)
         {
-            userDB = UserServiceDL.Instance;
+            userDB = UserDL.Instance;
             Answer = null;
             _guest = guest;
             currentID = _guest?.SystemID ?? -1;

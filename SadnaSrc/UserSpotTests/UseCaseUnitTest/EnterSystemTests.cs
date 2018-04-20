@@ -2,26 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.UserSpot;
 
 namespace UserSpotTests.UseCaseUnitTest
 {
     [TestClass]
-    public class UseCase1_1_Test
+    public class EnterSystemTests
     {
-        private UserService userServiceSession;
         private User generatedGuest;
-        private MarketYard marketSession;
 
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketSession = MarketYard.Instance;
-            userServiceSession = (UserService)marketSession.GetUserService();
-            Assert.AreEqual((int) EnterSystemStatus.Success, userServiceSession.EnterSystem().Status);
-            generatedGuest = userServiceSession.MarketUser;
-        }
+            var marketDbMocker = new Mock<IMarketDB>();
+            MarketException.SetDB(marketDbMocker.Object);
+            MarketLog.SetDB(marketDbMocker.Object);
+            var userDbMocker = new Mock<IUserDL>();
+            userDbMocker.Setup(x => x.SaveUser(It.IsAny<User>()));
+            userDbMocker.Setup(x => x.GetAllSystemIDs()).Returns(new[] {5000, 7000, 9000});
+            generatedGuest = new EnterSystemSlave(userDbMocker.Object).EnterSystem();
+        }    
 
         [TestMethod]
         public void GuestHasNoPolicyTest()
@@ -47,7 +49,6 @@ namespace UserSpotTests.UseCaseUnitTest
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            userServiceSession.CleanSession();
             MarketYard.CleanSession();
         }
     }

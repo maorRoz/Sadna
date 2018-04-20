@@ -8,17 +8,18 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    public class UserServiceDL
+    public class UserDL : IUserDL
     {
 
-        private static UserServiceDL _instance;
+        private static UserDL _instance;
 
-        public static UserServiceDL Instance => _instance ?? (_instance = new UserServiceDL());
+        public static UserDL Instance => _instance ?? (_instance = new UserDL());
 
         private static List<int> userIDs = new List<int>();
 
-        private MarketDB dbConnection;
-        private UserServiceDL()
+        private readonly MarketDB dbConnection;
+
+        private UserDL()
         {
             dbConnection = MarketDB.Instance;
         }
@@ -128,7 +129,7 @@ namespace SadnaSrc.UserSpot
             }
             return loadedStorePolicies.ToArray();
         }
-        public void SaveUser(User user)
+        public virtual void SaveUser(User user)
         {
             dbConnection.InsertTable("User", "SystemID,Name,Address,Password,CreditCard",
                 new [] { "@idParam", "@nameParam", "@addressParam", "@passParam","@creditParam" }, user.ToData());

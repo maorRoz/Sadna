@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
-    public class MarketDB
+    public class MarketDB : IMarketDB
     {
         private static MarketDB _instance;
 
@@ -465,6 +465,7 @@ namespace SadnaSrc.Main
         public void Exit()
         {
             _dbConnection.Close();
+            _instance = null;
         }
     } 
 }

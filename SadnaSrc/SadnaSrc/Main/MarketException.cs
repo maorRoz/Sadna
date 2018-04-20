@@ -19,6 +19,14 @@ namespace SadnaSrc.Main
         private static readonly Random random = new Random();
         private string errorMessage;
         public int  Status { get; }
+
+        private static IMarketDB _dbConnection = MarketDB.Instance;
+
+
+        public static void SetDB(IMarketDB dbConnection)
+        {
+            _dbConnection = dbConnection;
+        }
         public MarketException(int status,string message)
         {
             InitiateException(message);
@@ -42,8 +50,7 @@ namespace SadnaSrc.Main
 
         private void InsertError(string errorID)
         {
-            var dbConnection = MarketDB.Instance;
-            dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description", 
+            _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description", 
                 new[] { "@idParam", "@moduleParam", "@descriptionParam" }, 
                 new object []{errorID ,GetModuleName(),WrapErrorMessageForDb(errorMessage)});
         }
@@ -75,10 +82,9 @@ namespace SadnaSrc.Main
 
         public static void RemoveErrors()
         {
-            var dbConnection = MarketDB.Instance;
             foreach (var errorID in publishedErrorIDs)
             {
-                dbConnection.DeleteFromTable("System_Errors","ErrorID = '"+errorID+"'");
+                _dbConnection.DeleteFromTable("System_Errors","ErrorID = '"+errorID+"'");
             }
             publishedErrorIDs.Clear();
         }

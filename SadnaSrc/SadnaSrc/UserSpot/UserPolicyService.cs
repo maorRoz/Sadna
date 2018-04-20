@@ -10,7 +10,7 @@ namespace SadnaSrc.UserSpot
 {
     public class UserPolicyService
     {
-        private readonly UserServiceDL _userDB;
+        private readonly UserDL _userDB;
         public List<StoreManagerPolicy> StorePolicies { get; }
         public List<StatePolicy> StatesPolicies { get; }
 
@@ -18,7 +18,7 @@ namespace SadnaSrc.UserSpot
         public UserPolicyService(int userID)
         {
             _userID = userID;
-            _userDB = UserServiceDL.Instance;
+            _userDB = UserDL.Instance;
             StatesPolicies = new List<StatePolicy>();
             StorePolicies = new List<StoreManagerPolicy>();
         }
@@ -27,7 +27,7 @@ namespace SadnaSrc.UserSpot
         //TODO: fix this, it shouldn't be static at all
         public static void PromoteStorePolicies(string userName,string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
-            var userDB = UserServiceDL.Instance;
+            var userDB = UserDL.Instance;
             if (!userDB.IsUserNameExist(userName))
             {
                 throw new UserException(PromoteStoreStatus.NoUserFound, "No user by the name '" + userName + " has been found for promotion!");

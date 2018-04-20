@@ -10,7 +10,7 @@ using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.UserSpot;
 
-namespace IntegrationTests
+namespace IntegrationTests.OrderSyncher_Integration
 {
     [TestClass]
     public class OrderSyncher_IntegrationTest
@@ -44,7 +44,7 @@ namespace IntegrationTests
             try
             {
                 orderSyncherHarmony.CancelLottery("L2");
-                OrderPoolDL _orderDL = OrderPoolDL.Instance;
+                OrderDL _orderDL = OrderDL.Instance;
                 _orderDL.GetTicketParticipantID("T2");
                 Assert.Fail();
             }

@@ -12,7 +12,13 @@ namespace SadnaSrc.Main
     {
         private static readonly List<string> publishedLogsIDs = new List<string>();
         private static readonly Random random = new Random();
+        private static IMarketDB _dbConnection = MarketDB.Instance;
 
+
+        public static void SetDB(IMarketDB dbConnection)
+        {
+            _dbConnection = dbConnection;
+        }
         private static string GenerateLogID()
         {
             return ((char) random.Next(97, 123)) + "" + ((char)random.Next(97,123)) + "" + random.Next(1000, 10000);
@@ -26,17 +32,15 @@ namespace SadnaSrc.Main
 
         private static void InsertLog(string logID, string moduleName, string description)
         {
-            var dbConnection = MarketDB.Instance;
-            dbConnection.InsertTable("System_Log", "LogID,Date,ModuleName,Description",
+            _dbConnection.InsertTable("System_Log", "LogID,Date,ModuleName,Description",
                 new[] { "@idValue", "@dateValue", "@moduleParam", "@descriptionParam" },
                 new object[] { logID, DateTime.Now, moduleName, description });
         }
         public static void RemoveLogs()
         {
-            var dbConnection = MarketDB.Instance;
             foreach (var logID in publishedLogsIDs)
             {
-                dbConnection.DeleteFromTable("System_Log","LogID = '"+logID+"'");
+                _dbConnection.DeleteFromTable("System_Log","LogID = '"+logID+"'");
             }
             publishedLogsIDs.Clear();
         }

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace IntegrationTests.FullCycle_Integration
 {
     [TestClass]
     public class LotteryEndToEnd

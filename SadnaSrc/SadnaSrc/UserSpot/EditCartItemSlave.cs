@@ -9,7 +9,7 @@ namespace SadnaSrc.UserSpot
 {
     class EditCartItemSlave
     {
-        private readonly UserServiceDL userDB;
+        private readonly UserDL userDB;
 
         private readonly User _user;
 
@@ -19,7 +19,7 @@ namespace SadnaSrc.UserSpot
 
         public EditCartItemSlave(User user)
         {
-            userDB = UserServiceDL.Instance;
+            userDB = UserDL.Instance;
             Answer = null;
             _user = user;
             userID = user?.SystemID ?? -1;

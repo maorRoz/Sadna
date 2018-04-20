@@ -11,13 +11,13 @@ namespace SadnaSrc.UserSpot
     {
         private int _userID;
         private List<CartItem> cartStorage;
-        private UserServiceDL userDB;
+        private UserDL userDB;
         private bool _toSave;
 
         public CartService(int userID)
         {
             _userID = userID;
-            userDB = UserServiceDL.Instance;
+            userDB = UserDL.Instance;
             cartStorage = new List<CartItem>();
             _toSave = false;
         }

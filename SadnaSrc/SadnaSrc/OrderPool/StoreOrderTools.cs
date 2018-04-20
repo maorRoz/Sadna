@@ -11,7 +11,7 @@ namespace SadnaSrc.OrderPool
 {
     class StoreOrderTools
     {
-        private readonly OrderPoolDL _orderDL;
+        private readonly OrderDL _orderDL;
         private SupplyService _supplyService;
         private PaymentService _paymentService;
 
@@ -20,7 +20,7 @@ namespace SadnaSrc.OrderPool
 
         public StoreOrderTools()
         {
-            _orderDL = OrderPoolDL.Instance;
+            _orderDL = OrderDL.Instance;
             _supplyService = SupplyService.Instance;
             _paymentService = PaymentService.Instance;
 

@@ -82,6 +82,7 @@ namespace SadnaSrc.Main
             refundLotteriesService.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
+            Exit();
             _instance = null;
         }
 

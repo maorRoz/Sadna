@@ -10,15 +10,17 @@ namespace SadnaSrc.UserSpot
     public class UserService : IUserService
     {
         public User MarketUser { get; private set; }
+        private UserDL userDB;
 
         public UserService()
         {
             MarketUser = null;
+            userDB = UserDL.Instance;
         }
 
         public MarketAnswer EnterSystem()
         {
-            EnterSystemSlave slave = new EnterSystemSlave();
+            EnterSystemSlave slave = new EnterSystemSlave(userDB);
             MarketUser = slave.EnterSystem();
             return slave.Answer;
         }
@@ -68,7 +70,6 @@ namespace SadnaSrc.UserSpot
 
         public void CleanSession()
         {
-            var userDB = UserServiceDL.Instance;
             userDB.CleanSession();
         }
 

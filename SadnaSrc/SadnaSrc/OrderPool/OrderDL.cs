@@ -9,16 +9,16 @@ using SadnaSrc.Main;
 namespace SadnaSrc.OrderPool
 {
 
-    public class OrderPoolDL
+    public class OrderDL
     {
         private static Random rand = new Random();
-        private static OrderPoolDL _instance;
+        private static OrderDL _instance;
 
-        public static OrderPoolDL Instance => _instance ?? (_instance = new OrderPoolDL());
+        public static OrderDL Instance => _instance ?? (_instance = new OrderDL());
 
         private MarketDB dbConnection;
 
-        private OrderPoolDL()
+        private OrderDL()
         {
             dbConnection = MarketDB.Instance;
         }
