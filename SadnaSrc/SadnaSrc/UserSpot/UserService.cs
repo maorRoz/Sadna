@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
-using static System.Int32;
 
 namespace SadnaSrc.UserSpot
 {
@@ -30,47 +29,17 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer SignUp(string name, string address, string password,string creditCard)
         {
-            MarketLog.Log("UserSpot", "User " + currentID + " attempting to sign up to the system...");
-            try
-            {
-                ApproveSignUp(name, address, password,creditCard);
-                string encryptedPassword = ToEncryptPassword(password);
-                MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User " + currentID + " data...");
-                MarketUser = userDL.RegisterUser(name, address, encryptedPassword, creditCard, MarketUser.Cart.GetCartStorage());
-                MarketUser.Cart.EstablishServiceDL(userDL);
-                MarketLog.Log("UserSpot", "User " + currentID + " sign up to the system has been successfull!");
-                return new UserAnswer(SignInStatus.Success, "Sign up has been successfull!");
-            }
-            catch (UserException e)
-            {
-                MarketLog.Log("UserSpot", "User " + currentID + " has failed to sign up. Error message has been created!");
-                return new UserAnswer((SignUpStatus)e.Status, e.GetErrorMessage());
-            }
+            SignUpSlave slave = new SignUpSlave(MarketUser);
+            MarketUser = slave.SignUp(name,address,password,creditCard);
+            return slave.Answer;
         }
 
         public MarketAnswer SignIn(string name, string password)
         {
-            MarketLog.Log("UserSpot", "User " + currentID + " attempting to sign in the system...");
-            try
-            {
-                ApproveSignIn(name, password);
-                string encryptedPassword = ToEncryptPassword(password);
-                MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest "
-                                          + currentID + " into the system...");
-                MarketUser = userDL.LoadUser(name, encryptedPassword, MarketUser.Cart.GetCartStorage());
-                currentID = MarketUser.SystemID;
-                MarketUser.Cart.EstablishServiceDL(userDL);
-                MarketLog.Log("UserSpot", "User " + guestID + " sign in to the system has been successfull!");
-                MarketLog.Log("UserSpot", "User " + guestID + " is now recognized as Registered User " + currentID);
-                Synch();
-                return new UserAnswer(SignInStatus.Success, "Sign in has been successful!");
-
-            }
-            catch (UserException e)
-            {
-                MarketLog.Log("UserSpot", "User " + currentID + " has failed to sign in. Error message has been created!");
-                return new UserAnswer((SignInStatus)e.Status, e.GetErrorMessage());
-            }
+            SignInSlave slave = new SignInSlave(MarketUser);
+            MarketUser = slave.SignIn(name,password);
+            currentID = MarketUser.SystemID;
+            return slave.Answer;
         }
 
         public MarketAnswer ViewCart()
@@ -182,22 +151,6 @@ namespace SadnaSrc.UserSpot
                 "sign in action has been requested by registered user!");
         }
 
-        private bool IsValidCreditCard(string creditCard)
-        {
-			int _;
-			return !string.IsNullOrEmpty(creditCard) && creditCard.Length == 8 && TryParse(creditCard,out _);
-        }
-
-        private void ApproveSignUp(string name, string address, string password, string creditCard)
-        {
-            ApproveGuest("sign up");
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(address) || string.IsNullOrEmpty(password) || !IsValidCreditCard(creditCard))
-            {
-                throw new UserException(SignUpStatus.NullEmptyFewDataGiven,
-                    "sign up action has been requested while some required fields are still missing or invalid!");
-            }
-        }
-
         private CartItem ApproveModifyCart(string action, string store, string product, double unitPrice)
         {
             ApproveEnetered(action);
@@ -214,26 +167,6 @@ namespace SadnaSrc.UserSpot
             throw new UserException(RemoveFromCartStatus.NoItemFound,
                 "Remove Cart Item operation found no item to modify!");
 
-        }
-        private string ToEncryptPassword(string password)
-        {
-            MarketLog.Log("UserSpot", "encrypting User " + currentID + " password for security measures...");
-            string encryptedPassword = GetSecuredPassword(password);
-            MarketLog.Log("UserSpot", "User " + currentID + " password has been encrypted successfully!");
-            return encryptedPassword;
-        }
-
-        public static string GetSecuredPassword(string password)
-        {
-            var secuirtyService = System.Security.Cryptography.MD5.Create();
-            byte[] bytes = Encoding.Default.GetBytes(password);
-            byte[] encodedBytes = secuirtyService.ComputeHash(bytes);
-
-            StringBuilder newPasswordString = new StringBuilder();
-            for (int i = 0; i < encodedBytes.Length; i++)
-                newPasswordString.Append(encodedBytes[i].ToString("x2"));
-
-            return newPasswordString.ToString();
         }
 
         private void ApproveSignIn(string name, string password)

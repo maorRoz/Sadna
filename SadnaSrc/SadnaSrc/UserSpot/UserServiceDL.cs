@@ -21,7 +21,7 @@ namespace SadnaSrc.UserSpot
             dbConnection = MarketDB.Instance;
         }
 
-        private List<int> GetAllSystemIDs()
+        public int[] GetAllSystemIDs()
         {
             var ids = new List<int>();
             using (var dbReader = dbConnection.SelectFromTable("User", "SystemID"))
@@ -35,18 +35,7 @@ namespace SadnaSrc.UserSpot
                 }
             }
 
-            return ids;
-        }
-        public int GenerateSystemID()
-        {
-            int newID = new Random().Next(1000, 10000);
-            List<int> savedIDs = GetAllSystemIDs();
-            while (savedIDs.Contains(newID))
-            {
-                newID = new Random().Next(1000, 10000);
-            }
-
-            return newID;
+            return ids.ToArray();
         }
 
         public bool IsUserNameExist(string name)
