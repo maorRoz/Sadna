@@ -16,22 +16,25 @@ namespace SadnaSrc.UserSpot
 
         public UserAnswer Answer { get; private set; }
 
+        private int currentID;
+
         public SignUpSlave(User guest)
         {
             userDB = UserServiceDL.Instance;
             Answer = null;
             _guest = guest;
+            currentID = _guest?.SystemID ?? -1;
         }
 
         public User SignUp(string name, string address, string password, string creditCard)
         {
+            MarketLog.Log("UserSpot", "User " + currentID + " attempting to sign up to the system...");
             try
             {
                 ApproveSignUp(name, address, password, creditCard);
-                MarketLog.Log("UserSpot", "User " + _guest.SystemID + " attempting to sign up to the system...");
                 string encryptedPassword = UserSecurityService.ToEncryptPassword(_guest.SystemID,password);
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User "
-                                          + _guest.SystemID + " data...");
+                                          + currentID + " data...");
                 RegisteredUser newRegistered = userDB.RegisterUser(_guest.SystemID,name, address, encryptedPassword,
                     creditCard, _guest.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + newRegistered.SystemID + " sign up to the system has been successfull!");
@@ -40,7 +43,7 @@ namespace SadnaSrc.UserSpot
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + _guest.SystemID + " has failed to sign up. Error message has been created!");
+                MarketLog.Log("UserSpot", "User " + currentID + " has failed to sign up. Error message has been created!");
                 Answer = new UserAnswer((SignUpStatus)e.Status, e.GetErrorMessage());
                 return _guest;
             }

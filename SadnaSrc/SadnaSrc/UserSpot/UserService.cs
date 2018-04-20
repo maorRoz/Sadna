@@ -10,8 +10,6 @@ namespace SadnaSrc.UserSpot
     public class UserService : IUserService
     {
         public User MarketUser { get; private set; }
-        private int guestID;
-        private int currentID;
 
         public UserService()
         {
@@ -22,8 +20,6 @@ namespace SadnaSrc.UserSpot
         {
             EnterSystemSlave slave = new EnterSystemSlave();
             MarketUser = slave.EnterSystem();
-            currentID = MarketUser.SystemID;
-            guestID = MarketUser.SystemID;
             return slave.Answer;
         }
 
@@ -38,7 +34,6 @@ namespace SadnaSrc.UserSpot
         {
             SignInSlave slave = new SignInSlave(MarketUser);
             MarketUser = slave.SignIn(name,password);
-            currentID = MarketUser.SystemID;
             return slave.Answer;
         }
 
@@ -74,8 +69,7 @@ namespace SadnaSrc.UserSpot
         public void CleanSession()
         {
             var userDB = UserServiceDL.Instance;
-            userDB.DeleteUser(guestID);
-            userDB.DeleteUser(currentID);
+            userDB.CleanSession();
         }
 
     }

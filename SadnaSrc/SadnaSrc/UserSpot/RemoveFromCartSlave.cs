@@ -15,29 +15,32 @@ namespace SadnaSrc.UserSpot
 
         public UserAnswer Answer { get; private set; }
 
+        private int userID;
+
         public RemoveFromCartSlave(User user)
         {
             userDB = UserServiceDL.Instance;
             Answer = null;
             _user = user;
+            userID = user?.SystemID ?? -1;
         }
-        public MarketAnswer RemoveFromCart(string store, string product, double unitPrice)
+        public void RemoveFromCart(string store, string product, double unitPrice)
         {
-            MarketLog.Log("UserSpot", "User " + _user.SystemID + " attempting to remove his cart item: " + product + " from store: " + store + " ...");
+            MarketLog.Log("UserSpot", "User " + userID + " attempting to remove his cart item: " + product + " from store: " + store + " ...");
             try
             {
                 CartItem toRemove = ApproveModifyCart(store, product, unitPrice);
 
-                MarketLog.Log("UserSpot", "User " + _user.SystemID + " found cart item: " + product + " from store: " + store + ". proceeding for the removal...");
+                MarketLog.Log("UserSpot", "User " + userID + " found cart item: " + product + " from store: " + store + ". proceeding for the removal...");
                 _user.Cart.RemoveFromCart(toRemove);
-                MarketLog.Log("UserSpot", "User " + _user.SystemID + "successfully removed cart item: " + product + " from store: " + store + " ...");
-                return new UserAnswer(RemoveFromCartStatus.Success, "Remove Cart Item has been successful!");
+                MarketLog.Log("UserSpot", "User " + userID + "successfully removed cart item: " + product + " from store: " + store + " ...");
+                Answer = new  UserAnswer(RemoveFromCartStatus.Success, "Remove Cart Item has been successful!");
             }
             catch (UserException e)
             {
                 MarketLog.Log("UserSpot",
-                    "User " + _user.SystemID + " has failed to Edit Cart Item. Error message has been created!");
-                return new UserAnswer((RemoveFromCartStatus)e.Status, e.GetErrorMessage());
+                    "User " + userID + " has failed to Edit Cart Item. Error message has been created!");
+                Answer = new UserAnswer((RemoveFromCartStatus)e.Status, e.GetErrorMessage());
             }
         }
 

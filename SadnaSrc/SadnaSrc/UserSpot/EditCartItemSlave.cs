@@ -15,26 +15,29 @@ namespace SadnaSrc.UserSpot
 
         public UserAnswer Answer { get; private set; }
 
+        private int userID;
+
         public EditCartItemSlave(User user)
         {
             userDB = UserServiceDL.Instance;
             Answer = null;
             _user = user;
+            userID = user?.SystemID ?? -1;
         }
         public void EditCartItem(string store, string product, double unitPrice, int quantity)
         {
+            MarketLog.Log("UserSpot", "User " + userID + " attempting to edit his cart item: " + product + " from store: " + store + " ...");
             try
             {
                 CartItem toEdit = ApproveModifyCart(store, product, unitPrice);
-                MarketLog.Log("UserSpot", "User " + _user.SystemID + " attempting to edit his cart item: " + product + " from store: " + store + " ...");
-                MarketLog.Log("UserSpot", "User " + _user.SystemID + " found cart item: " + product + " from store: " + store + ". proceeding for the edit...");
+                MarketLog.Log("UserSpot", "User " + userID + " found cart item: " + product + " from store: " + store + ". proceeding for the edit...");
                 _user.Cart.EditCartItem(toEdit, quantity);
-                MarketLog.Log("UserSpot", "User " + _user.SystemID + "successfully edited cart item: " + product + " from store: " + store + " ...");
+                MarketLog.Log("UserSpot", "User " + userID + "successfully edited cart item: " + product + " from store: " + store + " ...");
                 Answer = new UserAnswer(EditCartItemStatus.Success, "Edit Cart Item has been successful!");
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + _user.SystemID + " has failed to Edit Cart Item. Error message has been created!");
+                MarketLog.Log("UserSpot", "User " + userID + " has failed to Edit Cart Item. Error message has been created!");
                 Answer = new UserAnswer((EditCartItemStatus)e.Status, e.GetErrorMessage());
             }
 

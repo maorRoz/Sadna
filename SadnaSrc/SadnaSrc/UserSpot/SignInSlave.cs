@@ -16,25 +16,29 @@ namespace SadnaSrc.UserSpot
 
         public UserAnswer Answer { get; private set; }
 
+        private int guestID;
+
         public SignInSlave(User guest)
         {
             userDB = UserServiceDL.Instance;
             Answer = null;
             _guest = guest;
+            guestID = _guest?.SystemID ?? -1;
         }
 
         public User SignIn(string name, string password)
         {
+            MarketLog.Log("UserSpot", "User " + guestID + " attempting to sign in the system...");
             try
             {
                 ApproveSignIn(name, password);
-                MarketLog.Log("UserSpot", "User " + _guest.SystemID + " attempting to sign in the system...");
                 string encryptedPassword = UserSecurityService.ToEncryptPassword(_guest.SystemID,password);
                 MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest "
-                                          + _guest.SystemID + " into the system...");
+                                          + guestID + " into the system...");
                 User loggedUser = userDB.LoadUser(name, encryptedPassword, _guest.Cart.GetCartStorage());
-                MarketLog.Log("UserSpot", "User " + _guest.SystemID + " sign in to the system has been successfull!");
-                MarketLog.Log("UserSpot", "User " + _guest.SystemID + " is now recognized as Registered User " + loggedUser.SystemID);
+                MarketLog.Log("UserSpot", "User " + loggedUser.SystemID + " sign in to the system has been successfull!");
+                MarketLog.Log("UserSpot", "User " + loggedUser.SystemID + " is now recognized as Registered User "
+                                          + loggedUser.SystemID);
                 Answer = new UserAnswer(SignInStatus.Success, "Sign in has been successful!");
                 return loggedUser;
 
@@ -42,7 +46,7 @@ namespace SadnaSrc.UserSpot
             catch (UserException e)
             {
                 MarketLog.Log("UserSpot",
-                    "User " + _guest.SystemID + " has failed to sign in. Error message has been created!");
+                    "User " + guestID + " has failed to sign in. Error message has been created!");
                 Answer = new UserAnswer((SignInStatus) e.Status, e.GetErrorMessage());
                 return _guest;
             }

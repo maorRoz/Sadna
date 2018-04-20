@@ -14,26 +14,29 @@ namespace SadnaSrc.UserSpot
         private readonly User _user;
 
         public UserAnswer Answer { get; private set; }
+
+        private int userID;
         public ViewCartSlave(User user)
         {
             userDB = UserServiceDL.Instance;
             Answer = null;
             _user = user;
+            userID = user?.SystemID ?? -1;
         }
         public void ViewCart()
         {
+            MarketLog.Log("UserSpot", "User " + userID + " attempting to view his cart...");
             try
             {
                 ApproveEnetered();
-                MarketLog.Log("UserSpot", "User " + _user.SystemID + " attempting to view his cart...");
 
-                MarketLog.Log("UserSpot", "User " + _user.SystemID + " has successfully retrieved his cart info...");
+                MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved his cart info...");
                 Answer = new UserAnswer(ViewCartStatus.Success, "View of the user's cart has been granted successfully!",
                     _user.Cart.GetCartStorageToString());
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + _user.SystemID + " has failed to View Cart. Error message has been created!");
+                MarketLog.Log("UserSpot", "User " + userID + " has failed to View Cart. Error message has been created!");
                 Answer = new UserAnswer((ViewCartStatus)e.Status, e.GetErrorMessage(), null);
             }
 

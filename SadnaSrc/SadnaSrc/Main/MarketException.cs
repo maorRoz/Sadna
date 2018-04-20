@@ -16,6 +16,7 @@ namespace SadnaSrc.Main
     public class MarketException : Exception
     {
         private static readonly List<string> publishedErrorIDs = new List<string>();
+        private static readonly Random random = new Random();
         private string errorMessage;
         public int  Status { get; }
         public MarketException(int status,string message)
@@ -49,7 +50,6 @@ namespace SadnaSrc.Main
 
         private static string GenerateErrorID()
         {
-            var random = new Random();
             return random.Next(1000, 10000) + "" + ((char)random.Next(97, 123)) + "" + ((char)random.Next(97, 123));
         }
 

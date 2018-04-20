@@ -15,6 +15,8 @@ namespace SadnaSrc.UserSpot
 
         public static UserServiceDL Instance => _instance ?? (_instance = new UserServiceDL());
 
+        private static List<int> userIDs = new List<int>();
+
         private MarketDB dbConnection;
         private UserServiceDL()
         {
@@ -138,6 +140,7 @@ namespace SadnaSrc.UserSpot
         {
             dbConnection.InsertTable("User", "SystemID,Name,Address,Password,CreditCard",
                 new [] { "@idParam", "@nameParam", "@addressParam", "@passParam","@creditParam" }, user.ToData());
+            userIDs.Add(user.SystemID);
         }
 
         private string[] UserNamesInSystem()
@@ -272,9 +275,12 @@ namespace SadnaSrc.UserSpot
             dbConnection.UpdateTable("CartItem", item.GetDbIdentifier(), columnNames, valuesNames, values);
         }
 
-        public void DeleteUser(int toDeleteID)
+        public void CleanSession()
         {
-            dbConnection.DeleteFromTable("User", "SystemID = " + toDeleteID);
+            foreach(var userID in userIDs)
+            {
+                dbConnection.DeleteFromTable("User", "SystemID = " + userID);
+            }
         }
 
     }

@@ -10,11 +10,11 @@ namespace SadnaSrc.Main
 {
     public class MarketLog
     {
-        private static List<string> publishedLogsIDs;
+        private static readonly List<string> publishedLogsIDs = new List<string>();
+        private static readonly Random random = new Random();
 
         private static string GenerateLogID()
         {
-            var random = new Random();
             return ((char) random.Next(97, 123)) + "" + ((char)random.Next(97,123)) + "" + random.Next(1000, 10000);
         }
         public static void Log(string moduleName, string description)
