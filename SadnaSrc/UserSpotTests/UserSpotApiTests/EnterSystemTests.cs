@@ -6,7 +6,7 @@ using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.UserSpot;
 
-namespace UserSpotTests.UseCaseUnitTest
+namespace UserSpotTests.UserSpotApiTests
 {
     [TestClass]
     public class EnterSystemTests

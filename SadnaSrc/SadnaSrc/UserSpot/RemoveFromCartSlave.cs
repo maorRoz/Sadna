@@ -9,7 +9,6 @@ namespace SadnaSrc.UserSpot
 {
     class RemoveFromCartSlave
     {
-        private readonly UserDL userDB;
 
         private readonly User _user;
 
@@ -19,7 +18,6 @@ namespace SadnaSrc.UserSpot
 
         public RemoveFromCartSlave(User user)
         {
-            userDB = UserDL.Instance;
             Answer = null;
             _user = user;
             userID = user?.SystemID ?? -1;

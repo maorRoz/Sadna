@@ -126,7 +126,7 @@ namespace UserSpotTests.UseCaseUnitTest
         }
 
         [TestMethod]
-        public void RegisteredUserCartisEmptyTest()
+        public void RegisteredUserCartIsEmptyTest()
         {
             DoSignUp("MaorRegister7", "Here 3", "123", "12345678");
             RegisteredUser registeredUser = (RegisteredUser)userServiceSession.MarketUser;
@@ -139,12 +139,10 @@ namespace UserSpotTests.UseCaseUnitTest
             userServiceSession.EnterSystem();
             User user = userServiceSession.MarketUser;
             Assert.IsFalse(user.IsRegisteredUser());
-            Assert.AreEqual(0, user.Cart.GetCartStorage().Length);
             Assert.AreEqual((int) SignUpStatus.Success, userServiceSession.SignUp("MaorRegister8", "Here 3", "123", "12345678").Status);
             user = userServiceSession.MarketUser;
             Assert.IsFalse(user.IsSystemAdmin());
             Assert.IsTrue(user.IsRegisteredUser());
-            Assert.AreEqual(0, user.Cart.GetCartStorage().Length);
         }
 
         [TestMethod]

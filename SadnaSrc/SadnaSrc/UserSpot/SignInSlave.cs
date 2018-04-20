@@ -8,9 +8,9 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class SignInSlave
+    public class SignInSlave
     {
-        private readonly UserDL userDB;
+        private readonly IUserDL _userDB;
 
         private readonly User _guest;
 
@@ -18,9 +18,9 @@ namespace SadnaSrc.UserSpot
 
         private int guestID;
 
-        public SignInSlave(User guest)
+        public SignInSlave(User guest, IUserDL userDB)
         {
-            userDB = UserDL.Instance;
+            _userDB = userDB;
             Answer = null;
             _guest = guest;
             guestID = _guest?.SystemID ?? -1;
@@ -37,7 +37,7 @@ namespace SadnaSrc.UserSpot
                 MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest "
                                           + guestID + " into the system...");
                 object[] userData = ValidateUserExist(name, encryptedPassword);
-                User loggedUser = userDB.LoadUser(userData, _guest.Cart.GetCartStorage());
+                User loggedUser = _userDB.LoadUser(userData, _guest.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + loggedUser.SystemID + " sign in to the system has been successfull!");
                 MarketLog.Log("UserSpot", "User " + loggedUser.SystemID + " is now recognized as Registered User "
                                           + loggedUser.SystemID);
@@ -56,7 +56,7 @@ namespace SadnaSrc.UserSpot
 
         private string FindSimilarUserName(string name)
         {
-            string[] userNames = userDB.UserNamesInSystem();
+            string[] userNames = _userDB.UserNamesInSystem();
             string similarName = "";
             foreach (string userName in userNames)
             {
@@ -80,7 +80,7 @@ namespace SadnaSrc.UserSpot
 
         private object[] ValidateUserExist(string userName,string password)
         {
-            var loadedData = userDB.FindRegisteredUserData(userName, password);
+            var loadedData = _userDB.FindRegisteredUserData(userName, password);
             if (loadedData != null)
             {
                 return loadedData;

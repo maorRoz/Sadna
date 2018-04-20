@@ -56,7 +56,7 @@ namespace SadnaSrc.UserSpot
             object[] values = {name, address, password,creditCard};
             dbConnection.UpdateTable("User","SystemID = "+ userID, columnNames ,valuesNames,values);
             SaveCartItem(userID,guestCart);
-            return new RegisteredUser(userID, name,address,password,creditCard,guestCart);
+            return new RegisteredUser(this,userID, name,address,password,creditCard,guestCart);
         }
         public void SaveUserStatePolicy(int userID,StatePolicy policy)
         {
@@ -175,7 +175,7 @@ namespace SadnaSrc.UserSpot
             var loadedCreditCard = (string)userData[4];
             SaveCartItem(loadedID, guestCart);
 
-            return new RegisteredUser(loadedID, loadedName, loadedAddress, loadedPassword, loadedCreditCard, 
+            return new RegisteredUser(this,loadedID, loadedName, loadedAddress, loadedPassword, loadedCreditCard, 
                 LoadCartItems(loadedID), LoadUserStatePolicy(loadedID), LoadUserStorePolicies(loadedID));
         }
 

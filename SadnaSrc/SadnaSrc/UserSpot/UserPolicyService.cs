@@ -10,15 +10,15 @@ namespace SadnaSrc.UserSpot
 {
     public class UserPolicyService
     {
-        private readonly UserDL _userDB;
+        private readonly IUserDL _userDB;
         public List<StoreManagerPolicy> StorePolicies { get; }
         public List<StatePolicy> StatesPolicies { get; }
 
         private int _userID;
-        public UserPolicyService(int userID)
+        public UserPolicyService(IUserDL userDB, int userID)
         {
             _userID = userID;
-            _userDB = UserDL.Instance;
+            _userDB = userDB;
             StatesPolicies = new List<StatePolicy>();
             StorePolicies = new List<StoreManagerPolicy>();
         }

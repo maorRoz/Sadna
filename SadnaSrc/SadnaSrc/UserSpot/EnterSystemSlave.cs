@@ -25,7 +25,7 @@ namespace SadnaSrc.UserSpot
         public User EnterSystem()
         {
             MarketLog.Log("UserSpot", "New User attempting to enter the system...");
-            User newGuest  = new User(GenerateSystemID());
+            User newGuest  = new User(_userDB,GenerateSystemID());
             MarketLog.Log("UserSpot", "User " + newGuest.SystemID + " has entered the system! " +
                                       "attempting to save the user entry...");
             _userDB.SaveUser(newGuest);

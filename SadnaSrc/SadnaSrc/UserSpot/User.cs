@@ -13,11 +13,11 @@ namespace SadnaSrc.UserSpot
         public CartService Cart { get; }
 
         public int SystemID { get; }
-        public User(int systemID)
+        public User(IUserDL userDB,int systemID)
         {
             SystemID = systemID;
-            PolicyService = new UserPolicyService(SystemID);
-            Cart = new CartService(SystemID);
+            PolicyService = new UserPolicyService(userDB,SystemID);
+            Cart = new CartService(userDB,SystemID);
         }
 
         public bool IsRegisteredUser()

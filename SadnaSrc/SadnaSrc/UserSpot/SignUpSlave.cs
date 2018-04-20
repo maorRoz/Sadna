@@ -8,9 +8,9 @@ using static System.Int32;
 
 namespace SadnaSrc.UserSpot
 {
-    class SignUpSlave
+    public class SignUpSlave
     {
-        private readonly UserDL userDB;
+        private readonly IUserDL _userDB;
 
         private readonly User _guest;
 
@@ -18,9 +18,9 @@ namespace SadnaSrc.UserSpot
 
         private int currentID;
 
-        public SignUpSlave(User guest)
+        public SignUpSlave(User guest, IUserDL userDB)
         {
-            userDB = UserDL.Instance;
+            _userDB = userDB;
             Answer = null;
             _guest = guest;
             currentID = _guest?.SystemID ?? -1;
@@ -36,7 +36,7 @@ namespace SadnaSrc.UserSpot
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User "
                                           + currentID + " data...");
                 ValidateUserNotExist(name);
-                RegisteredUser newRegistered = userDB.RegisterUser(_guest.SystemID,name, address, encryptedPassword,
+                RegisteredUser newRegistered = _userDB.RegisterUser(_guest.SystemID,name, address, encryptedPassword,
                     creditCard, _guest.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + newRegistered.SystemID + " sign up to the system has been successfull!");
                 Answer = new UserAnswer(SignInStatus.Success, "Sign up has been successfull!");
@@ -52,7 +52,7 @@ namespace SadnaSrc.UserSpot
 
         private void ValidateUserNotExist(string userName)
         {
-            if (userDB.IsUserNameExist(userName))
+            if (_userDB.IsUserNameExist(userName))
             {
                 throw new UserException(SignUpStatus.TakenName, currentID + " register action has been requested while " +
                                                 "there is already a User with the given name '"+userName+"' in the system!");

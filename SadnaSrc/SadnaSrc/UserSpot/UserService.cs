@@ -27,14 +27,14 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer SignUp(string name, string address, string password,string creditCard)
         {
-            SignUpSlave slave = new SignUpSlave(MarketUser);
+            SignUpSlave slave = new SignUpSlave(MarketUser,userDB);
             MarketUser = slave.SignUp(name,address,password,creditCard);
             return slave.Answer;
         }
 
         public MarketAnswer SignIn(string name, string password)
         {
-            SignInSlave slave = new SignInSlave(MarketUser);
+            SignInSlave slave = new SignInSlave(MarketUser, userDB);
             MarketUser = slave.SignIn(name,password);
             return slave.Answer;
         }

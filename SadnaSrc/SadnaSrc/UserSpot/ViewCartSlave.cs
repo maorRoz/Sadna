@@ -9,7 +9,6 @@ namespace SadnaSrc.UserSpot
 {
     class ViewCartSlave
     {
-        private readonly UserDL userDB;
 
         private readonly User _user;
 
@@ -18,7 +17,6 @@ namespace SadnaSrc.UserSpot
         private int userID;
         public ViewCartSlave(User user)
         {
-            userDB = UserDL.Instance;
             Answer = null;
             _user = user;
             userID = user?.SystemID ?? -1;
@@ -29,7 +27,6 @@ namespace SadnaSrc.UserSpot
             try
             {
                 ApproveEnetered();
-
                 MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved his cart info...");
                 Answer = new UserAnswer(ViewCartStatus.Success, "View of the user's cart has been granted successfully!",
                     _user.Cart.GetCartStorageToString());

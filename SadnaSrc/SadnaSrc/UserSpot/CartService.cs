@@ -11,13 +11,13 @@ namespace SadnaSrc.UserSpot
     {
         private int _userID;
         private List<CartItem> cartStorage;
-        private UserDL userDB;
+        private IUserDL _userDB;
         private bool _toSave;
 
-        public CartService(int userID)
+        public CartService(IUserDL userDB,int userID)
         {
             _userID = userID;
-            userDB = UserDL.Instance;
+            _userDB = userDB;
             cartStorage = new List<CartItem>();
             _toSave = false;
         }
@@ -87,7 +87,10 @@ namespace SadnaSrc.UserSpot
         public void EmptyCart()
         {
             cartStorage.Clear();
-            userDB.RemoveCart(_userID);
+            if (_toSave)
+            {
+                _userDB.RemoveCart(_userID);
+            }
         }
 
         public void EmptyCart(string store)
@@ -97,7 +100,7 @@ namespace SadnaSrc.UserSpot
             {
                 if (_toSave && item.Store.Equals(store))
                 {
-                    userDB.RemoveCartItem(_userID, item);
+                    _userDB.RemoveCartItem(_userID, item);
                 }
                 else
                 {
@@ -119,7 +122,7 @@ namespace SadnaSrc.UserSpot
                 cartStorage.Add(toAdd);
                 if (_toSave)
                 {
-                    userDB.SaveCartItem(_userID,new[]{toAdd});
+                    _userDB.SaveCartItem(_userID,new[]{toAdd});
                 }
             }            
         }
@@ -132,7 +135,7 @@ namespace SadnaSrc.UserSpot
                 item.ChangeQuantity(quantity);
                 if (_toSave)
                 {
-                    userDB.UpdateCartItemQuantity(item);
+                    _userDB.UpdateCartItemQuantity(item);
                 }
             }
         }
@@ -146,7 +149,7 @@ namespace SadnaSrc.UserSpot
                 cartStorage.Remove(item);
                 if (_toSave)
                 {
-                    userDB.RemoveCartItem(_userID,item);
+                    _userDB.RemoveCartItem(_userID,item);
                 }
                 break;
             }
