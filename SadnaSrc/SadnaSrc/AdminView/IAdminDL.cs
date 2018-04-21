@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.AdminView
 {
-    interface IAdminDL
+    public interface IAdminDL
     {
         string[] GetPurchaseHistory(string field, string givenValue);
         bool IsUserNameExistInHistory(string userName);

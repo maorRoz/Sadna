@@ -17,10 +17,6 @@ namespace BlackBox.StoreBlackBoxTests
 		private IUserBridge _adminBridge;
 		private IUserBridge _guestBridge;
 		private IOrderBridge _orderBridge;
-
-		private readonly string adminName = "Arik1";
-		private readonly string adminPass = "123";
-
 		private readonly string storeAction1 = "PromoteStoreAdmin";
 		private readonly string storeAction2 = "ManageProducts";
 		private readonly string storeAction3 = "DeclareDiscountPolicy";

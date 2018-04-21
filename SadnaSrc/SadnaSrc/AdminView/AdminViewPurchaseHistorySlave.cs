@@ -10,16 +10,16 @@ namespace SadnaSrc.AdminView
 {
     class AdminViewPurchaseHistorySlave
     {
-        private readonly IAdminDL adminDB;
+        private readonly IAdminDL _adminDB;
         private int adminSystemID;
         private IUserAdmin _admin;
 
         public AdminAnswer Answer { get; private set; }
 
 
-        public AdminViewPurchaseHistorySlave(IUserAdmin admin)
+        public AdminViewPurchaseHistorySlave(IAdminDL adminDB, IUserAdmin admin)
         {
-            adminDB = AdminDL.Instance;
+            _adminDB = adminDB;
             Answer = null;
             _admin = admin;
             adminSystemID = _admin.GetAdminSystemID();
@@ -30,7 +30,7 @@ namespace SadnaSrc.AdminView
             try
             {
                 _admin.ValidateSystemAdmin();
-                var historyReport = adminDB.GetPurchaseHistory(field, givenValue);
+                var historyReport = _adminDB.GetPurchaseHistory(field, givenValue);
                 Answer = new AdminAnswer(ViewPurchaseHistoryStatus.Success, "View purchase history has been successful!", historyReport);
             }
             catch (MarketException e)
@@ -79,7 +79,7 @@ namespace SadnaSrc.AdminView
 
         private void ValidateUserNameExistInPurchaseHistory(string userName)
         {
-            if (!adminDB.IsUserNameExistInHistory(userName))
+            if (!_adminDB.IsUserNameExistInHistory(userName))
             {
                 throw new AdminException(ViewPurchaseHistoryStatus.NoUserFound, "Couldn't find any User with " +
                                                                                 "that ID in history records");
@@ -89,7 +89,7 @@ namespace SadnaSrc.AdminView
 
         private void ValidateStoreNameExistInPurchaseHistory(string storeName)
         {
-            if (!adminDB.IsStoreExistInHistory(storeName))
+            if (!_adminDB.IsStoreExistInHistory(storeName))
             {
                 throw new AdminException(ViewPurchaseHistoryStatus.NoStoreFound, "Couldn't find any Store" +
                                                                                  " with that name in history records");

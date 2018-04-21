@@ -15,11 +15,13 @@ namespace SadnaSrc.Main
         private static MarketDB _instance;
 
         public static MarketDB Instance => _instance ?? (_instance = new MarketDB());
+
         private SQLiteConnection _dbConnection;
         private MarketDB()
         {
             InitiateDb();
             CreateTables();
+            InsertByForce();
         }
         private void InitiateDb()
         {
@@ -37,20 +39,22 @@ namespace SadnaSrc.Main
             makeFK.ExecuteNonQuery();
 
         }
+
         private void CreateTables()
         {
-            string[] createTableStrings = {
+            string[] createTableStrings =
+            {
                 CreateSystemLogTable(),
                 CreateSystemErrorsTable(),
                 CreateUserTable(),
                 CreateProductTable(),
-                CreateDiscountTable(), 
-                CreateStockTable(), 
-                CreateLotteryTable(), 
-                CreateLotteryTicketsTable(), 
-                CreateStoreTable(), 
+                CreateDiscountTable(),
+                CreateStockTable(),
+                CreateLotteryTable(),
+                CreateLotteryTicketsTable(),
+                CreateStoreTable(),
                 CreateUserStatePolicyTable(),
-                CreateUserStorePolicyTable(),  
+                CreateUserStorePolicyTable(),
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
                 CreateOrderTable(),
@@ -62,6 +66,9 @@ namespace SadnaSrc.Main
                 var createTableCommand = new SQLiteCommand(createTableStrings[i], _dbConnection);
                 createTableCommand.ExecuteNonQuery();
             }
+        }
+
+        private void InsertByForce() { 
 
             string[] thingsToInsertByForce =
             {
@@ -183,6 +190,7 @@ namespace SadnaSrc.Main
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Ryder','#9','Cluckin Bell','Lottery',1,5.00,'Today')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Vadim Chernov','Goldstar','The Red Rock','Immediate',1,11.00,'Today')",
             };
+
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
                 var insertCommand = new SQLiteCommand(thingsToInsertByForce[i], _dbConnection);
@@ -462,5 +470,9 @@ namespace SadnaSrc.Main
             return new SQLiteCommand(cmd, _dbConnection).ExecuteReader();
         }
 
+        public void Exit()
+        {
+            _instance = null;
+        }
     } 
 }

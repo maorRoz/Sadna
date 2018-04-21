@@ -10,7 +10,7 @@ namespace SadnaSrc.AdminView
 {
     class RemoveUserSlave
     {
-        private readonly IAdminDL adminDB;
+        private readonly IAdminDL _adminDB;
 
 
         public AdminAnswer Answer { get; private set; }
@@ -19,9 +19,9 @@ namespace SadnaSrc.AdminView
         private IUserAdmin _admin;
 
 
-        public RemoveUserSlave(IUserAdmin admin)
+        public RemoveUserSlave(IAdminDL adminDB,IUserAdmin admin)
         {
-            adminDB = AdminDL.Instance;
+            _adminDB = adminDB;
             Answer = null;
             _admin = admin;
             adminSystemID = _admin.GetAdminSystemID();
@@ -39,7 +39,7 @@ namespace SadnaSrc.AdminView
                 MarketLog.Log("AdminView", "User " + userName +
                                            " has been found by the system. Removing user's saved cart and profile...");
 
-                adminDB.DeleteUser(userName);
+                _adminDB.DeleteUser(userName);
                 MarketLog.Log("AdminView", "System Admin " + adminSystemID +
                                            " successfully removed User " + userName + " from the system!");
 
@@ -77,13 +77,13 @@ namespace SadnaSrc.AdminView
 
         private void RemoveSolelyOwnedStores(string userName)
         {
-            string[] solelyOwnedStores = adminDB.FindSolelyOwnedStores();
+            string[] solelyOwnedStores = _adminDB.FindSolelyOwnedStores();
             foreach (string store in solelyOwnedStores)
             {
                 MarketLog.Log("AdminView", "User " + userName + " found to be a sole Store Owner of '"
                                            + store + "' store. System Admin " + adminSystemID
                                            + " deactivating therefore store '" + store + "'");
-                adminDB.CloseStore(store);
+                _adminDB.CloseStore(store);
                 MarketLog.Log("AdminView", "System Admin " + adminSystemID +
                                            " deactivated store '" + store + "' successfully!");
             }
@@ -91,7 +91,7 @@ namespace SadnaSrc.AdminView
 
         private void ValidateUserExist(string userName)
         {
-            if (!adminDB.IsUserExist(userName))
+            if (!_adminDB.IsUserExist(userName))
             {
                 throw new AdminException(RemoveUserStatus.NoUserFound, "Couldn't find any User with that Name to remove");
             }

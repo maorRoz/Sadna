@@ -15,8 +15,6 @@ namespace BlackBox.UserBlackBoxTests
 		private IStoreShoppingBridge _storeGuestBridge;
 		private IStoreManagementBridge _storeManage1;
 		private IStoreManagementBridge _storeManage2;
-		private string usertoSignIn = "vika";
-		private string userPass = "6666";
 
 		[TestInitialize]
 		public void MarketBuilder()

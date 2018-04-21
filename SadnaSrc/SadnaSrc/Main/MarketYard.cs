@@ -83,6 +83,7 @@ namespace SadnaSrc.Main
             refundLotteriesService.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
+            MarketDB.Instance.Exit();
         }
     }
 }
