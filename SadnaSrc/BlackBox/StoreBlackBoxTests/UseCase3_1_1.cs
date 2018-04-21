@@ -17,7 +17,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			SignUp(ref _userBridge, "Pnina", "lo kef", "777777", "88888888");
+		    MarketDB.Instance.InsertByForce();
+            SignUp(ref _userBridge, "Pnina", "lo kef", "777777", "88888888");
 			_storeBridge = StoreShoppingDriver.getBridge();
 			_storeBridge.GetStoreShoppingService(_userBridge.GetUserSession());
 			_storeBridge.OpenStore("lokef", "li");

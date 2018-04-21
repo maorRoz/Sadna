@@ -16,7 +16,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_storeBridge = StoreShoppingDriver.getBridge();
+		    MarketDB.Instance.InsertByForce();
+            _storeBridge = StoreShoppingDriver.getBridge();
 			SignUp("Pnina", "mishol", "7894", "12345678");
 			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.Success, _storeBridge.OpenStore("OOF", "BASA").Status);

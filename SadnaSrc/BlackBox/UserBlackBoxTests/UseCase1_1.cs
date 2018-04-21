@@ -12,6 +12,7 @@ namespace BlackBox.UserBlackBoxTests
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             _bridge = UserDriver.getBridge();
         }
 

@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.UserSpot;
 
-namespace UserSpotTests.PureUnitTest
+namespace UserSpotTests.DbUserSpotIntegration
 {
     [TestClass]
     public class StoreManagerPolicy_Test
@@ -25,6 +25,7 @@ namespace UserSpotTests.PureUnitTest
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             DoSignUp(promoteName, "no-where", promotePassword, "12345678");
             userServiceSignInSession = null;

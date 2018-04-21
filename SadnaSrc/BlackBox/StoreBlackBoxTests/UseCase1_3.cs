@@ -16,6 +16,7 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
+            MarketDB.Instance.InsertByForce();
 			_storeBridge = StoreShoppingDriver.getBridge();
 			SignUp("Pnina", "mishol", "7894", "12345678");
 			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());

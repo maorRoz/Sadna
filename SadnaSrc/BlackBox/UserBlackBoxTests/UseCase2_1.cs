@@ -14,6 +14,7 @@ namespace BlackBox.UserBlackBoxTests
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             _bridgeSignIn = UserDriver.getBridge();
         }
 
@@ -21,6 +22,7 @@ namespace BlackBox.UserBlackBoxTests
 
         public void SignInSucceeded()
         {
+
             SignUp("Shalom", "hatavor", "852", "12345678");
             _bridgeSignIn.EnterSystem();
             Assert.AreEqual((int)SignInStatus.Success, _bridgeSignIn.SignIn("Shalom", "852").Status);
