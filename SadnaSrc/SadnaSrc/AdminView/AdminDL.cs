@@ -10,15 +10,15 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
 {
-    class SystemAdminServiceDL
+    class AdminDL : IAdminDL
     {
 
-        private static SystemAdminServiceDL _instance;
+        private static AdminDL _instance;
 
-        public static SystemAdminServiceDL Instance => _instance ?? (_instance = new SystemAdminServiceDL());
+        public static AdminDL Instance => _instance ?? (_instance = new AdminDL());
 
         private MarketDB dbConnection;
-        private SystemAdminServiceDL()
+        private AdminDL()
         {
             dbConnection = MarketDB.Instance;
         }

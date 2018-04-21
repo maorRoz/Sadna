@@ -10,7 +10,7 @@ namespace SadnaSrc.AdminView
 {
     class RemoveUserSlave
     {
-        private readonly SystemAdminServiceDL adminDB;
+        private readonly IAdminDL adminDB;
 
 
         public AdminAnswer Answer { get; private set; }
@@ -21,7 +21,7 @@ namespace SadnaSrc.AdminView
 
         public RemoveUserSlave(IUserAdmin admin)
         {
-            adminDB = SystemAdminServiceDL.Instance;
+            adminDB = AdminDL.Instance;
             Answer = null;
             _admin = admin;
             adminSystemID = _admin.GetAdminSystemID();

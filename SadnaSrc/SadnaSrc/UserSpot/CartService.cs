@@ -110,7 +110,7 @@ namespace SadnaSrc.UserSpot
             cartStorage = filteredStorage;
         }
 
-        public void AddToCart(string store,string product,double unitPrice,int quantity)
+        public void AddToCart(string product,string store,int quantity,double unitPrice)
         {
             CartItem toAdd = new CartItem(product,store, quantity, unitPrice);
             if (cartStorage.Contains(toAdd))

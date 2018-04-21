@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class RemoveFromCartSlave
+    public class RemoveFromCartSlave
     {
 
         private readonly User _user;
@@ -22,7 +22,7 @@ namespace SadnaSrc.UserSpot
             _user = user;
             userID = user?.SystemID ?? -1;
         }
-        public void RemoveFromCart(string store, string product, double unitPrice)
+        public void RemoveFromCart(string product, string store, double unitPrice)
         {
             MarketLog.Log("UserSpot", "User " + userID + " attempting to remove his cart item: " + product + " from store: " + store + " ...");
             try

@@ -35,9 +35,9 @@ namespace BlackBox
             return _userService.ViewCart();
         }
 
-        public MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity)
+        public MarketAnswer EditCartItem(string store, string product, int quantity, double unitPrice)
         {
-            return _userService.EditCartItem(store, product, unitPrice, quantity);
+            return _userService.EditCartItem(store, product, quantity, unitPrice);
         }
 
         public MarketAnswer RemoveFromCart(string store, string product, double unitPrice)

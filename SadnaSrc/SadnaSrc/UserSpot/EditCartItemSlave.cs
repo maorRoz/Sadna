@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class EditCartItemSlave
+    public class EditCartItemSlave
     {
 
         private readonly User _user;
@@ -22,7 +22,7 @@ namespace SadnaSrc.UserSpot
             _user = user;
             userID = user?.SystemID ?? -1;
         }
-        public void EditCartItem(string store, string product, double unitPrice, int quantity)
+        public void EditCartItem(string store, string product, int quantity,double unitPrice)
         {
             MarketLog.Log("UserSpot", "User " + userID + " attempting to edit his cart item: " + product + " from store: " + store + " ...");
             try

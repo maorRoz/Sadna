@@ -47,10 +47,10 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        public MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity)
+        public MarketAnswer EditCartItem(string store, string product, int quantity, double unitPrice)
         {
             EditCartItemSlave slave = new EditCartItemSlave(MarketUser);
-            slave.EditCartItem(store,product,unitPrice,quantity);
+            slave.EditCartItem(store,product,quantity, unitPrice);
             return slave.Answer;
 
         }
@@ -58,13 +58,13 @@ namespace SadnaSrc.UserSpot
         public MarketAnswer RemoveFromCart(string store, string product, double unitPrice)
         {
             RemoveFromCartSlave slave = new RemoveFromCartSlave(MarketUser);
-            slave.RemoveFromCart(store,product,unitPrice);
+            slave.RemoveFromCart(product, store, unitPrice);
             return slave.Answer;
         }
 
         public void AddToCart(string product, string store, int quantity, double unitPrice)
         {
-            MarketUser.Cart.AddToCart(store,product,unitPrice,quantity);
+            MarketUser.Cart.AddToCart(product, store, quantity,unitPrice);
         }
 
 

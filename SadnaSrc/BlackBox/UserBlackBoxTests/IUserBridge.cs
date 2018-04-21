@@ -13,7 +13,7 @@ namespace BlackBox
 		MarketAnswer SignUp(string name, string address, string password, string creditCard);
 		MarketAnswer SignIn(string name, string password);
 		MarketAnswer ViewCart();
-		MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity);
+		MarketAnswer EditCartItem(string store, string product,int quantity,double unitPrice);
 		MarketAnswer RemoveFromCart(string store, string product, double unitPrice);
 		IUserService GetUserSession();
 		void CleanSession();

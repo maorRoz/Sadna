@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class ViewCartSlave
+    public class ViewCartSlave
     {
 
         private readonly User _user;

@@ -15,13 +15,13 @@ namespace SadnaSrc.Main
         private static MarketDB _instance;
 
         public static MarketDB Instance => _instance ?? (_instance = new MarketDB());
-        private SQLiteConnection _dbConnection;
+        private static SQLiteConnection _dbConnection;
         private MarketDB()
         {
             InitiateDb();
             CreateTables();
         }
-        private void InitiateDb()
+        private static void InitiateDb()
         {
             var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
             programPath = programPath.Replace("\\bin\\Debug", "");
@@ -37,7 +37,7 @@ namespace SadnaSrc.Main
             makeFK.ExecuteNonQuery();
 
         }
-        private void CreateTables()
+        private static void CreateTables()
         {
             string[] createTableStrings = {
                 CreateSystemLogTable(),

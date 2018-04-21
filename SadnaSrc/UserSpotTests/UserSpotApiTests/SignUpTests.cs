@@ -12,13 +12,13 @@ namespace UserSpotTests.UserSpotApiTests
     public class SignUpTests
     {
         private SignUpSlave slave;
-        private int registeredUserID = 5000;
         private User guestUser;
-        private string registeredUserName = "MaorRegister";
-        private string registeredUserAddress = "Here 3";
-        private string registeredUserPassword = "123";
-        private string encryptedUserPassword = UserSecurityService.GetSecuredPassword("123");
-        private string registeredUserCreditCard = "12345678";
+        private readonly int registeredUserID = 5000;
+        private readonly string registeredUserName = "MaorRegister";
+        private readonly string registeredUserAddress = "Here 3";
+        private readonly string registeredUserPassword = "123";
+        private readonly string encryptedUserPassword = UserSecurityService.GetSecuredPassword("123");
+        private readonly string registeredUserCreditCard = "12345678";
         private Mock<IMarketDB> marketDbMocker;
         private Mock<IUserDL> userDbMocker;
 
@@ -32,8 +32,7 @@ namespace UserSpotTests.UserSpotApiTests
             userDbMocker.Setup(x => x.RegisterUser(It.IsAny<int>(),It.IsAny<string>(),
                 It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CartItem[]>()))
                 .Returns(new RegisteredUser(userDbMocker.Object,registeredUserID, registeredUserName,registeredUserAddress,
-                    encryptedUserPassword, registeredUserCreditCard,new CartItem[0],
-                    new []{new StatePolicy(StatePolicy.State.RegisteredUser)}, new StoreManagerPolicy[0]));
+                    encryptedUserPassword, registeredUserCreditCard,new CartItem[0]));
             userDbMocker.Setup(x => x.IsUserNameExist(It.IsAny<string>())).Returns(false);
             guestUser = new User(userDbMocker.Object, registeredUserID);
             slave = new SignUpSlave(guestUser, userDbMocker.Object);
@@ -42,7 +41,9 @@ namespace UserSpotTests.UserSpotApiTests
         [TestMethod]
         public void RegisteredUserIsRegisteredTest()
         {
-            User user = slave.SignUp(registeredUserName, registeredUserAddress, registeredUserPassword, registeredUserCreditCard);
+            User user = slave.SignUp(registeredUserName, registeredUserAddress, registeredUserPassword, 
+                registeredUserCreditCard);
+            Assert.IsFalse(user.HasStorePolicies());
             Assert.IsFalse(user.IsSystemAdmin());
             Assert.IsTrue(user.IsRegisteredUser());
 
@@ -156,7 +157,7 @@ namespace UserSpotTests.UserSpotApiTests
             MarketYard.CleanSession();
         }
 
-        public void CompareUserToData(object[] expected,object[] actual)
+        private void CompareUserToData(object[] expected,object[] actual)
         {
             Assert.AreEqual(expected.Length, actual.Length);
             for (int i = 0; i < expected.Length; i++)
@@ -165,7 +166,7 @@ namespace UserSpotTests.UserSpotApiTests
             }
         }
 
-        public void BadSignUpToDataCompare(User user)
+        private void BadSignUpToDataCompare(User user)
         {
             Assert.IsFalse(user.IsRegisteredUser());
             object[] expected = guestUser.ToData();

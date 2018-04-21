@@ -84,8 +84,9 @@
   <ItemGroup>
     <Compile Include="AdminView\AdminAnswer.cs" />
     <Compile Include="AdminView\AdminViewPurchaseHistorySlave.cs" />
+    <Compile Include="AdminView\IAdminDL.cs" />
     <Compile Include="AdminView\RemoveUserSlave.cs" />
-    <Compile Include="AdminView\SystemAdminServiceDL.cs" />
+    <Compile Include="AdminView\AdminDL.cs" />
     <Compile Include="AdminView\AdminException.cs" />
     <Compile Include="Main\IMarketDB.cs" />
     <Compile Include="Main\IOrderService.cs" />

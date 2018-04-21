@@ -126,7 +126,7 @@ namespace BlackBox.UserBlackBoxTests
 		{
 			_bridge.EnterSystem();
 			_bridge.SignIn(usertoSignIn, userPass);
-			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridge.EditCartItem("BLAH", "bisli", 25.0, 5).Status);
+			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridge.EditCartItem("BLAH", "bisli", 5, 25.0).Status);
 			//didn't edit, everything is the same
 			MarketAnswer res = _bridge.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
@@ -169,7 +169,7 @@ namespace BlackBox.UserBlackBoxTests
 		{
 			_bridge.EnterSystem();
 			_bridge.SignIn(usertoSignIn, userPass);
-			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridge.EditCartItem("BlahStore", "Gunoooo", 25.0, 5).Status);
+			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridge.EditCartItem("BlahStore", "Gunoooo", 5, 25.0).Status);
 			MarketAnswer res = _bridge.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
@@ -189,7 +189,7 @@ namespace BlackBox.UserBlackBoxTests
 		[TestMethod]
 		public void NoItemFoundChangeQuantityProductNameGuest()
 		{
-			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridgeGuest.EditCartItem("BlahStore", "Gunoooo", 25.0, 5).Status);
+			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridgeGuest.EditCartItem("BlahStore", "Gunoooo", 5, 25.0).Status);
 			MarketAnswer res = _bridgeGuest.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
