@@ -18,8 +18,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-
-			SignUp(ref _storeOwnerUserBridge, "Pnina", "Mishol", "7777", "77777777");
+		    MarketDB.Instance.InsertByForce();
+            SignUp(ref _storeOwnerUserBridge, "Pnina", "Mishol", "7777", "77777777");
 			OpenStoreAndProducts();
 			_storeShoppingBridge2 = null;
 			_storeManagementBridge2 = null;

@@ -20,6 +20,7 @@ namespace BlackBox.StoreBlackBoxTests
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             SignIn();
             CreateStore1AndProducts();
             CreateStore2AndProducts();

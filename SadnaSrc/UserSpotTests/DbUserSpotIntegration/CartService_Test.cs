@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.UserSpot;
 
-namespace UserSpotTests.PureUnitTest
+namespace UserSpotTests.DbUserSpotIntegration
 {
 
     [TestClass]
@@ -27,6 +27,7 @@ namespace UserSpotTests.PureUnitTest
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceGuestSession = (UserService)marketSession.GetUserService();
             userServiceGuestSession.EnterSystem();

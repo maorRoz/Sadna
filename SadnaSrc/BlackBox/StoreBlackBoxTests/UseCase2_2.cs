@@ -19,7 +19,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void SuccessInOpeningAStore()
 		{
-			SignUp("Pnina","mishol","7894","12345678");
+		    MarketDB.Instance.InsertByForce();
+            SignUp("Pnina","mishol","7894","12345678");
 			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.Success, _storeBridge.OpenStore("PninaStore", "Ben-Gurion").Status);
 			MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("PninaStore");

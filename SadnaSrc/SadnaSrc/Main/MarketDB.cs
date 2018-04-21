@@ -21,7 +21,6 @@ namespace SadnaSrc.Main
         {
             InitiateDb();
             CreateTables();
-            InsertByForce();
         }
         private void InitiateDb()
         {
@@ -468,11 +467,6 @@ namespace SadnaSrc.Main
         public SQLiteDataReader freeStyleSelect(string cmd)
         {
             return new SQLiteCommand(cmd, _dbConnection).ExecuteReader();
-        }
-
-        public static void Exit()
-        {
-            _instance = null;
         }
     } 
 }

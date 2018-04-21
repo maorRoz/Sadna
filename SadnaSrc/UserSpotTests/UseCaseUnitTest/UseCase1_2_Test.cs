@@ -19,6 +19,7 @@ namespace UserSpotTests.UseCaseUnitTest
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceSession = (UserService) marketSession.GetUserService();
             userServiceSession2 = null;
