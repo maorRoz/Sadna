@@ -76,8 +76,8 @@ namespace BlackBox.UserBlackBoxTests
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-			    "Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90",
-                "Name : bisli Store BlahStore Quantity: 5 Unit Price : 200 Final Price: 1000"
+			    "Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90",
+                "Name : bisli Store : BlahStore Quantity : 5 Unit Price : 200 Final Price : 1000"
 			};
             Assert.AreEqual(cartItemsExpected.Length,cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -96,8 +96,8 @@ namespace BlackBox.UserBlackBoxTests
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
+				"Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)

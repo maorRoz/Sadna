@@ -69,7 +69,7 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedItems = cartDetails.ReportList;
 			string[] expectedItems =
 			{
-				"Name : Ouch Store Toy Quantity: 3 Unit Price : 30 Final Price: 90",
+				"Name : Ouch Store : Toy Quantity : 3 Unit Price : 30 Final Price : 90",
 			};
 			Assert.AreEqual(expectedItems.Length,receivedItems.Length);
 			for (int i = 0; i < receivedItems.Length; i++)
@@ -133,7 +133,7 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedItems = cartDetails.ReportList;
 			string[] expectedItems =
 			{
-				"Name : Ouch Store Toy Quantity: 3 Unit Price : 30 Final Price: 90",
+				"Name : Ouch Store : Toy Quantity : 3 Unit Price : 30 Final Price : 90",
 			};
 			Assert.AreEqual(expectedItems.Length, receivedItems.Length);
 			for (int i = 0; i < receivedItems.Length; i++)

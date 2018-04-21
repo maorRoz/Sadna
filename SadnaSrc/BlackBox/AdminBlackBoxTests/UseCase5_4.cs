@@ -3,7 +3,7 @@ using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBox.BlackBoxAdminTests
+namespace BlackBox.AdminBlackBoxTests
 {
 	[TestClass]
 	public class UseCase5_4

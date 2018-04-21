@@ -68,7 +68,7 @@ namespace SadnaSrc.Main
             }
         }
 
-        private void InsertByForce() { 
+        public void InsertByForce() { 
 
             string[] thingsToInsertByForce =
             {

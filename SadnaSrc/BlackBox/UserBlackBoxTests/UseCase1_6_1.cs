@@ -74,15 +74,15 @@ namespace BlackBox.UserBlackBoxTests
 		{
 			_bridge.EnterSystem();
 			_bridge.SignIn(usertoSignIn, userPass);
-			MarketAnswer res2 = _bridge.EditCartItem("BlahStore", "bisli", 200, 1);
+			MarketAnswer res2 = _bridge.EditCartItem("BlahStore", "bisli", 1, 200);
 			Assert.AreEqual((int)EditCartItemStatus.Success, res2.Status);
 			MarketAnswer res = _bridge.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90",
-				"Name : bisli Store BlahStore Quantity: 6 Unit Price : 200 Final Price: 1200"
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90",
+				"Name : bisli Store : BlahStore Quantity : 6 Unit Price : 200 Final Price : 1200"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -95,15 +95,15 @@ namespace BlackBox.UserBlackBoxTests
 		[TestMethod]
 		public void SuccessChangeQuantityOfProductGuest()
 		{
-			MarketAnswer res2 = _bridgeGuest.EditCartItem("BlahStore2", "doritos", 30, 1);
+			MarketAnswer res2 = _bridgeGuest.EditCartItem("BlahStore2", "doritos", 1, 30);
 			Assert.AreEqual((int)EditCartItemStatus.Success, res2.Status);
 			MarketAnswer res = _bridgeGuest.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-				"Name : doritos Store BlahStore2 Quantity: 4 Unit Price : 30 Final Price: 120"
+				"Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+				"Name : doritos Store : BlahStore2 Quantity : 4 Unit Price : 30 Final Price : 120"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -117,7 +117,7 @@ namespace BlackBox.UserBlackBoxTests
 		public void DidntEnterSystemChangeQuantity()
 		{
 			_bridgeGuest2 = UserDriver.getBridge();
-			MarketAnswer res = _bridgeGuest2.EditCartItem("BlahStore", "bisli", 200, 1);
+			MarketAnswer res = _bridgeGuest2.EditCartItem("BlahStore", "bisli", 1, 200);
 			Assert.AreEqual((int)EditCartItemStatus.DidntEnterSystem, res.Status);
 		}
 
@@ -133,8 +133,8 @@ namespace BlackBox.UserBlackBoxTests
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90",
-				"Name : bisli Store BlahStore Quantity: 5 Unit Price : 200 Final Price: 1000"
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90",
+				"Name : bisli Store : BlahStore Quantity : 5 Unit Price : 200 Final Price : 1000"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -147,14 +147,14 @@ namespace BlackBox.UserBlackBoxTests
 		[TestMethod]
 		public void NoItemFoundChangeQuantityStoreNameGuest()
 		{
-			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridgeGuest.EditCartItem("Blah", "cheaps", 20, 1).Status);
+			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridgeGuest.EditCartItem("Blah", "cheaps", 1, 20).Status);
 			MarketAnswer res = _bridgeGuest.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
+				"Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -175,8 +175,8 @@ namespace BlackBox.UserBlackBoxTests
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90",
-				"Name : bisli Store BlahStore Quantity: 5 Unit Price : 200 Final Price: 1000"
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90",
+				"Name : bisli Store : BlahStore Quantity : 5 Unit Price : 200 Final Price : 1000"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -195,8 +195,8 @@ namespace BlackBox.UserBlackBoxTests
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
+				"Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -210,14 +210,14 @@ namespace BlackBox.UserBlackBoxTests
 		{
 			_bridge.EnterSystem();
 			_bridge.SignIn(usertoSignIn, userPass);
-			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridge.EditCartItem("M", "Gun", 50, 5).Status);
+			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridge.EditCartItem("M", "Gun", 5, 50).Status);
 			MarketAnswer res = _bridge.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90",
-				"Name : bisli Store BlahStore Quantity: 5 Unit Price : 200 Final Price: 1000"
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90",
+				"Name : bisli Store : BlahStore Quantity : 5 Unit Price : 200 Final Price : 1000"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -230,14 +230,14 @@ namespace BlackBox.UserBlackBoxTests
 		[TestMethod]
 		public void NoItemFoundChangeQuantityUnitPriceGuest()
 		{
-			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridgeGuest.EditCartItem("M", "Gun", 50, 5).Status);
+			Assert.AreEqual((int)EditCartItemStatus.NoItemFound, _bridgeGuest.EditCartItem("M", "Gun", 5, 50).Status);
 			MarketAnswer res = _bridgeGuest.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
+				"Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90"
 
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
@@ -254,15 +254,15 @@ namespace BlackBox.UserBlackBoxTests
 		{
 			_bridge.EnterSystem();
 			_bridge.SignIn(usertoSignIn, userPass);
-			Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, _bridge.EditCartItem("BlahStore", "bisli", 200, -200).Status);
+			Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, _bridge.EditCartItem("BlahStore", "bisli", -200, 200).Status);
 			//check the item wasn't changed
 			MarketAnswer res = _bridge.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90",
-				"Name : bisli Store BlahStore Quantity: 5 Unit Price : 200 Final Price: 1000"
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90",
+				"Name : bisli Store : BlahStore Quantity : 5 Unit Price : 200 Final Price : 1000"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -275,15 +275,15 @@ namespace BlackBox.UserBlackBoxTests
 		[TestMethod]
 		public void NegativeQuantityGuest()
 		{
-			Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, _bridgeGuest.EditCartItem("BlahStore", "cheaps", 20, -200).Status);
+			Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, _bridgeGuest.EditCartItem("BlahStore", "cheaps", -200, 20).Status);
 			//check the item wasn't changed
 			MarketAnswer res = _bridgeGuest.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
+				"Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90"
 
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
@@ -299,14 +299,14 @@ namespace BlackBox.UserBlackBoxTests
 		{
 			_bridge.EnterSystem();
 			_bridge.SignIn(usertoSignIn, userPass);
-			Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, _bridge.EditCartItem("BlahStore", "bisli", 200, -5).Status);
+			Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, _bridge.EditCartItem("BlahStore", "bisli", -5, 200).Status);
 			MarketAnswer res = _bridge.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90",
-				"Name : bisli Store BlahStore Quantity: 5 Unit Price : 200 Final Price: 1000"
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90",
+				"Name : bisli Store : BlahStore Quantity : 5 Unit Price : 200 Final Price : 1000"
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
 			for (int i = 0; i < cartItemsReceived.Length; i++)
@@ -318,15 +318,15 @@ namespace BlackBox.UserBlackBoxTests
 		[TestMethod]
 		public void ZeroQuantityGuest()
 		{
-			Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, _bridgeGuest.EditCartItem("BlahStore", "cheaps", 20, -2).Status);
+			Assert.AreEqual((int)EditCartItemStatus.ZeroNegativeQuantity, _bridgeGuest.EditCartItem("BlahStore", "cheaps", -2, 20).Status);
 			//check the item wasn't changed
 			MarketAnswer res = _bridgeGuest.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.Success, res.Status);
 			string[] cartItemsReceived = res.ReportList;
 			string[] cartItemsExpected =
 			{
-				"Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
+				"Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90"
 
 			};
 			Assert.AreEqual(cartItemsExpected.Length, cartItemsReceived.Length);
