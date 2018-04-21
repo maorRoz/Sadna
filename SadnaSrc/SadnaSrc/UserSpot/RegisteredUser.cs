@@ -14,7 +14,8 @@ namespace SadnaSrc.UserSpot
         private string _password;
         public string CreditCard { get; private set; }
 
-        private void InitiateRegisteredUser(string name, string address, string password, string creditCard, CartItem[] savedCart)
+        private void InitiateRegisteredUser(string name, string address, string password,
+            string creditCard, CartItem[] savedCart)
         {
             Name = name;
             Address = address;
@@ -23,17 +24,19 @@ namespace SadnaSrc.UserSpot
             Cart.EnableCartSave();
             Cart.LoadCart(savedCart);
         }
-        public RegisteredUser(int systemID,string name,string address,string password, string creditCard,CartItem[] guestCart) 
-            : base(systemID)
+        public RegisteredUser(IUserDL userDB,int systemID,string name,string address
+            ,string password, string creditCard,CartItem[] guestCart) 
+            : base(userDB,systemID)
         {
             InitiateRegisteredUser(name, address, password, creditCard, guestCart);
             PolicyService.AddStatePolicy(StatePolicy.State.RegisteredUser);
 
         }
 
-        public RegisteredUser(int loadedSystemID, string loadednName, string loadedAddress,string loadedPassword,string loadedcreditCard,
+        public RegisteredUser(IUserDL userDB, int loadedSystemID, string loadednName,
+            string loadedAddress,string loadedPassword,string loadedcreditCard,
             CartItem[] loadedCart, StatePolicy[] loadedStates, StoreManagerPolicy[] loadedStorePermissions) 
-            : base(loadedSystemID)
+            : base(userDB,loadedSystemID)
         {
             InitiateRegisteredUser(loadednName, loadedAddress, loadedPassword, loadedcreditCard, loadedCart);
             PolicyService.LoadPolicies(loadedStates,loadedStorePermissions);

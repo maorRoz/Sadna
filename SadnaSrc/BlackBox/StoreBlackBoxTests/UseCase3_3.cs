@@ -25,7 +25,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			SignUp(ref _bridgeSignUp, "LAMA", "ANI TZRIHA", "121112", "85296363");
+		    MarketDB.Instance.InsertByForce();
+            SignUp(ref _bridgeSignUp, "LAMA", "ANI TZRIHA", "121112", "85296363");
 			SignUp(ref _userToPromoteBridge,"eurovision","France","852963","78945678");
 			SignUp(ref _userToPromoteBridge2,"blah","NotNice","98989","88888888");
 			_storeBridge = StoreShoppingDriver.getBridge();

@@ -71,9 +71,9 @@ namespace BlackBox.StoreBlackBoxTests
 			MarketAnswer cartDetails = _bridgeSignUp.ViewCart();
 			string[] cartItemsExpected =
 			{
-				"Name : bisli Store BlahStore Quantity: 1 Unit Price : 200 Final Price: 200",
-				"Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-				"Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
+				"Name : bisli Store : BlahStore Quantity : 1 Unit Price : 200 Final Price : 200",
+				"Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+				"Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90"
 			};
 
             string[] cartItemsReceived = cartDetails.ReportList;
@@ -98,9 +98,9 @@ namespace BlackBox.StoreBlackBoxTests
             MarketAnswer cartDetails = _signInBridge.ViewCart();
             string[] cartItemsExpected =
             {
-                "Name : bisli Store BlahStore Quantity: 1 Unit Price : 200 Final Price: 200",
-                "Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-                "Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
+                "Name : bisli Store : BlahStore Quantity : 1 Unit Price : 200 Final Price : 200",
+                "Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+                "Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90"
 
             };
 
@@ -254,9 +254,9 @@ namespace BlackBox.StoreBlackBoxTests
             MarketAnswer cartDetails = _bridgeSignUp.ViewCart();
             string[] cartItemsExpected =
             {
-                "Name : bisli Store BlahStore Quantity: 1 Unit Price : 200 Final Price: 200",
-                "Name : cheaps Store BlahStore Quantity: 2 Unit Price : 20 Final Price: 40",
-                "Name : doritos Store BlahStore2 Quantity: 3 Unit Price : 30 Final Price: 90"
+                "Name : bisli Store : BlahStore Quantity : 1 Unit Price : 200 Final Price : 200",
+                "Name : cheaps Store : BlahStore Quantity : 2 Unit Price : 20 Final Price : 40",
+                "Name : doritos Store : BlahStore2 Quantity : 3 Unit Price : 30 Final Price : 90"
 
             };
 

@@ -15,13 +15,21 @@ namespace SadnaSrc.Main
     }
     public class MarketException : Exception
     {
-        private static SQLiteConnection _dbConnection;
-        private static List<string> publishedErrorIDs;
+        private static readonly List<string> publishedErrorIDs = new List<string>();
+        private static readonly Random random = new Random();
         private string errorMessage;
         public int  Status { get; }
+
+        private static IMarketDB _dbConnection = MarketDB.Instance;
+
+
+        public static void SetDB(IMarketDB dbConnection)
+        {
+            _dbConnection = dbConnection;
+        }
         public MarketException(int status,string message)
         {
-            initiateException(message);
+            InitiateException(message);
             Status = status;
 
         }
@@ -29,38 +37,26 @@ namespace SadnaSrc.Main
         public MarketException(MarketError error,string message)
         {
             Status = (int)error;
-            initiateException(message);
+            InitiateException(message);
         }
 
-        private void initiateException(string message)
+        private void InitiateException(string message)
         {
-            var insertRequest = "INSERT INTO System_Errors (ErrorID,ModuleName,Description) VALUES (@idParam,@moduleParam,@descriptionParam)";
-            var commandDb = new SQLiteCommand(insertRequest, _dbConnection);
             string errorID = GenerateErrorID();
+            InsertError(errorID);
             errorMessage = message;
-            commandDb.Parameters.AddWithValue("@idParam", errorID);
-            commandDb.Parameters.AddWithValue("@moduleParam", GetModuleName());
-            commandDb.Parameters.AddWithValue("@descriptionParam", WrapErrorMessageForDb(errorMessage));
-            try
-            {
-                commandDb.ExecuteNonQuery();
-                publishedErrorIDs.Add(errorID);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Problem occured in the attempt to save system error in DB, returned error message :" + e.Message);
-            }
+            publishedErrorIDs.Add(errorID);
         }
 
-        public static void InsertDbConnector(SQLiteConnection dbConnection)
+        private void InsertError(string errorID)
         {
-            _dbConnection = dbConnection;
-            publishedErrorIDs = new List<string>();
+            _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description", 
+                new[] { "@idParam", "@moduleParam", "@descriptionParam" }, 
+                new object []{errorID ,GetModuleName(),WrapErrorMessageForDb(errorMessage)});
         }
 
         private static string GenerateErrorID()
         {
-            var random = new Random();
             return random.Next(1000, 10000) + "" + ((char)random.Next(97, 123)) + "" + ((char)random.Next(97, 123));
         }
 
@@ -86,21 +82,9 @@ namespace SadnaSrc.Main
 
         public static void RemoveErrors()
         {
-            foreach (string errorID in publishedErrorIDs)
+            foreach (var errorID in publishedErrorIDs)
             {
-                var deleteRequest = "DELETE FROM System_Errors WHERE ErrorID LIKE '%" + errorID + "%'";
-                var commandDb = new SQLiteCommand(deleteRequest, _dbConnection);
-                try
-                {
-                    commandDb.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(
-                        "Problem occured in the attempt to communicate with the DB, returned error message :" +
-                        e.Message);
-                    break;
-                }
+                _dbConnection.DeleteFromTable("System_Errors","ErrorID = '"+errorID+"'");
             }
             publishedErrorIDs.Clear();
         }

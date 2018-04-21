@@ -54,11 +54,11 @@ namespace BlackBox
             throw new NotImplementedException();
         }
 
-        public MarketAnswer EditCartItem(string store, string product, double unitPrice, int quantity)
+        public MarketAnswer EditCartItem(string store, string product, int quantity,double unitPrice)
         {
             if (real != null)
             {
-                return real.EditCartItem(store, product, unitPrice, quantity);
+                return real.EditCartItem(store, product, quantity, unitPrice);
             }
             throw new NotImplementedException();
         }

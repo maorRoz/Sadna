@@ -9,12 +9,15 @@ namespace SadnaSrc.UserSpot
 {
     public class CartService
     {
+        private int _userID;
         private List<CartItem> cartStorage;
-        private static UserServiceDL _userDL;
+        private IUserDL _userDB;
         private bool _toSave;
 
-        public CartService(int systemID)
+        public CartService(IUserDL userDB,int userID)
         {
+            _userID = userID;
+            _userDB = userDB;
             cartStorage = new List<CartItem>();
             _toSave = false;
         }
@@ -23,14 +26,22 @@ namespace SadnaSrc.UserSpot
         {
             _toSave = true;
         }
-        public void EstablishServiceDL(UserServiceDL userDL)
-        {
-            _userDL = userDL;
-        }
 
         private static CartItem[] SortedCartStorage(CartItem[] storage)
         {
             return storage.OrderBy(x => x.Quantity).ToArray();
+        }
+
+        public string[] GetCartStorageToString()
+        {
+            var itemRecords = new List<string>();
+            CartItem[] currentStorage = GetCartStorage();
+            foreach (CartItem item in currentStorage)
+            {
+                itemRecords.Add(item.ToString());
+            }
+
+            return itemRecords.ToArray();
         }
 
         public CartItem[] GetCartStorage()
@@ -76,7 +87,10 @@ namespace SadnaSrc.UserSpot
         public void EmptyCart()
         {
             cartStorage.Clear();
-            _userDL.RemoveCart();
+            if (_toSave)
+            {
+                _userDB.RemoveCart(_userID);
+            }
         }
 
         public void EmptyCart(string store)
@@ -86,7 +100,7 @@ namespace SadnaSrc.UserSpot
             {
                 if (_toSave && item.Store.Equals(store))
                 {
-                    _userDL.RemoveCartItem(item);
+                    _userDB.RemoveCartItem(_userID, item);
                 }
                 else
                 {
@@ -96,7 +110,7 @@ namespace SadnaSrc.UserSpot
             cartStorage = filteredStorage;
         }
 
-        public void AddToCart(string store,string product,double unitPrice,int quantity)
+        public void AddToCart(string product,string store,int quantity,double unitPrice)
         {
             CartItem toAdd = new CartItem(product,store, quantity, unitPrice);
             if (cartStorage.Contains(toAdd))
@@ -108,7 +122,7 @@ namespace SadnaSrc.UserSpot
                 cartStorage.Add(toAdd);
                 if (_toSave)
                 {
-                    _userDL.SaveCartItem(new []{toAdd});
+                    _userDB.SaveCartItem(_userID,new[]{toAdd});
                 }
             }            
         }
@@ -121,7 +135,7 @@ namespace SadnaSrc.UserSpot
                 item.ChangeQuantity(quantity);
                 if (_toSave)
                 {
-                    _userDL.UpdateCartItemQuantity(item);
+                    _userDB.UpdateCartItemQuantity(item);
                 }
             }
         }
@@ -135,7 +149,7 @@ namespace SadnaSrc.UserSpot
                 cartStorage.Remove(item);
                 if (_toSave)
                 {
-                    _userDL.RemoveCartItem(item);
+                    _userDB.RemoveCartItem(_userID,item);
                 }
                 break;
             }

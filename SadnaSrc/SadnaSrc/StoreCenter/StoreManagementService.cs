@@ -240,7 +240,7 @@ namespace SadnaSrc.StoreCenter
                 global.DataLayer.RemoveStockListItem(stockListItem);
                 return new StoreAnswer(StoreEnum.Success, "product removed");
             }
-            catch (MarketException e)
+            catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
                 return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
@@ -353,7 +353,7 @@ namespace SadnaSrc.StoreCenter
             {
                 return new StoreAnswer(exe);
             }
-            catch (MarketException exe)
+            catch (MarketException)
             {
                 return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
@@ -392,7 +392,7 @@ namespace SadnaSrc.StoreCenter
             {
                 return new StoreAnswer(exe);
             }
-            catch (MarketException exe)
+            catch (MarketException)
             {
                 return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }

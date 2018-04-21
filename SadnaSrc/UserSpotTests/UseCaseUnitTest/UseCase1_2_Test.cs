@@ -126,7 +126,7 @@ namespace UserSpotTests.UseCaseUnitTest
         }
 
         [TestMethod]
-        public void RegisteredUserCartisEmptyTest()
+        public void RegisteredUserCartIsEmptyTest()
         {
             DoSignUp("MaorRegister7", "Here 3", "123", "12345678");
             RegisteredUser registeredUser = (RegisteredUser)userServiceSession.MarketUser;
@@ -139,12 +139,10 @@ namespace UserSpotTests.UseCaseUnitTest
             userServiceSession.EnterSystem();
             User user = userServiceSession.MarketUser;
             Assert.IsFalse(user.IsRegisteredUser());
-            Assert.AreEqual(0, user.Cart.GetCartStorage().Length);
             Assert.AreEqual((int) SignUpStatus.Success, userServiceSession.SignUp("MaorRegister8", "Here 3", "123", "12345678").Status);
             user = userServiceSession.MarketUser;
             Assert.IsFalse(user.IsSystemAdmin());
             Assert.IsTrue(user.IsRegisteredUser());
-            Assert.AreEqual(0, user.Cart.GetCartStorage().Length);
         }
 
         [TestMethod]
@@ -176,7 +174,7 @@ namespace UserSpotTests.UseCaseUnitTest
         {
             DoSignUp("MaorRegister11", "Here 3", "123", "12345678");
             RegisteredUser adminUser = (RegisteredUser)userServiceSession.MarketUser;
-            object[] expectedData = { adminUser.SystemID, "MaorRegister11", "Here 3", UserService.GetSecuredPassword("123"),"12345678" };
+            object[] expectedData = { adminUser.SystemID, "MaorRegister11", "Here 3", UserSecurityService.GetSecuredPassword("123"),"12345678" };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.IsTrue(adminUser.IsRegisteredUser());
             Assert.IsFalse(adminUser.IsSystemAdmin());
@@ -215,7 +213,7 @@ namespace UserSpotTests.UseCaseUnitTest
             DoSignUp(name, address, password, creditCard);
             Assert.IsFalse(MarketException.hasErrorRaised());
             RegisteredUser registeredUser = (RegisteredUser)userServiceSession.MarketUser;
-            object[] expectedData = { registeredUser.SystemID, name, address, UserService.GetSecuredPassword(password),creditCard };
+            object[] expectedData = { registeredUser.SystemID, name, address, UserSecurityService.GetSecuredPassword(password),creditCard };
             Assert.IsTrue(expectedData.SequenceEqual(registeredUser.ToData()));
         }
     }

@@ -19,7 +19,7 @@ namespace SadnaSrc.MarketHarmony
         /// </summary>
         int GetAdminSystemID();
         /// <summary>
-        /// get the user name
+        /// get the user name.
         /// Make assumption that ValidateSystemAdmin() has been called already
         /// </summary>
         string GetAdminName();

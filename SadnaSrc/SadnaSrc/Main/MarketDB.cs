@@ -1,39 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Common;
 using System.Data.SQLite;
+using System.Data.SQLite.EF6;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
-    public class SystemDL
+    public class MarketDB : IMarketDB
     {
-        private static SQLiteConnection _dbConnection;
+        private static MarketDB _instance;
 
-        protected SystemDL()
+        public static MarketDB Instance => _instance ?? (_instance = new MarketDB());
+
+        private SQLiteConnection _dbConnection;
+        private MarketDB()
         {
-        }
-        public static void InsertDbConnector(SQLiteConnection dbConnection)
-        {
-            _dbConnection = dbConnection;
+            InitiateDb();
             CreateTables();
+            InsertByForce();
+        }
+        private void InitiateDb()
+        {
+            var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
+            programPath = programPath.Replace("\\bin\\Debug", "");
+            string[] programPathParts = programPath.Split('\\');
+            programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
+            programPath = string.Join("\\", programPathParts);
+            var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
+
+            _dbConnection = new SQLiteConnection(dbPath);
+             _dbConnection.Open();
+
+            var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON", _dbConnection);
+            makeFK.ExecuteNonQuery();
+
         }
 
-        private static void CreateTables()
+        private void CreateTables()
         {
-            string[] createTableStrings = {
+            string[] createTableStrings =
+            {
                 CreateSystemLogTable(),
                 CreateSystemErrorsTable(),
                 CreateUserTable(),
                 CreateProductTable(),
-                CreateDiscountTable(), 
-                CreateStockTable(), 
-                CreateLotteryTable(), 
-                CreateLotteryTicketsTable(), 
-                CreateStoreTable(), 
+                CreateDiscountTable(),
+                CreateStockTable(),
+                CreateLotteryTable(),
+                CreateLotteryTicketsTable(),
+                CreateStoreTable(),
                 CreateUserStatePolicyTable(),
-                CreateUserStorePolicyTable(),  
+                CreateUserStorePolicyTable(),
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
                 CreateOrderTable(),
@@ -45,6 +66,9 @@ namespace SadnaSrc.Main
                 var createTableCommand = new SQLiteCommand(createTableStrings[i], _dbConnection);
                 createTableCommand.ExecuteNonQuery();
             }
+        }
+
+        public void InsertByForce() { 
 
             string[] thingsToInsertByForce =
             {
@@ -61,7 +85,7 @@ namespace SadnaSrc.Main
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'Cluckin Bell'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = 'The Red Rock'",
                 "UPDATE Store SET Status = 'Active' WHERE Name = '24'",
-                "UPDATE Store SET Status = 'Active' WHERE Name = '24'",
+                "UPDATE Store SET Status = 'Active' WHERE Name = 'T'",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P1', 'BOX', 100, 'this is a plastic box')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P2', 'Golden BOX', 1000, 'this is a golden box')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P3', 'DeleteMy BOX', 10, 'this is a trush')",
@@ -166,18 +190,20 @@ namespace SadnaSrc.Main
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Ryder','#9','Cluckin Bell','Lottery',1,5.00,'Today')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Vadim Chernov','Goldstar','The Red Rock','Immediate',1,11.00,'Today')",
             };
+
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
-                var insertStoreCommand = new SQLiteCommand(thingsToInsertByForce[i], _dbConnection);
+                var insertCommand = new SQLiteCommand(thingsToInsertByForce[i], _dbConnection);
                 try
                 {
-                    insertStoreCommand.ExecuteNonQuery();
+                    insertCommand.ExecuteNonQuery();
                 }
                 catch (Exception)
                 {
                     //dont care
                 }
             }
+
         }
 
 
@@ -225,7 +251,7 @@ namespace SadnaSrc.Main
                                     )";
         }
 
-    private static string CreateUserStatePolicyTable()
+        private static string CreateUserStatePolicyTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [StatePolicy] (
                                     [SystemID]      INTEGER,
@@ -366,7 +392,7 @@ namespace SadnaSrc.Main
                                     PRIMARY KEY([OrderID],[Store],[Name])
                                     )";
         }
-        protected void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
+        public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
         {
             var insertRequest = "INSERT INTO "+table+" ("+ tableColumns + ") VALUES ("+ string.Join(",", valuesNames)
                                 + ")";
@@ -387,19 +413,19 @@ namespace SadnaSrc.Main
             }
         }
 
-        protected SQLiteDataReader SelectFromTable(string table, string toSelect)
+        public SQLiteDataReader SelectFromTable(string table, string toSelect)
         {
             var selectRequest = "SELECT " + toSelect + " FROM " + table;
             return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
         }
 
-        protected SQLiteDataReader SelectFromTableWithCondition(string table, string toSelect, string condition)
+        public SQLiteDataReader SelectFromTableWithCondition(string table, string toSelect, string condition)
         {
             var selectRequest = "SELECT " + toSelect + " FROM " + table + " WHERE "+condition;
             return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
         }
 
-        protected void UpdateTable(string table,string updateCondition,string[] columnNames, string[] valuesNames, object[] values)
+        public void UpdateTable(string table,string updateCondition,string[] columnNames, string[] valuesNames, object[] values)
         {
             string [] setString = new string[values.Length];
             for (int i = 0; i < setString.Length; i++)
@@ -424,7 +450,7 @@ namespace SadnaSrc.Main
             }
         }
 
-        protected void DeleteFromTable(string table,string deleteCondition)
+        public void DeleteFromTable(string table,string deleteCondition)
         {
             var deleteCommand = "DELETE FROM " + table + " WHERE " + deleteCondition;
             var commandDb = new SQLiteCommand(deleteCommand, _dbConnection);
@@ -439,10 +465,14 @@ namespace SadnaSrc.Main
 
         }
 
-        protected SQLiteDataReader freeStyleSelect(string cmd)
+        public SQLiteDataReader freeStyleSelect(string cmd)
         {
             return new SQLiteCommand(cmd, _dbConnection).ExecuteReader();
         }
 
-    }
+        public static void Exit()
+        {
+            _instance = null;
+        }
+    } 
 }

@@ -7,9 +7,8 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.AdminView
 {
-    class AdminException : MarketException
+    public class AdminException : MarketException
     {
-        private static int _systemID = -1;
 
         public AdminException(MarketError error, string message) : base(error, message) { }
         public AdminException(RemoveUserStatus status, string message) : base((int)status, message)
@@ -20,12 +19,6 @@ namespace SadnaSrc.AdminView
         {
         }
 
-
-        public static void SetUser(int systemID)
-        {
-            _systemID = systemID;
-        }
-
         protected override string GetModuleName()
         {
             return "AdminView";
@@ -33,7 +26,7 @@ namespace SadnaSrc.AdminView
 
         protected override string WrapErrorMessageForDb(string message)
         {
-            return "System Admin " + _systemID + " Error: " + message;
+            return "System Admin Error: " + message;
         }
     }
 }

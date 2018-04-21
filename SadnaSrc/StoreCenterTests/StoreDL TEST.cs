@@ -22,6 +22,7 @@ namespace StoreCenterTests
         [TestInitialize]
         public void BuildSupplyPoint()
         {
+            MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
             handler = ModuleGlobalHandler.GetInstance();
             toDeleteProduct = null;

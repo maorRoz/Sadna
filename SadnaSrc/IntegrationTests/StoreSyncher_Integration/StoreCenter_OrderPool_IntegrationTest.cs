@@ -25,6 +25,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
@@ -379,7 +380,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanGuestSession();
+            userServiceSession.CleanSession();
             orderServiceSession.CleanSession();
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store1, product1));
             storeServiceSession.DataLayer.RemoveStockListItem(storeServiceSession.GetProductFromStore(store1, "Goldstar"));
