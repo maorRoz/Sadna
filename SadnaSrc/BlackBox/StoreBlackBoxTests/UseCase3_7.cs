@@ -23,6 +23,7 @@ namespace BlackBox.StoreBlackBoxTests
 
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             _ownerStoreBridge = StoreManagementDriver.getBridge();
 
             CreateUser1();

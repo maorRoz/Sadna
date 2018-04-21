@@ -19,7 +19,8 @@ namespace BlackBox.UserBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			_bridge = UserDriver.getBridge();
+		    MarketDB.Instance.InsertByForce();
+            _bridge = UserDriver.getBridge();
 			_bridge1 = UserDriver.getBridge();
 			_bridgeGuest = UserDriver.getBridge();
 			_bridgeGuest.EnterSystem();

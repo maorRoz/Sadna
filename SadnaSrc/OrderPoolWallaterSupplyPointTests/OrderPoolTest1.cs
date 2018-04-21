@@ -25,6 +25,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestInitialize]
         public void BuildOrderPool()
         {
+            MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
             userService = market.GetUserService();
             orderService= (OrderService)market.GetOrderService(ref userService);

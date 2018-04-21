@@ -22,6 +22,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestInitialize]
         public void BuildSupplyPoint()
         {
+            MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);

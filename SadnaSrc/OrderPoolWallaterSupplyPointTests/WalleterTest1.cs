@@ -19,6 +19,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestInitialize]
         public void BuildWalleter()
         {
+            MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;       
             paymentService = (PaymentService)market.GetPaymentService();
 
