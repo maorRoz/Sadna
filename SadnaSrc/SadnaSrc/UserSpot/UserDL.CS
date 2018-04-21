@@ -174,7 +174,7 @@ namespace SadnaSrc.UserSpot
             var loadedPassword = (string)userData[3];
             var loadedCreditCard = (string)userData[4];
             SaveCartItem(loadedID, guestCart);
-
+            userIDs.Add(loadedID);
             return new RegisteredUser(this,loadedID, loadedName, loadedAddress, loadedPassword, loadedCreditCard, 
                 LoadCartItems(loadedID), LoadUserStatePolicy(loadedID), LoadUserStorePolicies(loadedID));
         }
