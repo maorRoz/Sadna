@@ -11,7 +11,6 @@ namespace SadnaSrc.UserSpot
 {
     class UserException : MarketException
     {
-        private static int _systemID = -1;
 
         public UserException(MarketError error,string message) : base(error, message) { }
         public UserException(EnterSystemStatus status, string message) : base((int) status, message)
@@ -49,11 +48,6 @@ namespace SadnaSrc.UserSpot
         {
         }
 
-        public static void SetUser(int systemID)
-        {
-            _systemID = systemID;
-        }
-
         protected override string GetModuleName()
         {
             return "UserSpot";
@@ -61,7 +55,7 @@ namespace SadnaSrc.UserSpot
 
         protected override string WrapErrorMessageForDb(string message)
         {
-            return "User " + _systemID + " Error: " + message;
+            return "User Error: " + message;
         }
     }
 }

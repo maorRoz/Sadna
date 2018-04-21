@@ -20,35 +20,14 @@ namespace SadnaSrc.Main
         private static MarketYard _instance;
 
         public static MarketYard Instance => _instance ?? (_instance = new MarketYard());
+
         private static StoreOrderTools refundLotteriesService;
 
-        private static SQLiteConnection _dbConnection;
         public static DateTime MarketDate { get; private set; }
         private MarketYard()
         {
             MarketDate = new DateTime(2018, 4, 14);
-            InitiateDb();
             refundLotteriesService = new StoreOrderTools();
-        }
-
-        private void InitiateDb()
-        {
-            var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
-            programPath = programPath.Replace("\\bin\\Debug", "");
-            string[] programPathParts = programPath.Split('\\');
-            programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
-            programPath = string.Join("\\", programPathParts);
-            var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
-
-            _dbConnection = new SQLiteConnection(dbPath);
-            _dbConnection.Open();
-
-            var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON",_dbConnection);
-            makeFK.ExecuteNonQuery();
-            SystemDL.InsertDbConnector(_dbConnection);
-            MarketException.InsertDbConnector(_dbConnection);
-            MarketLog.InsertDbConnector(_dbConnection);
-
         }
 
         public static void SetDateTime(DateTime marketDate)
@@ -100,15 +79,12 @@ namespace SadnaSrc.Main
             {
                 return;
             }
+
             refundLotteriesService.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
-            Exit();
+            MarketDB.Exit();
             _instance = null;
-        }
-        public static void Exit()
-        {
-            _dbConnection.Close();
         }
     }
 }

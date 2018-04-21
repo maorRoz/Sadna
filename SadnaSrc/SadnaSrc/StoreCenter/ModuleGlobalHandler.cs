@@ -29,7 +29,7 @@ namespace SadnaSrc.StoreCenter
         }
         private ModuleGlobalHandler()
         {
-            DataLayer = new StoreDL();
+            DataLayer = StoreDL.Instance;
             StoreIdCounter = DataLayer.FindMaxStoreId();
             globalProductID = DataLayer.FindMaxProductId();
             globalDiscountCode = DataLayer.FindMaxDiscountId();

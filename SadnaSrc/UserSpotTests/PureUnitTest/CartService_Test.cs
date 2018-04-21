@@ -43,7 +43,7 @@ namespace UserSpotTests.PureUnitTest
         [TestMethod]
         public void LoadCartTest1()
         {
-            CartService cart = new CartService(0);
+            CartService cart = new CartService(UserDL.Instance,0);
             expected.AddRange(new [] {item1, item2, item3, item4});
             cart.LoadCart(new[]{item1,item2,item3,item4});
             Assert.IsTrue(cart.GetCartStorage().SequenceEqual(expected));
@@ -52,7 +52,7 @@ namespace UserSpotTests.PureUnitTest
         [TestMethod]
         public void LoadCartTest2()
         {
-            CartService cart = new CartService(0);
+            CartService cart = new CartService(UserDL.Instance, 0);
             cart.LoadCart(new CartItem[0]);
             Assert.IsTrue(cart.GetCartStorage().SequenceEqual(expected));
         }
@@ -60,7 +60,7 @@ namespace UserSpotTests.PureUnitTest
         [TestMethod]
         public void LoadCartTest3()
         {
-            CartService cart = new CartService(0);
+            CartService cart = new CartService(UserDL.Instance, 0);
             expected.AddRange(new [] {item1,item2});
             cart.LoadCart(new []{item1});
             Assert.IsFalse(cart.GetCartStorage().SequenceEqual(expected));
@@ -71,7 +71,7 @@ namespace UserSpotTests.PureUnitTest
         [TestMethod]
         public void SearchInCartTest1()
         {
-            CartService cart = new CartService(0);
+            CartService cart = new CartService(UserDL.Instance, 0);
             cart.LoadCart(new[] { item1, item2, item3, item4 });
             Assert.AreEqual(item1, cart.SearchInCart(item1.Store, item1.Name, item1.UnitPrice));
             Assert.AreEqual(item3, cart.SearchInCart(item3.Store, item3.Name, item3.UnitPrice));
@@ -80,7 +80,7 @@ namespace UserSpotTests.PureUnitTest
         [TestMethod]
         public void SearchInCartTest2()
         {
-            CartService cart = new CartService(0);
+            CartService cart = new CartService(UserDL.Instance, 0);
             cart.LoadCart(new[] { item1});
             Assert.AreEqual(null,cart.SearchInCart(item2.Store,item2.Name,item2.UnitPrice));
             Assert.AreEqual(null, cart.SearchInCart(item4.Store, item4.Name, item4.UnitPrice));
@@ -89,7 +89,7 @@ namespace UserSpotTests.PureUnitTest
         [TestMethod]
         public void SearchInCartTest3()
         {
-            CartService cart = new CartService(0);
+            CartService cart = new CartService(UserDL.Instance, 0);
             cart.LoadCart(new CartItem[0]);
             Assert.AreEqual(null, cart.SearchInCart(item1.Store, item1.Name, item1.UnitPrice));
             Assert.AreEqual(null, cart.SearchInCart(item2.Store, item2.Name, item2.UnitPrice));
@@ -297,7 +297,6 @@ namespace UserSpotTests.PureUnitTest
         {
             userServiceRegisteredSession = DoEnter();
             Assert.AreEqual((int)SignUpStatus.Success, userServiceRegisteredSession.SignUp(name, address, password, creditCard).Status);
-            userServiceRegisteredSession.Synch();
             Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceRegisteredSession.MarketUser.Cart.GetCartStorage()));
 
         }

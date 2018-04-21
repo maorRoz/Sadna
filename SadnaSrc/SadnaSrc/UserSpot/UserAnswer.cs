@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
-    class UserAnswer : MarketAnswer
+    public class UserAnswer : MarketAnswer
     {
         public UserAnswer(EnterSystemStatus status, string answer) : base((int)status, answer)
         {

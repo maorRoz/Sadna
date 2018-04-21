@@ -11,7 +11,7 @@ namespace SadnaSrc.OrderPool
 {
     class StoreOrderTools
     {
-        private readonly OrderPoolDL _orderDL;
+        private readonly OrderDL _orderDL;
         private SupplyService _supplyService;
         private PaymentService _paymentService;
 
@@ -20,7 +20,7 @@ namespace SadnaSrc.OrderPool
 
         public StoreOrderTools()
         {
-            _orderDL = new OrderPoolDL();
+            _orderDL = OrderDL.Instance;
             _supplyService = SupplyService.Instance;
             _paymentService = PaymentService.Instance;
 
@@ -79,7 +79,6 @@ namespace SadnaSrc.OrderPool
 
         private void Refund(string ticket)
         {
-            int orderId = 0;
             int participantID = _orderDL.GetTicketParticipantID(ticket);
             string creditCardToRefund = _orderDL.GetCreditCardToRefund(participantID);
             string nameToRefund = _orderDL.GetNameToRefund(participantID);
@@ -108,21 +107,21 @@ namespace SadnaSrc.OrderPool
                 _orderDL.AddOrder(order,"Lottery");
                 MarketLog.Log("OrderPool", "Successfully made delivery for item: " + itemName);
             }
-            catch (OrderException e)
+            catch (OrderException)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
             }
-            catch (WalleterException e)
+            catch (WalleterException)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
             }
-            catch (SupplyException e)
+            catch (SupplyException)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
             }
-            catch (MarketException e)
+            catch (MarketException)
             {
                 MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
                                            " Error message has been created!");

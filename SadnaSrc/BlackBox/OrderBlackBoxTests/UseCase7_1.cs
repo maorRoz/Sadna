@@ -23,7 +23,8 @@ namespace BlackBox.OrderBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-			SignUp("Pnina", "mishol", "666", "66666666");
+		    MarketDB.Instance.InsertByForce();
+            SignUp("Pnina", "mishol", "666", "66666666");
 			OpenStoreAndAddProducts();
 			_orderBridge = OrderDriver.getBridge();
 			_userAdminBridge = UserDriver.getBridge();
@@ -70,8 +71,8 @@ namespace BlackBox.OrderBlackBoxTests
 			string[] received = cartDetails.ReportList;
 			string[] expected =
 			{
-				"Name : Coffee Store HAHAHA Quantity: 3 Unit Price : 10 Final Price: 30",
-				"Name : Tea Store Yalla Quantity: 4 Unit Price : 10 Final Price: 40"
+				"Name : Coffee Store : HAHAHA Quantity : 3 Unit Price : 10 Final Price : 30",
+				"Name : Tea Store : Yalla Quantity : 4 Unit Price : 10 Final Price : 40"
 			};
 
 			Assert.AreEqual(expected.Length, cartDetails.ReportList.Length);
@@ -97,8 +98,8 @@ namespace BlackBox.OrderBlackBoxTests
 			string[] received = cartDetails.ReportList;
 			string[] expected =
 			{
-				"Name : Coffee Store HAHAHA Quantity: 3 Unit Price : 10 Final Price: 30",
-				"Name : Tea Store Yalla Quantity: 4 Unit Price : 10 Final Price: 40"
+				"Name : Coffee Store : HAHAHA Quantity : 3 Unit Price : 10 Final Price : 30",
+				"Name : Tea Store : Yalla Quantity : 4 Unit Price : 10 Final Price : 40"
 			};
 			
 			Assert.AreEqual(expected.Length, cartDetails.ReportList.Length);
@@ -284,8 +285,8 @@ namespace BlackBox.OrderBlackBoxTests
 			string[] received = cartDetails.ReportList;
 			string[] expected =
 			{
-				"Name : Coffee Store HAHAHA Quantity: 3 Unit Price : 10 Final Price: 30",
-				"Name : Tea Store Yalla Quantity: 4 Unit Price : 10 Final Price: 40"
+				"Name : Coffee Store : HAHAHA Quantity : 3 Unit Price : 10 Final Price : 30",
+				"Name : Tea Store : Yalla Quantity : 4 Unit Price : 10 Final Price : 40"
 			};
 
 			Assert.AreEqual(expected.Length, received.Length);
@@ -315,8 +316,8 @@ namespace BlackBox.OrderBlackBoxTests
 			string[] received = cartDetails.ReportList;
 			string[] expected =
 			{
-				"Name : Coffee Store HAHAHA Quantity: 3 Unit Price : 10 Final Price: 30",
-				"Name : Tea Store Yalla Quantity: 4 Unit Price : 10 Final Price: 40"
+				"Name : Coffee Store : HAHAHA Quantity : 3 Unit Price : 10 Final Price : 30",
+				"Name : Tea Store : Yalla Quantity : 4 Unit Price : 10 Final Price : 40"
 			};
 
 			Assert.AreEqual(expected.Length, received.Length);

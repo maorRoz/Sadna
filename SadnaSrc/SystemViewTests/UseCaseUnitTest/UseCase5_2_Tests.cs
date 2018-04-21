@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.AdminView;
 
-namespace SystemViewTests
+namespace SystemViewTests.UseCaseUnitTest
 {
     [TestClass]
     public class UseCase5_2_Tests
@@ -21,30 +21,22 @@ namespace SystemViewTests
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceSession = marketSession.GetUserService();
         }
 
         [TestMethod]
-        public void RemoveUserTest()
+        public void RemoveUserSoleOwnerTest()
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserNameSoleOwner).Status);
-            Assert.IsFalse(MarketException.hasErrorRaised());
+
         }
 
         [TestMethod]
         public void RemoveUserNotSoleOwnerTest()
-        {
-            DoSignInToAdmin();
-            adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
-            Assert.AreEqual((int)RemoveUserStatus.Success, adminServiceSession.RemoveUser(toRemoveUserNameSoleOwner).Status);
-
-        }
-
-        [TestMethod]
-        public void RemoveUserSoleOwnerTest()
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
@@ -96,7 +88,7 @@ namespace SystemViewTests
         [TestCleanup]
         public void AdminTestCleanUp()
         {
-            userServiceSession.CleanGuestSession();
+            userServiceSession.CleanSession();
             MarketYard.CleanSession();
         }
 

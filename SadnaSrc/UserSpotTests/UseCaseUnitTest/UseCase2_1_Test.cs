@@ -38,7 +38,7 @@ namespace UserSpotTests.UseCaseUnitTest
             DoSignUpSignIn("MaorLogin2", "Here 4", "123", "12345678");
             object[] loggedUserData = ((RegisteredUser) userServiceSignInSession.MarketUser).ToData();
             object[] registeredUserData = ((RegisteredUser)userServiceSignUpSession.MarketUser).ToData();
-            object[] expectedData = { loggedUserData[0], "MaorLogin2", "Here 4", UserService.GetSecuredPassword("123"),"12345678" };
+            object[] expectedData = { loggedUserData[0], "MaorLogin2", "Here 4", UserSecurityService.GetSecuredPassword("123"),"12345678" };
             Assert.IsTrue(loggedUserData.SequenceEqual(registeredUserData));
             Assert.IsTrue(loggedUserData.SequenceEqual(expectedData));
         }
@@ -151,7 +151,7 @@ namespace UserSpotTests.UseCaseUnitTest
         {
             DoSignUpSignIn("MaorLogin17", "Here 3", "123", "12345678");
             RegisteredUser adminUser = (RegisteredUser)userServiceSignInSession.MarketUser;
-            object[] expectedData = { adminUser.SystemID, "MaorLogin17", "Here 3", UserService.GetSecuredPassword("123"),"12345678" };
+            object[] expectedData = { adminUser.SystemID, "MaorLogin17", "Here 3", UserSecurityService.GetSecuredPassword("123"),"12345678" };
             Assert.IsTrue(expectedData.SequenceEqual(adminUser.ToData()));
             Assert.IsTrue(adminUser.IsRegisteredUser());
             Assert.IsFalse(adminUser.IsSystemAdmin());
@@ -219,7 +219,6 @@ namespace UserSpotTests.UseCaseUnitTest
             userServiceSignUpSession = (UserService)marketSession.GetUserService();
             userServiceSignUpSession.EnterSystem();
             Assert.AreEqual((int) SignUpStatus.Success, userServiceSignUpSession.SignUp(name, address, password, creditCard).Status);
-            userServiceSignInSession.Synch();
 
         }
         private void MissingCredentialsSignInTest(string name, string address,

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace IntegrationTests.FullCycle_Integration
 {
     [TestClass]
     public class LotteryEndToEnd
@@ -27,7 +27,7 @@ namespace StoreCenterTests
         [TestInitialize]
         public void BuildStore()
         {
-
+            MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
             handler = ModuleGlobalHandler.GetInstance();
             userService = market.GetUserService();

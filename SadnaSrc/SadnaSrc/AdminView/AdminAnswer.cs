@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.AdminView
 {
-    class AdminAnswer : MarketAnswer
+    public class AdminAnswer : MarketAnswer
     {
         public AdminAnswer(RemoveUserStatus status, string answer) : base((int)status, answer)
         {

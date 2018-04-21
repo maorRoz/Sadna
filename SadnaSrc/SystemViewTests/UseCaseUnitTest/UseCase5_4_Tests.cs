@@ -7,7 +7,7 @@ using SadnaSrc.AdminView;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.Main;
 
-namespace SystemViewTests
+namespace SystemViewTests.UseCaseUnitTest
 {
 
     [TestClass]
@@ -27,6 +27,7 @@ namespace SystemViewTests
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceSession = marketSession.GetUserService();
         }
@@ -112,7 +113,7 @@ namespace SystemViewTests
         [TestCleanup]
         public void AdminTestCleanUp()
         {
-            userServiceSession.CleanGuestSession();
+            userServiceSession.CleanSession();
             MarketYard.CleanSession();
     
         }

@@ -21,8 +21,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
-
-			SignUp(ref _storeOwnerUserBridge, "Pnina", "Mishol", "7777", "77777777");
+		    MarketDB.Instance.InsertByForce();
+            SignUp(ref _storeOwnerUserBridge, "Pnina", "Mishol", "7777", "77777777");
 			OpenStoreAndProducts();
 			_storeShoppingBridge2 = null;
 			_storeManagementBridge2 = null;
@@ -69,7 +69,7 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedItems = cartDetails.ReportList;
 			string[] expectedItems =
 			{
-				"Name : Ouch Store Toy Quantity: 3 Unit Price : 30 Final Price: 90",
+				"Name : Ouch Store : Toy Quantity : 3 Unit Price : 30 Final Price : 90",
 			};
 			Assert.AreEqual(expectedItems.Length,receivedItems.Length);
 			for (int i = 0; i < receivedItems.Length; i++)
@@ -133,7 +133,7 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedItems = cartDetails.ReportList;
 			string[] expectedItems =
 			{
-				"Name : Ouch Store Toy Quantity: 3 Unit Price : 30 Final Price: 90",
+				"Name : Ouch Store : Toy Quantity : 3 Unit Price : 30 Final Price : 90",
 			};
 			Assert.AreEqual(expectedItems.Length, receivedItems.Length);
 			for (int i = 0; i < receivedItems.Length; i++)

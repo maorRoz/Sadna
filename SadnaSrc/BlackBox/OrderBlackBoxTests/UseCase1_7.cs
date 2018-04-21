@@ -22,6 +22,7 @@ namespace BlackBox.OrderBlackBoxTests
 		[TestInitialize]
 		public void MarketBuilder()
 		{
+            MarketDB.Instance.InsertByForce();
 			SignUp("Pnina", "mishol", "666", "66666666");
 			OpenStoreAndAddProducts();
 			_orderBridge = OrderDriver.getBridge();

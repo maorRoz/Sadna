@@ -49,8 +49,8 @@ namespace SadnaSrc.UserSpot
 
         public override string ToString()
         {
-            return "Name : " + Name + " Store " + Store + " Quantity: " + Quantity + " Unit Price : " + UnitPrice
-                   + " Final Price: " + FinalPrice ;
+            return "Name : " + Name + " Store : " + Store + " Quantity : " + Quantity + " Unit Price : " + UnitPrice
+                   + " Final Price : " + FinalPrice ;
         }
 
         public override bool Equals(object obj)

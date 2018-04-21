@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 
-namespace BlackBox.BlackBoxAdminTests
+namespace BlackBox.AdminBlackBoxTests
 {
 	[TestClass]
 	public class UseCase5_2
@@ -25,7 +25,8 @@ namespace BlackBox.BlackBoxAdminTests
 
 		public void MarketBuilder()
 		{
-			_adminBridge = AdminDriver.getBridge();
+		    MarketDB.Instance.InsertByForce();
+            _adminBridge = AdminDriver.getBridge();
 			SignUp(ref _signUpBridge1, userSoleStoreOwner, "mishol", userSoleStoreOwnerPass, "12345678");
 			SignUp(ref _signUpBridge2, userNotSoleStoreOwner, "susia", userNotSoleStoreOwnerPass, "12345678");
 			_storeBridge = StoreShoppingDriver.getBridge();
