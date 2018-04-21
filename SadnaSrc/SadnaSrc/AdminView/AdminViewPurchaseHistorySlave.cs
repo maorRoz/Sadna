@@ -8,7 +8,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
 {
-    class AdminViewPurchaseHistorySlave
+    public class AdminViewPurchaseHistorySlave
     {
         private readonly IAdminDL _adminDB;
         private int adminSystemID;

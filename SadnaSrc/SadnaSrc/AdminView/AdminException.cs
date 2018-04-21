@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.AdminView
 {
-    class AdminException : MarketException
+    public class AdminException : MarketException
     {
 
         public AdminException(MarketError error, string message) : base(error, message) { }

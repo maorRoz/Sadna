@@ -8,15 +8,15 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
 {
-    class RemoveUserSlave
+    public class RemoveUserSlave
     {
         private readonly IAdminDL _adminDB;
 
 
         public AdminAnswer Answer { get; private set; }
 
-        private int adminSystemID;
-        private IUserAdmin _admin;
+        private readonly int adminSystemID;
+        private readonly IUserAdmin _admin;
 
 
         public RemoveUserSlave(IAdminDL adminDB,IUserAdmin admin)
