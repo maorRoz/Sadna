@@ -26,6 +26,7 @@ namespace BlackBox.OrderBlackBoxTests
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             SignUpStoreOwner("Pnina", "mishol", "666", "66666666");
             OpenStoreAndAddProducts();
             _userAdminBridge = UserDriver.getBridge();
@@ -234,7 +235,7 @@ namespace BlackBox.OrderBlackBoxTests
             _orderBridge3?.CleanSession();
             _orderBridge3?.EnableSupplySystem();
             _orderBridge3?.EnablePaymentSystem();
-            _userAdminBridge.CleanMarket();
+            _userAdminBridge?.CleanMarket();
         }
 
         private void SignUpStoreOwner(string name, string address, string password, string creditCard)

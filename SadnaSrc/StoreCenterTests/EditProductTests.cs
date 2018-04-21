@@ -20,6 +20,7 @@ namespace StoreCenterTests
         [TestInitialize]
         public void BuildStore()
         {
+            MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
             handler = ModuleGlobalHandler.GetInstance();
             userService = market.GetUserService();

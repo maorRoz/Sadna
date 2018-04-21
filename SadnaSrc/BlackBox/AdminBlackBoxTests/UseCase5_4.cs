@@ -29,7 +29,8 @@ namespace BlackBox.AdminBlackBoxTests
 
 		public void MarketBuilder()
 		{
-			_adminBridge = AdminDriver.getBridge();
+		    MarketDB.Instance.InsertByForce();
+            _adminBridge = AdminDriver.getBridge();
 
 			CreateUser1();
 			CreateUser2();

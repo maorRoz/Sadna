@@ -33,7 +33,8 @@ namespace BlackBox.StoreBlackBoxTests
         [TestInitialize]
 		public void MarketBuilder()
 		{
-			SignUp(ref _bridgeSignUp, "Odin", "Valhalla", "121112", "85296363");
+		    MarketDB.Instance.InsertByForce();
+            SignUp(ref _bridgeSignUp, "Odin", "Valhalla", "121112", "85296363");
 			SignUp(ref _userToPromoteBridge,"Thor","Midgard", "121112", "78945678");
 			SignUp(ref _userToPromoteBridge2,"Loki","Somewhere Else", "121112", "88888888");
 			_storeBridge = StoreShoppingDriver.getBridge();

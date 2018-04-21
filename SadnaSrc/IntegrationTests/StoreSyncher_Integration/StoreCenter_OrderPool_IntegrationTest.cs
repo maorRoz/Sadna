@@ -25,6 +25,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();

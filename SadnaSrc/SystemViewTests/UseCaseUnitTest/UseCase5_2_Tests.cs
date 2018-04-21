@@ -21,6 +21,7 @@ namespace SystemViewTests.UseCaseUnitTest
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceSession = marketSession.GetUserService();
         }

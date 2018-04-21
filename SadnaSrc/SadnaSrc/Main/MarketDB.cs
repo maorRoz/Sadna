@@ -470,7 +470,7 @@ namespace SadnaSrc.Main
             return new SQLiteCommand(cmd, _dbConnection).ExecuteReader();
         }
 
-        public void Exit()
+        public static void Exit()
         {
             _instance = null;
         }
