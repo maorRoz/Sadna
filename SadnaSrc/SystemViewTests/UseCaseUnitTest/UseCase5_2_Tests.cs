@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.AdminView;
 
-namespace SystemViewTests
+namespace SystemViewTests.UseCaseUnitTest
 {
     [TestClass]
     public class UseCase5_2_Tests

@@ -17,14 +17,12 @@ namespace SadnaSrc.Main
          SQLiteDataReader SelectFromTableWithCondition(string table, string toSelect, string condition);
 
 
-         void UpdateTable(string table, string updateCondition, string[] columnNames,
-            string[] valuesNames, object[] values);
-
+         void UpdateTable(string table, string updateCondition, string[] columnNames,string[] valuesNames, object[] values);
+ 
 
          void DeleteFromTable(string table, string deleteCondition);
 
          SQLiteDataReader freeStyleSelect(string cmd);
 
-         void Exit();
     }
 }

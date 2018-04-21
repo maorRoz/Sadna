@@ -7,7 +7,7 @@ using SadnaSrc.AdminView;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.Main;
 
-namespace SystemViewTests
+namespace SystemViewTests.UseCaseUnitTest
 {
 
     [TestClass]

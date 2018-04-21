@@ -79,16 +79,10 @@ namespace SadnaSrc.Main
             {
                 return;
             }
+
             refundLotteriesService.CleanSession();
             MarketLog.RemoveLogs();
             MarketException.RemoveErrors();
-            Exit();
-            _instance = null;
-        }
-
-        public static void Exit()
-        {
-            MarketDB.Instance.Exit();
         }
     }
 }

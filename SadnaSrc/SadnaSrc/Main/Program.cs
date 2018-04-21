@@ -12,7 +12,6 @@ namespace SadnaSrc.Main
         static void Main(string[] args)
         {
             var marketSystem = MarketYard.Instance;
-            MarketYard.Exit();
         }
     }
 }
