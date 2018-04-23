@@ -5,7 +5,7 @@ $(document).ready(function() {
 
     socket.connectionMethods.onConnected = () => {
         console.log('client has been connected!');
-        socket.invoke('EnterSystem', socket);
+        socket.invoke('EnterSystem', socket.connectionId);
     }
 
     socket.connectionMethods.onDisconnected = () => {
