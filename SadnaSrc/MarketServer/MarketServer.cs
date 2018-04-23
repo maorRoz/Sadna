@@ -23,12 +23,12 @@ namespace MarketServer
             await InvokeClientMethodToAllAsync("marketMessage", socketId, message);
         }
 
-        public async Task EnterSystem()
+        public async Task EnterSystem(object socketId)
         {
-            IUserService user = marketSession.GetUserService();
-            user.EnterSystem();
+            var user = marketSession.GetUserService();
+            var id = user.EnterSystem().ReportList[0];
             users.Add(user);
-            await InvokeClientMethodToAllAsync("identifyClient", 3003);
+            await InvokeClientMethodAsync(null,"identifyClient", new object[]{id});
         }
     }
 }

@@ -9,7 +9,7 @@ namespace SadnaSrc.UserSpot
 {
     public class UserAnswer : MarketAnswer
     {
-        public UserAnswer(EnterSystemStatus status, string answer) : base((int)status, answer)
+        public UserAnswer(EnterSystemStatus status, string answer,int userId) : base((int)status, answer,new[]{userId.ToString()})
         {
 
         }

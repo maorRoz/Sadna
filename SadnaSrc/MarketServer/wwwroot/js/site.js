@@ -1,21 +1,20 @@
 ﻿// Write your JavaScript code.
 $(document).ready(function() {
-    var connection = new WebSocketManager.Connection('ws://localhost:3000/market');
-    connection.enableLogging = true;
+    var socket = new WebSocketManager.Connection('ws://localhost:3000/market');
+    socket.enableLogging = true;
 
-    connection.connectionMethods.onConnected = () => {
+    socket.connectionMethods.onConnected = () => {
         console.log('client has been connected!');
-        connection.invoke('EnterSystem', connection.connectionId, message);
+        socket.invoke('EnterSystem', socket);
     }
 
-    connection.connectionMethods.onDisconnected = () => {
-        console.log('client has been disconnected!');
+    socket.connectionMethods.onDisconnected = () => {
     }
 
-    connection.clientMethods['identifyClient'] = (userId) => {
+    socket.clientMethods['identifyClient'] = (userId) => {
         var messageText = 'your user id is:' + userId;
-        console.log(userId);
+        console.log(messageText);
     }
-    connection.start();
+    socket.start();
 
 })
