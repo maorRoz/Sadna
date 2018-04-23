@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "SignIn";
+}
+
+<h2>Login</h2>
+
+<div class="row top-space">
+    <div class="col-lg-10">
+        <p>Username:</p>
+        <input class="form-control" id="user-name-entry" />
+        <br />
+        <p>Password:</p>
+        <input class="form-control" id="user-password-entry" />
+        <br />
+        <br />
+        <button class="btn btn-primary" id="sign-in-submit">Login</button>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+}
