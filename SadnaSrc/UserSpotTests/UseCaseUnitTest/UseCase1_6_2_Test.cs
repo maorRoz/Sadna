@@ -72,7 +72,7 @@ namespace UserSpotTests.UseCaseUnitTest
         {
             userServiceRegisteredSession = (UserService)marketSession.GetUserService();
             Assert.AreEqual((int)RemoveFromCartStatus.DidntEnterSystem, userServiceRegisteredSession.RemoveFromCart("X", "Health Potion", 5.0).Status);
-            Assert.IsTrue(MarketException.hasErrorRaised());
+            Assert.IsTrue(MarketException.HasErrorRaised());
         }
 
         [TestMethod]

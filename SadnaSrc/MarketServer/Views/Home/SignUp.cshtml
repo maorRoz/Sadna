@@ -1,27 +1,35 @@
 ﻿
 @{
-    ViewData["Title"] = "SignUp";
+    ViewData["Title"] = "Sign Up";
 }
 <h2>@ViewData["Title"]</h2>
 
 <div class="row top-space">
     <div class="col-lg-10">
-        <div id="signup-form">
-            <p>Username:</p>
-            <input class="form-control" id="user-name-entry"/>
-            <br/>
-            <p>Address:</p>
-            <input class="form-control" id="user-address-entry"/>
-            <br/>
-            <p>Password:</p>
-            <input class="form-control" id="user-password-entry"/>
-            <br/>
-            <p>Credit Card:</p>
-            <input class="form-control" id="user-creditcard-entry"/>
-            <br/>
-            <br/>
+        <div id="alertContainer"></div>
+
+            <div>
+                <label for="user-name-entry">UserName:</label>
+                <input class="form-control" id="user-name-entry" />
+            </div>
+            <br />
+            <div>
+                <label for="user-address-entry">Address:</label>
+                <input class="form-control" id="user-address-entry" />
+            </div>
+            <br />
+            <div>
+                <label for="user-password-entry">Password:</label>
+                <input class="form-control" id="user-password-entry" />
+            </div>
+            <br />
+            <div>
+                <label for="user-creditcard-entry">Credit Card:</label>
+                <input class="form-control" id="user-creditcard-entry" />
+            </div>
+            <br />
+            <br />
             <button class="btn btn-primary" id="submit-signup-button">Register</button>
-        </div>
    </div>
 </div>
 

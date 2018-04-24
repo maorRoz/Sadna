@@ -29,30 +29,30 @@ namespace SadnaSrc.Main
         }
         public MarketException(int status,string message)
         {
-            InitiateException(message);
+            InitiateException(GetModuleName(),WrapErrorMessageForDb(message));
             Status = status;
 
         }
 
         public MarketException(MarketError error,string message)
         {
+            InitiateException(GetModuleName(), WrapErrorMessageForDb(message));
             Status = (int)error;
-            InitiateException(message);
         }
 
-        private void InitiateException(string message)
+        private void InitiateException(string moduleName,string message)
         {
             string errorID = GenerateErrorID();
-            InsertError(errorID);
+            InsertError(errorID, moduleName,message);
             errorMessage = message;
             publishedErrorIDs.Add(errorID);
         }
 
-        private void InsertError(string errorID)
+        private void InsertError(string errorID,string moduleName,string message)
         {
             _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description", 
                 new[] { "@idParam", "@moduleParam", "@descriptionParam" }, 
-                new object []{errorID ,GetModuleName(),WrapErrorMessageForDb(errorMessage)});
+                new object []{errorID , moduleName, message });
         }
 
         private static string GenerateErrorID()
@@ -75,7 +75,7 @@ namespace SadnaSrc.Main
             return "General Error: " + message;
         }
 
-        public static bool hasErrorRaised()
+        public static bool HasErrorRaised()
         {
             return publishedErrorIDs.Count > 0;
         }

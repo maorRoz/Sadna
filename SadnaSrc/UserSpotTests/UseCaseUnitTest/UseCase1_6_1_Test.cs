@@ -133,7 +133,7 @@ namespace UserSpotTests.UseCaseUnitTest
             userServiceRegisteredSession = (UserService)marketSession.GetUserService();
             Assert.AreEqual((int)EditCartItemStatus.DidntEnterSystem, userServiceRegisteredSession.EditCartItem("X",
                 "Health Potion", -2, 5.0).Status);
-            Assert.IsTrue(MarketException.hasErrorRaised());
+            Assert.IsTrue(MarketException.HasErrorRaised());
         }
 
         [TestMethod]

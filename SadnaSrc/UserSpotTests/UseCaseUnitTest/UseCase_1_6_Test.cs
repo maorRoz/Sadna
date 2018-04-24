@@ -67,7 +67,7 @@ namespace UserSpotTests.UseCaseUnitTest
         {
             userServiceRegisteredSession = (UserService)marketSession.GetUserService();
             Assert.AreEqual((int)ViewCartStatus.DidntEnterSystem, userServiceRegisteredSession.ViewCart().Status);
-            Assert.IsTrue(MarketException.hasErrorRaised());
+            Assert.IsTrue(MarketException.HasErrorRaised());
         }
         [TestMethod]
         public void ViewEmptyCartTest()

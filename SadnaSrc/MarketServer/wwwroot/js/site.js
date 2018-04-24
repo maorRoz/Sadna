@@ -20,7 +20,6 @@ $(document).ready(function() {
         var addressEntry = $('#user-address-entry').val().trim();
         var passEntry = $('#user-password-entry').val().trim();
         var creditEntry = $('#user-creditcard-entry').val().trim();
-        $('#user-name-entry').val('');
         socket.invoke('SignUpUser',
             socketId,
             getParameterValues('SystemId'),
@@ -34,7 +33,22 @@ $(document).ready(function() {
         console.log(addressEntry);
         console.log(passEntry);
         console.log(creditEntry);
-        console.log('clicking!!!');
+        console.log('clicking submit signup!!!');
+    }
+
+    function submitSignIn() {
+        var nameEntry = $('#user-name-entry').val().trim();
+        var passEntry = $('#user-password-entry').val().trim();
+        socket.invoke('SignInUser',
+            socketId,
+            getParameterValues('SystemId'),
+            nameEntry,
+            passEntry);
+        console.log(socketId);
+        console.log(getParameterValues('SystemId'));
+        console.log(nameEntry);
+        console.log(passEntry);
+        console.log('clicking submit signin!!!');
     }
 
 
@@ -57,21 +71,35 @@ $(document).ready(function() {
         location.href = window.location.href + '?SystemId=' + userId;
     }
 
+    socket.clientMethods['LoggingMarket'] = (statusCode, message,userId) => {
+        console.log(statusCode);
+        console.log(message);
+        if (statusCode === 0) {
+            location.href = 'BrowseMarket' + '?SystemId=' + userId;
+        }
+        var alertMessage = $("<div class='alert'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>"+message +"</div>");
+        $('#alertContainer').append(alertMessage);
+    }
+
+    /*<div class="alert">
+    <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
+    This is an alert box.
+</div>*/
+
     socket.clientMethods['GetApiAnswer'] = (answer) => {
         console.log(answer);
     }
 
-    socket.clientMethods['LoggingMarket'] = (statusCode, message,userId) => {
-        console.log(statusCode);
-        console.log(message);
-        location.href = 'BrowseMarket' + '?SystemId=' + userId;
-    }
-
     socket.start();
 
-    var $button = document.getElementById('submit-signup-button');
-    if ($button !== undefined && $button !== null) {
-        $button.onclick = function () { submitSignUp(); }
+    var $submitSignupButton = document.getElementById('submit-signup-button');
+    if ($submitSignupButton !== undefined && $submitSignupButton !== null) {
+        $submitSignupButton.onclick = function () { submitSignUp(); }
+    }
+
+    var $submitSigninButton = document.getElementById('submit-signin-button');
+    if ($submitSigninButton !== undefined && $submitSigninButton !== null) {
+        $submitSigninButton.onclick = function () { submitSignIn(); }
     }
 
 })

@@ -41,7 +41,7 @@ namespace SadnaSrc.UserSpot
                 MarketLog.Log("UserSpot", "User " + loggedUser.SystemID + " sign in to the system has been successfull!");
                 MarketLog.Log("UserSpot", "User " + loggedUser.SystemID + " is now recognized as Registered User "
                                           + loggedUser.SystemID);
-                Answer = new UserAnswer(SignInStatus.Success, "Sign in has been successful!");
+                Answer = new UserAnswer(SignInStatus.Success, "Sign in has been successful!",loggedUser.SystemID);
                 return loggedUser;
 
             }
