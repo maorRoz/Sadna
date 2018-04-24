@@ -7,6 +7,7 @@ using System.Data.SQLite.EF6;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 
 namespace SadnaSrc.Main
 {
@@ -27,8 +28,16 @@ namespace SadnaSrc.Main
             var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
             programPath = programPath.Replace("\\bin\\Debug", "");
             string[] programPathParts = programPath.Split('\\');
-            programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
-            programPath = string.Join("\\", programPathParts);
+            if (programPathParts.Length == 8 && programPathParts[7].IsNullOrEmpty())
+            {
+                programPathParts[6] = "SadnaSrc";
+            }
+            else
+            {
+                programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
+            }
+
+            programPath = string.Join("\\", programPathParts); 
             var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
 
             _dbConnection = new SQLiteConnection(dbPath);

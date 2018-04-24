@@ -224,26 +224,49 @@ namespace SadnaSrc.StoreCenter
             }
             catch (Exception)
             { return false; }
+
             if (item == null)
+            {
                 return false;
+            }
+
             if (item.PurchaseWay != PurchaseEnum.Lottery)
+            {
                 return false;
+            }
+
             try
             {
                 Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, productName);
             }
             catch (Exception)
             { return false; }
+
             if (Lotto == null)
+            {
                 return false;
+            }
+
             if (!Lotto.IsActive)
+            {
                 return false;
+            }
+
             if (priceWantToPay <= 0)
+            {
                 return false;
+            }
+
             if (!Lotto.CanPurchase(priceWantToPay))
+            {
                 return false;
+            }
+
             if (!Lotto.checkDatesWhenPurches())
+            {
                 return false;
+            }
+
             return true;
         }
 

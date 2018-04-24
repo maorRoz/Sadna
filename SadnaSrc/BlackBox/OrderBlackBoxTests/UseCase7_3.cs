@@ -47,6 +47,7 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void LotteryStillGoing()
         {
+            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShoppers();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             string[] expectedHistoryFirstBuyer =
@@ -65,6 +66,7 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void FirstBuyerWin()
         {
+            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShoppers();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge2.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
@@ -93,6 +95,7 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void SecondBuyerWin()
         {
+            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShoppers();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge2.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
@@ -121,6 +124,7 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void ThirdBuyerWin()
         {
+            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShoppers();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge2.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
@@ -179,6 +183,7 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void LotteryFailGuest()
         {
+            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             _buyerGuestBridge = UserDriver.getBridge();
             _buyerGuestBridge.EnterSystem();
             _orderBridge1 = OrderDriver.getBridge();
@@ -189,6 +194,7 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void FailPurchaseLotterySupplySystemCollapsed()
         {
+            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShopper1();
             _orderBridge1.DisableSupplySystem();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
@@ -207,6 +213,7 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void FailPurchaseLotteryPaymentSystemCollapsed()
         {
+            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShopper1();
             _orderBridge1.DisablePaymentSystem();
             Assert.AreEqual((int)WalleterStatus.PaymentSystemError, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
