@@ -6,24 +6,27 @@
 
 <div class="row top-space">
     <div class="col-lg-10">
-        <p>Username:</p> 
-        <input class="form-control" id="user-name-entry" />
-        <br/>
-        <p>Address:</p> 
-        <input class="form-control" id="user-name-entry" />
-        <br/>
-        <p>Password:</p> 
-        <input class="form-control" id="user-password-entry"/>
-        <br/>
-        <p>Credit Card:</p> 
-        <input class="form-control" id="user-name-entry" />
-        <br/>
-        <br/>
-        <button class ="btn btn-primary" id="sign-up-submit">Register</button>
-    </div>
+        <div id="signup-form">
+            <p>Username:</p>
+            <input class="form-control" id="user-name-entry"/>
+            <br/>
+            <p>Address:</p>
+            <input class="form-control" id="user-address-entry"/>
+            <br/>
+            <p>Password:</p>
+            <input class="form-control" id="user-password-entry"/>
+            <br/>
+            <p>Credit Card:</p>
+            <input class="form-control" id="user-creditcard-entry"/>
+            <br/>
+            <br/>
+            <button class="btn btn-primary" id="submit-signup-button">Register</button>
+        </div>
+   </div>
 </div>
 
 @section Scripts{
     <script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+
 }
 
