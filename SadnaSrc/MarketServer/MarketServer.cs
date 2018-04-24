@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Cache;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
 using WebSocketManager;
@@ -16,11 +17,6 @@ namespace MarketServer
         {
             marketSession = MarketYard.Instance;
             users = new List<IUserService>();
-        }
-
-        public async Task SendMessage(string socketId, string message)
-        {
-            await InvokeClientMethodToAllAsync("marketMessage", socketId, message);
         }
 
         public async Task EnterSystem(string socketId)

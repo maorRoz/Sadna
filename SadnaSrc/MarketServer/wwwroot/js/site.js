@@ -6,6 +6,7 @@ $(document).ready(function() {
     socket.connectionMethods.onConnected = () => {
         console.log('client has been connected!');
         socket.invoke('EnterSystem', socket.connectionId);
+      //  socket.invoke('EnterSystem',ViewBag.SystemId);
     }
 
     socket.connectionMethods.onDisconnected = () => {
@@ -13,6 +14,7 @@ $(document).ready(function() {
 
     socket.clientMethods['identifyClient'] = (userId) => {
         var messageText = 'your user id is:' + userId;
+       // location.href = 'Home/BrowseMarket?SystemId='+userId;
         console.log(messageText);
     }
     socket.start();

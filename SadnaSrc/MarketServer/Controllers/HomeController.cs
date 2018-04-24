@@ -10,18 +10,20 @@ namespace MarketServer.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult BrowseMarket()
+        public IActionResult BrowseMarket(int SystemId)
         {
+          //  SystemId = 5400;
+          //  ViewBag.SystemId = SystemId;
             return View();
         }
 
-        public IActionResult SignUp()
+        public IActionResult SignUp(int SystemId)
         {
 
             return View();
         }
 
-        public IActionResult SignIn()
+        public IActionResult SignIn(int SystemId)
         { 
 
             return View();
