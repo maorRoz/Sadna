@@ -32,7 +32,7 @@ namespace MarketServer
         {
             var userService = users[Convert.ToInt32(userId)];
             var answer = userService.SignUp(userName, address, password, creditCard);
-            await InvokeClientMethodAsync(socketId, "GetApiAnswer", new object[]{"sign up action returns :"+answer.Answer});
+            await InvokeClientMethodAsync(socketId, "LoggingMarket", new object[]{answer.Status,answer.Answer,userId});
         }
     }
 }

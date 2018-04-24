@@ -12,22 +12,22 @@ namespace MarketServer.Controllers
     {
         public IActionResult BrowseMarket(int SystemId)
         {
-            SystemId = 5400;
-          //  ViewBag.SystemId = SystemId;
             return View(SystemId);
         }
 
         public IActionResult SignUp(int SystemId)
         {
 
-            return View();
+            return View(SystemId);
         }
 
         public IActionResult SignIn(int SystemId)
         { 
 
-            return View();
+            return View(SystemId);
         }
+
+
 
         public IActionResult Error()
         {
