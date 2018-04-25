@@ -326,7 +326,7 @@ namespace UserSpotTests.DbUserSpotIntegration
         private void DoSignUpSignIn(string name, string address, string password,string creditCard)
         {
             DoSignUp(name, address, password, creditCard);
-            Assert.IsFalse(MarketException.hasErrorRaised());
+            Assert.IsFalse(MarketException.HasErrorRaised());
             DoSignIn(name, password);
         }
 

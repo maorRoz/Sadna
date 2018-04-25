@@ -73,7 +73,7 @@ namespace SystemViewTests.UseCaseUnitTest
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)RemoveUserStatus.SelfTermination, adminServiceSession.RemoveUser(adminName).Status);
-            Assert.IsTrue(MarketException.hasErrorRaised());
+            Assert.IsTrue(MarketException.HasErrorRaised());
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace SystemViewTests.UseCaseUnitTest
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)RemoveUserStatus.NoUserFound, adminServiceSession.RemoveUser(noUserName).Status);
-            Assert.IsTrue(MarketException.hasErrorRaised());
+            Assert.IsTrue(MarketException.HasErrorRaised());
         }
 
         [TestCleanup]

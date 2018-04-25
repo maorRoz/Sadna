@@ -31,7 +31,7 @@ namespace SadnaSrc.UserSpot
             _userDB.SaveUser(newGuest);
             MarketLog.Log("UserSpot", "User " + newGuest.SystemID + " has been saved successfully as new " +
                                       "guest entry in the system!");
-            Answer = new UserAnswer(EnterSystemStatus.Success, "You've been entered the system successfully!");
+            Answer = new UserAnswer(EnterSystemStatus.Success, "You've been entered the system successfully!",newGuest.SystemID);
             return newGuest;
         }
 

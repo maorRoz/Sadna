@@ -7,6 +7,7 @@ using System.Data.SQLite.EF6;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 
 namespace SadnaSrc.Main
 {
@@ -27,8 +28,16 @@ namespace SadnaSrc.Main
             var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
             programPath = programPath.Replace("\\bin\\Debug", "");
             string[] programPathParts = programPath.Split('\\');
-            programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
-            programPath = string.Join("\\", programPathParts);
+            if (programPathParts[programPathParts.Length-1].IsNullOrEmpty())
+            {
+                programPathParts[programPathParts.Length-2] = "SadnaSrc";
+            }
+            else
+            {
+                programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
+            }
+
+            programPath = string.Join("\\", programPathParts); 
             var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
 
             _dbConnection = new SQLiteConnection(dbPath);
@@ -305,7 +314,7 @@ namespace SadnaSrc.Main
             return @"CREATE TABLE IF NOT EXISTS [Products] (
                                     [SystemID]     TEXT,
                                     [Name]         TEXT,
-                                    [BasePrice]    INTEGER,
+                                    [BasePrice]    REAL,
                                     [Description]  TEXT,
                                     PRIMARY KEY([SystemID])
                                     )";
@@ -340,8 +349,8 @@ namespace SadnaSrc.Main
             return @"CREATE TABLE IF NOT EXISTS [LotteryTicket] (
                                     [myID]              TEXT,
                                     [LotteryID]         TEXT,
-                                    [IntervalStart]     INTEGER,
-                                    [IntervalEnd]       INTEGER,
+                                    [IntervalStart]     REAL,
+                                    [IntervalEnd]       REAL,
                                     [Cost]              REAL,
                                     [Status]            TEXT,
                                     [UserID]            INTEGER,
@@ -355,8 +364,8 @@ namespace SadnaSrc.Main
             return @"CREATE TABLE IF NOT EXISTS [LotteryTable] (
                                     [SystemID]              TEXT,
                                     [ProductSystemID]       TEXT,
-                                    [ProductNormalPrice]    INTEGER,
-                                    [TotalMoneyPayed]       INTEGER,
+                                    [ProductNormalPrice]    REAL,
+                                    [TotalMoneyPayed]       REAL,
                                     [storeName]             TEXT,
                                     [StartDate]             TEXT,
                                     [EndDate]               TEXT,

@@ -46,7 +46,7 @@ namespace SystemViewTests.UseCaseUnitTest
             };
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByUser(userNameToView1).Status);
             Assert.IsTrue(adminServiceSession.ViewPurchaseHistoryByUser(userNameToView1).ReportList.SequenceEqual(expectedHistory));
-            Assert.IsFalse(MarketException.hasErrorRaised());
+            Assert.IsFalse(MarketException.HasErrorRaised());
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@ namespace SystemViewTests.UseCaseUnitTest
             };
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByStore(storeNameToView2).Status);
             Assert.IsTrue(adminServiceSession.ViewPurchaseHistoryByStore(storeNameToView2).ReportList.SequenceEqual(expectedHistory));
-            Assert.IsFalse(MarketException.hasErrorRaised());
+            Assert.IsFalse(MarketException.HasErrorRaised());
         }
         [TestMethod]
         public void DidntEnterTest()
@@ -98,7 +98,7 @@ namespace SystemViewTests.UseCaseUnitTest
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoUserFound, adminServiceSession.ViewPurchaseHistoryByUser(noUserName).Status);
-            Assert.IsTrue(MarketException.hasErrorRaised());
+            Assert.IsTrue(MarketException.HasErrorRaised());
         }
 
         [TestMethod]
@@ -107,7 +107,7 @@ namespace SystemViewTests.UseCaseUnitTest
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoStoreFound, adminServiceSession.ViewPurchaseHistoryByStore(noStoreName).Status);
-            Assert.IsTrue(MarketException.hasErrorRaised());
+            Assert.IsTrue(MarketException.HasErrorRaised());
         }
 
         [TestCleanup]

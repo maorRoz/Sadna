@@ -79,6 +79,32 @@ namespace IntegrationTests.FullCycle_Integration
             Assert.AreEqual(0, noLotterys.Count);
             
         }
+        [TestMethod]
+        public void LotteryEndToEndPurchesIlligalValueZeroMouney()
+        {
+            orderService = market.GetOrderService(ref userService);
+            ((OrderService)orderService).LoginBuyer("Arik3", "123");
+            MarketAnswer ans = orderService.BuyLotteryTicket("name", "T", 1, 0);
+            Assert.AreEqual(ans.Status, (int)OrderStatus.InvalidCoupon);
+
+        }
+        [TestMethod]
+        public void LotteryEndToEndPurchesIlligalValueNegativeMouney()
+        {
+            orderService = market.GetOrderService(ref userService);
+            ((OrderService)orderService).LoginBuyer("Arik3", "123");
+            MarketAnswer ans = orderService.BuyLotteryTicket("name", "T", 1, -5);
+            Assert.AreEqual(ans.Status, (int)OrderStatus.InvalidCoupon);
+        }
+
+        [TestMethod]
+        public void LotteryEndToEndPurchesIlligalValueOverMouney()
+        {
+            orderService = market.GetOrderService(ref userService);
+            ((OrderService)orderService).LoginBuyer("Arik3", "123");
+            MarketAnswer ans = orderService.BuyLotteryTicket("name", "T", 1, 900000);
+            Assert.AreEqual(ans.Status, (int)OrderStatus.InvalidCoupon);
+        }
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {

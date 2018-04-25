@@ -46,7 +46,7 @@ namespace SadnaSrc.MarketHarmony
         {
             if (!_storeService.HasActiveLottery(store, itemName, wantToPay))
             {
-                throw new OrderException(GiveDetailsStatus.InvalidNameOrAddress, "no lottery is on going! cannot get ticket from expired or unavailable lottery"); 
+                throw new OrderException(OrderStatus.InvalidCoupon, "no lottery is on going! cannot get ticket from expired or unavailable lottery"); 
             }
         }
 
