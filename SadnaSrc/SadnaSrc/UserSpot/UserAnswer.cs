@@ -18,6 +18,11 @@ namespace SadnaSrc.UserSpot
 
         }
 
+        public UserAnswer(SignInStatus status, string answer, int loggedId) : base((int) status, answer,new[] {loggedId.ToString()})
+        {
+
+        }
+
         public UserAnswer(SignInStatus status, string answer) : base((int)status, answer)
         {
 

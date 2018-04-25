@@ -11,6 +11,7 @@ namespace MarketServer
 {
     public class MarketServer : WebSocketHandler
     {
+        private const int SuccessLogin = 0;
         private Dictionary<int,IUserService> users;
         private MarketYard marketSession;
         public MarketServer(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
@@ -27,12 +28,31 @@ namespace MarketServer
             await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
         }
 
+
         public async Task SignUpUser(string socketId,string userId, string userName, string address, string password,
             string creditCard)
         {
             var userService = users[Convert.ToInt32(userId)];
             var answer = userService.SignUp(userName, address, password, creditCard);
-            await InvokeClientMethodAsync(socketId, "GetApiAnswer", new object[]{"sign up action returns :"+answer.Answer});
+            await InvokeClientMethodAsync(socketId, "LoggingMarket", new object[]{answer.Status,answer.Answer,userId});
+        }
+
+        public async Task SignInUser(string socketId, string userId, string userName,string password)
+        {
+            int userIdNumber = Convert.ToInt32(userId);
+            var userService = users[userIdNumber];
+            var answer = userService.SignIn(userName, password);
+            if (answer.Status == SuccessLogin)
+            {
+                users.Remove(userIdNumber);
+                userIdNumber = Convert.ToInt32(answer.ReportList[0]);
+                if (!users.ContainsKey(userIdNumber))
+                {
+                    users.Add(Convert.ToInt32(userIdNumber), userService);
+                }
+            }
+            await InvokeClientMethodAsync(socketId, "LoggingMarket",
+                new object[] { answer.Status, answer.Answer, userIdNumber });
         }
     }
 }
