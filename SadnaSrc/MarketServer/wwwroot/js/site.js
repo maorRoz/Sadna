@@ -75,10 +75,21 @@ $(document).ready(function() {
         console.log(statusCode);
         console.log(message);
         if (statusCode === 0) {
+            var successMessage =
+                $(
+                    "<div class='success'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
+                    message +
+                    "</div>");
+            $('#alertContainer').append(successMessage);
             location.href = 'BrowseMarket' + '?SystemId=' + userId;
+        } else {
+            var alertMessage =
+                $(
+                    "<div class='error'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
+                    message +
+                    "</div>");
+            $('#alertContainer').append(alertMessage);
         }
-        var alertMessage = $("<div class='alert'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>"+message +"</div>");
-        $('#alertContainer').append(alertMessage);
     }
 
     /*<div class="alert">

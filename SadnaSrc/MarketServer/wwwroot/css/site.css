@@ -3,20 +3,31 @@
     padding-bottom: 20px;
 }
 
-
-
-
-
-
-/* The alert message box */
-.alert {
+/* The success message box*/
+.success {
     padding: 20px;
-    background-color: #f44336; /* Red */
+    background-color: #32CD32; /* Green */
     color: white;
     margin-bottom: 15px;
 }
 
-/* The close button */
+/* The tip/mistake message box */
+.tip {
+    padding: 20px;
+    background-color: #DAA520;
+    color: white;
+    margin-bottom: 15px;
+}
+
+/* The error message box */
+.error {
+    padding: 20px;
+    background-color: #f44336; 
+    color: white;
+    margin-bottom: 15px;
+}
+
+/* The close button of error/tip/success message box */
 .closebtn {
     margin-left: 15px;
     color: white;
