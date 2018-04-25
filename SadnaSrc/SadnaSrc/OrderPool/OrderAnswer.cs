@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.OrderPool
 {
-    class OrderAnswer : MarketAnswer
+    public class OrderAnswer : MarketAnswer
     {
         public OrderAnswer(GiveDetailsStatus status, string answer) : base((int) status, answer)
         {
