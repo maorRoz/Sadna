@@ -305,7 +305,7 @@ namespace SadnaSrc.Main
             return @"CREATE TABLE IF NOT EXISTS [Products] (
                                     [SystemID]     TEXT,
                                     [Name]         TEXT,
-                                    [BasePrice]    INTEGER,
+                                    [BasePrice]    REAL,
                                     [Description]  TEXT,
                                     PRIMARY KEY([SystemID])
                                     )";
@@ -340,8 +340,8 @@ namespace SadnaSrc.Main
             return @"CREATE TABLE IF NOT EXISTS [LotteryTicket] (
                                     [myID]              TEXT,
                                     [LotteryID]         TEXT,
-                                    [IntervalStart]     INTEGER,
-                                    [IntervalEnd]       INTEGER,
+                                    [IntervalStart]     REAL,
+                                    [IntervalEnd]       REAL,
                                     [Cost]              REAL,
                                     [Status]            TEXT,
                                     [UserID]            INTEGER,
@@ -355,8 +355,8 @@ namespace SadnaSrc.Main
             return @"CREATE TABLE IF NOT EXISTS [LotteryTable] (
                                     [SystemID]              TEXT,
                                     [ProductSystemID]       TEXT,
-                                    [ProductNormalPrice]    INTEGER,
-                                    [TotalMoneyPayed]       INTEGER,
+                                    [ProductNormalPrice]    REAL,
+                                    [TotalMoneyPayed]       REAL,
                                     [storeName]             TEXT,
                                     [StartDate]             TEXT,
                                     [EndDate]               TEXT,
