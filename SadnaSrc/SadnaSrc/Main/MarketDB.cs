@@ -28,9 +28,9 @@ namespace SadnaSrc.Main
             var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
             programPath = programPath.Replace("\\bin\\Debug", "");
             string[] programPathParts = programPath.Split('\\');
-            if (programPathParts.Length == 8 && programPathParts[7].IsNullOrEmpty())
+            if (programPathParts[programPathParts.Length-1].IsNullOrEmpty())
             {
-                programPathParts[6] = "SadnaSrc";
+                programPathParts[programPathParts.Length-2] = "SadnaSrc";
             }
             else
             {
