@@ -54,5 +54,10 @@ namespace MarketServer
             await InvokeClientMethodAsync(socketId, "LoggingMarket",
                 new object[] { answer.Status, answer.Answer, userIdNumber });
         }
+
+        public async Task SendFeed()
+        {
+            await InvokeClientMethodAsync("?", "NotifyFeed", new object[]{"some stupid notification"});
+        }
     }
 }

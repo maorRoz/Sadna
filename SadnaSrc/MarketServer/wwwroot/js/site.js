@@ -92,6 +92,14 @@ $(document).ready(function() {
         }
     }
 
+    socket.clientMethods['NotifyFeed'] = (feedMessage) => {
+        var feedBox = $(
+            "<div class='marketFeed'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
+            feedMessage +
+            "</div>");
+        $('feedContainer').append(feedBox);
+    }
+
     /*<div class="alert">
     <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
     This is an alert box.
