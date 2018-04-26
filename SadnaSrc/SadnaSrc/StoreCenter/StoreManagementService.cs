@@ -33,29 +33,9 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer CloseStore()
         {
-            try
-            {
-                if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
-            }
-            catch (Exception)
-            {
-                return new StoreAnswer(StoreEnum.StoreNotExists, "the store doesn't exists");
-            }
-            try
-            {
-                _storeManager.CanPromoteStoreOwner(); // can do anything
-                return store.CloseStore();
-            }
-            catch (StoreException)
-            {
-                MarketLog.Log("StoreCenter", "closing store failed");
-                return new StoreAnswer(StoreEnum.CloseStoreFail, "Store is not active");
-            }
-            catch (MarketException)
-            {
-                MarketLog.Log("StoreCenter", "closing store failed");
-                return new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
-            }
+            CloseStoreSlave slave = new CloseStoreSlave(_storeManager, ref store);
+            slave.closeStore();
+            return slave.answer;
         }
 
 
@@ -448,16 +428,16 @@ namespace SadnaSrc.StoreCenter
                     throw new StoreException(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
                 }
 
-	            string dicoundCode = global.GetDiscountCode();
+                string dicoundCode = global.GetDiscountCode();
 
-				Discount discount = new Discount(dicoundCode, global.GetdiscountTypeEnumString(discountType), startDate,
+                Discount discount = new Discount(dicoundCode, global.GetdiscountTypeEnumString(discountType), startDate,
                     endDate, discountAmount, presenteges);
                 stockListItem.Discount = discount;
                 global.DataLayer.AddDiscount(discount);
                 discountsToRemvoe.AddLast(discount);
                 global.DataLayer.EditStockInDatabase(stockListItem);
                 MarketLog.Log("StoreCenter", "discount added successfully");
-	            string[] coupon = {dicoundCode};
+                string[] coupon = { dicoundCode };
                 return new StoreAnswer(DiscountStatus.Success, "discount added successfully", coupon);
             }
             catch (StoreException exe)
