@@ -12,11 +12,6 @@ namespace SadnaSrc.StoreCenter
     public class ModuleGlobalHandler : OutsideModuleService
     {
         static ModuleGlobalHandler instance;
-        private int StoreIdCounter;
-        private int globalProductID;
-        private int globalDiscountCode;
-        private int globalLotteryID;
-        private int globalLotteryTicketID;
         public StoreDL DataLayer { get; }
         public static ModuleGlobalHandler GetInstance()
         {
@@ -30,11 +25,6 @@ namespace SadnaSrc.StoreCenter
         private ModuleGlobalHandler()
         {
             DataLayer = StoreDL.Instance;
-            StoreIdCounter = DataLayer.FindMaxStoreId();
-            globalProductID = DataLayer.FindMaxProductId();
-            globalDiscountCode = DataLayer.FindMaxDiscountId();
-            globalLotteryID = DataLayer.FindMaxLotteryId();
-            globalLotteryTicketID = DataLayer.FindMaxLotteryTicketId();
         }
 
         public void AddStore(Store temp)

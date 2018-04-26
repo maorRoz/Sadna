@@ -9,14 +9,16 @@ namespace SadnaSrc.StoreCenter
         internal MarketAnswer answer;
         StoreDL global;
         private IUserSeller _storeManager;
-        string _storeName;
-        Store _store;
+        private string _storeName;
+        private Store _store;
         private int globalProductID;
+        private All_ID_Manager manager;
         public AddNewProductSlave(IUserSeller storeManager, Store store)
         {
             _storeManager = storeManager;
             _store = store;
             _storeName = store.Name;
+            manager = All_ID_Manager.GetInstance();
         }
 
         internal StockListItem AddNewProduct(string _name, double _price, string _description, int quantity)
@@ -31,14 +33,13 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if has premmision to add products");
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
-                MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
-                
+                MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);    
                 MarketLog.Log("StoreCenter", " name is avlaiable");
                 MarketLog.Log("StoreCenter", " checking that quanitity is positive");
                 _checkQuantityIsOK(quantity);
                 MarketLog.Log("StoreCenter", " quanitity is positive");
-                Product product = new Product(GetProductID(), _name, _price, _description);
-                StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, store.SystemId);
+                Product product = new Product(manager.GetProductID(), _name, _price, _description);
+                StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, _store.SystemId);
                 global.AddStockListItemToDataBase(stockListItem);
                 MarketLog.Log("StoreCenter", "product added");
                 answer = new StoreAnswer(StoreEnum.Success, "product added");
@@ -56,14 +57,7 @@ namespace SadnaSrc.StoreCenter
                 return null;
             }
         }
-
-        private string GetProductID()
-        {
-            int currentMaxProductId = globalProductID;
-            globalProductID++;
-            return "P" + currentMaxProductId;
-        }
-
+        
         private void _checkQuantityIsOK(int quantity)
         {
             if (quantity <= 0)
