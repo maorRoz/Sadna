@@ -125,36 +125,7 @@ namespace SadnaSrc.StoreCenter
         /**
          * next section is ID handlers
          **/
-        public string GetProductID()
-        {
-            int currentMaxProductId = globalProductID;
-            globalProductID++;
-            return "P" + currentMaxProductId;
-        }
-        public string GetDiscountCode()
-        {
-            int currentMaxDiscountCode = globalDiscountCode;
-            globalDiscountCode++;
-            return "D" + currentMaxDiscountCode;
-        }
-        public string GetNextStoreId()
-        {
-            int currentMaxStoreId = StoreIdCounter;
-            StoreIdCounter++;
-            return "S" + currentMaxStoreId;
-        }
-        public string GetLottyerID()
-        {
-            int currentMaxLotteryId = globalLotteryID;
-            globalLotteryID++;
-            return "L" + currentMaxLotteryId;
-        }
-        public string GetLotteryTicketID()
-        {
-            int currentMaxLotteryTicketId = globalLotteryTicketID;
-            globalLotteryTicketID++;
-            return "T" + currentMaxLotteryTicketId;
-        }
+        
 
         public LinkedList<Store> GetAllStores()
         {

@@ -37,50 +37,11 @@ namespace SadnaSrc.StoreCenter
             slave.closeStore();
             return slave.answer;
         }
-
-
-        private void ValidatePromotionEligible(string actions)
-        {
-            if (actions.Contains("StoreOwner"))
-            {
-                _storeManager.CanPromoteStoreOwner();
-            }
-            else
-            {
-                _storeManager.CanPromoteStoreAdmin();
-            }
-        }
-
         public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
-            MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to grant " + someoneToPromoteName +
-                                         " manager options in Store" + _storeName + ". Validating store activity and existence..");
-            try
-            {
-                global.DataLayer.ValidateStoreExists(_storeName);
-                ValidatePromotionEligible(actions);
-                _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
-                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has been authorized. granting " +
-                                             someoneToPromoteName + " manager options in Store" + _storeName + "...");
-                _storeManager.Promote(someoneToPromoteName, actions);
-                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " granted " +
-                                             someoneToPromoteName + " manager options in Store" + _storeName + "successfully");
-                return new StoreAnswer(PromoteStoreStatus.Success, "promote with manager options has been successful!");
-
-            }
-            catch (StoreException e)
-            {
-                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " tried to promote others in unavailable Store " + _storeName +
-                                             "and has been denied. Error message has been created!");
-                return new StoreAnswer(PromoteStoreStatus.InvalidStore, e.GetErrorMessage());
-            }
-            catch (MarketException e)
-            {
-                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to promote " + someoneToPromoteName +
-                                  "with manager options in Store" + _storeName + " and therefore has been denied. Error message has been created!");
-                return new StoreAnswer((PromoteStoreStatus)e.Status, e.GetErrorMessage());
-            }
-
+            PromoteToStoreManagerSlave slave = new PromoteToStoreManagerSlave(_storeManager, _storeName);
+            slave.PromoteToStoreManager(someoneToPromoteName, actions);
+            return slave.answer;
         }
 
         /*  public MarketAnswer GetStoreProducts()
@@ -114,38 +75,11 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity)
         {
-            MarketLog.Log("StoreCenter", "trying to add product to store");
-            MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.DataLayer.IsStoreExistAndActive(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists or active"); }
-            try
-            {
-                MarketLog.Log("StoreCenter", " store exists");
-                MarketLog.Log("StoreCenter", " check if has premmision to add products");
-                _storeManager.CanManageProducts();
-                MarketLog.Log("StoreCenter", " has premmission");
-                MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + store.Name);
-                if (!global.IsProductNameAvailableInStore(_storeName, _name))
-                { throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); }
-                MarketLog.Log("StoreCenter", " name is avlaiable");
-                MarketLog.Log("StoreCenter", " checking that quanitity is positive");
-                if (quantity <= 0) { return new StoreAnswer(StoreEnum.quantityIsNegatie, "negative quantity"); }
-                MarketLog.Log("StoreCenter", " quanitity is positive");
-                Product product = new Product(global.GetProductID(), _name, _price, _description);
-                StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, store.SystemId);
-                global.DataLayer.AddStockListItemToDataBase(stockListItem);
+            AddNewProductSlave slave = new AddNewProductSlave();
+            StockListItem stockListItem = slave.AddNewProduct(_name, _price, _description, quantity);
+            if (stockListItem!=null)
                 stockListItemToRemove.AddLast(stockListItem);
-                MarketLog.Log("StoreCenter", "product added");
-                return new StoreAnswer(StoreEnum.Success, "product added");
-            }
-            catch (StoreException)
-            {
-                return new StoreAnswer(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
-            }
-            catch (MarketException)
-            {
-                MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
-            }
+            return slave.answer;
         }
 
         public MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
