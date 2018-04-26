@@ -117,4 +117,8 @@ $(document).ready(function() {
         $submitSigninButton.onclick = function () { submitSignIn(); }
     }
 
+    var $cartList = document.getElementById('cartList');
+    if ($cartList !== undefined && $cartList !== null) {
+        console.log('i can feel the cart!');
+    }
 })

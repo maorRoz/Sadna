@@ -26,6 +26,11 @@ namespace MarketServer.Controllers
             return View(new UserModel(SystemId, State));
         }
 
+        public IActionResult CartManagement(int SystemId, string State)
+        {
+
+            return View(new UserModel(SystemId, State));
+        }
 
 
         public IActionResult Error()
