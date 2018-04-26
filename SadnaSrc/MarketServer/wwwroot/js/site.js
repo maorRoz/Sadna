@@ -55,11 +55,11 @@ $(document).ready(function() {
         console.log('your SystemId is : ' +systemId);
         if (systemId === undefined || systemId === 0) {
             socket.invoke('EnterSystem', socketId);
-        } else if(getParameterValues('State') !== 'Guest'){
-            var $signUpRemove = document.getElementById('signUpPage');
-            $signUpRemove.parentNode.removeChild($signUpRemove);
-            var $signInRemove = document.getElementById('signInPage');
-            $signInRemove.parentNode.removeChild($signInRemove);
+        } else if (getParameterValues('State') !== 'Guest') {
+              var $signUpRemove = document.getElementById('signUpPage');
+              $signUpRemove.parentNode.removeChild($signUpRemove);
+              var $signInRemove = document.getElementById('signInPage');
+              $signInRemove.parentNode.removeChild($signInRemove);
         }
     }
 

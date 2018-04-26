@@ -29,8 +29,8 @@
                 <a asp-area="" asp-controller="Home" asp-action="BrowseMarket" asp-route-SystemId="@Model.SystemId" asp-route-State="@Model.State" class="navbar-brand">MarketYard</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="BrowseMarket" asp-route-SystemId="@Model.SystemId" asp-route-State="@Model.State">Browse Market</a></li>
+                <ul id="menuBar" class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Home" asp-action="BrowseMarket" asp-route-SystemId="@Model.SystemId" asp-route-State="@Model.State" >Browse Market</a></li>
                     <li><a id="signUpPage" asp-area="" asp-controller="Home" asp-action="SignUp" asp-route-SystemId="@Model.SystemId" asp-route-State="@Model.State">Sign Up</a></li>
                     <li><a id="signInPage" asp-area="" asp-controller="Home" asp-action="SignIn" asp-route-SystemId="@Model.SystemId" asp-route-State="@Model.State">Sign In</a></li>
                 </ul>
