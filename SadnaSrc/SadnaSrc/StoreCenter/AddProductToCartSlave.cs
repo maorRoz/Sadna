@@ -8,24 +8,24 @@ namespace SadnaSrc.StoreCenter
     {
         internal MarketAnswer answer;
         private IUserShopper _shopper;
-        ModuleGlobalHandler storeLogic;
+        StoreDL storeLogic;
 
         public AddProductToCartSlave(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = ModuleGlobalHandler.GetInstance();
+            storeLogic = StoreDL.Instance;
         }
 
         internal void AddProductToCart(string store, string productName, int quantity)
         {
             MarketLog.Log("StoreCenter", "trying to add something to the cart");
             MarketLog.Log("StoreCenter", "checking if store exists");
-            if (!storeLogic.DataLayer.IsStoreExistAndActive(store))
+            if (!storeLogic.IsStoreExistAndActive(store))
             { throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
             MarketLog.Log("StoreCenter", "checking if user has premmisions");
             _shopper.ValidateCanBrowseMarket();
             MarketLog.Log("StoreCenter", "checking if product exists");
-            if (storeLogic.IsProductNameAvailableInStore(store, productName)) //aka product is NotFiniteNumberException in store
+            if (IsProductNameAvailableInStore(store, productName)) //aka product is NotFiniteNumberException in store
             {
                 MarketLog.Log("StoreCenter", "Product is not exists in the store");
                 throw new StoreException(StoreEnum.ProductNotFound, "product is not exists");
@@ -53,6 +53,12 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "add product successeded");
             answer = new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
                                                              " successfully added to the user's cart!");
+        }
+
+        private bool IsProductNameAvailableInStore(string storeName, string productName)
+        {
+            Product P = storeLogic.getProductByNameFromStore(storeName, productName);
+            return (P == null);
         }
     }
 }

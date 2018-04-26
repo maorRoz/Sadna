@@ -12,7 +12,6 @@ namespace SadnaSrc.StoreCenter
     public class ModuleGlobalHandler : OutsideModuleService
     {
         static ModuleGlobalHandler instance;
-        private int StoreIdCounter;
         private int globalProductID;
         private int globalDiscountCode;
         private int globalLotteryID;
@@ -30,7 +29,6 @@ namespace SadnaSrc.StoreCenter
         private ModuleGlobalHandler()
         {
             DataLayer = StoreDL.Instance;
-            StoreIdCounter = DataLayer.FindMaxStoreId();
             globalProductID = DataLayer.FindMaxProductId();
             globalDiscountCode = DataLayer.FindMaxDiscountId();
             globalLotteryID = DataLayer.FindMaxLotteryId();
@@ -136,12 +134,6 @@ namespace SadnaSrc.StoreCenter
             int currentMaxDiscountCode = globalDiscountCode;
             globalDiscountCode++;
             return "D" + currentMaxDiscountCode;
-        }
-        public string GetNextStoreId()
-        {
-            int currentMaxStoreId = StoreIdCounter;
-            StoreIdCounter++;
-            return "S" + currentMaxStoreId;
         }
         public string GetLottyerID()
         {

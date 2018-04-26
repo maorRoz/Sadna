@@ -9,12 +9,12 @@ namespace SadnaSrc.StoreCenter
     {
         internal MarketAnswer answer;
         private IUserShopper _shopper;
-        ModuleGlobalHandler storeLogic;
+        StoreDL storeLogic;
 
         public ViewStoreStockSlave(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = ModuleGlobalHandler.GetInstance();
+            storeLogic = StoreDL.Instance;
         }
 
         internal void ViewStoreStock(string storename)
@@ -22,14 +22,14 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "checking store stack");
             _shopper.ValidateCanBrowseMarket();
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!storeLogic.DataLayer.IsStoreExistAndActive(storename))
+            if (!storeLogic.IsStoreExistAndActive(storename))
             {
                 MarketLog.Log("StoreCenter", "store do not exists");
                 throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active");
             }
-            Store store = storeLogic.DataLayer.getStorebyName(storename);
+            Store store = storeLogic.getStorebyName(storename);
             LinkedList<string> result = new LinkedList<string>();
-            LinkedList<string> IDS = storeLogic.DataLayer.GetAllStoreProductsID(store.SystemId);
+            LinkedList<string> IDS = storeLogic.GetAllStoreProductsID(store.SystemId);
             foreach (string item in IDS)
             {
                 result.AddLast(GetProductStockInformation(item));

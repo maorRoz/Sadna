@@ -8,12 +8,12 @@ namespace SadnaSrc.StoreCenter
     {
         internal MarketAnswer answer;
         private IUserShopper _shopper;
-        ModuleGlobalHandler storeLogic;
+        StoreDL storeLogic;
 
         public ViewStoreInfoSlave(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = ModuleGlobalHandler.GetInstance();
+            storeLogic = StoreDL.Instance;
         }
 
         internal void ViewStoreInfo(string store)
