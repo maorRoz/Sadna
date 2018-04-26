@@ -119,6 +119,8 @@
     <Compile Include="MarketHarmony\PurchaseHistory.cs" />
     <Compile Include="OrderPool\StoreOrderTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreCenter\AddProductToCartSlave.cs" />
+    <Compile Include="StoreCenter\OpenStoreSlave.cs" />
     <Compile Include="StoreCenter\OutsideModuleService.cs" />
     <Compile Include="StoreCenter\LotteryTicket.cs" />
     <Compile Include="StoreCenter\LotterySaleManagmentTicket.cs" />
@@ -132,6 +134,8 @@
     <Compile Include="StoreCenter\StoreException.cs" />
     <Compile Include="StoreCenter\StoreManagementService.cs" />
     <Compile Include="StoreCenter\StoreShoppingService.cs" />
+    <Compile Include="StoreCenter\ViewStoreInfoSlave.cs" />
+    <Compile Include="StoreCenter\ViewStoreStockSlave.cs" />
     <Compile Include="SupplyPoint\SupplyAnswer.cs" />
     <Compile Include="SupplyPoint\SupplyException.cs" />
     <Compile Include="SupplyPoint\SupplyService.cs" />
