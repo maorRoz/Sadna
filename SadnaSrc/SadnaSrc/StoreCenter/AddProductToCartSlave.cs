@@ -28,24 +28,8 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "checking if product exists");
                 checkIsProductNameAvailableInStore(store, productName);
                 StockListItem stockListItem = storeLogic.GetProductFromStore(store, productName);
-                MarketLog.Log("StoreCenter", "checking that the required quantity is not too big");
-                if (quantity > stockListItem.Quantity)
-                {
-                    MarketLog.Log("StoreCenter", "required quantity is not too big");
-                    throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big");
-                }
-                MarketLog.Log("StoreCenter", "checking that the required quantity is not negative or zero");
-                if (quantity <= 0)
-                {
-                    MarketLog.Log("StoreCenter", "required quantity is negative or zero");
-                    throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
-                }
-                if (stockListItem.Discount != null)
-                {
-                    if (stockListItem.Discount.discountType == discountTypeEnum.Visible)
-                        if (stockListItem.Discount.checkTime())
-                            stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
-                }
+                checkifQuantityIsOK(quantity, stockListItem);   
+                checkIfDiscountExistsAndCalcValue(ref stockListItem);
                 _shopper.AddToCart(stockListItem.Product, store, quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
                 answer = new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
@@ -62,6 +46,32 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "no premission");
                 answer = new StoreAnswer(StoreEnum.NoPremmision,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
+            }
+        }
+
+        private void checkifQuantityIsOK(int quantity, StockListItem stockListItem)
+        {
+            MarketLog.Log("StoreCenter", "checking that the required quantity is not too big");
+            if (quantity > stockListItem.Quantity)
+            {
+                MarketLog.Log("StoreCenter", "required quantity is not too big");
+                throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big");
+            }
+            MarketLog.Log("StoreCenter", "checking that the required quantity is not negative or zero");
+            if (quantity <= 0)
+            {
+                MarketLog.Log("StoreCenter", "required quantity is negative or zero");
+                throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
+            }
+        }
+
+        private void checkIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
+        {
+            if (stockListItem.Discount != null)
+            {
+                if (stockListItem.Discount.discountType == discountTypeEnum.Visible)
+                    if (stockListItem.Discount.checkTime())
+                        stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
             }
         }
 
