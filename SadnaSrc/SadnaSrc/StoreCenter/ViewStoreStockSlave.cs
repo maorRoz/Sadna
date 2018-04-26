@@ -19,14 +19,12 @@ namespace SadnaSrc.StoreCenter
 
         internal void ViewStoreStock(string storename)
         {
-            MarketLog.Log("StoreCenter", "checking store stack");
+            try
+            {
+             MarketLog.Log("StoreCenter", "checking store stack");
             _shopper.ValidateCanBrowseMarket();
             MarketLog.Log("StoreCenter", "check if store exists");
-            if (!storeLogic.IsStoreExistAndActive(storename))
-            {
-                MarketLog.Log("StoreCenter", "store do not exists");
-                throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active");
-            }
+            checkIfStoreExists(storename);
             Store store = storeLogic.getStorebyName(storename);
             LinkedList<string> result = new LinkedList<string>();
             LinkedList<string> IDS = storeLogic.GetAllStoreProductsID(store.SystemId);
@@ -37,7 +35,28 @@ namespace SadnaSrc.StoreCenter
             string[] resultArray = new string[result.Count];
             result.CopyTo(resultArray, 0);
             answer = new StoreAnswer(StoreEnum.Success, "", resultArray);
+            }
+            catch (StoreException e)
+            {
+                answer = new StoreAnswer(e);
+            }
+            catch (MarketException)
+            {
+                MarketLog.Log("StoreCenter", "no premission");
+                answer = new StoreAnswer(StoreEnum.NoPremmision,
+                    "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
+            }
         }
+
+        private void checkIfStoreExists(string storename)
+        {
+            if (!storeLogic.IsStoreExistAndActive(storename))
+            {
+                MarketLog.Log("StoreCenter", "store do not exists");
+                throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active");
+            }
+        }
+
         private string GetProductStockInformation(string ProductID)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();

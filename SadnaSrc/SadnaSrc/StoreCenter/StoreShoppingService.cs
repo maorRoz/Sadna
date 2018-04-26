@@ -29,92 +29,33 @@ namespace SadnaSrc.StoreCenter
         }
         public MarketAnswer OpenStore(string storeName, string address)
         {
-            try
-            {
-                OpenStoreSlave slave = new OpenStoreSlave(_shopper);
-                Store S = slave.OpenStore(storeName, address);
+            OpenStoreSlave slave = new OpenStoreSlave(_shopper);
+            Store S = slave.OpenStore(storeName, address);
+            if (S!=null)
                 stores.AddLast(S);
-                return slave.answer;
-            }
-            catch (StoreException e)
-            {
-                MarketLog.Log("StoreCenter", "error in opening store");
-                return new StoreAnswer((OpenStoreStatus)e.Status, "Store " + storeName + " creation has been denied. " +
-                                                 "something is wrong with adding a new store of that type. Error message has been created!");
-            }
-            catch (MarketException)
-            {
-                MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(OpenStoreStatus.InvalidUser,
-                    "User validation as store owner has been failed. only registered users can open new stores. Error message has been created!");
-            }
+            return slave.answer;
         }
         
         public MarketAnswer ViewStoreInfo(string store)
         {
-            try
-            {
-                ViewStoreInfoSlave slave = new ViewStoreInfoSlave(_shopper);
-                slave.ViewStoreInfo(store);
-                return slave.answer;
-            }
-            catch (StoreException e)
-            {
-                MarketLog.Log("StoreCenter", "");
-                return new StoreAnswer((ViewStoreStatus)e.Status, "Something is wrong with viewing " + store +
-                                                                  " info by customers . Error message has been created!");
-            }
-            catch (MarketException)
-            {
-                MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(ViewStoreStatus.InvalidUser,
-                    "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
-            }
-
-
+            ViewStoreInfoSlave slave = new ViewStoreInfoSlave(_shopper);
+            slave.ViewStoreInfo(store);
+            return slave.answer;
         }
      
         
         public MarketAnswer ViewStoreStock(string storename)
         {
-            try
-            {
                 ViewStoreStockSlave slave = new ViewStoreStockSlave(_shopper);
                 slave.ViewStoreStock(storename);
                 return slave.answer;
-            }
-            catch (StoreException e)
-            {
-                return new StoreAnswer(e);
-            }
-            catch (MarketException)
-            {
-                MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(StoreEnum.NoPremmision,
-                    "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
-            }
         }
 
         public MarketAnswer AddProductToCart(string store, string productName, int quantity)
         {
-            try
-            {
                 AddProductToCartSlave slave = new AddProductToCartSlave(_shopper);
                 slave.AddProductToCart(store, productName, quantity);
                 return slave.answer;
-            }
-            catch (StoreException e)
-            {
-                MarketLog.Log("StoreCenter", "adding to cart failed");
-                return new StoreAnswer((AddProductStatus)e.Status, "There is no product or store or quantity of that type in the market." +
-                                                                  " request has been denied. Error message has been created!");
-            }
-            catch (MarketException)
-            {
-                MarketLog.Log("StoreCenter", "no premission");
-                return new StoreAnswer(StoreEnum.NoPremmision,
-                    "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
-            }
         }
 
         public void CleanSeesion()
