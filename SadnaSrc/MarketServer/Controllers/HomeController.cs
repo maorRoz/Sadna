@@ -10,21 +10,20 @@ namespace MarketServer.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult BrowseMarket(int SystemId)
+        public IActionResult BrowseMarket(int SystemId,string State)
         {
-            return View(SystemId);
+            return View(new UserModel(SystemId,State));
         }
 
-        public IActionResult SignUp(int SystemId)
+        public IActionResult SignUp(int SystemId, string State)
         {
-
-            return View(SystemId);
+             return View(new UserModel(SystemId, State));
         }
 
-        public IActionResult SignIn(int SystemId)
+        public IActionResult SignIn(int SystemId, string State)
         { 
 
-            return View(SystemId);
+            return View(new UserModel(SystemId, State));
         }
 
 

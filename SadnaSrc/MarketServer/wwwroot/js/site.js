@@ -27,13 +27,10 @@ $(document).ready(function() {
             addressEntry,
             passEntry,
             creditEntry);
-        console.log(socketId);
-        console.log(getParameterValues('SystemId'));
-        console.log(nameEntry);
-        console.log(addressEntry);
-        console.log(passEntry);
-        console.log(creditEntry);
-        console.log('clicking submit signup!!!');
+        $('#user-name-entry').val('');
+        $('#user-address-entry').val('');
+        $('#user-password-entry').val('');
+        $('#user-creditcard-entry').val('');
     }
 
     function submitSignIn() {
@@ -44,11 +41,8 @@ $(document).ready(function() {
             getParameterValues('SystemId'),
             nameEntry,
             passEntry);
-        console.log(socketId);
-        console.log(getParameterValues('SystemId'));
-        console.log(nameEntry);
-        console.log(passEntry);
-        console.log('clicking submit signin!!!');
+        $('#user-name-entry').val('');
+        $('#user-password-entry').val('');
     }
 
 
@@ -61,6 +55,11 @@ $(document).ready(function() {
         console.log('your SystemId is : ' +systemId);
         if (systemId === undefined || systemId === 0) {
             socket.invoke('EnterSystem', socketId);
+        } else if(getParameterValues('State') !== 'Guest'){
+            var $signUpRemove = document.getElementById('signUpPage');
+            $signUpRemove.parentNode.removeChild($signUpRemove);
+            var $signInRemove = document.getElementById('signInPage');
+            $signInRemove.parentNode.removeChild($signInRemove);
         }
     }
 
@@ -68,28 +67,20 @@ $(document).ready(function() {
     }
 
     socket.clientMethods['IdentifyClient'] = (userId) => {
-        location.href = window.location.href + '?SystemId=' + userId;
+        location.href = window.location.href + '?SystemId=' + userId + '&State=Guest';
     }
 
-    socket.clientMethods['LoggingMarket'] = (statusCode, message,userId) => {
-        console.log(statusCode);
+    socket.clientMethods['LoggedMarket'] = (message, userId, state) => {
         console.log(message);
-        if (statusCode === 0) {
+        console.log(userId);
+        console.log(state);
             var successMessage =
                 $(
                     "<div class='success'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
                     message +
                     "</div>");
             $('#alertContainer').append(successMessage);
-            location.href = 'BrowseMarket' + '?SystemId=' + userId;
-        } else {
-            var alertMessage =
-                $(
-                    "<div class='error'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
-                    message +
-                    "</div>");
-            $('#alertContainer').append(alertMessage);
-        }
+            location.href = 'BrowseMarket' + '?SystemId=' + userId + '&State=' + state; 
     }
 
     socket.clientMethods['NotifyFeed'] = (feedMessage) => {
@@ -100,13 +91,18 @@ $(document).ready(function() {
         $('feedContainer').append(feedBox);
     }
 
-    /*<div class="alert">
-    <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
-    This is an alert box.
-</div>*/
 
     socket.clientMethods['GetApiAnswer'] = (answer) => {
         console.log(answer);
+    }
+
+    socket.clientMethods['ErrorApi'] = (error) => {
+        console.log(error);
+        var alertBox =
+            $("<div class='error'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
+                error +
+                "</div>");
+        $('#alertContainer').append(alertBox);
     }
 
     socket.start();

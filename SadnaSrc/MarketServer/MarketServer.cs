@@ -11,7 +11,7 @@ namespace MarketServer
 {
     public class MarketServer : WebSocketHandler
     {
-        private const int SuccessLogin = 0;
+        private const int Success = 0;
         private Dictionary<int,IUserService> users;
         private MarketYard marketSession;
         public MarketServer(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
@@ -34,7 +34,16 @@ namespace MarketServer
         {
             var userService = users[Convert.ToInt32(userId)];
             var answer = userService.SignUp(userName, address, password, creditCard);
-            await InvokeClientMethodAsync(socketId, "LoggingMarket", new object[]{answer.Status,answer.Answer,userId});
+            if (answer.Status == Success)
+            {
+                await InvokeClientMethodAsync(socketId, "LoggedMarket",
+                    new object[] {answer.Answer, userId,"Registered"});
+            }
+            else
+            {
+                await InvokeClientMethodAsync(socketId, "ErrorApi",
+                    new object[] { answer.Answer });
+            }
         }
 
         public async Task SignInUser(string socketId, string userId, string userName,string password)
@@ -42,7 +51,7 @@ namespace MarketServer
             int userIdNumber = Convert.ToInt32(userId);
             var userService = users[userIdNumber];
             var answer = userService.SignIn(userName, password);
-            if (answer.Status == SuccessLogin)
+            if (answer.Status == Success)
             {
                 users.Remove(userIdNumber);
                 userIdNumber = Convert.ToInt32(answer.ReportList[0]);
@@ -50,9 +59,16 @@ namespace MarketServer
                 {
                     users.Add(Convert.ToInt32(userIdNumber), userService);
                 }
+
+                string state = answer.ReportList[1];
+                await InvokeClientMethodAsync(socketId, "LoggedMarket",
+                    new object[] {answer.Answer, userIdNumber, state});
             }
-            await InvokeClientMethodAsync(socketId, "LoggingMarket",
-                new object[] { answer.Status, answer.Answer, userIdNumber });
+            else
+            {
+                await InvokeClientMethodAsync(socketId, "ErrorApi",
+                    new object[] {answer.Answer});
+            }
         }
 
         public async Task SendFeed()
