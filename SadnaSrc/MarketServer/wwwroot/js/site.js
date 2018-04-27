@@ -75,16 +75,7 @@ $(document).ready(function() {
     }
 
     socket.clientMethods['LoggedMarket'] = (message, userId, state) => {
-        console.log(message);
-        console.log(userId);
-        console.log(state);
-            var successMessage =
-                $(
-                    "<div class='success'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
-                    message +
-                    "</div>");
-            $('#alertContainer').append(successMessage);
-            location.href = 'MainLobby' + '?systemId=' + userId + '&state=' + state; 
+            location.href = 'MainLobby' + '?systemId=' + userId + '&state=' + state +'&message=' +message; 
     }
 
     socket.clientMethods['NotifyFeed'] = (feedMessage) => {
@@ -92,12 +83,7 @@ $(document).ready(function() {
             "<div class='marketFeed'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
             feedMessage +
             "</div>");
-        $('feedContainer').append(feedBox);
-    }
-
-
-    socket.clientMethods['GetApiAnswer'] = (answer) => {
-        console.log(answer);
+        $('#feedContainer').append(feedBox);
     }
 
     socket.clientMethods['ErrorApi'] = (error) => {
@@ -119,10 +105,5 @@ $(document).ready(function() {
     var $submitSigninButton = document.getElementById('submit-signin-button');
     if ($submitSigninButton !== undefined && $submitSigninButton !== null) {
         $submitSigninButton.onclick = function () { submitSignIn(); }
-    }
-
-    var $cartList = document.getElementById('cartList');
-    if ($cartList !== undefined && $cartList !== null) {
-        console.log('i can feel the cart!');
     }
 })

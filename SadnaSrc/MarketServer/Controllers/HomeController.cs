@@ -5,14 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MarketServer.Models;
+using SadnaSrc.Main;
 
 namespace MarketWeb.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult MainLobby(int systemId, string state)
+        public IActionResult MainLobby(int systemId, string state, string message)
         {
-            return View(new UserModel(systemId, state));
+            return View(new UserModel(systemId, state, message));
         }
 
         public IActionResult BrowseMarket(int systemId,string state)
