@@ -9,6 +9,9 @@ namespace MarketServer.Models
     {
         public int SystemId { get; set; }
         public string State { get; set; }
+
+        public List<CartModel> Items { get; set; }
+
         public UserModel(int systemId, string state)
         {
             SystemId = systemId;

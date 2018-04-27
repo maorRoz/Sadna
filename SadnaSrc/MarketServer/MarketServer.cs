@@ -12,12 +12,12 @@ namespace MarketServer
     public class MarketServer : WebSocketHandler
     {
         private const int Success = 0;
-        private Dictionary<int,IUserService> users;
+        public static Dictionary<int,IUserService> users = new Dictionary<int, IUserService>();
         private MarketYard marketSession;
         public MarketServer(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
         {
             marketSession = MarketYard.Instance;
-            users = new Dictionary<int,IUserService>();
+            MarketDB.Instance.InsertByForce();
         }
 
         public async Task EnterSystem(string socketId)

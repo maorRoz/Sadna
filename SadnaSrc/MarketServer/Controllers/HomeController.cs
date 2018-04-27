@@ -10,6 +10,11 @@ namespace MarketServer.Controllers
 {
     public class HomeController : Controller
     {
+        public IActionResult MainLobby(int SystemId, string State)
+        {
+            return View(new UserModel(SystemId, State));
+        }
+
         public IActionResult BrowseMarket(int SystemId,string State)
         {
             return View(new UserModel(SystemId,State));
@@ -28,8 +33,8 @@ namespace MarketServer.Controllers
 
         public IActionResult CartManagement(int SystemId, string State)
         {
-
-            return View(new UserModel(SystemId, State));
+            var userService = MarketServer.users[SystemId];
+            return View(new CartModel(SystemId,State,userService.ViewCart().ReportList));
         }
 
 

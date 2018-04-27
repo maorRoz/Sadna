@@ -80,7 +80,7 @@ $(document).ready(function() {
                     message +
                     "</div>");
             $('#alertContainer').append(successMessage);
-            location.href = 'BrowseMarket' + '?SystemId=' + userId + '&State=' + state; 
+            location.href = 'MainLobby' + '?SystemId=' + userId + '&State=' + state; 
     }
 
     socket.clientMethods['NotifyFeed'] = (feedMessage) => {
