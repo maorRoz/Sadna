@@ -10,13 +10,11 @@ using SadnaSrc.Walleter;
 
 namespace SadnaSrc.OrderPool
 {
-    public class BuyFromCartSlave
+    public class MakePurchaseSlave
     {
-        public string UserName { get; set; }
-        public string UserAddress { get; set; }
-        public string CreditCard { get; set; }
-
-        public static Random randy = new Random();
+        private string UserName { get; set; }
+        private string UserAddress { get; set; }
+        private string CreditCard { get; set; }
 
 
         private readonly OrderDL _orderDL;
@@ -27,9 +25,11 @@ namespace SadnaSrc.OrderPool
         private readonly SupplyService _supplyService;
         private readonly PaymentService _paymentService;
 
+        private int cheatCode = -1;
+
         public OrderAnswer Answer { get; private set; }
 
-        public BuyFromCartSlave(IUserBuyer buyer, IStoresSyncher storesSync)
+        public MakePurchaseSlave(IUserBuyer buyer, IStoresSyncher storesSync)
         {
             _buyer = buyer;
             _storesSync = storesSync;
@@ -246,6 +246,56 @@ namespace SadnaSrc.OrderPool
             }
         }
 
+        public Order BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
+        {
+            MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " tickets for lottery sale of " + itemName +
+                                       " from store " + store + "...");
+            int orderId = 0;
+            try
+            {
+                _buyer.ValidateRegisteredUser();
+                _storesSync.ValidateTicket(itemName, store, unitPrice);
+                OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
+                CheckOrderItem(ticketToBuy);
+                Order order = InitOrder();
+                orderId = order.GetOrderID();
+                order.AddOrderItem(ticketToBuy);
+                _paymentService.ProccesPayment(order, CreditCard);
+                _orderDL.AddOrder(order, "Lottery");
+                _storesSync.UpdateLottery(itemName, store, unitPrice, UserName, cheatCode);
+                MarketLog.Log("OrderPool", "User " + UserName + " successfully bought lottery ticket.");
+                Answer = new OrderAnswer(OrderStatus.Success, "Successfully bought Lottery ticket ");
+                return order;
+            }
+            catch (OrderException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
+                Answer = new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
+                return null;
+            }
+            catch (WalleterException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
+                                           " Error message has been created!");
+                Answer = new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
+                return null;
+            }
+            catch (SupplyException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
+                                           " Error message has been created!");
+                Answer = new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
+                return null;
+            }
+            catch (MarketException e)
+            {
+                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
+                                           " Error message has been created!");
+                Answer = new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
+                return null;
+            }
+        }
+
         private void CheckOrderItem(OrderItem item)
         {
             if (item.Name == null || item.Store == null || item.Quantity == 0)
@@ -298,6 +348,13 @@ namespace SadnaSrc.OrderPool
             {
                 CheckOrderItem(item);
             }
+        }
+
+        public void UpdateUserDetails(string userName, string address, string creditCard)
+        {
+            UserName = userName;
+            UserAddress = address;
+            CreditCard = creditCard;
         }
     }
 }

@@ -19,8 +19,6 @@ namespace SadnaSrc.OrderPool
         public string UserAddress { get; set; }
         public string CreditCard { get; set; }
 
-        public static Random randy = new Random();
-
 
         public List<Order> Orders;
         private readonly OrderDL _orderDL;
@@ -31,9 +29,7 @@ namespace SadnaSrc.OrderPool
         private SupplyService _supplyService;
         private PaymentService _paymentService;
 
-        private int cheatCode = -1;
-
-        private readonly BuyFromCartSlave regularBuySlave;
+        private readonly MakePurchaseSlave slave;
 
 
 
@@ -50,7 +46,7 @@ namespace SadnaSrc.OrderPool
             _supplyService.AttachExternalSystem();
             _paymentService.AttachExternalSystem();
 
-            regularBuySlave = new BuyFromCartSlave(buyer, storesSync);
+            slave = new MakePurchaseSlave(buyer, storesSync);
         }
 
         public static void CheckOrderItem(OrderItem item)
@@ -114,12 +110,7 @@ namespace SadnaSrc.OrderPool
 
         public void Cheat(int cheatResult)
         {
-            cheatCode = cheatResult;
-        }
-
-        public void SaveOrderToDB(Order order, string saleType)
-        {
-            _orderDL.AddOrder(order,saleType);
+            //TODO: something. Maybe return some sort of market answer?
         }
 
         public void RemoveOrderFromDB(int orderId)
@@ -157,104 +148,60 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
         {
-            Order newOrder = regularBuySlave.BuyItemFromImmediate(itemName, store, quantity, unitPrice);
+            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
+            Order newOrder = slave.BuyItemFromImmediate(itemName, store, quantity, unitPrice);
             if(newOrder!= null)
                 Orders.Add(newOrder);
-            return regularBuySlave.Answer;
+            return slave.Answer;
         }
 
         public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
         {
-            Order newOrder = regularBuySlave.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon);
+            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
+            Order newOrder = slave.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon);
             if (newOrder != null)
                 Orders.Add(newOrder);
-            return regularBuySlave.Answer;
+            return slave.Answer;
         }
 
 
         public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
         {
-            MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " tickets for lottery sale of " + itemName +
-                                       " from store " + store + "...");
-            int orderId = 0;
-            try
-            {
-                _buyer.ValidateRegisteredUser();
-                _storesSync.ValidateTicket(itemName, store, unitPrice);
-                OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
-                CheckOrderItem(ticketToBuy);
-                Order order = InitOrder();
-                orderId = order.GetOrderID();
-                order.AddOrderItem(ticketToBuy);
-                _paymentService.ProccesPayment(order,CreditCard);
-                SaveOrderToDB(order,"Lottery");
-                _storesSync.UpdateLottery(itemName, store, unitPrice, UserName, cheatCode);
-                MarketLog.Log("OrderPool", "User " + UserName + " successfully bought lottery ticket.");
-                return new OrderAnswer(OrderStatus.Success, "Successfully bought Lottery ticket ");
-            }
-            catch (OrderException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Error message has been created!");
-                return new OrderAnswer((OrderStatus) e.Status, e.GetErrorMessage());
-            }
-            catch (WalleterException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with payment system." +
-                                           " Error message has been created!");
-                return new OrderAnswer((WalleterStatus)e.Status, e.GetErrorMessage());
-            }
-            catch (SupplyException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute while communicating with supply system." +
-                                           " Error message has been created!");
-                return new OrderAnswer((SupplyStatus)e.Status, e.GetErrorMessage());
-            }
-            catch (MarketException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId + " has failed to execute. Something is wrong with Store or User." +
-                                           " Error message has been created!");
-                return new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
-            }
+            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
+            Order newOrder = slave.BuyLotteryTicket(itemName, store, quantity, unitPrice);
+            if (newOrder != null)
+                Orders.Add(newOrder);
+            return slave.Answer;
         }
 
 
         public MarketAnswer BuyAllItemsFromStore(string store)
         {
-            Order newOrder = regularBuySlave.BuyAllItemsFromStore(store);
+            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
+            Order newOrder = slave.BuyAllItemsFromStore(store);
             if (newOrder != null)
                 Orders.Add(newOrder);
-            return regularBuySlave.Answer;
+            return slave.Answer;
         }
 
 
         public MarketAnswer BuyEverythingFromCart()
         {
-            Order newOrder = regularBuySlave.BuyEverythingFromCart();
+            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
+            Order newOrder = slave.BuyEverythingFromCart();
             if (newOrder != null)
                 Orders.Add(newOrder);
-            return regularBuySlave.Answer;
+            return slave.Answer;
         }
         
 
         public MarketAnswer GiveDetails(string userName, string address, string creditCard)
         {
-	        try
-	        {
-		        MarketLog.Log("OrderPool",
-			        "User entering name and address for later usage in market order. validating data ...");
-		        IsValidUserDetails(userName, address, creditCard);
-		        MarketLog.Log("OrderPool", "Validation has been completed. User name and address are valid and been updated");
-		        UserName = userName;
-		        UserAddress = address;
-		        CreditCard = creditCard;
-		        return new OrderAnswer(GiveDetailsStatus.Success, "User name and address has been updated successfully!");
-	        }
-	        catch (OrderException)
-	        {
-		        return new OrderAnswer(GiveDetailsStatus.InvalidNameOrAddress,"blah");
-
-	        }
-            
+	        OrderDetailsSlave detailSlave = new OrderDetailsSlave();
+            detailSlave.GiveDetails(userName, address, creditCard);
+            if (detailSlave.Answer.Status == (int)GiveDetailsStatus.Success)
+                slave.UpdateUserDetails(userName, address, creditCard);
+            return detailSlave.Answer;
         }
         /*
          * Private Functions
@@ -267,16 +214,6 @@ namespace SadnaSrc.OrderPool
                 UserName = _buyer.GetName();
                 UserAddress = _buyer.GetAddress();
                 CreditCard = _buyer.GetCreditCard();
-            }    
-        }
-
-        private void IsValidUserDetails(string userName, string address, string creditCard)
-        {
-            int x;
-            if (userName == null || address == null || creditCard == null || creditCard.Length != 8 || !Int32.TryParse(creditCard, out x))
-            {
-                MarketLog.Log("OrderPool", "User entered name or address which is invalid by the system standards!");
-                throw new OrderException(GiveDetailsStatus.InvalidNameOrAddress, "User entered invalid name or address into the order");
             }
         }
 
