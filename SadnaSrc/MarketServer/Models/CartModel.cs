@@ -29,11 +29,11 @@ namespace MarketServer.Models
             public CartItemModel(string data)
             {
                 var dataParam = data.Split(':');
-                Name = dataParam[1];
-                Store = dataParam[3];
-                Quantity = dataParam[5];
-            //    UnitPrice = dataParam[7];
-            //    FinalPrice = dataParam[9];
+                Name = dataParam[1].Substring(1, dataParam[1].Length - 8);
+                Store = dataParam[2].Substring(1,dataParam[2].Length - 11);
+                Quantity = dataParam[3].Substring(1 , dataParam[3].Length - 12);
+                UnitPrice = dataParam[4].Substring(1 , dataParam[4].Length - 13);
+                FinalPrice = dataParam[5];
             }
         }
 

@@ -13,7 +13,8 @@
             <ul id="cartList">
                 @foreach (var item in Model.Items)
                 {
-                    <li> @item.Name </li>
+				<li> @item.Name @item.Store @item.Quantity @item.UnitPrice @item.FinalPrice</li>
+					
                 }
             </ul>
         </div>
