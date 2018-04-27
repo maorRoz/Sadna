@@ -4,6 +4,10 @@ $(document).ready(function() {
     var socketId = null;
     socket.enableLogging = true;
 
+    function foo()
+    {
+        console.log('1');
+    }
 
     function getParameterValues(param) {
         var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -22,7 +26,7 @@ $(document).ready(function() {
         var creditEntry = $('#user-creditcard-entry').val().trim();
         socket.invoke('SignUpUser',
             socketId,
-            getParameterValues('SystemId'),
+            getParameterValues('systemId'),
             nameEntry,
             addressEntry,
             passEntry,
@@ -38,7 +42,7 @@ $(document).ready(function() {
         var passEntry = $('#user-password-entry').val().trim();
         socket.invoke('SignInUser',
             socketId,
-            getParameterValues('SystemId'),
+            getParameterValues('systemId'),
             nameEntry,
             passEntry);
         $('#user-name-entry').val('');
@@ -51,11 +55,11 @@ $(document).ready(function() {
         console.log('client has been connected!');
         socketId = socket.connectionId;
         console.log('your SocketId is : ' + socketId);
-        var systemId = getParameterValues('SystemId');
-        console.log('your SystemId is : ' +systemId);
+        var systemId = getParameterValues('systemId');
+        console.log('your systemId is : ' +systemId);
         if (systemId === undefined || systemId === 0) {
             socket.invoke('EnterSystem', socketId);
-        } else if (getParameterValues('State') !== 'Guest') {
+        } else if (getParameterValues('state') !== 'Guest') {
               var $signUpRemove = document.getElementById('signUpPage');
               $signUpRemove.parentNode.removeChild($signUpRemove);
               var $signInRemove = document.getElementById('signInPage');
@@ -67,7 +71,7 @@ $(document).ready(function() {
     }
 
     socket.clientMethods['IdentifyClient'] = (userId) => {
-        location.href = window.location.href + '?SystemId=' + userId + '&State=Guest';
+        location.href = window.location.href + '?systemId=' + userId + '&state=Guest';
     }
 
     socket.clientMethods['LoggedMarket'] = (message, userId, state) => {
@@ -80,7 +84,7 @@ $(document).ready(function() {
                     message +
                     "</div>");
             $('#alertContainer').append(successMessage);
-            location.href = 'MainLobby' + '?SystemId=' + userId + '&State=' + state; 
+            location.href = 'MainLobby' + '?systemId=' + userId + '&state=' + state; 
     }
 
     socket.clientMethods['NotifyFeed'] = (feedMessage) => {

@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SadnaSrc.UserSpot;
 using WebSocketManager;
 
-namespace MarketServer
+namespace MarketWeb
 {
     public class Startup
     {

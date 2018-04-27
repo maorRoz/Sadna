@@ -6,35 +6,29 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MarketServer.Models;
 
-namespace MarketServer.Controllers
+namespace MarketWeb.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult MainLobby(int SystemId, string State)
+        public IActionResult MainLobby(int systemId, string state)
         {
-            return View(new UserModel(SystemId, State));
+            return View(new UserModel(systemId, state));
         }
 
-        public IActionResult BrowseMarket(int SystemId,string State)
+        public IActionResult BrowseMarket(int systemId,string state)
         {
-            return View(new UserModel(SystemId,State));
+            return View(new UserModel(systemId,state));
         }
 
-        public IActionResult SignUp(int SystemId, string State)
+        public IActionResult SignUp(int systemId, string state)
         {
-             return View(new UserModel(SystemId, State));
+             return View(new UserModel(systemId, state));
         }
 
-        public IActionResult SignIn(int SystemId, string State)
+        public IActionResult SignIn(int systemId, string state)
         { 
 
-            return View(new UserModel(SystemId, State));
-        }
-
-        public IActionResult CartManagement(int SystemId, string State)
-        {
-            var userService = MarketServer.users[SystemId];
-            return View(new CartModel(SystemId,State,userService.ViewCart().ReportList));
+            return View(new UserModel(systemId, state));
         }
 
 

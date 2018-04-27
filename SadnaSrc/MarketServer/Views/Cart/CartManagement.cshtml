@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "MarketYard Cart";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<div class="row top-space">
+    <div class="col-lg-12">
+        <div id="feedContainer" style="float: right;width:20%"></div>
+		<div style="float: left;width:70%">
+			<div id="alertContainer"></div>
+		    <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Store </th>
+                    <th>Quantity </th>
+                    <th>UnitPrice</th>
+                    <th>FinalPrice</th>
+                </tr>
+                </thead>
+		        @foreach (var item in Model.Items)
+		        {
+		            <tr>
+		                <td>@item.Name</td>
+		                <td>@item.Store</td>
+		                <td>@item.Quantity</td>
+		                <td>@item.UnitPrice</td>
+		                <td>@item.FinalPrice</td>
+		                <td>
+		                    <a asp-controller="Cart" asp-action="RemoveCartItem" asp-route-systemId="@Model.SystemId"
+		                       asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name" 
+		                       asp-route-unitPrice="@item.UnitPrice">Remove</a> |
+		                    Buyout |
+		                    + |
+		                    -
+		                </td>
+		            </tr>
+		        }
+		    </table>
+
+		</div>
+    </div>
+</div>
+
+@section Scripts{
+    <script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+
+
+
+}

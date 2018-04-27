@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 using WebSocketManager;
 
 
-namespace MarketServer
+namespace MarketWeb
 {
     public class MarketServer : WebSocketHandler
     {
