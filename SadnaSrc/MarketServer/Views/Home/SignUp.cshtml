@@ -6,8 +6,13 @@
 
 <div class="row top-space">
     <div class="col-lg-10">
-        <div id="alertContainer"></div>
 
+        <div id="feedContainer" style="float: right;width:20%">
+            <br/>
+        </div>
+
+        <div style="float: left;width:70%">
+            <div id="alertContainer"></div>
             <div>
                 <label for="user-name-entry">UserName:</label>
                 <input class="form-control" id="user-name-entry" />
@@ -30,11 +35,12 @@
             <br />
             <br />
             <button class="btn btn-primary" id="submit-signup-button">Register</button>
-   </div>
+        </div>
+
+    </div>
 </div>
 
 @section Scripts{
     <script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
-
 }
 

@@ -27,6 +27,13 @@
     margin-bottom: 15px;
 }
 
+.marketFeed {
+    padding: 5px;
+    background-color: #20b2aa;
+    color: white;
+    margin-bottom: 15px;
+}
+
 /* The close button of error/tip/success message box */
 .closebtn {
     margin-left: 15px;
