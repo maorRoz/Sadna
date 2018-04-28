@@ -119,9 +119,18 @@
     <Compile Include="MarketHarmony\PurchaseHistory.cs" />
     <Compile Include="OrderPool\StoreOrderTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreCenter\AddDiscountToProductSlave.cs" />
+    <Compile Include="StoreCenter\AddNewLotterySlave.cs" />
     <Compile Include="StoreCenter\AddNewProductSlave.cs" />
+    <Compile Include="StoreCenter\AddQuanitityToProductSlave.cs" />
     <Compile Include="StoreCenter\All_ID_Manager.cs" />
+    <Compile Include="StoreCenter\ChangeProductPurchaseWayToImmediateSlave.cs" />
+    <Compile Include="StoreCenter\ChangeProductPurchaseWayToLotterySlave.cs" />
     <Compile Include="StoreCenter\CloseStoreSlave.cs" />
+    <Compile Include="StoreCenter\EditDiscountSlave.cs" />
+    <Compile Include="StoreCenter\EditProductSlave.cs" />
+    <Compile Include="StoreCenter\EnumStringConverter.cs" />
+    <Compile Include="StoreCenter\ManagementSlave.cs" />
     <Compile Include="StoreCenter\OutsideModuleService.cs" />
     <Compile Include="StoreCenter\LotteryTicket.cs" />
     <Compile Include="StoreCenter\LotterySaleManagmentTicket.cs" />
@@ -129,6 +138,8 @@
     <Compile Include="StoreCenter\Product.cs" />
     <Compile Include="StoreCenter\PromoteToStoreManagerSlave.cs" />
     <Compile Include="StoreCenter\PurchesPolicy.cs" />
+    <Compile Include="StoreCenter\RemoveDiscountFromProductSlave.cs" />
+    <Compile Include="StoreCenter\RemoveProductSlave.cs" />
     <Compile Include="StoreCenter\StockListItem.cs" />
     <Compile Include="StoreCenter\Store.cs" />
     <Compile Include="StoreCenter\StoreAnswer.cs" />
@@ -136,6 +147,7 @@
     <Compile Include="StoreCenter\StoreException.cs" />
     <Compile Include="StoreCenter\StoreManagementService.cs" />
     <Compile Include="StoreCenter\StoreShoppingService.cs" />
+    <Compile Include="StoreCenter\ViewStoreHistorySlave.cs" />
     <Compile Include="SupplyPoint\SupplyAnswer.cs" />
     <Compile Include="SupplyPoint\SupplyException.cs" />
     <Compile Include="SupplyPoint\SupplyService.cs" />

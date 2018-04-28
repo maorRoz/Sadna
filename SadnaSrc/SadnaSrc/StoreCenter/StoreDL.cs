@@ -154,6 +154,7 @@ namespace SadnaSrc.StoreCenter
                 discount.Percentages
             };
         }
+        
 
         private object[] GetLotteryManagmentValuesArray(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
@@ -526,6 +527,11 @@ namespace SadnaSrc.StoreCenter
         public void RemoveStockListItem(StockListItem stockListItem)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
+            {
+                LotterySaleManagmentTicket LSMT = GetLotteryByProductID(stockListItem.Product.SystemId);
+                RemoveLottery(LSMT);
+            }
             if (stockListItem.Discount != null)
             {
                 RemoveDiscount(stockListItem.Discount);

@@ -4,20 +4,15 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddNewProductSlave
+    internal class AddNewProductSlave : AbstractSlave
     {
         internal MarketAnswer answer;
-        StoreDL global;
-        private IUserSeller _storeManager;
-        private string _storeName;
         private Store _store;
         private int globalProductID;
         private All_ID_Manager manager;
-        public AddNewProductSlave(IUserSeller storeManager, Store store)
+        public AddNewProductSlave(IUserSeller storeManager, Store store) : base(store.Name, storeManager)
         {
-            _storeManager = storeManager;
             _store = store;
-            _storeName = store.Name;
             manager = All_ID_Manager.GetInstance();
         }
 
@@ -64,18 +59,5 @@ namespace SadnaSrc.StoreCenter
             { throw new StoreException(StoreEnum.quantityIsNegatie, "negative quantity"); }
         }
 
-        private void checkIfStoreExistsAndActive()
-        {
-            if (!global.IsStoreExistAndActive(_storeName))
-            { throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
-        }
-
-        private void IsProductNameAvailableInStore(string name)
-        {
-
-            Product P = global.getProductByNameFromStore(_storeName, name);
-            if (P == null)
-            { throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); }
-        }
     }
 }
