@@ -19,15 +19,15 @@
 		        }
 		    </div>
 		    <table class="table">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Store </th>
-                    <th>Quantity </th>
-                    <th>UnitPrice</th>
-                    <th>FinalPrice</th>
-                </tr>
-                </thead>
+		        <thead>
+		        <tr>
+		            <th>Name</th>
+		            <th>Store </th>
+		            <th>Quantity </th>
+		            <th>UnitPrice</th>
+		            <th>FinalPrice</th>
+		        </tr>
+		        </thead>
 		        @foreach (var item in Model.Items)
 		        {
 		            <tr>
@@ -53,6 +53,8 @@
 		            </tr>
 		        }
 		    </table>
+		    <hr/>
+		    <button class="btn-primary"> Checkout Cart</button>
 
 		</div>
     </div>
