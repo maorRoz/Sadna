@@ -28,24 +28,6 @@ namespace MarketWeb
             await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
         }
 
-
-        public async Task SignUpUser(string socketId,string userId, string userName, string address, string password,
-            string creditCard)
-        {
-            var userService = users[Convert.ToInt32(userId)];
-            var answer = userService.SignUp(userName, address, password, creditCard);
-            if (answer.Status == Success)
-            {
-                await InvokeClientMethodAsync(socketId, "LoggedMarket",
-                    new object[] {answer.Answer, userId,"Registered"});
-            }
-            else
-            {
-                await InvokeClientMethodAsync(socketId, "ErrorApi",
-                    new object[] { answer.Answer });
-            }
-        }
-
         public async Task SignInUser(string socketId, string userId, string userName,string password)
         {
             int userIdNumber = Convert.ToInt32(userId);

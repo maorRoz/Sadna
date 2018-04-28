@@ -12,17 +12,18 @@ namespace MarketWeb.Controllers
 {
     public class CartController : Controller
     {
-        public IActionResult CartManagement(int systemId, string state)
+        public IActionResult CartManagement(int systemId, string state,string message)
         {
             var userService = MarketServer.users[systemId];
-            return View(new CartModel(systemId, state, userService.ViewCart().ReportList));
+            var cartData = userService.ViewCart().ReportList;
+            return View(new CartModel(systemId, state, message, cartData));
         }
 
         public IActionResult RemoveCartItem(int systemId, string state, string store, string product, double unitPrice)
         {
             var userService = MarketServer.users[systemId];
             var answer = userService.RemoveFromCart(store, product, unitPrice);
-            return RedirectToAction("CartManagement", new { systemId = systemId, state = state });
+            return RedirectToAction("CartManagement", new { systemId, state });
         }
     }
 }

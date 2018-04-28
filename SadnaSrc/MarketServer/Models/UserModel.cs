@@ -14,11 +14,6 @@ namespace MarketServer.Models
 
         public string Message { get; set; }
 
-        public UserModel(int systemId, string state)
-        {
-            SystemId = systemId;
-            State = state;
-        }
         public UserModel(int systemId, string state, string message)
         {
             SystemId = systemId;

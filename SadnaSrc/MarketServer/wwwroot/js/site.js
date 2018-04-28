@@ -14,38 +14,6 @@ $(document).ready(function() {
         }
     }
 
-    function submitSignUp() {
-        var nameEntry = $('#user-name-entry').val().trim();
-        var addressEntry = $('#user-address-entry').val().trim();
-        var passEntry = $('#user-password-entry').val().trim();
-        var creditEntry = $('#user-creditcard-entry').val().trim();
-        socket.invoke('SignUpUser',
-            socketId,
-            getParameterValues('systemId'),
-            nameEntry,
-            addressEntry,
-            passEntry,
-            creditEntry);
-        $('#user-name-entry').val('');
-        $('#user-address-entry').val('');
-        $('#user-password-entry').val('');
-        $('#user-creditcard-entry').val('');
-    }
-
-    function submitSignIn() {
-        var nameEntry = $('#user-name-entry').val().trim();
-        var passEntry = $('#user-password-entry').val().trim();
-        socket.invoke('SignInUser',
-            socketId,
-            getParameterValues('systemId'),
-            nameEntry,
-            passEntry);
-        $('#user-name-entry').val('');
-        $('#user-password-entry').val('');
-    }
-
-
-
     socket.connectionMethods.onConnected = () => {
         console.log('client has been connected!');
         socketId = socket.connectionId;
@@ -69,10 +37,6 @@ $(document).ready(function() {
         location.href = window.location.href + '?systemId=' + userId + '&state=Guest';
     }
 
-    socket.clientMethods['LoggedMarket'] = (message, userId, state) => {
-            location.href = 'MainLobby' + '?systemId=' + userId + '&state=' + state +'&message=' +message; 
-    }
-
     socket.clientMethods['NotifyFeed'] = (feedMessage) => {
         var feedBox = $(
             "<div class='marketFeed'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
@@ -81,24 +45,6 @@ $(document).ready(function() {
         $('#feedContainer').append(feedBox);
     }
 
-    socket.clientMethods['ErrorApi'] = (error) => {
-        console.log(error);
-        var alertBox =
-            $("<div class='error'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
-                error +
-                "</div>");
-        $('#alertContainer').append(alertBox);
-    }
-
     socket.start();
 
-    var $submitSignupButton = document.getElementById('submit-signup-button');
-    if ($submitSignupButton !== undefined && $submitSignupButton !== null) {
-        $submitSignupButton.onclick = function () { submitSignUp(); }
-    }
-
-    var $submitSigninButton = document.getElementById('submit-signin-button');
-    if ($submitSigninButton !== undefined && $submitSigninButton !== null) {
-        $submitSigninButton.onclick = function () { submitSignIn(); }
-    }
 })

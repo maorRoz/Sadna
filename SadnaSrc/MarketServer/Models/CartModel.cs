@@ -9,7 +9,7 @@ namespace MarketServer.Models
     public class CartModel: UserModel
     {
         public CartItemModel[] Items { get; set; }
-        public CartModel(int systemId, string state,string[] itemData) : base(systemId,state)
+        public CartModel(int systemId, string state,string message,string[] itemData) : base(systemId,state,message)
         {
             Items = new CartItemModel[itemData.Length];
             for (int i = 0; i < Items.Length; i++)

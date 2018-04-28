@@ -17,9 +17,9 @@ namespace MarketWeb.Controllers
             return View(new UserModel(systemId, state, message));
         }
 
-        public IActionResult BrowseMarket(int systemId,string state)
+        public IActionResult BrowseMarket(int systemId,string state, string message)
         {
-            return View(new UserModel(systemId,state));
+            return View(new UserModel(systemId,state,message));
         }
 
         public IActionResult SignUp(int systemId, string state,string message)
@@ -27,13 +27,12 @@ namespace MarketWeb.Controllers
              return View(new UserModel(systemId, state,message));
         }
 
-        public IActionResult SignIn(int systemId, string state)
+        public IActionResult SignIn(int systemId, string state, string message)
         { 
 
-            return View(new UserModel(systemId, state));
+            return View(new UserModel(systemId, state,message));
         }
 
-        [HttpPost]
         public IActionResult SubmitSignUp(int systemId, string state,string usernameEntry,string addressEntry,
             string passwordEntry,string creditCardEntry)
         {
@@ -41,10 +40,30 @@ namespace MarketWeb.Controllers
             var answer = userService.SignUp(usernameEntry, addressEntry, passwordEntry, creditCardEntry);
             if (answer.Status == Success)
             {
-                return RedirectToAction("SignUp", new { systemId = systemId, state = state, message = answer.Answer});
+                return RedirectToAction("MainLobby", new { systemId, state, message = answer.Answer });
             }
 
-            return RedirectToRoute("MainLobby", new {systemId = systemId, state = state, message = answer.Answer});
+            return RedirectToAction("SignUp", new {systemId, state, message = answer.Answer});
+        }
+
+        public IActionResult SubmitSignIn(int systemId, string state, string usernameEntry, string passwordEntry)
+        {
+            var userService = MarketServer.users[systemId];
+            var answer = userService.SignIn(usernameEntry, passwordEntry);
+            if (answer.Status == Success)
+            {
+                MarketServer.users.Remove(systemId);
+                systemId = Convert.ToInt32(answer.ReportList[0]);
+                if (!MarketServer.users.ContainsKey(systemId))
+                {
+                    MarketServer.users.Add(Convert.ToInt32(systemId), userService);
+                }
+
+                state = answer.ReportList[1];
+                return RedirectToAction("MainLobby", new { systemId, state, message = answer.Answer });
+            }
+
+            return RedirectToAction("SignIn", new { systemId, state, message = answer.Answer });
         }
 
 
