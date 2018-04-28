@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.MarketFeed
 {
-    class BuyObserver
+    class BuyObserver : Observer
     {
+        public override void Update()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

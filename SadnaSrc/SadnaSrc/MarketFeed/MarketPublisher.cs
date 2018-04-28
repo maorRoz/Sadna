@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.MarketFeed
 {
-    class MarketPublisher : Observer
+    class MarketPublisher
     {
     }
 }

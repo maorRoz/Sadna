@@ -8,5 +8,9 @@ namespace SadnaSrc.MarketFeed
 {
     class MessageObserver : Observer
     {
+        public override void Update()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
