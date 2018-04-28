@@ -22,7 +22,6 @@ namespace SadnaSrc.OrderPool
         void UpdateOrderPrice(int orderId, double price);
         string[] GetAllExpiredLotteries();
         void CancelLottery(string lottery);
-        string[] GetLottery(string lottery);
         string[] GetAllTickets(string lottery);
         int GetTicketParticipantID(string ticket);
         string GetCreditCardToRefund(int userID);

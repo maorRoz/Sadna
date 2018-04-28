@@ -80,6 +80,8 @@ namespace SadnaSrc.OrderPool
         private void Refund(string ticket)
         {
             int participantID = _orderDL.GetTicketParticipantID(ticket);
+            if(participantID < 0)
+                throw new OrderException(LotteryOrderStatus.InvalidLotteryTicket, "Cannot find ticket or user");
             string creditCardToRefund = _orderDL.GetCreditCardToRefund(participantID);
             string nameToRefund = _orderDL.GetNameToRefund(participantID);
             double sumToRefund = _orderDL.GetSumToRefund(ticket);
@@ -127,8 +129,10 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public Order InitOrder(string userName,string userAddress)
+        private Order InitOrder(string userName,string userAddress)
         {
+            if(userName == null || userAddress == null)
+                throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find name or address");
             Order order = new Order(_orderDL.RandomOrderID(), userName, userAddress);
             MarketLog.Log("OrderPool", " successfully initialized new order " + order.GetOrderID() + "for user "+userName+".");
             return order;
@@ -136,6 +140,8 @@ namespace SadnaSrc.OrderPool
 
         private Order RefundOrder(double sum,string userName,string ticket)
         {
+            if(sum <= 0 || userName == null || ticket == null)
+                throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find cost or user name.");
             Order refund = new Order(_orderDL.RandomOrderID(), userName);
             refund.AddOrderItem(new OrderItem("---", "REFUND: Lottery Ticket", -1 * sum, 1)); 
             MarketLog.Log("OrderPool", " successfully initialized new order " + refund.GetOrderID() + "for user " + userName + ".");
