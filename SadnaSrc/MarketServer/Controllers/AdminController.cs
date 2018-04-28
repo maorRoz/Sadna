@@ -16,9 +16,9 @@ namespace MarketWeb.Controllers
         private const int Success = 0;
         public IActionResult RemoveUserView(int systemId,string state, string message, bool valid)
         {
-			string[] blah = new string[5];
-			return View(new UserListModel(systemId, state, message, blah));
-
+			var userService = MarketServer.users[systemId];
+			string[] usersData = userService.ViewUsers().ReportList;
+			return View(new UserListModel(systemId, state, message, usersData));
 		}
 
         public IActionResult ToRemoveUser(int systemId, string state, string toDeleteName)

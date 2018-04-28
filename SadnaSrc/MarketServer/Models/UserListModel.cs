@@ -8,14 +8,24 @@ namespace MarketWeb.Models
 {
     public class UserListModel : UserModel
     {
-		string[] users;
-        public UserListModel(int systemId, string state, string message, string[] userNames) : base(systemId, state, message)
-        {
-			users = new string[userNames.Length];
-			for (int i = 0; i < users.Length; i++)
+		public UserItem[] Items { get; set; }
+		public UserListModel(int systemId, string state, string message, string[] itemData) : base(systemId, state, message)
+		{
+			Items = new UserItem[itemData.Length];
+			for (int i = 0; i < Items.Length; i++)
 			{
-				users[i] = userNames[i];
+				Items[i] = new UserItem(itemData[i]);
 			}
-        }
-    }
+		}
+
+		public class UserItem
+		{
+			public string Name { get; set; }
+
+			public UserItem(string data)
+			{
+				Name = data;
+			}
+		}
+	}
 }
