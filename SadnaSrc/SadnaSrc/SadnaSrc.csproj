@@ -110,6 +110,7 @@
     <Compile Include="MarketHarmony\UserBuyerHarmony.cs" />
     <Compile Include="MarketHarmony\UserSellerHarmony.cs" />
     <Compile Include="MarketHarmony\UserShopperHarmony.cs" />
+    <Compile Include="OrderPool\IOrderDL.cs" />
     <Compile Include="OrderPool\Order.cs" />
     <Compile Include="OrderPool\OrderAnswer.cs" />
     <Compile Include="OrderPool\OrderException.cs" />

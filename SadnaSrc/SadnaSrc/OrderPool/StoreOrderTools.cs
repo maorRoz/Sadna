@@ -150,7 +150,5 @@ namespace SadnaSrc.OrderPool
                 _orderDL.RemoveOrder(order.GetOrderID());
             }
         }
-
-
     }
 }

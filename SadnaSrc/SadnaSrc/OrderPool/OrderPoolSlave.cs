@@ -12,7 +12,7 @@ namespace SadnaSrc.OrderPool
 {
     public class OrderPoolSlave
     {
-        private readonly OrderDL _orderDL;
+        private readonly IOrderDL _orderDL;
 
         private readonly IUserBuyer _buyer;
         private readonly IStoresSyncher _storesSync;
@@ -24,13 +24,13 @@ namespace SadnaSrc.OrderPool
 
         public OrderAnswer Answer { get; private set; }
 
-        public OrderPoolSlave(ref IUserBuyer buyer, IStoresSyncher storesSync)
+        public OrderPoolSlave(ref IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL)
         {
             _buyer = buyer;
             _storesSync = storesSync;
             _supplyService = SupplyService.Instance;
             _paymentService = PaymentService.Instance;
-            _orderDL = OrderDL.Instance;
+            _orderDL = orderDL;
 
             _supplyService.AttachExternalSystem();
             _paymentService.AttachExternalSystem();

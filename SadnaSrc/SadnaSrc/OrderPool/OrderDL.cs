@@ -9,7 +9,7 @@ using SadnaSrc.Main;
 namespace SadnaSrc.OrderPool
 {
 
-    public class OrderDL
+    public class OrderDL : IOrderDL
     {
         private static Random rand = new Random();
         private static OrderDL _instance;
