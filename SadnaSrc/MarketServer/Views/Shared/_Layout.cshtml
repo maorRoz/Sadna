@@ -30,12 +30,12 @@
                 <a asp-area="" asp-controller="Home" asp-action="MainLobby" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State" class="navbar-brand">MarketYard</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul id="menuBar" class="nav navbar-nav">
+                <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="BrowseMarket" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State" >Browse Market</a></li>
-                    <li><a id="cartPage" asp-area="" asp-controller="Cart" asp-action="CartManagement" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Cart</a></li>
+                    <li><a asp-area="" asp-controller="Cart" asp-action="CartManagement" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Cart</a></li>
                     @if (Model.State != null && Model.State.Equals("Guest")){ 
-                        <li><a id="signUpPage" asp-area="" asp-controller="Home" asp-action="SignUp" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Sign Up</a></li>
-                        <li><a id="signInPage" asp-area="" asp-controller="Home" asp-action="SignIn" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Sign In</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="SignUp" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Sign Up</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="SignIn" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Sign In</a></li>
                     }
                     @if (Model.State != null && Model.State.Equals("Registered"))
                     {
