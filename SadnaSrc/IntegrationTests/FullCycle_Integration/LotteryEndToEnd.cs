@@ -33,6 +33,7 @@ namespace IntegrationTests.FullCycle_Integration
             userService = market.GetUserService();
             otherUser = market.GetUserService();
             userService.EnterSystem();
+            otherUser.EnterSystem();
             userService.SignIn("Arik1", "123");
             managementService = (StoreManagementService)market.GetStoreManagementService(userService, "T");
             Product P = new Product("P10000", "name", 100, "ds");
@@ -45,7 +46,7 @@ namespace IntegrationTests.FullCycle_Integration
         [TestMethod]
         public void LotteryEndToEndNoLotto()
         {
-            orderService = market.GetOrderService(ref userService);
+            orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             orderService.BuyLotteryTicket("name", "T", 1, 50);
             tickets = handler.DataLayer.getAllTickets("L100");
@@ -56,7 +57,7 @@ namespace IntegrationTests.FullCycle_Integration
         [TestMethod]
         public void LotteryEndToEndOneWinner()
         {
-            orderService = market.GetOrderService(ref userService);
+            orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             orderService.BuyLotteryTicket("name", "T", 1, 100);
             tickets = handler.DataLayer.getAllTickets("L100");
@@ -67,7 +68,8 @@ namespace IntegrationTests.FullCycle_Integration
         [TestMethod]
         public void LotteryEndToEndCancelLotto()
         {
-            orderService = market.GetOrderService(ref userService);
+            
+            orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             orderService.BuyLotteryTicket("name", "T", 1, 50);
             tickets = handler.DataLayer.getAllTickets("L100");
@@ -82,7 +84,7 @@ namespace IntegrationTests.FullCycle_Integration
         [TestMethod]
         public void LotteryEndToEndPurchesIlligalValueZeroMouney()
         {
-            orderService = market.GetOrderService(ref userService);
+            orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             MarketAnswer ans = orderService.BuyLotteryTicket("name", "T", 1, 0);
             Assert.AreEqual(ans.Status, (int)OrderStatus.InvalidCoupon);
@@ -91,7 +93,7 @@ namespace IntegrationTests.FullCycle_Integration
         [TestMethod]
         public void LotteryEndToEndPurchesIlligalValueNegativeMouney()
         {
-            orderService = market.GetOrderService(ref userService);
+            orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             MarketAnswer ans = orderService.BuyLotteryTicket("name", "T", 1, -5);
             Assert.AreEqual(ans.Status, (int)OrderStatus.InvalidCoupon);
@@ -100,7 +102,7 @@ namespace IntegrationTests.FullCycle_Integration
         [TestMethod]
         public void LotteryEndToEndPurchesIlligalValueOverMouney()
         {
-            orderService = market.GetOrderService(ref userService);
+            orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             MarketAnswer ans = orderService.BuyLotteryTicket("name", "T", 1, 900000);
             Assert.AreEqual(ans.Status, (int)OrderStatus.InvalidCoupon);
