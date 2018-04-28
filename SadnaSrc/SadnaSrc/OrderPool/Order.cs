@@ -89,17 +89,6 @@ namespace SadnaSrc.OrderPool
             _totalPrice += item.Price*item.Quantity;
         }
 
-        public void RemoveOrderItem(OrderItem item)
-        {
-            if (GetOrderItem(item.Name, item.Store) == null)
-            {
-                throw new OrderException(OrderItemStatus.NoOrderItemInOrder, "Order item is not listed in the order.");
-            }
-
-            _items.Remove(item);
-            _totalPrice -= item.Price * item.Quantity;
-        }
-
         public void ComputeTotalPrice()
         {
             double acc = 0;

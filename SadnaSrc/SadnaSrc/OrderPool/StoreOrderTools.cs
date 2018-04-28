@@ -98,7 +98,6 @@ namespace SadnaSrc.OrderPool
             try
             {
                 OrderItem toBuy = new OrderItem(store, "DELIVERY : " + itemName, 1, 1);
-                OrderService.CheckOrderItem(toBuy);
                 Order order = InitOrder(_orderDL.GetNameToRefund(userId), _orderDL.GetAddressToSendPackage(userId));
                 orderId = order.GetOrderID();
                 order.AddOrderItem(toBuy);

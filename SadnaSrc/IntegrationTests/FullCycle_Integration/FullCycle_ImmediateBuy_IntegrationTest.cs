@@ -72,6 +72,7 @@ namespace IntegrationTests.FullCycle_Integration
             {
                 storeServiceSession.LoginShoper(user, pass);
                 storeServiceSession.AddProductToCart(store, product, 3);
+                orderServiceSession.LoginBuyer(user, pass);
                 orderServiceSession.BuyItemFromImmediate(product, store, 3, 11);
                 Assert.AreEqual(2, sysadminSession.ViewPurchaseHistoryByStore(store).ReportList.Length);
                 string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[1];
@@ -94,6 +95,7 @@ namespace IntegrationTests.FullCycle_Integration
                 storeServiceSession.AddProductToCart(store, product, 3);
                 CartItem expected = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart(store, product, 11);
                 Assert.AreEqual(3, expected.Quantity);
+                orderServiceSession.LoginBuyer(user, pass);
                 orderServiceSession.BuyItemFromImmediate(product, store, 3, 11);
                 userServiceSession3.SignIn(user, pass);
                 Assert.IsNull(((UserService)userServiceSession3).MarketUser.Cart.SearchInCart(store, product, 11));

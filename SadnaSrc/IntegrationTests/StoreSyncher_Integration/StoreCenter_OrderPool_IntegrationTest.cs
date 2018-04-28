@@ -226,7 +226,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                userServiceSession.SignIn("Vadim Chernov", "123");
+                orderServiceSession.LoginBuyer("Vadim Chernov", "123");
                 orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
                 orderServiceSession.BuyItemFromImmediate(product1, store1, 3, 6);
                 StockListItem itemToCheck = storeServiceSession.GetProductFromStore(store1, product1);
@@ -244,7 +244,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                userServiceSession.SignIn("Vova", "123");
+                orderServiceSession.LoginBuyer("Vova", "123");
                 orderServiceSession.GiveDetails("Vova", "Donkelblum", "12345667");
                 orderServiceSession.BuyItemFromImmediate(product2, store2, 8, 6);
             }
@@ -255,7 +255,7 @@ namespace IntegrationTests.StoreSyncher_Integration
 
             try
             {
-                StockListItem itemToCheck = storeServiceSession.GetProductFromStore(store2, product1);
+                storeServiceSession.GetProductFromStore(store2, product1);
                 Assert.Fail();
             }
             catch (MarketException)
@@ -269,7 +269,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                userServiceSession.SignIn("Arik1", "123");
+                orderServiceSession.LoginBuyer("Arik1", "123");
                 orderServiceSession.GiveDetails("Arik1", "AAA", "12345667");
                 orderServiceSession.BuyItemFromImmediate(product1, store1, 3, 6);
                 Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
@@ -285,7 +285,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                userServiceSession.SignIn("Vadim Chernov", "123");
+                orderServiceSession.LoginBuyer("Vadim Chernov", "123");
                 orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
                 orderServiceSession.BuyAllItemsFromStore(store1);
                 Assert.AreEqual(17, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
@@ -302,7 +302,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                userServiceSession.SignIn("Vadim Chernov", "123");
+                orderServiceSession.LoginBuyer("Vadim Chernov", "123");
                 orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
                 orderServiceSession.BuyAllItemsFromStore("A" + store1);
                 Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
@@ -319,7 +319,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                userServiceSession.SignIn("CJ", "123");
+                orderServiceSession.LoginBuyer("CJ", "123");
                 orderServiceSession.BuyItemWithCoupon("Pizza", "The Red Rock", 2, 60.00, "D1");
                 Assert.AreEqual(8, storeServiceSession.GetProductFromStore("The Red Rock", "Pizza").Quantity);
             }
@@ -334,7 +334,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                userServiceSession.SignIn("CJ", "123");
+                orderServiceSession.LoginBuyer("CJ", "123");
                 orderServiceSession.BuyItemWithCoupon("Pizza", "The Red Rock", 2, 60.00, "D6");
                 Assert.AreEqual(10, storeServiceSession.GetProductFromStore("The Red Rock", "Pizza").Quantity);
             }
@@ -349,7 +349,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                userServiceSession.SignIn("Vadim Chernov", "123");
+                orderServiceSession.LoginBuyer("Vadim Chernov", "123");
                 orderServiceSession.BuyItemWithCoupon("Bamba", "The Red Rock", 2, 6.00, "D6");
                 Assert.AreEqual(20, storeServiceSession.GetProductFromStore("The Red Rock", "Bamba").Quantity);
             }
@@ -364,7 +364,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                userServiceSession.SignIn("Vadim Chernov", "123");
+                orderServiceSession.LoginBuyer("Vadim Chernov", "123");
                 orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
                 orderServiceSession.BuyEverythingFromCart();
                 Assert.AreEqual(17, storeServiceSession.GetProductFromStore(store1, product1).Quantity);

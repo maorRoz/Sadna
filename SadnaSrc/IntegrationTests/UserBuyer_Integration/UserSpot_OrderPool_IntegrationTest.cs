@@ -56,7 +56,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                orderServiceSession.LoginBuyer(user, pass);
                 Assert.AreEqual(user, userBuyerHarmony.GetName());
                 Assert.AreEqual("Mivtza Kilshon", userBuyerHarmony.GetAddress());
                 Assert.AreEqual("12345678", userBuyerHarmony.GetCreditCard());
@@ -73,7 +73,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                orderServiceSession.LoginBuyer(user, pass);
                 orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 1, 6.00);
                 userServiceSession2.SignIn(user, pass);
                 CartItem item = ((UserService) userServiceSession2).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
@@ -90,7 +90,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                orderServiceSession.LoginBuyer(user, pass);
                 orderServiceSession.BuyItemFromImmediate("OCB", "24", 2, 10.00);
                 userServiceSession2.SignIn(user, pass);
                 Assert.IsNull(((UserService)userServiceSession2).MarketUser.Cart.SearchInCart("24", "OCB", 10.00));
@@ -106,7 +106,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                userServiceSession.SignIn(user , pass);
+                orderServiceSession.LoginBuyer(user , pass);
                 orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 999, 6.00);
                 userServiceSession2.SignIn(user, pass);
                 CartItem item = ((UserService)userServiceSession2).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
@@ -123,7 +123,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                orderServiceSession.LoginBuyer(user, pass);
                 orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", -5, 6.00);
                 userServiceSession2.SignIn(user, pass);
                 CartItem item = ((UserService)userServiceSession2).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
@@ -140,7 +140,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                orderServiceSession.LoginBuyer(user, pass);
                 orderServiceSession.BuyAllItemsFromStore("The Red Rock");
                 userServiceSession2.SignIn(user, pass);
                 Assert.AreEqual(0, ((UserService)userServiceSession2).MarketUser.Cart.GetCartStorage("The Red Rock").Length);
@@ -156,7 +156,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                orderServiceSession.LoginBuyer(user, pass);
                 orderServiceSession.BuyAllItemsFromStore("The Blue Rock");
                 userServiceSession2.SignIn(user, pass);
                 Assert.AreEqual(3, ((UserService)userServiceSession2).MarketUser.Cart.GetCartStorage().Length);
@@ -172,7 +172,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                orderServiceSession.LoginBuyer(user, pass);
                 orderServiceSession.BuyEverythingFromCart();
                 userServiceSession2.SignIn(user, pass);
                 Assert.AreEqual(0, ((UserService)userServiceSession2).MarketUser.Cart.GetCartStorage().Length);
@@ -201,7 +201,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                userServiceSession.SignIn(user, pass);
+                orderServiceSession.LoginBuyer(user, pass);
                 orderServiceSession.GiveDetails("Moshe", "A", "12345678");
                 Assert.AreEqual("Moshe", orderServiceSession.UserName);
                 Assert.AreEqual("A",orderServiceSession.UserAddress);
