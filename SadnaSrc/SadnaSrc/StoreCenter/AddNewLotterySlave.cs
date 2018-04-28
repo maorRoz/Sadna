@@ -10,9 +10,9 @@ namespace SadnaSrc.StoreCenter
         Store store;
         All_ID_Manager ID_Manager;
 
-        public AddNewLotterySlave(Store _store, IUserSeller storeManager) : base(_store.Name, storeManager)
+        public AddNewLotterySlave(string storeName, IUserSeller storeManager) : base(storeName, storeManager)
         {
-            store = _store;
+            store = global.getStorebyName(storeName);
             ID_Manager = All_ID_Manager.GetInstance();
         }
 

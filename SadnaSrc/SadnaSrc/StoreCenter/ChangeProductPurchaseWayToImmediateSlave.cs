@@ -7,8 +7,6 @@ namespace SadnaSrc.StoreCenter
     internal class ChangeProductPurchaseWayToImmediateSlave : AbstractSlave
     {
         internal MarketAnswer answer;
-        private string _storeName;
-        private IUserSeller _storeManager;
         private IOrderSyncher syncher;
 
         public ChangeProductPurchaseWayToImmediateSlave(string storeName, IUserSeller storeManager,

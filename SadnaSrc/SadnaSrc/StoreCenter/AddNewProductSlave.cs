@@ -8,11 +8,10 @@ namespace SadnaSrc.StoreCenter
     {
         internal MarketAnswer answer;
         private Store _store;
-        private int globalProductID;
         private All_ID_Manager manager;
-        public AddNewProductSlave(IUserSeller storeManager, Store store) : base(store.Name, storeManager)
+        public AddNewProductSlave(IUserSeller storeManager, string _StoreName) : base(_StoreName, storeManager)
         {
-            _store = store;
+            _store = global.getStorebyName(_storeName);
             manager = All_ID_Manager.GetInstance();
         }
 
@@ -21,14 +20,16 @@ namespace SadnaSrc.StoreCenter
 
             MarketLog.Log("StoreCenter", "trying to add product to store");
             MarketLog.Log("StoreCenter", "check if store exists");
-            checkIfStoreExistsAndActive();
             try
             {
+                checkIfStoreExistsAndActive();
                 MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to add products");
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
-                MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);    
+                MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
+                checkIfProductNameAvailable(_name);
+                
                 MarketLog.Log("StoreCenter", " name is avlaiable");
                 MarketLog.Log("StoreCenter", " checking that quanitity is positive");
                 _checkQuantityIsOK(quantity);
@@ -52,7 +53,14 @@ namespace SadnaSrc.StoreCenter
                 return null;
             }
         }
-        
+
+        private void checkIfProductNameAvailable(string name)
+        {
+            Product P = global.getProductByNameFromStore(_storeName, name);
+            if (P != null)
+                throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
+        }
+
         private void _checkQuantityIsOK(int quantity)
         {
             if (quantity <= 0)

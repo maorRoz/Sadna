@@ -91,10 +91,17 @@ namespace SadnaSrc.StoreCenter
                     MarketLog.Log("StoreCenter", "name exists in shop");
                     throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
                 }
+                checkIfProductNameAvailable(newValue);
                 answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
                 product.Name = newValue;
             }
         }
-        
+        private void checkIfProductNameAvailable(string name)
+        {
+            Product P = global.getProductByNameFromStore(_storeName, name);
+            if (P != null)
+                throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
+        }
+
     }
 }

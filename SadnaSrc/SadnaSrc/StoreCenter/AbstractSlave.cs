@@ -29,7 +29,7 @@ namespace SadnaSrc.StoreCenter
 
             Product P = global.getProductByNameFromStore(_storeName, name);
             if (P == null)
-            { throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop"); }
+            { throw new StoreException(StoreEnum.ProductNotFound, "Product Name is already Exists In Shop"); }
         }
         protected void checkifProductExists(Product product)
         {

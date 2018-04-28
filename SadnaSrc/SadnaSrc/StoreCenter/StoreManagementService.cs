@@ -75,7 +75,7 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity)
         {
-            AddNewProductSlave slave = new AddNewProductSlave(_storeManager, store);
+            AddNewProductSlave slave = new AddNewProductSlave(_storeManager, _storeName);
             StockListItem stockListItem = slave.AddNewProduct(_name, _price, _description, quantity);
             if (stockListItem!=null)
                 stockListItemToRemove.AddLast(stockListItem);
@@ -85,7 +85,7 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
             DateTime endDate)
         {
-            AddNewLotterySlave slave = new AddNewLotterySlave(store,_storeManager);
+            AddNewLotterySlave slave = new AddNewLotterySlave(_storeName,_storeManager);
             StockListItem stockListItem =  slave.AddNewLottery(_name, _price, _description, startDate, endDate);
             if (stockListItem!=null)
                 stockListItemToRemove.AddLast(stockListItem);

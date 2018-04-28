@@ -80,16 +80,6 @@ namespace SadnaSrc.StoreCenter
             answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount type become " + newValue);
             return discount;
         }
-        private void checkIfStoreExists()
-        {
-            MarketLog.Log("StoreCenter", "check if store exists");
-            if (!global.IsStoreExist(_storeName))
-            {
-                MarketLog.Log("StoreCenter", " store does not exists");
-                throw new StoreException(StoreEnum.StoreNotExists, "store not exists");
-            }
-            MarketLog.Log("StoreCenter", " store exists");
-        }
         private Discount editDiscountStartDatePrivateMethod(Discount discount, string newValue, string productName)
         {
 

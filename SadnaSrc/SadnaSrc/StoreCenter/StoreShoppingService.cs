@@ -29,12 +29,13 @@ namespace SadnaSrc.StoreCenter
         }
         public MarketAnswer OpenStore(string storeName, string address)
         {
+            All_ID_Manager manager = All_ID_Manager.GetInstance();
             MarketLog.Log("StoreCenter", "trying to add new store");
             try
             {
                 _shopper.ValidateRegistered();
                 MarketLog.Log("StoreCenter", "premission gained");
-                Store newStore = new Store(storeLogic.GetNextStoreId(), storeName, address);
+                Store newStore = new Store(manager.GetNextStoreId(), storeName, address);
                 storeLogic.AddStore(newStore);
                 MarketLog.Log("StoreCenter", "store was opened");
                 _shopper.AddOwnership(storeName);
@@ -93,7 +94,7 @@ namespace SadnaSrc.StoreCenter
             string product = stockListItem.Product.ToString();
             if (stockListItem.Discount != null)
                 discount = stockListItem.Discount.ToString() + " , ";
-            string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
+            string purchaseWay = EnumStringConverter.PrintEnum(stockListItem.PurchaseWay);
             string quanitity = stockListItem.Quantity + "";
             string result = product + " , " + discount + purchaseWay + " , " + quanitity;
             return result;

@@ -130,7 +130,7 @@
     <Compile Include="StoreCenter\EditDiscountSlave.cs" />
     <Compile Include="StoreCenter\EditProductSlave.cs" />
     <Compile Include="StoreCenter\EnumStringConverter.cs" />
-    <Compile Include="StoreCenter\ManagementSlave.cs" />
+    <Compile Include="StoreCenter\AbstractSlave.cs" />
     <Compile Include="StoreCenter\OutsideModuleService.cs" />
     <Compile Include="StoreCenter\LotteryTicket.cs" />
     <Compile Include="StoreCenter\LotterySaleManagmentTicket.cs" />
