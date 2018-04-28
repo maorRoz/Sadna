@@ -530,7 +530,8 @@ namespace SadnaSrc.StoreCenter
             if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
             {
                 LotterySaleManagmentTicket LSMT = GetLotteryByProductID(stockListItem.Product.SystemId);
-                RemoveLottery(LSMT);
+                if (LSMT!=null)
+                    RemoveLottery(LSMT);
             }
             if (stockListItem.Discount != null)
             {

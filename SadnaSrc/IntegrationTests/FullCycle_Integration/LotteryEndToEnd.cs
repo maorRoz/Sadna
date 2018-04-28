@@ -82,14 +82,6 @@ namespace IntegrationTests.FullCycle_Integration
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
-            if (ProductToDelete != null)
-            {
-                handler.DataLayer.RemoveStockListItem(ProductToDelete);
-            }
-            if (LotteryToDelete != null)
-            {
-                handler.DataLayer.RemoveLottery(LotteryToDelete);
-            }
             orderService.CleanSession();
             userService.CleanSession();
             managementService.CleanSession();
