@@ -12,6 +12,7 @@ namespace SadnaSrc.Main
         MarketAnswer RemoveUser(string userName);
         MarketAnswer ViewPurchaseHistoryByUser(string userName);
         MarketAnswer ViewPurchaseHistoryByStore(string storeName);
+		
     }
 
     public enum RemoveUserStatus

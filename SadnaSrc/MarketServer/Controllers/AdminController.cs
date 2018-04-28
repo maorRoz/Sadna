@@ -16,9 +16,10 @@ namespace MarketWeb.Controllers
         private const int Success = 0;
         public IActionResult RemoveUserView(int systemId,string state, string message, bool valid)
         {
-            // get user list in db
-            return View(new UserListModel(systemId,state,message));
-        }
+			string[] blah = new string[5];
+			return View(new UserListModel(systemId, state, message, blah));
+
+		}
 
         public IActionResult ToRemoveUser(int systemId, string state, string toDeleteName)
         {
@@ -30,8 +31,10 @@ namespace MarketWeb.Controllers
 
         public IActionResult AdminSelectView(int systemId, string state, string message)
         {
-            return View(new UserModel(systemId,state,message));
-        }
+			var userService = MarketServer.users[systemId];
+			string[] usersData = userService.ViewUsers().ReportList;
+			return View(new UserListModel(systemId, state, message, usersData));
+		}
 
         public IActionResult AdminViewPurchaseHistory(int systemId, string state,string viewSubject,string viewKind)
         {
@@ -51,7 +54,7 @@ namespace MarketWeb.Controllers
                 return RedirectToAction("AdminSelectView", new{ systemId, state, message = answer.Answer, });
             }
 
-            return View(new PurchaseHistoryModel(systemId,state,viewSubject));
+            return View(new PurchaseHistoryModel(systemId,state,viewSubject,answer.ReportList));
         }
     }
 }

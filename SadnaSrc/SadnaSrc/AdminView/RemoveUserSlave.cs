@@ -66,6 +66,11 @@ namespace SadnaSrc.AdminView
             }
         }
 
+		public void ViewUsers()
+		{
+
+		}
+
         private void ApproveNotSelfTermination(string userName)
         {
             if (_admin.GetAdminName() == userName)
