@@ -110,12 +110,12 @@
     <Compile Include="MarketHarmony\UserBuyerHarmony.cs" />
     <Compile Include="MarketHarmony\UserSellerHarmony.cs" />
     <Compile Include="MarketHarmony\UserShopperHarmony.cs" />
-    <Compile Include="OrderPool\MakePurchaseSlave.cs" />
     <Compile Include="OrderPool\Order.cs" />
     <Compile Include="OrderPool\OrderAnswer.cs" />
     <Compile Include="OrderPool\OrderException.cs" />
     <Compile Include="OrderPool\OrderItem.cs" />
     <Compile Include="OrderPool\OrderDL.cs" />
+    <Compile Include="OrderPool\OrderPoolSlave.cs" />
     <Compile Include="OrderPool\OrderService.cs" />
     <Compile Include="MarketHarmony\PurchaseHistory.cs" />
     <Compile Include="OrderPool\StoreOrderTools.cs" />

@@ -41,7 +41,7 @@ namespace SadnaSrc.OrderPool
         {
             if (UserName == null)
                 UserName = _buyer.GetName();
-            if(UserAddress == null)
+            if (UserAddress == null)
                 UserAddress = _buyer.GetAddress();
             if (CreditCard == null)
                 CreditCard = _buyer.GetCreditCard();
@@ -61,7 +61,7 @@ namespace SadnaSrc.OrderPool
                 _storesSync.RemoveProducts(wrap);
                 _buyer.RemoveItemFromCart(itemName, store, quantity, unitPrice);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought item " + itemName + "in an immediate sale.");
-                Answer =  new OrderAnswer(OrderStatus.Success, "Successfully bought item " + itemName);
+                Answer = new OrderAnswer(OrderStatus.Success, "Successfully bought item " + itemName);
                 return order;
             }
             catch (OrderException e)
