@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminViewTests", "SystemVie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyExternalSystems", "ProxyExternalSystems\ProxyExternalSystems.csproj", "{F4484437-AA89-4A9D-994B-36B603202356}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketServer", "MarketServer\MarketServer.csproj", "{0C9C1D0C-8013-46B0-A5FB-44CEE7BA34CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketWeb", "MarketServer\MarketWeb.csproj", "{0C9C1D0C-8013-46B0-A5FB-44CEE7BA34CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
