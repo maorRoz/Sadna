@@ -159,7 +159,7 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer ViewStoreHistory()
         {
-            ViewStoreHistorySlave slave = new ViewStoreHistorySlave(store, _storeManager);
+            ViewStoreHistorySlave slave = new ViewStoreHistorySlave(_storeName, _storeManager);
             slave.ViewStoreHistory();
             return slave.answer;
         }

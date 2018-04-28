@@ -9,9 +9,9 @@ namespace SadnaSrc.StoreCenter
         internal MarketAnswer answer;
         private Store store;
         
-        public ViewStoreHistorySlave(Store _store, IUserSeller storeManager) :base (_store.Name,storeManager)
+        public ViewStoreHistorySlave(string _store, IUserSeller storeManager) :base (_store, storeManager)
         {
-            store = _store;
+            store = global.getStorebyName(_store);
         }
 
         internal void ViewStoreHistory()
