@@ -113,7 +113,6 @@
     <Compile Include="OrderPool\MakePurchaseSlave.cs" />
     <Compile Include="OrderPool\Order.cs" />
     <Compile Include="OrderPool\OrderAnswer.cs" />
-    <Compile Include="OrderPool\OrderDetailsSlave.cs" />
     <Compile Include="OrderPool\OrderException.cs" />
     <Compile Include="OrderPool\OrderItem.cs" />
     <Compile Include="OrderPool\OrderDL.cs" />

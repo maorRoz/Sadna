@@ -10,13 +10,8 @@ using SadnaSrc.Walleter;
 
 namespace SadnaSrc.OrderPool
 {
-    public class MakePurchaseSlave
+    public class OrderPoolSlave
     {
-        private string UserName { get; set; }
-        private string UserAddress { get; set; }
-        private string CreditCard { get; set; }
-
-
         private readonly OrderDL _orderDL;
 
         private readonly IUserBuyer _buyer;
@@ -29,13 +24,12 @@ namespace SadnaSrc.OrderPool
 
         public OrderAnswer Answer { get; private set; }
 
-        public MakePurchaseSlave(IUserBuyer buyer, IStoresSyncher storesSync)
+        public OrderPoolSlave(ref IUserBuyer buyer, IStoresSyncher storesSync)
         {
             _buyer = buyer;
             _storesSync = storesSync;
             _supplyService = SupplyService.Instance;
             _paymentService = PaymentService.Instance;
-            GetUserDetailsFromBuyer();
             _orderDL = OrderDL.Instance;
 
             _supplyService.AttachExternalSystem();
@@ -43,15 +37,21 @@ namespace SadnaSrc.OrderPool
 
         }
 
-        public Order BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
+        public Order BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string UserName, string UserAddress, string CreditCard)
         {
+            if (UserName == null)
+                UserName = _buyer.GetName();
+            if(UserAddress == null)
+                UserAddress = _buyer.GetAddress();
+            if (CreditCard == null)
+                CreditCard = _buyer.GetCreditCard();
             MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " " + itemName + " from store " + store + " in immediate sale...");
             int orderId = 0;
             try
             {
                 OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
                 CheckOrderItem(toBuy);
-                Order order = InitOrder();
+                Order order = InitOrder(UserName, UserAddress);
                 orderId = order.GetOrderID();
                 order.AddOrderItem(toBuy);
                 _supplyService.CreateDelivery(order);
@@ -93,8 +93,14 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public Order BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
+        public Order BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon, string UserName, string UserAddress, string CreditCard)
         {
+            if (UserName == null)
+                UserName = _buyer.GetName();
+            if (UserAddress == null)
+                UserAddress = _buyer.GetAddress();
+            if (CreditCard == null)
+                CreditCard = _buyer.GetCreditCard();
             MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " " + itemName + " from store " + store + " in immediate sale...");
             int orderId = 0;
             try
@@ -112,7 +118,7 @@ namespace SadnaSrc.OrderPool
                     return null;
                 }
                 CheckOrderItem(toBuy);
-                Order order = InitOrder();
+                Order order = InitOrder(UserName, UserAddress);
                 orderId = order.GetOrderID();
                 order.AddOrderItem(toBuy);
                 _supplyService.CreateDelivery(order);
@@ -154,14 +160,20 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public Order BuyAllItemsFromStore(string store)
+        public Order BuyAllItemsFromStore(string store, string UserName, string UserAddress, string CreditCard)
         {
+            if (UserName == null)
+                UserName = _buyer.GetName();
+            if (UserAddress == null)
+                UserAddress = _buyer.GetAddress();
+            if (CreditCard == null)
+                CreditCard = _buyer.GetCreditCard();
             MarketLog.Log("OrderPool", "Attempting to buy everything in cart from store " + store + "...");
             int orderId = 0;
             try
             {
                 OrderItem[] itemsToBuy = _buyer.CheckoutFromStore(store);
-                Order order = InitOrder(itemsToBuy);
+                Order order = InitOrder(itemsToBuy, UserName, UserAddress);
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
                 _orderDL.AddOrder(order);
@@ -200,14 +212,20 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public Order BuyEverythingFromCart()
+        public Order BuyEverythingFromCart(string UserName, string UserAddress, string CreditCard)
         {
+            if (UserName == null)
+                UserName = _buyer.GetName();
+            if (UserAddress == null)
+                UserAddress = _buyer.GetAddress();
+            if (CreditCard == null)
+                CreditCard = _buyer.GetCreditCard();
             MarketLog.Log("OrderPool", "Attempting to buy everything in cart...");
             int orderId = 0;
             try
             {
                 OrderItem[] itemsToBuy = _buyer.CheckoutAll();
-                Order order = InitOrder(itemsToBuy);
+                Order order = InitOrder(itemsToBuy, UserName, UserAddress);
                 _supplyService.CreateDelivery(order);
                 _paymentService.ProccesPayment(order, CreditCard);
                 _orderDL.AddOrder(order);
@@ -246,8 +264,14 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public Order BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
+        public Order BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice, string UserName, string UserAddress, string CreditCard)
         {
+            if (UserName == null)
+                UserName = _buyer.GetName();
+            if (UserAddress == null)
+                UserAddress = _buyer.GetAddress();
+            if (CreditCard == null)
+                CreditCard = _buyer.GetCreditCard();
             MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " tickets for lottery sale of " + itemName +
                                        " from store " + store + "...");
             int orderId = 0;
@@ -257,7 +281,7 @@ namespace SadnaSrc.OrderPool
                 _storesSync.ValidateTicket(itemName, store, unitPrice);
                 OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
                 CheckOrderItem(ticketToBuy);
-                Order order = InitOrder();
+                Order order = InitOrder(UserName, UserAddress);
                 orderId = order.GetOrderID();
                 order.AddOrderItem(ticketToBuy);
                 _paymentService.ProccesPayment(order, CreditCard);
@@ -323,17 +347,15 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public Order InitOrder()
+        public Order InitOrder(string UserName, string UserAddress)
         {
-            GetUserDetailsFromBuyer();
             Order order = new Order(_orderDL.RandomOrderID(), UserName, UserAddress);
             MarketLog.Log("OrderPool", "User " + UserName + " successfully initialized new order " + order.GetOrderID() + ".");
             return order;
         }
 
-        public Order InitOrder(OrderItem[] items)
+        public Order InitOrder(OrderItem[] items, string UserName, string UserAddress)
         {
-            GetUserDetailsFromBuyer();
             CheckAllItems(items);
             Order order = new Order(_orderDL.RandomOrderID(), UserName, UserAddress);
             foreach (OrderItem item in items)
@@ -343,16 +365,6 @@ namespace SadnaSrc.OrderPool
 
             MarketLog.Log("OrderPool", "User " + UserName + " successfully initialized new order " + order.GetOrderID() + ".");
             return order;
-        }
-
-        private void GetUserDetailsFromBuyer()
-        {
-            if (_buyer.GetName() != null)
-            {
-                UserName = _buyer.GetName();
-                UserAddress = _buyer.GetAddress();
-                CreditCard = _buyer.GetCreditCard();
-            }
         }
 
         private void CheckAllItems(OrderItem[] items)
@@ -366,13 +378,6 @@ namespace SadnaSrc.OrderPool
             {
                 CheckOrderItem(item);
             }
-        }
-
-        public void UpdateUserDetails(string userName, string address, string creditCard)
-        {
-            UserName = userName;
-            UserAddress = address;
-            CreditCard = creditCard;
         }
 
         private void IsValidUserDetails(string userName, string address, string creditCard)

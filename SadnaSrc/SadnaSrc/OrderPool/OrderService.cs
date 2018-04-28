@@ -26,27 +26,21 @@ namespace SadnaSrc.OrderPool
         private readonly IUserBuyer _buyer;
         private readonly IStoresSyncher _storesSync;
 
-        private readonly MakePurchaseSlave slave;
+        private readonly OrderPoolSlave slave;
 
-
+        private int cheatCode = -1;
 
         public OrderService(IUserBuyer buyer, IStoresSyncher storesSync)
         {
             Orders = new List<Order>();
             _buyer = buyer;
+            UserName = buyer.GetName();
+            UserAddress = buyer.GetAddress();
+            CreditCard = buyer.GetCreditCard();
             _storesSync = storesSync;
             _orderDL = OrderDL.Instance;
 
-            slave = new MakePurchaseSlave(buyer, storesSync);
-        }
-
-        public static void CheckOrderItem(OrderItem item)
-        {
-            if (item.Name == null || item.Store == null || item.Quantity == 0)
-            {
-                MarketLog.Log("OrderPool", "User entered item details which are invalid by the system standards!");
-                throw new OrderException(OrderItemStatus.InvalidDetails, "User entered invalid item details");
-            }
+            slave = new OrderPoolSlave(ref buyer, storesSync);
         }
 
         //only for Unit Tests of developer!!(not for integration or blackbox or real usage)
@@ -56,19 +50,6 @@ namespace SadnaSrc.OrderPool
             UserName = _buyer.GetName();
             UserAddress = _buyer.GetAddress();
             CreditCard = _buyer.GetCreditCard();
-        }
-
-        public Order InitOrder(OrderItem[] items)
-        {
-            Order order = new Order(_orderDL.RandomOrderID(), UserName, UserAddress);
-            foreach (OrderItem item in items)
-            {
-                order.AddOrderItem(item);
-            }
-
-            Orders.Add(order);
-            MarketLog.Log("OrderPool", "User " + UserName + " successfully initialized new order " + order.GetOrderID() + ".");
-            return order;
         }
 
         public void CleanSession()
@@ -84,16 +65,7 @@ namespace SadnaSrc.OrderPool
 
         public void Cheat(int cheatResult)
         {
-            //TODO: something. Maybe return some sort of market answer?
-        }     
-        
-        public Order GetOrder(int orderID)
-        {
-            foreach (Order order in Orders)
-            {
-                if (order.GetOrderID() == orderID) return order;
-            }
-            return null;
+            cheatCode = cheatResult;
         }
 
         /*
@@ -102,7 +74,7 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
         {
-            Order newOrder = slave.BuyItemFromImmediate(itemName, store, quantity, unitPrice);
+            Order newOrder = slave.BuyItemFromImmediate(itemName, store, quantity, unitPrice, UserName, UserAddress, CreditCard);
             if(newOrder!= null)
                 Orders.Add(newOrder);
             return slave.Answer;
@@ -110,7 +82,7 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
         {
-            Order newOrder = slave.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon);
+            Order newOrder = slave.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
             return slave.Answer;
@@ -119,7 +91,7 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
         {
-            Order newOrder = slave.BuyLotteryTicket(itemName, store, quantity, unitPrice);
+            Order newOrder = slave.BuyLotteryTicket(itemName, store, quantity, unitPrice, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
             return slave.Answer;
@@ -128,7 +100,7 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyAllItemsFromStore(string store)
         {
-            Order newOrder = slave.BuyAllItemsFromStore(store);
+            Order newOrder = slave.BuyAllItemsFromStore(store, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
             return slave.Answer;
@@ -137,7 +109,7 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyEverythingFromCart()
         {
-            Order newOrder = slave.BuyEverythingFromCart();
+            Order newOrder = slave.BuyEverythingFromCart(UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
             return slave.Answer;
@@ -147,9 +119,23 @@ namespace SadnaSrc.OrderPool
         public MarketAnswer GiveDetails(string userName, string address, string creditCard)
         {
             slave.GiveDetails(userName, address, creditCard);
-            if (slave.Answer.Status == (int)GiveDetailsStatus.Success)
-                slave.UpdateUserDetails(userName, address, creditCard);
+            if (slave.Answer.Status == (int) GiveDetailsStatus.Success)
+            {
+                UserName = userName;
+                UserAddress = address;
+                CreditCard = creditCard;
+            }
             return slave.Answer;
+        }
+
+        //Getter function for specific order from the list
+        public Order GetOrder(int orderID)
+        {
+            foreach (Order order in Orders)
+            {
+                if (order.GetOrderID() == orderID) return order;
+            }
+            return null;
         }
     }
 }

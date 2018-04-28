@@ -72,11 +72,12 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                getItemsFromCart(emptyUser, pass);
-                Assert.Fail();
+                string result = getItemsFromCart(emptyUser, pass);
+                Assert.AreEqual("", result);
             }
             catch (MarketException)
             {
+                Assert.Fail();
             }
         }
 
@@ -104,11 +105,12 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                getSingleStoreItems("The Blue Rock");
-                Assert.Fail();
+                string result = getSingleStoreItems("The Blue Rock");
+                Assert.AreEqual("", result);
             }
             catch (MarketException)
             {
+                Assert.Fail();
             }
         }
 
@@ -117,11 +119,12 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                getSingleStoreItems("Cluckin' Bell");
-                Assert.Fail();
+                string result = getSingleStoreItems("Cluckin' Bell");
+                Assert.AreEqual("", result);
             }
             catch (MarketException)
             {
+                Assert.Fail();
             }
         }
 
@@ -259,13 +262,11 @@ namespace IntegrationTests.UserBuyer_Integration
 
         private string getOrderString(OrderItem[] items)
         {
-            Order o = orderServiceSession.InitOrder(items);
-            OrderItem[] orderItems = o.GetItems().ToArray();
             string result = "";
-            for (int i = 0; i < orderItems.Length; i++)
+            for (int i = 0; i < items.Length; i++)
             {
 
-                result += getOrderItemString(orderItems[i]) + ". ";
+                result += getOrderItemString(items[i]) + ". ";
             }
 
             return result;
