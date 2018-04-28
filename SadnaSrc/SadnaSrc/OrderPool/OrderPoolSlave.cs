@@ -330,9 +330,9 @@ namespace SadnaSrc.OrderPool
                 MarketLog.Log("OrderPool", "Validation has been completed. User name and address are valid and been updated");
                 Answer = new OrderAnswer(GiveDetailsStatus.Success, "User name and address has been updated successfully!");
             }
-            catch (OrderException)
+            catch (OrderException e)
             {
-                Answer = new OrderAnswer(GiveDetailsStatus.InvalidNameOrAddress, "blah");
+                Answer = new OrderAnswer(GiveDetailsStatus.InvalidNameOrAddress, e.GetErrorMessage());
 
             }
 
