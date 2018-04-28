@@ -33,20 +33,20 @@ namespace MarketWeb.Controllers
             return View(new UserModel(systemId, state,message));
         }
 
-        public IActionResult SubmitSignUp(int systemId, string state,string usernameEntry,string addressEntry,
+        public IActionResult SubmitSignUp(int systemId,string usernameEntry,string addressEntry,
             string passwordEntry,string creditCardEntry)
         {
             var userService = MarketServer.users[systemId];
             var answer = userService.SignUp(usernameEntry, addressEntry, passwordEntry, creditCardEntry);
             if (answer.Status == Success)
             {
-                return RedirectToAction("MainLobby", new { systemId, state, message = answer.Answer });
+                return RedirectToAction("MainLobby", new { systemId, state ="Registered", message = answer.Answer });
             }
 
-            return RedirectToAction("SignUp", new {systemId, state, message = answer.Answer});
+            return RedirectToAction("SignUp", new {systemId, state ="Guest", message = answer.Answer});
         }
 
-        public IActionResult SubmitSignIn(int systemId, string state, string usernameEntry, string passwordEntry)
+        public IActionResult SubmitSignIn(int systemId, string usernameEntry, string passwordEntry)
         {
             var userService = MarketServer.users[systemId];
             var answer = userService.SignIn(usernameEntry, passwordEntry);
@@ -59,11 +59,11 @@ namespace MarketWeb.Controllers
                     MarketServer.users.Add(Convert.ToInt32(systemId), userService);
                 }
 
-                state = answer.ReportList[1];
+                var state = answer.ReportList[1];
                 return RedirectToAction("MainLobby", new { systemId, state, message = answer.Answer });
             }
 
-            return RedirectToAction("SignIn", new { systemId, state, message = answer.Answer });
+            return RedirectToAction("SignIn", new { systemId, state = "Guest", message = answer.Answer });
         }
 
 

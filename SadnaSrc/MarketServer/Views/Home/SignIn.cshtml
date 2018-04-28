@@ -20,7 +20,7 @@
                     </div>
                 }
             </div>
-            @using (Html.BeginForm("SubmitSignIn", "Home", new { Model.SystemId , Model.State}))
+            @using (Html.BeginForm("SubmitSignIn", "Home", new { Model.SystemId}))
             {
                 <label for="user-name-entry">Username:</label>
                 <input type="text" class="form-control" id="user-name-entry" name="usernameEntry"/>
