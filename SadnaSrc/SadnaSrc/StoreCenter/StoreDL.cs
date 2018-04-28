@@ -155,6 +155,7 @@ namespace SadnaSrc.StoreCenter
             };
         }
 
+
         private object[] GetLotteryManagmentValuesArray(LotterySaleManagmentTicket lotterySaleManagementTicket)
         {
             return new object[]
@@ -208,7 +209,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + lottery.IntervalStart + "'",
                 "'" + lottery.IntervalEnd + "'",
                 "'" + lottery.Cost + "'",
-                "'" + handler.PrintEnum(lottery.myStatus) + "'",
+                "'" + EnumStringConverter.PrintEnum(lottery.myStatus) + "'",
                 "'" + lottery.UserID + "'"
             };
         }
@@ -219,7 +220,7 @@ namespace SadnaSrc.StoreCenter
             return new[]
             {
                 "'" + discount.discountCode + "'",
-                "'" + handler.PrintEnum(discount.discountType) + "'",
+                "'" + EnumStringConverter.PrintEnum(discount.discountType) + "'",
                 "'" + discount.startDate + "'",
                 "'" + discount.EndDate + "'",
                 "'" + discount.DiscountAmount + "'",
@@ -253,7 +254,7 @@ namespace SadnaSrc.StoreCenter
                 "'" + stockListItem.Product.SystemId + "'",
                 "'" + stockListItem.Quantity + "'",
                 "'" + IfDiscountNotExists + "'",
-                "'" + handler.PrintEnum(stockListItem.PurchaseWay) + "'"
+                "'" + EnumStringConverter.PrintEnum(stockListItem.PurchaseWay) + "'"
             };
         }
 
@@ -337,7 +338,7 @@ namespace SadnaSrc.StoreCenter
                 {
                     LotteryTicket lottery = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1),
                         dbReader.GetDouble(2), dbReader.GetDouble(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
-                    lottery.myStatus = handler.GetLotteryStatusString(dbReader.GetString(5));
+                    lottery.myStatus = EnumStringConverter.GetLotteryStatusString(dbReader.GetString(5));
                     result.AddLast(lottery);
                 }
             }
@@ -367,7 +368,7 @@ namespace SadnaSrc.StoreCenter
                 while (dbReader.Read())
                 {
                     stockListItem = new StockListItem(dbReader.GetInt32(2), _product,
-                        GetDiscount(dbReader.GetString(3)), handler.GetPurchaseEnumString(dbReader.GetString(4)),
+                        GetDiscount(dbReader.GetString(3)), EnumStringConverter.GetPurchaseEnumString(dbReader.GetString(4)),
                         dbReader.GetString(0));
                     return stockListItem;
                 }
@@ -387,7 +388,7 @@ namespace SadnaSrc.StoreCenter
                 while (discountReader.Read())
                 {
                     discount = new Discount(DiscountCode,
-                        handler.GetdiscountTypeEnumString(discountReader.GetString(1)),
+                        EnumStringConverter.GetdiscountTypeEnumString(discountReader.GetString(1)),
                         DateTime.Parse(discountReader.GetString(2))
                         , DateTime.Parse(discountReader.GetString(3))
                         , discountReader.GetInt32(4),
@@ -444,8 +445,8 @@ namespace SadnaSrc.StoreCenter
                 while (dbReader.Read())
                 {
                     LotteryTicket lotty = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1),
-                        dbReader.GetDouble(2), dbReader.GetDouble(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
-                    lotty.myStatus = handler.GetLotteryStatusString(dbReader.GetString(5));
+                        dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
+                    lotty.myStatus = EnumStringConverter.GetLotteryStatusString(dbReader.GetString(5));
                     return lotty;
                 }
             }
@@ -526,6 +527,12 @@ namespace SadnaSrc.StoreCenter
         public void RemoveStockListItem(StockListItem stockListItem)
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
+            {
+                LotterySaleManagmentTicket LSMT = GetLotteryByProductID(stockListItem.Product.SystemId);
+                if (LSMT != null)
+                    RemoveLottery(LSMT);
+            }
             if (stockListItem.Discount != null)
             {
                 RemoveDiscount(stockListItem.Discount);

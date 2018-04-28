@@ -13,21 +13,20 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer answer { get; set; }
         IUserShopper _shopper;
         StoreDL storeLogic;
-        private int StoreIdCounter;
         public OpenStoreSlave(IUserShopper shopper)
         {
             _shopper = shopper;
             storeLogic = StoreDL.Instance;
-            StoreIdCounter = storeLogic.FindMaxStoreId();
         }
         public Store OpenStore(string storeName, string address)
         {
+            All_ID_Manager manager = All_ID_Manager.GetInstance();
             try
             {
                 MarketLog.Log("StoreCenter", "trying to add new store");
                 _shopper.ValidateRegistered();
                 MarketLog.Log("StoreCenter", "premission gained");
-                Store newStore = new Store(GetNextStoreId(), storeName, address);
+                Store newStore = new Store(manager.GetNextStoreId(), storeName, address);
                 storeLogic.AddStore(newStore);
                 MarketLog.Log("StoreCenter", "store was opened");
                 _shopper.AddOwnership(storeName);
@@ -49,12 +48,6 @@ namespace SadnaSrc.StoreCenter
                     "User validation as store owner has been failed. only registered users can open new stores. Error message has been created!");
                 return null;
             }
-        }
-        public string GetNextStoreId()
-        {
-            int currentMaxStoreId = StoreIdCounter;
-            StoreIdCounter++;
-            return "S" + currentMaxStoreId;
         }
     }
 }

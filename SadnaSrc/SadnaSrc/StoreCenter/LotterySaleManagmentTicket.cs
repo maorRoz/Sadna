@@ -49,8 +49,9 @@ namespace SadnaSrc.StoreCenter
         }
         public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
         {
+            All_ID_Manager manager = All_ID_Manager.GetInstance();
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LotteryTicket lottery = new LotteryTicket(handler.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
+            LotteryTicket lottery = new LotteryTicket(manager.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
                (int)(TotalMoneyPayed + moneyPayed), moneyPayed, userID);
             handler.DataLayer.AddLotteryTicket(lottery);
             TotalMoneyPayed += moneyPayed;
