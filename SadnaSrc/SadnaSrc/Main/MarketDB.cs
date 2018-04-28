@@ -396,8 +396,7 @@ namespace SadnaSrc.Main
                                     [Name]          TEXT,
                                     [Price]         REAL,
                                     [Quantity]      INTEGER,
-                                    FOREIGN KEY([OrderID])      REFERENCES [Orders]([OrderID]) ON DELETE CASCADE,
-                                    
+                                    FOREIGN KEY([OrderID])      REFERENCES [Orders]([OrderID]) ON DELETE CASCADE,                                
                                     PRIMARY KEY([OrderID],[Store],[Name])
                                     )";
         }
@@ -408,8 +407,9 @@ namespace SadnaSrc.Main
                                     [NotificationID]    TEXT,
                                     [Reciever]          INTEGER,
                                     [Message]           TEXT,
-                                    [Status]            TEXT
+                                    [Status]            TEXT,
                                     FOREIGN KEY([Reciever])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    PRIMARY KEY([NotificationID])
                                     )";
         }
         public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
