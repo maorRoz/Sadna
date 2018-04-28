@@ -20,14 +20,11 @@ namespace SadnaSrc.OrderPool
         public string CreditCard { get; set; }
 
 
-        public List<Order> Orders;
+        public readonly List<Order> Orders;
         private readonly OrderDL _orderDL;
         
         private readonly IUserBuyer _buyer;
-        private IStoresSyncher _storesSync;
-
-        private SupplyService _supplyService;
-        private PaymentService _paymentService;
+        private readonly IStoresSyncher _storesSync;
 
         private readonly MakePurchaseSlave slave;
 
@@ -38,13 +35,7 @@ namespace SadnaSrc.OrderPool
             Orders = new List<Order>();
             _buyer = buyer;
             _storesSync = storesSync;
-            _supplyService = SupplyService.Instance;
-            _paymentService = PaymentService.Instance;
-            GetUserDetailsFromBuyer();
             _orderDL = OrderDL.Instance;
-
-            _supplyService.AttachExternalSystem();
-            _paymentService.AttachExternalSystem();
 
             slave = new MakePurchaseSlave(buyer, storesSync);
         }
@@ -62,13 +53,13 @@ namespace SadnaSrc.OrderPool
         public void LoginBuyer(string userName, string password)
         {
             ((UserBuyerHarmony)_buyer).LogInBuyer(userName, password);
-            GetUserDetailsFromBuyer();
+            UserName = _buyer.GetName();
+            UserAddress = _buyer.GetAddress();
+            CreditCard = _buyer.GetCreditCard();
         }
 
         public Order InitOrder(OrderItem[] items)
         {
-            GetUserDetailsFromBuyer();
-            CheckAllItems(items);
             Order order = new Order(_orderDL.RandomOrderID(), UserName, UserAddress);
             foreach (OrderItem item in items)
             {
@@ -78,23 +69,6 @@ namespace SadnaSrc.OrderPool
             Orders.Add(order);
             MarketLog.Log("OrderPool", "User " + UserName + " successfully initialized new order " + order.GetOrderID() + ".");
             return order;
-        }
-
-        public Order InitOrder()
-        {
-            GetUserDetailsFromBuyer();
-            Order order = new Order(_orderDL.RandomOrderID(), UserName, UserAddress);
-            Orders.Add(order);
-            MarketLog.Log("OrderPool", "User " + UserName + " successfully initialized new order " + order.GetOrderID() + ".");
-            return order;
-        }
-
-        public void SaveToDB()
-        {
-            foreach (Order order in Orders)
-            {
-                _orderDL.AddOrder(order);
-            }
         }
 
         public void CleanSession()
@@ -111,12 +85,7 @@ namespace SadnaSrc.OrderPool
         public void Cheat(int cheatResult)
         {
             //TODO: something. Maybe return some sort of market answer?
-        }
-
-        public void RemoveOrderFromDB(int orderId)
-        {
-            _orderDL.RemoveOrder(orderId);
-        }      
+        }     
         
         public Order GetOrder(int orderID)
         {
@@ -127,28 +96,12 @@ namespace SadnaSrc.OrderPool
             return null;
         }
 
-        public Order GetOrderFromDB(int orderID)
-        {
-            return _orderDL.FindOrder(orderID);
-        }
-
-        public OrderItem FindOrderItemInOrder(int orderId, string store, string name)
-        {
-            foreach (Order order in Orders)
-            {
-                return order.GetOrderItem(name, store);
-            }
-
-            return null;
-        }
-
         /*
          * Interface functions
          */
 
         public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
         {
-            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
             Order newOrder = slave.BuyItemFromImmediate(itemName, store, quantity, unitPrice);
             if(newOrder!= null)
                 Orders.Add(newOrder);
@@ -157,7 +110,6 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
         {
-            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
             Order newOrder = slave.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon);
             if (newOrder != null)
                 Orders.Add(newOrder);
@@ -167,7 +119,6 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
         {
-            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
             Order newOrder = slave.BuyLotteryTicket(itemName, store, quantity, unitPrice);
             if (newOrder != null)
                 Orders.Add(newOrder);
@@ -177,7 +128,6 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyAllItemsFromStore(string store)
         {
-            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
             Order newOrder = slave.BuyAllItemsFromStore(store);
             if (newOrder != null)
                 Orders.Add(newOrder);
@@ -187,7 +137,6 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyEverythingFromCart()
         {
-            slave.UpdateUserDetails(UserName, UserAddress, CreditCard);
             Order newOrder = slave.BuyEverythingFromCart();
             if (newOrder != null)
                 Orders.Add(newOrder);
@@ -197,38 +146,10 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer GiveDetails(string userName, string address, string creditCard)
         {
-	        OrderDetailsSlave detailSlave = new OrderDetailsSlave();
-            detailSlave.GiveDetails(userName, address, creditCard);
-            if (detailSlave.Answer.Status == (int)GiveDetailsStatus.Success)
+            slave.GiveDetails(userName, address, creditCard);
+            if (slave.Answer.Status == (int)GiveDetailsStatus.Success)
                 slave.UpdateUserDetails(userName, address, creditCard);
-            return detailSlave.Answer;
-        }
-        /*
-         * Private Functions
-         */
-
-        private void GetUserDetailsFromBuyer()
-        {
-            if (_buyer.GetName() != null)
-            {
-                UserName = _buyer.GetName();
-                UserAddress = _buyer.GetAddress();
-                CreditCard = _buyer.GetCreditCard();
-            }
-        }
-
-
-        private void CheckAllItems(OrderItem[] items)
-        {
-            if (items.Length == 0)
-            {
-                MarketLog.Log("OrderPool", "User entered empty item list !");
-                throw new OrderException(OrderItemStatus.InvalidDetails, "User entered empty item list");
-            }
-            foreach (var item in items)
-            {
-                CheckOrderItem(item);
-            }
+            return slave.Answer;
         }
     }
 }

@@ -296,6 +296,24 @@ namespace SadnaSrc.OrderPool
             }
         }
 
+        public void GiveDetails(string userName, string address, string creditCard)
+        {
+            try
+            {
+                MarketLog.Log("OrderPool",
+                    "User entering name and address for later usage in market order. validating data ...");
+                IsValidUserDetails(userName, address, creditCard);
+                MarketLog.Log("OrderPool", "Validation has been completed. User name and address are valid and been updated");
+                Answer = new OrderAnswer(GiveDetailsStatus.Success, "User name and address has been updated successfully!");
+            }
+            catch (OrderException)
+            {
+                Answer = new OrderAnswer(GiveDetailsStatus.InvalidNameOrAddress, "blah");
+
+            }
+
+        }
+
         private void CheckOrderItem(OrderItem item)
         {
             if (item.Name == null || item.Store == null || item.Quantity == 0)
@@ -305,7 +323,7 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        private Order InitOrder()
+        public Order InitOrder()
         {
             GetUserDetailsFromBuyer();
             Order order = new Order(_orderDL.RandomOrderID(), UserName, UserAddress);
@@ -313,7 +331,7 @@ namespace SadnaSrc.OrderPool
             return order;
         }
 
-        private Order InitOrder(OrderItem[] items)
+        public Order InitOrder(OrderItem[] items)
         {
             GetUserDetailsFromBuyer();
             CheckAllItems(items);
@@ -355,6 +373,16 @@ namespace SadnaSrc.OrderPool
             UserName = userName;
             UserAddress = address;
             CreditCard = creditCard;
+        }
+
+        private void IsValidUserDetails(string userName, string address, string creditCard)
+        {
+            int x;
+            if (userName == null || address == null || creditCard == null || creditCard.Length != 8 || !Int32.TryParse(creditCard, out x))
+            {
+                MarketLog.Log("OrderPool", "User entered name or address which is invalid by the system standards!");
+                throw new OrderException(GiveDetailsStatus.InvalidNameOrAddress, "User entered invalid name or address into the order");
+            }
         }
     }
 }
