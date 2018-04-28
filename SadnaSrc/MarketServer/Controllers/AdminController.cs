@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using MarketServer.Models;
 using MarketWeb.Models;
 using SadnaSrc.Main;
-
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MarketWeb.Controllers
 {
@@ -40,14 +40,14 @@ namespace MarketWeb.Controllers
 
         public IActionResult AdminSelectView(int systemId, string state, string message)
         {
-			var userService = MarketServer.users[systemId];
-			string[] usersData = userService.ViewUsers().ReportList;
-			return View(new UserListModel(systemId, state, message, usersData));
+			return View(new UserModel(systemId,state,message));
+			
 		}
 
-        public IActionResult AdminViewPurchaseHistory(int systemId, string state,string viewSubject,string viewKind)
+        public IActionResult AdminViewPurchaseHistory(int systemId, string state,string viewSubject, string viewKind)
         {
-            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.users[systemId]);
+			viewKind = Request.Form["MovieType"].ToString();
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.users[systemId]);
             MarketAnswer answer;
             if (viewKind == "Store")
             {

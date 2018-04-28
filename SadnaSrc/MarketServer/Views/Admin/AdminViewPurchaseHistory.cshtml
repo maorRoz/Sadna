@@ -1,5 +1,5 @@
 ﻿@{
-	ViewData["Title"] = "MarketYard ViewHistory";
+	ViewData["Title"] = "MarketYard View Purchase History";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -32,39 +32,22 @@
 				</thead>
 				@foreach (var item in Model.Items)
 				{
-					<tr>
-						<td>@item.Name</td>
-						<td>@item.Store</td>
-						<td>@item.Quantity</td>
-						<td>@item.UnitPrice</td>
-						<td>@item.FinalPrice</td>
-						<td>
-							<a asp-controller="Cart" asp-action="IncreaseCartItem" asp-route-systemId="@Model.SystemId"
-							   asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
-							   asp-route-unitPrice="@item.UnitPrice"><img src="\images\+.png"></a>
-
-							<a asp-controller="Cart" asp-action="DecreaseCartItem" asp-route-systemId="@Model.SystemId"
-							   asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
-							   asp-route-unitPrice="@item.UnitPrice"><img src="\images\-.png" /></a>
-
-							<a asp-controller="Cart" asp-action="RemoveCartItem" asp-route-systemId="@Model.SystemId"
-							   asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
-							   asp-route-unitPrice="@item.UnitPrice"><img src="\images\cancel.png" /></a> |
-							Buyout
-						</td>
-					</tr>
+				<tr>
+					<td>@item.User</td>
+					<td>@item.Product</td>
+					<td>@item.Store</td>
+					<td>@item.Sale</td>
+					<td>@item.Quantity</td>
+					<td>@item.Price</td>
+					<td>@item.Date</td>
+				</tr>
 				}
 			</table>
 			<hr />
-			<button class="btn-primary"> Checkout Cart</button>
-
 		</div>
 	</div>
 </div>
 
 @section Scripts{
 	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
-
-
-
 }
