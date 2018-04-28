@@ -4,11 +4,11 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddQuanitityToProductSlave :AbstractSlave
+    internal class AddQuanitityToProductSlave : AbstractSlave
     {
         internal MarketAnswer answer;
 
-        public AddQuanitityToProductSlave(string storeName, IUserSeller storeManager) : base(storeName,storeManager)
+        public AddQuanitityToProductSlave(string storeName, IUserSeller storeManager) : base(storeName, storeManager)
         {
         }
 
@@ -50,5 +50,4 @@ namespace SadnaSrc.StoreCenter
             }
         }
     }
-}
 }
