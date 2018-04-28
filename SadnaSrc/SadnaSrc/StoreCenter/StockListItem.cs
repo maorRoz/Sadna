@@ -38,7 +38,7 @@ namespace SadnaSrc.StoreCenter
                 (Quantity == obj.Quantity) &&
                 (Product.SystemId == obj.Product.SystemId) &&
                 (Discount.discountCode == obj.Discount.discountCode) &&
-                (handler.PrintEnum(PurchaseWay).Equals(handler.PrintEnum(obj.PurchaseWay)));
+                (EnumStringConverter.PrintEnum(PurchaseWay).Equals(EnumStringConverter.PrintEnum(obj.PurchaseWay)));
         }
 
         public override int GetHashCode()

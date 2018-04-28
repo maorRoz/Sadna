@@ -9,15 +9,15 @@ namespace SadnaSrc.StoreCenter
 {
     public class LotteryTicket
     {
-        public double IntervalStart { get; set; }
-        public double IntervalEnd { get; set; }
+        public int IntervalStart { get; set; }
+        public int IntervalEnd { get; set; }
         public string LotteryNumber { get; set; }
         public string myID { get; set; }
         public LotteryTicketStatus myStatus { get; set; }
         public int UserID { get; set; }
 
         public double Cost { get; set; }
-        public LotteryTicket(string _myID, string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
+        public LotteryTicket(string _myID, string _LotteryNumber, int _IntervalStart, int _IntervalEnd, double cost, int _userID)
         {
             LotteryNumber = _LotteryNumber;
             myID = _myID;
@@ -60,7 +60,7 @@ namespace SadnaSrc.StoreCenter
                     obj.IntervalEnd == IntervalEnd &&
                     obj.LotteryNumber == LotteryNumber &&
                     obj.myID == myID &&
-                    handler.PrintEnum(obj.myStatus).Equals(handler.PrintEnum(myStatus)) &&
+                    EnumStringConverter.PrintEnum(obj.myStatus).Equals(EnumStringConverter.PrintEnum(myStatus)) &&
                     obj.UserID == UserID
                     );
         }
