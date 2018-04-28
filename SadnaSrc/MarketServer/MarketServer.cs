@@ -28,31 +28,6 @@ namespace MarketWeb
             await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
         }
 
-        public async Task SignInUser(string socketId, string userId, string userName,string password)
-        {
-            int userIdNumber = Convert.ToInt32(userId);
-            var userService = users[userIdNumber];
-            var answer = userService.SignIn(userName, password);
-            if (answer.Status == Success)
-            {
-                users.Remove(userIdNumber);
-                userIdNumber = Convert.ToInt32(answer.ReportList[0]);
-                if (!users.ContainsKey(userIdNumber))
-                {
-                    users.Add(Convert.ToInt32(userIdNumber), userService);
-                }
-
-                string state = answer.ReportList[1];
-                await InvokeClientMethodAsync(socketId, "LoggedMarket",
-                    new object[] {answer.Answer, userIdNumber, state});
-            }
-            else
-            {
-                await InvokeClientMethodAsync(socketId, "ErrorApi",
-                    new object[] {answer.Answer});
-            }
-        }
-
         public async Task SendFeed()
         {
             await InvokeClientMethodAsync("?", "NotifyFeed", new object[]{"some stupid notification"});
