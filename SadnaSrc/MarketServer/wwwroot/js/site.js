@@ -4,11 +4,6 @@ $(document).ready(function() {
     var socketId = null;
     socket.enableLogging = true;
 
-    function foo()
-    {
-        console.log('1');
-    }
-
     function getParameterValues(param) {
         var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
         for (var i = 0; i < url.length; i++) {
