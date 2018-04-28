@@ -66,7 +66,8 @@ namespace SadnaSrc.Main
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
                 CreateOrderTable(),
-                CreateOrderItemTable()
+                CreateOrderItemTable(),
+                CreateNotificationsTable()
             };
 
             for (var i = 0; i < createTableStrings.Length; i++)
@@ -398,6 +399,17 @@ namespace SadnaSrc.Main
                                     FOREIGN KEY([OrderID])      REFERENCES [Orders]([OrderID]) ON DELETE CASCADE,
                                     
                                     PRIMARY KEY([OrderID],[Store],[Name])
+                                    )";
+        }
+
+        private static string CreateNotificationsTable()
+        {
+            return @"Create TABLE IF NOT EXISTS [Notifications] (
+                                    [NotificationID]    TEXT,
+                                    [Reciever]          INTEGER,
+                                    [Message]           TEXT,
+                                    [Status]            TEXT
+                                    FOREIGN KEY([Reciever])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
                                     )";
         }
         public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)

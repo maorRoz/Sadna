@@ -101,6 +101,14 @@
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
     <Compile Include="Main\MarketDB.cs" />
+    <Compile Include="MarketFeed\BuyObserver.cs" />
+    <Compile Include="MarketFeed\FeedDL.cs" />
+    <Compile Include="MarketFeed\FeedQueue.cs" />
+    <Compile Include="MarketFeed\IFeedDL.cs" />
+    <Compile Include="MarketFeed\LotteryObserver.cs" />
+    <Compile Include="MarketFeed\MarketPublisher.cs" />
+    <Compile Include="MarketFeed\MessageObserver.cs" />
+    <Compile Include="MarketFeed\Observer.cs" />
     <Compile Include="MarketHarmony\IOrderSyncher.cs" />
     <Compile Include="MarketHarmony\IStoresSyncher.cs" />
     <Compile Include="MarketHarmony\IUserSeller.cs" />
