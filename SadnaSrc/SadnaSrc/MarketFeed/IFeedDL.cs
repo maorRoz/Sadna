@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.MarketFeed
 {
-    interface IFeedDL
+    public interface IFeedDL
     {
+        Dictionary<int, IFeedQueue> GetReaders();
+        void SaveNotification(Notification notification);
+
+
     }
 }

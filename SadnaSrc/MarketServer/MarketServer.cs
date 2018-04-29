@@ -4,12 +4,13 @@ using System.Linq;
 using System.Net.Cache;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using WebSocketManager;
 
 
 namespace MarketWeb
 {
-    public class MarketServer : WebSocketHandler
+    public class MarketServer : WebSocketHandler,IListener
     {
         private const int Success = 0;
         public static Dictionary<int,IUserService> users = new Dictionary<int, IUserService>();
@@ -28,9 +29,14 @@ namespace MarketWeb
             await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
         }
 
-        public async Task SendFeed()
+        public async void GetMessage(string socketId, string message)
         {
-            await InvokeClientMethodAsync("?", "NotifyFeed", new object[]{"some stupid notification"});
+            await SendFeed(socketId, message);
+        }
+
+        private async Task SendFeed(string socketId, string message)
+        {
+            await InvokeClientMethodAsync(socketId, "NotifyFeed", new object[]{message});
         }
     }
 }

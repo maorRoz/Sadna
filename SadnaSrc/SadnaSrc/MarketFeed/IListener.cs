@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.MarketFeed
 {
-    class MarketPublisher
+    public interface IListener
     {
+        void GetMessage(string socketId, string message);
     }
 }
