@@ -9,26 +9,26 @@ namespace SadnaSrc.MarketFeed
     public class Notification
     {   
         public string Id { get; }
-        public string Receiver { get; }
+        public int Receiver { get; }
         public string Message { get; }
 
-        public string Status { get; }
+        public string Status { get; set; }
 
         private static readonly Random Random = new Random();
-        public Notification(string receiver, string message)
+        public Notification(int receiver, string message)
         {
             Id = GenerateId();
             Receiver = receiver;
             Message = message;
-            Status = "Unread";
+            Status = "Pending";
         }
 
-        public Notification(string id, string receiver, string message)
+        public Notification(string id, int receiver, string message)
         {
             Id = id;
             Receiver = receiver;
             Message = message;
-            Status = "Unread";
+            Status = "Pending";
         }
 
         private static string GenerateId()

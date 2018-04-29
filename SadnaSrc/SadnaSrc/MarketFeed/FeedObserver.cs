@@ -22,7 +22,7 @@ namespace SadnaSrc.MarketFeed
         public void Update()
         {
             var feedQueue = Publisher.Instance.GetFeedQueue(_userId);
-            var newNotifications = feedQueue.GetFeed();
+            var newNotifications = feedQueue.GetPendingFeeds();
             foreach (var notification in newNotifications)
             {
                 _server.GetMessage(_socketId,notification.Message);

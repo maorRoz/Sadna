@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 
 namespace SadnaSrc.MarketFeed
 {
@@ -15,41 +16,59 @@ namespace SadnaSrc.MarketFeed
         public FeedQueue(IFeedDL feedDL)
         {
             _feedDL = feedDL;
-            queue = new List<Notification>();
             observers = new List<IObserver>();
         }
 
-        public FeedQueue(IFeedDL feedDL, Notification[] notifications)
+        public void LoadOfflineFeed(Notification[] notifications)
         {
-            _feedDL = feedDL;
             queue = new List<Notification>(notifications);
-            observers = new List<IObserver>();
         }
 
 
         public void Attach(IObserver observer)
         {
             observers.Add(observer);
+            if (observers.Count == 1)
+            {
+                Notify();
+            }
         }
 
         public void Notify()
         {
+            RefreshQueue();
+            if (queue.IsNullOrEmpty())
+            {
+                return;
+
+            }
             foreach (var observer in observers)
             {
                 observer.Update();
+            }
+
+            MarkQueueAsRead();
+
+        }
+
+        private void MarkQueueAsRead()
+        {
+            foreach (var notification in queue)
+            {
+                _feedDL.HasBeenRead(notification.Id);
+                notification.Status = "Read";
             }
         }
 
         public void AddFeed(Notification notification)
         {
+            _feedDL.SaveUnreadNotification(notification);
             queue.Add(notification);
-            _feedDL.SaveNotification(notification);
             Notify();
         }
 
-        public Notification[] GetFeed()
+        public Notification[] GetPendingFeeds()
         {
-            RefreshQueue();
             return queue.ToArray();
         }
 
@@ -58,7 +77,7 @@ namespace SadnaSrc.MarketFeed
             var freshFeed = new List<Notification>();
             foreach (var notification in queue)
             {
-                if (notification.Status.Equals("Unread"))
+                if (notification.Status.Equals("Pending"))
                 {
                     freshFeed.Add(notification);
                 }

@@ -24,12 +24,37 @@ namespace SadnaSrc.MarketFeed
             throw new NotImplementedException();
         }
 
-        public void SaveNotification(Notification notification)
+        public void SaveUnreadNotification(Notification notification)
         {
             throw new NotImplementedException();
         }
 
-        private Notification[] GetNotifications(int userId)
+        public Notification[] GetUnreadNotifications(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int[] GetStoreOwnersIds(string store)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int[] GetRefundedIds(string lottery)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetLotteryWinner(string lottery)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int[] GetLotteryLosers(string lottery)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HasBeenRead(string notificationId)
         {
             throw new NotImplementedException();
         }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketFeed;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -262,12 +263,15 @@ namespace SadnaSrc.StoreCenter
             return true;
         }
 
-        public void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher,int cheatCode)
+        public void updateLottery(string storeName, string productName, double moneyPayed, string userName, IOrderSyncher syncher,int cheatCode)
         {
-            LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
-            if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))
+            LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, productName);
+            if (Lotto.updateLottery(moneyPayed, DataLayer.getUserIDFromUserName(userName)))
             {
-                syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID(cheatCode));
+                var publisher = Publisher.Instance;
+                var winnerId = Lotto.getWinnerID(cheatCode);
+                syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, winnerId);
+                publisher.NotifyLotteryFinish(Lotto.SystemID,productName,storeName);
             }
         }
     }
