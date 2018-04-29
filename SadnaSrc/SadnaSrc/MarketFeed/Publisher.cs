@@ -23,17 +23,16 @@ namespace SadnaSrc.MarketFeed
             {
                 FeedDl = FeedDL.Instance;
             }
-
-            readers = FeedDl.GetReaders();
-            LoadNotifications();
+            readers = new Dictionary<int, IFeedQueue>();
+            EstablishQueues();
         }
 
-        private void LoadNotifications()
+        private void EstablishQueues()
         {
-            foreach (var userId in readers.Keys)
+            var userIds = FeedDl.GetUserIds();
+            foreach (var userId in userIds)
             {
-                var queue = readers[userId];
-                queue.LoadOfflineFeed(FeedDl.GetUnreadNotifications(userId));
+                readers.Add(userId, new FeedQueue(FeedDl, userId));
             }
         }
 
@@ -87,7 +86,7 @@ namespace SadnaSrc.MarketFeed
 
         public void AddFeedQueue(int userId)
         {
-            readers.Add(userId,new FeedQueue(FeedDl));
+            readers.Add(userId,new FeedQueue(FeedDl,userId));
         }
 
         public IFeedQueue GetFeedQueue(int userId)

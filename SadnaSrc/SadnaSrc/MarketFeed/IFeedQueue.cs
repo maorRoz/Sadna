@@ -11,8 +11,6 @@ namespace SadnaSrc.MarketFeed
         void Attach(IObserver observer);
         void Notify();
 
-        void LoadOfflineFeed(Notification[] notifications);
-
         void AddFeed(Notification notification);
 
         Notification[] GetPendingFeeds();

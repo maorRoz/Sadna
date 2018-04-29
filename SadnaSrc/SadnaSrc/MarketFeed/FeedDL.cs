@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.MarketFeed
 {
@@ -19,44 +20,93 @@ namespace SadnaSrc.MarketFeed
             dbConnection = MarketDB.Instance;
         }
 
-        public Dictionary<int, IFeedQueue> GetReaders()
+        public int[] GetUserIds()
         {
-            throw new NotImplementedException();
+            var userIds = new List<int>();
+            using (var dbReader = dbConnection.SelectFromTable("User", "SystemId"))
+            {
+                while (!dbReader.Read())
+                {
+                    userIds.Add(dbReader.GetInt32(0));
+                }
+            }
+
+            return userIds.ToArray();
         }
 
         public void SaveUnreadNotification(Notification notification)
         {
-            throw new NotImplementedException();
+            dbConnection.InsertTable("Notifications", "NotificationID,Receiver,Message,Status", 
+                new[]{"@id,@receiver,@msg,@status"},notification.ToData());
         }
 
         public Notification[] GetUnreadNotifications(int userId)
         {
-            throw new NotImplementedException();
+            var loadedFeedsList = new List<Notification>();
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("Notifications", "Message", "Receiver = " + userId +" AND Status ='Pending'"))
+            {
+                while (!dbReader.Read())
+                {
+                    var loadedFeed = new Notification(userId,dbReader.GetString(0));
+                    loadedFeedsList.Add(loadedFeed);
+                }
+            }
+
+            return loadedFeedsList.ToArray();
         }
 
         public int[] GetStoreOwnersIds(string store)
         {
-            throw new NotImplementedException();
-        }
+            var ownersIds = new List<int>();
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("StoreManagerPolicy", "SystemID", "Store = '"+ store +"'" +
+                                                                                            "Action = 'StoreOwner'"))
+            {
+                while (!dbReader.Read())
+                {
+                    var owner = dbReader.GetInt32(0);
+                    ownersIds.Add(owner);
+                }
+            }
 
-        public int[] GetRefundedIds(string lottery)
-        {
-            throw new NotImplementedException();
+            return ownersIds.ToArray();
         }
 
         public int GetLotteryWinner(string lottery)
         {
-            throw new NotImplementedException();
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "UserID","LotteryID =" +
+                                                                                 " '"+lottery +"' AND Status ='WINNING'"))
+            {
+                if (!dbReader.Read())
+                {
+                    return dbReader.GetInt32(0);
+                }
+            }
+
+            throw new MarketException(MarketError.DbError,"shouldn't get here!");
         }
 
         public int[] GetLotteryLosers(string lottery)
         {
-            throw new NotImplementedException();
+            var loserIds = new List<int>();
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "UserID", "LotteryID =" +
+                                                                               " '" + lottery + "' AND Status ='LOSING'"))
+            {
+                while (!dbReader.Read())
+                {
+                    var loserId = dbReader.GetInt32(0);
+                    loserIds.Add(loserId);
+                }
+            }
+
+            return loserIds.ToArray();
         }
 
         public void HasBeenRead(string notificationId)
         {
-            throw new NotImplementedException();
+            dbConnection.UpdateTable("Notifications","NotificationID = '"+notificationId +"'",new[]{"NotificationID"},
+                new[]{"@id"},new object[]{notificationId});
         }
     }
 }

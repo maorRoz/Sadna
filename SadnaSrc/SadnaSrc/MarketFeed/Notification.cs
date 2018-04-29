@@ -31,6 +31,11 @@ namespace SadnaSrc.MarketFeed
             Status = "Pending";
         }
 
+        public object[] ToData()
+        {
+            return new object[] { Id,Receiver,Message,Status};
+        }
+
         private static string GenerateId()
         {
             return ((char)Random.Next(97, 123)) + "" + ((char)Random.Next(97, 123)) + "" + Random.Next(1000, 10000);

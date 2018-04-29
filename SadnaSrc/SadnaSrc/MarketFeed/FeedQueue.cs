@@ -13,15 +13,11 @@ namespace SadnaSrc.MarketFeed
         private List<IObserver> observers;
         private IFeedDL _feedDL;
 
-        public FeedQueue(IFeedDL feedDL)
+        public FeedQueue(IFeedDL feedDL,int userId)
         {
             _feedDL = feedDL;
             observers = new List<IObserver>();
-        }
-
-        public void LoadOfflineFeed(Notification[] notifications)
-        {
-            queue = new List<Notification>(notifications);
+            queue = new List<Notification>(_feedDL.GetUnreadNotifications(userId));
         }
 
 
