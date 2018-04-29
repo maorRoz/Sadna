@@ -48,7 +48,7 @@ namespace SadnaSrc.StoreCenter
         public override string ToString()
         {
             ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            if (handler.PrintEnum(discountType) == handler.PrintEnum(discountTypeEnum.Hidden))
+            if (EnumStringConverter.PrintEnum(discountType) == EnumStringConverter.PrintEnum(discountTypeEnum.Hidden))
                 return "type is: hidden";
             if (Percentages)
             {

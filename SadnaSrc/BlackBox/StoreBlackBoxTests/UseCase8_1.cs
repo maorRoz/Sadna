@@ -275,7 +275,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
-			_orderBridge.BuyEverythingFromCart();
+			_orderBridge.BuyEverythingFromCart(new string[] {null});
 		}
 
 

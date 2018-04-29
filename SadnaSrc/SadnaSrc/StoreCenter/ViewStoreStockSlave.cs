@@ -70,7 +70,7 @@ namespace SadnaSrc.StoreCenter
             string product = stockListItem.Product.ToString();
             if (stockListItem.Discount != null)
                 discount = stockListItem.Discount.ToString() + " , ";
-            string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
+            string purchaseWay = EnumStringConverter.PrintEnum(stockListItem.PurchaseWay);
             string quanitity = stockListItem.Quantity + "";
             string result = product + " , " + discount + purchaseWay + " , " + quanitity;
             return result;

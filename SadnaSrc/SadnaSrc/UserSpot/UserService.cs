@@ -47,6 +47,13 @@ namespace SadnaSrc.UserSpot
 
         }
 
+		public MarketAnswer ViewUsers()
+		{
+			ViewUsersSlave slave = new ViewUsersSlave(MarketUser,userDB);
+			slave.ViewUsers();
+			return slave.Answer;
+		}
+
         public MarketAnswer EditCartItem(string store, string product, int quantity, double unitPrice)
         {
             EditCartItemSlave slave = new EditCartItemSlave(MarketUser);
@@ -72,6 +79,5 @@ namespace SadnaSrc.UserSpot
         {
             userDB.CleanSession();
         }
-
-    }
+	}
 }

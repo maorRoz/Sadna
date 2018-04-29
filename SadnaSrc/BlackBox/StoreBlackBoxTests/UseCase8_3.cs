@@ -296,14 +296,14 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
-			_orderBridge.BuyEverythingFromCart();
+			_orderBridge.BuyEverythingFromCart(new string[] {null});
 		}
 
 		private void CreateOrderWithCoupon(string coupon)
 		{
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
-			MarketAnswer res =_orderBridge.BuyItemWithCoupon("Ouch", "Toy", 2, 30, coupon);
+			MarketAnswer res =_orderBridge.BuyItemFromImmediate("Ouch", "Toy", 2, 30, coupon);
 			Assert.AreEqual((int)OrderStatus.Success,res.Status);
 		}
 
@@ -311,7 +311,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
-			MarketAnswer res = _orderBridge.BuyItemWithCoupon("Ouch", "Toy", 2, 30, coupon);
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Ouch", "Toy", 2, 30, coupon);
 			Assert.AreEqual((int)OrderStatus.InvalidCoupon, res.Status);
 		}
 

@@ -53,7 +53,7 @@ namespace IntegrationTests.FullCycle_Integration
                 storeServiceSession.MakeGuest();
                 storeServiceSession.AddProductToCart(store, product, 3);
                 orderServiceSession.GiveDetails("Someone", "Somewhere", "12345689");
-                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11);
+                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11, null);
                 Assert.AreEqual(2, sysadminSession.ViewPurchaseHistoryByStore(store).ReportList.Length);
                 string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[1];
                 Assert.AreEqual(PurchaseString("Someone"), actual);
@@ -73,7 +73,7 @@ namespace IntegrationTests.FullCycle_Integration
                 storeServiceSession.LoginShoper(user, pass);
                 storeServiceSession.AddProductToCart(store, product, 3);
                 orderServiceSession.LoginBuyer(user, pass);
-                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11);
+                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11, null);
                 Assert.AreEqual(2, sysadminSession.ViewPurchaseHistoryByStore(store).ReportList.Length);
                 string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[1];
                 Assert.AreEqual(PurchaseString(user), actual);
@@ -96,7 +96,7 @@ namespace IntegrationTests.FullCycle_Integration
                 CartItem expected = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart(store, product, 11);
                 Assert.AreEqual(3, expected.Quantity);
                 orderServiceSession.LoginBuyer(user, pass);
-                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11);
+                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11, null);
                 userServiceSession3.SignIn(user, pass);
                 Assert.IsNull(((UserService)userServiceSession3).MarketUser.Cart.SearchInCart(store, product, 11));
                 StockListItem itemToCheck = ModuleGlobalHandler.GetInstance().GetProductFromStore(store, product);

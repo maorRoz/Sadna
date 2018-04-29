@@ -60,7 +60,7 @@ namespace SadnaSrc.StoreCenter
                     obj.IntervalEnd == IntervalEnd &&
                     obj.LotteryNumber == LotteryNumber &&
                     obj.myID == myID &&
-                    handler.PrintEnum(obj.myStatus).Equals(handler.PrintEnum(myStatus)) &&
+                    EnumStringConverter.PrintEnum(obj.myStatus).Equals(EnumStringConverter.PrintEnum(myStatus)) &&
                     obj.UserID == UserID
                     );
         }

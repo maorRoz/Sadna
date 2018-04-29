@@ -170,7 +170,7 @@ namespace IntegrationTests.UserAdmin_Integration
             storeShoppingService = marketSession.GetStoreShoppingService(ref userServiceSession);
             Assert.AreEqual((int)StoreEnum.Success, storeShoppingService.AddProductToCart("The Red Rock", "Goldstar", 5).Status);
             orderService = marketSession.GetOrderService(ref userServiceSession);
-            Assert.AreEqual((int)OrderStatus.Success, orderService.BuyEverythingFromCart().Status);
+            Assert.AreEqual((int)OrderStatus.Success, orderService.BuyEverythingFromCart(new string[] {null}).Status);
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByUser("Arik1").Status);
             string[] actualHistory = adminServiceSession.ViewPurchaseHistoryByUser("Arik1").ReportList;
             string[] expectedHistory =
@@ -195,7 +195,7 @@ namespace IntegrationTests.UserAdmin_Integration
             storeShoppingService = marketSession.GetStoreShoppingService(ref userServiceSession);
             Assert.AreEqual((int)StoreEnum.Success, storeShoppingService.AddProductToCart("X", "BOX", 3).Status);
             orderService = marketSession.GetOrderService(ref userServiceSession);
-            Assert.AreEqual((int)OrderStatus.Success, orderService.BuyEverythingFromCart().Status);
+            Assert.AreEqual((int)OrderStatus.Success, orderService.BuyEverythingFromCart(new string[] {null}).Status);
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByUser("Arik1").Status);
             string[] actualHistory = adminServiceSession.ViewPurchaseHistoryByStore("X").ReportList;
             string[] expectedHistory =
