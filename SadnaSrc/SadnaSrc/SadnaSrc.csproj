@@ -182,6 +182,7 @@
     <Compile Include="UserSpot\UserService.cs" />
     <Compile Include="UserSpot\UserDL.cs" />
     <Compile Include="UserSpot\ViewCartSlave.cs" />
+    <Compile Include="UserSpot\ViewUsersSlave.cs" />
     <Compile Include="Walleter\PaymentService.cs" />
     <Compile Include="Walleter\WalleterAnswer.cs" />
     <Compile Include="Walleter\WalleterException.cs" />

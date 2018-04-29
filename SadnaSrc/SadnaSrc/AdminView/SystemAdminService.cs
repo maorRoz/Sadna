@@ -38,5 +38,7 @@ namespace SadnaSrc.AdminView
             slave.ViewPurchaseHistoryByStore(storeName);
             return slave.Answer;
         }
-    }
+
+		
+	}
 }
