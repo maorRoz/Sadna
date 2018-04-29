@@ -116,6 +116,11 @@
     <Compile Include="OrderPool\OrderException.cs" />
     <Compile Include="OrderPool\OrderItem.cs" />
     <Compile Include="OrderPool\OrderDL.cs" />
+    <Compile Include="OrderPool\MakePurchaseSlave.cs" />
+    <Compile Include="OrderPool\LotteryTicketSlave.cs" />
+    <Compile Include="OrderPool\ValidateDetailsSlave.cs" />
+    <Compile Include="OrderPool\PurchaseEverythingSlave.cs" />
+    <Compile Include="OrderPool\PurchaseItemSlave.cs" />
     <Compile Include="OrderPool\OrderPoolSlave.cs" />
     <Compile Include="OrderPool\OrderService.cs" />
     <Compile Include="MarketHarmony\PurchaseHistory.cs" />

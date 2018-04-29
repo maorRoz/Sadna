@@ -11,7 +11,7 @@ using SadnaSrc.UserSpot;
 namespace OrderPoolWallaterSupplyPointTests
 {
     [TestClass]
-    public class OrderPoolApiTest
+    public class OrderPoolBuyItemTest
     {
         private Mock<IMarketDB> marketDbMocker;
         private Mock<IOrderDL> orderDbMocker;

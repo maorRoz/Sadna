@@ -80,7 +80,7 @@
     <Compile Include="OrderPoolTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplyPointTest1.cs" />
-    <Compile Include="OrderPoolApiTest.cs" />
+    <Compile Include="OrderPoolBuyItemTest.cs" />
     <Compile Include="WalleterTest1.cs" />
   </ItemGroup>
   <ItemGroup>
