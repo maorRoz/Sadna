@@ -82,7 +82,7 @@ namespace BlackBox.OrderBlackBoxTests
 		{
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
-			MarketAnswer res = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer res = _orderBridge.BuyEverythingFromCart(new string[]{null, null});
 			Assert.AreEqual((int)OrderStatus.Success,res.Status);
 			MarketAnswer puchaseHistory = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, puchaseHistory.Status);
@@ -123,7 +123,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails("PninaGuest", "MisholGuest", "77777777");
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderStatus.Success, order.Status);
 			
 			MarketAnswer cartDetails = _buyerGuestBridge.ViewCart();
@@ -151,7 +151,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails(null, "MisholGuest", "77777777");
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 
 		}
@@ -162,7 +162,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails("PninaGuest", null, "77777777");
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 		}
 
@@ -172,7 +172,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails("PninaGuest", "MisholGuest", "");
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 
 		}
@@ -182,7 +182,7 @@ namespace BlackBox.OrderBlackBoxTests
 		{
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 		}
 
@@ -192,7 +192,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			_orderBridge.DisableSupplySystem();
-			MarketAnswer res = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer res = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);

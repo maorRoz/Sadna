@@ -5,7 +5,7 @@ namespace BlackBox
 	interface IOrderBridge
 	{
 		void GetOrderService(IUserService userService);
-		MarketAnswer BuyEverythingFromCart();
+		MarketAnswer BuyEverythingFromCart(string[] coupons);
 		MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon);
 		MarketAnswer GiveDetails(string userName, string address, string creditCard);
 

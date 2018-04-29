@@ -14,7 +14,7 @@ namespace SadnaSrc.Main
 
         MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity,double unitPrice);
         
-        MarketAnswer BuyEverythingFromCart();
+        MarketAnswer BuyEverythingFromCart(string[] coupons);
 
         MarketAnswer GiveDetails(string userName, string address, string creditCard);
 

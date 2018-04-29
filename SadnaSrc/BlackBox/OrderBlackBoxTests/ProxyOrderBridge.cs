@@ -28,11 +28,11 @@ namespace BlackBox.OrderBlackBoxTests
 			throw new NotImplementedException();
 		}
 
-		public MarketAnswer BuyEverythingFromCart()
+		public MarketAnswer BuyEverythingFromCart(string[] coupons)
 		{
 			if (real != null)
 			{
-				return real.BuyEverythingFromCart();
+				return real.BuyEverythingFromCart(coupons);
 			}
 			throw new NotImplementedException();
 		}

@@ -22,9 +22,9 @@ namespace BlackBox
 			_orderService = _market.GetOrderService(ref userService);
 		}
 
-		public MarketAnswer BuyEverythingFromCart()
+		public MarketAnswer BuyEverythingFromCart(string[] coupons)
 		{
-			return _orderService.BuyEverythingFromCart();
+			return _orderService.BuyEverythingFromCart(coupons);
 		}
 
 	    public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)

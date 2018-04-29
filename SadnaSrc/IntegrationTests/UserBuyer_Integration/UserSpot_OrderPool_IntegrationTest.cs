@@ -141,7 +141,7 @@ namespace IntegrationTests.UserBuyer_Integration
             try
             {
                 orderServiceSession.LoginBuyer(user, pass);
-                orderServiceSession.BuyEverythingFromCart();
+                orderServiceSession.BuyEverythingFromCart(null);
                 userServiceSession2.SignIn(user, pass);
                 Assert.AreEqual(0, ((UserService)userServiceSession2).MarketUser.Cart.GetCartStorage().Length);
             }
@@ -156,7 +156,7 @@ namespace IntegrationTests.UserBuyer_Integration
         {
             try
             {
-                Assert.AreNotEqual(0, orderServiceSession.BuyEverythingFromCart().Status);
+                Assert.AreNotEqual(0, orderServiceSession.BuyEverythingFromCart(new string[0]).Status);
             }
             catch (MarketException)
             {

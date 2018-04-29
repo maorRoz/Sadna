@@ -332,7 +332,7 @@ namespace IntegrationTests.StoreSyncher_Integration
             {
                 orderServiceSession.LoginBuyer("Vadim Chernov", "123");
                 orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
-                orderServiceSession.BuyEverythingFromCart();
+                orderServiceSession.BuyEverythingFromCart(new string[]{null, null, null});
                 Assert.AreEqual(17, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
                 Assert.AreEqual(33, storeServiceSession.GetProductFromStore(store1, "Goldstar").Quantity);
                 Assert.AreEqual(98, storeServiceSession.GetProductFromStore(store2, "OCB").Quantity);

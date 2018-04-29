@@ -88,9 +88,9 @@ namespace SadnaSrc.OrderPool
         }
 
 
-        public MarketAnswer BuyEverythingFromCart()
+        public MarketAnswer BuyEverythingFromCart(string[] coupons) 
         {
-            Order newOrder = slave.BuyEverythingFromCart(UserName, UserAddress, CreditCard);
+            Order newOrder = slave.BuyEverythingFromCart(coupons, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
             return slave.Answer;

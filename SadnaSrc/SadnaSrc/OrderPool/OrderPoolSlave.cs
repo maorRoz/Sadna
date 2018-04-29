@@ -111,7 +111,7 @@ namespace SadnaSrc.OrderPool
             }
         }
 
-        public Order BuyEverythingFromCart(string UserName, string UserAddress, string CreditCard)
+        public Order BuyEverythingFromCart(string[] coupons, string UserName, string UserAddress, string CreditCard)
         {
             if (UserName == null)
                 UserName = _buyer.GetName();
@@ -124,6 +124,26 @@ namespace SadnaSrc.OrderPool
             try
             {
                 Order order = CreateOrderAllCart(UserName, UserAddress);
+                OrderItem[] items = order.GetItems().ToArray();
+                if (coupons != null)
+                    for (int i=0; i < items.Length; i++)
+                    {
+                        if (coupons[i] != null)
+                        {
+                            try
+                            {
+                                items[i].Price = _storesSync.GetPriceFromCoupon(items[i].Name, items[i].Store, items[i].Quantity, coupons[i]);
+                            }
+                            catch (MarketException e)
+                            {
+                                MarketLog.Log("OrderPool", "Order " + orderId +
+                                                           " has failed to execute. Something is wrong with Store." +
+                                                           " Error message has been created!");
+                                Answer = new OrderAnswer(OrderStatus.InvalidCoupon, e.GetErrorMessage());
+                                return null;
+                            }
+                        }
+                    }
                 ProcessOrder(order, CreditCard);
                 _buyer.EmptyCart();
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in the cart.");
@@ -180,10 +200,8 @@ namespace SadnaSrc.OrderPool
                 _buyer.ValidateRegisteredUser();
                 _storesSync.ValidateTicket(itemName, store, unitPrice);
                 OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
-                CheckOrderItem(ticketToBuy);
-                Order order = InitOrder(UserName, UserAddress);
+                Order order = CreateOrderOneItem(ticketToBuy, UserName, UserAddress);
                 orderId = order.GetOrderID();
-                order.AddOrderItem(ticketToBuy);
                 _paymentService.ProccesPayment(order, CreditCard);
                 _orderDL.AddOrder(order, "Lottery");
                 _storesSync.UpdateLottery(itemName, store, unitPrice, UserName, cheatCode);
