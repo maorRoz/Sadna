@@ -19,14 +19,14 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
-                checkIfStoreExistsAndActive();
+                checkIfStoreExistsAndActiveDiscount();
                 MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
                 _storeManager.CanDeclareDiscountPolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
                 Product product = global.getProductByNameFromStore(_storeName, productName);
-                checkifProductExists(product);
+                checkifProductExistsDiscount(product);
                 MarketLog.Log("StoreCenter", "check if dates are OK");
                 checkIfDatesOK(startDate,endDate);
                 MarketLog.Log("StoreCenter", "check that discount amount is OK");
@@ -56,7 +56,20 @@ namespace SadnaSrc.StoreCenter
                 return null;
             }
         }
-
+        protected void checkIfStoreExistsAndActiveDiscount()
+        {
+            if (!global.IsStoreExistAndActive(_storeName))
+            { throw new StoreException(DiscountStatus.NoStore, "store not exists or active"); }
+        }
+        protected void checkifProductExistsDiscount(Product product)
+        {
+            if (product == null)
+            {
+                MarketLog.Log("StoreCenter", "product not exists");
+                throw new StoreException(DiscountStatus.ProductNotFound, "no Such Product");
+            }
+            MarketLog.Log("StoreCenter", "product exists");
+        }
         private void checkHasNoExistsDiscount(StockListItem stockListItem)
         {
             if (stockListItem.Discount != null)

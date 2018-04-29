@@ -28,7 +28,7 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
-                IsProductNameAvailableInStore(name);
+                checkIfProductNameAvailable(name);
                 Product product = new Product(ID_Manager.GetProductID(), name, price, description);
                 StockListItem stockListItem = new StockListItem(1, product, null, PurchaseEnum.Lottery, store.SystemId);
                 global.AddStockListItemToDataBase(stockListItem);
@@ -51,6 +51,13 @@ namespace SadnaSrc.StoreCenter
                 answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
             return null;
+        }
+
+        private void checkIfProductNameAvailable(string name)
+        {
+            Product P = global.getProductByNameFromStore(_storeName, name);
+            if (P != null)
+                throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }
     }
 }
