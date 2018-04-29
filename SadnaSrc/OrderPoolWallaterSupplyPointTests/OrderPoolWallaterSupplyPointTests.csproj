@@ -77,6 +77,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrderPoolLotteryTicketTest.cs" />
+    <Compile Include="OrderPoolBuyEverythingTest.cs" />
     <Compile Include="OrderPoolTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupplyPointTest1.cs" />

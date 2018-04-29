@@ -29,27 +29,20 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                Order order = CreateOrderAllCart(UserName, UserAddress);
-                OrderItem[] items = order.GetItems().ToArray();
-                if (coupons != null)
-                    for (int i=0; i < items.Length; i++)
-                    {
-                        if (coupons[i] != null)
-                        {
-                            try
-                            {
-                                items[i].Price = _storesSync.GetPriceFromCoupon(items[i].Name, items[i].Store, items[i].Quantity, coupons[i]);
-                            }
-                            catch (MarketException e)
-                            {
-                                MarketLog.Log("OrderPool", "Order " + orderId +
-                                                           " has failed to execute. Something is wrong with Store." +
-                                                           " Error message has been created!");
-                                Answer = new OrderAnswer(OrderStatus.InvalidCoupon, e.GetErrorMessage());
-                                return null;
-                            }
-                        }
-                    }
+                Order order;
+                try
+                {
+                    order = CreateOrderAllCart(UserName, UserAddress, coupons);
+                    orderId = order.GetOrderID();
+                }
+                catch (MarketException e)
+                {
+                    MarketLog.Log("OrderPool", "Order " + orderId +
+                                               " has failed to execute. Something is wrong with Store." +
+                                               " Error message has been created!");
+                    Answer = new OrderAnswer(OrderStatus.InvalidCoupon, e.GetErrorMessage());
+                    return null;
+                }
                 ProcessOrder(order, CreditCard);
                 _buyer.EmptyCart();
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in the cart.");
@@ -125,9 +118,17 @@ namespace SadnaSrc.OrderPool
             _orderDL.AddOrder(order);
         }
 
-        private Order CreateOrderAllCart(string UserName, string UserAddress)
+        private Order CreateOrderAllCart(string UserName, string UserAddress, string[] coupons)
         {
             OrderItem[] itemsToBuy = _buyer.CheckoutAll();
+            if (coupons != null)
+                for (int i = 0; i < itemsToBuy.Length; i++)
+                {
+                    if (coupons[i] != null)
+                    {
+                        itemsToBuy[i].Price = _storesSync.GetPriceFromCoupon(itemsToBuy[i].Name, itemsToBuy[i].Store, itemsToBuy[i].Quantity, coupons[i]);
+                    }
+                }
             Order order = InitOrder(itemsToBuy, UserName, UserAddress);
             return order;
         }

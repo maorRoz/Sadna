@@ -12,14 +12,6 @@ namespace SadnaSrc.OrderPool
 {
     public class LotteryTicketSlave : MakePurchaseSlave
     {
-        private readonly IOrderDL _orderDL;
-
-        private readonly IUserBuyer _buyer;
-        private readonly IStoresSyncher _storesSync;
-
-        private readonly SupplyService _supplyService;
-        private readonly PaymentService _paymentService;
-
         private int cheatCode = -1;
 
         public OrderAnswer Answer { get; private set; }

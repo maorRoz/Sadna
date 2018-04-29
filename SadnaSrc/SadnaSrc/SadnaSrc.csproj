@@ -121,7 +121,6 @@
     <Compile Include="OrderPool\ValidateDetailsSlave.cs" />
     <Compile Include="OrderPool\PurchaseEverythingSlave.cs" />
     <Compile Include="OrderPool\PurchaseItemSlave.cs" />
-    <Compile Include="OrderPool\OrderPoolSlave.cs" />
     <Compile Include="OrderPool\OrderService.cs" />
     <Compile Include="MarketHarmony\PurchaseHistory.cs" />
     <Compile Include="OrderPool\StoreOrderTools.cs" />
