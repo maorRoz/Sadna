@@ -74,7 +74,7 @@ namespace IntegrationTests.UserBuyer_Integration
             try
             {
                 orderServiceSession.LoginBuyer(user, pass);
-                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 1, 6.00);
+                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 1, 6.00, null);
                 userServiceSession2.SignIn(user, pass);
                 CartItem item = ((UserService) userServiceSession2).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
                 Assert.AreEqual(2,item.Quantity);
@@ -91,7 +91,7 @@ namespace IntegrationTests.UserBuyer_Integration
             try
             {
                 orderServiceSession.LoginBuyer(user, pass);
-                orderServiceSession.BuyItemFromImmediate("OCB", "24", 2, 10.00);
+                orderServiceSession.BuyItemFromImmediate("OCB", "24", 2, 10.00, null);
                 userServiceSession2.SignIn(user, pass);
                 Assert.IsNull(((UserService)userServiceSession2).MarketUser.Cart.SearchInCart("24", "OCB", 10.00));
             }
@@ -107,7 +107,7 @@ namespace IntegrationTests.UserBuyer_Integration
             try
             {
                 orderServiceSession.LoginBuyer(user , pass);
-                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 999, 6.00);
+                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 999, 6.00, null);
                 userServiceSession2.SignIn(user, pass);
                 CartItem item = ((UserService)userServiceSession2).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
                 Assert.AreEqual(3,item.Quantity);
@@ -124,7 +124,7 @@ namespace IntegrationTests.UserBuyer_Integration
             try
             {
                 orderServiceSession.LoginBuyer(user, pass);
-                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", -5, 6.00);
+                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", -5, 6.00, null);
                 userServiceSession2.SignIn(user, pass);
                 CartItem item = ((UserService)userServiceSession2).MarketUser.Cart.SearchInCart("The Red Rock", "Bamba", 6.00);
                 Assert.AreEqual(3,item.Quantity);

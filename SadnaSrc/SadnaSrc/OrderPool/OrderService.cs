@@ -38,7 +38,7 @@ namespace SadnaSrc.OrderPool
             _storesSync = storesSync;
             _orderDL = OrderDL.Instance;
 
-            slave = new OrderPoolSlave(ref buyer, storesSync, OrderDL.Instance);
+            slave = new OrderPoolSlave(buyer, storesSync, OrderDL.Instance);
         }
 
         //only for Unit Tests of developer!!(not for integration or blackbox or real usage)
@@ -70,17 +70,9 @@ namespace SadnaSrc.OrderPool
          * Interface functions
          */
 
-        public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
+        public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon)
         {
-            Order newOrder = slave.BuyItemFromImmediate(itemName, store, quantity, unitPrice, UserName, UserAddress, CreditCard);
-            if(newOrder!= null)
-                Orders.Add(newOrder);
-            return slave.Answer;
-        }
-
-        public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
-        {
-            Order newOrder = slave.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon, UserName, UserAddress, CreditCard);
+            Order newOrder = slave.BuyItemFromImmediate(itemName, store, quantity, unitPrice, coupon, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
             return slave.Answer;

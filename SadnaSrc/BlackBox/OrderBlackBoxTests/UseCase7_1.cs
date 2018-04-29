@@ -188,7 +188,7 @@ namespace BlackBox.OrderBlackBoxTests
 		{
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
-			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 100, 10);
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 100, 10, null);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
 			//TODO: check nothing had changed
 			CheckHistoryNullCartSameStockNotChangedRegisterUser();
@@ -199,7 +199,7 @@ namespace BlackBox.OrderBlackBoxTests
 		{
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
-			MarketAnswer res = _orderBridge.BuyItemFromImmediate("why","HAHAHA",3,10);
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("why","HAHAHA",3,10, null);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder,res.Status);
 			//TODO: check nothing has changed
 			CheckHistoryNullCartSameStockNotChangedRegisterUser();
@@ -272,7 +272,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			_orderBridge.DisablePaymentSystem();
-			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1);
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1, null);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
 			CheckHistoryNullCartSameStockNotChangedRegisterUser();
 		}

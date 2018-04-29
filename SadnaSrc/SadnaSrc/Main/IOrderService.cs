@@ -10,9 +10,7 @@ namespace SadnaSrc.Main
 {
     public interface IOrderService
     {
-        MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice);
-
-        MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon);
+        MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon);
 
         MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity,double unitPrice);
         
