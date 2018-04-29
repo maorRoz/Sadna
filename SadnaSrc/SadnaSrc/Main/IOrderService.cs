@@ -15,8 +15,6 @@ namespace SadnaSrc.Main
         MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon);
 
         MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity,double unitPrice);
-
-        MarketAnswer BuyAllItemsFromStore(string store);
         
         MarketAnswer BuyEverythingFromCart();
 

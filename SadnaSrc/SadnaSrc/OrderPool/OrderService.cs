@@ -96,15 +96,6 @@ namespace SadnaSrc.OrderPool
         }
 
 
-        public MarketAnswer BuyAllItemsFromStore(string store)
-        {
-            Order newOrder = slave.BuyAllItemsFromStore(store, UserName, UserAddress, CreditCard);
-            if (newOrder != null)
-                Orders.Add(newOrder);
-            return slave.Answer;
-        }
-
-
         public MarketAnswer BuyEverythingFromCart()
         {
             Order newOrder = slave.BuyEverythingFromCart(UserName, UserAddress, CreditCard);

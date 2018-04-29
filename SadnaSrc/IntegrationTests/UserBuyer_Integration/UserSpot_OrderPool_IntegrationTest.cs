@@ -136,38 +136,6 @@ namespace IntegrationTests.UserBuyer_Integration
         }
 
         [TestMethod]
-        public void StoreItemsRemovedFromCartTest()
-        {
-            try
-            {
-                orderServiceSession.LoginBuyer(user, pass);
-                orderServiceSession.BuyAllItemsFromStore("The Red Rock");
-                userServiceSession2.SignIn(user, pass);
-                Assert.AreEqual(0, ((UserService)userServiceSession2).MarketUser.Cart.GetCartStorage("The Red Rock").Length);
-            }
-            catch (MarketException)
-            {
-                Assert.Fail();
-            }
-        }
-
-        [TestMethod]
-        public void CartUnchangedNonexistantStoreTest()
-        {
-            try
-            {
-                orderServiceSession.LoginBuyer(user, pass);
-                orderServiceSession.BuyAllItemsFromStore("The Blue Rock");
-                userServiceSession2.SignIn(user, pass);
-                Assert.AreEqual(3, ((UserService)userServiceSession2).MarketUser.Cart.GetCartStorage().Length);
-            }
-            catch (MarketException)
-            {
-                Assert.Fail();
-            }
-        }
-
-        [TestMethod]
         public void CartIsEmptyAfterBuyTest()
         {
             try

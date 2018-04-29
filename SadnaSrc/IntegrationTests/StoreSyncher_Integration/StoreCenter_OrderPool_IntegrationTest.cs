@@ -281,40 +281,6 @@ namespace IntegrationTests.StoreSyncher_Integration
         }
 
         [TestMethod]
-        public void BuyAllFromStoreStockUpdateTest()
-        {
-            try
-            {
-                orderServiceSession.LoginBuyer("Vadim Chernov", "123");
-                orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
-                orderServiceSession.BuyAllItemsFromStore(store1);
-                Assert.AreEqual(17, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
-                Assert.AreEqual(33, storeServiceSession.GetProductFromStore(store1, "Goldstar").Quantity);
-            }
-            catch (MarketException)
-            {
-                Assert.Fail();
-            }
-        }
-
-        [TestMethod]
-        public void StoreNotExistsStockUnchangedTest()
-        {
-            try
-            {
-                orderServiceSession.LoginBuyer("Vadim Chernov", "123");
-                orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
-                orderServiceSession.BuyAllItemsFromStore("A" + store1);
-                Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
-                Assert.AreEqual(36, storeServiceSession.GetProductFromStore(store1, "Goldstar").Quantity);
-            }
-            catch (MarketException)
-            {
-                Assert.Fail();
-            }
-        }
-
-        [TestMethod]
         public void GetItemWithCouponTest()
         {
             try
