@@ -389,5 +389,10 @@ namespace SadnaSrc.OrderPool
                 throw new OrderException(GiveDetailsStatus.InvalidNameOrAddress, "User entered invalid name or address into the order");
             }
         }
+
+        public void Cheat(int cheatResult)
+        {
+            cheatCode = cheatResult;
+        }
     }
 }

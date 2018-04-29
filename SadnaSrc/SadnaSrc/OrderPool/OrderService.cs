@@ -28,8 +28,6 @@ namespace SadnaSrc.OrderPool
 
         private readonly OrderPoolSlave slave;
 
-        private int cheatCode = -1;
-
         public OrderService(IUserBuyer buyer, IStoresSyncher storesSync)
         {
             Orders = new List<Order>();
@@ -65,7 +63,7 @@ namespace SadnaSrc.OrderPool
 
         public void Cheat(int cheatResult)
         {
-            cheatCode = cheatResult;
+            slave.Cheat(cheatResult);
         }
 
         /*
