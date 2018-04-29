@@ -283,26 +283,6 @@ namespace StoreCenterTests
             Assert.AreEqual(expected, find); ;
         }
         [TestMethod]
-        public void GetAllActiveStores()
-        {
-            Store[] expected =
-            {
-                new Store("S1", "X", "Here 4"),
-                new Store("S2", "Y", "Here 4"),
-                new Store("S3", "M", "Here 4"),
-                new Store("S4", "Cluckin Bell", "Los Santos"),
-                new Store("S5", "The Red Rock", "Mivtza Yoav"),
-                new Store("S6", "24", "Mezada"),
-                new Store("S7", "T","wanderland")
-            };
-            Store[] actual = handler.DataLayer.GetAllActiveStores().OrderBy(x=>x.SystemId).ToArray();
-            Assert.AreEqual(expected.Length, actual.Length);
-            for (int i = 0; i < actual.Length; i++)
-            {
-                Assert.AreEqual(expected[i], actual[i]);
-            }
-        }
-        [TestMethod]
         public void GetLotteryTicket()
         {
             LotteryTicket expected = new LotteryTicket("T1", "L1", 0, 0, 0, 0); //Exists in DB
@@ -323,7 +303,7 @@ namespace StoreCenterTests
         [TestMethod]
         public void RemoveLotteryTicket()
         {
-            LotteryTicket expected = new LotteryTicket("T3", "L1", 0, 0, 0, 0); ;
+            LotteryTicket expected = new LotteryTicket("T3", "L1", 0, 0, 0, 0);
             handler.DataLayer.AddLotteryTicket(expected);
             LotteryTicket find = handler.DataLayer.GetLotteryTicket("T3");
             Assert.AreEqual(expected, find);

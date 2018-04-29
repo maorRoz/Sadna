@@ -132,7 +132,6 @@ namespace SadnaSrc.StoreCenter
             return slave.answer;
         }
 
-
         public MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
         {
             AddDiscountToProductSlave slave = new AddDiscountToProductSlave(_storeName, _storeManager);

@@ -445,7 +445,7 @@ namespace SadnaSrc.StoreCenter
                 while (dbReader.Read())
                 {
                     LotteryTicket lotty = new LotteryTicket(dbReader.GetString(0), dbReader.GetString(1),
-                        dbReader.GetInt32(2), dbReader.GetInt32(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
+                        dbReader.GetDouble(2), dbReader.GetDouble(3), dbReader.GetDouble(4), dbReader.GetInt32(6));
                     lotty.myStatus = EnumStringConverter.GetLotteryStatusString(dbReader.GetString(5));
                     return lotty;
                 }
