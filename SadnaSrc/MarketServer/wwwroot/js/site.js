@@ -19,8 +19,12 @@ $(document).ready(function() {
         socketId = socket.connectionId;
         console.log('your SocketId is : ' + socketId);
         var systemId = getParameterValues('systemId');
+        if (systemId === undefined) {
+            systemId = getParameterValues('SystemId');
+        }
         console.log('your systemId is : ' +systemId);
         if (systemId === undefined || systemId === 0) {
+            console.log('heloooooooooo');
             socket.invoke('EnterSystem', socketId);
         } 
     }

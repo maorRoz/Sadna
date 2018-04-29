@@ -20,14 +20,7 @@ namespace MarketWeb.Controllers
             var userService = MarketServer.users[systemId];
             string[] usersData = userService.ViewUsers().ReportList;
             int status = userService.ViewUsers().Status;
-            if (status == Success)
-            {
-                ViewBag.valid = true;
-            }
-            else
-            {
-                ViewBag.valid = false;
-            }
+            ViewBag.valid = valid;
 
             return View(new UserListModel(systemId, state, message, usersData));
         }
@@ -59,10 +52,10 @@ namespace MarketWeb.Controllers
                 : adminService.ViewPurchaseHistoryByUser(viewSubject);
 
 
-          /*  if (answer.Status != Success)
+            if (answer.Status != Success)
             {
                 return RedirectToAction("AdminSelectView", new {systemId, state, message = answer.Answer});
-            }*/
+            }
 
             return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
         }
