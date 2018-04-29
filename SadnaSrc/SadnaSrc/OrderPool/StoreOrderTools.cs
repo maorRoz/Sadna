@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Walleter;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 
 namespace SadnaSrc.OrderPool
 {
@@ -46,11 +47,15 @@ namespace SadnaSrc.OrderPool
             try
             {
                 string[] ticketsToRefund = _orderDL.GetAllTickets(lottery);
+                List<int> refundedIds = new List<int>();
                 foreach (string ticket in ticketsToRefund)
                 {
-                    Refund(ticket);
+                    var refundedId = Refund(ticket);
+                    refundedIds.Add(refundedId);
                 }
 
+             //   var publisher = Publisher.Instance;
+             //   publisher.NotifyLotteryCanceled(refundedIds.ToArray());
                 _orderDL.CancelLottery(lottery);
 
             }
@@ -77,7 +82,7 @@ namespace SadnaSrc.OrderPool
 
 
 
-        private void Refund(string ticket)
+        private int Refund(string ticket)
         {
             int participantID = _orderDL.GetTicketParticipantID(ticket);
             if(participantID < 0)
@@ -91,6 +96,7 @@ namespace SadnaSrc.OrderPool
             _orderDL.AddOrder(order,"Lottery");
             _orderDL.RemoveTicket(ticket);
             MarketLog.Log("OrderPool", "User " + nameToRefund + " successfully refunded the sum: " + sumToRefund);
+            return participantID;
         }
 
         public void SendPackage(string itemName, string store,int userId)
