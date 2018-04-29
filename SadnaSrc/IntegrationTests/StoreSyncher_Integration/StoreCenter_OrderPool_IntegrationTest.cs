@@ -228,7 +228,7 @@ namespace IntegrationTests.StoreSyncher_Integration
             {
                 orderServiceSession.LoginBuyer("Vadim Chernov", "123");
                 orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
-                orderServiceSession.BuyItemFromImmediate(product1, store1, 3, 6);
+                orderServiceSession.BuyItemFromImmediate(product1, store1, 3, 6, null);
                 StockListItem itemToCheck = storeServiceSession.GetProductFromStore(store1, product1);
                 Assert.AreEqual(17, itemToCheck.Quantity);
             }
@@ -246,7 +246,7 @@ namespace IntegrationTests.StoreSyncher_Integration
             {
                 orderServiceSession.LoginBuyer("Vova", "123");
                 orderServiceSession.GiveDetails("Vova", "Donkelblum", "12345667");
-                orderServiceSession.BuyItemFromImmediate(product2, store2, 8, 6);
+                orderServiceSession.BuyItemFromImmediate(product2, store2, 8, 6, null);
             }
             catch (MarketException)
             {
@@ -271,42 +271,8 @@ namespace IntegrationTests.StoreSyncher_Integration
             {
                 orderServiceSession.LoginBuyer("Arik1", "123");
                 orderServiceSession.GiveDetails("Arik1", "AAA", "12345667");
-                orderServiceSession.BuyItemFromImmediate(product1, store1, 3, 6);
+                orderServiceSession.BuyItemFromImmediate(product1, store1, 3, 6, null);
                 Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
-            }
-            catch (MarketException)
-            {
-                Assert.Fail();
-            }
-        }
-
-        [TestMethod]
-        public void BuyAllFromStoreStockUpdateTest()
-        {
-            try
-            {
-                orderServiceSession.LoginBuyer("Vadim Chernov", "123");
-                orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
-                orderServiceSession.BuyAllItemsFromStore(store1);
-                Assert.AreEqual(17, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
-                Assert.AreEqual(33, storeServiceSession.GetProductFromStore(store1, "Goldstar").Quantity);
-            }
-            catch (MarketException)
-            {
-                Assert.Fail();
-            }
-        }
-
-        [TestMethod]
-        public void StoreNotExistsStockUnchangedTest()
-        {
-            try
-            {
-                orderServiceSession.LoginBuyer("Vadim Chernov", "123");
-                orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
-                orderServiceSession.BuyAllItemsFromStore("A" + store1);
-                Assert.AreEqual(20, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
-                Assert.AreEqual(36, storeServiceSession.GetProductFromStore(store1, "Goldstar").Quantity);
             }
             catch (MarketException)
             {
@@ -320,7 +286,7 @@ namespace IntegrationTests.StoreSyncher_Integration
             try
             {
                 orderServiceSession.LoginBuyer("CJ", "123");
-                orderServiceSession.BuyItemWithCoupon("Pizza", "The Red Rock", 2, 60.00, "D1");
+                orderServiceSession.BuyItemFromImmediate("Pizza", "The Red Rock", 2, 60.00, "D1");
                 Assert.AreEqual(8, storeServiceSession.GetProductFromStore("The Red Rock", "Pizza").Quantity);
             }
             catch (MarketException)
@@ -335,7 +301,7 @@ namespace IntegrationTests.StoreSyncher_Integration
             try
             {
                 orderServiceSession.LoginBuyer("CJ", "123");
-                orderServiceSession.BuyItemWithCoupon("Pizza", "The Red Rock", 2, 60.00, "D6");
+                orderServiceSession.BuyItemFromImmediate("Pizza", "The Red Rock", 2, 60.00, "D6");
                 Assert.AreEqual(10, storeServiceSession.GetProductFromStore("The Red Rock", "Pizza").Quantity);
             }
             catch (MarketException)
@@ -350,7 +316,7 @@ namespace IntegrationTests.StoreSyncher_Integration
             try
             {
                 orderServiceSession.LoginBuyer("Vadim Chernov", "123");
-                orderServiceSession.BuyItemWithCoupon("Bamba", "The Red Rock", 2, 6.00, "D6");
+                orderServiceSession.BuyItemFromImmediate("Bamba", "The Red Rock", 2, 6.00, "D6");
                 Assert.AreEqual(20, storeServiceSession.GetProductFromStore("The Red Rock", "Bamba").Quantity);
             }
             catch (MarketException)
@@ -366,7 +332,7 @@ namespace IntegrationTests.StoreSyncher_Integration
             {
                 orderServiceSession.LoginBuyer("Vadim Chernov", "123");
                 orderServiceSession.GiveDetails("Vadim Chernov", "Mivtza Kilshon", "12345667");
-                orderServiceSession.BuyEverythingFromCart();
+                orderServiceSession.BuyEverythingFromCart(new string[]{null, null, null});
                 Assert.AreEqual(17, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
                 Assert.AreEqual(33, storeServiceSession.GetProductFromStore(store1, "Goldstar").Quantity);
                 Assert.AreEqual(98, storeServiceSession.GetProductFromStore(store2, "OCB").Quantity);

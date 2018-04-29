@@ -65,7 +65,7 @@ namespace SadnaSrc.Walleter
         public void CheckCreditCard(string details)
         {
             int x;
-            if (details.Length != 8 || !Int32.TryParse(details, out x))
+            if (details == null || details.Length != 8 || !Int32.TryParse(details, out x))
             {
                 throw new WalleterException(WalleterStatus.InvalidCreditCardSyntax, "Failed, Invalid credit card details..");
             }

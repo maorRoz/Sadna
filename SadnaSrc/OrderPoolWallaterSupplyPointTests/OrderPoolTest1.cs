@@ -32,7 +32,7 @@ namespace OrderPoolWallaterSupplyPointTests
             userService = market.GetUserService();
             orderService= (OrderService)market.GetOrderService(ref userService);
             IUserBuyer buyer = new UserBuyerHarmony(ref userService);
-            slave = new OrderPoolSlave(ref buyer, new StoresSyncherHarmony());
+            slave = new OrderPoolSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance);
             orderService.GiveDetails("Big Smoke", "Grove Street", "54238521");
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);

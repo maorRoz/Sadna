@@ -28,8 +28,6 @@ namespace SadnaSrc.OrderPool
 
         private readonly OrderPoolSlave slave;
 
-        private int cheatCode = -1;
-
         public OrderService(IUserBuyer buyer, IStoresSyncher storesSync)
         {
             Orders = new List<Order>();
@@ -40,7 +38,7 @@ namespace SadnaSrc.OrderPool
             _storesSync = storesSync;
             _orderDL = OrderDL.Instance;
 
-            slave = new OrderPoolSlave(ref buyer, storesSync);
+            slave = new OrderPoolSlave(buyer, storesSync, OrderDL.Instance);
         }
 
         //only for Unit Tests of developer!!(not for integration or blackbox or real usage)
@@ -65,24 +63,16 @@ namespace SadnaSrc.OrderPool
 
         public void Cheat(int cheatResult)
         {
-            cheatCode = cheatResult;
+            slave.Cheat(cheatResult);
         }
 
         /*
          * Interface functions
          */
 
-        public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
+        public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon)
         {
-            Order newOrder = slave.BuyItemFromImmediate(itemName, store, quantity, unitPrice, UserName, UserAddress, CreditCard);
-            if(newOrder!= null)
-                Orders.Add(newOrder);
-            return slave.Answer;
-        }
-
-        public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
-        {
-            Order newOrder = slave.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon, UserName, UserAddress, CreditCard);
+            Order newOrder = slave.BuyItemFromImmediate(itemName, store, quantity, unitPrice, coupon, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
             return slave.Answer;
@@ -98,18 +88,9 @@ namespace SadnaSrc.OrderPool
         }
 
 
-        public MarketAnswer BuyAllItemsFromStore(string store)
+        public MarketAnswer BuyEverythingFromCart(string[] coupons) 
         {
-            Order newOrder = slave.BuyAllItemsFromStore(store, UserName, UserAddress, CreditCard);
-            if (newOrder != null)
-                Orders.Add(newOrder);
-            return slave.Answer;
-        }
-
-
-        public MarketAnswer BuyEverythingFromCart()
-        {
-            Order newOrder = slave.BuyEverythingFromCart(UserName, UserAddress, CreditCard);
+            Order newOrder = slave.BuyEverythingFromCart(coupons, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
             return slave.Answer;
