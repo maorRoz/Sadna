@@ -11,5 +11,9 @@ namespace SadnaSrc.MarketFeed
     {
         void Update();
 
+        void Subscribe();
+
+        void Unsubscribe();
+
     }
 }

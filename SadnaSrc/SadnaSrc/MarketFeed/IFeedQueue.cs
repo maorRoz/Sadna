@@ -9,6 +9,8 @@ namespace SadnaSrc.MarketFeed
     public interface IFeedQueue
     {
         void Attach(IObserver observer);
+
+        void Detach(IObserver observer);
         void Notify();
 
         void AddFeed(Notification notification);

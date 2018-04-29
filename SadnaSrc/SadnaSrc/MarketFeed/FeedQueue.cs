@@ -30,6 +30,11 @@ namespace SadnaSrc.MarketFeed
             }
         }
 
+        public void Detach(IObserver observer)
+        {
+            observers.Remove(observer);
+        }
+
         public void Notify()
         {
             RefreshQueue();
