@@ -54,8 +54,8 @@ namespace SadnaSrc.OrderPool
                     refundedIds.Add(refundedId);
                 }
 
-                var publisher = Publisher.Instance;
-                publisher.NotifyLotteryCanceled(refundedIds.ToArray());
+             //   var publisher = Publisher.Instance;
+             //   publisher.NotifyLotteryCanceled(refundedIds.ToArray());
                 _orderDL.CancelLottery(lottery);
 
             }

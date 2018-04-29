@@ -268,10 +268,10 @@ namespace SadnaSrc.StoreCenter
             LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, productName);
             if (Lotto.updateLottery(moneyPayed, DataLayer.getUserIDFromUserName(userName)))
             {
-                var publisher = Publisher.Instance;
                 var winnerId = Lotto.getWinnerID(cheatCode);
                 syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, winnerId);
-                publisher.NotifyLotteryFinish(Lotto.SystemID,productName,storeName);
+                //  var publisher = Publisher.Instance;
+                //   publisher.NotifyLotteryFinish(Lotto.SystemID,productName,storeName);
             }
         }
     }
