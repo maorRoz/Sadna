@@ -9,7 +9,7 @@ namespace MarketWeb.Models
     public class PurchaseHistoryModel : UserModel
     {
 		public PurchaseItemModel[] Items { get; set; }
-		public PurchaseHistoryModel(int systemId, string state, string subject, string[] history) : base(systemId, state,null)
+		public PurchaseHistoryModel(int systemId, string state, string[] history) : base(systemId, state,null)
         {
 			Items = new PurchaseItemModel[history.Length];
 			for (int i = 0; i < Items.Length; i++)

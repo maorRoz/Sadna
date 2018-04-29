@@ -18,26 +18,24 @@
 				@Model.Message
 			</div>
 }
-			<fieldset>
-				Choose: <select ID ="Options" name="Options">
-
-					<option value=""></option>
-
-					<option value="0">Store</option>
-
-					<option value="1">User</option>
-
-				</select>
-			</fieldset>
 
 			</div>
-			@using (Html.BeginForm("AdminViewPurchaseHistory", "Admin", new { Model.SystemId }))
+			@using (Html.BeginForm("AdminViewPurchaseHistory", "Admin", new { Model.SystemId,Model.State }))
 			{
-			<br />
+			    <br />
+			    <fieldset>
 			<input type="text" class="form-control" id="store-user-name" name="viewSubject" />
 			<br />
-			<input type="submit" class="btn btn-primary">
+			        Choose: <select name="viewKind">
 
+			            <option value="Store">Store</option>
+
+			            <option value="User">User</option>
+
+			        </select>
+			    <br />
+			<input type="submit" class="btn btn-primary">
+			    </fieldset>
 			}
 
 		</div>
