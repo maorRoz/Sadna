@@ -21,7 +21,8 @@ namespace OrderPoolWallaterSupplyPointTests
         private OrderItem item3;
         private IUserService userService;
         private OrderService orderService;
-        private OrderPoolSlave slave;
+        private PurchaseItemSlave slave1;
+        private PurchaseEverythingSlave slave2;
 
 
         [TestInitialize]
@@ -32,7 +33,8 @@ namespace OrderPoolWallaterSupplyPointTests
             userService = market.GetUserService();
             orderService= (OrderService)market.GetOrderService(ref userService);
             IUserBuyer buyer = new UserBuyerHarmony(ref userService);
-            slave = new OrderPoolSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance);
+            slave1 = new PurchaseItemSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance);
+            slave2 = new PurchaseEverythingSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance);
             orderService.GiveDetails("Big Smoke", "Grove Street", "54238521");
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
@@ -54,7 +56,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestEmptyOrder()
         {
-            var order = slave.InitOrder("Big Smoke", "Grove Street");
+            var order = slave1.InitOrder("Big Smoke", "Grove Street");
             Assert.AreEqual("Big Smoke", order.GetUserName());
             Assert.AreEqual("Grove Street", order.GetShippingAddress());
         }
@@ -63,7 +65,7 @@ namespace OrderPoolWallaterSupplyPointTests
         public void TestOrderWithOneItem()
         {
             OrderItem[] wrap = {item2};
-            var order = slave.InitOrder(wrap, "Big Smoke", "Grove Street");
+            var order = slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
             Assert.AreEqual(1, order.GetItems().Count);
             Assert.IsNotNull(order.GetOrderItem("#9 Large", "Cluckin Bell"));
             Assert.AreEqual(7.0, order.GetOrderItem("#9 Large", "Cluckin Bell").Price);
@@ -77,7 +79,7 @@ namespace OrderPoolWallaterSupplyPointTests
             {
                 item2 = new OrderItem(null, "#9 Large", 5.0, 2);
                 OrderItem[] wrap = {item2};
-                slave.InitOrder(wrap, "Big Smoke", "Grove Street");
+                slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
                 Assert.Fail();
             }
             catch (MarketException e)
@@ -93,7 +95,7 @@ namespace OrderPoolWallaterSupplyPointTests
             {
                 item2 = new OrderItem("Cluckin Bell", null, 5.0, 2);
                 OrderItem[] wrap = { item2 };
-                slave.InitOrder(wrap, "Big Smoke", "Grove Street");
+                slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
                 Assert.Fail();
             }
             catch (MarketException e)
@@ -109,7 +111,7 @@ namespace OrderPoolWallaterSupplyPointTests
             {
                 item2 = new OrderItem("Cluckin Bell", "#9", 5.0, 0);
                 OrderItem[] wrap = { item2 };
-                slave.InitOrder(wrap, "Big Smoke", "Grove Street");
+                slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
                 Assert.Fail();
             }
             catch (MarketException e)
@@ -124,7 +126,7 @@ namespace OrderPoolWallaterSupplyPointTests
             try
             {
                 OrderItem[] wrap = { };
-                slave.InitOrder(wrap, "Big Smoke", "Grove Street");
+                slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
                 Assert.Fail();
             }
             catch (MarketException e)
@@ -137,7 +139,7 @@ namespace OrderPoolWallaterSupplyPointTests
         public void TestOrderWithItems1()
         {
             OrderItem[] wrap = { item1 , item2, item3};
-            var order = slave.InitOrder(wrap, "Big Smoke", "Grove Street");
+            var order = slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
             Assert.AreEqual(25.50,order.GetPrice());
         }
 
@@ -145,7 +147,7 @@ namespace OrderPoolWallaterSupplyPointTests
         public void TestOrderWithItems2()
         {
             OrderItem[] wrap = { item1, item2, item3 };
-            var order = slave.InitOrder(wrap, "Big Smoke", "Grove Street");
+            var order = slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
             Assert.AreEqual(2, order.GetOrderItem("#9","Cluckin Bell").Quantity);
         }
 
@@ -153,7 +155,7 @@ namespace OrderPoolWallaterSupplyPointTests
         public void TestOrderWithItems3()
         {
             OrderItem[] wrap = { item1, item2, item3 };
-            var order = slave.InitOrder(wrap, "Big Smoke", "Grove Street");
+            var order = slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
             Assert.AreEqual(2, order.GetOrderItem("#9", "Cluckin Bell").Quantity);
         }
 

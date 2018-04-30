@@ -26,7 +26,7 @@ namespace SadnaSrc.OrderPool
         private readonly IUserBuyer _buyer;
         private readonly IStoresSyncher _storesSync;
 
-        private readonly OrderPoolSlave slave;
+        private readonly LotteryTicketSlave ltSlave;
 
         public OrderService(IUserBuyer buyer, IStoresSyncher storesSync)
         {
@@ -38,7 +38,7 @@ namespace SadnaSrc.OrderPool
             _storesSync = storesSync;
             _orderDL = OrderDL.Instance;
 
-            slave = new OrderPoolSlave(buyer, storesSync, OrderDL.Instance);
+            ltSlave = new LotteryTicketSlave(_buyer, _storesSync, _orderDL);
         }
 
         //only for Unit Tests of developer!!(not for integration or blackbox or real usage)
@@ -63,7 +63,7 @@ namespace SadnaSrc.OrderPool
 
         public void Cheat(int cheatResult)
         {
-            slave.Cheat(cheatResult);
+            ltSlave.Cheat(cheatResult);
         }
 
         /*
@@ -72,41 +72,44 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon)
         {
-            Order newOrder = slave.BuyItemFromImmediate(itemName, store, quantity, unitPrice, coupon, UserName, UserAddress, CreditCard);
+            PurchaseItemSlave piSlave = new PurchaseItemSlave(_buyer, _storesSync, _orderDL);
+            Order newOrder = piSlave.BuyItemFromImmediate(itemName, store, quantity, unitPrice, coupon, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
-            return slave.Answer;
+            return piSlave.Answer;
         }
 
 
         public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
-        {
-            Order newOrder = slave.BuyLotteryTicket(itemName, store, quantity, unitPrice, UserName, UserAddress, CreditCard);
+        { 
+            Order newOrder = ltSlave.BuyLotteryTicket(itemName, store, quantity, unitPrice, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
-            return slave.Answer;
+            return ltSlave.Answer;
         }
 
 
         public MarketAnswer BuyEverythingFromCart(string[] coupons) 
         {
-            Order newOrder = slave.BuyEverythingFromCart(coupons, UserName, UserAddress, CreditCard);
+            PurchaseEverythingSlave peSlave = new PurchaseEverythingSlave(_buyer, _storesSync, _orderDL);
+            Order newOrder = peSlave.BuyEverythingFromCart(coupons, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
-            return slave.Answer;
+            return peSlave.Answer;
         }
         
 
         public MarketAnswer GiveDetails(string userName, string address, string creditCard)
         {
-            slave.GiveDetails(userName, address, creditCard);
-            if (slave.Answer.Status == (int) GiveDetailsStatus.Success)
+            ValidateDetailsSlave vdSlave = new ValidateDetailsSlave();
+            vdSlave.GiveDetails(userName, address, creditCard);
+            if (vdSlave.Answer.Status == (int) GiveDetailsStatus.Success)
             {
                 UserName = userName;
                 UserAddress = address;
                 CreditCard = creditCard;
             }
-            return slave.Answer;
+            return vdSlave.Answer;
         }
 
         //Getter function for specific order from the list
