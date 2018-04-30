@@ -76,5 +76,31 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + Percentages.GetHashCode();
             return hashCode;
         }
+        public string[] GetDiscountStringValues()
+        {
+            return new[]
+            {
+                "'" + discountCode + "'",
+                "'" + EnumStringConverter.PrintEnum(discountType) + "'",
+                "'" + startDate + "'",
+                "'" + EndDate + "'",
+                "'" + DiscountAmount + "'",
+                "'" + Percentages + "'"
+            };
+        }
+
+        public object[] GetDiscountValuesArray()
+        {
+            return new object[]
+            {
+                discountCode,
+                discountType,
+                startDate,
+                EndDate,
+                DiscountAmount,
+                Percentages
+            };
+        }
+
     }
 }

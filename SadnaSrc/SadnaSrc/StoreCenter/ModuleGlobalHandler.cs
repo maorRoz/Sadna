@@ -92,7 +92,7 @@ namespace SadnaSrc.StoreCenter
 
         public double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity)
         {
-            if (!DataLayer.IsStoreExist(storeName))
+            if (!DataLayer.IsStoreExistAndActive(storeName))
                 throw new StoreException(CalculateEnum.StoreNotExists, "store not exists");
             if (IsProductNameAvailableInStore(storeName, productName))
                 throw new StoreException(CalculateEnum.ProductNotFound, "Product Not Found");

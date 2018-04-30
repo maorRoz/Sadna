@@ -20,10 +20,6 @@ namespace SadnaSrc.StoreCenter
             BasePrice = _price;
             Description = _description;
         }
-        public object[] ToData()
-        {
-            return new object[] { SystemId, Name, BasePrice, Description };
-        }
 
         public override bool Equals(object obj)
         {
@@ -54,6 +50,27 @@ namespace SadnaSrc.StoreCenter
                 hashCode = (hashCode * 397) ^ (Description != null ? Description.GetHashCode() : 0);
                 return hashCode;
             }
+        }
+        public object[] GetProductValuesArray()
+        {
+            return new object[]
+            {
+                SystemId,
+                Name,
+                BasePrice,
+                Description
+            };
+        }
+
+        public string[] GetProductStringValues()
+        {
+            return new[]
+            {
+                "'" + SystemId + "'",
+                "'" + Name + "'",
+                BasePrice + "",
+                "'" + Description + "'"
+            };
         }
     }
 }

@@ -154,5 +154,43 @@ namespace SadnaSrc.StoreCenter
             }
             return InformAllWinner(winnerResult).UserID;
         }
+        public string[] GetLotteryManagmentStringValues()
+        {
+            string isActive = "";
+            if (IsActive)
+            {
+                isActive = "true";
+            }
+            else
+            {
+                isActive = "false";
+            }
+
+            return new[]
+            {
+                "'" + SystemID + "'",
+                "'" + Original.SystemId + "'",
+                "'" + ProductNormalPrice + "'",
+                "'" + TotalMoneyPayed + "'",
+                "'" + storeName + "'",
+                "'" + StartDate + "'",
+                "'" + EndDate + "'",
+                "'" + isActive + "'"
+            };
+        }
+        public object[] GetLotteryManagmentValuesArray()
+        {
+            return new object[]
+            {
+                SystemID,
+                Original.SystemId,
+                ProductNormalPrice,
+                TotalMoneyPayed,
+                storeName,
+                StartDate,
+                EndDate,
+                IsActive
+            };
+        }
     }
 }

@@ -81,6 +81,26 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Address);
             return hashCode;
         }
+        public string[] GetStoreStringValues()
+        {
+            return new[]
+            {
+                "'" + SystemId + "'",
+                "'" + Name + "'",
+                "'" + Address + "'",
+                "'" + GetStringFromActive() + "'"
+            };
+        }
+        public object[] GetStoreArray()
+        {
+            return new object[]
+            {
+                SystemId,
+                Name,
+                Address,
+                GetStringFromActive()
+            };
+        }
     }
 }
 //////////////////// this function will be removed after I will have Maor function!//////////////////////

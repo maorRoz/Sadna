@@ -40,41 +40,122 @@ namespace SadnaSrc.StoreCenter
         private All_ID_Manager()
         {
             DataLayer = StoreDL.Instance;
-            StoreIdCounter = DataLayer.FindMaxStoreId();
-            globalProductID = DataLayer.FindMaxProductId();
-            globalDiscountCode = DataLayer.FindMaxDiscountId();
-            globalLotteryID = DataLayer.FindMaxLotteryId();
-            globalLotteryTicketID = DataLayer.FindMaxLotteryTicketId();
+            StoreIdCounter = FindMaxStoreId();
+            globalProductID = FindMaxProductId();
+            globalDiscountCode = FindMaxDiscountId();
+            globalLotteryID = FindMaxLotteryId();
+            globalLotteryTicketID = FindMaxLotteryTicketId();
         }
+
+        private static int FindMaxLotteryTicketId()
+        {
+            StoreDL DL = StoreDL.Instance;
+            LinkedList<string> list = DL.getAllLotteryTicketIDs();
+            int max = -5;
+            int temp = 0;
+            foreach (string s in list)
+            {
+                temp = Int32.Parse(s.Substring(1));
+                if (temp>max)
+                {
+                    max = temp;
+                }
+            }
+            return max;
+        }
+
+        private static int FindMaxLotteryId()
+        {
+            StoreDL DL = StoreDL.Instance;
+            LinkedList<string> list = DL.getAllLotteryManagmentIDs();
+            int max = -5;
+            int temp = 0;
+            foreach (string s in list)
+            {
+                temp = Int32.Parse(s.Substring(1));
+                if (temp > max)
+                {
+                    max = temp;
+                }
+            }
+            return max;
+        }
+
+        private static int FindMaxDiscountId()
+        {
+            StoreDL DL = StoreDL.Instance;
+            LinkedList<string> list = DL.getAllDiscountIDs();
+            int max = -5;
+            int temp = 0;
+            foreach (string s in list)
+            {
+                temp = Int32.Parse(s.Substring(1));
+                if (temp > max)
+                {
+                    max = temp;
+                }
+            }
+            return max;
+        }
+
+        private static int FindMaxProductId()
+        {
+            StoreDL DL = StoreDL.Instance;
+            LinkedList<string> list = DL.getAllProductIDs();
+            int max = -5;
+            int temp = 0;
+            foreach (string s in list)
+            {
+                temp = Int32.Parse(s.Substring(1));
+                if (temp > max)
+                {
+                    max = temp;
+                }
+            }
+            return max;
+        }
+
+        private static int FindMaxStoreId()
+        {
+            StoreDL DL = StoreDL.Instance;
+            LinkedList<string> list = DL.getAllStoresIDs();
+            int max = -5;
+            int temp = 0;
+            foreach (string s in list)
+            {
+                temp = Int32.Parse(s.Substring(1));
+                if (temp > max)
+                {
+                    max = temp;
+                }
+            }
+            return max;
+        }
+
         public string GetProductID()
         {
-            int currentMaxProductId = globalProductID;
             globalProductID++;
-            return "P" + currentMaxProductId;
+            return "P" + globalProductID;
         }
         public string GetDiscountCode()
         {
-            int currentMaxDiscountCode = globalDiscountCode;
             globalDiscountCode++;
-            return "D" + currentMaxDiscountCode;
+            return "D" + globalDiscountCode;
         }
         public string GetNextStoreId()
         {
-            int currentMaxStoreId = StoreIdCounter;
             StoreIdCounter++;
-            return "S" + currentMaxStoreId;
+            return "S" + StoreIdCounter;
         }
         public string GetLottyerID()
         {
-            int currentMaxLotteryId = globalLotteryID;
             globalLotteryID++;
-            return "L" + currentMaxLotteryId;
+            return "L" + globalLotteryID;
         }
         public string GetLotteryTicketID()
         {
-            int currentMaxLotteryTicketId = globalLotteryTicketID;
             globalLotteryTicketID++;
-            return "T" + currentMaxLotteryTicketId;
+            return "T" + globalLotteryTicketID;
         }
     }
 }

@@ -4,17 +4,11 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class PromoteToStoreManagerSlave
+    internal class PromoteToStoreManagerSlave : AbstractSlave
     {
         internal MarketAnswer answer;
-        private IUserSeller _storeManager;
-        public string _storeName;
-        StoreDL global;
-        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName)
+        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName) : base(storeName,storeManager)
         {
-            _storeManager = storeManager;
-            _storeName = storeName;
-            global = StoreDL.Instance;
         }
         internal void PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
@@ -22,7 +16,7 @@ namespace SadnaSrc.StoreCenter
                                       " manager options in Store" + _storeName + ". Validating store activity and existence..");
             try
             {
-                global.ValidateStoreExists(_storeName);
+                checkIfStoreExistsAndActive();   
                 ValidatePromotionEligible(actions);
                 _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has been authorized. granting " +

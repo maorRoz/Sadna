@@ -145,8 +145,7 @@ namespace StoreCenterTests
         }
         [TestMethod]
         public void addDiscountsuccessfully()
-        {
-
+        { 
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");

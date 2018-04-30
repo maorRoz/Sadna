@@ -31,10 +31,10 @@ namespace StoreCenterTests
             Store store = new Store("SX", "name1test", "here");
             Store find = handler.DataLayer.getStorebyName("name1test");
             Assert.IsNull(find);
-            Assert.IsFalse(handler.DataLayer.IsStoreExist("name1test"));
+            Assert.IsFalse(handler.DataLayer.IsStoreExistAndActive("name1test"));
             toDeleteStore = store;
             handler.DataLayer.AddStore(store);
-            Assert.IsTrue(handler.DataLayer.IsStoreExist("name1test"));
+            Assert.IsTrue(handler.DataLayer.IsStoreExistAndActive("name1test"));
         }
         [TestMethod]
         public void OpenStoreInterfaceLevelSameName()

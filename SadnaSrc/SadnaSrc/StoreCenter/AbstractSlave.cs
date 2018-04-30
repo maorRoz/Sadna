@@ -10,7 +10,7 @@ namespace SadnaSrc.StoreCenter
          * in oreder to avoid double-code I added them here
          **/
         protected string _storeName;
-        protected StoreDL global;
+        protected I_StoreDL global;
         protected IUserSeller _storeManager;
         public AbstractSlave(string storeName, IUserSeller storeManager)
         {

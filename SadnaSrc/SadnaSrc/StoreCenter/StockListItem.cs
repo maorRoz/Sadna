@@ -51,5 +51,39 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + PurchaseWay.GetHashCode();
             return hashCode;
         }
+        public object[] GetStockListItemArray()
+        {
+            object discountObject = "";
+            if (Discount != null)
+            {
+                discountObject = Discount;
+            }
+
+            return new object[]
+            {
+                SystemId,
+                Product,
+                Quantity,
+                discountObject,
+                PurchaseWay
+            };
+        }
+        public string[] GetStockListItemStringValues()
+        {
+            string IfDiscountNotExists = "null";
+            if (Discount != null)
+            {
+                IfDiscountNotExists = Discount.discountCode;
+            }
+
+            return new[]
+            {
+                "'" + SystemId + "'",
+                "'" + Product.SystemId + "'",
+                "'" + Quantity + "'",
+                "'" + IfDiscountNotExists + "'",
+                "'" + EnumStringConverter.PrintEnum(PurchaseWay) + "'"
+            };
+        }
     }
 }

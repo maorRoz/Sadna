@@ -80,5 +80,32 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + UserID.GetHashCode();
             return hashCode;
         }
+        public object[] GetTicketValuesArray()
+        {
+
+            return new object[]
+            {
+                myID,
+                LotteryNumber,
+                IntervalStart,
+                IntervalEnd,
+                myStatus,
+                UserID
+            };
+        }
+        public string[] GetTicketStringValues()
+        {
+            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            return new[]
+            {
+                "'" + myID + "'",
+                "'" + LotteryNumber + "'",
+                "'" + IntervalStart + "'",
+                "'" + IntervalEnd + "'",
+                "'" + Cost + "'",
+                "'" + EnumStringConverter.PrintEnum(myStatus) + "'",
+                "'" + UserID + "'"
+            };
+        }
     }
 }

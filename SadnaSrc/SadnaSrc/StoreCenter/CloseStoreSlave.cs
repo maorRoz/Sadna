@@ -18,7 +18,7 @@ namespace SadnaSrc.StoreCenter
         {
             try
             {
-                checkIfStoreExists();
+                checkIfStoreExistsAndActive();
             }
             catch (Exception)
             {
@@ -39,12 +39,6 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "closing store failed");
                 answer = new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
             }
-        }
-
-        private void checkIfStoreExists()
-        {
-            if (!global.IsStoreExist(_storeName))
-            { throw new StoreException(StoreEnum.StoreNotExists, "store not exists"); }
         }
     }
 }
