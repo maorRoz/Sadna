@@ -16,7 +16,7 @@ namespace SadnaSrc.StoreCenter
         public OpenStoreSlave(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.Instance;
+            storeLogic = StoreDL.GetInstance();
         }
         public Store OpenStore(string storeName, string address)
         {
@@ -26,6 +26,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "trying to add new store");
                 _shopper.ValidateRegistered();
                 MarketLog.Log("StoreCenter", "premission gained");
+                checkIfNameAvailable(storeName);
                 Store newStore = new Store(manager.GetNextStoreId(), storeName, address);
                 storeLogic.AddStore(newStore);
                 MarketLog.Log("StoreCenter", "store was opened");
@@ -48,6 +49,13 @@ namespace SadnaSrc.StoreCenter
                     "User validation as store owner has been failed. only registered users can open new stores. Error message has been created!");
                 return null;
             }
+        }
+
+        private void checkIfNameAvailable(String name)
+        {
+            Store P = storeLogic.getStorebyName(name);
+            if (P != null)
+                throw new StoreException(OpenStoreStatus.AlreadyExist, "store name must be uniqe");
         }
     }
 }

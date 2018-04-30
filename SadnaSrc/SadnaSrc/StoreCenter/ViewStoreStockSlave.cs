@@ -14,7 +14,7 @@ namespace SadnaSrc.StoreCenter
         public ViewStoreStockSlave(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.Instance;
+            storeLogic = StoreDL.GetInstance();
         }
 
         internal void ViewStoreStock(string storename)
@@ -59,8 +59,8 @@ namespace SadnaSrc.StoreCenter
 
         private string GetProductStockInformation(string ProductID)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(ProductID);
+            StoreDL handler = StoreDL.GetInstance();
+            StockListItem stockListItem = handler.GetStockListItembyProductID(ProductID);
             if (stockListItem == null)
             {
                 MarketLog.Log("storeCenter", "product not exists");

@@ -53,8 +53,8 @@ namespace SadnaSrc.StoreCenter
             if (IsActive)
             {
                 IsActive = false;
-                ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-                handler.DataLayer.EditStore(this);
+                StoreDL handler = StoreDL.GetInstance();
+                handler.EditStore(this);
                 return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
             }
             return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is already closed");

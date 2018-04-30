@@ -14,8 +14,16 @@ namespace SadnaSrc.StoreCenter
     {
 
         private static StoreDL _instance;
-
-        public static StoreDL Instance => _instance ?? (_instance = new StoreDL());
+        
+        public static StoreDL GetInstance()
+        {
+                if (_instance == null)
+                {
+                    _instance = new StoreDL();
+                    return _instance;
+                }
+                return _instance;
+        }
 
         private MarketDB dbConnection;
 
@@ -88,7 +96,7 @@ namespace SadnaSrc.StoreCenter
         public Store getStorebyName(string storeName)
         {
 
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "' AND Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {

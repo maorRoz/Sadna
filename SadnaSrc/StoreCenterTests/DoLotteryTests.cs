@@ -15,7 +15,7 @@ namespace StoreCenterTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private ModuleGlobalHandler handler;
+        private I_StoreDL handler;
         IUserService userService;
         public LotterySaleManagmentTicket LotteryToDelete;
         public LinkedList<LotteryTicket> tickets;
@@ -25,13 +25,13 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = ModuleGlobalHandler.GetInstance();
+            handler = StoreDL.GetInstance();
             userService = market.GetUserService();
             Product P = new Product("P10000", "name", 100, "ds");
             ProductToDelete = new StockListItem(1, P, null, PurchaseEnum.Lottery, "S7");
             LotteryToDelete = new LotterySaleManagmentTicket("L100", "T", P, DateTime.Parse("31/12/2019"), DateTime.Parse("31/12/2020"));
-            handler.DataLayer.AddStockListItemToDataBase(ProductToDelete);
-            handler.DataLayer.AddLottery(LotteryToDelete);
+            handler.AddStockListItemToDataBase(ProductToDelete);
+            handler.AddLottery(LotteryToDelete);
             tickets = new LinkedList<LotteryTicket>();
         }
         [TestMethod]
@@ -44,9 +44,9 @@ namespace StoreCenterTests
         [TestMethod]
         public void DolotteryOneUser()
         {
-            LotteryTicket expected = new LotteryTicket("T100", "L100", 0, 100, 100, handler.DataLayer.getUserIDFromUserName("Arik1"));
+            LotteryTicket expected = new LotteryTicket("T100", "L100", 0, 100, 100, handler.getUserIDFromUserName("Arik1"));
             tickets.AddLast(expected);
-            handler.DataLayer.AddLotteryTicket(expected);
+            handler.AddLotteryTicket(expected);
             LotteryToDelete.TotalMoneyPayed = 100;
             LotteryTicket find = LotteryToDelete.Dolottery();
             expected.myStatus = LotteryTicketStatus.Winning;
@@ -55,25 +55,25 @@ namespace StoreCenterTests
         [TestMethod]
         public void DolotteryTweUsersFirstWIn()
         {
-            LotteryTicket expectedWin = new LotteryTicket("T100", "L100", 0, 50, 50, handler.DataLayer.getUserIDFromUserName("Arik1"));
-            LotteryTicket expectedLose = new LotteryTicket("T101", "L100", 50, 100, 50, handler.DataLayer.getUserIDFromUserName("Arik2"));
+            LotteryTicket expectedWin = new LotteryTicket("T100", "L100", 0, 50, 50, handler.getUserIDFromUserName("Arik1"));
+            LotteryTicket expectedLose = new LotteryTicket("T101", "L100", 50, 100, 50, handler.getUserIDFromUserName("Arik2"));
             tickets.AddLast(expectedWin);
-            handler.DataLayer.AddLotteryTicket(expectedWin);
+            handler.AddLotteryTicket(expectedWin);
             tickets.AddLast(expectedLose);
-            handler.DataLayer.AddLotteryTicket(expectedLose);
+            handler.AddLotteryTicket(expectedLose);
             LotteryToDelete.TotalMoneyPayed = 100;
             LotteryTicket find = LotteryToDelete.Dolottery(20);
             expectedWin.myStatus = LotteryTicketStatus.Winning;
-            LotteryTicket findLose = handler.DataLayer.GetLotteryTicket("T101");
+            LotteryTicket findLose = handler.GetLotteryTicket("T101");
             Assert.AreEqual(LotteryTicketStatus.Losing, findLose.myStatus);
             Assert.AreEqual(expectedWin, find);
         }
         [TestMethod]
         public void DolotteryIlligalValue()
         {
-            LotteryTicket expected = new LotteryTicket("T100", "L100", 0, 100, 100, handler.DataLayer.getUserIDFromUserName("Arik1"));
+            LotteryTicket expected = new LotteryTicket("T100", "L100", 0, 100, 100, handler.getUserIDFromUserName("Arik1"));
             tickets.AddLast(expected);
-            handler.DataLayer.AddLotteryTicket(expected);
+            handler.AddLotteryTicket(expected);
             LotteryToDelete.TotalMoneyPayed = 100;
             LotteryTicket find = LotteryToDelete.Dolottery(5000);
             Assert.IsNull(find);
@@ -83,15 +83,15 @@ namespace StoreCenterTests
         {
             if (ProductToDelete != null)
             {
-                handler.DataLayer.RemoveStockListItem(ProductToDelete);
+                handler.RemoveStockListItem(ProductToDelete);
             }
             if (LotteryToDelete != null)
             {
-                handler.DataLayer.RemoveLottery(LotteryToDelete);
+                handler.RemoveLottery(LotteryToDelete);
             }
             foreach(LotteryTicket tick in tickets)
             {
-                handler.DataLayer.RemoveLotteryTicket(tick);
+                handler.RemoveLotteryTicket(tick);
             }
             userService.CleanSession();
             MarketYard.CleanSession();

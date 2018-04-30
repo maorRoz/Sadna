@@ -39,7 +39,7 @@ namespace SadnaSrc.StoreCenter
         }
         private All_ID_Manager()
         {
-            DataLayer = StoreDL.Instance;
+            DataLayer = StoreDL.GetInstance();
             StoreIdCounter = FindMaxStoreId();
             globalProductID = FindMaxProductId();
             globalDiscountCode = FindMaxDiscountId();
@@ -49,7 +49,7 @@ namespace SadnaSrc.StoreCenter
 
         private static int FindMaxLotteryTicketId()
         {
-            StoreDL DL = StoreDL.Instance;
+            StoreDL DL = StoreDL.GetInstance();
             LinkedList<string> list = DL.getAllLotteryTicketIDs();
             int max = -5;
             int temp = 0;
@@ -66,7 +66,7 @@ namespace SadnaSrc.StoreCenter
 
         private static int FindMaxLotteryId()
         {
-            StoreDL DL = StoreDL.Instance;
+            StoreDL DL = StoreDL.GetInstance();
             LinkedList<string> list = DL.getAllLotteryManagmentIDs();
             int max = -5;
             int temp = 0;
@@ -83,7 +83,7 @@ namespace SadnaSrc.StoreCenter
 
         private static int FindMaxDiscountId()
         {
-            StoreDL DL = StoreDL.Instance;
+            StoreDL DL = StoreDL.GetInstance();
             LinkedList<string> list = DL.getAllDiscountIDs();
             int max = -5;
             int temp = 0;
@@ -100,7 +100,7 @@ namespace SadnaSrc.StoreCenter
 
         private static int FindMaxProductId()
         {
-            StoreDL DL = StoreDL.Instance;
+            StoreDL DL = StoreDL.GetInstance();
             LinkedList<string> list = DL.getAllProductIDs();
             int max = -5;
             int temp = 0;
@@ -117,7 +117,7 @@ namespace SadnaSrc.StoreCenter
 
         private static int FindMaxStoreId()
         {
-            StoreDL DL = StoreDL.Instance;
+            StoreDL DL = StoreDL.GetInstance();
             LinkedList<string> list = DL.getAllStoresIDs();
             int max = -5;
             int temp = 0;

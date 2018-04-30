@@ -13,7 +13,7 @@ namespace SadnaSrc.StoreCenter
         public AddProductToCartSlave(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.Instance;
+            storeLogic = StoreDL.GetInstance();
         }
 
         internal void AddProductToCart(string store, string productName, int quantity)

@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
         public CloseStoreSlave(IUserSeller storeManager, ref Store _store) : base(_store.Name, storeManager)
         {
             store = _store;
-            global = StoreDL.Instance;
+            global = StoreDL.GetInstance();
         }
 
         internal void closeStore()

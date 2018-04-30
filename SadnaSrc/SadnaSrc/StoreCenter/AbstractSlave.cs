@@ -15,7 +15,7 @@ namespace SadnaSrc.StoreCenter
         public AbstractSlave(string storeName, IUserSeller storeManager)
         {
             _storeName = storeName;
-            global = StoreDL.Instance;
+            global = StoreDL.GetInstance();
             _storeManager = storeManager;
         }
         protected void checkIfStoreExistsAndActive()

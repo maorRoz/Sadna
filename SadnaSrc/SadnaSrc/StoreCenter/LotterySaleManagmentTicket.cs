@@ -50,12 +50,12 @@ namespace SadnaSrc.StoreCenter
         public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
         {
             All_ID_Manager manager = All_ID_Manager.GetInstance();
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreDL handler = StoreDL.GetInstance();
             LotteryTicket lottery = new LotteryTicket(manager.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
                (int)(TotalMoneyPayed + moneyPayed), moneyPayed, userID);
-            handler.DataLayer.AddLotteryTicket(lottery);
+            handler.AddLotteryTicket(lottery);
             TotalMoneyPayed += moneyPayed;
-            handler.DataLayer.EditLotteryInDatabase(this);
+            handler.EditLotteryInDatabase(this);
             return lottery;
         }
         public LotteryTicket Dolottery()
@@ -84,8 +84,8 @@ namespace SadnaSrc.StoreCenter
         private LotteryTicket InformAllWinner(int winningNumber)
         {
             LotteryTicket winner = null;
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(SystemID);
+            StoreDL handler = StoreDL.GetInstance();
+            LinkedList<LotteryTicket> tickets = handler.getAllTickets(SystemID);
             foreach (LotteryTicket lotter in tickets)
             {
                 if (lotter.IsWinning(winningNumber))
@@ -97,7 +97,7 @@ namespace SadnaSrc.StoreCenter
                 {
                     lotter.RunLosing();
                 }
-                handler.DataLayer.EditLotteryTicketInDatabase(lotter);
+                handler.EditLotteryTicketInDatabase(lotter);
             }
             return winner;
         }
@@ -119,9 +119,9 @@ namespace SadnaSrc.StoreCenter
         }
         internal void InformCancel(IOrderSyncher syncher)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreDL handler = StoreDL.GetInstance();
             IsActive = false;
-            handler.DataLayer.EditLotteryInDatabase(this);
+            handler.EditLotteryInDatabase(this);
             syncher.CancelLottery(SystemID);
         }
 

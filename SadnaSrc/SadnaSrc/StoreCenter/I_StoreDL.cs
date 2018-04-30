@@ -11,6 +11,7 @@ namespace SadnaSrc.StoreCenter
         Store GetStorebyID(string storeID);
         void AddProductToDatabase(Product product);
         void EditProductInDatabase(Product product);
+        int getUserIDFromUserName(string userName);
         Store getStorebyName(string storeName);
         LinkedList<LotteryTicket> getAllTickets(string systemID);
         StockListItem GetStockListItembyProductID(string product);

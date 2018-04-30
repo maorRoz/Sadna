@@ -12,7 +12,7 @@ namespace SadnaSrc.StoreCenter
     public class ModuleGlobalHandler : OutsideModuleService
     {
         static ModuleGlobalHandler instance;
-        public StoreDL DataLayer { get; }
+        public I_StoreDL DataLayer { get; }
         public static ModuleGlobalHandler GetInstance()
         {
             if (instance == null)
@@ -24,7 +24,7 @@ namespace SadnaSrc.StoreCenter
         }
         private ModuleGlobalHandler()
         {
-            DataLayer = StoreDL.Instance;
+            DataLayer = StoreDL.GetInstance();
         }
 
         public void AddStore(Store temp)
