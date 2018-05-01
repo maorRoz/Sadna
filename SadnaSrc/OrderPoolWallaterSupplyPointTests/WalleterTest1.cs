@@ -22,14 +22,7 @@ namespace OrderPoolWallaterSupplyPointTests
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;       
             paymentService = (PaymentService)market.GetPaymentService();
-
-        }
-
-        [TestMethod]
-        public void TestExternalSystemAttachment()
-        {
-            MarketAnswer ans = paymentService.AttachExternalSystem();
-            Assert.AreEqual((int)WalleterStatus.Success, ans.Status);
+            paymentService.FixExternal();
         }
 
        
@@ -125,17 +118,13 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestProccessPayment()
         {
-            paymentService.AttachExternalSystem();
             Order order = new Order(123456, "Big Smoke","Grove Street");
-                
             paymentService.ProccesPayment(order, "12345678");
         }
 
         [TestMethod]
         public void TestProccessPaymentBadData1()
         {
-           
-            paymentService.AttachExternalSystem();
             Order order = new Order(123456, "Big Smoke", "Grove Street");
             try
             {
@@ -152,7 +141,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestProccessPaymentBadData2()
         {
-            paymentService.AttachExternalSystem();
             Order order = new Order(123456, "Big Smoke", "Grove Street");
 
             try
@@ -169,7 +157,6 @@ namespace OrderPoolWallaterSupplyPointTests
 
         public void TestProccessPaymentBadData3()
         {
-            paymentService.AttachExternalSystem();
             Order order = new Order(123456, "Big Smoke", "Grove Street");
 
             try
@@ -187,7 +174,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBrokenExternalOnPayment()
         {
-            paymentService.AttachExternalSystem();
             Order order = new Order(123456, "Big Smoke", "Grove Street");
             paymentService.BreakExternal();
             try
@@ -205,15 +191,13 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestRefund()
         {
-            paymentService.AttachExternalSystem();
-
+            paymentService.FixExternal();
             paymentService.Refund(3.0,"12345678","Big Smoke");
         }
 
         [TestMethod]
         public void TestBadRefund1()
         {
-            paymentService.AttachExternalSystem();
 
             try
             {
@@ -230,7 +214,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBadRefund2()
         {
-            paymentService.AttachExternalSystem();
             try
             {
                 paymentService.Refund(3.0, "123dd45678", "Big Smoke");
@@ -246,7 +229,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBadRefund3()
         {
-            paymentService.AttachExternalSystem();
             try
             {
                 paymentService.Refund(3.0, "8", "Big Smoke");
@@ -262,7 +244,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBadRefund4()
         {
-            paymentService.AttachExternalSystem();
 
             try
             {
@@ -279,7 +260,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBrokenExternalOnRefund()
         {
-            paymentService.AttachExternalSystem();
             Order order = new Order(123456, "Big Smoke", "Grove Street");
             paymentService.BreakExternal();
             try

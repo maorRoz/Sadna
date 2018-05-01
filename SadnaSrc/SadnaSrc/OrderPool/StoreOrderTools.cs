@@ -25,9 +25,6 @@ namespace SadnaSrc.OrderPool
             _supplyService = SupplyService.Instance;
             _paymentService = PaymentService.Instance;
 
-            _supplyService.AttachExternalSystem();
-            _paymentService.AttachExternalSystem();
-
             Orders = new List<Order>();
         }
 

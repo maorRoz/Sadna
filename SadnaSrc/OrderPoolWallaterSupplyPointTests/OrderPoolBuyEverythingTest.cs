@@ -38,7 +38,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void BuyOneItemTest()
         {
-            userBuyerMocker.Setup(x => x.CheckoutAll()).Returns(new OrderItem[]{item2});
+            userBuyerMocker.Setup(x => x.CheckoutAll()).Returns(new[]{item2});
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             slave = new PurchaseEverythingSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object);
             Order order = slave.BuyEverythingFromCart(null, "Big Smoke", "Grove Street", "12345678");
@@ -54,7 +54,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void BuySeveralItemTest()
         {
-            userBuyerMocker.Setup(x => x.CheckoutAll()).Returns(new OrderItem[] {item1, item2 });
+            userBuyerMocker.Setup(x => x.CheckoutAll()).Returns(new [] {item1, item2 });
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             slave = new PurchaseEverythingSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object);
             Order order = slave.BuyEverythingFromCart(null, "Big Smoke", "Grove Street", "12345678");
@@ -83,7 +83,7 @@ namespace OrderPoolWallaterSupplyPointTests
                 (item1.Name, item1.Store, item1.Quantity, It.IsAny<string>())).Returns(3.0);
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             slave = new PurchaseEverythingSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object);
-            Order order = slave.BuyEverythingFromCart(new string[]{"D1", null}, "Big Smoke", "Grove Street", "12345678");
+            Order order = slave.BuyEverythingFromCart(new []{"D1", null}, "Big Smoke", "Grove Street", "12345678");
             Assert.AreEqual(2, order.GetItems().Count);
             Assert.IsNotNull(order.GetOrderItem("#9 Large", "Cluckin Bell"));
             Assert.IsNotNull(order.GetOrderItem("#9", "Cluckin Bell"));
