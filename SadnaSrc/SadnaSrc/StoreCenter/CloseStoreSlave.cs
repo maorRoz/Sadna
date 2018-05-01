@@ -8,9 +8,9 @@ namespace SadnaSrc.StoreCenter
     {
         internal MarketAnswer answer;
         public Store store;
-        public CloseStoreSlave(IUserSeller storeManager, ref Store _store) : base(_store.Name, storeManager)
+        public CloseStoreSlave(IUserSeller storeManager, ref string _storeName) : base(_storeName, storeManager)
         {
-            store = _store;
+            store = global.getStorebyName(_storeName);
             global = StoreDL.GetInstance();
         }
 

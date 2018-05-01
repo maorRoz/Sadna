@@ -33,7 +33,7 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer CloseStore()
         {
-            CloseStoreSlave slave = new CloseStoreSlave(_storeManager, ref store);
+            CloseStoreSlave slave = new CloseStoreSlave(_storeManager, ref _storeName);
             slave.closeStore();
             return slave.answer;
         }

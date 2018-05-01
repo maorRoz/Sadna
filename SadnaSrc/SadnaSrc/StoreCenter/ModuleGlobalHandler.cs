@@ -44,6 +44,8 @@ namespace SadnaSrc.StoreCenter
 
         public StockListItem GetProductFromStore(string store, string productName)
         {
+            CheckThatStoreExitst(store);
+            CheckThatProductExitst(store, productName);
             return DataLayer.GetProductFromStore(store, productName);
         }
         public bool IsProductNameAvailableInStore(string storeName, string productName)
@@ -66,8 +68,8 @@ namespace SadnaSrc.StoreCenter
 
         public void UpdateQuantityAfterPurchase(string storeName, string productName, int quantity)
         {
-            Store store = DataLayer.getStorebyName(storeName);
-            if (store == null) { throw new StoreException(StoreSyncStatus.NoStore, "no such store"); }
+            CheckThatStoreExitst(storeName);
+            CheckThatProductExitst(storeName, productName);
             StockListItem product = DataLayer.GetProductFromStore(storeName, productName);
             if (product.Quantity < quantity || quantity <= 0)
             { throw new StoreException(StoreSyncStatus.NoProduct, "product doesn't exist in this quantity"); }
@@ -77,8 +79,26 @@ namespace SadnaSrc.StoreCenter
 
         public bool ProductExistsInQuantity(string storeName, string product, int quantity)
         {
+            CheckThatStoreExitst(storeName);
+            CheckThatProductExitst(storeName, product);
             StockListItem sli = DataLayer.GetProductFromStore(storeName, product);
-            return sli.Quantity >= quantity;
+            if (sli!=null)
+                return sli.Quantity >= quantity;
+            return false;
+        }
+
+        private void CheckThatProductExitst(string storeName, string product)
+        {
+            Product P = DataLayer.getProductByNameFromStore(storeName, product);
+            if (P == null)
+            { throw new StoreException(StoreEnum.ProductNotFound, "product not exists in store"); }
+        }
+
+        private void CheckThatStoreExitst(string storeName)
+        {
+            Store S = DataLayer.getStorebyName(storeName);
+            if (S==null)
+            { throw new StoreException(StoreEnum.StoreNotExists, "store not exists"); }
         }
 
         public Store GetStoreByID(int ID)

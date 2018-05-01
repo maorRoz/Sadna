@@ -96,7 +96,7 @@ namespace SadnaSrc.StoreCenter
         public Store getStorebyName(string storeName)
         {
 
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "' AND Status = 'Active'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "*", "Name = '" + storeName +"'"))
             {
                 while (dbReader.Read())
                 {
