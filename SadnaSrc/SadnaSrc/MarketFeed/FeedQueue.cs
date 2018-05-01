@@ -7,7 +7,7 @@ using Castle.Core.Internal;
 
 namespace SadnaSrc.MarketFeed
 {
-    class FeedQueue : IFeedQueue
+    public class FeedQueue : IFeedQueue
     {
         private List<Notification> queue;
         private List<IObserver> observers;

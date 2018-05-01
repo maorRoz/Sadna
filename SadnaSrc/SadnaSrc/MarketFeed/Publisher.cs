@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.MarketFeed
 {
-    public class Publisher
+    public class Publisher : IPublisher
     {
         private static Publisher _instance;
 

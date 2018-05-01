@@ -12,8 +12,8 @@ namespace SadnaSrc.MarketFeed
 
         public static void SubscribeSocket(IListener webSocketServer, int userId,string socket)
         {
-            var observer = new FeedObserver(webSocketServer, userId, socket);
-            observer.AttachToQueue();
+            var observer = new FeedObserver(Publisher.Instance,webSocketServer, userId, socket);
+            observers.Add(observer);
         }
 
         public static void UnSubscribeSocket(string socket)

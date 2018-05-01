@@ -108,6 +108,7 @@
     <Compile Include="MarketFeed\IFeedDL.cs" />
     <Compile Include="MarketFeed\IListener.cs" />
     <Compile Include="MarketFeed\FeedSubscriber.cs" />
+    <Compile Include="MarketFeed\IPublisher.cs" />
     <Compile Include="MarketFeed\Publisher.cs" />
     <Compile Include="MarketFeed\Notification.cs" />
     <Compile Include="MarketFeed\IObserver.cs" />

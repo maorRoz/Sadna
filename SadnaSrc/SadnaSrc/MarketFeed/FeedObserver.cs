@@ -12,17 +12,19 @@ namespace SadnaSrc.MarketFeed
         public string SocketId { get; }
         private IListener _server;
 
-        private readonly Publisher publisher;
-        public FeedObserver(IListener server,int userId,string socketId)
+        private readonly IPublisher _publisher;
+        public FeedObserver(IPublisher publisher,IListener server,int userId,string socketId)
         {
             _server = server;
             _userId = userId;
             SocketId = socketId;
-            publisher = Publisher.Instance;
+            _publisher = publisher;
+            var feedQueue = _publisher.GetFeedQueue(_userId);
+            feedQueue.Attach(this);
         }
         public void Update()
         {
-            var feedQueue = publisher.GetFeedQueue(_userId);
+            var feedQueue = _publisher.GetFeedQueue(_userId);
             var newNotifications = feedQueue.GetPendingFeeds();
             foreach (var notification in newNotifications)
             {
@@ -30,15 +32,9 @@ namespace SadnaSrc.MarketFeed
             }
         }
 
-        public void AttachToQueue()
-        {
-            var queue = publisher.GetFeedQueue(_userId);
-            queue.Attach(this);
-        }
-
         public void DetachFromQueue()
         {
-            var feedQueue = publisher.GetFeedQueue(_userId);
+            var feedQueue = _publisher.GetFeedQueue(_userId);
             feedQueue.Detach(this);
         }
 
