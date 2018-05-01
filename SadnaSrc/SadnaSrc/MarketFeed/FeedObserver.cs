@@ -9,7 +9,7 @@ namespace SadnaSrc.MarketFeed
     public class FeedObserver : IObserver
     {
         private int _userId;
-        private string _socketId;
+        public string SocketId { get; }
         private IListener _server;
 
         private readonly Publisher publisher;
@@ -17,7 +17,7 @@ namespace SadnaSrc.MarketFeed
         {
             _server = server;
             _userId = userId;
-            _socketId = socketId;
+            SocketId = socketId;
             publisher = Publisher.Instance;
         }
         public void Update()
@@ -26,17 +26,17 @@ namespace SadnaSrc.MarketFeed
             var newNotifications = feedQueue.GetPendingFeeds();
             foreach (var notification in newNotifications)
             {
-                _server.GetMessage(_socketId,notification.Message);
+                _server.GetMessage(SocketId, notification.Message);
             }
         }
 
-        public void Subscribe()
+        public void AttachToQueue()
         {
             var queue = publisher.GetFeedQueue(_userId);
             queue.Attach(this);
         }
 
-        public void Unsubscribe()
+        public void DetachFromQueue()
         {
             var feedQueue = publisher.GetFeedQueue(_userId);
             feedQueue.Detach(this);
