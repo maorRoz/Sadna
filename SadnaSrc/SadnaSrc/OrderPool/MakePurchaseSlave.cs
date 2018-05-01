@@ -28,9 +28,6 @@ namespace SadnaSrc.OrderPool
             _paymentService = PaymentService.Instance;
             _orderDL = orderDL;
 
-            _supplyService.AttachExternalSystem();
-            _paymentService.AttachExternalSystem();
-
         }
 
         protected void CheckOrderItem(OrderItem item)

@@ -11,19 +11,11 @@ namespace SadnaSrc.Walleter
 {
     public class PaymentService : IPaymentService
     {
-        private PaymentSystem sock;
+        private readonly PaymentSystem sock = PaymentSystem.Instance;
 
         private static PaymentService _instance;
 
         public static PaymentService Instance => _instance ?? (_instance = new PaymentService());
-
-        public MarketAnswer AttachExternalSystem()
-        {
-            sock = new PaymentSystem();
-            MarketLog.Log("Walleter", "Connection to external payment system established successfully ! ");
-            return new WalleterAnswer(WalleterStatus.Success, "Connection to external payment system established successfully !");
-
-        }
 
         public void ProccesPayment(Order order, string creditCardetails)
         {

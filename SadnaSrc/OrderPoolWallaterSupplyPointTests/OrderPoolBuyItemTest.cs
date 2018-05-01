@@ -6,7 +6,9 @@ using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
+using SadnaSrc.SupplyPoint;
 using SadnaSrc.UserSpot;
+using SadnaSrc.Walleter;
 
 namespace OrderPoolWallaterSupplyPointTests
 {
@@ -31,6 +33,8 @@ namespace OrderPoolWallaterSupplyPointTests
             userBuyerMocker = new Mock<IUserBuyer>();
             storeSyncherMock = new Mock<IStoresSyncher>();
             item = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
+            SupplyService.Instance.FixExternal();
+            PaymentService.Instance.FixExternal();
         }
 
         [TestMethod]

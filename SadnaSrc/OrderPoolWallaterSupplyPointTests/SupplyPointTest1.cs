@@ -28,22 +28,15 @@ namespace OrderPoolWallaterSupplyPointTests
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
             item3 = new OrderItem("Cluckin Bell", "#6 Extra Dip", 8.50, 1);
             supplyService = (SupplyService)market.GetSupplyService();
+            supplyService.FixExternal();
         }
 
-
-        [TestMethod]
-        public void TestExternalSystemAttachment()
-        {
-            MarketAnswer ans = supplyService.AttachExternalSystem();
-            Assert.AreEqual((int)SupplyStatus.Success, ans.Status);
-        }
 
        
 
         [TestMethod]
         public void TestCheckOrderDetails()
         {
-            supplyService.AttachExternalSystem();
             Order order = new Order(123456, "Big Smoke", "Grove Street");
             order.AddOrderItem(item1);
             supplyService.CheckOrderDetails(order);
@@ -52,7 +45,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBrokenOrder1()
         {
-            supplyService.AttachExternalSystem();
             Order order = new Order(123456, null, "Grove Street");
             order.AddOrderItem(item1);
             try
@@ -70,7 +62,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBrokenOrder2()
         {
-            supplyService.AttachExternalSystem();
             Order order = new Order(123456, "Big SMoke", null);
             order.AddOrderItem(item1);
             try
@@ -88,7 +79,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBrokenOrder3()
         {
-            supplyService.AttachExternalSystem();
             Order order = new Order(12, "Big SMoke", "Grove Street");
             order.AddOrderItem(item1);
             try
@@ -106,7 +96,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBrokenOrder4()
         {
-            supplyService.AttachExternalSystem();
             Order order = new Order(122326565, "Big SMoke", "Grove Street");
             order.AddOrderItem(item1);
             try
@@ -124,7 +113,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBrokenOrder5()
         {
-            supplyService.AttachExternalSystem();
             Order order = new Order(123456, null, "Grove Street");
             try
             {
@@ -141,7 +129,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestCreateDelivery()
         {
-            supplyService.AttachExternalSystem();
             Order order = new Order(123456, "Big Smoke", "Grove Street");
             order.AddOrderItem(item1);
             supplyService.CreateDelivery(order);
@@ -150,7 +137,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestBadDelivery()
         {
-            supplyService.AttachExternalSystem();
             Order order = new Order(12, "Big Smoke", "Grove Street");
             order.AddOrderItem(item1);
             try
@@ -169,7 +155,6 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestMethod]
         public void TestExternalSystemError()
         {
-            supplyService.AttachExternalSystem();
             Order order = new Order(123456, "Big Smoke","Grove Street");
             order.AddOrderItem(item1);
 

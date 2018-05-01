@@ -14,21 +14,13 @@ namespace SadnaSrc.SupplyPoint
 {
     public class SupplyService : ISupplyService
     {
-        private SupplySystem sock = null;
+        private readonly SupplySystem sock = SupplySystem.Instance;
 
 
         private static SupplyService _instance;
 
         public static SupplyService Instance => _instance ?? (_instance = new SupplyService());
 
-
-        public MarketAnswer AttachExternalSystem()
-        {
-            sock = new SupplySystem();
-            MarketLog.Log("SupplyPoint", "Connection to external supply system established successfully ! ");
-            return new SupplyAnswer(SupplyStatus.Success, "Connection to external supply system established successfully !");
-
-        }
 
         public void CreateDelivery(Order order)
         {

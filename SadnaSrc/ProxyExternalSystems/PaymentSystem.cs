@@ -8,7 +8,17 @@ namespace ProxyExternalSystems
 {
     public class PaymentSystem
     {
-        private bool ans = true;
+        private static bool ans = true;
+
+
+        private static PaymentSystem _instance;
+
+        public static PaymentSystem Instance => _instance ?? (_instance = new PaymentSystem());
+
+        private PaymentSystem()
+        {
+
+        }
         public bool ProccessPayment(string creditCardetails, double price)
         {
             return ans;
