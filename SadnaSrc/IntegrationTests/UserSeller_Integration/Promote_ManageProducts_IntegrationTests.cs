@@ -206,7 +206,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                StoreDL.GetInstance().GetProductFromStore(store, newProduct);
+                ModuleGlobalHandler.GetInstance().GetProductFromStore(store, newProduct);
                 Assert.Fail();
             }
             catch (MarketException)
@@ -221,7 +221,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(shopper, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                StoreDL.GetInstance().GetProductFromStore(store, newProduct);
+                ModuleGlobalHandler.GetInstance().GetProductFromStore(store, newProduct);
                 Assert.Fail();
             }
             catch (MarketException)
@@ -236,7 +236,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(manager, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                Assert.AreEqual(50, StoreDL.GetInstance().GetProductFromStore(store, newProduct).Quantity);
+                Assert.AreEqual(50, ModuleGlobalHandler.GetInstance().GetProductFromStore(store, newProduct).Quantity);
             }
             catch (MarketException)
             {
@@ -251,7 +251,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(manager2, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                StoreDL.GetInstance().GetProductFromStore(store, newProduct);
+                ModuleGlobalHandler.GetInstance().GetProductFromStore(store, newProduct);
                 Assert.Fail();
             }
             catch (MarketException)
@@ -266,7 +266,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(owner, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                Assert.AreEqual(50, StoreDL.GetInstance().GetProductFromStore(store, newProduct).Quantity);
+                Assert.AreEqual(50, ModuleGlobalHandler.GetInstance().GetProductFromStore(store, newProduct).Quantity);
             }
             catch (MarketException)
             {
@@ -281,7 +281,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(sysadmin, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                Assert.AreEqual(50, StoreDL.GetInstance().GetProductFromStore(store, newProduct).Quantity);
+                Assert.AreEqual(50, ModuleGlobalHandler.GetInstance().GetProductFromStore(store, newProduct).Quantity);
             }
             catch (MarketException)
             {
@@ -447,7 +447,7 @@ namespace IntegrationTests.UserSeller_Integration
         {
             SignIn(user);
             storeServiceSession.RemoveProduct(product);
-            StoreDL.GetInstance().GetProductFromStore(store, product);
+            ModuleGlobalHandler.GetInstance().GetProductFromStore(store, product);
 
         }
 
@@ -455,7 +455,7 @@ namespace IntegrationTests.UserSeller_Integration
         {
             SignIn(user);
             storeServiceSession.EditProduct(product, "Name", "Bambaa");
-            StoreDL.GetInstance().GetProductFromStore(store, "Bambaa");
+            ModuleGlobalHandler.GetInstance().GetProductFromStore(store, "Bambaa");
         }
 
         private void SignIn(string user)
