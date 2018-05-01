@@ -24,12 +24,14 @@ $(document).ready(function() {
         }
         console.log('your systemId is : ' +systemId);
         if (systemId === undefined || systemId === 0) {
-            console.log('heloooooooooo');
             socket.invoke('EnterSystem', socketId);
-        } 
+        } else {
+            socket.invoke('SubscribeSocket', systemId, socketId);
+        }
     }
 
     socket.connectionMethods.onDisconnected = () => {
+        socket.invoke('UnSubscribeSocket', socketId);
     }
 
     socket.clientMethods['IdentifyClient'] = (userId) => {
