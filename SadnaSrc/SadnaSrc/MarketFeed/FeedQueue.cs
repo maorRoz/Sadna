@@ -65,7 +65,6 @@ namespace SadnaSrc.MarketFeed
         {
             _feedDL.SaveUnreadNotification(notification);
             queue.Add(notification);
-            Notify();
         }
 
         public Notification[] GetPendingFeeds()

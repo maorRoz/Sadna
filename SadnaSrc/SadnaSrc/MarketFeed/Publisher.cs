@@ -81,7 +81,9 @@ namespace SadnaSrc.MarketFeed
         private void Publish(int receiver, string message)
         {
             var newFeed = new Notification(receiver, message);
-            readers[receiver].AddFeed(newFeed);
+            var reader = readers[receiver];
+            reader.AddFeed(newFeed);
+            reader.Notify();
         }
 
         public void AddFeedQueue(int userId)
