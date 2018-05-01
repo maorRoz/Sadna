@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="IntegrationTests\BuyFromStoreFeedTests.cs" />
     <Compile Include="IntegrationTests\LotteryFeedTests.cs" />
+    <Compile Include="IntegrationTests\NewMessageSentFeedTests.cs" />
     <Compile Include="UnitTests\FeedQueueTests.cs" />
     <Compile Include="UnitTests\PublisherTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

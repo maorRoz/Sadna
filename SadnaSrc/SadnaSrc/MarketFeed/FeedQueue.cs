@@ -38,7 +38,7 @@ namespace SadnaSrc.MarketFeed
         public void Notify()
         {
             RefreshQueue();
-            if (queue.IsNullOrEmpty())
+            if (queue.IsNullOrEmpty() || observers.IsNullOrEmpty())
             {
                 return;
 
@@ -73,6 +73,7 @@ namespace SadnaSrc.MarketFeed
             return queue.ToArray();
         }
 
+
         private void RefreshQueue()
         {
             var freshFeed = new List<Notification>();
@@ -86,5 +87,12 @@ namespace SadnaSrc.MarketFeed
 
             queue = freshFeed;
         }
+
+        public void CleanQueue()
+        {
+            queue.Clear();
+        }
+
+
     }
 }

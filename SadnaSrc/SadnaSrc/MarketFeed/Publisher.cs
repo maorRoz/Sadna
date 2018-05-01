@@ -93,5 +93,13 @@ namespace SadnaSrc.MarketFeed
         {
             return readers[userId];
         }
+
+        public void CleanPublisherQueues()
+        {
+            foreach (var queue in readers.Values)
+            {
+                queue.CleanQueue();
+            }
+        }
     }
 }
