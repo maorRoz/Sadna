@@ -4,17 +4,11 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class PromoteToStoreManagerSlave
+    internal class PromoteToStoreManagerSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
-        private IUserSeller _storeManager;
-        public string _storeName;
-        StoreDL global;
-        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName)
+        internal MarketAnswer Answer;
+        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName) : base(storeName,storeManager)
         {
-            _storeManager = storeManager;
-            _storeName = storeName;
-            global = StoreDL.Instance;
         }
         internal void PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
@@ -22,7 +16,7 @@ namespace SadnaSrc.StoreCenter
                                       " manager options in Store" + _storeName + ". Validating store activity and existence..");
             try
             {
-                global.ValidateStoreExists(_storeName);
+                checkIfStoreExistsAndActive();   
                 ValidatePromotionEligible(actions);
                 _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has been authorized. granting " +
@@ -30,20 +24,20 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.Promote(someoneToPromoteName, actions);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " granted " +
                                              someoneToPromoteName + " manager options in Store" + _storeName + "successfully");
-                answer = new StoreAnswer(PromoteStoreStatus.Success, "promote with manager options has been successful!");
+                Answer = new StoreAnswer(PromoteStoreStatus.Success, "promote with manager options has been successful!");
 
             }
             catch (StoreException e)
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " tried to promote others in unavailable Store " + _storeName +
                                              "and has been denied. Error message has been created!");
-                answer = new StoreAnswer(PromoteStoreStatus.InvalidStore, e.GetErrorMessage());
+                Answer = new StoreAnswer(PromoteStoreStatus.InvalidStore, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to promote " + someoneToPromoteName +
                                   "with manager options in Store" + _storeName + " and therefore has been denied. Error message has been created!");
-                answer = new StoreAnswer((PromoteStoreStatus)e.Status, e.GetErrorMessage());
+                Answer = new StoreAnswer((PromoteStoreStatus)e.Status, e.GetErrorMessage());
             }
 
         }

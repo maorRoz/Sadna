@@ -4,21 +4,21 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class CloseStoreSlave : AbstractSlave
+    internal class CloseStoreSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
         public Store store;
-        public CloseStoreSlave(IUserSeller storeManager, ref Store _store) : base(_store.Name, storeManager)
+        public CloseStoreSlave(IUserSeller storeManager, ref string _storeName) : base(_storeName, storeManager)
         {
-            store = _store;
-            global = StoreDL.Instance;
+            store = DataLayerInstance.GetStorebyName(_storeName);
+            DataLayerInstance = StoreDL.GetInstance();
         }
 
-        internal void closeStore()
+        internal void CloseStore()
         {
             try
             {
-                checkIfStoreExists();
+                checkIfStoreExistsAndActive();
             }
             catch (Exception)
             {
@@ -39,12 +39,6 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "closing store failed");
                 answer = new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
             }
-        }
-
-        private void checkIfStoreExists()
-        {
-            if (!global.IsStoreExist(_storeName))
-            { throw new StoreException(StoreEnum.StoreNotExists, "store not exists"); }
         }
     }
 }

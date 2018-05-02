@@ -14,14 +14,14 @@ namespace StoreCenterTests
     public class AddToCartTests
     {
         private MarketYard market;
-        private ModuleGlobalHandler handler;
+        private StoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = ModuleGlobalHandler.GetInstance();
+            handler = StoreDL.GetInstance();
             userService = market.GetUserService();
         }
 
@@ -30,7 +30,7 @@ namespace StoreCenterTests
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             liorSession.MakeGuest();
-            Store find = handler.DataLayer.getStorebyName("newStoreName");
+            Store find = handler.GetStorebyName("newStoreName");
             Assert.IsNull(find);
             MarketAnswer ans = liorSession.AddProductToCart("newStoreName", "ppp", 6);
             Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
@@ -39,7 +39,7 @@ namespace StoreCenterTests
         public void AddToCartWhenHasNoPremmision()
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
-            Store find = handler.DataLayer.getStorebyName("X");
+            Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 6);
             Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
         }
@@ -49,7 +49,7 @@ namespace StoreCenterTests
 
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             liorSession.MakeGuest();
-            Store find = handler.DataLayer.getStorebyName("X");
+            Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOBO", 6);
             Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
@@ -58,7 +58,7 @@ namespace StoreCenterTests
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             liorSession.MakeGuest();
-            Store find = handler.DataLayer.getStorebyName("X");
+            Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 999999);
             Assert.AreEqual((int)StoreEnum.QuantityIsTooBig, ans.Status);
         }
@@ -67,7 +67,7 @@ namespace StoreCenterTests
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             liorSession.MakeGuest();
-            Store find = handler.DataLayer.getStorebyName("X");
+            Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 0);
             Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
         }
@@ -76,7 +76,7 @@ namespace StoreCenterTests
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             liorSession.MakeGuest();
-            Store find = handler.DataLayer.getStorebyName("X");
+            Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", -1);
             Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
         }
@@ -85,7 +85,7 @@ namespace StoreCenterTests
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             liorSession.MakeGuest();
-            Store find = handler.DataLayer.getStorebyName("X");
+            Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 1);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }

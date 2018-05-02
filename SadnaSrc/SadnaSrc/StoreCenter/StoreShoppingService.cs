@@ -11,12 +11,12 @@ namespace SadnaSrc.StoreCenter
     public class StoreShoppingService : IStoreShoppingService
     {
         private IUserShopper _shopper;
-        private readonly ModuleGlobalHandler storeLogic;
+        private readonly StoreSyncerImplementation storeLogic;
         private LinkedList<Store> stores;
         public StoreShoppingService(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = ModuleGlobalHandler.GetInstance();
+            storeLogic = StoreSyncerImplementation.GetInstance();
             stores = new LinkedList<Store>();
         }
         public void LoginShoper(string userName, string password)
@@ -33,7 +33,7 @@ namespace SadnaSrc.StoreCenter
             Store S = slave.OpenStore(storeName, address);
             if (S!=null)
                 stores.AddLast(S);
-            return slave.answer;
+            return slave.Answer;
         }
         
         public MarketAnswer ViewStoreInfo(string store)
@@ -56,6 +56,12 @@ namespace SadnaSrc.StoreCenter
                 AddProductToCartSlave slave = new AddProductToCartSlave(_shopper);
                 slave.AddProductToCart(store, productName, quantity);
                 return slave.answer;
+        }
+        public LinkedList<Store> GetAllStores()
+        {
+            StoreDL DataLayer = StoreDL.GetInstance();
+            LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
+            return AllStores;
         }
 
         public void CleanSeesion()

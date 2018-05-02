@@ -15,14 +15,14 @@ namespace StoreCenterTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private ModuleGlobalHandler handler;
+        private I_StoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = ModuleGlobalHandler.GetInstance();
+            handler = StoreDL.GetInstance();
             userService = market.GetUserService();
         }
         [TestMethod]
@@ -68,9 +68,9 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
+            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "Name", "MOMO");
-            Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "MOMO");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "MOMO");
             Assert.IsNotNull(find);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
@@ -81,9 +81,9 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
+            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "0");
-            Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual(5, find.BasePrice);
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, ans.Status);
@@ -95,9 +95,9 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
+            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "NotA-Number");
-            Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual(5, find.BasePrice);
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, ans.Status);
@@ -109,9 +109,9 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
+            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "-4");
-            Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual(5, find.BasePrice);
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, ans.Status);
@@ -123,9 +123,9 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
+            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "10");
-            Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual(10, find.BasePrice);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
@@ -137,9 +137,9 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.DataLayer.GetProductFromStore(liorSession._storeName, "GOLD");
+            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "Description", "MOMO");
-            Product find = handler.DataLayer.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual("MOMO", find.Description);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
@@ -151,7 +151,7 @@ namespace StoreCenterTests
         {
             if (ProductToDelete != null)
             {
-                handler.DataLayer.RemoveStockListItem(ProductToDelete);
+                handler.RemoveStockListItem(ProductToDelete);
             }
             userService.CleanSession();
             MarketYard.CleanSession();

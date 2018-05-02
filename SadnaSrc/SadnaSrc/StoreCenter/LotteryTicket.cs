@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using static System.Int32;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -15,8 +15,20 @@ namespace SadnaSrc.StoreCenter
         public string myID { get; set; }
         public LotteryTicketStatus myStatus { get; set; }
         public int UserID { get; set; }
+        
 
         public double Cost { get; set; }
+        private static int globalLotteryTicketID = FindMaxLotteryTicketId;
+        public LotteryTicket(string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
+        {
+            LotteryNumber = _LotteryNumber;
+            myID = GetLotteryTicketID();
+            IntervalStart = _IntervalStart;
+            IntervalEnd = _IntervalEnd;
+            Cost = cost;
+            myStatus = LotteryTicketStatus.Waiting;
+            UserID = _userID;
+        }
         public LotteryTicket(string _myID, string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
         {
             LotteryNumber = _LotteryNumber;
@@ -55,7 +67,7 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(LotteryTicket obj)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             return (obj.IntervalStart == IntervalStart &&
                     obj.IntervalEnd == IntervalEnd &&
                     obj.LotteryNumber == LotteryNumber &&
@@ -79,6 +91,56 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + myStatus.GetHashCode();
             hashCode = hashCode * -1521134295 + UserID.GetHashCode();
             return hashCode;
+        }
+        public object[] GetTicketValuesArray()
+        {
+
+            return new object[]
+            {
+                myID,
+                LotteryNumber,
+                IntervalStart,
+                IntervalEnd,
+                myStatus,
+                UserID
+            };
+        }
+        public string[] GetTicketStringValues()
+        {
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            return new[]
+            {
+                "'" + myID + "'",
+                "'" + LotteryNumber + "'",
+                "'" + IntervalStart + "'",
+                "'" + IntervalEnd + "'",
+                "'" + Cost + "'",
+                "'" + EnumStringConverter.PrintEnum(myStatus) + "'",
+                "'" + UserID + "'"
+            };
+        }
+        private static string GetLotteryTicketID()
+        {
+            globalLotteryTicketID++;
+            return "T" + globalLotteryTicketID;
+        }
+        private static int FindMaxLotteryTicketId
+        {
+            get
+            {
+                StoreDL DL = StoreDL.GetInstance();
+                LinkedList<string> list = DL.GetAllLotteryTicketIDs();
+                int max = -5;
+                foreach (string s in list)
+                {
+                    var temp = Parse(s.Substring(1));
+                    if (temp > max)
+                    {
+                        max = temp;
+                    }
+                }
+                return max;
+            }
         }
     }
 }

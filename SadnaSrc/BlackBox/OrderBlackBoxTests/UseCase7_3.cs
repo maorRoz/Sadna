@@ -318,6 +318,5 @@ namespace BlackBox.OrderBlackBoxTests
             }
 
         }
-
     }
 }

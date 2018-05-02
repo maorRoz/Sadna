@@ -15,7 +15,7 @@ namespace StoreCenterTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private ModuleGlobalHandler handler;
+        private I_StoreDL handler;
         IUserService userService;
         public LotterySaleManagmentTicket LotteryToDelete;
 
@@ -24,7 +24,7 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = ModuleGlobalHandler.GetInstance();
+            handler = StoreDL.GetInstance();
             userService = market.GetUserService();
         }
         [TestMethod]
@@ -64,8 +64,8 @@ namespace StoreCenterTests
             Product P = new Product("P1345678", "OBJ", 9, "des");
             ProductToDelete = new StockListItem(4, P, null, PurchaseEnum.Lottery, "S1");
             LotteryToDelete = new LotterySaleManagmentTicket("L1000", "X", P, DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2020"));
-            handler.DataLayer.AddStockListItemToDataBase(ProductToDelete);
-            handler.DataLayer.AddLottery(LotteryToDelete);
+            handler.AddStockListItemToDataBase(ProductToDelete);
+            handler.AddLottery(LotteryToDelete);
             MarketAnswer ans = liorSession.ChangeProductPurchaseWayToImmediate("OBJ");
             StockListItem find = handler.GetProductFromStore("X", "OBJ");
             Assert.AreEqual((int)PurchaseEnum.Immediate, (int)find.PurchaseWay);
@@ -85,11 +85,11 @@ namespace StoreCenterTests
         {
             if (ProductToDelete != null)
             {
-                handler.DataLayer.RemoveStockListItem(ProductToDelete);
+                handler.RemoveStockListItem(ProductToDelete);
             }
             if (LotteryToDelete != null)
             {
-                handler.DataLayer.RemoveLottery(LotteryToDelete);
+                handler.RemoveLottery(LotteryToDelete);
             }
             userService.CleanSession();
             MarketYard.CleanSession();

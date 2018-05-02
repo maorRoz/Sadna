@@ -15,9 +15,19 @@ namespace SadnaSrc.StoreCenter
         public DateTime EndDate { get; set; }
         public int DiscountAmount { get; set; }
         public bool Percentages { get; set; }
-
+        private static int globalDiscountCode = FindMaxDiscountId();
         //assume that the startDate < EndDate
 
+        public Discount(discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
+        {
+            discountCode = GetDiscountCode();
+            discountType = _discountType;
+            startDate = _startDate;
+            EndDate = _EndDate;
+            DiscountAmount = _discountAmount;
+            Percentages = _presenteges;
+
+        }
         public Discount(string _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
         {
             discountCode = _discountCode;
@@ -47,7 +57,7 @@ namespace SadnaSrc.StoreCenter
         }
         public override string ToString()
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             if (EnumStringConverter.PrintEnum(discountType) == EnumStringConverter.PrintEnum(discountTypeEnum.Hidden))
                 return "type is: hidden";
             if (Percentages)
@@ -60,7 +70,7 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-        internal bool checkTime()
+        internal bool CheckTime()
         {
             return ((startDate.Date <= MarketYard.MarketDate) && (MarketYard.MarketDate <= EndDate.Date));
         }
@@ -75,6 +85,52 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + DiscountAmount.GetHashCode();
             hashCode = hashCode * -1521134295 + Percentages.GetHashCode();
             return hashCode;
+        }
+        public string[] GetDiscountStringValues()
+        {
+            return new[]
+            {
+                "'" + discountCode + "'",
+                "'" + EnumStringConverter.PrintEnum(discountType) + "'",
+                "'" + startDate + "'",
+                "'" + EndDate + "'",
+                "'" + DiscountAmount + "'",
+                "'" + Percentages + "'"
+            };
+        }
+
+        public object[] GetDiscountValuesArray()
+        {
+            return new object[]
+            {
+                discountCode,
+                discountType,
+                startDate,
+                EndDate,
+                DiscountAmount,
+                Percentages
+            };
+        }
+        private static int FindMaxDiscountId()
+        {
+            StoreDL DL = StoreDL.GetInstance();
+            LinkedList<string> list = DL.GetAllDiscountIDs();
+            int max = -5;
+            int temp = 0;
+            foreach (string s in list)
+            {
+                temp = Int32.Parse(s.Substring(1));
+                if (temp > max)
+                {
+                    max = temp;
+                }
+            }
+            return max;
+        }
+        private static string GetDiscountCode()
+        {
+            globalDiscountCode++;
+            return "D" + globalDiscountCode;
         }
     }
 }

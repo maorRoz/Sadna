@@ -15,14 +15,14 @@ namespace StoreCenterTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private ModuleGlobalHandler handler;
+        private I_StoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = ModuleGlobalHandler.GetInstance();
+            handler = StoreDL.GetInstance();
             userService = market.GetUserService();
         }
         [TestMethod]
@@ -68,7 +68,7 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", 4);
-            ProductToDelete = handler.DataLayer.GetProductFromStore("X", "item");
+            ProductToDelete = handler.GetProductFromStore("X", "item");
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 
@@ -78,7 +78,7 @@ namespace StoreCenterTests
         {
             if (ProductToDelete != null)
             {
-                handler.DataLayer.RemoveStockListItem(ProductToDelete);
+                handler.RemoveStockListItem(ProductToDelete);
             }
             userService.CleanSession();
             MarketYard.CleanSession();

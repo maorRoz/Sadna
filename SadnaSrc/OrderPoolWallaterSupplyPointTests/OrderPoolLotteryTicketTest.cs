@@ -45,6 +45,7 @@ namespace OrderPoolWallaterSupplyPointTests
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             slave = new LotteryTicketSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object);
             Order order = slave.BuyLotteryTicket("#9 Large", "Cluckin Bell", 1, 5.00, "Big Smoke", "Grove Street", "12345678");
+            Assert.IsNotNull(order);
             Assert.AreEqual(1, order.GetItems().Count);
             Assert.IsNotNull(order.GetOrderItem("#9 Large", "Cluckin Bell"));
             OrderItem actual = order.GetOrderItem("#9 Large", "Cluckin Bell");

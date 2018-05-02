@@ -75,14 +75,14 @@ namespace SadnaSrc.Main
 
         public static void CleanSession()
         {
+            MarketLog.RemoveLogs();
+            MarketException.RemoveErrors();
             if (_instance == null)
             {
                 return;
             }
 
             refundLotteriesService.CleanSession();
-            MarketLog.RemoveLogs();
-            MarketException.RemoveErrors();
         }
     }
 }

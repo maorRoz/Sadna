@@ -46,6 +46,7 @@ namespace OrderPoolWallaterSupplyPointTests
             slave = new PurchaseItemSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object);
             Order order = slave.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.00, null, "Big Smoke", "Grove Street",
                 "12345678");
+            Assert.IsNotNull(order);
             Assert.AreEqual(1, order.GetItems().Count);
             Assert.IsNotNull(order.GetOrderItem("#9 Large", "Cluckin Bell"));
             OrderItem actual = order.GetOrderItem("#9 Large", "Cluckin Bell");
@@ -129,6 +130,7 @@ namespace OrderPoolWallaterSupplyPointTests
             slave = new PurchaseItemSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object);
             Order order = slave.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.00, "D1", "Big Smoke", "Grove Street",
                 "12345678");
+            Assert.IsNotNull(order);
             Assert.AreEqual(1, order.GetItems().Count);
             Assert.IsNotNull(order.GetOrderItem("#9 Large", "Cluckin Bell"));
             OrderItem actual = order.GetOrderItem("#9 Large", "Cluckin Bell");

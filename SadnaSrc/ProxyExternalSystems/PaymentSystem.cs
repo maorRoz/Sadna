@@ -24,12 +24,12 @@ namespace ProxyExternalSystems
             return ans;
         }
 
-        public void fuckUp()
+        public static void FuckUp()
         {
             ans = false;
         }
 
-        public void fuckDown()
+        public static void FuckDown()
         {
             ans = true;
         }

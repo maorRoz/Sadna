@@ -4,7 +4,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddQuanitityToProductSlave : AbstractSlave
+    internal class AddQuanitityToProductSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
 
@@ -21,12 +21,12 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "checking that has premmisions");
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", "checking that Product Exists");
-                checkifProductExists(global.getProductByNameFromStore(_storeName, productName));
-                StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+                checkifProductExists(DataLayerInstance.GetProductByNameFromStore(_storeName, productName));
+                StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
                 MarketLog.Log("StoreCenter", "checking that quantity is positive");
-                checkIfQuanityIsOK(quantity);
+                CheckIfQuanityIsOK(quantity);
                 stockListItem.Quantity += quantity;
-                global.EditStockInDatabase(stockListItem);
+                DataLayerInstance.EditStockInDatabase(stockListItem);
                 answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " added by amound of " + quantity);
             }
             catch (StoreException exe)
@@ -41,7 +41,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfQuanityIsOK(int quantity)
+        private void CheckIfQuanityIsOK(int quantity)
         {
             if (quantity <= 0)
             {

@@ -14,14 +14,14 @@ namespace StoreCenterTests
     public class ViewStoreStockTests
     {
         private MarketYard market;
-        private ModuleGlobalHandler handler;
+        private I_StoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = ModuleGlobalHandler.GetInstance();
+            handler = StoreDL.GetInstance();
             userService = market.GetUserService();
         }
         [TestMethod]

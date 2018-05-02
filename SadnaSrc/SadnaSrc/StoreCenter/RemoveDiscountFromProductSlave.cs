@@ -4,9 +4,9 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class RemoveDiscountFromProductSlave : AbstractSlave
+    internal class RemoveDiscountFromProductSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        internal MarketAnswer Answer;
 
         public RemoveDiscountFromProductSlave(string storeName, IUserSeller storeManager) :base(storeName,storeManager)
         {
@@ -22,28 +22,28 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
                 _storeManager.CanDeclareDiscountPolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
-                Product P = global.getProductByNameFromStore(_storeName, productName);
+                Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
                 checkifProductExists(P);
-                Discount D = checkIfDiscountExistsPrivateMethod(productName);
-                StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+                Discount D = CheckIfDiscountExistsPrivateMethod(productName);
+                StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
                 stockListItem.Discount = null;
-                global.RemoveDiscount(D);
-                global.EditStockInDatabase(stockListItem);
+                DataLayerInstance.RemoveDiscount(D);
+                DataLayerInstance.EditStockInDatabase(stockListItem);
                 MarketLog.Log("StoreCenter", "discount removed successfully");
-                answer = new StoreAnswer(DiscountStatus.Success, "discount removed successfully");
+                Answer = new StoreAnswer(DiscountStatus.Success, "discount removed successfully");
             }
             catch (StoreException exe)
             {
-                answer = new StoreAnswer(exe);
+                Answer = new StoreAnswer(exe);
             }
             catch (MarketException)
             {
-                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
-        private Discount checkIfDiscountExistsPrivateMethod(string productName)
+        private Discount CheckIfDiscountExistsPrivateMethod(string productName)
         {
-            StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+            StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
             MarketLog.Log("StoreCenter", " Product exists");
             MarketLog.Log("StoreCenter", "checking that the product has a discount");
             Discount discount = stockListItem.Discount;

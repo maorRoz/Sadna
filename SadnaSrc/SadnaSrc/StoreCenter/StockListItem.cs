@@ -33,7 +33,7 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(StockListItem obj)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             return (SystemId.Equals(obj.SystemId)) &&
                 (Quantity == obj.Quantity) &&
                 (Product.SystemId == obj.Product.SystemId) &&
@@ -50,6 +50,40 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + EqualityComparer<Discount>.Default.GetHashCode(Discount);
             hashCode = hashCode * -1521134295 + PurchaseWay.GetHashCode();
             return hashCode;
+        }
+        public object[] GetStockListItemArray()
+        {
+            object discountObject = "";
+            if (Discount != null)
+            {
+                discountObject = Discount;
+            }
+
+            return new object[]
+            {
+                SystemId,
+                Product,
+                Quantity,
+                discountObject,
+                PurchaseWay
+            };
+        }
+        public string[] GetStockListItemStringValues()
+        {
+            string IfDiscountNotExists = "null";
+            if (Discount != null)
+            {
+                IfDiscountNotExists = Discount.discountCode;
+            }
+
+            return new[]
+            {
+                "'" + SystemId + "'",
+                "'" + Product.SystemId + "'",
+                "'" + Quantity + "'",
+                "'" + IfDiscountNotExists + "'",
+                "'" + EnumStringConverter.PrintEnum(PurchaseWay) + "'"
+            };
         }
     }
 }

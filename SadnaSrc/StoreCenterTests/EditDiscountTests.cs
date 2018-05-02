@@ -16,14 +16,14 @@ namespace StoreCenterTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private ModuleGlobalHandler handler;
+        private I_StoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = ModuleGlobalHandler.GetInstance();
+            handler = StoreDL.GetInstance();
             userService = market.GetUserService();
         }
         [TestMethod]
@@ -329,7 +329,7 @@ namespace StoreCenterTests
         {
             if (ProductToDelete != null)
             {
-                handler.DataLayer.RemoveStockListItem(ProductToDelete);
+                handler.RemoveStockListItem(ProductToDelete);
             }
             userService.CleanSession();
             MarketYard.CleanSession();
