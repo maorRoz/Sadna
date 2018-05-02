@@ -2,6 +2,8 @@
 using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.SupplyPoint;
+using SadnaSrc.Walleter;
 
 namespace BlackBox.OrderBlackBoxTests
 {
@@ -34,7 +36,9 @@ namespace BlackBox.OrderBlackBoxTests
 			_adminBridge.GetAdminService(_userAdminBridge.GetUserSession());
 			_buyerRegisteredUserBridge = null;
 			_buyerGuestBridge = null;
-		}
+		    PaymentService.Instance.FixExternal();
+		    SupplyService.Instance.FixExternal();
+        }
 
 		private void SignUp(string name, string address, string password, string creditCard)
 		{
@@ -345,20 +349,10 @@ namespace BlackBox.OrderBlackBoxTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_userAdminBridge.CleanSession();
-			_buyerRegisteredUserBridge?.CleanSession();
-			_buyerGuestBridge?.CleanSession();
-			_storeOwnerBridge.CleanSession();
-			_shoppingBridge.CleanSession();
-			_shoppingBridge2?.CleanSession();
-			_storeManagementBridge.CleanSession();
-			_storeManagementBridge2.CleanSession();
-			_orderBridge.CleanSession();
-			_orderBridge.EnableSupplySystem();
-			_orderBridge.EnablePaymentSystem();
-			_userAdminBridge.CleanMarket();
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
 
-		}
+        }
 
 	}
 }

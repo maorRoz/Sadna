@@ -8,7 +8,6 @@ namespace SadnaSrc.Main
 {
     public interface IStoreManagementService
     {
-        void CleanSession(); // for tests only
 
         /**
          *StoreManagers/StoreOwners Promotion

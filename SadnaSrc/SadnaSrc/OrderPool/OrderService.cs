@@ -50,17 +50,6 @@ namespace SadnaSrc.OrderPool
             CreditCard = _buyer.GetCreditCard();
         }
 
-        public void CleanSession()
-        {
-            foreach (Order order in Orders)
-            {
-                _orderDL.RemoveOrder(order.GetOrderID());
-            }
-
-            _storesSync.CleanSession();
-            _buyer.CleanSession();
-        }
-
         public void Cheat(int cheatResult)
         {
             ltSlave.Cheat(cheatResult);

@@ -19,8 +19,6 @@ namespace SadnaSrc.Main
         MarketAnswer GiveDetails(string userName, string address, string creditCard);
 
         void Cheat(int cheatResult);
-
-        void CleanSession();
     }
 
     public enum GiveDetailsStatus

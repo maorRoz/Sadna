@@ -56,7 +56,7 @@ namespace StoreCenterTests
         [TestCleanup]
         public void CleanUpTest()
         {
-            userService.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
     }

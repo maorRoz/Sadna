@@ -190,10 +190,8 @@ namespace BlackBox.UserBlackBoxTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            _bridge2?.CleanSession();
-            _bridge.CleanSession();
-            _bridge.CleanMarket();
-            _bridge2?.CleanMarket();
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
         }
     }
 }

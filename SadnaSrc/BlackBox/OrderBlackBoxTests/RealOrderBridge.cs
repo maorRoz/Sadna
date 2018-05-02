@@ -61,11 +61,6 @@ namespace BlackBox
 			_paymentService.FixExternal();
 		}
 
-		public void CleanSession()
-		{
-			_orderService.CleanSession();
-		}
-
 	    public void Cheat(int cheatCode)
 	    {
 	        _orderService.Cheat(cheatCode);

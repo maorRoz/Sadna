@@ -93,8 +93,7 @@ namespace UserSpotTests.UseCaseUnitTest
         [TestCleanup]
         public void CartServiceTestCleanUp()
         {
-            userServiceRegisteredSession?.CleanSession();
-            userServiceGuestSession.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

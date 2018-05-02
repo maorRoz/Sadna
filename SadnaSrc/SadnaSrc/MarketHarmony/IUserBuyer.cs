@@ -82,6 +82,5 @@ namespace SadnaSrc.MarketHarmony
         /// <summary>
         /// Clean UserService data from DB . use during clean up method of testing.
         /// </summary>
-        void CleanSession(); //only for testing
     }
 }

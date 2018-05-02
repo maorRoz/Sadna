@@ -81,19 +81,7 @@ namespace StoreCenterTests
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
-            if (ProductToDelete != null)
-            {
-                handler.RemoveStockListItem(ProductToDelete);
-            }
-            if (LotteryToDelete != null)
-            {
-                handler.RemoveLottery(LotteryToDelete);
-            }
-            foreach(LotteryTicket tick in tickets)
-            {
-                handler.RemoveLotteryTicket(tick);
-            }
-            userService.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
     }

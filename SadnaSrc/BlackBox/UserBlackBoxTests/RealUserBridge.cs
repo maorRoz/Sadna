@@ -50,12 +50,6 @@ namespace BlackBox
 			return _userService;
 		}
 
-        public void CleanSession()
-        {
-            _userService.CleanSession();
-
-        }
-
         public void CleanMarket()
         {
             MarketYard.CleanSession();

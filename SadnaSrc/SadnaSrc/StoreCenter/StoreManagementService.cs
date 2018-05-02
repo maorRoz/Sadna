@@ -134,21 +134,6 @@ namespace SadnaSrc.StoreCenter
             return slave.answer;
         }
 
-        public void CleanSession()
-        {
-            if (store != null)
-            {
-                LinkedList<string> items = global.DataLayer.GetAllStoreProductsID(store.SystemId);
-                foreach (string id in items)
-                {
-                    StockListItem item = global.DataLayer.GetStockListItembyProductID(id);
-                    global.DataLayer.RemoveStockListItem(item);
-                }
-                global.DataLayer.RemoveStore(store);
-            }
-
-            syncher.CleanSession();
-        }
 
         public MarketAnswer AddQuanitityToProduct(string productName, int quantity)
         {

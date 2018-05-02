@@ -2,6 +2,8 @@
 using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.SupplyPoint;
+using SadnaSrc.Walleter;
 
 namespace BlackBox.OrderBlackBoxTests
 {
@@ -41,6 +43,8 @@ namespace BlackBox.OrderBlackBoxTests
             _orderBridge2 = null;
             _orderBridge3 = null;
             _buyerGuestBridge = null;
+            PaymentService.Instance.FixExternal();
+            SupplyService.Instance.FixExternal();
         }
 
 
@@ -224,25 +228,8 @@ namespace BlackBox.OrderBlackBoxTests
         [TestCleanup]
         public void LotteryTestCleanUp()
         {
-            _userAdminBridge.CleanSession();
-            _buyerRegisteredUserBridge1?.CleanSession();
-            _buyerRegisteredUserBridge2?.CleanSession();
-            _buyerRegisteredUserBridge3?.CleanSession();
-            _buyerGuestBridge?.CleanSession();
-            _storeOwnerBridge.CleanSession();
-            _shoppingBridge.CleanSession();
-            _shoppingBridge2?.CleanSession();
-            _storeManagementBridge.CleanSession();
-            _orderBridge1?.CleanSession();
-            _orderBridge1?.EnableSupplySystem();
-            _orderBridge1?.EnablePaymentSystem();
-            _orderBridge2?.CleanSession();
-            _orderBridge2?.EnableSupplySystem();
-            _orderBridge2?.EnablePaymentSystem();
-            _orderBridge3?.CleanSession();
-            _orderBridge3?.EnableSupplySystem();
-            _orderBridge3?.EnablePaymentSystem();
-            _userAdminBridge?.CleanMarket();
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
         }
 
         private void SignUpStoreOwner(string name, string address, string password, string creditCard)

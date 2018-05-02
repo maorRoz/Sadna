@@ -216,11 +216,7 @@ namespace IntegrationTests.UserAdmin_Integration
         [TestCleanup]
         public void UserAdminTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            deletedUserSession?.CleanSession();
-            deletedUserSession2?.CleanSession();
-            storeShoppingService?.CleanSeesion();
-            orderService?.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

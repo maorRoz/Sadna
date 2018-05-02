@@ -130,17 +130,5 @@ namespace BlackBox
             throw new NotImplementedException();
         }
 
-	    public void CleanSession()
-        {
-            if (real != null)
-            {
-                real.CleanSession();
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
-
     }
 }

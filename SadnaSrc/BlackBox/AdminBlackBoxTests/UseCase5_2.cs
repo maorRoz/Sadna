@@ -127,14 +127,9 @@ namespace BlackBox.AdminBlackBoxTests
 
 		public void UserTestCleanUp()
 		{
-			_adminSignInBridge.CleanSession();
-			_signUpBridge1.CleanSession();
-			_signUpBridge2.CleanSession();
-			_signInBridge?.CleanSession();
-			_storeBridge.CleanSession();
-			_managerBridge?.CleanSession();
-			_signUpBridge1.CleanMarket();
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
 
-		}
+        }
 	}
 }

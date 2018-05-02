@@ -44,10 +44,6 @@ namespace BlackBox
             return _storeShoppingService.ViewStoreStock(store);
         }
 
-        public void CleanSession()
-        {
-            _storeShoppingService?.CleanSeesion();
-        }
 
 
     }

@@ -79,9 +79,8 @@ namespace BlackBox.StoreBlackBoxTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            _storeBridge.CleanSession();
-            _bridgeSignUp.CleanSession();
-            _bridgeSignUp.CleanMarket();
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
         }
 
 

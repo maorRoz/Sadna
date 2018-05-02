@@ -280,10 +280,7 @@ namespace UserSpotTests.DbUserSpotIntegration
         [TestCleanup]
         public void CartServiceTestCleanUp()
         {
-            userServiceLoggedSession?.CleanSession();
-            userServiceLoggedSession2?.CleanSession();
-            userServiceRegisteredSession?.CleanSession();
-            userServiceGuestSession.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

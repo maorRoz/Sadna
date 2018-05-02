@@ -452,9 +452,7 @@ namespace UserSpotTests.DbUserSpotIntegration
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            userServiceSignUpSession.CleanSession();
-            userServiceSignInSession?.CleanSession();
-            userServiceSignInSession2?.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 
