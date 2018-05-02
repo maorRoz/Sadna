@@ -41,16 +41,16 @@ namespace BlackBox.StoreBlackBoxTests
         {
             _orderBridge2 = OrderDriver.getBridge();
             _orderBridge2.GetOrderService(_userBridge2.GetUserSession());
-            _orderBridge2.BuyItemFromImmediate("hello2", "blahblah", 2, 20);
-            _orderBridge2.BuyItemFromImmediate("Goodbye2", "blahblah2", 2, 20);
+            _orderBridge2.BuyItemFromImmediate("hello2", "blahblah", 2, 20, null);
+            _orderBridge2.BuyItemFromImmediate("Goodbye2", "blahblah2", 2, 20, null);
         }
 
         private void User1MakeOrder()
         {
             _orderBridge = OrderDriver.getBridge();
             _orderBridge.GetOrderService(_userBridge.GetUserSession());
-            _orderBridge.BuyItemFromImmediate("hello", "blahblah", 2, 10);
-            _orderBridge.BuyItemFromImmediate("Goodbye", "blahblah2", 2, 10);
+            _orderBridge.BuyItemFromImmediate("hello", "blahblah", 2, 10, null);
+            _orderBridge.BuyItemFromImmediate("Goodbye", "blahblah2", 2, 10, null);
         }
 
         private void User2AddToCart()

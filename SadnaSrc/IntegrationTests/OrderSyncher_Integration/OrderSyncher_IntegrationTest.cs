@@ -46,12 +46,12 @@ namespace IntegrationTests.OrderSyncher_Integration
             {
                 orderSyncherHarmony.CancelLottery("L2");
                 OrderDL _orderDL = OrderDL.Instance;
-                _orderDL.GetTicketParticipantID("T2");
-                Assert.Fail();
+                int userID = _orderDL.GetTicketParticipantID("T2");
+                Assert.AreEqual(-1, userID);
             }
-            catch (MarketException e)
+            catch (MarketException)
             {
-                Assert.AreEqual((int)LotteryOrderStatus.InvalidLotteryTicket, e.Status);
+                Assert.Fail();
             }
         }
 

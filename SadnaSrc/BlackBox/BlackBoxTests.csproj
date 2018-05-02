@@ -78,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminBlackBoxTests\AdminDriver.cs" />
+    <Compile Include="NotificationsBlackBoxTests\UseCase11_1.cs" />
+    <Compile Include="NotificationsBlackBoxTests\UseCase11_4.cs" />
+    <Compile Include="NotificationsBlackBoxTests\UseCase11_5.cs" />
     <Compile Include="OrderBlackBoxTests\IOrderBridge.cs" />
     <Compile Include="OrderBlackBoxTests\OrderDriver.cs" />
     <Compile Include="OrderBlackBoxTests\ProxyOrderBridge.cs" />

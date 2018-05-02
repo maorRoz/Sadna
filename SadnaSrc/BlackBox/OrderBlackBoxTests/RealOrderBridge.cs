@@ -22,23 +22,18 @@ namespace BlackBox
 			_orderService = _market.GetOrderService(ref userService);
 		}
 
-		public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
+		public MarketAnswer BuyEverythingFromCart(string[] coupons)
 		{
-			return _orderService.BuyItemFromImmediate(itemName, store, quantity,unitPrice);
-		}
-
-		public MarketAnswer BuyEverythingFromCart()
-		{
-			return _orderService.BuyEverythingFromCart();
+			return _orderService.BuyEverythingFromCart(coupons);
 		}
 
 	    public MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice)
 	    {
 	        return _orderService.BuyLotteryTicket(itemName, store, quantity, unitPrice);
 	    }
-		public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
+		public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon)
 		{
-			return _orderService.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon);
+			return _orderService.BuyItemFromImmediate(itemName, store, quantity, unitPrice, coupon);
 		}
 
 		public MarketAnswer GiveDetails(string userName, string address, string creditCard)

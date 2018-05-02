@@ -339,7 +339,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeBridge.AddProductToCart("Volcano", "Yolo", 2);
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_bridgeSignUp.GetUserSession());
-			_orderBridge.BuyEverythingFromCart();
+			_orderBridge.BuyEverythingFromCart(new string[]{null});
 		}
 
 		private void CheckProductEditedInStock()

@@ -8,7 +8,16 @@ namespace ProxyExternalSystems
 {
     public class SupplySystem
     {
-        private bool ans = true;
+        private static bool ans = true;
+
+        private static SupplySystem _instance;
+
+        public static SupplySystem Instance => _instance ?? (_instance = new SupplySystem());
+
+        private SupplySystem()
+        {
+
+        }
         public bool ProcessDelivery(int orderId, string username, string address)
         {
             return ans;
