@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations.Model;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SadnaSrc.MarketFeed
 {
-    public interface IObserver
+    public interface IPublisher
     {
-        void Update();
-
+        IFeedQueue GetFeedQueue(int userId);
     }
 }

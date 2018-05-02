@@ -14,22 +14,36 @@ $(document).ready(function() {
         }
     }
 
+    function extractQuery(param1,param2) {
+        var queryValue = getParameterValues(param1);
+        if (queryValue === undefined) {
+            queryValue = getParameterValues(param2);
+        }
+        return queryValue;
+    }
+
     socket.connectionMethods.onConnected = () => {
         console.log('client has been connected!');
         socketId = socket.connectionId;
         console.log('your SocketId is : ' + socketId);
-        var systemId = getParameterValues('systemId');
-        if (systemId === undefined) {
-            systemId = getParameterValues('SystemId');
-        }
+        var systemId = extractQuery('systemId','SystemId');
         console.log('your systemId is : ' +systemId);
         if (systemId === undefined || systemId === 0) {
-            console.log('heloooooooooo');
             socket.invoke('EnterSystem', socketId);
-        } 
+        } else {
+            var status = extractQuery('status', 'Status');
+            console.log('your status is : ' + status);
+            if (status !== 'Guest') {
+                socket.invoke('SubscribeSocket', systemId, socketId);
+            }
+        }
     }
 
     socket.connectionMethods.onDisconnected = () => {
+        var status = extractQuery('status', 'Status');
+        if (status !== 'Guest') {
+            socket.invoke('UnSubscribeSocket', socketId);
+        }
     }
 
     socket.clientMethods['IdentifyClient'] = (userId) => {

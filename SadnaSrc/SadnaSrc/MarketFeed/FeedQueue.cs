@@ -7,7 +7,7 @@ using Castle.Core.Internal;
 
 namespace SadnaSrc.MarketFeed
 {
-    class FeedQueue : IFeedQueue
+    public class FeedQueue : IFeedQueue
     {
         private List<Notification> queue;
         private List<IObserver> observers;
@@ -38,7 +38,7 @@ namespace SadnaSrc.MarketFeed
         public void Notify()
         {
             RefreshQueue();
-            if (queue.IsNullOrEmpty())
+            if (queue.IsNullOrEmpty() || observers.IsNullOrEmpty())
             {
                 return;
 
@@ -65,13 +65,13 @@ namespace SadnaSrc.MarketFeed
         {
             _feedDL.SaveUnreadNotification(notification);
             queue.Add(notification);
-            Notify();
         }
 
         public Notification[] GetPendingFeeds()
         {
             return queue.ToArray();
         }
+
 
         private void RefreshQueue()
         {
@@ -86,5 +86,12 @@ namespace SadnaSrc.MarketFeed
 
             queue = freshFeed;
         }
+
+        public void CleanQueue()
+        {
+            queue.Clear();
+        }
+
+
     }
 }

@@ -25,16 +25,28 @@ namespace SadnaSrc.Main
         }
         public static void Log(string moduleName, string description)
         {
-            string logID = GenerateLogID();
-            InsertLog(logID,moduleName,description);
-            publishedLogsIDs.Add(logID);
+            string logId = GenerateLogID();
+            while (!InsertLog(logId, moduleName, description))
+            {
+                logId = GenerateLogID();
+            }
+
+            publishedLogsIDs.Add(logId);
         }
 
-        private static void InsertLog(string logID, string moduleName, string description)
+        private static bool InsertLog(string logID, string moduleName, string description)
         {
-            _dbConnection.InsertTable("System_Log", "LogID,Date,ModuleName,Description",
-                new[] { "@idValue", "@dateValue", "@moduleParam", "@descriptionParam" },
-                new object[] { logID, DateTime.Now, moduleName, description });
+            try
+            {
+                _dbConnection.InsertTable("System_Log", "LogID,Date,ModuleName,Description",
+                    new[] {"@idValue", "@dateValue", "@moduleParam", "@descriptionParam"},
+                    new object[] {logID, DateTime.Now, moduleName, description});
+                return true;
+            }
+            catch (MarketException)
+            {
+                return false;
+            }
         }
         public static void RemoveLogs()
         {

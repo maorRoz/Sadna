@@ -16,5 +16,7 @@ namespace SadnaSrc.MarketFeed
         void AddFeed(Notification notification);
 
         Notification[] GetPendingFeeds();
+
+        void CleanQueue();
     }
 }
