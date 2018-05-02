@@ -115,7 +115,12 @@ namespace SadnaSrc.OrderPool
         {
             _supplyService.CreateDelivery(order);
             _paymentService.ProccesPayment(order, CreditCard);
-            _storesSync.RemoveProducts(order.GetItems().ToArray());
+            var toRemoveItems = order.GetItems().ToArray();
+            foreach (var item in toRemoveItems)
+            {
+                publisher.NotifyClientBuy(item.Store,item.Name);
+            }
+            _storesSync.RemoveProducts(toRemoveItems);
             _orderDL.AddOrder(order);
         }
 

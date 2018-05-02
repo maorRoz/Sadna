@@ -56,6 +56,7 @@ namespace SadnaSrc.OrderPool
                 MarketLog.Log("OrderPool",
                     "User " + UserName + " successfully bought item " + itemName + "in an immediate sale.");
                 Answer = new OrderAnswer(OrderStatus.Success, "Successfully bought item " + itemName);
+                publisher.NotifyClientBuy(store, itemName);
                 return order;
 
             }
