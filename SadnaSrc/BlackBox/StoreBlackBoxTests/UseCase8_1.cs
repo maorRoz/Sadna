@@ -282,17 +282,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
-			_userBuyer?.CleanSession();
-            _userAdmin?.CleanSession();
-			_storeOwnerUserBridge.CleanSession();
-			_storeShoppingBridge.CleanSession();
-			_storeShoppingBridge2?.CleanSession();
-			_storeManagementBridge.CleanSession();
-			_storeManagementBridge2?.CleanSession();
-			_orderBridge?.CleanSession();
-			_userAdmin?.CleanSession();
-			_storeOwnerUserBridge.CleanMarket();
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+        }
 	}
 }

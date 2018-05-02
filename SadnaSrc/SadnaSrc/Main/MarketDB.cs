@@ -222,7 +222,7 @@ namespace SadnaSrc.Main
             var tableNames = new[]
             {
                 "System_Log",
-                "System_Error",
+                "System_Errors",
                 "User",
                 "Products",
                 "Discount",

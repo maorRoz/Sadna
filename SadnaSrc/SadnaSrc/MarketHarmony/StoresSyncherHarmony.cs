@@ -55,9 +55,5 @@ namespace SadnaSrc.MarketHarmony
             return _storeService.CalculateItemPriceWithDiscount(store, itemName, coupon, quantity);
         }
 
-        public void CleanSession()
-        {
-            orderSyncher.CleanSession();
-        }
     }
 }

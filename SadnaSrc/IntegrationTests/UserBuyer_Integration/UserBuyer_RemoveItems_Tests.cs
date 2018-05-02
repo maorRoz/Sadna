@@ -219,9 +219,7 @@ namespace IntegrationTests.UserBuyer_Integration
         [TestCleanup]
         public void UserOrderTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            orderServiceSession.CleanSession();
-            userBuyerHarmony.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

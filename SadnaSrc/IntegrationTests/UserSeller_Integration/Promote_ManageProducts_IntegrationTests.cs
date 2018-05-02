@@ -430,9 +430,7 @@ namespace IntegrationTests.UserSeller_Integration
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            userServiceSession2.CleanSession();
-            storeServiceSession.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

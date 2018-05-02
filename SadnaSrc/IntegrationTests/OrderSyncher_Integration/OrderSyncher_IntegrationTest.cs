@@ -58,8 +58,7 @@ namespace IntegrationTests.OrderSyncher_Integration
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            orderSyncherHarmony.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
     }

@@ -310,17 +310,9 @@ namespace BlackBox.StoreBlackBoxTests
         [TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_storeBridge.CleanSession();
-			_bridgeSignUp.CleanSession();
-			_userToPromoteBridge.CleanSession();
-			_userToPromoteBridge2.CleanSession();
-			_storeManager1.CleanSession();
-			_storeManager2?.CleanSession();
-			_signInBridge?.CleanSession();
-		    _adminBridge?.CleanSession();
-		    _guestBridge?.CleanSession();
-            _bridgeSignUp.CleanMarket();
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+        }
 
         /*
          * Private helper functions

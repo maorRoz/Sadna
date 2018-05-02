@@ -25,6 +25,5 @@ namespace BlackBox
 		MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue);
 		MarketAnswer RemoveDiscountFromProduct(string productName);
     MarketAnswer ViewStoreHistory();
-		void CleanSession();
 	}
 }

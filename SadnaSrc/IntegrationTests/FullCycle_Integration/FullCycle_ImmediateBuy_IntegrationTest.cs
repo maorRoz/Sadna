@@ -111,11 +111,7 @@ namespace IntegrationTests.FullCycle_Integration
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            userServiceSession2.CleanSession();
-            userServiceSession3.CleanSession();
-            orderServiceSession.CleanSession();
-            storeServiceSession.CleanSeesion();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

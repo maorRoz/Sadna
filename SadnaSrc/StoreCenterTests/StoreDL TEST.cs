@@ -351,30 +351,9 @@ namespace StoreCenterTests
         [TestCleanup]
         public void CleanDb()
         {
-            if (toDeleteTicket != null)
-            {
-                handler.RemoveLotteryTicket(toDeleteTicket);
-            }
-            if (toDeleteLottery != null)
-            {
-                handler.RemoveLottery(toDeleteLottery);
-            }
-            if (toDeleteDiscount != null)
-            {
-                handler.RemoveDiscount(toDeleteDiscount);
-            }
-            if (toDeleteProduct != null)
-            {
-                handler.RemoveProduct(toDeleteProduct);
-            }
-            if (toDeleteStockItem != null)
-            {
-                handler.RemoveStockListItem(toDeleteStockItem);
-            }
-            if (toDeleteStore != null)
-            {
-                handler.RemoveStore(toDeleteStore);
-            }
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
+
         }
     }
 }

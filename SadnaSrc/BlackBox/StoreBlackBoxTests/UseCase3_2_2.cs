@@ -204,14 +204,9 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_storeOwnerUserBridge.CleanSession();
-			_storeShoppingBridge.CleanSession();
-			_storeShoppingBridge2?.CleanSession();
-			_storeManagementBridge.CleanSession();
-			_storeManagementBridge2?.CleanSession();
-			_userBuyer?.CleanSession();
-			_storeOwnerUserBridge.CleanMarket();
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+        }
 
 
 	}

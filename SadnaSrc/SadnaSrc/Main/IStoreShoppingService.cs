@@ -18,7 +18,6 @@ namespace SadnaSrc.Main
 
         MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
-        void CleanSeesion();
     }
 
     public enum OpenStoreStatus

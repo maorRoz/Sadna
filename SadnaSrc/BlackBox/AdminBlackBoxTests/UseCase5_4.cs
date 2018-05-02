@@ -261,18 +261,10 @@ namespace BlackBox.AdminBlackBoxTests
 
 		public void UserTestCleanUp()
 		{
-			_adminSignInBridge.CleanSession();
-			_userBridge.CleanSession();
-			_userBridge2.CleanSession();
-			_storeShopping.CleanSession();
-			_storeShopping2.CleanSession();
-			_managerBridge.CleanSession();
-			_managerBridge2.CleanSession();
-			_orderBridge.CleanSession();
-			_orderBridge2.CleanSession();
-			_adminSignInBridge.CleanMarket();
-			
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+
+        }
 		
 
 	}

@@ -73,11 +73,5 @@ namespace SadnaSrc.UserSpot
         {
             MarketUser.Cart.AddToCart(product, store, quantity,unitPrice);
         }
-
-
-        public void CleanSession()
-        {
-            userDB.CleanSession();
-        }
 	}
 }

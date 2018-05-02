@@ -82,10 +82,5 @@ namespace BlackBox
             return _storeManagementService.CloseStore();
         }
 
-	    public void CleanSession()
-        {
-            _storeManagementService?.CleanSession();
-        }
-
     }
 }

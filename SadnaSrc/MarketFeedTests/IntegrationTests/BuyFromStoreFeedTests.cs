@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.MarketFeed;
 using Moq;
+using SadnaSrc.Main;
 
 namespace MarketFeedTests.IntegrationTests
 {
@@ -10,7 +11,7 @@ namespace MarketFeedTests.IntegrationTests
         [TestInitialize]
         public void IntegrationFeedTestsBuilder()
         {
-
+            MarketDB.Instance.InsertByForce();
         }
 
         [TestMethod]
@@ -59,6 +60,13 @@ namespace MarketFeedTests.IntegrationTests
         public void NoOwnersStoreClosedTest()
         {
 
+        }
+
+        [TestCleanup]
+        public void IntegrationFeedTestsCleanUp()
+        {
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
         }
 
     }

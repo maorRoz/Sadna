@@ -16,7 +16,6 @@ namespace BlackBox
 		void EnablePaymentSystem();
 
 	    void Cheat(int cheatCode);
-	    void CleanSession();
 
 
 	}

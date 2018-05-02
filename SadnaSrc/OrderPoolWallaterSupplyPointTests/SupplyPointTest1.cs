@@ -175,6 +175,7 @@ namespace OrderPoolWallaterSupplyPointTests
         public void UserTestCleanUp()
         {
 
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
     }

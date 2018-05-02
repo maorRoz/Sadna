@@ -199,8 +199,7 @@ namespace UserSpotTests.UseCaseUnitTest
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            userServiceSignUpSession?.CleanSession();
-            userServiceSignInSession.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

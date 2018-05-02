@@ -138,11 +138,8 @@ namespace BlackBox.StoreBlackBoxTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            _userBridge.CleanSession();
-            _userBridge2?.CleanSession();
-            _storeBridge.CleanSession();
-            _storeManage1.CleanSession();
-            _userBridge.CleanMarket();
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
         }
 
     }

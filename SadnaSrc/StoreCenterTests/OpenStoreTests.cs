@@ -75,11 +75,7 @@ namespace StoreCenterTests
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
-            if (toDeleteStore != null)
-            {
-                handler.RemoveStore(toDeleteStore);
-            }
-            userService.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
     }

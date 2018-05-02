@@ -151,13 +151,5 @@ namespace SadnaSrc.OrderPool
 
             return refund;
         }
-
-        public void CleanSession()
-        {
-            foreach (Order order in Orders)
-            {
-                _orderDL.RemoveOrder(order.GetOrderID());
-            }
-        }
     }
 }

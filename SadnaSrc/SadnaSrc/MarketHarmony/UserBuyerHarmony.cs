@@ -143,11 +143,6 @@ namespace SadnaSrc.MarketHarmony
                 ((RegisteredUser)_userService.MarketUser).CreditCard : null;
         }
 
-        public void CleanSession()
-        {
-            _userService.CleanSession();
-        }
-
         //only for unit tests of OrderPool(and not for Integration)
         public void LogInBuyer(string userName,string password)
         {

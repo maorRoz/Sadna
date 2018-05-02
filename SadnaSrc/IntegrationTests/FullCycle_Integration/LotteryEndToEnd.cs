@@ -110,10 +110,7 @@ namespace IntegrationTests.FullCycle_Integration
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
-            orderService.CleanSession();
-            userService.CleanSession();
-            managementService.CleanSession();
-            otherUser.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
     }

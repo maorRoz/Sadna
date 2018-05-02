@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
-    public class MarketLog
+    public static class MarketLog
     {
-        private static readonly List<string> publishedLogsIDs = new List<string>();
         private static readonly Random random = new Random();
         private static IMarketDB _dbConnection = MarketDB.Instance;
 
@@ -30,8 +29,6 @@ namespace SadnaSrc.Main
             {
                 logId = GenerateLogID();
             }
-
-            publishedLogsIDs.Add(logId);
         }
 
         private static bool InsertLog(string logID, string moduleName, string description)
@@ -47,14 +44,6 @@ namespace SadnaSrc.Main
             {
                 return false;
             }
-        }
-        public static void RemoveLogs()
-        {
-            foreach (var logID in publishedLogsIDs)
-            {
-                _dbConnection.DeleteFromTable("System_Log","LogID = '"+logID+"'");
-            }
-            publishedLogsIDs.Clear();
         }
     }
 }
