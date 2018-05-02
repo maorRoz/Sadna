@@ -51,12 +51,12 @@ namespace SadnaSrc.SupplyPoint
 
         public void BreakExternal()
         {
-            sock.fuckUp();
+            SupplySystem.FuckUp();
         }
 
         public void FixExternal()
         {
-            sock.fuckDown();
+            SupplySystem.FuckDown();
         }
     }
 }

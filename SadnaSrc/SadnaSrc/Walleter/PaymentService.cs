@@ -74,12 +74,12 @@ namespace SadnaSrc.Walleter
 
         public void BreakExternal()
         {
-            sock.fuckUp();
+            PaymentSystem.FuckUp();
         }
 
         public void FixExternal()
         {
-            sock.fuckDown();
+            PaymentSystem.FuckDown();
         }
     }
 }
