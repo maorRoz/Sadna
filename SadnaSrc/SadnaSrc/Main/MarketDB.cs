@@ -215,6 +215,38 @@ namespace SadnaSrc.Main
 
         }
 
+        public void InsertByForceClient() { }
+
+        public void CleanByForce()
+        {
+            var tableNames = new[]
+            {
+                "System_Log",
+                "System_Error",
+                "User",
+                "Products",
+                "Discount",
+                "Stock",
+                "LotteryTable",
+                "LotteryTicket",
+                "Store",
+                "StatePolicy",
+                "StoreManagerPolicy",
+                "CartItem",
+                "PurchaseHistory",
+                "Orders",
+                "OrderItem",
+                "Notifications"
+
+            };
+
+            for (int i = 0; i < tableNames.Length; i++)
+            {
+                var deleateTableCommand = new SQLiteCommand("Delete FROM " +tableNames[i], _dbConnection);
+                deleateTableCommand.ExecuteNonQuery();
+            }
+        }
+
 
         private static string CreateSystemLogTable()
         {
