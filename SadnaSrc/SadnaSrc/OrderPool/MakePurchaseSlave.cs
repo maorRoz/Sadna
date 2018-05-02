@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.Walleter;
@@ -16,11 +17,12 @@ namespace SadnaSrc.OrderPool
 
         protected readonly IUserBuyer _buyer;
         protected readonly IStoresSyncher _storesSync;
+        protected readonly IPublisher publisher;
 
         protected readonly SupplyService _supplyService;
         protected readonly PaymentService _paymentService;
 
-        public MakePurchaseSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL)
+        public MakePurchaseSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL,IPublisher publisher)
         {
             _buyer = buyer;
             _storesSync = storesSync;

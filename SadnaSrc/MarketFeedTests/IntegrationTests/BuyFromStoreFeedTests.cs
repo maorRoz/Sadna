@@ -8,9 +8,15 @@ namespace MarketFeedTests.IntegrationTests
 {
     public class BuyFromStoreFeedTests
     {
+
+        private Mock<IListener> serverMocker;
+        private int countMessagesToServer;
+
         [TestInitialize]
         public void IntegrationFeedTestsBuilder()
         {
+            countMessagesToServer = 0;
+            serverMocker.Setup(x => x.GetMessage(It.IsAny<string>(), It.IsAny<string>())).Callback(SendMessageToServer);
             MarketDB.Instance.InsertByForce();
         }
 
@@ -67,6 +73,11 @@ namespace MarketFeedTests.IntegrationTests
         {
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
+        }
+
+        private void SendMessageToServer()
+        {
+            countMessagesToServer++;
         }
 
     }

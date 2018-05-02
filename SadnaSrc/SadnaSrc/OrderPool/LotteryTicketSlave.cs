@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.Walleter;
@@ -16,8 +17,8 @@ namespace SadnaSrc.OrderPool
 
         public OrderAnswer Answer { get; private set; }
 
-        public LotteryTicketSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL) :
-            base(buyer, storesSync, orderDL){}
+        public LotteryTicketSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL,IPublisher publisher) :
+            base(buyer, storesSync, orderDL,publisher){}
 
         public Order BuyLotteryTicket(string itemName, string store, int quantity, double unitPrice, string UserName,
             string UserAddress, string CreditCard)
