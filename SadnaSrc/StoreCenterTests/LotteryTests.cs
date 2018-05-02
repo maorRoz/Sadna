@@ -15,7 +15,7 @@ namespace StoreCenterTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private ModuleGlobalHandler handler; // need to be here
+        private StoreSyncerImplementation handler; // need to be here
         IUserService userService;
 
         [TestInitialize]
@@ -23,7 +23,7 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = ModuleGlobalHandler.GetInstance();
+            handler = StoreSyncerImplementation.GetInstance();
             userService = market.GetUserService();
         }
         [TestMethod]

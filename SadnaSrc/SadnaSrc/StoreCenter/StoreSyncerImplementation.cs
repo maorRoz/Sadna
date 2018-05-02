@@ -1,67 +1,37 @@
 ﻿using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
-using SadnaSrc.StoreCenter;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class ModuleGlobalHandler : OutsideModuleService
+    public class StoreSyncerImplementation : OutsideModuleService
     {
-        static ModuleGlobalHandler instance;
+        static StoreSyncerImplementation instance;
         public I_StoreDL DataLayer { get; }
-        public static ModuleGlobalHandler GetInstance()
+        public static StoreSyncerImplementation GetInstance()
         {
             if (instance == null)
             {
-                instance = new ModuleGlobalHandler();
+                instance = new StoreSyncerImplementation();
                 return instance;
             }
             return instance;
         }
-        private ModuleGlobalHandler()
+        private StoreSyncerImplementation()
         {
             DataLayer = StoreDL.GetInstance();
         }
-
-        public void AddStore(Store temp)
-        {
-            DataLayer.AddStore(temp);
-        }
-
-        public string[] GetStoreInfo(string store)
-        {
-            return DataLayer.GetStoreInfo(store);
-        }
-
-        public string[] GetStoreStockInfo(string store)
-        {
-            return DataLayer.GetStoreStockInfo(store);
-        }
-
+        
         public StockListItem GetProductFromStore(string store, string productName)
         {
             CheckThatStoreExitst(store);
             CheckThatProductExitst(store, productName);
             return DataLayer.GetProductFromStore(store, productName);
         }
-        public bool IsProductNameAvailableInStore(string storeName, string productName)
-        {
-            Product P = DataLayer.getProductByNameFromStore(storeName, productName);
-            return (P == null);
-        }
-
-
-        /**
-         * next section is ID handlers
-         **/
-
 
         public LinkedList<Store> GetAllStores()
-        {
+        { 
             LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
             return AllStores;
         }
@@ -86,30 +56,16 @@ namespace SadnaSrc.StoreCenter
                 return sli.Quantity >= quantity;
             return false;
         }
-
-        private void CheckThatProductExitst(string storeName, string product)
+        
+      
+        public void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher, int cheatCode)
         {
-            Product P = DataLayer.getProductByNameFromStore(storeName, product);
-            if (P == null)
-            { throw new StoreException(StoreEnum.ProductNotFound, "product not exists in store"); }
+            LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
+            if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))
+            {
+                syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID(cheatCode));
+            }
         }
-
-        private void CheckThatStoreExitst(string storeName)
-        {
-            Store S = DataLayer.getStorebyName(storeName);
-            if (S==null)
-            { throw new StoreException(StoreEnum.StoreNotExists, "store not exists"); }
-        }
-
-        public Store GetStoreByID(int ID)
-        {
-            return GetStoreByID("S" + ID);
-        }
-        public Store GetStoreByID(string ID)
-        {
-            return DataLayer.GetStorebyID(ID);
-        }
-
         public double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity)
         {
             if (!DataLayer.IsStoreExistAndActive(storeName))
@@ -169,13 +125,24 @@ namespace SadnaSrc.StoreCenter
             return true;
         }
 
-        public void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher, int cheatCode)
+        
+        private bool IsProductNameAvailableInStore(string storeName, string productName)
         {
-            LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
-            if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))
-            {
-                syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID(cheatCode));
-            }
+            Product P = DataLayer.getProductByNameFromStore(storeName, productName);
+            return (P == null);
+        }
+        private void CheckThatProductExitst(string storeName, string product)
+        {
+            Product P = DataLayer.getProductByNameFromStore(storeName, product);
+            if (P == null)
+            { throw new StoreException(StoreEnum.ProductNotFound, "product not exists in store"); }
+        }
+
+        private void CheckThatStoreExitst(string storeName)
+        {
+            Store S = DataLayer.getStorebyName(storeName);
+            if (S == null)
+            { throw new StoreException(StoreEnum.StoreNotExists, "store not exists"); }
         }
     }
 }

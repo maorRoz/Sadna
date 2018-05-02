@@ -4,7 +4,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class EditDiscountSlave : AbstractSlave
+    internal class EditDiscountSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
 
@@ -47,7 +47,7 @@ namespace SadnaSrc.StoreCenter
                     discount = editDiscountPercentagesPrivateMehtod(discount, newValue, productName);
                 }
                 if (answer == null) { throw new StoreException(DiscountStatus.NoLegalAttrebute, "no leagal attrebute found"); }
-                global.EditDiscountInDatabase(discount);
+                DataLayerInstance.EditDiscountInDatabase(discount);
             }
             catch (StoreException exe)
             {
@@ -60,7 +60,7 @@ namespace SadnaSrc.StoreCenter
         }
         private Discount checkIfDiscountExistsPrivateMethod(string productName)
         {
-            StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+            StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
             MarketLog.Log("StoreCenter", " Product exists");
             MarketLog.Log("StoreCenter", "checking that the product has a discount");
             Discount discount = stockListItem.Discount;
@@ -143,7 +143,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "DiscountAmount is >= 100, cant make it presenteges");
                 throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100, cant make it presenteges");
             }
-            if ((!discount.Percentages) && (newintValue > global.getProductByNameFromStore(_storeName, productName).BasePrice))
+            if ((!discount.Percentages) && (newintValue > DataLayerInstance.getProductByNameFromStore(_storeName, productName).BasePrice))
             {
                 MarketLog.Log("StoreCenter", "discount amount is >= product price");
                 throw new StoreException(DiscountStatus.DiscountGreaterThenProductPrice, "DiscountAmount is > then product price");

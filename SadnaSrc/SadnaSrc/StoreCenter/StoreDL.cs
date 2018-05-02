@@ -168,7 +168,7 @@ namespace SadnaSrc.StoreCenter
 
         public LinkedList<LotteryTicket> getAllTickets(string systemID)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "*", "LotteryID = '" + systemID + "'"))
             {
@@ -198,7 +198,7 @@ namespace SadnaSrc.StoreCenter
         public StockListItem GetStockListItembyProductID(string product)
         {
             Product _product = GetProductID(product);
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             StockListItem stockListItem = null;
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "*", "ProductSystemID = '" + product + "'"))
             {
@@ -218,7 +218,7 @@ namespace SadnaSrc.StoreCenter
         {
             Discount discount = null;
 
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             using (var discountReader =
                 dbConnection.SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + DiscountCode + "'"))
             {
@@ -253,7 +253,7 @@ namespace SadnaSrc.StoreCenter
 
         public LotteryTicket GetLotteryTicket(string ticketID)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "*", "myID = '" + ticketID + "'"))
             {
                 while (dbReader.Read())
@@ -340,7 +340,7 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveStockListItem(StockListItem stockListItem)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
             {
                 LotterySaleManagmentTicket LSMT = GetLotteryByProductID(stockListItem.Product.SystemId);

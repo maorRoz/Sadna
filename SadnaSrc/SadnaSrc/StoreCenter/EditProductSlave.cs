@@ -4,7 +4,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class EditProductSlave : AbstractSlave
+    internal class EditProductSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
         
@@ -27,13 +27,13 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
-                Product product = global.getProductByNameFromStore(_storeName, productName);
+                Product product = DataLayerInstance.getProductByNameFromStore(_storeName, productName);
                 checkifProductExists(product);
                 checkIfEditName(whatToEdit, newValue, ref product);
                 checkIfEditPrice(whatToEdit, newValue, ref product);
                 checkIfEditDescription(whatToEdit, newValue, ref product);
                 checkIfNoLegalFound();
-                global.EditProductInDatabase(product);
+                DataLayerInstance.EditProductInDatabase(product);
             }
             catch (StoreException exe)
             {
@@ -85,7 +85,7 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("StoreCenter", "edit name");
                 MarketLog.Log("StoreCenter", "checking if new new is avaliabe");
-                Product P = global.getProductByNameFromStore(_storeName, product.Name);
+                Product P = DataLayerInstance.getProductByNameFromStore(_storeName, product.Name);
                 if (P == null)
                 {
                     MarketLog.Log("StoreCenter", "name exists in shop");
@@ -98,7 +98,7 @@ namespace SadnaSrc.StoreCenter
         }
         private void checkIfProductNameAvailable(string name)
         {
-            Product P = global.getProductByNameFromStore(_storeName, name);
+            Product P = DataLayerInstance.getProductByNameFromStore(_storeName, name);
             if (P != null)
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }

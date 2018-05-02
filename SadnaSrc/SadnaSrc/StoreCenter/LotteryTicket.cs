@@ -15,8 +15,20 @@ namespace SadnaSrc.StoreCenter
         public string myID { get; set; }
         public LotteryTicketStatus myStatus { get; set; }
         public int UserID { get; set; }
+        
 
         public double Cost { get; set; }
+        private static int globalLotteryTicketID = FindMaxLotteryTicketId();
+        public LotteryTicket(string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
+        {
+            LotteryNumber = _LotteryNumber;
+            myID = GetLotteryTicketID();
+            IntervalStart = _IntervalStart;
+            IntervalEnd = _IntervalEnd;
+            Cost = cost;
+            myStatus = LotteryTicketStatus.Waiting;
+            UserID = _userID;
+        }
         public LotteryTicket(string _myID, string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
         {
             LotteryNumber = _LotteryNumber;
@@ -55,7 +67,7 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(LotteryTicket obj)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             return (obj.IntervalStart == IntervalStart &&
                     obj.IntervalEnd == IntervalEnd &&
                     obj.LotteryNumber == LotteryNumber &&
@@ -95,7 +107,7 @@ namespace SadnaSrc.StoreCenter
         }
         public string[] GetTicketStringValues()
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             return new[]
             {
                 "'" + myID + "'",
@@ -106,6 +118,27 @@ namespace SadnaSrc.StoreCenter
                 "'" + EnumStringConverter.PrintEnum(myStatus) + "'",
                 "'" + UserID + "'"
             };
+        }
+        private static string GetLotteryTicketID()
+        {
+            globalLotteryTicketID++;
+            return "T" + globalLotteryTicketID;
+        }
+        private static int FindMaxLotteryTicketId()
+        {
+            StoreDL DL = StoreDL.GetInstance();
+            LinkedList<string> list = DL.getAllLotteryTicketIDs();
+            int max = -5;
+            int temp = 0;
+            foreach (string s in list)
+            {
+                temp = Int32.Parse(s.Substring(1));
+                if (temp > max)
+                {
+                    max = temp;
+                }
+            }
+            return max;
         }
     }
 }

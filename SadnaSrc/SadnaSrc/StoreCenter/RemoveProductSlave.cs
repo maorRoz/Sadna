@@ -4,7 +4,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class RemoveProductSlave :AbstractSlave
+    internal class RemoveProductSlave :AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
         IOrderSyncher syncher;
@@ -26,12 +26,12 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
-                Product product = global.getProductByNameFromStore(_storeName, productName);
+                Product product = DataLayerInstance.getProductByNameFromStore(_storeName, productName);
                 checkifProductExists(product);
                 MarketLog.Log("StoreCenter", "product exists");
-                StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+                StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
                 handleIfLottery(stockListItem);
-                global.RemoveStockListItem(stockListItem);
+                DataLayerInstance.RemoveStockListItem(stockListItem);
                 answer = new StoreAnswer(StoreEnum.Success, "product removed");
             }
             catch (StoreException exe)
@@ -49,9 +49,9 @@ namespace SadnaSrc.StoreCenter
         {
             if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
             {
-                LotterySaleManagmentTicket LotteryManagment = global.GetLotteryByProductID(stockListItem.Product.SystemId);
+                LotterySaleManagmentTicket LotteryManagment = DataLayerInstance.GetLotteryByProductID(stockListItem.Product.SystemId);
                 LotteryManagment.InformCancel(syncher);
-                global.RemoveLottery(LotteryManagment);
+                DataLayerInstance.RemoveLottery(LotteryManagment);
             }
         }
 

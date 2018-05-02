@@ -17,7 +17,7 @@ namespace IntegrationTests.OrderSyncher_Integration
     {
         private IUserService userServiceSession;
         private OrderService orderServiceSession;
-        private ModuleGlobalHandler storeServiceSession;
+        private StoreSyncerImplementation storeServiceSession;
         private OrderSyncherHarmony orderSyncherHarmony;
 
         private MarketYard marketSession;
@@ -34,7 +34,7 @@ namespace IntegrationTests.OrderSyncher_Integration
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
             orderServiceSession = (OrderService)marketSession.GetOrderService(ref userServiceSession);
-            storeServiceSession = ModuleGlobalHandler.GetInstance();
+            storeServiceSession = StoreSyncerImplementation.GetInstance();
             orderSyncherHarmony = new OrderSyncherHarmony();
         }
 

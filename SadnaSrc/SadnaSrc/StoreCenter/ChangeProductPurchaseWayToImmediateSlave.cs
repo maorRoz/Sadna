@@ -4,7 +4,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ChangeProductPurchaseWayToImmediateSlave : AbstractSlave
+    internal class ChangeProductPurchaseWayToImmediateSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
         private IOrderSyncher syncher;
@@ -24,12 +24,12 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if has premmision to edit product purches type");
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", "check if product exists");
-                checkifProductExists(global.getProductByNameFromStore(_storeName, productName));
+                checkifProductExists(DataLayerInstance.getProductByNameFromStore(_storeName, productName));
                 MarketLog.Log("StoreCenter", "product exists");
-                StockListItem stockList = global.GetProductFromStore(_storeName, productName);
+                StockListItem stockList = DataLayerInstance.GetProductFromStore(_storeName, productName);
                 doIfLottery(stockList);
                 stockList.PurchaseWay = PurchaseEnum.Immediate;
-                global.EditStockInDatabase(stockList);
+                DataLayerInstance.EditStockInDatabase(stockList);
                 answer = new StoreAnswer(StoreEnum.Success, "purches way changed");
             }
             catch (StoreException exe)
@@ -46,9 +46,9 @@ namespace SadnaSrc.StoreCenter
         {
             if (stockList.PurchaseWay == PurchaseEnum.Lottery)
             {
-                LotterySaleManagmentTicket lottery = global.GetLotteryByProductID(stockList.Product.SystemId);
+                LotterySaleManagmentTicket lottery = DataLayerInstance.GetLotteryByProductID(stockList.Product.SystemId);
                 lottery.InformCancel(syncher);
-                global.EditLotteryInDatabase(lottery);
+                DataLayerInstance.EditLotteryInDatabase(lottery);
 
             }
         }

@@ -20,14 +20,13 @@ namespace SadnaSrc.StoreCenter
         }
         public Store OpenStore(string storeName, string address)
         {
-            All_ID_Manager manager = All_ID_Manager.GetInstance();
             try
             {
                 MarketLog.Log("StoreCenter", "trying to add new store");
                 _shopper.ValidateRegistered();
                 MarketLog.Log("StoreCenter", "premission gained");
                 checkIfNameAvailable(storeName);
-                Store newStore = new Store(manager.GetNextStoreId(), storeName, address);
+                Store newStore = new Store(storeName, address);
                 storeLogic.AddStore(newStore);
                 MarketLog.Log("StoreCenter", "store was opened");
                 _shopper.AddOwnership(storeName);

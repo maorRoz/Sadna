@@ -4,14 +4,12 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ChangeProductPurchaseWayToLotterySlave : AbstractSlave
+    internal class ChangeProductPurchaseWayToLotterySlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
-        private All_ID_Manager manager;
 
         public ChangeProductPurchaseWayToLotterySlave(string storeName, IUserSeller storeManager) : base (storeName,storeManager)
         {
-            manager = All_ID_Manager.GetInstance();
         }
 
         internal void ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate)
@@ -24,17 +22,17 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", "check if product exists");
-                checkifProductExists(global.getProductByNameFromStore(_storeName, productName));
+                checkifProductExists(DataLayerInstance.getProductByNameFromStore(_storeName, productName));
                 MarketLog.Log("StoreCenter", "product exists");
-                StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+                StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
                 checkIfAlreadyLottery(stockListItem);
                 MarketLog.Log("StoreCenter", "check if dates are OK");
                 checkIfDatesAreOK(startDate, endDate);
                 stockListItem.PurchaseWay = PurchaseEnum.Lottery;
-                global.EditStockInDatabase(stockListItem);
-                LotterySaleManagmentTicket lotterySaleManagmentTicket = new LotterySaleManagmentTicket(manager.GetLottyerID(),
+                DataLayerInstance.EditStockInDatabase(stockListItem);
+                LotterySaleManagmentTicket lotterySaleManagmentTicket = new LotterySaleManagmentTicket(
                     _storeName, stockListItem.Product, startDate, endDate);
-                global.AddLottery(lotterySaleManagmentTicket);
+                DataLayerInstance.AddLottery(lotterySaleManagmentTicket);
 
                 answer = new StoreAnswer(ChangeToLotteryEnum.Success, "type changed");
             }

@@ -15,14 +15,14 @@ namespace StoreCenterTests
     {
         private MarketYard market;
         public Store toDeleteStore;
-        private ModuleGlobalHandler handler; //Need to be here
+        private StoreSyncerImplementation handler; //Need to be here
         IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = ModuleGlobalHandler.GetInstance();
+            handler = StoreSyncerImplementation.GetInstance();
             userService = market.GetUserService();
         }
         [TestMethod]

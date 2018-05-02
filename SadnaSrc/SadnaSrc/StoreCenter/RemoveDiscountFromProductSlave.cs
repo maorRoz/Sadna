@@ -4,7 +4,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class RemoveDiscountFromProductSlave : AbstractSlave
+    internal class RemoveDiscountFromProductSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
 
@@ -22,13 +22,13 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
                 _storeManager.CanDeclareDiscountPolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
-                Product P = global.getProductByNameFromStore(_storeName, productName);
+                Product P = DataLayerInstance.getProductByNameFromStore(_storeName, productName);
                 checkifProductExists(P);
                 Discount D = checkIfDiscountExistsPrivateMethod(productName);
-                StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+                StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
                 stockListItem.Discount = null;
-                global.RemoveDiscount(D);
-                global.EditStockInDatabase(stockListItem);
+                DataLayerInstance.RemoveDiscount(D);
+                DataLayerInstance.EditStockInDatabase(stockListItem);
                 MarketLog.Log("StoreCenter", "discount removed successfully");
                 answer = new StoreAnswer(DiscountStatus.Success, "discount removed successfully");
             }
@@ -43,7 +43,7 @@ namespace SadnaSrc.StoreCenter
         }
         private Discount checkIfDiscountExistsPrivateMethod(string productName)
         {
-            StockListItem stockListItem = global.GetProductFromStore(_storeName, productName);
+            StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
             MarketLog.Log("StoreCenter", " Product exists");
             MarketLog.Log("StoreCenter", "checking that the product has a discount");
             Discount discount = stockListItem.Discount;

@@ -13,7 +13,7 @@ namespace SadnaSrc.StoreCenter
     {
 
         public Store store;
-        ModuleGlobalHandler global;
+        StoreSyncerImplementation global;
         private IUserSeller _storeManager;
         public string _storeName;
         private IOrderSyncher syncher;
@@ -24,7 +24,7 @@ namespace SadnaSrc.StoreCenter
         {
             _storeManager = storeManager;
             _storeName = storeName;
-            global = ModuleGlobalHandler.GetInstance();
+            global = StoreSyncerImplementation.GetInstance();
             store = global.DataLayer.getStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();

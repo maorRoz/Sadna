@@ -4,14 +4,14 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class CloseStoreSlave : AbstractSlave
+    internal class CloseStoreSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
         public Store store;
         public CloseStoreSlave(IUserSeller storeManager, ref string _storeName) : base(_storeName, storeManager)
         {
-            store = global.getStorebyName(_storeName);
-            global = StoreDL.GetInstance();
+            store = DataLayerInstance.getStorebyName(_storeName);
+            DataLayerInstance = StoreDL.GetInstance();
         }
 
         internal void closeStore()

@@ -33,7 +33,7 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(StockListItem obj)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             return (SystemId.Equals(obj.SystemId)) &&
                 (Quantity == obj.Quantity) &&
                 (Product.SystemId == obj.Product.SystemId) &&

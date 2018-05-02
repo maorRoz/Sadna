@@ -16,7 +16,7 @@ namespace SadnaSrc.MarketHarmony
         private IOrderSyncher orderSyncher;
         public StoresSyncherHarmony()
         {
-            _storeService = ModuleGlobalHandler.GetInstance();
+            _storeService = StoreSyncerImplementation.GetInstance();
             orderSyncher = new OrderSyncherHarmony();
         }
 
@@ -30,7 +30,7 @@ namespace SadnaSrc.MarketHarmony
 
         public void UpdateLottery(string itemName, string store,double moenyPayed, string username,int cheatCode)
         {
-            ModuleGlobalHandler globalHandler = ModuleGlobalHandler.GetInstance();
+            StoreSyncerImplementation globalHandler = StoreSyncerImplementation.GetInstance();
             globalHandler.updateLottery(store, itemName, moenyPayed, username, orderSyncher,cheatCode);
         }
 

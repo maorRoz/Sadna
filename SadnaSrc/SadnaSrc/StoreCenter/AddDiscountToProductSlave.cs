@@ -4,13 +4,11 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddDiscountToProductSlave : AbstractSlave
+    internal class AddDiscountToProductSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
-        private All_ID_Manager ID_Manager;
         public AddDiscountToProductSlave(string storeName, IUserSeller storeManager) :base(storeName,storeManager)
         {
-            ID_Manager = All_ID_Manager.GetInstance();
         }
 
         internal Discount AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
@@ -25,23 +23,22 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanDeclareDiscountPolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
-                Product product = global.getProductByNameFromStore(_storeName, productName);
+                Product product = DataLayerInstance.getProductByNameFromStore(_storeName, productName);
                 checkifProductExistsDiscount(product);
                 MarketLog.Log("StoreCenter", "check if dates are OK");
                 checkIfDatesOK(startDate,endDate);
                 MarketLog.Log("StoreCenter", "check that discount amount is OK");
                 checkPresentegesAndAmountOK(discountAmount, presenteges, product);
-                StockListItem stockListItem = global.GetProductFromStore(_storeName, product.Name);
+                StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, product.Name);
                 MarketLog.Log("StoreCenter", "check that the product don't have another discount");
                 checkHasNoExistsDiscount(stockListItem);
-                string dicoundCode = ID_Manager.GetDiscountCode();
-                Discount discount = new Discount(dicoundCode, EnumStringConverter.GetdiscountTypeEnumString(discountType), startDate,
+                Discount discount = new Discount(EnumStringConverter.GetdiscountTypeEnumString(discountType), startDate,
                     endDate, discountAmount, presenteges);
                 stockListItem.Discount = discount;
-                global.AddDiscount(discount);
-                global.EditStockInDatabase(stockListItem);
+                DataLayerInstance.AddDiscount(discount);
+                DataLayerInstance.EditStockInDatabase(stockListItem);
                 MarketLog.Log("StoreCenter", "discount added successfully");
-                string[] coupon = { dicoundCode };
+                string[] coupon = { discount.discountCode};
                 answer = new StoreAnswer(DiscountStatus.Success, "discount added successfully", coupon);
                 return discount;
             }
@@ -58,7 +55,7 @@ namespace SadnaSrc.StoreCenter
         }
         protected void checkIfStoreExistsAndActiveDiscount()
         {
-            if (!global.IsStoreExistAndActive(_storeName))
+            if (!DataLayerInstance.IsStoreExistAndActive(_storeName))
             { throw new StoreException(DiscountStatus.NoStore, "store not exists or active"); }
         }
         protected void checkifProductExistsDiscount(Product product)

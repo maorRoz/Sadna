@@ -4,7 +4,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class PromoteToStoreManagerSlave : AbstractSlave
+    internal class PromoteToStoreManagerSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
         public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName) : base(storeName,storeManager)

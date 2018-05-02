@@ -11,12 +11,12 @@ namespace SadnaSrc.StoreCenter
     public class StoreShoppingService : IStoreShoppingService
     {
         private IUserShopper _shopper;
-        private readonly ModuleGlobalHandler storeLogic;
+        private readonly StoreSyncerImplementation storeLogic;
         private LinkedList<Store> stores;
         public StoreShoppingService(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = ModuleGlobalHandler.GetInstance();
+            storeLogic = StoreSyncerImplementation.GetInstance();
             stores = new LinkedList<Store>();
         }
         public void LoginShoper(string userName, string password)

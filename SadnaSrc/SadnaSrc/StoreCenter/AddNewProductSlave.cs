@@ -4,15 +4,13 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddNewProductSlave : AbstractSlave
+    internal class AddNewProductSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
         private Store _store;
-        private All_ID_Manager manager;
         public AddNewProductSlave(IUserSeller storeManager, string _StoreName) : base(_StoreName, storeManager)
         {
-            _store = global.getStorebyName(_storeName);
-            manager = All_ID_Manager.GetInstance();
+            _store = DataLayerInstance.getStorebyName(_storeName);
         }
 
         internal StockListItem AddNewProduct(string _name, double _price, string _description, int quantity)
@@ -34,9 +32,9 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " checking that quanitity is positive");
                 _checkQuantityIsOK(quantity);
                 MarketLog.Log("StoreCenter", " quanitity is positive");
-                Product product = new Product(manager.GetProductID(), _name, _price, _description);
+                Product product = new Product(_name, _price, _description);
                 StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, _store.SystemId);
-                global.AddStockListItemToDataBase(stockListItem);
+                DataLayerInstance.AddStockListItemToDataBase(stockListItem);
                 MarketLog.Log("StoreCenter", "product added");
                 answer = new StoreAnswer(StoreEnum.Success, "product added");
                 return stockListItem;
@@ -56,7 +54,7 @@ namespace SadnaSrc.StoreCenter
 
         private void checkIfProductNameAvailable(string name)
         {
-            Product P = global.getProductByNameFromStore(_storeName, name);
+            Product P = DataLayerInstance.getProductByNameFromStore(_storeName, name);
             if (P != null)
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }

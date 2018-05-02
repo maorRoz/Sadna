@@ -18,7 +18,19 @@ namespace SadnaSrc.StoreCenter
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
         public bool IsActive { get; set; }
+        private static int globalLotteryID = FindMaxLotteryId();
 
+        public LotterySaleManagmentTicket(string _storeName, Product _original, DateTime _StartDate, DateTime _EndDate)
+        {
+            SystemID = GetLottyerID() ;
+            Original = _original;
+            ProductNormalPrice = _original.BasePrice;
+            TotalMoneyPayed = 0;
+            StartDate = _StartDate;
+            EndDate = _EndDate;
+            storeName = _storeName;
+            IsActive = true;
+        }
         public LotterySaleManagmentTicket(string _SystemID, string _storeName, Product _original, DateTime _StartDate, DateTime _EndDate)
         {
             SystemID = _SystemID;
@@ -49,9 +61,8 @@ namespace SadnaSrc.StoreCenter
         }
         public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
         {
-            All_ID_Manager manager = All_ID_Manager.GetInstance();
             StoreDL handler = StoreDL.GetInstance();
-            LotteryTicket lottery = new LotteryTicket(manager.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
+            LotteryTicket lottery = new LotteryTicket(SystemID, (int)TotalMoneyPayed,
                (int)(TotalMoneyPayed + moneyPayed), moneyPayed, userID);
             handler.AddLotteryTicket(lottery);
             TotalMoneyPayed += moneyPayed;
@@ -191,6 +202,27 @@ namespace SadnaSrc.StoreCenter
                 EndDate,
                 IsActive
             };
+        }
+        private static string GetLottyerID()
+        {
+            globalLotteryID++;
+            return "L" + globalLotteryID;
+        }
+        private static int FindMaxLotteryId()
+        {
+            StoreDL DL = StoreDL.GetInstance();
+            LinkedList<string> list = DL.getAllLotteryManagmentIDs();
+            int max = -5;
+            int temp = 0;
+            foreach (string s in list)
+            {
+                temp = Int32.Parse(s.Substring(1));
+                if (temp > max)
+                {
+                    max = temp;
+                }
+            }
+            return max;
         }
     }
 }

@@ -4,14 +4,14 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ViewStoreHistorySlave : AbstractSlave
+    internal class ViewStoreHistorySlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
         private Store store;
         
         public ViewStoreHistorySlave(string _store, IUserSeller storeManager) :base (_store, storeManager)
         {
-            store = global.getStorebyName(_store);
+            store = DataLayerInstance.getStorebyName(_store);
         }
 
         internal void ViewStoreHistory()
@@ -19,9 +19,9 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store purchase history...");
             try
             {
-                global.IsStoreExistAndActive(_storeName);
+                DataLayerInstance.IsStoreExistAndActive(_storeName);
                 _storeManager.CanViewPurchaseHistory();
-                var historyReport = global.GetHistory(store);
+                var historyReport = DataLayerInstance.GetHistory(store);
                 answer =  new StoreAnswer(ViewStorePurchaseHistoryStatus.Success, "View purchase history has been successful!", historyReport);
             }
             catch (StoreException e)
