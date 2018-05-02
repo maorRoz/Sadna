@@ -24,10 +24,10 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if has premmision to edit product purches type");
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", "check if product exists");
-                checkifProductExists(DataLayerInstance.getProductByNameFromStore(_storeName, productName));
+                checkifProductExists(DataLayerInstance.GetProductByNameFromStore(_storeName, productName));
                 MarketLog.Log("StoreCenter", "product exists");
                 StockListItem stockList = DataLayerInstance.GetProductFromStore(_storeName, productName);
-                doIfLottery(stockList);
+                ValidateLottery(stockList);
                 stockList.PurchaseWay = PurchaseEnum.Immediate;
                 DataLayerInstance.EditStockInDatabase(stockList);
                 answer = new StoreAnswer(StoreEnum.Success, "purches way changed");
@@ -42,7 +42,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void doIfLottery(StockListItem stockList)
+        private void ValidateLottery(StockListItem stockList)
         {
             if (stockList.PurchaseWay == PurchaseEnum.Lottery)
             {

@@ -30,8 +30,8 @@ namespace SadnaSrc.MarketHarmony
 
         public void UpdateLottery(string itemName, string store,double moenyPayed, string username,int cheatCode)
         {
-            StoreSyncerImplementation globalHandler = StoreSyncerImplementation.GetInstance();
-            globalHandler.updateLottery(store, itemName, moenyPayed, username, orderSyncher,cheatCode);
+            StoreSyncerImplementation syncher = StoreSyncerImplementation.GetInstance();
+            syncher.UpdateLottery(store, itemName, moenyPayed, username, orderSyncher,cheatCode);
         }
 
 

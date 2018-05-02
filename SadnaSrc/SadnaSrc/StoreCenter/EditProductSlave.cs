@@ -27,12 +27,12 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
-                Product product = DataLayerInstance.getProductByNameFromStore(_storeName, productName);
+                Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
                 checkifProductExists(product);
-                checkIfEditName(whatToEdit, newValue, ref product);
-                checkIfEditPrice(whatToEdit, newValue, ref product);
-                checkIfEditDescription(whatToEdit, newValue, ref product);
-                checkIfNoLegalFound();
+                CheckIfEditName(whatToEdit, newValue, ref product);
+                CheckIfEditPrice(whatToEdit, newValue, ref product);
+                CheckIfEditDescription(whatToEdit, newValue, ref product);
+                CheckIfNoLegalFound();
                 DataLayerInstance.EditProductInDatabase(product);
             }
             catch (StoreException exe)
@@ -46,7 +46,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfNoLegalFound()
+        private void CheckIfNoLegalFound()
         {
             if (answer == null)
             {
@@ -55,7 +55,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfEditDescription(string whatToEdit, string newValue, ref Product product)
+        private void CheckIfEditDescription(string whatToEdit, string newValue, ref Product product)
         {
             if (whatToEdit == "Description" || whatToEdit == "desccription")
             {
@@ -65,7 +65,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfEditPrice(string whatToEdit, string newValue, ref Product product)
+        private void CheckIfEditPrice(string whatToEdit, string newValue, ref Product product)
         {
             if (whatToEdit == "BasePrice" || whatToEdit == "basePrice" || whatToEdit == "Baseprice" || whatToEdit == "baseprice")
             {
@@ -79,26 +79,26 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfEditName(string whatToEdit, string newValue, ref Product product)
+        private void CheckIfEditName(string whatToEdit, string newValue, ref Product product)
         {
             if (whatToEdit == "Name" || whatToEdit == "name")
             {
                 MarketLog.Log("StoreCenter", "edit name");
                 MarketLog.Log("StoreCenter", "checking if new new is avaliabe");
-                Product P = DataLayerInstance.getProductByNameFromStore(_storeName, product.Name);
+                Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, product.Name);
                 if (P == null)
                 {
                     MarketLog.Log("StoreCenter", "name exists in shop");
                     throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
                 }
-                checkIfProductNameAvailable(newValue);
+                CheckIfProductNameAvailable(newValue);
                 answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
                 product.Name = newValue;
             }
         }
-        private void checkIfProductNameAvailable(string name)
+        private void CheckIfProductNameAvailable(string name)
         {
-            Product P = DataLayerInstance.getProductByNameFromStore(_storeName, name);
+            Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
             if (P != null)
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }

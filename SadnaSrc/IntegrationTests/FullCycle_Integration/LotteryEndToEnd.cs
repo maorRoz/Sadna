@@ -49,7 +49,7 @@ namespace IntegrationTests.FullCycle_Integration
             orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             orderService.BuyLotteryTicket("name", "T", 1, 50);
-            tickets = handler.getAllTickets("L100");
+            tickets = handler.GetAllTickets("L100");
             Assert.AreEqual(1, tickets.Count);
             LotteryTicket ticket = tickets.First();
             Assert.AreEqual(LotteryTicketStatus.Waiting, ticket.myStatus);
@@ -60,7 +60,7 @@ namespace IntegrationTests.FullCycle_Integration
             orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             orderService.BuyLotteryTicket("name", "T", 1, 100);
-            tickets = handler.getAllTickets("L100");
+            tickets = handler.GetAllTickets("L100");
             Assert.AreEqual(1, tickets.Count);
             LotteryTicket ticket = tickets.First();
             Assert.AreEqual(LotteryTicketStatus.Winning, ticket.myStatus);
@@ -72,12 +72,12 @@ namespace IntegrationTests.FullCycle_Integration
             orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             orderService.BuyLotteryTicket("name", "T", 1, 50);
-            tickets = handler.getAllTickets("L100");
+            tickets = handler.GetAllTickets("L100");
             Assert.AreEqual(1, tickets.Count);
             LotteryTicket ticket = tickets.First();
             Assert.AreEqual(LotteryTicketStatus.Waiting, ticket.myStatus);
             managementService.ChangeProductPurchaseWayToImmediate("name");
-            LinkedList<LotteryTicket> noLotterys = handler.getAllTickets("L100");
+            LinkedList<LotteryTicket> noLotterys = handler.GetAllTickets("L100");
             Assert.AreEqual(0, noLotterys.Count);
             
         }

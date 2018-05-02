@@ -17,18 +17,18 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
-                checkIfStoreExistsAndActiveDiscount();
+                CheckIfStoreExistsAndActiveDiscount();
                 MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
                 _storeManager.CanDeclareDiscountPolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
-                Product product = DataLayerInstance.getProductByNameFromStore(_storeName, productName);
-                checkifProductExistsDiscount(product);
+                Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
+                CheckifProductExistsDiscount(product);
                 MarketLog.Log("StoreCenter", "check if dates are OK");
-                checkIfDatesOK(startDate,endDate);
+                CheckIfDatesOK(startDate,endDate);
                 MarketLog.Log("StoreCenter", "check that discount amount is OK");
-                checkPresentegesAndAmountOK(discountAmount, presenteges, product);
+                CheckPresentegesAndAmountOK(discountAmount, presenteges, product);
                 StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, product.Name);
                 MarketLog.Log("StoreCenter", "check that the product don't have another discount");
                 checkHasNoExistsDiscount(stockListItem);
@@ -53,12 +53,12 @@ namespace SadnaSrc.StoreCenter
                 return null;
             }
         }
-        protected void checkIfStoreExistsAndActiveDiscount()
+        private void CheckIfStoreExistsAndActiveDiscount()
         {
             if (!DataLayerInstance.IsStoreExistAndActive(_storeName))
             { throw new StoreException(DiscountStatus.NoStore, "store not exists or active"); }
         }
-        protected void checkifProductExistsDiscount(Product product)
+        private void CheckifProductExistsDiscount(Product product)
         {
             if (product == null)
             {
@@ -76,7 +76,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkPresentegesAndAmountOK(int discountAmount, bool presenteges, Product product)
+        private void CheckPresentegesAndAmountOK(int discountAmount, bool presenteges, Product product)
         {
             if (presenteges && (discountAmount >= 100))
             {
@@ -95,7 +95,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfDatesOK(DateTime startDate, DateTime endDate)
+        private void CheckIfDatesOK(DateTime startDate, DateTime endDate)
         {
             if ((startDate < MarketYard.MarketDate) || !(startDate < endDate))
             {

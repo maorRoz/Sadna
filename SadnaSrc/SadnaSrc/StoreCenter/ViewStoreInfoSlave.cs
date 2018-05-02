@@ -24,7 +24,7 @@ namespace SadnaSrc.StoreCenter
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "premission gained");
                 string[] storeInfo = storeLogic.GetStoreInfo(store);
-                checkIfStoreInfoIsNotNull(storeInfo);
+                CheckIfStoreInfoIsNotNull(storeInfo);
                 MarketLog.Log("StoreCenter", "info gained");
                 answer = new StoreAnswer(ViewStoreStatus.Success, "Store info has been successfully granted!", storeInfo);
             }
@@ -41,7 +41,7 @@ namespace SadnaSrc.StoreCenter
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             } 
         }
-        private void checkIfStoreInfoIsNotNull(object item)
+        private void CheckIfStoreInfoIsNotNull(object item)
         {
             if (item == null)
             { throw new StoreException(ViewStoreStatus.NoStore, "No store found"); }

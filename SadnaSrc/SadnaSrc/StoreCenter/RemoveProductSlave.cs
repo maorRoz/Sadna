@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     internal class RemoveProductSlave :AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        internal MarketAnswer Answer;
         IOrderSyncher syncher;
 
         public RemoveProductSlave(ref IOrderSyncher _syncher, string name, IUserSeller manager) : base(name, manager)
@@ -26,32 +26,32 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
-                Product product = DataLayerInstance.getProductByNameFromStore(_storeName, productName);
+                Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
                 checkifProductExists(product);
                 MarketLog.Log("StoreCenter", "product exists");
                 StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
-                handleIfLottery(stockListItem);
+                HandleIfLottery(stockListItem);
                 DataLayerInstance.RemoveStockListItem(stockListItem);
-                answer = new StoreAnswer(StoreEnum.Success, "product removed");
+                Answer = new StoreAnswer(StoreEnum.Success, "product removed");
             }
             catch (StoreException exe)
             {
-                answer = new StoreAnswer(exe);
+                Answer = new StoreAnswer(exe);
             }
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
 
-        private void handleIfLottery(StockListItem stockListItem)
+        private void HandleIfLottery(StockListItem stockListItem)
         {
             if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
             {
-                LotterySaleManagmentTicket LotteryManagment = DataLayerInstance.GetLotteryByProductID(stockListItem.Product.SystemId);
-                LotteryManagment.InformCancel(syncher);
-                DataLayerInstance.RemoveLottery(LotteryManagment);
+                LotterySaleManagmentTicket lotteryManagment = DataLayerInstance.GetLotteryByProductID(stockListItem.Product.SystemId);
+                lotteryManagment.InformCancel(syncher);
+                DataLayerInstance.RemoveLottery(lotteryManagment);
             }
         }
 

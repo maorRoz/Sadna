@@ -12,7 +12,7 @@ namespace SadnaSrc.StoreCenter
         protected string _storeName;
         protected I_StoreDL DataLayerInstance;
         protected IUserSeller _storeManager;
-        public AbstractStoreCenterSlave(string storeName, IUserSeller storeManager)
+        protected AbstractStoreCenterSlave(string storeName, IUserSeller storeManager)
         {
             _storeName = storeName;
             DataLayerInstance = StoreDL.GetInstance();
@@ -27,7 +27,7 @@ namespace SadnaSrc.StoreCenter
         protected void IsProductNameAvailableInStore(string name)
         {
 
-            Product P = DataLayerInstance.getProductByNameFromStore(_storeName, name);
+            Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
             if (P == null)
             { throw new StoreException(StoreEnum.ProductNotFound, "Product Name is already Exists In Shop"); }
         }

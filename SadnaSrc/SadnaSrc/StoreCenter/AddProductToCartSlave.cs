@@ -22,11 +22,11 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("StoreCenter", "trying to add something to the cart");
                 MarketLog.Log("StoreCenter", "checking if store exists");
-                checkIfStoreExitsts(store);
+                CheckIfStoreExitsts(store);
                 MarketLog.Log("StoreCenter", "checking if user has premmisions");
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "checking if product exists");
-                checkIsProductNameAvailableInStore(store, productName);
+                CheckIsProductNameAvailableInStore(store, productName);
                 StockListItem stockListItem = storeLogic.GetProductFromStore(store, productName);
                 checkifQuantityIsOK(quantity, stockListItem);   
                 checkIfDiscountExistsAndCalcValue(ref stockListItem);
@@ -70,12 +70,12 @@ namespace SadnaSrc.StoreCenter
             if (stockListItem.Discount != null)
             {
                 if (stockListItem.Discount.discountType == discountTypeEnum.Visible)
-                    if (stockListItem.Discount.checkTime())
+                    if (stockListItem.Discount.CheckTime())
                         stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
             }
         }
 
-        private void checkIsProductNameAvailableInStore(string store, string productName)
+        private void CheckIsProductNameAvailableInStore(string store, string productName)
         {
             if (IsProductNameAvailableInStore(store, productName)) //aka product is NotFiniteNumberException in store
             {
@@ -84,7 +84,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfStoreExitsts(string store)
+        private void CheckIfStoreExitsts(string store)
         {
             if (!storeLogic.IsStoreExistAndActive(store))
             { throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
@@ -92,7 +92,7 @@ namespace SadnaSrc.StoreCenter
 
         private bool IsProductNameAvailableInStore(string storeName, string productName)
         {
-            Product P = storeLogic.getProductByNameFromStore(storeName, productName);
+            Product P = storeLogic.GetProductByNameFromStore(storeName, productName);
             return (P == null);
         }
     }

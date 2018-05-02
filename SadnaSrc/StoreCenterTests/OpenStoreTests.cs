@@ -29,7 +29,7 @@ namespace StoreCenterTests
         public void CheckName()
         {
             Store store = new Store("SX", "name1test", "here");
-            Store find = handler.getStorebyName("name1test");
+            Store find = handler.GetStorebyName("name1test");
             Assert.IsNull(find);
             Assert.IsFalse(handler.IsStoreExistAndActive("name1test"));
             toDeleteStore = store;
@@ -42,7 +42,7 @@ namespace StoreCenterTests
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             liorSession.LoginShoper("Arik3", "123");
             MarketAnswer ans = liorSession.OpenStore("newStoreName", "adress");
-            toDeleteStore = handler.getStorebyName("newStoreName");
+            toDeleteStore = handler.GetStorebyName("newStoreName");
             ans = liorSession.OpenStore("newStoreName", "adress");
             Assert.AreEqual((int)OpenStoreStatus.AlreadyExist, ans.Status);
         }
@@ -51,12 +51,12 @@ namespace StoreCenterTests
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             liorSession.LoginShoper("Arik3", "123");
-            Store find = handler.getStorebyName("newStoreName");
+            Store find = handler.GetStorebyName("newStoreName");
             Assert.IsNull(find);
             MarketAnswer ans = liorSession.OpenStore("newStoreName", "adress");
-            find = handler.getStorebyName("newStoreName");
+            find = handler.GetStorebyName("newStoreName");
             Assert.IsNotNull(find);
-            toDeleteStore = handler.getStorebyName("newStoreName");
+            toDeleteStore = handler.GetStorebyName("newStoreName");
             Assert.IsNotNull(toDeleteStore);
             Assert.AreEqual((int)OpenStoreStatus.Success, ans.Status);
         }
@@ -65,7 +65,7 @@ namespace StoreCenterTests
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             liorSession.MakeGuest();
-            Store find = handler.getStorebyName("newStoreName");
+            Store find = handler.GetStorebyName("newStoreName");
             Assert.IsNull(find);
             MarketAnswer ans = liorSession.OpenStore("newStoreName", "adress");
             Assert.AreEqual((int)OpenStoreStatus.InvalidUser, ans.Status);

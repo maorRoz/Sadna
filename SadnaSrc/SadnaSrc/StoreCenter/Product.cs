@@ -8,7 +8,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class Product
     {
-        public string SystemId;
+        public readonly string SystemId;
         public string Name { get; set; }
         public double BasePrice { get; set; }
         public string Description { get; set; }
@@ -91,7 +91,7 @@ namespace SadnaSrc.StoreCenter
         private static int FindMaxProductId()
         {
             StoreDL DL = StoreDL.GetInstance();
-            LinkedList<string> list = DL.getAllProductIDs();
+            LinkedList<string> list = DL.GetAllProductIDs();
             int max = -5;
             int temp = 0;
             foreach (string s in list)

@@ -9,7 +9,7 @@ namespace SadnaSrc.StoreCenter
 {
     static class EnumStringConverter
     {
-        static public string PrintEnum(LotteryTicketStatus status)
+        public static string PrintEnum(LotteryTicketStatus status)
         {
             switch (status)
             {
@@ -21,7 +21,7 @@ namespace SadnaSrc.StoreCenter
             }
 
         }
-        static public string PrintEnum(discountTypeEnum type)
+        public static string PrintEnum(discountTypeEnum type)
         {
             switch (type)
             {
@@ -30,7 +30,7 @@ namespace SadnaSrc.StoreCenter
                 default: throw new StoreException(MarketError.LogicError, "Enum value not exists");
             }
         }
-        static public string PrintEnum(PurchaseEnum purchaseEnum)
+        public static string PrintEnum(PurchaseEnum purchaseEnum)
         {
             switch (purchaseEnum)
             {
@@ -39,33 +39,61 @@ namespace SadnaSrc.StoreCenter
                 default: throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
             }
         }
-        static public discountTypeEnum GetdiscountTypeEnumString(string discountType)
+        public static discountTypeEnum GetdiscountTypeEnumString(string discountType)
         {
-            if ((discountType == "HIDDEN") || (discountType == "hidden") || (discountType == "Hidden"))
-                return discountTypeEnum.Hidden;
-            if ((discountType == "VISIBLE") || (discountType == "visible") || (discountType == "Visible"))
-                return discountTypeEnum.Visible;
+            switch (discountType)
+            {
+                case "HIDDEN":
+                case "hidden":
+                case "Hidden":
+                    return discountTypeEnum.Hidden;
+                case "VISIBLE":
+                case "visible":
+                case "Visible":
+                    return discountTypeEnum.Visible;
+            }
+
             throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
         }
-        static public PurchaseEnum GetPurchaseEnumString(string purchaseType)
+        public static PurchaseEnum GetPurchaseEnumString(string purchaseType)
         {
-            if ((purchaseType == "Immediate") || (purchaseType == "immediate") || (purchaseType == "IMMEDIATE"))
-                return PurchaseEnum.Immediate;
-            if ((purchaseType == "Lottery") || (purchaseType == "lottery") || (purchaseType == "LOTTERY"))
-                return PurchaseEnum.Lottery;
+            switch (purchaseType)
+            {
+                case "Immediate":
+                case "immediate":
+                case "IMMEDIATE":
+                    return PurchaseEnum.Immediate;
+                case "Lottery":
+                case "lottery":
+                case "LOTTERY":
+                    return PurchaseEnum.Lottery;
+            }
+
             throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
         }
 
         static public LotteryTicketStatus GetLotteryStatusString(string lotteryStatus)
         {
-            if ((lotteryStatus == "CANCEL") || (lotteryStatus == "Cancel") || (lotteryStatus == "cancel"))
-                return LotteryTicketStatus.Cancel;
-            if ((lotteryStatus == "WINNING") || (lotteryStatus == "Winning") || (lotteryStatus == "winning"))
-                return LotteryTicketStatus.Winning;
-            if ((lotteryStatus == "WAITING") || (lotteryStatus == "Waiting") || (lotteryStatus == "waiting"))
-                return LotteryTicketStatus.Waiting;
-            if ((lotteryStatus == "LOSING") || (lotteryStatus == "Losing") || (lotteryStatus == "losing"))
-                return LotteryTicketStatus.Losing;
+            switch (lotteryStatus)
+            {
+                case "CANCEL":
+                case "Cancel":
+                case "cancel":
+                    return LotteryTicketStatus.Cancel;
+                case "WINNING":
+                case "Winning":
+                case "winning":
+                    return LotteryTicketStatus.Winning;
+                case "WAITING":
+                case "Waiting":
+                case "waiting":
+                    return LotteryTicketStatus.Waiting;
+                case "LOSING":
+                case "Losing":
+                case "losing":
+                    return LotteryTicketStatus.Losing;
+            }
+
             throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
         }
     }

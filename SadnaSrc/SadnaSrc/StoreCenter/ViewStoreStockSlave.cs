@@ -24,8 +24,8 @@ namespace SadnaSrc.StoreCenter
              MarketLog.Log("StoreCenter", "checking store stack");
             _shopper.ValidateCanBrowseMarket();
             MarketLog.Log("StoreCenter", "check if store exists");
-            checkIfStoreExists(storename);
-            Store store = storeLogic.getStorebyName(storename);
+            CheckIfStoreExists(storename);
+            Store store = storeLogic.GetStorebyName(storename);
             LinkedList<string> result = new LinkedList<string>();
             LinkedList<string> IDS = storeLogic.GetAllStoreProductsID(store.SystemId);
             foreach (string item in IDS)
@@ -48,7 +48,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfStoreExists(string storename)
+        private void CheckIfStoreExists(string storename)
         {
             if (!storeLogic.IsStoreExistAndActive(storename))
             {
@@ -57,14 +57,14 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private string GetProductStockInformation(string ProductID)
+        private string GetProductStockInformation(string productID)
         {
             StoreDL handler = StoreDL.GetInstance();
-            StockListItem stockListItem = handler.GetStockListItembyProductID(ProductID);
+            StockListItem stockListItem = handler.GetStockListItembyProductID(productID);
             if (stockListItem == null)
             {
                 MarketLog.Log("storeCenter", "product not exists");
-                throw new StoreException(StoreEnum.ProductNotFound, "product " + ProductID + " does not exist in Stock");
+                throw new StoreException(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
             }
             string discount = "";
             string product = stockListItem.Product.ToString();

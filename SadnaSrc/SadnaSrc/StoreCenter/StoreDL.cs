@@ -32,7 +32,7 @@ namespace SadnaSrc.StoreCenter
             dbConnection = MarketDB.Instance;
         }
 
-        public LinkedList<string> getAllStoresIDs()
+        public LinkedList<string> GetAllStoresIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("Store", "SystemID"))
@@ -44,7 +44,7 @@ namespace SadnaSrc.StoreCenter
             }
             return ids;
         }
-        public LinkedList<string> getAllProductIDs()
+        public LinkedList<string> GetAllProductIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("Products", "SystemID"))
@@ -56,7 +56,7 @@ namespace SadnaSrc.StoreCenter
             }
             return ids;
         }
-        public LinkedList<string> getAllDiscountIDs()
+        public LinkedList<string> GetAllDiscountIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("Discount", "DiscountCode"))
@@ -68,7 +68,7 @@ namespace SadnaSrc.StoreCenter
             }
             return ids;
         }
-        public LinkedList<string> getAllLotteryTicketIDs()
+        public LinkedList<string> GetAllLotteryTicketIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("LotteryTicket", "myID"))
@@ -80,7 +80,7 @@ namespace SadnaSrc.StoreCenter
             }
             return ids;
         }
-        public LinkedList<string> getAllLotteryManagmentIDs()
+        public LinkedList<string> GetAllLotteryManagmentIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("LotteryTable", "SystemID"))
@@ -93,7 +93,7 @@ namespace SadnaSrc.StoreCenter
             return ids;
         }
       
-        public Store getStorebyName(string storeName)
+        public Store GetStorebyName(string storeName)
         {
 
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "'"))
@@ -166,7 +166,7 @@ namespace SadnaSrc.StoreCenter
                 product.GetProductStringValues(), product.GetProductValuesArray());
         }
 
-        public LinkedList<LotteryTicket> getAllTickets(string systemID)
+        public LinkedList<LotteryTicket> GetAllTickets(string systemID)
         {
             StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
@@ -214,17 +214,17 @@ namespace SadnaSrc.StoreCenter
             return stockListItem;
         }
 
-        public Discount GetDiscount(string DiscountCode)
+        public Discount GetDiscount(string discountCode)
         {
             Discount discount = null;
 
             StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             using (var discountReader =
-                dbConnection.SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + DiscountCode + "'"))
+                dbConnection.SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + discountCode + "'"))
             {
                 while (discountReader.Read())
                 {
-                    discount = new Discount(DiscountCode,
+                    discount = new Discount(discountCode,
                         EnumStringConverter.GetdiscountTypeEnumString(discountReader.GetString(1)),
                         DateTime.Parse(discountReader.GetString(2))
                         , DateTime.Parse(discountReader.GetString(3))
@@ -440,9 +440,9 @@ namespace SadnaSrc.StoreCenter
             }
             return null; 
         }
-        public Product getProductByNameFromStore(string storeName, string ProductName)
+        public Product GetProductByNameFromStore(string storeName, string ProductName)
         {
-            Store store = getStorebyName(storeName);
+            Store store = GetStorebyName(storeName);
             LinkedList<string> productsID = GetAllStoreProductsID(store.SystemId);
             foreach (string ID in productsID)
             {
@@ -470,7 +470,7 @@ namespace SadnaSrc.StoreCenter
         }
         public StockListItem GetProductFromStore(string store, string productName)
         {
-            Product product = getProductByNameFromStore(store, productName);
+            Product product = GetProductByNameFromStore(store, productName);
             return GetStockListItembyProductID(product.SystemId);
 
         }
@@ -508,11 +508,11 @@ namespace SadnaSrc.StoreCenter
 
         public LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName)
         {
-            Product P = getProductByNameFromStore(storeName, productName);
+            Product P = GetProductByNameFromStore(storeName, productName);
             return GetLotteryByProductID(P.SystemId);
         }
 
-        public int getUserIDFromUserName(string userName)
+        public int GetUserIDFromUserName(string userName)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "SystemID", "Name = '" + userName + "'"))
             {

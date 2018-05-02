@@ -33,7 +33,7 @@ namespace SadnaSrc.StoreCenter
             Store S = slave.OpenStore(storeName, address);
             if (S!=null)
                 stores.AddLast(S);
-            return slave.answer;
+            return slave.Answer;
         }
         
         public MarketAnswer ViewStoreInfo(string store)

@@ -25,7 +25,7 @@ namespace SadnaSrc.StoreCenter
             _storeManager = storeManager;
             _storeName = storeName;
             global = StoreSyncerImplementation.GetInstance();
-            store = global.DataLayer.getStorebyName(storeName);
+            store = global.DataLayer.GetStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();
             syncher = new OrderSyncherHarmony();
@@ -34,44 +34,15 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer CloseStore()
         {
             CloseStoreSlave slave = new CloseStoreSlave(_storeManager, ref _storeName);
-            slave.closeStore();
+            slave.CloseStore();
             return slave.answer;
         }
         public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
             PromoteToStoreManagerSlave slave = new PromoteToStoreManagerSlave(_storeManager, _storeName);
             slave.PromoteToStoreManager(someoneToPromoteName, actions);
-            return slave.answer;
+            return slave.Answer;
         }
-
-        /*  public MarketAnswer GetStoreProducts()
-          {
-              MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store stock...");
-              try
-              {
-                  if (!global.DataLayer.IsStoreExist(_storeName)) { return new StoreAnswer(StoreEnum.StoreNotExists, "store not exists"); }
-                  _storeManager.CanManageProducts();
-                  List<string> productList = new List<string>();
-                  foreach (Product product in store.GetAllProducts())
-                  {
-                      productList.Add(product.ToString());
-                  }
-                  return new StoreAnswer(ManageStoreStatus.Success, "Stock report has been successfully fetched!",
-                      productList.ToArray());
-              }
-              catch (StoreException e)
-              {
-                  MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " tried to view stock in unavailable Store " + _storeName +
-                                               "and has been denied. Error message has been created!");
-                  return new StoreAnswer(ManageStoreStatus.InvalidStore, e.GetErrorMessage());
-              }
-              catch (MarketException e)
-              {
-                  MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view stock in Store"
-                                               + _storeName + " and therefore has been denied. Error message has been created!");
-                  return new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
-              }
-          }*/
 
         public MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity)
         {
@@ -96,7 +67,7 @@ namespace SadnaSrc.StoreCenter
         {
             RemoveProductSlave slave = new RemoveProductSlave(ref syncher, _storeName, _storeManager);
             slave.RemoveProduct(productName);
-            return slave.answer;
+            return slave.Answer;
         }
 
 
@@ -107,7 +78,7 @@ namespace SadnaSrc.StoreCenter
             slave.EditProduct(productName, whatToEdit, newValue);
             return slave.answer;
         }
-        public void clearSession()
+        public void ClearSession()
         {
             foreach (Discount discount in discountsToRemvoe)
             {
@@ -153,7 +124,7 @@ namespace SadnaSrc.StoreCenter
         {
             RemoveDiscountFromProductSlave slave = new RemoveDiscountFromProductSlave(_storeName, _storeManager);
             slave.RemoveDiscountFromProduct(productName);
-            return slave.answer;
+            return slave.Answer;
         }
 
         public MarketAnswer ViewStoreHistory()

@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
 
         public AddNewLotterySlave(string storeName, IUserSeller storeManager) : base(storeName, storeManager)
         {
-            store = DataLayerInstance.getStorebyName(storeName);
+            store = DataLayerInstance.GetStorebyName(storeName);
         }
 
         internal StockListItem AddNewLottery(string name, double price, string description, DateTime startDate, DateTime endDate)
@@ -26,7 +26,7 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
-                checkIfProductNameAvailable(name);
+                CheckIfProductNameAvailable(name);
                 Product product = new Product(name, price, description);
                 StockListItem stockListItem = new StockListItem(1, product, null, PurchaseEnum.Lottery, store.SystemId);
                 DataLayerInstance.AddStockListItemToDataBase(stockListItem);
@@ -50,9 +50,9 @@ namespace SadnaSrc.StoreCenter
             return null;
         }
 
-        private void checkIfProductNameAvailable(string name)
+        private void CheckIfProductNameAvailable(string name)
         {
-            Product P = DataLayerInstance.getProductByNameFromStore(_storeName, name);
+            Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
             if (P != null)
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }

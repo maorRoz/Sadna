@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
         
         public ViewStoreHistorySlave(string _store, IUserSeller storeManager) :base (_store, storeManager)
         {
-            store = DataLayerInstance.getStorebyName(_store);
+            store = DataLayerInstance.GetStorebyName(_store);
         }
 
         internal void ViewStoreHistory()

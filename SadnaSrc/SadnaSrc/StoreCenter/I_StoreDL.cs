@@ -11,15 +11,14 @@ namespace SadnaSrc.StoreCenter
         Store GetStorebyID(string storeID);
         void AddProductToDatabase(Product product);
         void EditProductInDatabase(Product product);
-        int getUserIDFromUserName(string userName);
-        Store getStorebyName(string storeName);
-        LinkedList<LotteryTicket> getAllTickets(string systemID);
+        int GetUserIDFromUserName(string userName);
+        Store GetStorebyName(string storeName);
+        LinkedList<LotteryTicket> GetAllTickets(string systemID);
         StockListItem GetStockListItembyProductID(string product);
-        Discount GetDiscount(string DiscountCode);
+        Discount GetDiscount(string discountCode);
         bool IsStoreExistAndActive(string store);
         string[] GetStoreInfo(string store);
         string[] GetStoreStockInfo(string store);
-        //MUST HAVE:
         void AddLotteryTicket(LotteryTicket lottery);
         LotteryTicket GetLotteryTicket(string ticketID);
         void EditLotteryTicketInDatabase(LotteryTicket lotter);
@@ -42,8 +41,7 @@ namespace SadnaSrc.StoreCenter
         void AddStockListItemToDataBase(StockListItem stockListItem);
         LinkedList<Store> GetAllActiveStores(); // all active stores
         void RemoveDiscount(Discount discount);
-//CAN BE PUT IN OTHER CLASS:
-        Product getProductByNameFromStore(string storeName, string ProductName);
+        Product GetProductByNameFromStore(string storeName, string ProductName);
         StockListItem GetProductFromStore(string store, string productName);
         LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName);
         }

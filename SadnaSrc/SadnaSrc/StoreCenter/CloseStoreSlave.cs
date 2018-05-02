@@ -10,11 +10,11 @@ namespace SadnaSrc.StoreCenter
         public Store store;
         public CloseStoreSlave(IUserSeller storeManager, ref string _storeName) : base(_storeName, storeManager)
         {
-            store = DataLayerInstance.getStorebyName(_storeName);
+            store = DataLayerInstance.GetStorebyName(_storeName);
             DataLayerInstance = StoreDL.GetInstance();
         }
 
-        internal void closeStore()
+        internal void CloseStore()
         {
             try
             {

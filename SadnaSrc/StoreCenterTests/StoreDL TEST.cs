@@ -59,15 +59,15 @@ namespace StoreCenterTests
         }
 
         [TestMethod]
-        public void getUserIdByUserNameFail()
+        public void GetUserIdByUserNameFail()
         {
-            int find = handler.getUserIDFromUserName("mmm");
+            int find = handler.GetUserIDFromUserName("mmm");
             Assert.AreEqual(-1, find);
         }
         [TestMethod]
-        public void getUserIdByUserNameSuccess()
+        public void GetUserIdByUserNameSuccess()
         {
-            int find = handler.getUserIDFromUserName("Arik1");
+            int find = handler.GetUserIDFromUserName("Arik1");
             Assert.AreEqual(1,find);
         }
         [TestMethod]
@@ -107,7 +107,7 @@ namespace StoreCenterTests
         public void getStoreByName()
         {
             Store expected = new Store("S1", "X", "Here 4"); // THIS exists in DB by SQL injection
-            Store find = handler.getStorebyName("X");
+            Store find = handler.GetStorebyName("X");
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
@@ -320,7 +320,7 @@ namespace StoreCenterTests
             toDeleteTicket = ticket2;
             expected.AddLast(ticket1);
             expected.AddLast(ticket2);
-            LinkedList<LotteryTicket> find = handler.getAllTickets("L1");
+            LinkedList<LotteryTicket> find = handler.GetAllTickets("L1");
             Assert.AreEqual(expected.Count, find.Count);
             LotteryTicket[] findResults = new LotteryTicket[find.Count];
             find.CopyTo(findResults, 0);

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using static System.Int32;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -18,7 +18,7 @@ namespace SadnaSrc.StoreCenter
         
 
         public double Cost { get; set; }
-        private static int globalLotteryTicketID = FindMaxLotteryTicketId();
+        private static int globalLotteryTicketID = FindMaxLotteryTicketId;
         public LotteryTicket(string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
         {
             LotteryNumber = _LotteryNumber;
@@ -124,21 +124,23 @@ namespace SadnaSrc.StoreCenter
             globalLotteryTicketID++;
             return "T" + globalLotteryTicketID;
         }
-        private static int FindMaxLotteryTicketId()
+        private static int FindMaxLotteryTicketId
         {
-            StoreDL DL = StoreDL.GetInstance();
-            LinkedList<string> list = DL.getAllLotteryTicketIDs();
-            int max = -5;
-            int temp = 0;
-            foreach (string s in list)
+            get
             {
-                temp = Int32.Parse(s.Substring(1));
-                if (temp > max)
+                StoreDL DL = StoreDL.GetInstance();
+                LinkedList<string> list = DL.GetAllLotteryTicketIDs();
+                int max = -5;
+                foreach (string s in list)
                 {
-                    max = temp;
+                    var temp = Parse(s.Substring(1));
+                    if (temp > max)
+                    {
+                        max = temp;
+                    }
                 }
+                return max;
             }
-            return max;
         }
     }
 }

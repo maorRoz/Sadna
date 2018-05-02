@@ -54,10 +54,10 @@ namespace SadnaSrc.StoreCenter
         }
         
       
-        public void updateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher, int cheatCode)
+        public void UpdateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher, int cheatCode)
         {
             LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
-            if (Lotto.updateLottery(moenyPayed, DataLayer.getUserIDFromUserName(UserName)))
+            if (Lotto.updateLottery(moenyPayed, DataLayer.GetUserIDFromUserName(UserName)))
             {
                 syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID(cheatCode));
             }
@@ -117,7 +117,7 @@ namespace SadnaSrc.StoreCenter
                 return false;
             if (!Lotto.CanPurchase(priceWantToPay))
                 return false;
-            if (!Lotto.checkDatesWhenPurches())
+            if (!Lotto.CheckDatesWhenPurches())
                 return false;
             return true;
         }
@@ -125,19 +125,19 @@ namespace SadnaSrc.StoreCenter
         
         private bool IsProductNameAvailableInStore(string storeName, string productName)
         {
-            Product P = DataLayer.getProductByNameFromStore(storeName, productName);
+            Product P = DataLayer.GetProductByNameFromStore(storeName, productName);
             return (P == null);
         }
         private void CheckThatProductExitst(string storeName, string product)
         {
-            Product P = DataLayer.getProductByNameFromStore(storeName, product);
+            Product P = DataLayer.GetProductByNameFromStore(storeName, product);
             if (P == null)
             { throw new StoreException(StoreEnum.ProductNotFound, "product not exists in store"); }
         }
 
         private void CheckThatStoreExitst(string storeName)
         {
-            Store S = DataLayer.getStorebyName(storeName);
+            Store S = DataLayer.GetStorebyName(storeName);
             if (S == null)
             { throw new StoreException(StoreEnum.StoreNotExists, "store not exists"); }
         }

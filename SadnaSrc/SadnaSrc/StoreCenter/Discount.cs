@@ -70,7 +70,7 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-        internal bool checkTime()
+        internal bool CheckTime()
         {
             return ((startDate.Date <= MarketYard.MarketDate) && (MarketYard.MarketDate <= EndDate.Date));
         }
@@ -114,7 +114,7 @@ namespace SadnaSrc.StoreCenter
         private static int FindMaxDiscountId()
         {
             StoreDL DL = StoreDL.GetInstance();
-            LinkedList<string> list = DL.getAllDiscountIDs();
+            LinkedList<string> list = DL.GetAllDiscountIDs();
             int max = -5;
             int temp = 0;
             foreach (string s in list)

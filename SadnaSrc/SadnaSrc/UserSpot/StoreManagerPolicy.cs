@@ -39,37 +39,18 @@ namespace SadnaSrc.UserSpot
         }
         public static StoreAction GetActionFromString(string actionString)
         {
-            if (actionString.Equals("StoreOwner"))
+            switch (actionString)
             {
-                return StoreAction.StoreOwner;
+                case "StoreOwner": return StoreAction.StoreOwner;
+                case "PromoteStoreAdmin": return StoreAction.PromoteStoreAdmin;
+                case "ManageProducts": return StoreAction.ManageProducts;
+                case "DeclareDiscountPolicy": return StoreAction.DeclareDiscountPolicy;
+                case "DeclarePurchasePolicy": return StoreAction.DeclarePurchasePolicy;
+                case "ViewPurchaseHistory": return StoreAction.ViewPurchaseHistory;
+                default:
+                    throw new UserException(PromoteStoreStatus.InvalidPromotion,
+                        "Procedure to cast string into store action has failed! there is no state by that name...");
             }
-
-            if (actionString.Equals("PromoteStoreAdmin"))
-            {
-                return StoreAction.PromoteStoreAdmin;
-            }
-
-            if (actionString.Equals("ManageProducts"))
-            {
-                return StoreAction.ManageProducts;
-            }
-
-            if (actionString.Equals("DeclareDiscountPolicy"))
-            {
-                return StoreAction.DeclareDiscountPolicy;
-            }
-
-            if (actionString.Equals("DeclarePurchasePolicy"))
-            {
-                return StoreAction.DeclarePurchasePolicy;
-            }
-
-            if (actionString.Equals("ViewPurchaseHistory"))
-            {
-                return StoreAction.ViewPurchaseHistory;
-            }
-
-            throw new UserException(PromoteStoreStatus.InvalidPromotion, "Procedure to cast string into store action has failed! there is no state by that name...");
         }
 
         public override bool Equals(object obj)

@@ -44,7 +44,7 @@ namespace StoreCenterTests
         [TestMethod]
         public void DolotteryOneUser()
         {
-            LotteryTicket expected = new LotteryTicket("T100", "L100", 0, 100, 100, handler.getUserIDFromUserName("Arik1"));
+            LotteryTicket expected = new LotteryTicket("T100", "L100", 0, 100, 100, handler.GetUserIDFromUserName("Arik1"));
             tickets.AddLast(expected);
             handler.AddLotteryTicket(expected);
             LotteryToDelete.TotalMoneyPayed = 100;
@@ -55,8 +55,8 @@ namespace StoreCenterTests
         [TestMethod]
         public void DolotteryTweUsersFirstWIn()
         {
-            LotteryTicket expectedWin = new LotteryTicket("T100", "L100", 0, 50, 50, handler.getUserIDFromUserName("Arik1"));
-            LotteryTicket expectedLose = new LotteryTicket("T101", "L100", 50, 100, 50, handler.getUserIDFromUserName("Arik2"));
+            LotteryTicket expectedWin = new LotteryTicket("T100", "L100", 0, 50, 50, handler.GetUserIDFromUserName("Arik1"));
+            LotteryTicket expectedLose = new LotteryTicket("T101", "L100", 50, 100, 50, handler.GetUserIDFromUserName("Arik2"));
             tickets.AddLast(expectedWin);
             handler.AddLotteryTicket(expectedWin);
             tickets.AddLast(expectedLose);
@@ -71,7 +71,7 @@ namespace StoreCenterTests
         [TestMethod]
         public void DolotteryIlligalValue()
         {
-            LotteryTicket expected = new LotteryTicket("T100", "L100", 0, 100, 100, handler.getUserIDFromUserName("Arik1"));
+            LotteryTicket expected = new LotteryTicket("T100", "L100", 0, 100, 100, handler.GetUserIDFromUserName("Arik1"));
             tickets.AddLast(expected);
             handler.AddLotteryTicket(expected);
             LotteryToDelete.TotalMoneyPayed = 100;

@@ -22,31 +22,50 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanDeclareDiscountPolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
                 IsProductNameAvailableInStore(productName);
-                Discount discount = checkIfDiscountExistsPrivateMethod(productName);
-                if ((whatToEdit == "discountType") || (whatToEdit == "DiscountType") || (whatToEdit == "discounttype") || (whatToEdit == "DISCOUNTTYPE"))
+                Discount discount = CheckIfDiscountExistsPrivateMethod(productName);
+                switch (whatToEdit)
                 {
-                    discount = editDiscountdiscyoutTypePrivateMethod(discount, newValue, productName);
+                    case "discountType":
+                    case "DiscountType":
+                    case "discounttype":
+                    case "DISCOUNTTYPE":
+                        discount = EditDiscountdiscyoutTypePrivateMethod(discount, newValue, productName);
+                        break;
+                    case "startDate":
+                    case "start Date":
+                    case "StartDate":
+                    case "Start Date":
+                    case "startdate":
+                    case "start date":
+                    case "STARTDATE":
+                    case "START DATE":
+                        discount = EditDiscountStartDatePrivateMethod(discount, newValue, productName);
+                        break;
+                    case "EndDate":
+                    case "end Date":
+                    case "enddate":
+                    case "End Date":
+                    case "end date":
+                    case "ENDDATE":
+                    case "END DATE":
+                        discount = EditDiscountEndDatePrivateMethod(discount, newValue, productName);
+                        break;
+                    case "DiscountAmount":
+                    case "Discount Amount":
+                    case "discount amount":
+                    case "discountamount":
+                    case "DISCOUNTAMOUNT":
+                    case "DISCOUNT AMOUNT":
+                        discount = EditDiscountDiscountAmountPrivateMehtod(discount, newValue, productName);
+                        break;
+                    case "Percentages":
+                    case "percentages":
+                    case "PERCENTAGES":
+                        discount = EditDiscountPercentagesPrivateMehtod(discount, newValue, productName);
+                        break;
+                }
 
-                }
-                if ((whatToEdit == "startDate") || (whatToEdit == "start Date") || (whatToEdit == "StartDate") || (whatToEdit == "Start Date") || (whatToEdit == "startdate") || (whatToEdit == "start date") || (whatToEdit == "STARTDATE") || (whatToEdit == "START DATE"))
-                {
-                    discount = editDiscountStartDatePrivateMethod(discount, newValue, productName);
-                }
-
-                if ((whatToEdit == "EndDate") || (whatToEdit == "end Date") || (whatToEdit == "enddate") || (whatToEdit == "End Date") || (whatToEdit == "end date") || (whatToEdit == "ENDDATE") || (whatToEdit == "END DATE"))
-                {
-                    discount = editDiscountEndDatePrivateMethod(discount, newValue, productName);
-                }
-
-                if ((whatToEdit == "DiscountAmount") || (whatToEdit == "Discount Amount") || (whatToEdit == "discount amount") || (whatToEdit == "discountamount") || (whatToEdit == "DISCOUNTAMOUNT") || (whatToEdit == "DISCOUNT AMOUNT"))
-                {
-                    discount = editDiscountDiscountAmountPrivateMehtod(discount, newValue, productName);
-                }
-                if ((whatToEdit == "Percentages") || (whatToEdit == "percentages") || (whatToEdit == "PERCENTAGES"))
-                {
-                    discount = editDiscountPercentagesPrivateMehtod(discount, newValue, productName);
-                }
-                if (answer == null) { throw new StoreException(DiscountStatus.NoLegalAttrebute, "no leagal attrebute found"); }
+                if (answer == null) { throw new StoreException(DiscountStatus.NoLegalAttrebute, "no legal attribute found"); }
                 DataLayerInstance.EditDiscountInDatabase(discount);
             }
             catch (StoreException exe)
@@ -58,7 +77,7 @@ namespace SadnaSrc.StoreCenter
                 answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
-        private Discount checkIfDiscountExistsPrivateMethod(string productName)
+        private Discount CheckIfDiscountExistsPrivateMethod(string productName)
         {
             StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
             MarketLog.Log("StoreCenter", " Product exists");
@@ -72,7 +91,7 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", " check what you want to edit");
             return discount;
         }
-        private Discount editDiscountdiscyoutTypePrivateMethod(Discount discount, string newValue, string productName)
+        private Discount EditDiscountdiscyoutTypePrivateMethod(Discount discount, string newValue, string productName)
         {
             MarketLog.Log("StoreCenter", " edit discount type");
             discount.discountType = EnumStringConverter.GetdiscountTypeEnumString(newValue);
@@ -80,7 +99,7 @@ namespace SadnaSrc.StoreCenter
             answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount type become " + newValue);
             return discount;
         }
-        private Discount editDiscountStartDatePrivateMethod(Discount discount, string newValue, string productName)
+        private Discount EditDiscountStartDatePrivateMethod(Discount discount, string newValue, string productName)
         {
 
             MarketLog.Log("StoreCenter", " edit start date");
@@ -107,7 +126,7 @@ namespace SadnaSrc.StoreCenter
             answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount Start Date become " + startTime);
             return discount;
         }
-        private Discount editDiscountPercentagesPrivateMehtod(Discount discount, string newValue, string productName)
+        private Discount EditDiscountPercentagesPrivateMehtod(Discount discount, string newValue, string productName)
         {
             MarketLog.Log("StoreCenter", "try to edit precenteges");
             bool newboolValue = true;
@@ -128,7 +147,7 @@ namespace SadnaSrc.StoreCenter
             answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become false");
             return discount;
         }
-        private Discount editDiscountDiscountAmountPrivateMehtod(Discount discount, string newValue, string productName)
+        private Discount EditDiscountDiscountAmountPrivateMehtod(Discount discount, string newValue, string productName)
         {
 
             MarketLog.Log("StoreCenter", " edit discount amount");
@@ -143,7 +162,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "DiscountAmount is >= 100, cant make it presenteges");
                 throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100, cant make it presenteges");
             }
-            if ((!discount.Percentages) && (newintValue > DataLayerInstance.getProductByNameFromStore(_storeName, productName).BasePrice))
+            if ((!discount.Percentages) && (newintValue > DataLayerInstance.GetProductByNameFromStore(_storeName, productName).BasePrice))
             {
                 MarketLog.Log("StoreCenter", "discount amount is >= product price");
                 throw new StoreException(DiscountStatus.DiscountGreaterThenProductPrice, "DiscountAmount is > then product price");
@@ -158,7 +177,7 @@ namespace SadnaSrc.StoreCenter
             answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount amount become " + newValue);
             return discount;
         }
-        private Discount editDiscountEndDatePrivateMethod(Discount discount, string newValue, string productName)
+        private Discount EditDiscountEndDatePrivateMethod(Discount discount, string newValue, string productName)
         {
 
             MarketLog.Log("StoreCenter", " edit start date");

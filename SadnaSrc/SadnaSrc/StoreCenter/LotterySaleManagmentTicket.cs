@@ -18,7 +18,7 @@ namespace SadnaSrc.StoreCenter
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
         public bool IsActive { get; set; }
-        private static int globalLotteryID = FindMaxLotteryId();
+        private static int globalLotteryID = FindMaxLotteryId;
 
         public LotterySaleManagmentTicket(string _storeName, Product _original, DateTime _StartDate, DateTime _EndDate)
         {
@@ -51,7 +51,7 @@ namespace SadnaSrc.StoreCenter
         {
             return (TotalMoneyPayed + moneyPayed <= ProductNormalPrice);
         }
-        public bool checkDatesWhenPurches()
+        public bool CheckDatesWhenPurches()
         {
             return ((StartDate.Date <= MarketYard.MarketDate) && (EndDate.Date >= MarketYard.MarketDate));
         }
@@ -73,7 +73,7 @@ namespace SadnaSrc.StoreCenter
         {
             if (TotalMoneyPayed == ProductNormalPrice)
             {
-                return InformAllWinner(Random());
+                return InformAllWinner(RandomLotteryNumber());
             }
             return null;
         }
@@ -85,9 +85,8 @@ namespace SadnaSrc.StoreCenter
             }
             return null;
         }
-        private int Random()
+        private int RandomLotteryNumber()
         {
-
             Random r = new Random(DateTime.Now.Millisecond);
             int winningNumber = r.Next(0, (int)ProductNormalPrice);
             return winningNumber;
@@ -96,7 +95,7 @@ namespace SadnaSrc.StoreCenter
         {
             LotteryTicket winner = null;
             StoreDL handler = StoreDL.GetInstance();
-            LinkedList<LotteryTicket> tickets = handler.getAllTickets(SystemID);
+            LinkedList<LotteryTicket> tickets = handler.GetAllTickets(SystemID);
             foreach (LotteryTicket lotter in tickets)
             {
                 if (lotter.IsWinning(winningNumber))
@@ -158,7 +157,7 @@ namespace SadnaSrc.StoreCenter
 
         internal int getWinnerID(int cheatCode)
         {
-            int winnerResult = Random();
+            int winnerResult = RandomLotteryNumber();
             if (cheatCode != -1)
             {
                 winnerResult = cheatCode;
@@ -208,21 +207,23 @@ namespace SadnaSrc.StoreCenter
             globalLotteryID++;
             return "L" + globalLotteryID;
         }
-        private static int FindMaxLotteryId()
+        private static int FindMaxLotteryId
         {
-            StoreDL DL = StoreDL.GetInstance();
-            LinkedList<string> list = DL.getAllLotteryManagmentIDs();
-            int max = -5;
-            int temp = 0;
-            foreach (string s in list)
+            get
             {
-                temp = Int32.Parse(s.Substring(1));
-                if (temp > max)
+                StoreDL DL = StoreDL.GetInstance();
+                LinkedList<string> list = DL.GetAllLotteryManagmentIDs();
+                var max = -5;
+                foreach (string s in list)
                 {
-                    max = temp;
+                    var temp = int.Parse(s.Substring(1));
+                    if (temp > max)
+                    {
+                        max = temp;
+                    }
                 }
+                return max;
             }
-            return max;
         }
     }
 }

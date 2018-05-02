@@ -70,7 +70,7 @@ namespace StoreCenterTests
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "Name", "MOMO");
-            Product find = handler.getProductByNameFromStore(liorSession._storeName, "MOMO");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "MOMO");
             Assert.IsNotNull(find);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
@@ -83,7 +83,7 @@ namespace StoreCenterTests
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "0");
-            Product find = handler.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual(5, find.BasePrice);
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, ans.Status);
@@ -97,7 +97,7 @@ namespace StoreCenterTests
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "NotA-Number");
-            Product find = handler.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual(5, find.BasePrice);
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, ans.Status);
@@ -111,7 +111,7 @@ namespace StoreCenterTests
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "-4");
-            Product find = handler.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual(5, find.BasePrice);
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, ans.Status);
@@ -125,7 +125,7 @@ namespace StoreCenterTests
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "10");
-            Product find = handler.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual(10, find.BasePrice);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
@@ -139,7 +139,7 @@ namespace StoreCenterTests
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
             ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "Description", "MOMO");
-            Product find = handler.getProductByNameFromStore(liorSession._storeName, "GOLD");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual("MOMO", find.Description);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);

@@ -10,7 +10,7 @@ namespace SadnaSrc.StoreCenter
         private Store _store;
         public AddNewProductSlave(IUserSeller storeManager, string _StoreName) : base(_StoreName, storeManager)
         {
-            _store = DataLayerInstance.getStorebyName(_storeName);
+            _store = DataLayerInstance.GetStorebyName(_storeName);
         }
 
         internal StockListItem AddNewProduct(string _name, double _price, string _description, int quantity)
@@ -26,11 +26,11 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
-                checkIfProductNameAvailable(_name);
+                CheckIfProductNameAvailable(_name);
                 
                 MarketLog.Log("StoreCenter", " name is avlaiable");
                 MarketLog.Log("StoreCenter", " checking that quanitity is positive");
-                _checkQuantityIsOK(quantity);
+                CheckQuantityIsOK(quantity);
                 MarketLog.Log("StoreCenter", " quanitity is positive");
                 Product product = new Product(_name, _price, _description);
                 StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, _store.SystemId);
@@ -52,14 +52,14 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfProductNameAvailable(string name)
+        private void CheckIfProductNameAvailable(string name)
         {
-            Product P = DataLayerInstance.getProductByNameFromStore(_storeName, name);
+            Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
             if (P != null)
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }
 
-        private void _checkQuantityIsOK(int quantity)
+        private void CheckQuantityIsOK(int quantity)
         {
             if (quantity <= 0)
             { throw new StoreException(StoreEnum.quantityIsNegatie, "negative quantity"); }

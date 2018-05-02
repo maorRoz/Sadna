@@ -22,12 +22,12 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", "check if product exists");
-                checkifProductExists(DataLayerInstance.getProductByNameFromStore(_storeName, productName));
+                checkifProductExists(DataLayerInstance.GetProductByNameFromStore(_storeName, productName));
                 MarketLog.Log("StoreCenter", "product exists");
                 StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
-                checkIfAlreadyLottery(stockListItem);
+                CheckIfAlreadyLottery(stockListItem);
                 MarketLog.Log("StoreCenter", "check if dates are OK");
-                checkIfDatesAreOK(startDate, endDate);
+                CheckIfDatesAreOK(startDate, endDate);
                 stockListItem.PurchaseWay = PurchaseEnum.Lottery;
                 DataLayerInstance.EditStockInDatabase(stockListItem);
                 LotterySaleManagmentTicket lotterySaleManagmentTicket = new LotterySaleManagmentTicket(
@@ -47,13 +47,13 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-        private void checkIfDatesAreOK(DateTime startDate, DateTime endDate)
+        private void CheckIfDatesAreOK(DateTime startDate, DateTime endDate)
         {
             if (startDate.Date > endDate.Date)
                 throw new StoreException(ChangeToLotteryEnum.DatesAreWrong, "start date is lated then end date");
         }
 
-        private void checkIfAlreadyLottery(StockListItem stockListItem)
+        private void CheckIfAlreadyLottery(StockListItem stockListItem)
         {
             if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
             {
