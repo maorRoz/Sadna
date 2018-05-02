@@ -62,6 +62,7 @@ namespace SadnaSrc.StoreCenter
                 syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID(cheatCode));
             }
         }
+        // this fucntion calculate item price if it has Hidden discount. happend only in Purches time and this is way it's happening here
         public double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity)
         {
             if (!DataLayer.IsStoreExistAndActive(storeName))
