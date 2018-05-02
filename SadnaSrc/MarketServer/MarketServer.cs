@@ -26,11 +26,10 @@ namespace MarketWeb
             var userService = marketSession.GetUserService();
             var id = Convert.ToInt32(userService.EnterSystem().ReportList[0]);
             users.Add(id, userService);
-            SubscribeSocket(id,socketId);
             await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
         }
 
-        public void LeaveSystem(string socketId)
+        public void UnSubscribeSocket(string socketId)
         {
            // FeedSubscriber.UnSubscribeSocket(socketId);
         }
