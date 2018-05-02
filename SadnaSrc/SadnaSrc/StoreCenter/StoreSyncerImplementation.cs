@@ -1,4 +1,4 @@
-﻿using SadnaSrc.Main;
+using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 using System;
 using System.Collections.Generic;
