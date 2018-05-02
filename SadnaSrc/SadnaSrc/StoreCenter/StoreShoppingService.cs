@@ -57,6 +57,12 @@ namespace SadnaSrc.StoreCenter
                 slave.AddProductToCart(store, productName, quantity);
                 return slave.answer;
         }
+        public LinkedList<Store> GetAllStores()
+        {
+            StoreDL DataLayer = StoreDL.GetInstance();
+            LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
+            return AllStores;
+        }
 
         public void CleanSeesion()
         {

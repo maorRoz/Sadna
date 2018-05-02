@@ -10,7 +10,6 @@ namespace SadnaSrc.StoreCenter
 {
     interface OutsideModuleService
     {
-        LinkedList<Store> GetAllStores();
         void UpdateQuantityAfterPurchase(string store, string product, int quantity);
         bool ProductExistsInQuantity(string storeName, string product, int quantity);
         double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity);

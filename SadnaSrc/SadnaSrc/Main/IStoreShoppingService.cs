@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SadnaSrc.StoreCenter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace SadnaSrc.Main
 {
     public interface IStoreShoppingService
     {
+        LinkedList<Store> GetAllStores(); //Maor asked for me to put it here...
         MarketAnswer OpenStore(string storeName, string storeAddress);
 
         MarketAnswer ViewStoreInfo(string store);

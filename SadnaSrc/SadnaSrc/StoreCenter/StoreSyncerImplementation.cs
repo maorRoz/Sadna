@@ -30,11 +30,7 @@ namespace SadnaSrc.StoreCenter
             return DataLayer.GetProductFromStore(store, productName);
         }
 
-        public LinkedList<Store> GetAllStores()
-        { 
-            LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
-            return AllStores;
-        }
+        
 
         public void UpdateQuantityAfterPurchase(string storeName, string productName, int quantity)
         {
