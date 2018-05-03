@@ -23,7 +23,7 @@ namespace SadnaSrc.MarketFeed
         public int[] GetUserIds()
         {
             var userIds = new List<int>();
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "SystemID","Name != NULL"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "SystemID","Name IS NOT NULL"))
             {
                 while (dbReader.Read())
                 {
