@@ -74,7 +74,7 @@ namespace SadnaSrc.OrderPool
                                            " has failed to execute. Something is wrong with Store or User." +
                                            " Error message has been created!");
                 Answer = new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
-                publisher.NotifyClientBuy(store, itemName);
+                _publisher.NotifyClientBuy(store, itemName);
                 return null;
             }
         }

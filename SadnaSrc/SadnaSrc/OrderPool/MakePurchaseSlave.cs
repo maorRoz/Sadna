@@ -17,7 +17,7 @@ namespace SadnaSrc.OrderPool
 
         protected readonly IUserBuyer _buyer;
         protected readonly IStoresSyncher _storesSync;
-        protected readonly IPublisher publisher;
+        protected readonly IPublisher _publisher;
 
         protected readonly SupplyService _supplyService;
         protected readonly PaymentService _paymentService;
@@ -29,6 +29,7 @@ namespace SadnaSrc.OrderPool
             _supplyService = SupplyService.Instance;
             _paymentService = PaymentService.Instance;
             _orderDL = orderDL;
+            _publisher = publisher;
 
         }
 

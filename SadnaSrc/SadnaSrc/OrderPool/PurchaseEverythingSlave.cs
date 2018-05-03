@@ -118,7 +118,7 @@ namespace SadnaSrc.OrderPool
             var toRemoveItems = order.GetItems().ToArray();
             foreach (var item in toRemoveItems)
             {
-                publisher.NotifyClientBuy(item.Store,item.Name);
+                _publisher.NotifyClientBuy(item.Store,item.Name);
             }
             _storesSync.RemoveProducts(toRemoveItems);
             _orderDL.AddOrder(order);
