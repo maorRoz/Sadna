@@ -8,7 +8,7 @@ namespace SadnaSrc.StoreCenter
     {
         internal MarketAnswer Answer;
 
-        public RemoveDiscountFromProductSlave(string storeName, IUserSeller storeManager) :base(storeName,storeManager)
+        public RemoveDiscountFromProductSlave(string storeName, IUserSeller storeManager, I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
 

@@ -12,11 +12,11 @@ namespace SadnaSrc.StoreCenter
     {
         public MarketAnswer Answer { get; set; }
         IUserShopper _shopper;
-        StoreDL storeLogic;
-        public OpenStoreSlave(IUserShopper shopper)
+        I_StoreDL storeLogic;
+        public OpenStoreSlave(IUserShopper shopper, I_StoreDL storeDL)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.GetInstance();
+            storeLogic = storeDL;
         }
         public Store OpenStore(string storeName, string address)
         {

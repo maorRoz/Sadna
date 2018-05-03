@@ -13,11 +13,20 @@ namespace SadnaSrc.StoreCenter
         private IUserShopper _shopper;
         private readonly StoreSyncerImplementation storeLogic;
         private LinkedList<Store> stores;
+        private I_StoreDL storeDL;
+        public StoreShoppingService(IUserShopper shopper, I_StoreDL _storeDL)
+        {
+            _shopper = shopper;
+            storeLogic = StoreSyncerImplementation.GetInstance();
+            stores = new LinkedList<Store>();
+            storeDL = _storeDL;
+        }
         public StoreShoppingService(IUserShopper shopper)
         {
             _shopper = shopper;
             storeLogic = StoreSyncerImplementation.GetInstance();
             stores = new LinkedList<Store>();
+            storeDL = StoreDL.GetInstance();
         }
         public void LoginShoper(string userName, string password)
         {
@@ -29,7 +38,7 @@ namespace SadnaSrc.StoreCenter
         }
         public MarketAnswer OpenStore(string storeName, string address)
         {
-            OpenStoreSlave slave = new OpenStoreSlave(_shopper);
+            OpenStoreSlave slave = new OpenStoreSlave(_shopper, storeDL);
             Store S = slave.OpenStore(storeName, address);
             if (S!=null)
                 stores.AddLast(S);
@@ -38,7 +47,7 @@ namespace SadnaSrc.StoreCenter
         
         public MarketAnswer ViewStoreInfo(string store)
         {
-            ViewStoreInfoSlave slave = new ViewStoreInfoSlave(_shopper);
+            ViewStoreInfoSlave slave = new ViewStoreInfoSlave(_shopper, storeDL);
             slave.ViewStoreInfo(store);
             return slave.answer;
         }
@@ -46,14 +55,14 @@ namespace SadnaSrc.StoreCenter
         
         public MarketAnswer ViewStoreStock(string storename)
         {
-                ViewStoreStockSlave slave = new ViewStoreStockSlave(_shopper);
+                ViewStoreStockSlave slave = new ViewStoreStockSlave(_shopper, storeDL);
                 slave.ViewStoreStock(storename);
                 return slave.answer;
         }
 
         public MarketAnswer AddProductToCart(string store, string productName, int quantity)
         {
-                AddProductToCartSlave slave = new AddProductToCartSlave(_shopper);
+                AddProductToCartSlave slave = new AddProductToCartSlave(_shopper, storeDL);
                 slave.AddProductToCart(store, productName, quantity);
                 return slave.answer;
         }

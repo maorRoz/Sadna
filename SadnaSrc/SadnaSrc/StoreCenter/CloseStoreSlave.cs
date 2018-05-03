@@ -8,10 +8,9 @@ namespace SadnaSrc.StoreCenter
     {
         internal MarketAnswer answer;
         public Store store;
-        public CloseStoreSlave(IUserSeller storeManager, ref string _storeName) : base(_storeName, storeManager)
+        public CloseStoreSlave(IUserSeller storeManager, ref string _storeName, I_StoreDL storeDL) : base(_storeName, storeManager, storeDL)
         {
             store = DataLayerInstance.GetStorebyName(_storeName);
-            DataLayerInstance = StoreDL.GetInstance();
         }
 
         internal void CloseStore()

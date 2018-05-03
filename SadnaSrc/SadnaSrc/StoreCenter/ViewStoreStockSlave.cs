@@ -11,10 +11,10 @@ namespace SadnaSrc.StoreCenter
         private IUserShopper _shopper;
         StoreDL storeLogic;
 
-        public ViewStoreStockSlave(IUserShopper shopper)
+        public ViewStoreStockSlave(IUserShopper shopper, I_StoreDL storeDL)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.GetInstance();
+            storeLogic = storeDL;
         }
 
         internal void ViewStoreStock(string storename)

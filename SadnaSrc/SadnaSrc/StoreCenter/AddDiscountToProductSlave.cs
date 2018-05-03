@@ -7,7 +7,7 @@ namespace SadnaSrc.StoreCenter
     internal class AddDiscountToProductSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer answer;
-        public AddDiscountToProductSlave(string storeName, IUserSeller storeManager) :base(storeName,storeManager)
+        public AddDiscountToProductSlave(string storeName, IUserSeller storeManager, I_StoreDL storeDL) :base(storeName,storeManager, storeDL)
         {
         }
 

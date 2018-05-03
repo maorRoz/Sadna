@@ -7,7 +7,7 @@ namespace SadnaSrc.StoreCenter
     internal class PromoteToStoreManagerSlave : AbstractStoreCenterSlave
     {
         internal MarketAnswer Answer;
-        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName) : base(storeName,storeManager)
+        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName, I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
         internal void PromoteToStoreManager(string someoneToPromoteName, string actions)

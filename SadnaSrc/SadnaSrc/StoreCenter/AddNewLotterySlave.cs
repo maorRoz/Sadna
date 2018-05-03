@@ -9,7 +9,7 @@ namespace SadnaSrc.StoreCenter
         internal MarketAnswer answer;
         Store store;
 
-        public AddNewLotterySlave(string storeName, IUserSeller storeManager) : base(storeName, storeManager)
+        public AddNewLotterySlave(string storeName, IUserSeller storeManager,I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
             store = DataLayerInstance.GetStorebyName(storeName);
         }

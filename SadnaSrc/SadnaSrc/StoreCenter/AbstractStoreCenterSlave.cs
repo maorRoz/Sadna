@@ -12,10 +12,10 @@ namespace SadnaSrc.StoreCenter
         protected string _storeName;
         protected I_StoreDL DataLayerInstance;
         protected IUserSeller _storeManager;
-        protected AbstractStoreCenterSlave(string storeName, IUserSeller storeManager)
+        protected AbstractStoreCenterSlave(string storeName, IUserSeller storeManager,I_StoreDL storeDL )
         {
             _storeName = storeName;
-            DataLayerInstance = StoreDL.GetInstance();
+            DataLayerInstance = storeDL;
             _storeManager = storeManager;
         }
         protected void checkIfStoreExistsAndActive()
