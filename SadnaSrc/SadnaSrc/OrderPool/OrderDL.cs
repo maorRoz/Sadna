@@ -135,7 +135,7 @@ namespace SadnaSrc.OrderPool
 
 
                 string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@quantityParam", "@priceParam", "@dateParam" };
-                object[] values3 = { order.GetUserName(), item.Name, item.Store, "Immediate", item.Quantity, item.Price, order.GetDate().ToString("dd/MM/yyyy") };
+                object[] values3 = { order.GetUserName(), item.Name, item.Store, "Immediate", item.Quantity, item.Price, order.GetDate() };
                 dbConnection.InsertTable("PurchaseHistory", "UserName,Product,Store,SaleType,Quantity,Price,Date", valuesNames3, values3);
             }
         }
@@ -154,7 +154,7 @@ namespace SadnaSrc.OrderPool
 
                 
                 string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@quantityParam", "@priceParam", "@dateParam" };
-                object[] values3 = { order.GetUserName(), item.Name, item.Store, saleType,item.Quantity,item.Price, order.GetDate().ToString("dd/MM/yyyy") };
+                object[] values3 = { order.GetUserName(), item.Name, item.Store, saleType,item.Quantity,item.Price, order.GetDate() };
                 dbConnection.InsertTable("PurchaseHistory", "UserName,Product,Store,SaleType,Quantity,Price,Date", valuesNames3, values3);
             }
 

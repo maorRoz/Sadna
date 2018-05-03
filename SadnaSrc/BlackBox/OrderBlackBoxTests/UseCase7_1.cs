@@ -70,7 +70,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_shoppingBridge2.GetStoreShoppingService(_buyerRegisteredUserBridge.GetUserSession());
 			_shoppingBridge2.AddProductToCart("Yalla", "Tea", 4);
 			_shoppingBridge2.AddProductToCart("HAHAHA", "Coffee", 3);
-			//TODO: check the products are actually in the cart before purchasing them
 			MarketAnswer cartDetails = _buyerRegisteredUserBridge.ViewCart();
 			string[] received = cartDetails.ReportList;
 			string[] expected =
@@ -97,7 +96,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_shoppingBridge2.GetStoreShoppingService(_buyerGuestBridge.GetUserSession());
 			_shoppingBridge2.AddProductToCart("Yalla", "Tea", 4);
 			_shoppingBridge2.AddProductToCart("HAHAHA", "Coffee", 3);
-			//TODO: check the products are actually in the cart before purchasing them
 			MarketAnswer cartDetails = _buyerGuestBridge.ViewCart();
 			string[] received = cartDetails.ReportList;
 			string[] expected =
@@ -122,23 +120,21 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			MarketAnswer res = _orderBridge.BuyEverythingFromCart(new string[]{null, null});
 			Assert.AreEqual((int)OrderStatus.Success, res.Status);
-			//TODO: check in the purchase history
 			MarketAnswer puchaseHistory = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, puchaseHistory.Status);
 			string[] receivedHistory = puchaseHistory.ReportList;
 			string[] expectedHistory =
 			{
 				"User: Shalom Product: Coffee Store: HAHAHA Sale: Immediate Quantity: 3 Price: 30 Date: " +
-				DateTime.Now.Date.ToString("d"),
+			    DateTime.Now.Date.ToString("yyyy-MM-dd"),
 				"User: Shalom Product: Tea Store: Yalla Sale: Immediate Quantity: 4 Price: 40 Date: " +
-				DateTime.Now.Date.ToString("d")
-			};
+				DateTime.Now.Date.ToString("yyyy-MM-dd")
+            };
 			Assert.AreEqual(expectedHistory.Length, receivedHistory.Length);
 			for (int i = 0; i < expectedHistory.Length; i++)
 			{
 				Assert.AreEqual(expectedHistory[i], receivedHistory[i]);
 			}
-			//TODO: check the products are no longer in the cart
 			MarketAnswer cartDetails = _buyerRegisteredUserBridge.ViewCart();
 			string[] expectedCart = { };
 			string[] receivedCart = cartDetails.ReportList;
@@ -167,12 +163,10 @@ namespace BlackBox.OrderBlackBoxTests
 			MarketAnswer order = _orderBridge.BuyEverythingFromCart(new string[] { null, null });
 			Assert.AreEqual((int)OrderStatus.Success, order.Status);
 
-			//TODO: check the products are no longer in the cart
 			MarketAnswer cartDetails = _buyerGuestBridge.ViewCart();
 			string[] expectedCart = { };
 			string[] receivedCart = cartDetails.ReportList;
 			Assert.AreEqual(expectedCart.Length, receivedCart.Length);
-			//TODO: check the stock
 			MarketAnswer stock1 = _shoppingBridge.ViewStoreStock("Yalla");
 			string[] expectedYallaStock =
 			{
@@ -194,7 +188,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 100, 10, null);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
-			//TODO: check nothing had changed
 			CheckHistoryNullCartSameStockNotChangedRegisterUser();
 		}
 
@@ -205,7 +198,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			MarketAnswer res = _orderBridge.BuyItemFromImmediate("why","HAHAHA",3,10, null);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder,res.Status);
-			//TODO: check nothing has changed
 			CheckHistoryNullCartSameStockNotChangedRegisterUser();
 		}
 
@@ -217,8 +209,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails(null, "MisholGuest", "77777777");
 			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
-			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
-			//TODO: check nothing has changed
 			CheckCartSameStockNotChangedGuest();
 		}
 
@@ -230,7 +220,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GiveDetails("PninaGuest", null, "77777777");
 			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
-			//TODO: check nothing has changed
 			CheckCartSameStockNotChangedGuest();
 		}
 
@@ -242,7 +231,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GiveDetails("PninaGuest", "MisholGuest", "");
 			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
-			//TODO: check nothing has changed
 			CheckCartSameStockNotChangedGuest();
 		}
 
@@ -253,7 +241,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
-			//TODO: check nothing has changed
 			CheckCartSameStockNotChangedGuest();
 		}
 
@@ -265,7 +252,6 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.DisableSupplySystem();
 			MarketAnswer res = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
-			//TODO: check nothing has changed
 			CheckHistoryNullCartSameStockNotChangedRegisterUser();
 
 		}
@@ -329,8 +315,6 @@ namespace BlackBox.OrderBlackBoxTests
 			{
 				Assert.AreEqual(expected[i], received[i]);
 			}
-
-			//TODO: check the store's stock stayed the same
 			MarketAnswer stock1 = _shoppingBridge.ViewStoreStock("Yalla");
 			string[] expectedYallaStock =
 			{

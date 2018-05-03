@@ -23,7 +23,7 @@ namespace SadnaSrc.MarketFeed
         public int[] GetUserIds()
         {
             var userIds = new List<int>();
-            using (var dbReader = dbConnection.SelectFromTable("User", "SystemID"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "SystemID","Name != NULL"))
             {
                 while (dbReader.Read())
                 {
@@ -37,7 +37,7 @@ namespace SadnaSrc.MarketFeed
         public void SaveUnreadNotification(Notification notification)
         {
             dbConnection.InsertTable("Notifications", "NotificationID,Receiver,Message,Status", 
-                new[]{"@id,@receiver,@msg,@status"},notification.ToData());
+                new[]{"@id","@receiver","@msg","@status"},notification.ToData());
         }
 
         public Notification[] GetUnreadNotifications(int userId)

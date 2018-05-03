@@ -94,10 +94,10 @@ namespace BlackBox.OrderBlackBoxTests
 			string[] expectedHistory =
 			{
 				"User: Shalom Product: Coffee Store: HAHAHA Sale: Immediate Quantity: 3 Price: 30 Date: " +
-				DateTime.Now.Date.ToString("d"),
+			    DateTime.Now.Date.ToString("yyyy-MM-dd"),
 				"User: Shalom Product: Tea Store: Yalla Sale: Immediate Quantity: 4 Price: 40 Date: " +
-				DateTime.Now.Date.ToString("d")
-			};
+				DateTime.Now.Date.ToString("yyyy-MM-dd")
+            };
 			Assert.AreEqual(expectedHistory.Length,receivedHistory.Length);
 			for (int i = 0; i < expectedHistory.Length; i++)
 			{
@@ -120,6 +120,38 @@ namespace BlackBox.OrderBlackBoxTests
 			};
 			Assert.AreEqual(expectedHahahaStock[0], stock2.ReportList[0]);
 		}
+
+	    [TestMethod]
+	    public void SuccessBuyingLessThenInCart()
+	    {
+	        AddProductsToCartRegisteredUser();
+	        _orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
+	        MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea","Yalla",3,10,null);
+	        Assert.AreEqual((int)OrderStatus.Success, res.Status);
+	        res = _orderBridge.BuyItemFromImmediate("Coffee", "HAHAHA", 1, 10, null);
+	        Assert.AreEqual((int)OrderStatus.Success, res.Status);
+	        res = _orderBridge.BuyEverythingFromCart(null);
+	        Assert.AreEqual((int)OrderStatus.Success, res.Status);
+            MarketAnswer puchaseHistory = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
+	        Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, puchaseHistory.Status);
+	        string[] receivedHistory = puchaseHistory.ReportList;
+	        string[] expectedHistory =
+	        {
+	            "User: Shalom Product: Coffee Store: HAHAHA Sale: Immediate Quantity: 1 Price: 10 Date: " +
+	            DateTime.Now.Date.ToString("yyyy-MM-dd"),
+	            "User: Shalom Product: Coffee Store: HAHAHA Sale: Immediate Quantity: 2 Price: 20 Date: " +
+	            DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom Product: Tea Store: Yalla Sale: Immediate Quantity: 3 Price: 30 Date: " +
+	            DateTime.Now.Date.ToString("yyyy-MM-dd"),
+	            "User: Shalom Product: Tea Store: Yalla Sale: Immediate Quantity: 1 Price: 10 Date: " +
+	            DateTime.Now.Date.ToString("yyyy-MM-dd"),
+            };
+	        Assert.AreEqual(expectedHistory.Length, receivedHistory.Length);
+	        for (int i = 0; i < expectedHistory.Length; i++)
+	        {
+	            Assert.AreEqual(expectedHistory[i], receivedHistory[i]);
+	        }
+        }
 
 		[TestMethod]
 		public void SuccessBuyingProductsGuest()

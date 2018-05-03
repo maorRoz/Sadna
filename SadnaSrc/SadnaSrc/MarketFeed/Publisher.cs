@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using SadnaSrc.Main;
 
 namespace SadnaSrc.MarketFeed
@@ -96,12 +97,9 @@ namespace SadnaSrc.MarketFeed
             return readers[userId];
         }
 
-        public void CleanPublisherQueues()
+        public static void CleanPublisher()
         {
-            foreach (var queue in readers.Values)
-            {
-                queue.CleanQueue();
-            }
+            _instance = null;
         }
     }
 }

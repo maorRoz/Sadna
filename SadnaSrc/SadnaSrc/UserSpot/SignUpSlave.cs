@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using static System.Int32;
 
 namespace SadnaSrc.UserSpot
@@ -11,6 +13,7 @@ namespace SadnaSrc.UserSpot
     public class SignUpSlave
     {
         private readonly IUserDL _userDB;
+        private readonly IPublisher _publisher;
 
         private readonly User _guest;
 
@@ -18,12 +21,13 @@ namespace SadnaSrc.UserSpot
 
         private int currentID;
 
-        public SignUpSlave(User guest, IUserDL userDB)
+        public SignUpSlave(User guest, IUserDL userDB,IPublisher publisher)
         {
             _userDB = userDB;
             Answer = null;
             _guest = guest;
             currentID = _guest?.SystemID ?? -1;
+            _publisher = publisher;
         }
 
         public User SignUp(string name, string address, string password, string creditCard)
@@ -40,6 +44,7 @@ namespace SadnaSrc.UserSpot
                     creditCard, _guest.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + newRegistered.SystemID + " sign up to the system has been successfull!");
                 Answer = new UserAnswer(SignInStatus.Success, "Sign up has been successfull!");
+                _publisher.AddFeedQueue(newRegistered.SystemID);
                 return newRegistered;
             }
             catch (UserException e)

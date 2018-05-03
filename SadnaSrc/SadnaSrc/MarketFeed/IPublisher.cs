@@ -9,6 +9,8 @@ namespace SadnaSrc.MarketFeed
     public interface IPublisher
     {
         IFeedQueue GetFeedQueue(int userId);
+
+        void AddFeedQueue(int userId);
         void NotifyClientBuy(string store, string product);
         void NotifyLotteryFinish(string lottery, string store, string product);
         void NotifyLotteryCanceled(int[] refundedIds);

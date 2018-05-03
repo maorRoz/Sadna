@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using SadnaSrc.UserSpot;
 
 namespace UserSpotTests.UserSpotApiTests
@@ -21,11 +22,16 @@ namespace UserSpotTests.UserSpotApiTests
         private readonly string registeredUserCreditCard = "12345678";
         private Mock<IMarketDB> marketDbMocker;
         private Mock<IUserDL> userDbMocker;
+        private Mock<IPublisher> publisherMocker;
+        private int counterQueueAdded;
 
         [TestInitialize]
         public void MarketBuilder()
         {
             marketDbMocker = new Mock<IMarketDB>();
+            publisherMocker = new Mock<IPublisher>();
+            counterQueueAdded = 0;
+            publisherMocker.Setup(x => x.AddFeedQueue(It.IsAny<int>())).Callback(addQueueCheck);
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             userDbMocker = new Mock<IUserDL>();
@@ -35,7 +41,7 @@ namespace UserSpotTests.UserSpotApiTests
                     encryptedUserPassword, registeredUserCreditCard,new CartItem[0]));
             userDbMocker.Setup(x => x.IsUserNameExist(It.IsAny<string>())).Returns(false);
             guestUser = new User(userDbMocker.Object, registeredUserID);
-            slave = new SignUpSlave(guestUser, userDbMocker.Object);
+            slave = new SignUpSlave(guestUser, userDbMocker.Object,publisherMocker.Object);
         }
 
         [TestMethod]
@@ -46,6 +52,7 @@ namespace UserSpotTests.UserSpotApiTests
             Assert.IsFalse(user.HasStorePolicies());
             Assert.IsFalse(user.IsSystemAdmin());
             Assert.IsTrue(user.IsRegisteredUser());
+            Assert.AreEqual(1,counterQueueAdded);
 
         }
 
@@ -57,6 +64,7 @@ namespace UserSpotTests.UserSpotApiTests
                 registeredUserCreditCard };
             object[] actual = user.ToData();
             CompareUserToData(expected, actual);
+            Assert.AreEqual(1, counterQueueAdded);
         }
 
         [TestMethod]
@@ -111,10 +119,11 @@ namespace UserSpotTests.UserSpotApiTests
         [TestMethod]
         public void DidntEnteredSystemTest()
         {
-            slave = new SignUpSlave(null,userDbMocker.Object);
+            slave = new SignUpSlave(null,userDbMocker.Object,publisherMocker.Object);
             User user = slave.SignUp(registeredUserName, registeredUserAddress, registeredUserPassword,
                 registeredUserCreditCard);
             Assert.IsNull(user);
+            Assert.AreEqual(0, counterQueueAdded);
 
         }
 
@@ -129,13 +138,14 @@ namespace UserSpotTests.UserSpotApiTests
         public void SignUpAgainTest()
         {
             User user = slave.SignUp(registeredUserName, registeredUserAddress, registeredUserPassword, registeredUserCreditCard);
-            slave = new SignUpSlave(user,userDbMocker.Object);
+            slave = new SignUpSlave(user,userDbMocker.Object,publisherMocker.Object);
             user = slave.SignUp("some other name", registeredUserAddress, registeredUserPassword,
                 registeredUserCreditCard);
             object[] expected = { registeredUserID, registeredUserName, registeredUserAddress, encryptedUserPassword,
                 registeredUserCreditCard };
             object[] actual = user.ToData();
             CompareUserToData(expected,actual);
+            Assert.AreEqual(1, counterQueueAdded);
         }
 
 
@@ -143,7 +153,7 @@ namespace UserSpotTests.UserSpotApiTests
         public void SignUpWithExistedName()
         {
             userDbMocker.Setup(x => x.IsUserNameExist(It.IsAny<string>())).Returns(true);
-            slave = new SignUpSlave(guestUser, userDbMocker.Object);
+            slave = new SignUpSlave(guestUser, userDbMocker.Object,publisherMocker.Object);
             User user = slave.SignUp(registeredUserName, registeredUserAddress, registeredUserPassword,
                 registeredUserCreditCard);
             BadSignUpToDataCompare(user);
@@ -172,6 +182,12 @@ namespace UserSpotTests.UserSpotApiTests
             object[] expected = guestUser.ToData();
             object[] actual = user.ToData();
             CompareUserToData(expected, actual);
+            Assert.AreEqual(0,counterQueueAdded);
+        }
+
+        private void addQueueCheck()
+        {
+            counterQueueAdded++;
         }
     }
 }
