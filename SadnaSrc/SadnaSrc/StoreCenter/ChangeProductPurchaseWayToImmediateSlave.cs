@@ -4,9 +4,9 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ChangeProductPurchaseWayToImmediateSlave : AbstractStoreCenterSlave
+    public class ChangeProductPurchaseWayToImmediateSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private IOrderSyncher syncher;
 
         public ChangeProductPurchaseWayToImmediateSlave(string storeName, IUserSeller storeManager,
@@ -15,7 +15,7 @@ namespace SadnaSrc.StoreCenter
             syncher = _syncher;
         }
 
-        internal void ChangeProductPurchaseWayToImmediate(string productName)
+        public void ChangeProductPurchaseWayToImmediate(string productName)
         {
             try
             {

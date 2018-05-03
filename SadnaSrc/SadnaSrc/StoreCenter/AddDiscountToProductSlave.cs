@@ -4,14 +4,14 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddDiscountToProductSlave : AbstractStoreCenterSlave
+    public class AddDiscountToProductSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         public AddDiscountToProductSlave(string storeName, IUserSeller storeManager, I_StoreDL storeDL) :base(storeName,storeManager, storeDL)
         {
         }
 
-        internal Discount AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
+        public Discount AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
         {
             MarketLog.Log("StoreCenter", "trying to add discount to product in store");
             MarketLog.Log("StoreCenter", "check if store exists");

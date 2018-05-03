@@ -4,16 +4,16 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddNewProductSlave : AbstractStoreCenterSlave
+    public class AddNewProductSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private Store _store;
         public AddNewProductSlave(IUserSeller storeManager, string storeName, I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
             _store = DataLayerInstance.GetStorebyName(_storeName);
         }
 
-        internal StockListItem AddNewProduct(string _name, double _price, string _description, int quantity)
+        public StockListItem AddNewProduct(string _name, double _price, string _description, int quantity)
         {
 
             MarketLog.Log("StoreCenter", "trying to add product to store");

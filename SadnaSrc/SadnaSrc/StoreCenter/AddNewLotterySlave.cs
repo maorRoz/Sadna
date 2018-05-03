@@ -4,9 +4,9 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddNewLotterySlave : AbstractStoreCenterSlave
+    public class AddNewLotterySlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         Store store;
 
         public AddNewLotterySlave(string storeName, IUserSeller storeManager,I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
@@ -14,7 +14,7 @@ namespace SadnaSrc.StoreCenter
             store = DataLayerInstance.GetStorebyName(storeName);
         }
 
-        internal StockListItem AddNewLottery(string name, double price, string description, DateTime startDate, DateTime endDate)
+        public StockListItem AddNewLottery(string name, double price, string description, DateTime startDate, DateTime endDate)
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
             MarketLog.Log("StoreCenter", "check if store exists");

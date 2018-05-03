@@ -4,9 +4,9 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class RemoveProductSlave :AbstractStoreCenterSlave
+    public class RemoveProductSlave :AbstractStoreCenterSlave
     {
-        internal MarketAnswer Answer;
+        public MarketAnswer Answer;
         IOrderSyncher syncher;
 
         public RemoveProductSlave(ref IOrderSyncher _syncher, string name, IUserSeller manager, I_StoreDL storeDL) : base(name, manager, storeDL)
@@ -14,7 +14,7 @@ namespace SadnaSrc.StoreCenter
             syncher = _syncher;
         }
 
-        internal void RemoveProduct(string productName)
+        public void RemoveProduct(string productName)
         {
             MarketLog.Log("StoreCenter", "trying to remove product from store");
             MarketLog.Log("StoreCenter", "check if store exists");

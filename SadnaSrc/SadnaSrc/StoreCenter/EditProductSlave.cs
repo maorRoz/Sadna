@@ -4,16 +4,16 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class EditProductSlave : AbstractStoreCenterSlave
+    public class EditProductSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         
 
         public EditProductSlave(string storename, IUserSeller storeManager, I_StoreDL storeDL) : base(storename, storeManager, storeDL)
         {
         }
 
-        internal void EditProduct(string productName, string whatToEdit, string newValue)
+        public void EditProduct(string productName, string whatToEdit, string newValue)
         {
 
             MarketLog.Log("StoreCenter", "trying to edit product in store");

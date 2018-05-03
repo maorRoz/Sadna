@@ -4,15 +4,15 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddQuanitityToProductSlave : AbstractStoreCenterSlave
+    public class AddQuanitityToProductSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
 
         public AddQuanitityToProductSlave(string storeName, IUserSeller storeManager, I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
 
-        internal void AddQuanitityToProduct(string productName, int quantity)
+        public void AddQuanitityToProduct(string productName, int quantity)
         {
             try
             {

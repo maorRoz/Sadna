@@ -5,9 +5,9 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ViewStoreStockSlave
+    public class ViewStoreStockSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private IUserShopper _shopper;
         I_StoreDL storeLogic;
 
@@ -17,7 +17,7 @@ namespace SadnaSrc.StoreCenter
             storeLogic = storeDL;
         }
 
-        internal void ViewStoreStock(string storename)
+        public void ViewStoreStock(string storename)
         {
             try
             {

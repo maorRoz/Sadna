@@ -4,15 +4,15 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class EditDiscountSlave : AbstractStoreCenterSlave
+    public class EditDiscountSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
 
         public EditDiscountSlave(string storeName, IUserSeller storeManager, I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
 
-        internal void EditDiscount(string productName, string whatToEdit, string newValue)
+        public void EditDiscount(string productName, string whatToEdit, string newValue)
         {
             try
             {

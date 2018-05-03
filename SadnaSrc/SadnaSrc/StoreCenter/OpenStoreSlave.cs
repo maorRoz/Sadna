@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    class OpenStoreSlave
+    public class OpenStoreSlave
     {
         public MarketAnswer Answer { get; set; }
         IUserShopper _shopper;

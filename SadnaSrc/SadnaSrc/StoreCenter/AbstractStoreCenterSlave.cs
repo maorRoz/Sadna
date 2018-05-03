@@ -3,7 +3,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal abstract class AbstractStoreCenterSlave
+    public abstract class AbstractStoreCenterSlave
     {
         /**
          * many of the slaves in the Store Managment use same methods and hold smae attrebutes. 
