@@ -8,8 +8,8 @@ namespace SadnaSrc.StoreCenter
     {
         internal MarketAnswer answer;
         private IUserShopper _shopper;
-        StoreDL storeLogic;
-
+        I_StoreDL storeLogic;
+        
         public AddProductToCartSlave(IUserShopper shopper, I_StoreDL storeDL)
         {
             _shopper = shopper;
