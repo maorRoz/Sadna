@@ -34,7 +34,7 @@ namespace StoreCenterTests
             [TestMethod]
             public void CloseStorePass()
             {
-             hadler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
             handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", "bala"));
             CloseStoreSlave slave = new CloseStoreSlave(userService.Object, "X", handler.Object);
             slave.CloseStore();
