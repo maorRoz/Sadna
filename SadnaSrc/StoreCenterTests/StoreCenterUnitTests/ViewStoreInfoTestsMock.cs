@@ -37,7 +37,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             {
                 ViewStoreInfoSlave slave = new ViewStoreInfoSlave(userService.Object, handler.Object);
                 slave.ViewStoreInfo("noStore");
-                Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
+                Assert.AreEqual((int)ViewStoreStatus.NoStore, slave.answer.Status);
             }
             [TestMethod]
             public void ViewStorePass()
