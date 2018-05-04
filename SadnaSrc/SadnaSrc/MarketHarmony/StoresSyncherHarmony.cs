@@ -24,14 +24,28 @@ namespace SadnaSrc.MarketHarmony
         {
             foreach (OrderItem item in purchased)
             {
-                _storeService.UpdateQuantityAfterPurchase(item.Store, item.Name, item.Quantity);
+                try
+                {
+                    _storeService.UpdateQuantityAfterPurchase(item.Store, item.Name, item.Quantity);
+                }
+                catch (StoreException e)
+                {
+                    throw new OrderException(OrderItemStatus.InvalidDetails, e.GetErrorMessage());
+                }
             }
         }
 
         public void UpdateLottery(string itemName, string store,double moenyPayed, string username,int cheatCode)
         {
-            StockSyncher syncher = StockSyncher.Instance;
-            syncher.UpdateLottery(store, itemName, moenyPayed, username, orderSyncher,cheatCode);
+            try
+            {
+                StockSyncher syncher = StockSyncher.Instance;
+                syncher.UpdateLottery(store, itemName, moenyPayed, username, orderSyncher, cheatCode);
+            }
+            catch (StoreException e)
+            {
+                throw new OrderException(LotteryOrderStatus.InvalidLotteryTicket, e.GetErrorMessage());
+            }
         }
 
 
@@ -46,13 +60,22 @@ namespace SadnaSrc.MarketHarmony
         {
             if (!_storeService.HasActiveLottery(store, itemName, wantToPay))
             {
-                throw new OrderException(OrderStatus.InvalidCoupon, "no lottery is on going! cannot get ticket from expired or unavailable lottery"); 
+                throw new OrderException(LotteryOrderStatus.InvalidLotteryTicket, "no lottery is on going! cannot get ticket from expired or unavailable lottery"); 
             }
         }
 
         public double GetPriceFromCoupon(string itemName, string store, int quantity, string coupon)
         {
-            return _storeService.CalculateItemPriceWithDiscount(store, itemName, coupon, quantity);
+            try
+            {
+                double result = _storeService.CalculateItemPriceWithDiscount(store, itemName, coupon, quantity);
+                return result;
+            }
+            catch (StoreException e)
+            {
+                throw new OrderException(OrderItemStatus.InvalidDetails, e.GetErrorMessage());
+            }
+            
         }
 
     }

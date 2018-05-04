@@ -241,7 +241,7 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			_orderBridge.DisablePaymentSystem();
 			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1, null);
-			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, res.Status);
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
 		}
@@ -253,7 +253,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea","Yalla",2100,10, null);
-			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, res.Status);
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
 		}

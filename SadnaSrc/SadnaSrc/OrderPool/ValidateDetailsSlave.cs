@@ -30,7 +30,6 @@ namespace SadnaSrc.OrderPool
             catch (OrderException e)
             {
                 Answer = new OrderAnswer(GiveDetailsStatus.InvalidNameOrAddress, e.GetErrorMessage());
-
             }
 
         }
