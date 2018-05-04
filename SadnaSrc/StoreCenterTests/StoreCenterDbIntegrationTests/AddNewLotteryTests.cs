@@ -8,87 +8,73 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
-    public class AddQuantityTests
+    public class AddNewLotteryTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private I_StoreDL handler;
+        private IStoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
         }
-
-
         [TestMethod]
-        public void AddQuanitityWhenStoreNotExists()
+        public void addProductWhenStoreNotExists()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
-            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 1);
+            MarketAnswer ans = liorSession.AddNewLottery("name0", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));
             Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
         }
         [TestMethod]
-        public void AddQuanitityWhenHasNoPremmision()
+        public void addProductWhenHasNoPremmision()
         {
             userService.EnterSystem();
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 1);
+            MarketAnswer ans = liorSession.AddNewLottery("name0", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));
             Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
         }
         [TestMethod]
-        public void AddQuanitiyWhenProductIsNotAvailableInStore()
+        public void addProductWhenProductNameIsNotAvailableInStore()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddQuanitityToProduct("LOX", 1);
-            Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
+            MarketAnswer ans = liorSession.AddNewLottery("BOX", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));
+            Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, ans.Status);
         }
         [TestMethod]
-        public void AddQuanitiyWhenQuantityIsNegative()
+        public void addProductWhenDatesAreWrong()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", -1);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+            MarketAnswer ans = liorSession.AddNewLottery("name0", 1, "des", DateTime.Parse("30/12/2019"), DateTime.Parse("30/10/2019"));
+            Assert.AreEqual((int)StoreEnum.DatesAreWrong, ans.Status);
         }
         [TestMethod]
-        public void AddQuanitiyWhenQuantityIsZero()
+        public void addProductSuccess()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 0);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
-        }
-        [TestMethod]
-        public void AddQuanitiySuccess()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("new", 5, "MOMO", 5);
-            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "new");
-            MarketAnswer ans = liorSession.AddQuanitityToProduct("new", 10);
-            StockListItem find = handler.GetProductFromStore(liorSession._storeName, "new");
-            Assert.AreEqual(find.Quantity, 15);
+            MarketAnswer ans = liorSession.AddNewLottery("name0", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));
+            ProductToDelete = handler.GetProductFromStore("X", "name0");
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 
 
         [TestCleanup]
-        public void CleanUpOpenStoreTest()
+        public void CleanUpTest()
         {
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();

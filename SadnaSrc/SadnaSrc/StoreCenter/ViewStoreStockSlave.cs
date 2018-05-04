@@ -5,23 +5,23 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ViewStoreStockSlave
+    public class ViewStoreStockSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private IUserShopper _shopper;
-        StoreDL storeLogic;
+        IStoreDL storeLogic;
 
-        public ViewStoreStockSlave(IUserShopper shopper)
+        public ViewStoreStockSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.GetInstance();
+            storeLogic = storeDL;
         }
 
-        internal void ViewStoreStock(string storename)
+        public void ViewStoreStock(string storename)
         {
             try
             {
-             MarketLog.Log("StoreCenter", "checking store stack");
+            MarketLog.Log("StoreCenter", "checking store stack");
             _shopper.ValidateCanBrowseMarket();
             MarketLog.Log("StoreCenter", "check if store exists");
             CheckIfStoreExists(storename);
@@ -59,8 +59,7 @@ namespace SadnaSrc.StoreCenter
 
         private string GetProductStockInformation(string productID)
         {
-            StoreDL handler = StoreDL.GetInstance();
-            StockListItem stockListItem = handler.GetStockListItembyProductID(productID);
+            StockListItem stockListItem = storeLogic.GetStockListItembyProductID(productID);
             if (stockListItem == null)
             {
                 MarketLog.Log("storeCenter", "product not exists");

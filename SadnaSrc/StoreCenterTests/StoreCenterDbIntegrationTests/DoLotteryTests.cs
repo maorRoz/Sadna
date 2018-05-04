@@ -8,15 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
     public class DoLotteryTests
     {
-        private MarketYard market;
         public StockListItem ProductToDelete;
-        private I_StoreDL handler;
-        IUserService userService;
+        private IStoreDL handler;
         public LotterySaleManagmentTicket LotteryToDelete;
         public LinkedList<LotteryTicket> tickets;
 
@@ -24,9 +22,7 @@ namespace StoreCenterTests
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
-            market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
-            userService = market.GetUserService();
+            handler = StoreDL.Instance;
             Product P = new Product("P10000", "name", 100, "ds");
             ProductToDelete = new StockListItem(1, P, null, PurchaseEnum.Lottery, "S7");
             LotteryToDelete = new LotterySaleManagmentTicket("L100", "T", P, DateTime.Parse("31/12/2019"), DateTime.Parse("31/12/2020"));

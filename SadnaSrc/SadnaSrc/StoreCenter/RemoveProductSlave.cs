@@ -4,17 +4,17 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class RemoveProductSlave :AbstractStoreCenterSlave
+    public class RemoveProductSlave :AbstractStoreCenterSlave
     {
-        internal MarketAnswer Answer;
+        public MarketAnswer Answer;
         IOrderSyncher syncher;
 
-        public RemoveProductSlave(ref IOrderSyncher _syncher, string name, IUserSeller manager) : base(name, manager)
+        public RemoveProductSlave(IOrderSyncher _syncher, string name, IUserSeller manager, IStoreDL storeDL) : base(name, manager, storeDL)
         {
             syncher = _syncher;
         }
 
-        internal void RemoveProduct(string productName)
+        public void RemoveProduct(string productName)
         {
             MarketLog.Log("StoreCenter", "trying to remove product from store");
             MarketLog.Log("StoreCenter", "check if store exists");
@@ -47,12 +47,10 @@ namespace SadnaSrc.StoreCenter
 
         private void HandleIfLottery(StockListItem stockListItem)
         {
-            if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
-            {
-                LotterySaleManagmentTicket lotteryManagment = DataLayerInstance.GetLotteryByProductID(stockListItem.Product.SystemId);
-                lotteryManagment.InformCancel(syncher);
-                DataLayerInstance.RemoveLottery(lotteryManagment);
-            }
+            if (stockListItem.PurchaseWay != PurchaseEnum.Lottery) return;
+            LotterySaleManagmentTicket lotteryManagment = DataLayerInstance.GetLotteryByProductID(stockListItem.Product.SystemId);
+            lotteryManagment.InformCancel(syncher);
+            DataLayerInstance.RemoveLottery(lotteryManagment);
         }
 
 

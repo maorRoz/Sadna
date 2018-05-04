@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    class OpenStoreSlave
+    public class OpenStoreSlave
     {
-        public MarketAnswer Answer { get; set; }
+        public MarketAnswer Answer { get; private set; }
         IUserShopper _shopper;
-        StoreDL storeLogic;
-        public OpenStoreSlave(IUserShopper shopper)
+        IStoreDL storeLogic;
+        public OpenStoreSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.GetInstance();
+            storeLogic = storeDL;
         }
         public Store OpenStore(string storeName, string address)
         {
@@ -50,10 +50,10 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void CheckIfNameAvailable(String name)
+        private void CheckIfNameAvailable(string name)
         {
-            Store product = storeLogic.GetStorebyName(name);
-            if (product != null)
+            var store = storeLogic.GetStorebyName(name);
+            if (store != null)
                 throw new StoreException(OpenStoreStatus.AlreadyExist, "store name must be uniqe");
         }
     }

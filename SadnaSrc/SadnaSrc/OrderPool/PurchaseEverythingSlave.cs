@@ -30,22 +30,10 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                Order order;
-                try
-                {
-                    order = CreateOrderAllCart(UserName, UserAddress, coupons);
-                    orderId = order.GetOrderID();
-                }
-                catch (MarketException e)
-                {
-                    MarketLog.Log("OrderPool", "Order " + orderId +
-                                               " has failed to execute. Something is wrong with Store." +
-                                               " Error message has been created!");
-                    Answer = new OrderAnswer(OrderStatus.InvalidCoupon, e.GetErrorMessage());
-                    return null;
-                }
+                Order order = CreateOrderAllCart(UserName, UserAddress, coupons);
+                orderId = order.GetOrderID();
                 ProcessOrder(order, CreditCard);
-                _buyer.EmptyCart();
+                EmptyCart();
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in the cart.");
                 Answer = new OrderAnswer(OrderStatus.Success, "Successfully bought all the items in the cart.");
                 return order;
@@ -71,14 +59,6 @@ namespace SadnaSrc.OrderPool
                                            " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
                 Answer = new OrderAnswer((SupplyStatus) e.Status, e.GetErrorMessage());
-                return null;
-            }
-            catch (MarketException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId +
-                                           " has failed to execute. Something is wrong with Store or User." +
-                                           " Error message has been created!");
-                Answer = new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
                 return null;
             }
         }
@@ -137,6 +117,18 @@ namespace SadnaSrc.OrderPool
                 }
             Order order = InitOrder(itemsToBuy, UserName, UserAddress);
             return order;
+        }
+
+        private void EmptyCart()
+        {
+            try
+            {
+                _buyer.EmptyCart();
+            }
+            catch (MarketException e)
+            {
+                throw new OrderException(OrderStatus.InvalidUser, e.GetErrorMessage());
+            }
         }
     }
 }

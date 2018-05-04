@@ -4,18 +4,18 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ChangeProductPurchaseWayToImmediateSlave : AbstractStoreCenterSlave
+    public class ChangeProductPurchaseWayToImmediateSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private IOrderSyncher syncher;
 
         public ChangeProductPurchaseWayToImmediateSlave(string storeName, IUserSeller storeManager,
-            IOrderSyncher _syncher) : base(storeName, storeManager)
+            IOrderSyncher _syncher, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
             syncher = _syncher;
         }
 
-        internal void ChangeProductPurchaseWayToImmediate(string productName)
+        public void ChangeProductPurchaseWayToImmediate(string productName)
         {
             try
             {
@@ -44,13 +44,10 @@ namespace SadnaSrc.StoreCenter
 
         private void ValidateLottery(StockListItem stockList)
         {
-            if (stockList.PurchaseWay == PurchaseEnum.Lottery)
-            {
-                LotterySaleManagmentTicket lottery = DataLayerInstance.GetLotteryByProductID(stockList.Product.SystemId);
-                lottery.InformCancel(syncher);
-                DataLayerInstance.EditLotteryInDatabase(lottery);
-
-            }
+            if (stockList.PurchaseWay != PurchaseEnum.Lottery) return;
+            LotterySaleManagmentTicket lottery = DataLayerInstance.GetLotteryByProductID(stockList.Product.SystemId);
+            lottery.InformCancel(syncher);
+            DataLayerInstance.EditLotteryInDatabase(lottery);
         }
     }
 }

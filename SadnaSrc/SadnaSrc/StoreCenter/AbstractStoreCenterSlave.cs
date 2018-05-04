@@ -3,19 +3,19 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal abstract class AbstractStoreCenterSlave
+    public abstract class AbstractStoreCenterSlave
     {
         /**
          * many of the slaves in the Store Managment use same methods and hold smae attrebutes. 
          * in oreder to avoid double-code I added them here
          **/
         protected string _storeName;
-        protected I_StoreDL DataLayerInstance;
+        protected IStoreDL DataLayerInstance;
         protected IUserSeller _storeManager;
-        protected AbstractStoreCenterSlave(string storeName, IUserSeller storeManager)
+        protected AbstractStoreCenterSlave(string storeName, IUserSeller storeManager,IStoreDL storeDL )
         {
             _storeName = storeName;
-            DataLayerInstance = StoreDL.GetInstance();
+            DataLayerInstance = storeDL;
             _storeManager = storeManager;
         }
         protected void checkIfStoreExistsAndActive()

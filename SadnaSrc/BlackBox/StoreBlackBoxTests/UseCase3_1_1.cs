@@ -81,7 +81,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", -1);
-			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
+			Assert.AreEqual((int)StoreEnum.QuantityIsNegative, result.Status);
 
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
@@ -99,7 +99,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 0);
-			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
+			Assert.AreEqual((int)StoreEnum.QuantityIsNegative, result.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			

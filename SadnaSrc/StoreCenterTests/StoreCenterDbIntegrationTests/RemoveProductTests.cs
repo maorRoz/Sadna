@@ -8,21 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
     public class RemoveProductTests
     {
         private MarketYard market;
-        public StockListItem ProductToDelete;
-        private I_StoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
             userService = market.GetUserService();
         }
         [TestMethod]

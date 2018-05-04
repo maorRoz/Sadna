@@ -4,16 +4,16 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddNewProductSlave : AbstractStoreCenterSlave
+    public class AddNewProductSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private Store _store;
-        public AddNewProductSlave(IUserSeller storeManager, string _StoreName) : base(_StoreName, storeManager)
+        public AddNewProductSlave(IUserSeller storeManager, string storeName, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
             _store = DataLayerInstance.GetStorebyName(_storeName);
         }
 
-        internal StockListItem AddNewProduct(string _name, double _price, string _description, int quantity)
+        public StockListItem AddNewProduct(string _name, double _price, string _description, int quantity)
         {
 
             MarketLog.Log("StoreCenter", "trying to add product to store");
@@ -26,8 +26,7 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
-                CheckIfProductNameAvailable(_name);
-                
+                CheckIfProductNameAvailable(_name); 
                 MarketLog.Log("StoreCenter", " name is avlaiable");
                 MarketLog.Log("StoreCenter", " checking that quanitity is positive");
                 CheckQuantityIsOK(quantity);
@@ -54,15 +53,15 @@ namespace SadnaSrc.StoreCenter
 
         private void CheckIfProductNameAvailable(string name)
         {
-            Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
-            if (P != null)
+            Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
+            if (product != null)
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }
 
         private void CheckQuantityIsOK(int quantity)
         {
             if (quantity <= 0)
-            { throw new StoreException(StoreEnum.quantityIsNegatie, "negative quantity"); }
+            { throw new StoreException(StoreEnum.QuantityIsNegative, "negative quantity"); }
         }
 
     }

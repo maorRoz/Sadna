@@ -4,15 +4,15 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddQuanitityToProductSlave : AbstractStoreCenterSlave
+    public class AddQuanitityToProductSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
 
-        public AddQuanitityToProductSlave(string storeName, IUserSeller storeManager) : base(storeName, storeManager)
+        public AddQuanitityToProductSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
 
-        internal void AddQuanitityToProduct(string productName, int quantity)
+        public void AddQuanitityToProduct(string productName, int quantity)
         {
             try
             {
@@ -43,11 +43,9 @@ namespace SadnaSrc.StoreCenter
 
         private void CheckIfQuanityIsOK(int quantity)
         {
-            if (quantity <= 0)
-            {
-                MarketLog.Log("StoreCenter", "quantity is not positive");
-                throw new StoreException(StoreEnum.quantityIsNegatie, "quantity " + quantity + " is less then or equal to 0");
-            }
+            if (quantity > 0) return;
+            MarketLog.Log("StoreCenter", "quantity is not positive");
+            throw new StoreException(StoreEnum.QuantityIsNegative, "quantity " + quantity + " is less then or equal to 0");
         }
     }
 }

@@ -77,24 +77,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="addDiscountTests.cs" />
-    <Compile Include="AddProductsTests.cs" />
-    <Compile Include="AddToCartTests.cs" />
-    <Compile Include="CalculateProductRealPriceTests.cs" />
-    <Compile Include="ChangeProductPurchaseWayToImmediateTests.cs" />
-    <Compile Include="ChangeProductPurchesWayToLotteryTests.cs" />
-    <Compile Include="DoLotteryTests.cs" />
-    <Compile Include="LotteryTests.cs" />
-    <Compile Include="ViewStoreInfoTests.cs" />
-    <Compile Include="ViewStoreStockTests.cs" />
-    <Compile Include="EditDiscountTests.cs" />
-    <Compile Include="EditProductTests.cs" />
-    <Compile Include="AddQuanitityTests.cs" />
-    <Compile Include="RemoveDiscountFromProductTests.cs" />
-    <Compile Include="RemoveProductTests.cs" />
-    <Compile Include="OpenStoreTests.cs" />
-    <Compile Include="StoreDL TEST.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\addDiscountTests.cs" />
+    <Compile Include="StoreCenterUnitTests\AddDiscountTestsMock.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\AddNewLotteryTests.cs" />
+    <Compile Include="StoreCenterUnitTests\AddNewLotteryTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\AddNewProductTestsMock.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\AddProductsTests.cs" />
+    <Compile Include="StoreCenterUnitTests\AddQuantityTestsMock.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\AddToCartTests.cs" />
+    <Compile Include="StoreCenterUnitTests\AddToCartTestsMock.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\CalculateProductRealPriceTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\ChangeProductPurchaseWayToImmediateTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\ChangeProductPurchesWayToLotteryTests.cs" />
+    <Compile Include="StoreCenterUnitTests\ChangeToImmediateTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\ChangeToLotteryTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\CloseStoreTestsMock.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\DoLotteryTests.cs" />
+    <Compile Include="StoreCenterUnitTests\EditDiscountTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\EditProductTestsMock.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\LotteryTests.cs" />
+    <Compile Include="StoreCenterUnitTests\OpenStoreTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\PromoteToManagerTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\RemoveDiscountTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\RemoveProductTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\ViewStoreHistoryTestsMock.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\ViewStoreInfoTests.cs" />
+    <Compile Include="StoreCenterUnitTests\ViewStoreInfoTestsMock.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\ViewStoreStockTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\EditDiscountTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\EditProductTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\AddQuanitityTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\RemoveDiscountFromProductTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\RemoveProductTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\OpenStoreTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\StoreDL TEST.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreCenterUnitTests\ViewStoreStockTestsMock.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
