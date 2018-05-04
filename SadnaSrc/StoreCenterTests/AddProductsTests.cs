@@ -22,11 +22,11 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
         }
         [TestMethod]
-        public void addProductWhenStoreNotExists()
+        public void AddProductWhenStoreNotExists()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");

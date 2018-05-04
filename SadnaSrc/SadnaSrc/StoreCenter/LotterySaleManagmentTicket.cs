@@ -61,7 +61,7 @@ namespace SadnaSrc.StoreCenter
         }
         public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
         {
-            StoreDL handler = StoreDL.GetInstance();
+            StoreDL handler = StoreDL.Instance;
             LotteryTicket lottery = new LotteryTicket(SystemID, (int)TotalMoneyPayed,
                (int)(TotalMoneyPayed + moneyPayed), moneyPayed, userID);
             handler.AddLotteryTicket(lottery);
@@ -94,7 +94,7 @@ namespace SadnaSrc.StoreCenter
         private LotteryTicket InformAllWinner(int winningNumber)
         {
             LotteryTicket winner = null;
-            StoreDL handler = StoreDL.GetInstance();
+            StoreDL handler = StoreDL.Instance;
             LinkedList<LotteryTicket> tickets = handler.GetAllTickets(SystemID);
             foreach (LotteryTicket lotter in tickets)
             {
@@ -131,7 +131,7 @@ namespace SadnaSrc.StoreCenter
         }
         internal void InformCancel(IOrderSyncher syncher)
         {
-            StoreDL handler = StoreDL.GetInstance();
+            StoreDL handler = StoreDL.Instance;
             IsActive = false;
             handler.EditLotteryInDatabase(this);
             syncher.CancelLottery(SystemID);
@@ -213,7 +213,7 @@ namespace SadnaSrc.StoreCenter
         {
             get
             {
-                StoreDL DL = StoreDL.GetInstance();
+                StoreDL DL = StoreDL.Instance;
                 LinkedList<string> list = DL.GetAllLotteryManagmentIDs();
                 var max = -5;
                 foreach (string s in list)

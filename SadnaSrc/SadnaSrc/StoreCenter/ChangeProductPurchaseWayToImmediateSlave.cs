@@ -44,13 +44,10 @@ namespace SadnaSrc.StoreCenter
 
         private void ValidateLottery(StockListItem stockList)
         {
-            if (stockList.PurchaseWay == PurchaseEnum.Lottery)
-            {
-                LotterySaleManagmentTicket lottery = DataLayerInstance.GetLotteryByProductID(stockList.Product.SystemId);
-                lottery.InformCancel(syncher);
-                DataLayerInstance.EditLotteryInDatabase(lottery);
-
-            }
+            if (stockList.PurchaseWay != PurchaseEnum.Lottery) return;
+            LotterySaleManagmentTicket lottery = DataLayerInstance.GetLotteryByProductID(stockList.Product.SystemId);
+            lottery.InformCancel(syncher);
+            DataLayerInstance.EditLotteryInDatabase(lottery);
         }
     }
 }

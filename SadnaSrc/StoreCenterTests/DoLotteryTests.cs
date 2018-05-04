@@ -25,7 +25,7 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
             Product P = new Product("P10000", "name", 100, "ds");
             ProductToDelete = new StockListItem(1, P, null, PurchaseEnum.Lottery, "S7");

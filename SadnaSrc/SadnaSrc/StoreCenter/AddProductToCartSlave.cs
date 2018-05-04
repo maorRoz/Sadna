@@ -28,8 +28,8 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "checking if product exists");
                 CheckIsProductNameAvailableInStore(store, productName);
                 StockListItem stockListItem = storeLogic.GetProductFromStore(store, productName);
-                checkifQuantityIsOK(quantity, stockListItem);   
-                checkIfDiscountExistsAndCalcValue(ref stockListItem);
+                CheckifQuantityIsOK(quantity, stockListItem);   
+                CheckIfDiscountExistsAndCalcValue(ref stockListItem);
                 _shopper.AddToCart(stockListItem.Product, store, quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
                 answer = new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
@@ -49,7 +49,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkifQuantityIsOK(int quantity, StockListItem stockListItem)
+        private void CheckifQuantityIsOK(int quantity, StockListItem stockListItem)
         {
             MarketLog.Log("StoreCenter", "checking that the required quantity is not too big");
             if (quantity > stockListItem.Quantity)
@@ -65,14 +65,11 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
+        private void CheckIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
         {
-            if (stockListItem.Discount != null)
-            {
-                if (stockListItem.Discount.discountType == discountTypeEnum.Visible)
-                    if (stockListItem.Discount.CheckTime())
-                        stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
-            }
+            if (stockListItem.Discount?.discountType != discountTypeEnum.Visible) return;
+            if (stockListItem.Discount.CheckTime())
+                stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
         }
 
         private void CheckIsProductNameAvailableInStore(string store, string productName)
@@ -92,8 +89,8 @@ namespace SadnaSrc.StoreCenter
 
         private bool IsProductNameAvailableInStore(string storeName, string productName)
         {
-            Product P = storeLogic.GetProductByNameFromStore(storeName, productName);
-            return (P == null);
+            Product product = storeLogic.GetProductByNameFromStore(storeName, productName);
+            return product == null;
         }
     }
 }

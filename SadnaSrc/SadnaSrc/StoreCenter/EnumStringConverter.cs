@@ -72,7 +72,7 @@ namespace SadnaSrc.StoreCenter
             throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
         }
 
-        static public LotteryTicketStatus GetLotteryStatusString(string lotteryStatus)
+        public static LotteryTicketStatus GetLotteryStatusString(string lotteryStatus)
         {
             switch (lotteryStatus)
             {
@@ -92,9 +92,10 @@ namespace SadnaSrc.StoreCenter
                 case "Losing":
                 case "losing":
                     return LotteryTicketStatus.Losing;
+                default:
+                    throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
             }
 
-            throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
         }
     }
 }

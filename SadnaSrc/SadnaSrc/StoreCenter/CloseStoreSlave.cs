@@ -7,7 +7,7 @@ namespace SadnaSrc.StoreCenter
     public class CloseStoreSlave : AbstractStoreCenterSlave
     {
         public MarketAnswer answer;
-        public Store store;
+        private Store store;
         public CloseStoreSlave(IUserSeller storeManager, string _storeName, IStoreDL storeDL) : base(_storeName, storeManager, storeDL)
         {
             store = DataLayerInstance.GetStorebyName(_storeName);
@@ -18,7 +18,7 @@ namespace SadnaSrc.StoreCenter
             try
             {
                 checkIfStoreExistsAndActive();
-                _storeManager.CanPromoteStoreOwner(); // can do anything
+                _storeManager.CanPromoteStoreOwner(); 
                 answer = store.CloseStore();
             }
             catch (StoreException exe)

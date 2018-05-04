@@ -14,16 +14,8 @@ namespace SadnaSrc.StoreCenter
     {
 
         private static StoreDL _instance;
-        
-        public static StoreDL GetInstance()
-        {
-                if (_instance == null)
-                {
-                    _instance = new StoreDL();
-                    return _instance;
-                }
-                return _instance;
-        }
+
+        public static StoreDL Instance => _instance ?? (_instance = new StoreDL());
 
         private MarketDB dbConnection;
 

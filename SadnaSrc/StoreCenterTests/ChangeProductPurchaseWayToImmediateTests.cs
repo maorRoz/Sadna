@@ -17,14 +17,14 @@ namespace StoreCenterTests
         public StockListItem ProductToDelete;
         private IStoreDL handler;
         IUserService userService;
-        public LotterySaleManagmentTicket LotteryToDelete;
+        private LotterySaleManagmentTicket lotteryToDelete;
 
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
         }
         [TestMethod]
@@ -63,9 +63,9 @@ namespace StoreCenterTests
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             Product P = new Product("P1345678", "OBJ", 9, "des");
             ProductToDelete = new StockListItem(4, P, null, PurchaseEnum.Lottery, "S1");
-            LotteryToDelete = new LotterySaleManagmentTicket("L1000", "X", P, DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2020"));
+            lotteryToDelete = new LotterySaleManagmentTicket("L1000", "X", P, DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2020"));
             handler.AddStockListItemToDataBase(ProductToDelete);
-            handler.AddLottery(LotteryToDelete);
+            handler.AddLottery(lotteryToDelete);
             MarketAnswer ans = liorSession.ChangeProductPurchaseWayToImmediate("OBJ");
             StockListItem find = handler.GetProductFromStore("X", "OBJ");
             Assert.AreEqual((int)PurchaseEnum.Immediate, (int)find.PurchaseWay);

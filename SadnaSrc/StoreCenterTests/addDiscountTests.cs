@@ -23,7 +23,7 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
             MarketYard.SetDateTime(new DateTime(2018,4,14));
         }

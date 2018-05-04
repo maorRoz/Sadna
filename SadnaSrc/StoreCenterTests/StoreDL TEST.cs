@@ -24,7 +24,7 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             toDeleteProduct = null;
             toDeleteDiscount = null;
             toDeleteStore = null;

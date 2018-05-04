@@ -28,7 +28,7 @@ namespace SadnaSrc.StoreCenter
             store = global.DataLayer.GetStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();
-            storeDL = StoreDL.GetInstance();
+            storeDL = StoreDL.Instance;
             syncher = new OrderSyncherHarmony();
         }
 

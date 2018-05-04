@@ -122,7 +122,7 @@ namespace SadnaSrc.StoreCenter
         {
             get
             {
-                StoreDL datalayer = StoreDL.GetInstance();
+                StoreDL datalayer = StoreDL.Instance;
                 LinkedList<string> list = datalayer.GetAllLotteryTicketIDs();
                 int max = -5;
                 foreach (string s in list)

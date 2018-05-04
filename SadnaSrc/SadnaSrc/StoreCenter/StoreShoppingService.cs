@@ -19,7 +19,7 @@ namespace SadnaSrc.StoreCenter
             _shopper = shopper;
             storeLogic = StockSyncher.Instance;
             stores = new LinkedList<Store>();
-            storeDL = StoreDL.GetInstance();
+            storeDL = StoreDL.Instance;
         }
         public void LoginShoper(string userName, string password)
         {
@@ -61,7 +61,7 @@ namespace SadnaSrc.StoreCenter
         }
         public LinkedList<Store> GetAllStores()
         {
-            StoreDL DataLayer = StoreDL.GetInstance();
+            StoreDL DataLayer = StoreDL.Instance;
             LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
             return AllStores;
         }

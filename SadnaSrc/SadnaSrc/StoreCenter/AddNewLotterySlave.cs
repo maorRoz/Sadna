@@ -7,7 +7,7 @@ namespace SadnaSrc.StoreCenter
     public class AddNewLotterySlave : AbstractStoreCenterSlave
     {
         public MarketAnswer answer;
-        Store store;
+        private readonly Store store;
 
         public AddNewLotterySlave(string storeName, IUserSeller storeManager,IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
@@ -53,19 +53,17 @@ namespace SadnaSrc.StoreCenter
             return null;
         }
 
-        private void CheckIfDatesAreOK(DateTime startDate, DateTime endDate)
+        private static void CheckIfDatesAreOK(DateTime startDate, DateTime endDate)
         {
-                if ((startDate < MarketYard.MarketDate) || !(startDate < endDate))
-                {
-                    MarketLog.Log("StoreCenter", "something wrong with the dates");
-                    throw new StoreException(StoreEnum.DatesAreWrong, "dates are not leagal");
-                }
+            if (startDate >= MarketYard.MarketDate && startDate < endDate) return;
+            MarketLog.Log("StoreCenter", "something wrong with the dates");
+            throw new StoreException(StoreEnum.DatesAreWrong, "dates are not leagal");
         }
 
         private void CheckIfProductNameAvailable(string name)
         {
-            Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
-            if (P != null)
+            Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
+            if (product != null)
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }
     }

@@ -11,7 +11,7 @@ namespace SadnaSrc.StoreCenter
         {
         }
 
-        internal Discount AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate,
+        public Discount AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate,
             int discountAmount, string discountType, bool presenteges)
         {
             MarketLog.Log("StoreCenter", "trying to add discount to product in store");
@@ -32,7 +32,7 @@ namespace SadnaSrc.StoreCenter
                 CheckPresentegesAndAmountOK(discountAmount, presenteges, product);
                 StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, product.Name);
                 MarketLog.Log("StoreCenter", "check that the product don't have another discount");
-                checkHasNoExistsDiscount(stockListItem);
+                CheckHasNoExistsDiscount(stockListItem);
                 Discount discount = new Discount(EnumStringConverter.GetdiscountTypeEnumString(discountType), startDate,
                     endDate, discountAmount, presenteges);
                 stockListItem.Discount = discount;
@@ -59,7 +59,7 @@ namespace SadnaSrc.StoreCenter
             if (!DataLayerInstance.IsStoreExistAndActive(_storeName))
             { throw new StoreException(DiscountStatus.NoStore, "store not exists or active"); }
         }
-        private void CheckifProductExistsDiscount(Product product)
+        private static void CheckifProductExistsDiscount(Product product)
         {
             if (product == null)
             {
@@ -68,16 +68,14 @@ namespace SadnaSrc.StoreCenter
             }
             MarketLog.Log("StoreCenter", "product exists");
         }
-        private void checkHasNoExistsDiscount(StockListItem stockListItem)
+        private static void CheckHasNoExistsDiscount(StockListItem stockListItem)
         {
-            if (stockListItem.Discount != null)
-            {
-                MarketLog.Log("StoreCenter", "the product have another discount");
-                throw new StoreException(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
-            }
+            if (stockListItem.Discount == null) return;
+            MarketLog.Log("StoreCenter", "the product have another discount");
+            throw new StoreException(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
         }
 
-        private void CheckPresentegesAndAmountOK(int discountAmount, bool presenteges, Product product)
+        private static void CheckPresentegesAndAmountOK(int discountAmount, bool presenteges, Product product)
         {
             if (presenteges && (discountAmount >= 100))
             {
@@ -98,11 +96,9 @@ namespace SadnaSrc.StoreCenter
 
         private void CheckIfDatesOK(DateTime startDate, DateTime endDate)
         {
-            if ((startDate < MarketYard.MarketDate) || !(startDate < endDate))
-            {
-                MarketLog.Log("StoreCenter", "something wrong with the dates");
-                throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal");
-            }
+            if (startDate >= MarketYard.MarketDate && startDate < endDate) return;
+            MarketLog.Log("StoreCenter", "something wrong with the dates");
+            throw new StoreException(DiscountStatus.DatesAreWrong, "dates are not leagal");
         }
     }
 }

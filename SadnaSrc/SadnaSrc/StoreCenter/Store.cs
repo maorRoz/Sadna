@@ -14,7 +14,7 @@ namespace SadnaSrc.StoreCenter
     {
         public string SystemId { get; }
         private readonly LinkedList<PurchasePolicy> purchasePolicy;
-        public bool IsActive { get; set; }
+        private bool isActive;
         public string Name { get; set; }
         public string Address { private get; set; }
 
@@ -26,7 +26,7 @@ namespace SadnaSrc.StoreCenter
             Name = name;
             Address = address;
             purchasePolicy = new LinkedList<PurchasePolicy>();
-            IsActive = true;
+            isActive = true;
         }
         public Store(string id, string name, string address)
         {
@@ -34,7 +34,7 @@ namespace SadnaSrc.StoreCenter
             Name = name;
             Address = address;
             purchasePolicy = new LinkedList<PurchasePolicy>();
-            IsActive = true;
+            isActive = true;
         }
 
         public Store(string id, string name, string address, string active)
@@ -49,37 +49,25 @@ namespace SadnaSrc.StoreCenter
         private void GetActiveFromString(string active)
         {
             if (active.Equals("Active"))
-                IsActive = true;
-            IsActive = false;
+                isActive = true;
+            isActive = false;
         }
 
-        public string GetStringFromActive()
+        private string GetStringFromActive()
         {
-            return IsActive ? "Active" : "InActive";
+            return isActive ? "Active" : "InActive";
         }
         public MarketAnswer CloseStore()
         {
-            if (IsActive)
+            if (isActive)
             {
-                IsActive = false;
-                StoreDL handler = StoreDL.GetInstance();
+                isActive = false;
+                StoreDL handler = StoreDL.Instance;
                 handler.EditStore(this);
                 return new StoreAnswer(StoreEnum.Success, "store " + SystemId + " closed");
             }
             return new StoreAnswer(StoreEnum.CloseStoreFail, "store " + SystemId + " is already closed");
         }
-        public bool Equals1(object obj)
-        {
-            if (obj.GetType() == GetType())
-            {
-                return ((Store)obj).SystemId.Equals(SystemId) &&
-                    ((Store)obj).Name.Equals(Name) &&
-                    ((Store)obj).Address.Equals(Address);
-            }
-            return false;
-
-        }
-
         private bool Equals(Store obj)
         {
             return obj.SystemId.Equals(SystemId) && obj.Name.Equals(Name) && obj.Address.Equals(Address);
@@ -99,7 +87,7 @@ namespace SadnaSrc.StoreCenter
             var hashCode = 501679021;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemId);
             hashCode = hashCode * -1521134295 + EqualityComparer<LinkedList<PurchasePolicy>>.Default.GetHashCode(purchasePolicy);
-            hashCode = hashCode * -1521134295 + IsActive.GetHashCode();
+            hashCode = hashCode * -1521134295 + isActive.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Address);
             return hashCode;
@@ -126,13 +114,12 @@ namespace SadnaSrc.StoreCenter
         }
         private static int FindMaxStoreId()
         {
-            StoreDL DL = StoreDL.GetInstance();
+            StoreDL DL = StoreDL.Instance;
             LinkedList<string> list = DL.GetAllStoresIDs();
             int max = -5;
-            int temp = 0;
             foreach (string s in list)
             {
-                temp = Int32.Parse(s.Substring(1));
+                var temp = Int32.Parse(s.Substring(1));
                 if (temp > max)
                 {
                     max = temp;

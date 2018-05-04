@@ -26,8 +26,7 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
-                CheckIfProductNameAvailable(_name);
-                
+                CheckIfProductNameAvailable(_name); 
                 MarketLog.Log("StoreCenter", " name is avlaiable");
                 MarketLog.Log("StoreCenter", " checking that quanitity is positive");
                 CheckQuantityIsOK(quantity);
@@ -54,8 +53,8 @@ namespace SadnaSrc.StoreCenter
 
         private void CheckIfProductNameAvailable(string name)
         {
-            Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
-            if (P != null)
+            Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
+            if (product != null)
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }
 
