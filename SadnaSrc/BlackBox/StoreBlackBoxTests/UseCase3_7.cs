@@ -108,8 +108,8 @@ namespace BlackBox.StoreBlackBoxTests
             string[] purchaseUserHistory = res.ReportList;
             string[] expectedHistory =
             {
-                "User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 50 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
-                "User: Maor Product: hello2 Store: blahblah Sale: Immediate Quantity: 2 Price: 100 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd")
+                "User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 20 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Maor Product: hello2 Store: blahblah Sale: Immediate Quantity: 2 Price: 40 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd")
             };
 
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, res.Status);

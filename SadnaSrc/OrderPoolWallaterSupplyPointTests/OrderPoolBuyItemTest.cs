@@ -28,6 +28,7 @@ namespace OrderPoolWallaterSupplyPointTests
         [TestInitialize]
         public void MarketBuilder()
         {
+            publisherMock = new Mock<IPublisher>();
             marketDbMocker = new Mock<IMarketDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);

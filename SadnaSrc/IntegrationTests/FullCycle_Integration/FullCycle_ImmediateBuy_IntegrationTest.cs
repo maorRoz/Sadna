@@ -118,7 +118,7 @@ namespace IntegrationTests.FullCycle_Integration
         private string PurchaseString(string buyer)
         {
             return "User: " + buyer + " Product: Goldstar Store: The Red Rock" + 
-                   " Sale: Immediate Quantity: 3 Price: 33 Date: " + DateTime.Now.ToShortDateString();
+                   " Sale: Immediate Quantity: 3 Price: 33 Date: " + DateTime.Now.Date.ToString("yyyy-MM-dd");
         }
     }
 }
