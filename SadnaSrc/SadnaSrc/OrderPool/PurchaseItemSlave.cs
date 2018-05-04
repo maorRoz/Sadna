@@ -32,27 +32,13 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
+                OrderItem toBuy = CheckoutItem(itemName, store, quantity, unitPrice);
                 if (coupon != null)
-                {
-                    try
-                    {
-                        toBuy.Price = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
-                    }
-                    catch (MarketException e)
-                    {
-                        MarketLog.Log("OrderPool", "Order " + orderId +
-                                                   " has failed to execute. Something is wrong with Store." +
-                                                   " Error message has been created!");
-                        Answer = new OrderAnswer(OrderStatus.InvalidCoupon, e.GetErrorMessage());
-                        return null;
-                    }
-                }
-
+                    toBuy.Price = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
                 Order order = CreateOrderOneItem(toBuy, UserName, UserAddress);
                 orderId = order.GetOrderID();
                 ProcessOrder(order, CreditCard);
-                _buyer.RemoveItemFromCart(itemName, store, quantity, unitPrice);
+                RemoveItemFromCart(itemName, store, quantity, unitPrice);
                 MarketLog.Log("OrderPool",
                     "User " + UserName + " successfully bought item " + itemName + "in an immediate sale.");
                 Answer = new OrderAnswer(OrderStatus.Success, "Successfully bought item " + itemName);
@@ -83,14 +69,6 @@ namespace SadnaSrc.OrderPool
                 Answer = new OrderAnswer((SupplyStatus) e.Status, e.GetErrorMessage());
                 return null;
             }
-            catch (MarketException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId +
-                                           " has failed to execute. Something is wrong with User." +
-                                           " Error message has been created!");
-                Answer = new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
-                return null;
-            }
         }
 
         public Order InitOrder(string UserName, string UserAddress)
@@ -115,6 +93,35 @@ namespace SadnaSrc.OrderPool
             _paymentService.ProccesPayment(order, CreditCard);
             _storesSync.RemoveProducts(order.GetItems().ToArray());
             _orderDL.AddOrder(order);
+        }
+
+        /*
+         * private functions for main purchase function
+         */
+
+        private OrderItem CheckoutItem(string itemName, string store, int quantity, double unitPrice)
+        {
+            try
+            {
+                OrderItem toBuy = _buyer.CheckoutItem(itemName, store, quantity, unitPrice);
+                return toBuy;
+            }
+            catch (MarketException e)
+            {
+                throw new OrderException(OrderItemStatus.InvalidDetails, e.GetErrorMessage());
+            }
+        }
+
+        private void RemoveItemFromCart(string itemName, string store, int quantity, double unitPrice)
+        {
+            try
+            {
+                _buyer.RemoveItemFromCart(itemName, store, quantity, unitPrice);
+            }
+            catch (MarketException e)
+            {
+                throw new OrderException(OrderItemStatus.InvalidDetails, e.GetErrorMessage());
+            }
         }
     }
 }
