@@ -10,14 +10,12 @@ namespace SadnaSrc.StoreCenter
 {
     public class StoreShoppingService : IStoreShoppingService
     {
-        private IUserShopper _shopper;
-        private readonly StockSyncher storeLogic;
-        private LinkedList<Store> stores;
-        private IStoreDL storeDL;
+        private readonly IUserShopper _shopper;
+        private readonly LinkedList<Store> stores;
+        private readonly IStoreDL storeDL;
         public StoreShoppingService(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = StockSyncher.Instance;
             stores = new LinkedList<Store>();
             storeDL = StoreDL.Instance;
         }
@@ -59,11 +57,11 @@ namespace SadnaSrc.StoreCenter
                 slave.AddProductToCart(store, productName, quantity);
                 return slave.answer;
         }
-        public LinkedList<Store> GetAllStores()
+        public MarketAnswer GetAllStores()
         {
-            StoreDL DataLayer = StoreDL.Instance;
-            LinkedList<Store> AllStores = DataLayer.GetAllActiveStores();
-            return AllStores;
+            StoreDL dataLayer = StoreDL.Instance;
+            var allStores = dataLayer.GetAllActiveStoreNames();
+            return new StoreAnswer(StoreEnum.Success,"You got all store names!",allStores);
         }
     }
 }

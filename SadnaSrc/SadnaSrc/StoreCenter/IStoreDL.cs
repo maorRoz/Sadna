@@ -39,7 +39,7 @@ namespace SadnaSrc.StoreCenter
         string[] GetHistory(Store store);
         void AddDiscount(Discount discount);
         void AddStockListItemToDataBase(StockListItem stockListItem);
-        LinkedList<Store> GetAllActiveStores(); // all active stores
+        string[] GetAllActiveStoreNames();
         void RemoveDiscount(Discount discount);
         Product GetProductByNameFromStore(string storeName, string ProductName);
         StockListItem GetProductFromStore(string store, string productName);

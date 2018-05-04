@@ -58,11 +58,9 @@ namespace SadnaSrc.StoreCenter
                 throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big");
             }
             MarketLog.Log("StoreCenter", "checking that the required quantity is not negative or zero");
-            if (quantity <= 0)
-            {
-                MarketLog.Log("StoreCenter", "required quantity is negative or zero");
-                throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
-            }
+            if (quantity > 0) return;
+            MarketLog.Log("StoreCenter", "required quantity is negative or zero");
+            throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
         }
 
         private void CheckIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
@@ -74,11 +72,9 @@ namespace SadnaSrc.StoreCenter
 
         private void CheckIsProductNameAvailableInStore(string store, string productName)
         {
-            if (IsProductNameAvailableInStore(store, productName)) //aka product is NotFiniteNumberException in store
-            {
-                MarketLog.Log("StoreCenter", "Product is not exists in the store");
-                throw new StoreException(StoreEnum.ProductNotFound, "product is not exists");
-            }
+            if (!IsProductNameAvailableInStore(store, productName)) return;
+            MarketLog.Log("StoreCenter", "Product is not exists in the store");
+            throw new StoreException(StoreEnum.ProductNotFound, "product is not exists");
         }
 
         private void CheckIfStoreExitsts(string store)

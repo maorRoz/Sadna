@@ -79,17 +79,6 @@ namespace SadnaSrc.StoreCenter
             slave.EditProduct(productName, whatToEdit, newValue);
             return slave.answer;
         }
-        public void ClearSession()
-        {
-            foreach (Discount discount in discountsToRemvoe)
-            {
-                global.DataLayer.RemoveDiscount(discount);
-            }
-            foreach (StockListItem stockListItem in stockListItemToRemove)
-            {
-                global.DataLayer.RemoveStockListItem(stockListItem);
-            }
-        }
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productName)
         {
             ChangeProductPurchaseWayToImmediateSlave slave = new ChangeProductPurchaseWayToImmediateSlave(_storeName, _storeManager, syncher, storeDL);
