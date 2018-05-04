@@ -471,6 +471,7 @@ namespace SadnaSrc.StoreCenter
         public StockListItem GetProductFromStore(string store, string productName)
         {
             Product product = GetProductByNameFromStore(store, productName);
+            if (product == null) return null;
             return GetStockListItembyProductID(product.SystemId);
 
         }

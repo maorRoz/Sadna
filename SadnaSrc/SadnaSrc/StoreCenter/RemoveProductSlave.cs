@@ -9,7 +9,7 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer Answer;
         IOrderSyncher syncher;
 
-        public RemoveProductSlave(ref IOrderSyncher _syncher, string name, IUserSeller manager, I_StoreDL storeDL) : base(name, manager, storeDL)
+        public RemoveProductSlave(IOrderSyncher _syncher, string name, IUserSeller manager, I_StoreDL storeDL) : base(name, manager, storeDL)
         {
             syncher = _syncher;
         }

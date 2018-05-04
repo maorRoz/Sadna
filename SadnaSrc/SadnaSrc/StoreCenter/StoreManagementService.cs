@@ -46,7 +46,7 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer CloseStore()
         {
-            CloseStoreSlave slave = new CloseStoreSlave(_storeManager, ref _storeName, storeDL);
+            CloseStoreSlave slave = new CloseStoreSlave(_storeManager, _storeName, storeDL);
             slave.CloseStore();
             return slave.answer;
         }
@@ -78,7 +78,7 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer RemoveProduct(string productName)
         {
-            RemoveProductSlave slave = new RemoveProductSlave(ref syncher, _storeName, _storeManager, storeDL);
+            RemoveProductSlave slave = new RemoveProductSlave(syncher, _storeName, _storeManager, storeDL);
             slave.RemoveProduct(productName);
             return slave.Answer;
         }

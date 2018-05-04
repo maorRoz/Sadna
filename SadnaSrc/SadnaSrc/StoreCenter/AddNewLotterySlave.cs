@@ -27,6 +27,9 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
                 CheckIfProductNameAvailable(name);
+                MarketLog.Log("StoreCenter", "check that dates are OK");
+                CheckIfDatesAreOK(startDate, endDate);
+                MarketLog.Log("StoreCenter", "Dates are fine");
                 Product product = new Product(name, price, description);
                 StockListItem stockListItem = new StockListItem(1, product, null, PurchaseEnum.Lottery, store.SystemId);
                 DataLayerInstance.AddStockListItemToDataBase(stockListItem);
@@ -48,6 +51,15 @@ namespace SadnaSrc.StoreCenter
                 answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
             return null;
+        }
+
+        private void CheckIfDatesAreOK(DateTime startDate, DateTime endDate)
+        {
+                if ((startDate < MarketYard.MarketDate) || !(startDate < endDate))
+                {
+                    MarketLog.Log("StoreCenter", "something wrong with the dates");
+                    throw new StoreException(StoreEnum.DatesAreWrong, "dates are not leagal");
+                }
         }
 
         private void CheckIfProductNameAvailable(string name)

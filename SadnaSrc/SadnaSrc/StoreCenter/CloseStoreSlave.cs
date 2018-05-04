@@ -8,30 +8,23 @@ namespace SadnaSrc.StoreCenter
     {
         public MarketAnswer answer;
         public Store store;
-        public CloseStoreSlave(IUserSeller storeManager, ref string _storeName, I_StoreDL storeDL) : base(_storeName, storeManager, storeDL)
+        public CloseStoreSlave(IUserSeller storeManager, string _storeName, I_StoreDL storeDL) : base(_storeName, storeManager, storeDL)
         {
             store = DataLayerInstance.GetStorebyName(_storeName);
         }
-
+        
         public void CloseStore()
         {
             try
             {
                 checkIfStoreExistsAndActive();
-            }
-            catch (Exception)
-            {
-                answer = new StoreAnswer(StoreEnum.StoreNotExists, "the store doesn't exists");
-            }
-            try
-            {
                 _storeManager.CanPromoteStoreOwner(); // can do anything
                 answer = store.CloseStore();
             }
-            catch (StoreException)
+            catch (StoreException exe)
             {
                 MarketLog.Log("StoreCenter", "closing store failed");
-                answer = new StoreAnswer(StoreEnum.CloseStoreFail, "Store is not active");
+                answer = new StoreAnswer(exe);
             }
             catch (MarketException)
             {

@@ -63,7 +63,8 @@ namespace SadnaSrc.Main
         NoPremmision,
         quantityIsNegatie,
         QuantityIsTooBig,
-        EnumValueNotExists
+        EnumValueNotExists,
+        DatesAreWrong
     }
     public enum DiscountStatus
     {

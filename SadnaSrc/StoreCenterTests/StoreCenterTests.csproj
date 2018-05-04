@@ -79,17 +79,25 @@
   <ItemGroup>
     <Compile Include="addDiscountTests.cs" />
     <Compile Include="AddDiscountTestsMock.cs" />
+    <Compile Include="AddNewLotteryTests.cs" />
+    <Compile Include="AddNewLotteryTestsMock.cs" />
+    <Compile Include="AddNewProductTestsMock.cs" />
     <Compile Include="AddProductsTests.cs" />
+    <Compile Include="AddQuantityTestsMock.cs" />
     <Compile Include="AddToCartTests.cs" />
     <Compile Include="CalculateProductRealPriceTests.cs" />
     <Compile Include="ChangeProductPurchaseWayToImmediateTests.cs" />
     <Compile Include="ChangeProductPurchesWayToLotteryTests.cs" />
+    <Compile Include="ChangeToImmediateTestsMock.cs" />
+    <Compile Include="CloseStoreTestsMock.cs" />
     <Compile Include="DoLotteryTests.cs" />
     <Compile Include="EditDiscountTestsMock.cs" />
+    <Compile Include="EditProductTestsMock.cs" />
     <Compile Include="LotteryTests.cs" />
     <Compile Include="OpenStoreTestsMock.cs" />
     <Compile Include="PromoteToManagerTestsMock.cs" />
     <Compile Include="RemoveDiscountTestsMock.cs" />
+    <Compile Include="RemoveProductTestsMock.cs" />
     <Compile Include="ViewStoreHistoryTestsMock.cs" />
     <Compile Include="ViewStoreInfoTests.cs" />
     <Compile Include="ViewStoreStockTests.cs" />
