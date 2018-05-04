@@ -108,6 +108,31 @@ namespace IntegrationTests.FullCycle_Integration
             }
         }
 
+        [TestMethod]
+        public void BuyPartiallyTestEverything()
+        {
+            try
+            {
+                storeServiceSession.LoginShoper(user, pass);
+                Assert.AreEqual(8, ((UserService)userServiceSession).MarketUser.SystemID);
+                storeServiceSession.AddProductToCart(store, product, 3);
+                CartItem expected = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart(store, product, 11);
+                Assert.AreEqual(3, expected.Quantity);
+                orderServiceSession.LoginBuyer(user, pass);
+                orderServiceSession.BuyItemFromImmediate(product, store, 1, 11, null);
+                userServiceSession3.SignIn(user, pass);
+                CartItem item = ((UserService) userServiceSession3).MarketUser.Cart.SearchInCart(store, product, 11);
+                Assert.IsNotNull(item);
+                Assert.AreEqual(2, item.Quantity);
+                StockListItem itemToCheck = StoreDL.GetInstance().GetProductFromStore(store, product);
+                Assert.AreEqual(35, itemToCheck.Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
