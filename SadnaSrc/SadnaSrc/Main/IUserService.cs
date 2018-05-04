@@ -51,13 +51,6 @@ namespace SadnaSrc.Main
         DidntEnterSystem,
     }
 
-	public enum ViewUsersStatus
-	{
-		Success,
-		DidntEnterSystem,
-	}
-
-
 	public enum EditCartItemStatus
     {
         Success,
