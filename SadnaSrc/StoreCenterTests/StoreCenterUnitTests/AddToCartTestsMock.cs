@@ -15,11 +15,19 @@ namespace StoreCenterTests.StoreCenterUnitTests
     public class AddToCartTestsMock
     {
         private Mock<IStoreDL> handler;
-        Mock<IUserShopper> userService;
+        private Mock<IUserShopper> userService;
+        private Mock<IMarketDB> marketDbMocker;
+
+
+        //TODO: improve this
+
 
         [TestInitialize]
         public void BuildStore()
         {
+            marketDbMocker = new Mock<IMarketDB>();
+            MarketException.SetDB(marketDbMocker.Object);
+            MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
             userService = new Mock<IUserShopper>();
             

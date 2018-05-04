@@ -16,12 +16,20 @@ namespace StoreCenterTests.StoreCenterUnitTests
     public class RemoveProductTestsMock
     {
         private Mock<IStoreDL> handler;
-        Mock<IUserSeller> userService;
-        Mock<IOrderSyncher> syncer;
+        private Mock<IUserSeller> userService;
+        private Mock<IOrderSyncher> syncer;
+        private Mock<IMarketDB> marketDbMocker;
+
+
+
+        //TODO: improve this
 
         [TestInitialize]
         public void BuildStore()
         {
+            marketDbMocker = new Mock<IMarketDB>();
+            MarketException.SetDB(marketDbMocker.Object);
+            MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
             userService = new Mock<IUserSeller>();
             syncer = new Mock<IOrderSyncher>();

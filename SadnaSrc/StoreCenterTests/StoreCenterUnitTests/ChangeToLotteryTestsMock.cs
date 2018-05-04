@@ -15,18 +15,23 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public class ChangeToLotteryTestsMock
         {
             private Mock<IStoreDL> handler;
-            Mock<IUserSeller> userService;
-            Mock<IOrderSyncher> syncer;
+            private Mock<IUserSeller> userService;
+            private Mock<IMarketDB> marketDbMocker;
+
+
+            //TODO: improve this
 
             [TestInitialize]
             public void BuildStore()
             {
+                marketDbMocker = new Mock<IMarketDB>();
+                MarketException.SetDB(marketDbMocker.Object);
+                MarketLog.SetDB(marketDbMocker.Object);
                 handler = new Mock<IStoreDL>();
                 userService = new Mock<IUserSeller>();
-                syncer = new Mock<IOrderSyncher>();
             }
             [TestMethod]
-            public void changeToLotteryFail()
+            public void ChangeToLotteryFail()
             {
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
                 ChangeProductPurchaseWayToLotterySlave slave = new ChangeProductPurchaseWayToLotterySlave("noStore", userService.Object, handler.Object);
@@ -34,7 +39,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
             }
             [TestMethod]
-            public void changeToLotteryPass()
+            public void ChangeToLotteryPass()
             {
                 Product P = new Product("NEWPROD", 150, "desc");
                 Discount discount = new Discount(discountTypeEnum.Visible, DateTime.Parse("03/ad05/2020"), DateTime.Parse("30/06/2020"), 50, false);
