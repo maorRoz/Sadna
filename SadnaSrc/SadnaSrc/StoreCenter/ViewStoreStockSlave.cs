@@ -65,13 +65,18 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("storeCenter", "product not exists");
                 throw new StoreException(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
             }
-            string discount = "";
+            string discount = " Discount: {";
             string product = stockListItem.Product.ToString();
             if (stockListItem.Discount != null)
-                discount = stockListItem.Discount.ToString() + " , ";
-            string purchaseWay = EnumStringConverter.PrintEnum(stockListItem.PurchaseWay);
-            string quanitity = stockListItem.Quantity + "";
-            string result = product + " , " + discount + purchaseWay + " , " + quanitity;
+                discount += stockListItem.Discount;
+            else
+            {
+                discount += "null";
+            }
+            discount += "}";
+            string purchaseWay = " Purchase Way: " + EnumStringConverter.PrintEnum(stockListItem.PurchaseWay);
+            string quanitity = " Quantity: "+stockListItem.Quantity ;
+            string result = product + discount + purchaseWay + quanitity;
             return result;
         }
     }
