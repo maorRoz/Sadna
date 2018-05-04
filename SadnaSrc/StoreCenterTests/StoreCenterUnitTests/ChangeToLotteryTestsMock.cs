@@ -42,7 +42,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             public void ChangeToLotteryPass()
             {
                 Product P = new Product("NEWPROD", 150, "desc");
-                Discount discount = new Discount(discountTypeEnum.Visible, DateTime.Parse("03/ad05/2020"), DateTime.Parse("30/06/2020"), 50, false);
+                Discount discount = new Discount(discountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
                 StockListItem SLI = new StockListItem(10, P, discount, PurchaseEnum.Immediate, "BLA");
                 
 

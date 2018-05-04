@@ -46,6 +46,7 @@ namespace MarketFeedTests.IntegrationTests
             var userService3 = marketSession.GetUserService();
             orderService3 = (OrderService)marketSession.GetOrderService(ref userService3);
             orderService3.LoginBuyer("Vova", "123");
+            MarketYard.SetDateTime(new DateTime(2018,4,14));
 
         }
 
