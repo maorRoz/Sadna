@@ -124,7 +124,7 @@ namespace IntegrationTests.FullCycle_Integration
                 CartItem item = ((UserService) userServiceSession3).MarketUser.Cart.SearchInCart(store, product, 11);
                 Assert.IsNotNull(item);
                 Assert.AreEqual(2, item.Quantity);
-                StockListItem itemToCheck = StoreDL.GetInstance().GetProductFromStore(store, product);
+                StockListItem itemToCheck = StoreDL.Instance.GetProductFromStore(store, product);
                 Assert.AreEqual(35, itemToCheck.Quantity);
             }
             catch (MarketException)
