@@ -19,7 +19,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult BrowseMarket(int systemId,string state, string message)
         {
-            return View(new UserModel(systemId,state,message));
+			return RedirectToAction("StoreManagement", "Store", new { systemId, state, message});
         }
 
         public IActionResult SignUp(int systemId, string state,string message)
