@@ -32,7 +32,6 @@ namespace MarketFeedTests.IntegrationTests
                                                                       + storeLottery + "...")).Callback(SendMessageToServer);
             serverMocker.Setup(x => x.GetMessage(buyerId3.ToString(), "You've lost the lottery on " + productLottery + " in "
                                                                       + storeLottery + "...")).Callback(SendMessageToServer);
-
             MarketDB.Instance.InsertByForce();
             var marketSession = MarketYard.Instance;
             var userService1 = marketSession.GetUserService();
@@ -132,12 +131,12 @@ namespace MarketFeedTests.IntegrationTests
 
         private void BuyoutLottery()
         {
-            var answer = orderService1.BuyLotteryTicket("#45 With Cheese", "Cluckin Bell", 1, 6);
+            var answer = orderService1.BuyLotteryTicket(productLottery, storeLottery, 1, 6);
             Assert.AreEqual(0,answer.Status);
-            answer = orderService2.BuyLotteryTicket("#45 With Cheese", "Cluckin Bell", 1, 6);
+            answer = orderService2.BuyLotteryTicket(productLottery, storeLottery, 1, 6);
             Assert.AreEqual(0, answer.Status);
             orderService3.Cheat(7);
-            answer = orderService3.BuyLotteryTicket("#45 With Cheese", "Cluckin Bell", 1, 6);
+            answer = orderService3.BuyLotteryTicket(productLottery, storeLottery, 1, 6);
             Assert.AreEqual(0, answer.Status);
         }
 
