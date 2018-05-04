@@ -21,7 +21,7 @@ namespace SadnaSrc.StoreCenter
         {
             try
             {
-             MarketLog.Log("StoreCenter", "checking store stack");
+            MarketLog.Log("StoreCenter", "checking store stack");
             _shopper.ValidateCanBrowseMarket();
             MarketLog.Log("StoreCenter", "check if store exists");
             CheckIfStoreExists(storename);
@@ -59,8 +59,7 @@ namespace SadnaSrc.StoreCenter
 
         private string GetProductStockInformation(string productID)
         {
-            StoreDL handler = StoreDL.GetInstance();
-            StockListItem stockListItem = handler.GetStockListItembyProductID(productID);
+            StockListItem stockListItem = storeLogic.GetStockListItembyProductID(productID);
             if (stockListItem == null)
             {
                 MarketLog.Log("storeCenter", "product not exists");
