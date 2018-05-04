@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IntegrationTests\BuyFromStoreFeedTests.cs" />
+    <Compile Include="IntegrationTests\IMarketMessenger.cs" />
     <Compile Include="IntegrationTests\LotteryCancelFeedTests.cs" />
     <Compile Include="IntegrationTests\LotteryFinishFeedTests.cs" />
     <Compile Include="IntegrationTests\NewMessageSentFeedTests.cs" />

@@ -75,11 +75,11 @@ namespace MarketFeedTests.IntegrationTests
         public void SignUpThenGetRefundOnTicketTest()
         {
             var newUserid = RegisterEvent();
+            serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You've been fully refunded on a lottery you " +
+                                                                       "were participating on")).Callback(SendMessageToServer);
+            FeedSubscriber.SubscribeSocket(serverMocker.Object, buyerId2, buyerId2.ToString());
             try
             {
-                serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You've been fully refunded on a lottery you " +
-                                                                          "were participating on")).Callback(SendMessageToServer);
-                FeedSubscriber.SubscribeSocket(serverMocker.Object, buyerId2, buyerId2.ToString());
                 ToCancelLottery();
                 Assert.AreEqual(1, countMessagesToServer);
                 FeedSubscriber.SubscribeSocket(serverMocker.Object, newUserid, newUserid.ToString());

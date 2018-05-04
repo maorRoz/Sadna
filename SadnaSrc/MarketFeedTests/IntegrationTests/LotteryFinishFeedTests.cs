@@ -98,12 +98,12 @@ namespace MarketFeedTests.IntegrationTests
         public void SignUpThenLoseLotteryTest()
         {
             var newUserid = RegisterEvent();
+            serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You've lost the lottery on " + productLottery + " in "
+                                                                       + storeLottery + "...")).Callback(SendMessageToServer);
+            FeedSubscriber.SubscribeSocket(serverMocker.Object, buyerId2, buyerId2.ToString());
+            FeedSubscriber.SubscribeSocket(serverMocker.Object, buyerId3, buyerId3.ToString());
             try
             {
-                serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You've lost the lottery on " + productLottery + " in "
-                                                                          + storeLottery + "...")).Callback(SendMessageToServer);
-                FeedSubscriber.SubscribeSocket(serverMocker.Object, buyerId2, buyerId2.ToString());
-                FeedSubscriber.SubscribeSocket(serverMocker.Object, buyerId3, buyerId3.ToString());
                 BuyoutLottery();
                 Assert.AreEqual(2, countMessagesToServer);
                 FeedSubscriber.SubscribeSocket(serverMocker.Object, newUserid, newUserid.ToString());
