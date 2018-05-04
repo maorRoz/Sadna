@@ -85,10 +85,12 @@
     <Compile Include="AddProductsTests.cs" />
     <Compile Include="AddQuantityTestsMock.cs" />
     <Compile Include="AddToCartTests.cs" />
+    <Compile Include="AddToCartTestsMock.cs" />
     <Compile Include="CalculateProductRealPriceTests.cs" />
     <Compile Include="ChangeProductPurchaseWayToImmediateTests.cs" />
     <Compile Include="ChangeProductPurchesWayToLotteryTests.cs" />
     <Compile Include="ChangeToImmediateTestsMock.cs" />
+    <Compile Include="ChangeToLotteryTestsMock.cs" />
     <Compile Include="CloseStoreTestsMock.cs" />
     <Compile Include="DoLotteryTests.cs" />
     <Compile Include="EditDiscountTestsMock.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="RemoveProductTestsMock.cs" />
     <Compile Include="ViewStoreHistoryTestsMock.cs" />
     <Compile Include="ViewStoreInfoTests.cs" />
+    <Compile Include="ViewStoreInfoTestsMock.cs" />
     <Compile Include="ViewStoreStockTests.cs" />
     <Compile Include="EditDiscountTests.cs" />
     <Compile Include="EditProductTests.cs" />

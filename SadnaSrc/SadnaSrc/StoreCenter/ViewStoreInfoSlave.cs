@@ -20,6 +20,7 @@ namespace SadnaSrc.StoreCenter
         {
             try
             {
+                checkIfStoreExistsAndActive(store);
                 MarketLog.Log("StoreCenter", "check that have premission to view store info");
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "premission gained");
@@ -45,6 +46,11 @@ namespace SadnaSrc.StoreCenter
         {
             if (item == null)
             { throw new StoreException(ViewStoreStatus.NoStore, "No store found"); }
+        }
+        private void checkIfStoreExistsAndActive(string _storename)
+        {
+            if (!storeLogic.IsStoreExistAndActive(_storename))
+            { throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
         }
     }
 }
