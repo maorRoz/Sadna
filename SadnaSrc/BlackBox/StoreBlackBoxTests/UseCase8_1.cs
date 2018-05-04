@@ -30,6 +30,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_userAdminBridge = null;
 			_orderBridge = null;
 			_userAdmin = null;
+            MarketYard.SetDateTime(new DateTime(2018,4,13));
 		}
 
 
@@ -71,8 +72,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] purchaseReceived = purchaseHistory.ReportList;
 			string[] purchaseExpected =
 			{
-				"User: Vika Product: Ouch Store: Toy Sale: Immediate Quantity: 3 Price: 60 Date: " +
-				DateTime.Now.Date.ToString("d"),
+				"User: Vika Product: Ouch Store: Toy Sale: Immediate Quantity: 3 Price: 90 Date: " +
+			    DateTime.Now.Date.ToString("yyyy-MM-dd"),
 			};
 			Assert.AreEqual(purchaseExpected.Length, purchaseReceived.Length);
 			for (int i = 0; i < purchaseReceived.Length; i++)
@@ -124,7 +125,7 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] purchaseExpected =
 			{
 				"User: Vika Product: Ouch Store: Toy Sale: Immediate Quantity: 3 Price: 90 Date: " +
-				DateTime.Now.Date.ToString("d"),
+			    DateTime.Now.Date.ToString("yyyy-MM-dd"),
 			};
 			Assert.AreEqual(purchaseExpected.Length, purchaseReceived.Length);
 			for (int i = 0; i < purchaseReceived.Length; i++)

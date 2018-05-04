@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.Walleter;
@@ -14,8 +15,8 @@ namespace SadnaSrc.OrderPool
     {
         public OrderAnswer Answer { get; private set; }
 
-        public PurchaseEverythingSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL) :
-            base(buyer, storesSync, orderDL){}
+        public PurchaseEverythingSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL,IPublisher publisher) :
+            base(buyer, storesSync, orderDL,publisher){}
 
         public Order BuyEverythingFromCart(string[] coupons, string UserName, string UserAddress, string CreditCard)
         {
@@ -114,7 +115,12 @@ namespace SadnaSrc.OrderPool
         {
             _supplyService.CreateDelivery(order);
             _paymentService.ProccesPayment(order, CreditCard);
-            _storesSync.RemoveProducts(order.GetItems().ToArray());
+            var toRemoveItems = order.GetItems().ToArray();
+            foreach (var item in toRemoveItems)
+            {
+                _publisher.NotifyClientBuy(item.Store,item.Name);
+            }
+            _storesSync.RemoveProducts(toRemoveItems);
             _orderDL.AddOrder(order);
         }
 

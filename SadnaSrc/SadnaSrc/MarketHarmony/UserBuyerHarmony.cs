@@ -100,7 +100,7 @@ namespace SadnaSrc.MarketHarmony
         }
         private static OrderItem ConvertCartItemToOrderItem(CartItem item, int quantity)
         {
-            return new OrderItem(item.Store, item.Name, item.FinalPrice, quantity);
+            return new OrderItem(item.Store, item.Name, item.UnitPrice * quantity, quantity);
         }
 
         private void ValidUserEnteredSystem()

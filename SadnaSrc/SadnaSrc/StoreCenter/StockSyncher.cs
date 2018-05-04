@@ -2,6 +2,7 @@ using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 using System;
 using System.Collections.Generic;
+using SadnaSrc.MarketFeed;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -54,6 +55,7 @@ namespace SadnaSrc.StoreCenter
             if (Lotto.updateLottery(moenyPayed, DataLayer.GetUserIDFromUserName(UserName)))
             {
                 syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID(cheatCode));
+                Publisher.Instance.NotifyLotteryFinish(Lotto.SystemID,storeName,ProductName);
             }
         }
         // this fucntion calculate item price if it has Hidden discount. happend only in Purches time and this is way it's happening here
