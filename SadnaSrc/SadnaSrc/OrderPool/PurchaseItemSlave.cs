@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.Walleter;
@@ -14,8 +15,8 @@ namespace SadnaSrc.OrderPool
     {
         public OrderAnswer Answer { get; private set; }
 
-        public PurchaseItemSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL) : 
-            base(buyer, storesSync, orderDL) {}
+        public PurchaseItemSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL,IPublisher publisher) : 
+            base(buyer, storesSync, orderDL,publisher) {}
 
         public Order BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon,
             string UserName, string UserAddress, string CreditCard)
@@ -55,6 +56,7 @@ namespace SadnaSrc.OrderPool
                 MarketLog.Log("OrderPool",
                     "User " + UserName + " successfully bought item " + itemName + "in an immediate sale.");
                 Answer = new OrderAnswer(OrderStatus.Success, "Successfully bought item " + itemName);
+                _publisher.NotifyClientBuy(store, itemName);
                 return order;
 
             }

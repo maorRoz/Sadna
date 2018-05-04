@@ -83,6 +83,11 @@ namespace SadnaSrc.MarketHarmony
 
             foreach (var permission in permissionsArray)
             {
+                if (permission.Length == 0)
+                {
+                    continue;
+
+                }
                 StoreManagerPolicy.StoreAction action = StoreManagerPolicy.GetActionFromString(permission);
                 if (!CanDoAnything() && !SearchPermission(action))
                 {

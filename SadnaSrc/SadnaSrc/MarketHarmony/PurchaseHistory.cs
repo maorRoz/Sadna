@@ -21,7 +21,7 @@ namespace SadnaSrc.MarketHarmony
             _sale = saleType;
             _quantity = quantity;
             _price = price;
-            _date = date;
+            _date = date.Substring(0,10);
         }
 
         public override bool Equals(object obj)

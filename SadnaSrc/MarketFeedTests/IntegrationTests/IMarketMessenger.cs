@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MarketFeedTests.IntegrationTests
 {
-    class LotteryFeedTests
+    public interface IMarketMessenger
     {
+        void SendMessage(int receiver,string message);
     }
 }

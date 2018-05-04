@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.AdminView;
+using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
@@ -85,7 +86,7 @@ namespace SadnaSrc.Main
         public static void CleanSession()
         {
             MarketException.RemoveErrors();
-            _instance = null;
+            Publisher.CleanPublisher();
         }
     }
 }
