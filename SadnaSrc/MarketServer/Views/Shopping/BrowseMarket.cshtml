@@ -28,9 +28,10 @@
                 <tr>
                     <td>@item.Name</td>
                 <td><a asp-controller="Shopping" asp-action="ViewStoreStock" asp-route-systemId="@Model.SystemId"
-		                     asp-route-state="@Model.State" asp-route-store="@item.Name" ><img src="\images\shop.png"></a> 
-                   <img src="\images\info.png" />
-                        </td>
+                       asp-route-state="@Model.State" asp-route-store="@item.Name" ><img src="\images\shop.png"></a> 
+                    <a asp-controller="Shopping" asp-action="ViewStoreInfo" asp-route-systemId="@Model.SystemId"
+                       asp-route-state="@Model.State" asp-route-store="@item.Name" ><img src="\images\info.png"></a> 
+                 </td>
                 </tr>
                 }
             </table>

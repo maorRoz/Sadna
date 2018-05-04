@@ -7,13 +7,24 @@
         <div id="feedContainer" style="float: right;width:20%"></div>
         <div style="float: left;width:70%">
             <div id="alertContainer">
-                @if (Model.Message != null)
+                @if (Model.Message != null && ViewBag.valid)
+                {
+                    <div class='success'>
+                        <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+                        @Model.Message
+                    </div>
+                }
+
+                @if (Model.Message != null && !ViewBag.valid)
                 {
                     <div class='error'>
                         <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
                         @Model.Message
                     </div>
                 }
+
+
+
             </div>
             <h2>@Model.StoreName Stock List</h2>
             <hr/>
@@ -37,6 +48,19 @@
                         <td>@item.Discount</td>
                         <td>@item.PurchaseWay</td>
                         <td>@item.Quantity</td>
+                        <td>
+                            @if(item.PurchaseWay == "Immediate"){
+                                <a asp-controller="Shopping" asp-action="AddToCart" asp-route-systemId="@Model.SystemId"
+                                   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name" 
+                                   asp-route-quantity="1"><img src="\images\cartAdd.png" /></a> 
+                            }
+                            else
+                            {
+                                <img src="\images\addTicket.png" />
+                            }
+
+
+                        </td>
                     </tr>
                 }
             </table>
