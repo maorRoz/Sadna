@@ -61,7 +61,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", -1);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
         }
         [TestMethod]
         public void AddQuanitiyWhenQuantityIsZero()
@@ -70,7 +70,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 0);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
         }
         [TestMethod]
         public void AddQuanitiySuccess()

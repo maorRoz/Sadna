@@ -60,7 +60,7 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", "checking that the required quantity is not negative or zero");
             if (quantity > 0) return;
             MarketLog.Log("StoreCenter", "required quantity is negative or zero");
-            throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
+            throw new StoreException(StoreEnum.QuantityIsNegative, "required quantity is negative");
         }
 
         private void CheckIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)

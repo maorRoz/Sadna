@@ -59,7 +59,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", -4);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
         }
         [TestMethod]
         public void addProductSuccess()

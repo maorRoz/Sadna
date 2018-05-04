@@ -50,7 +50,7 @@ namespace SadnaSrc.StoreCenter
         private void checkIfStoreExistsAndActive(string _storename)
         {
             if (!storeLogic.IsStoreExistAndActive(_storename))
-            { throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
+            { throw new StoreException(ViewStoreStatus.NoStore, "store not exists or active"); }
         }
     }
 }

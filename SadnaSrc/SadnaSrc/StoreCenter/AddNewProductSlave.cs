@@ -61,7 +61,7 @@ namespace SadnaSrc.StoreCenter
         private void CheckQuantityIsOK(int quantity)
         {
             if (quantity <= 0)
-            { throw new StoreException(StoreEnum.quantityIsNegatie, "negative quantity"); }
+            { throw new StoreException(StoreEnum.QuantityIsNegative, "negative quantity"); }
         }
 
     }

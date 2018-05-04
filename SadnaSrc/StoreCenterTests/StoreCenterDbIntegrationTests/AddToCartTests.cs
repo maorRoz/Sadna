@@ -69,7 +69,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             liorSession.MakeGuest();
             Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 0);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
         }
         [TestMethod]
         public void AddToCartWhenQuantityisNegative()
@@ -78,7 +78,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             liorSession.MakeGuest();
             Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", -1);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
         }
         [TestMethod]
         public void AddToCartSuccess()

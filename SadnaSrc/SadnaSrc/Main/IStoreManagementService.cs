@@ -46,22 +46,13 @@ namespace SadnaSrc.Main
     public enum StoreEnum
     {
         Success,
-        UpdateStockFail,
         ProductNotFound,
-        DiscountNotFound,
         UpdateProductFail,
-        OpenStoreFail,
-        AddStoreOwnerFail,
-        AddStoreManagerFail,
         CloseStoreFail,
-        ChangePurchaseTypeFail,
-        PurchesFail,
-        SetManagerPermissionsFail,
-        EditStoreFail,
         StoreNotExists,
         ProductNameNotAvlaiableInShop,
         NoPremmision,
-        quantityIsNegatie,
+        QuantityIsNegative,
         QuantityIsTooBig,
         EnumValueNotExists,
         DatesAreWrong

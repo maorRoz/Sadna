@@ -45,7 +45,7 @@ namespace SadnaSrc.StoreCenter
         {
             if (quantity > 0) return;
             MarketLog.Log("StoreCenter", "quantity is not positive");
-            throw new StoreException(StoreEnum.quantityIsNegatie, "quantity " + quantity + " is less then or equal to 0");
+            throw new StoreException(StoreEnum.QuantityIsNegative, "quantity " + quantity + " is less then or equal to 0");
         }
     }
 }
