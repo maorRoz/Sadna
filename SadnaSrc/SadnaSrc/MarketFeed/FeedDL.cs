@@ -23,9 +23,9 @@ namespace SadnaSrc.MarketFeed
         public int[] GetUserIds()
         {
             var userIds = new List<int>();
-            using (var dbReader = dbConnection.SelectFromTable("User", "SystemId"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "SystemID","Name IS NOT NULL"))
             {
-                while (!dbReader.Read())
+                while (dbReader.Read())
                 {
                     userIds.Add(dbReader.GetInt32(0));
                 }
@@ -37,7 +37,7 @@ namespace SadnaSrc.MarketFeed
         public void SaveUnreadNotification(Notification notification)
         {
             dbConnection.InsertTable("Notifications", "NotificationID,Receiver,Message,Status", 
-                new[]{"@id,@receiver,@msg,@status"},notification.ToData());
+                new[]{"@id","@receiver","@msg","@status"},notification.ToData());
         }
 
         public Notification[] GetUnreadNotifications(int userId)
@@ -46,7 +46,7 @@ namespace SadnaSrc.MarketFeed
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Notifications", "Message", "Receiver = " + userId +" AND Status ='Pending'"))
             {
-                while (!dbReader.Read())
+                while (dbReader.Read())
                 {
                     var loadedFeed = new Notification(userId,dbReader.GetString(0));
                     loadedFeedsList.Add(loadedFeed);
@@ -60,10 +60,10 @@ namespace SadnaSrc.MarketFeed
         {
             var ownersIds = new List<int>();
             using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("StoreManagerPolicy", "SystemID", "Store = '"+ store +"'" +
+                dbConnection.SelectFromTableWithCondition("StoreManagerPolicy", "SystemID", "Store = '"+ store +"' AND " +
                                                                                             "Action = 'StoreOwner'"))
             {
-                while (!dbReader.Read())
+                while (dbReader.Read())
                 {
                     var owner = dbReader.GetInt32(0);
                     ownersIds.Add(owner);
@@ -78,7 +78,7 @@ namespace SadnaSrc.MarketFeed
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "UserID","LotteryID =" +
                                                                                  " '"+lottery +"' AND Status ='WINNING'"))
             {
-                if (!dbReader.Read())
+                if (dbReader.Read())
                 {
                     return dbReader.GetInt32(0);
                 }
@@ -93,7 +93,7 @@ namespace SadnaSrc.MarketFeed
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "UserID", "LotteryID =" +
                                                                                " '" + lottery + "' AND Status ='LOSING'"))
             {
-                while (!dbReader.Read())
+                while (dbReader.Read())
                 {
                     var loserId = dbReader.GetInt32(0);
                     loserIds.Add(loserId);

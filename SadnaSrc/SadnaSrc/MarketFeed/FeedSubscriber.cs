@@ -8,7 +8,7 @@ namespace SadnaSrc.MarketFeed
 {
     public static class FeedSubscriber
     {
-        private static List<FeedObserver> observers;
+        private static List<FeedObserver> observers = new List<FeedObserver>();
 
         public static void SubscribeSocket(IListener webSocketServer, int userId,string socket)
         {

@@ -175,10 +175,10 @@ namespace IntegrationTests.UserAdmin_Integration
             string[] actualHistory = adminServiceSession.ViewPurchaseHistoryByUser("Arik1").ReportList;
             string[] expectedHistory =
             {
-                new PurchaseHistory("Arik1", "Goldstar","The Red Rock", "Immediate",5,55, DateTime.Now.ToShortDateString()).ToString(),
-                new PurchaseHistory("Arik1", "Health Potion", "X", "Immediate",2,11.5, "Today").ToString(),
-                new PurchaseHistory("Arik1", "INT Potion","Y", "Lottery",2,8.0, "Yesterday").ToString(),
-                new PurchaseHistory("Arik1", "Mana Potion", "Y", "Lottery",3,12.0, "Yesterday").ToString()
+                new PurchaseHistory("Arik1", "Goldstar","The Red Rock", "Immediate",5,55, DateTime.Now.Date.ToString("yyyy-MM-dd")).ToString(),
+                new PurchaseHistory("Arik1", "Health Potion", "X", "Immediate",2,11.5, "2018-12-29").ToString(),
+                new PurchaseHistory("Arik1", "INT Potion","Y", "Lottery",2,8.0, "2018-12-29").ToString(),
+                new PurchaseHistory("Arik1", "Mana Potion", "Y", "Lottery",3,12.0, "2018-12-29").ToString()
             };
             Assert.AreEqual(expectedHistory.Length, actualHistory.Length);
             for (int i = 0; i < expectedHistory.Length; i++)
@@ -200,8 +200,8 @@ namespace IntegrationTests.UserAdmin_Integration
             string[] actualHistory = adminServiceSession.ViewPurchaseHistoryByStore("X").ReportList;
             string[] expectedHistory =
             {
-                new PurchaseHistory("Arik1", "Health Potion","X", "Immediate",2,11.5, "Today").ToString(),
-                new PurchaseHistory("Arik1", "BOX", "X", "Immediate", 3, 300, DateTime.Now.ToShortDateString()).ToString(),
+                new PurchaseHistory("Arik1", "Health Potion","X", "Immediate",2,11.5, "2018-12-29").ToString(),
+                new PurchaseHistory("Arik1", "BOX", "X", "Immediate", 3, 300, DateTime.Now.Date.ToString("yyyy-MM-dd")).ToString(),
             };
             Assert.AreEqual(expectedHistory.Length,actualHistory.Length);
             for (int i = 0; i < expectedHistory.Length; i++)

@@ -11,7 +11,8 @@ namespace SadnaSrc.StoreCenter
         {
         }
 
-        internal Discount AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
+        internal Discount AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate,
+            int discountAmount, string discountType, bool presenteges)
         {
             MarketLog.Log("StoreCenter", "trying to add discount to product in store");
             MarketLog.Log("StoreCenter", "check if store exists");

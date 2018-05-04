@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 
 namespace SadnaSrc.UserSpot
 {
@@ -27,7 +28,7 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer SignUp(string name, string address, string password,string creditCard)
         {
-            SignUpSlave slave = new SignUpSlave(MarketUser,userDB);
+            SignUpSlave slave = new SignUpSlave(MarketUser,userDB,Publisher.Instance);
             MarketUser = slave.SignUp(name,address,password,creditCard);
             return slave.Answer;
         }

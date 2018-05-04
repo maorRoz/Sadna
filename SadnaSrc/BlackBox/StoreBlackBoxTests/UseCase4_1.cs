@@ -316,7 +316,7 @@ namespace BlackBox.StoreBlackBoxTests
 				string[] expected =
 				{
 					"User: Odin Product: Yolo Store: Volcano Sale: Immediate Quantity: 2 Price: 10 Date: " +
-					DateTime.Now.Date.ToString("d"),
+				    DateTime.Now.Date.ToString("yyyy-MM-dd"),
 				};
 
 				Assert.AreEqual(expected.Length, received.Length);

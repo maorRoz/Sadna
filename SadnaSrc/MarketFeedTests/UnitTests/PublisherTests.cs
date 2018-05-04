@@ -146,7 +146,7 @@ namespace MarketFeedTests.UnitTests
         [TestCleanup]
         public void CleanPublisher()
         {
-            publisher.CleanPublisherQueues();
+            Publisher.CleanPublisher();
         }
 
 

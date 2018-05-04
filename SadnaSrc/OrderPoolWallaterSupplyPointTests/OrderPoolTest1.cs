@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
@@ -33,8 +34,8 @@ namespace OrderPoolWallaterSupplyPointTests
             userService = market.GetUserService();
             orderService= (OrderService)market.GetOrderService(ref userService);
             IUserBuyer buyer = new UserBuyerHarmony(ref userService);
-            slave1 = new PurchaseItemSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance);
-            slave2 = new PurchaseEverythingSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance);
+            slave1 = new PurchaseItemSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance,Publisher.Instance);
+            slave2 = new PurchaseEverythingSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance, Publisher.Instance);
             orderService.GiveDetails("Big Smoke", "Grove Street", "54238521");
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);

@@ -33,7 +33,7 @@ namespace SadnaSrc.OrderPool
             _shippingAddress = "default"; 
             _items = new List<OrderItem>();
             _orderId = orderId;
-            _date = DateTime.Today;
+            _date = DateTime.Now;
         }
 
         public Order(int orderId, string userName, string shippingAddress)
@@ -42,7 +42,7 @@ namespace SadnaSrc.OrderPool
             _shippingAddress = shippingAddress;
             _items = new List<OrderItem>();
             _orderId = orderId;
-            _date = DateTime.Today;
+            _date = DateTime.Now;
         }
 
         public Order(int orderId, string userName, string shippingAddress, double price, string dateString,

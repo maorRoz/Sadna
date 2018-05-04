@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SadnaSrc.AdminView;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;
@@ -19,6 +20,7 @@ namespace OrderPoolWallaterSupplyPointTests
         private Mock<IOrderDL> orderDbMocker;
         private Mock<IUserBuyer> userBuyerMocker;
         private Mock<IStoresSyncher> storeSyncherMock;
+        private Mock<IPublisher> publisherMock;
 
         private LotteryTicketSlave slave;
         private OrderItem item1;
@@ -33,6 +35,7 @@ namespace OrderPoolWallaterSupplyPointTests
             orderDbMocker = new Mock<IOrderDL>();
             userBuyerMocker = new Mock<IUserBuyer>();
             storeSyncherMock = new Mock<IStoresSyncher>();
+            publisherMock = new Mock<IPublisher>();
             item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
             item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
             SupplyService.Instance.FixExternal();
@@ -43,7 +46,7 @@ namespace OrderPoolWallaterSupplyPointTests
         public void BuyTicketTest()
         {
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
-            slave = new LotteryTicketSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object);
+            slave = new LotteryTicketSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object,publisherMock.Object);
             Order order = slave.BuyLotteryTicket("#9 Large", "Cluckin Bell", 1, 5.00, "Big Smoke", "Grove Street", "12345678");
             Assert.IsNotNull(order);
             Assert.AreEqual(1, order.GetItems().Count);
@@ -61,7 +64,7 @@ namespace OrderPoolWallaterSupplyPointTests
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             storeSyncherMock.Setup(x => x.ValidateTicket(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<double>()))
                 .Throws(new OrderException(OrderStatus.InvalidCoupon, "some message"));
-            slave = new LotteryTicketSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object);
+            slave = new LotteryTicketSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object, publisherMock.Object);
             Order order = slave.BuyLotteryTicket("#9 Large", "Cluckin Bell", 1, 5.00, "Big Smoke", "Grove Street", "12345678");
             Assert.IsNull(order);
             Assert.AreEqual((int)OrderStatus.InvalidCoupon, slave.Answer.Status);
@@ -73,7 +76,7 @@ namespace OrderPoolWallaterSupplyPointTests
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             userBuyerMocker.Setup(x => x.ValidateRegisteredUser())
                 .Throws(new MarketException((int)EditCartItemStatus.DidntEnterSystem, ""));
-            slave = new LotteryTicketSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object);
+            slave = new LotteryTicketSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object, publisherMock.Object);
             Order order = slave.BuyLotteryTicket("#9 Large", "Cluckin Bell", 1, 5.00, "Big Smoke", "Grove Street", "12345678");
             Assert.IsNull(order);
             Assert.AreEqual((int)EditCartItemStatus.DidntEnterSystem, slave.Answer.Status);
