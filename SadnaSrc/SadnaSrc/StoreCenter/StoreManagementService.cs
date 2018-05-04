@@ -71,8 +71,6 @@ namespace SadnaSrc.StoreCenter
             return slave.Answer;
         }
 
-
-
         public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
         {
             EditProductSlave slave = new EditProductSlave(_storeName, _storeManager, storeDL);
@@ -108,8 +106,6 @@ namespace SadnaSrc.StoreCenter
             return slave.answer;
         }
 
-
-
         public MarketAnswer RemoveDiscountFromProduct(string productName)
         {
             RemoveDiscountFromProductSlave slave = new RemoveDiscountFromProductSlave(_storeName, _storeManager, storeDL);
@@ -123,7 +119,6 @@ namespace SadnaSrc.StoreCenter
             slave.ViewStoreHistory();
             return slave.answer;
         }
-
 
         public MarketAnswer AddQuanitityToProduct(string productName, int quantity)
         {

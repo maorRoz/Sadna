@@ -46,16 +46,16 @@ namespace SadnaSrc.StoreCenter
         
         public MarketAnswer ViewStoreStock(string storename)
         {
-                ViewStoreStockSlave slave = new ViewStoreStockSlave(_shopper, storeDL);
-                slave.ViewStoreStock(storename);
-                return slave.answer;
+            ViewStoreStockSlave slave = new ViewStoreStockSlave(_shopper, storeDL);
+            slave.ViewStoreStock(storename);
+            return slave.answer;
         }
 
         public MarketAnswer AddProductToCart(string store, string productName, int quantity)
         {
-                AddProductToCartSlave slave = new AddProductToCartSlave(_shopper, storeDL);
-                slave.AddProductToCart(store, productName, quantity);
-                return slave.answer;
+            AddProductToCartSlave slave = new AddProductToCartSlave(_shopper, storeDL);
+            slave.AddProductToCart(store, productName, quantity);
+            return slave.answer;
         }
         public MarketAnswer GetAllStores()
         {
