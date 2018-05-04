@@ -99,6 +99,7 @@ namespace SadnaSrc.MarketFeed
 
         public static void CleanPublisher()
         {
+            FeedDl = null;
             _instance = null;
         }
     }

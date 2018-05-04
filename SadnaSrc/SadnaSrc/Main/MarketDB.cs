@@ -114,6 +114,7 @@ namespace SadnaSrc.Main
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D5', 'HIDDEN', '01/01/2018', '1/03/2020', 50, 'false')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D6', 'VISIBLE', '01/01/2018', '1/03/2020', 50, 'false')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P1', 5, 'D1', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P2', 5, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S4', 'P19', 10, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S5', 'P4', 20, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S5', 'P5', 36, 'D1', 'Immediate')",

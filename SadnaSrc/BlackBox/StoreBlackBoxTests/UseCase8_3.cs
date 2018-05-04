@@ -30,6 +30,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_userAdminBridge = null;
 			_orderBridge = null;
 			_userAdmin = null;
+            MarketYard.SetDateTime(new DateTime(2018,4,14));
 		}
 
 

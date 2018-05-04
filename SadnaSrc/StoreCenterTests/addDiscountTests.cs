@@ -25,6 +25,7 @@ namespace StoreCenterTests
             market = MarketYard.Instance;
             handler = StoreDL.GetInstance();
             userService = market.GetUserService();
+            MarketYard.SetDateTime(new DateTime(2018,4,14));
         }
         [TestMethod]
         public void addDiscountWhenStoreNotExists()
@@ -32,16 +33,16 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.NoStore, ans.Status);
         }
         [TestMethod]
         public void addDiscountWhenHasNoPremission()
         {
             userService.EnterSystem();
-            userService.SignIn("CJ", "123");
+            userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
             Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
         }
         [TestMethod]
@@ -59,7 +60,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/1990"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/1990"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
         }
         [TestMethod]
@@ -68,7 +69,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/1990"), 50, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/1990"), 50, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
         }
         [TestMethod]
@@ -77,7 +78,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2018"), 50, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2018"), 50, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
         }
         [TestMethod]
@@ -86,7 +87,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("01/01/2019"), 50, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("01/01/2019"), 50, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
         }
         [TestMethod]
@@ -95,7 +96,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 150, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 150, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
         }
         [TestMethod]
@@ -104,7 +105,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 100, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 100, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
         }
         [TestMethod]
@@ -113,7 +114,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), -5, "HIDDEN", false);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), -5, "HIDDEN", false);
             Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
         }
         [TestMethod]
@@ -122,7 +123,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 0, "HIDDEN", false);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 0, "HIDDEN", false);
             Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
         }
         [TestMethod]
@@ -131,7 +132,7 @@ namespace StoreCenterTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 9000, "HIDDEN", false);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 9000, "HIDDEN", false);
             Assert.AreEqual((int)DiscountStatus.DiscountGreaterThenProductPrice, ans.Status);
         }
             [TestMethod]

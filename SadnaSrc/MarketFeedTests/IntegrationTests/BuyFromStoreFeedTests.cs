@@ -30,7 +30,6 @@ namespace MarketFeedTests.IntegrationTests
             serverMocker.Setup(x => x.GetMessage(owner2.ToString(), "BOX has been sold in X!")).Callback(SendMessageToServer);
             serverMocker.Setup(x => x.GetMessage(owner3.ToString(), "BOX has been sold in X!")).Callback(SendMessageToServer);
             MarketDB.Instance.InsertByForce();
-            publisher = Publisher.Instance;
             var marketSession = MarketYard.Instance;
             var userService = marketSession.GetUserService();
             orderService = (OrderService)marketSession.GetOrderService(ref userService);
