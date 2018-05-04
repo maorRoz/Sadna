@@ -5,20 +5,14 @@ using System.Collections.Generic;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class StoreSyncerImplementation : OutsideModuleService
+    public class StockSyncher : IStockSyncher
     {
-        static StoreSyncerImplementation instance;
-        public I_StoreDL DataLayer { get; }
-        public static StoreSyncerImplementation GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new StoreSyncerImplementation();
-                return instance;
-            }
-            return instance;
-        }
-        private StoreSyncerImplementation()
+        private static StockSyncher instance;
+
+        public IStoreDL DataLayer { get; }
+
+        public static StockSyncher Instance => instance ?? (instance = new StockSyncher());
+        private StockSyncher()
         {
             DataLayer = StoreDL.GetInstance();
         }
@@ -125,13 +119,13 @@ namespace SadnaSrc.StoreCenter
         
         private bool IsProductNameAvailableInStore(string storeName, string productName)
         {
-            Product P = DataLayer.GetProductByNameFromStore(storeName, productName);
-            return (P == null);
+            var product = DataLayer.GetProductByNameFromStore(storeName, productName);
+            return product == null;
         }
         private void CheckThatProductExitst(string storeName, string product)
         {
-            Product P = DataLayer.GetProductByNameFromStore(storeName, product);
-            if (P == null)
+            var prod = DataLayer.GetProductByNameFromStore(storeName, product);
+            if (prod == null)
             { throw new StoreException(StoreEnum.ProductNotFound, "product not exists in store"); }
         }
 

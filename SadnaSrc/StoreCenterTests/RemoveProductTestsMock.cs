@@ -15,14 +15,14 @@ namespace StoreCenterTests
 
     public class RemoveProductTestsMock
     {
-        private Mock<I_StoreDL> handler;
+        private Mock<IStoreDL> handler;
         Mock<IUserSeller> userService;
         Mock<IOrderSyncher> syncer;
 
         [TestInitialize]
         public void BuildStore()
         {
-            handler = new Mock<I_StoreDL>();
+            handler = new Mock<IStoreDL>();
             userService = new Mock<IUserSeller>();
             syncer = new Mock<IOrderSyncher>();
         }

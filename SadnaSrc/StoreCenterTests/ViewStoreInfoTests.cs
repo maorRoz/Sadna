@@ -15,7 +15,7 @@ namespace StoreCenterTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private I_StoreDL handler;
+        private IStoreDL handler;
         IUserService userService;
 
         [TestInitialize]

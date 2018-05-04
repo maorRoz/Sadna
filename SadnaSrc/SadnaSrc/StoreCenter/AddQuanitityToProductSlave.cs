@@ -8,7 +8,7 @@ namespace SadnaSrc.StoreCenter
     {
         public MarketAnswer answer;
 
-        public AddQuanitityToProductSlave(string storeName, IUserSeller storeManager, I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
+        public AddQuanitityToProductSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
 

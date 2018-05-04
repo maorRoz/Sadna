@@ -10,9 +10,9 @@ namespace SadnaSrc.StoreCenter
          * in oreder to avoid double-code I added them here
          **/
         protected string _storeName;
-        protected I_StoreDL DataLayerInstance;
+        protected IStoreDL DataLayerInstance;
         protected IUserSeller _storeManager;
-        protected AbstractStoreCenterSlave(string storeName, IUserSeller storeManager,I_StoreDL storeDL )
+        protected AbstractStoreCenterSlave(string storeName, IUserSeller storeManager,IStoreDL storeDL )
         {
             _storeName = storeName;
             DataLayerInstance = storeDL;

@@ -9,7 +9,7 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer answer;
         private Store store;
         
-        public ViewStoreHistorySlave(string _store, IUserSeller storeManager, I_StoreDL storeDL) : base(_store, storeManager, storeDL)
+        public ViewStoreHistorySlave(string _store, IUserSeller storeManager, IStoreDL storeDL) : base(_store, storeManager, storeDL)
         {
             store = DataLayerInstance.GetStorebyName(_store);
         }

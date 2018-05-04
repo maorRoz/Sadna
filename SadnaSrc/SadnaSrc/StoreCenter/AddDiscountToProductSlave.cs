@@ -7,7 +7,7 @@ namespace SadnaSrc.StoreCenter
     public class AddDiscountToProductSlave : AbstractStoreCenterSlave
     {
         public MarketAnswer answer;
-        public AddDiscountToProductSlave(string storeName, IUserSeller storeManager, I_StoreDL storeDL) :base(storeName,storeManager, storeDL)
+        public AddDiscountToProductSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) :base(storeName,storeManager, storeDL)
         {
         }
 

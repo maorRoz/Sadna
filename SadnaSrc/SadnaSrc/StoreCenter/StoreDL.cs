@@ -10,7 +10,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class StoreDL : I_StoreDL
+    public class StoreDL : IStoreDL
     {
 
         private static StoreDL _instance;
@@ -168,7 +168,7 @@ namespace SadnaSrc.StoreCenter
 
         public LinkedList<LotteryTicket> GetAllTickets(string systemID)
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "*", "LotteryID = '" + systemID + "'"))
             {
@@ -198,7 +198,7 @@ namespace SadnaSrc.StoreCenter
         public StockListItem GetStockListItembyProductID(string product)
         {
             Product _product = GetProductID(product);
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             StockListItem stockListItem = null;
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "*", "ProductSystemID = '" + product + "'"))
             {
@@ -218,7 +218,7 @@ namespace SadnaSrc.StoreCenter
         {
             Discount discount = null;
 
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             using (var discountReader =
                 dbConnection.SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + discountCode + "'"))
             {
@@ -253,7 +253,7 @@ namespace SadnaSrc.StoreCenter
 
         public LotteryTicket GetLotteryTicket(string ticketID)
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "*", "myID = '" + ticketID + "'"))
             {
                 while (dbReader.Read())
@@ -340,7 +340,7 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveStockListItem(StockListItem stockListItem)
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
             {
                 LotterySaleManagmentTicket LSMT = GetLotteryByProductID(stockListItem.Product.SystemId);

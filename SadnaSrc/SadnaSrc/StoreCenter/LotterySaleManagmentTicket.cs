@@ -10,10 +10,10 @@ namespace SadnaSrc.StoreCenter
 {
     public class LotterySaleManagmentTicket
     {
-        public string SystemID { get; set; }
+        public string SystemID { get; }
         public Product Original { get; }
         public double ProductNormalPrice { get; }
-        public string storeName { get; set; }
+        public string storeName { get; }
         public double TotalMoneyPayed { get; set; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
@@ -113,9 +113,11 @@ namespace SadnaSrc.StoreCenter
         }
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
+            if (obj == null)
+            {
                 return false;
-            return Equals((LotterySaleManagmentTicket)obj);
+            }
+            return obj.GetType() == GetType() && Equals((LotterySaleManagmentTicket)obj);
         }
         private bool Equals(LotterySaleManagmentTicket obj)
         {

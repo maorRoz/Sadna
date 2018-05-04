@@ -14,13 +14,13 @@ namespace StoreCenterTests
         [TestClass]
         public class ViewStoreStockTestsMock
         {
-            private Mock<I_StoreDL> handler;
+            private Mock<IStoreDL> handler;
             Mock<IUserShopper> userService;
 
             [TestInitialize]
             public void BuildStore()
             {
-                handler = new Mock<I_StoreDL>();
+                handler = new Mock<IStoreDL>();
                 userService = new Mock<IUserShopper>();
 
             }

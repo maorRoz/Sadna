@@ -14,7 +14,7 @@ namespace StoreCenterTests
     public class ViewStoreStockTests
     {
         private MarketYard market;
-        private I_StoreDL handler;
+        private IStoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()

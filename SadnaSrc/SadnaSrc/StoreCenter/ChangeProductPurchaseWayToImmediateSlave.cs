@@ -10,7 +10,7 @@ namespace SadnaSrc.StoreCenter
         private IOrderSyncher syncher;
 
         public ChangeProductPurchaseWayToImmediateSlave(string storeName, IUserSeller storeManager,
-            IOrderSyncher _syncher, I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
+            IOrderSyncher _syncher, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
             syncher = _syncher;
         }

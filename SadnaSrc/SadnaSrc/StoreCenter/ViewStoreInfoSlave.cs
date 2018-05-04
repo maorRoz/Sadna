@@ -8,9 +8,9 @@ namespace SadnaSrc.StoreCenter
     {
         public MarketAnswer answer;
         private IUserShopper _shopper;
-        I_StoreDL storeLogic;
+        IStoreDL storeLogic;
 
-        public ViewStoreInfoSlave(IUserShopper shopper, I_StoreDL storeDL)
+        public ViewStoreInfoSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
             storeLogic = storeDL;

@@ -32,12 +32,11 @@ namespace SadnaSrc.StoreCenter
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
+            if (obj == null)
             {
                 return false;
             }
-
-            return Equals((Product)obj);
+            return obj.GetType() == GetType() && Equals((Product)obj);
         }
 
 

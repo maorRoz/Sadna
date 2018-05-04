@@ -11,20 +11,13 @@ namespace SadnaSrc.StoreCenter
     public class StoreShoppingService : IStoreShoppingService
     {
         private IUserShopper _shopper;
-        private readonly StoreSyncerImplementation storeLogic;
+        private readonly StockSyncher storeLogic;
         private LinkedList<Store> stores;
-        private I_StoreDL storeDL;
-        public StoreShoppingService(IUserShopper shopper, I_StoreDL _storeDL)
-        {
-            _shopper = shopper;
-            storeLogic = StoreSyncerImplementation.GetInstance();
-            stores = new LinkedList<Store>();
-            storeDL = _storeDL;
-        }
+        private IStoreDL storeDL;
         public StoreShoppingService(IUserShopper shopper)
         {
             _shopper = shopper;
-            storeLogic = StoreSyncerImplementation.GetInstance();
+            storeLogic = StockSyncher.Instance;
             stores = new LinkedList<Store>();
             storeDL = StoreDL.GetInstance();
         }

@@ -13,7 +13,7 @@ namespace IntegrationTests.StoreSyncher_Integration
     {
         private IUserService userServiceSession;
         private OrderService orderServiceSession;
-        private StoreSyncerImplementation storeServiceSession;
+        private StockSyncher storeServiceSession;
         private StoresSyncherHarmony storeSyncherHarmony;
 
         private MarketYard marketSession;
@@ -30,7 +30,7 @@ namespace IntegrationTests.StoreSyncher_Integration
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
             orderServiceSession = (OrderService)marketSession.GetOrderService(ref userServiceSession);
-            storeServiceSession = StoreSyncerImplementation.GetInstance();
+            storeServiceSession = StockSyncher.Instance;
             storeSyncherHarmony = new StoresSyncherHarmony();
         }
 

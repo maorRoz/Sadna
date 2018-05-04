@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-    public interface I_StoreDL
+    public interface IStoreDL
     {
         Store GetStorebyID(string storeID);
         void AddProductToDatabase(Product product);

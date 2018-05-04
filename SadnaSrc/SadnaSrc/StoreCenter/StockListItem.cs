@@ -9,9 +9,9 @@ namespace SadnaSrc.StoreCenter
 {
     public class StockListItem
     {
-        public string SystemId { get; set; }
+        public string SystemId { get; }
         public int Quantity { get; set; }
-        public Product Product { get; set; }
+        public Product Product { get;}
         public Discount Discount { get; set; }
 
         public PurchaseEnum PurchaseWay { get; set; }
@@ -33,7 +33,7 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(StockListItem obj)
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             return (SystemId.Equals(obj.SystemId)) &&
                 (Quantity == obj.Quantity) &&
                 (Product.SystemId == obj.Product.SystemId) &&
@@ -59,7 +59,7 @@ namespace SadnaSrc.StoreCenter
                 discountObject = Discount;
             }
 
-            return new object[]
+            return new []
             {
                 SystemId,
                 Product,

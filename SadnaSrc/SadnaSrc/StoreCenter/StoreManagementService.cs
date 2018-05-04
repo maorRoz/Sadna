@@ -13,30 +13,18 @@ namespace SadnaSrc.StoreCenter
     {
 
         public Store store;
-        StoreSyncerImplementation global;
+        StockSyncher global;
         private IUserSeller _storeManager;
         public string _storeName;
         private IOrderSyncher syncher;
         private LinkedList<StockListItem> stockListItemToRemove;
         private LinkedList<Discount> discountsToRemvoe;
-        private I_StoreDL storeDL;
-
-        public StoreManagementService(IUserSeller storeManager, string storeName, I_StoreDL _storeDL)
-        {
-            _storeManager = storeManager;
-            _storeName = storeName;
-            global = StoreSyncerImplementation.GetInstance();
-            store = global.DataLayer.GetStorebyName(storeName);
-            stockListItemToRemove = new LinkedList<StockListItem>();
-            discountsToRemvoe = new LinkedList<Discount>();
-            syncher = new OrderSyncherHarmony();
-            storeDL = _storeDL;
-        }
+        private IStoreDL storeDL;
         public StoreManagementService(IUserSeller storeManager, string storeName)
         {
             _storeManager = storeManager;
             _storeName = storeName;
-            global = StoreSyncerImplementation.GetInstance();
+            global = StockSyncher.Instance;
             store = global.DataLayer.GetStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();

@@ -57,7 +57,7 @@ namespace SadnaSrc.StoreCenter
         }
         public override string ToString()
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             if (EnumStringConverter.PrintEnum(discountType) == EnumStringConverter.PrintEnum(discountTypeEnum.Hidden))
                 return "type is: hidden";
             if (Percentages)

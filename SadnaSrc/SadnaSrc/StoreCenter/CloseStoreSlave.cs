@@ -8,7 +8,7 @@ namespace SadnaSrc.StoreCenter
     {
         public MarketAnswer answer;
         public Store store;
-        public CloseStoreSlave(IUserSeller storeManager, string _storeName, I_StoreDL storeDL) : base(_storeName, storeManager, storeDL)
+        public CloseStoreSlave(IUserSeller storeManager, string _storeName, IStoreDL storeDL) : base(_storeName, storeManager, storeDL)
         {
             store = DataLayerInstance.GetStorebyName(_storeName);
         }

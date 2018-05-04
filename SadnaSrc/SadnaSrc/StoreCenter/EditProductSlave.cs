@@ -9,7 +9,7 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer answer;
         
 
-        public EditProductSlave(string storename, IUserSeller storeManager, I_StoreDL storeDL) : base(storename, storeManager, storeDL)
+        public EditProductSlave(string storename, IUserSeller storeManager, IStoreDL storeDL) : base(storename, storeManager, storeDL)
         {
         }
 

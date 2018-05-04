@@ -15,7 +15,7 @@ namespace StoreCenterTests
     {
         private MarketYard market;
         public Store toDeleteStore;
-        private I_StoreDL handler;
+        private IStoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()

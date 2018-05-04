@@ -7,7 +7,7 @@ namespace SadnaSrc.StoreCenter
     public class PromoteToStoreManagerSlave : AbstractStoreCenterSlave
     {
         public MarketAnswer Answer;
-        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName, I_StoreDL storeDL) : base(storeName, storeManager, storeDL)
+        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
         public void PromoteToStoreManager(string someoneToPromoteName, string actions)

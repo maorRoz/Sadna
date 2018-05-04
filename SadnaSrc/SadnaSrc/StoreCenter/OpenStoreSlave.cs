@@ -10,10 +10,10 @@ namespace SadnaSrc.StoreCenter
 {
     public class OpenStoreSlave
     {
-        public MarketAnswer Answer { get; set; }
+        public MarketAnswer Answer { get; private set; }
         IUserShopper _shopper;
-        I_StoreDL storeLogic;
-        public OpenStoreSlave(IUserShopper shopper, I_StoreDL storeDL)
+        IStoreDL storeLogic;
+        public OpenStoreSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
             storeLogic = storeDL;
@@ -50,10 +50,10 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void CheckIfNameAvailable(String name)
+        private void CheckIfNameAvailable(string name)
         {
-            Store product = storeLogic.GetStorebyName(name);
-            if (product != null)
+            var store = storeLogic.GetStorebyName(name);
+            if (store != null)
                 throw new StoreException(OpenStoreStatus.AlreadyExist, "store name must be uniqe");
         }
     }

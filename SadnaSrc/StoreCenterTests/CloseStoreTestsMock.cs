@@ -14,13 +14,13 @@ namespace StoreCenterTests
         [TestClass]
         public class CloseStoreTestsMock
         {
-            private Mock<I_StoreDL> handler;
+            private Mock<IStoreDL> handler;
             Mock<IUserSeller> userService;
 
             [TestInitialize]
             public void BuildStore()
             {
-                handler = new Mock<I_StoreDL>();
+                handler = new Mock<IStoreDL>();
                 userService = new Mock<IUserSeller>();
             }
             [TestMethod]
