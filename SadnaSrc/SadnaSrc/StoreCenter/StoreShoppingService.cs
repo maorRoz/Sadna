@@ -59,7 +59,7 @@ namespace SadnaSrc.StoreCenter
         }
         public MarketAnswer GetAllStores()
         {
-			      ViewStoreSlave slave = new ViewStoreSlave(_shopper);
+			      ViewStoreNamesSlave slave = new ViewStoreNamesSlave(_shopper,storeDL);
 			      slave.ViewStores();
 			      return slave.answer;
 		    }

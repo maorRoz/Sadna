@@ -8,31 +8,25 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-	class ViewStoreSlave
+	class ViewStoreNamesSlave
 	{
 		internal MarketAnswer answer;
 		private IUserShopper _shopper;
-		StoreDL storeLogic;
+	    private IStoreDL storeLogic;
 
-		public ViewStoreSlave(IUserShopper shopper)
+		public ViewStoreNamesSlave(IUserShopper shopper,IStoreDL storeDl)
 		{
 			_shopper = shopper;
-			storeLogic = StoreDL.GetInstance();
+		    storeLogic = storeDl;
 		}
 
 		internal void ViewStores()
 		{
-			try
+            try
 			{
-				LinkedList<string> result = new LinkedList<string>();
-				LinkedList<Store> IDS = storeLogic.GetAllActiveStores();
-				foreach (Store item in IDS)
-				{
-					result.AddLast(((Store)item).Name);
-				}
-				string[] resultArray = new string[result.Count];
-				result.CopyTo(resultArray, 0);
-				answer = new StoreAnswer(StoreEnum.Success, "", resultArray);
+			    _shopper.ValidateCanBrowseMarket();
+                var storeNames = storeLogic.GetAllActiveStoreNames();
+				answer = new StoreAnswer(StoreEnum.Success, "you've got all the store names!", storeNames);
 			}
 			catch (StoreException e)
 			{
