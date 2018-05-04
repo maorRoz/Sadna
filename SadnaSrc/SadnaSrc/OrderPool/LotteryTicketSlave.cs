@@ -34,7 +34,7 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                _buyer.ValidateRegisteredUser();
+                ValidateRegisteredUser();
                 _storesSync.ValidateTicket(itemName, store, unitPrice);
                 OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
                 Order order = CreateOrderOneItem(ticketToBuy, UserName, UserAddress);
@@ -69,15 +69,6 @@ namespace SadnaSrc.OrderPool
                 Answer = new OrderAnswer((SupplyStatus) e.Status, e.GetErrorMessage());
                 return null;
             }
-            catch (MarketException e)
-            {
-                MarketLog.Log("OrderPool", "Order " + orderId +
-                                           " has failed to execute. Something is wrong with Store or User." +
-                                           " Error message has been created!");
-                Answer = new OrderAnswer(OrderStatus.InvalidUser, e.GetErrorMessage());
-                _publisher.NotifyClientBuy(store, itemName);
-                return null;
-            }
         }
 
         public Order InitOrder(string UserName, string UserAddress)
@@ -105,6 +96,18 @@ namespace SadnaSrc.OrderPool
         {
             _paymentService.ProccesPayment(order, CreditCard);
             _orderDL.AddOrder(order, "Lottery");
+        }
+
+        private void ValidateRegisteredUser()
+        {
+            try
+            {
+                _buyer.ValidateRegisteredUser();
+            }
+            catch (MarketException e)
+            {
+                throw new OrderException(OrderStatus.InvalidUser, e.GetErrorMessage());
+            }
         }
     }
 }
