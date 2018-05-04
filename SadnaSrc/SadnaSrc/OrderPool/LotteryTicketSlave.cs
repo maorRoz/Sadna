@@ -43,6 +43,7 @@ namespace SadnaSrc.OrderPool
                 _storesSync.UpdateLottery(itemName, store, unitPrice, UserName, cheatCode);
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought lottery ticket.");
                 Answer = new OrderAnswer(OrderStatus.Success, "Successfully bought Lottery ticket ");
+                _publisher.NotifyClientBuy(store,itemName);
                 return order;
             }
             catch (OrderException e)

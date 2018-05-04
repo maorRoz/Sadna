@@ -43,7 +43,7 @@ namespace SadnaSrc.UserSpot
                 RegisteredUser newRegistered = _userDB.RegisterUser(_guest.SystemID,name, address, encryptedPassword,
                     creditCard, _guest.Cart.GetCartStorage());
                 MarketLog.Log("UserSpot", "User " + newRegistered.SystemID + " sign up to the system has been successfull!");
-                Answer = new UserAnswer(SignInStatus.Success, "Sign up has been successfull!");
+                Answer = new UserAnswer(SignUpStatus.Success, "Sign up has been successfull!");
                 _publisher.AddFeedQueue(newRegistered.SystemID);
                 return newRegistered;
             }
