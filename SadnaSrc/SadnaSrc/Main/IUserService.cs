@@ -66,6 +66,12 @@ namespace SadnaSrc.Main
         NoItemFound
     }
 
+    public enum ViewUsersStatus
+    {
+        Success,
+        DidntEnterSystem
+    }
+
     public enum BrowseMarketStatus
     {
         DidntEnterSystem,
@@ -76,6 +82,8 @@ namespace SadnaSrc.Main
     {
         NotSystemAdmin
     }
+
+
 
 	
     
