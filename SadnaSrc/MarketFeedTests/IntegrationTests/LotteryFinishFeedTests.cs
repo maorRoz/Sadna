@@ -24,6 +24,9 @@ namespace MarketFeedTests.IntegrationTests
         [TestInitialize]
         public void IntegrationFeedTestsBuilder()
         {
+            var marketDbMocker = new Mock<IMarketDB>();
+            MarketException.SetDB(marketDbMocker.Object);
+            MarketLog.SetDB(marketDbMocker.Object);
             countMessagesToServer = 0;
             serverMocker = new Mock<IListener>();
             serverMocker.Setup(x => x.GetMessage(buyerId2.ToString(), "You've won the lottery on " + productLottery + " in " 
@@ -43,6 +46,7 @@ namespace MarketFeedTests.IntegrationTests
             var userService3 = marketSession.GetUserService();
             orderService3 = (OrderService)marketSession.GetOrderService(ref userService3);
             orderService3.LoginBuyer("Vova", "123");
+            MarketYard.SetDateTime(new DateTime(2018,4,14));
 
         }
 

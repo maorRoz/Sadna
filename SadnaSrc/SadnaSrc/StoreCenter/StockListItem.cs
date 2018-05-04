@@ -9,9 +9,9 @@ namespace SadnaSrc.StoreCenter
 {
     public class StockListItem
     {
-        public string SystemId { get; set; }
+        private string systemId;
         public int Quantity { get; set; }
-        public Product Product { get; set; }
+        public Product Product { get;}
         public Discount Discount { get; set; }
 
         public PurchaseEnum PurchaseWay { get; set; }
@@ -19,7 +19,7 @@ namespace SadnaSrc.StoreCenter
         public StockListItem(int quantity, Product product, Discount discount, PurchaseEnum purchaseWay,
             string id)
         {
-            SystemId = id;
+            systemId = id;
             Quantity = quantity;
             Product = product;
             Discount = discount;
@@ -27,24 +27,25 @@ namespace SadnaSrc.StoreCenter
         }
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
+            if (obj == null)
+            {
                 return false;
-            return Equals((StockListItem)obj);
+            }
+            return obj.GetType() == GetType() && Equals((StockListItem)obj);
         }
         private bool Equals(StockListItem obj)
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
-            return (SystemId.Equals(obj.SystemId)) &&
-                (Quantity == obj.Quantity) &&
-                (Product.SystemId == obj.Product.SystemId) &&
-                (Discount.discountCode == obj.Discount.discountCode) &&
-                (EnumStringConverter.PrintEnum(PurchaseWay).Equals(EnumStringConverter.PrintEnum(obj.PurchaseWay)));
+            return systemId.Equals(obj.systemId) &&
+                Quantity == obj.Quantity &&
+                Product.SystemId == obj.Product.SystemId &&
+                Discount.discountCode == obj.Discount.discountCode &&
+                EnumStringConverter.PrintEnum(PurchaseWay).Equals(EnumStringConverter.PrintEnum(obj.PurchaseWay));
         }
 
         public override int GetHashCode()
         {
             var hashCode = -125935732;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(systemId);
             hashCode = hashCode * -1521134295 + Quantity.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<Product>.Default.GetHashCode(Product);
             hashCode = hashCode * -1521134295 + EqualityComparer<Discount>.Default.GetHashCode(Discount);
@@ -59,9 +60,9 @@ namespace SadnaSrc.StoreCenter
                 discountObject = Discount;
             }
 
-            return new object[]
+            return new []
             {
-                SystemId,
+                systemId,
                 Product,
                 Quantity,
                 discountObject,
@@ -70,18 +71,18 @@ namespace SadnaSrc.StoreCenter
         }
         public string[] GetStockListItemStringValues()
         {
-            string IfDiscountNotExists = "null";
+            string ifDiscountNotExists = "null";
             if (Discount != null)
             {
-                IfDiscountNotExists = Discount.discountCode;
+                ifDiscountNotExists = Discount.discountCode;
             }
 
             return new[]
             {
-                "'" + SystemId + "'",
+                "'" + systemId + "'",
                 "'" + Product.SystemId + "'",
                 "'" + Quantity + "'",
-                "'" + IfDiscountNotExists + "'",
+                "'" + ifDiscountNotExists + "'",
                 "'" + EnumStringConverter.PrintEnum(PurchaseWay) + "'"
             };
         }

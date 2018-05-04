@@ -4,13 +4,13 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class PromoteToStoreManagerSlave : AbstractStoreCenterSlave
+    public class PromoteToStoreManagerSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer Answer;
-        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName) : base(storeName,storeManager)
+        public MarketAnswer Answer;
+        public PromoteToStoreManagerSlave(IUserSeller storeManager, string storeName, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
-        internal void PromoteToStoreManager(string someoneToPromoteName, string actions)
+        public void PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
             MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to grant " + someoneToPromoteName +
                                       " manager options in Store" + _storeName + ". Validating store activity and existence..");

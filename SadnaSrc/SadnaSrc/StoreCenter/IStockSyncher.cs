@@ -8,7 +8,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    interface OutsideModuleService
+    interface IStockSyncher
     {
         void UpdateQuantityAfterPurchase(string store, string product, int quantity);
         bool ProductExistsInQuantity(string storeName, string product, int quantity);

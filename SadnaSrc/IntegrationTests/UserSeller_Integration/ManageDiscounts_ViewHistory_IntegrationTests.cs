@@ -53,7 +53,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndAddDiscount("guest", existingProduct);
-                Assert.IsNull(StoreDL.GetInstance().GetProductFromStore(store, existingProduct).Discount);
+                Assert.IsNull(StoreDL.Instance.GetProductFromStore(store, existingProduct).Discount);
             }
             catch (MarketException)
             {
@@ -67,7 +67,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndAddDiscount(manager, existingProduct);
-                Assert.IsNull(StoreDL.GetInstance().GetProductFromStore(store, existingProduct).Discount);
+                Assert.IsNull(StoreDL.Instance.GetProductFromStore(store, existingProduct).Discount);
             }
             catch (MarketException)
             {
@@ -82,7 +82,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 SignInAndAddDiscount(manager2, existingProduct);
                 Assert.AreEqual("D7",
-                    StoreDL.GetInstance().GetProductFromStore(store, existingProduct).Discount.discountCode);
+                    StoreDL.Instance.GetProductFromStore(store, existingProduct).Discount.discountCode);
             }
             catch (MarketException)
             {
@@ -97,7 +97,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 SignInAndAddDiscount(owner, existingProduct);
                 Assert.AreEqual("D8",
-                    StoreDL.GetInstance().GetProductFromStore(store, existingProduct).Discount.discountCode);
+                    StoreDL.Instance.GetProductFromStore(store, existingProduct).Discount.discountCode);
             }
             catch (MarketException)
             {
@@ -115,8 +115,8 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndEditDiscount("guest", existingProduct2);
-                Assert.AreEqual(50, 
-                    StoreDL.GetInstance().GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
+                Assert.AreEqual(50,
+                    StoreDL.Instance.GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
             }
             catch (MarketException)
             {
@@ -131,7 +131,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 SignInAndEditDiscount(manager, existingProduct2);
                 Assert.AreEqual(50,
-                    StoreDL.GetInstance().GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
+                    StoreDL.Instance.GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
             }
             catch (MarketException)
             {
@@ -146,7 +146,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 SignInAndEditDiscount(manager2, existingProduct2);
                 Assert.AreEqual(2,
-                    StoreDL.GetInstance().GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
+                    StoreDL.Instance.GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
             }
             catch (MarketException)
             {
@@ -161,7 +161,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 SignInAndEditDiscount(owner, existingProduct2);
                 Assert.AreEqual(2,
-                    StoreDL.GetInstance().GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
+                    StoreDL.Instance.GetProductFromStore(store, existingProduct2).Discount.DiscountAmount);
             }
             catch (MarketException)
             {
@@ -179,7 +179,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndRemoveDiscount("guest", existingProduct2);
-                Assert.IsNotNull(StoreDL.GetInstance().GetProductFromStore(store, existingProduct2).Discount);
+                Assert.IsNotNull(StoreDL.Instance.GetProductFromStore(store, existingProduct2).Discount);
             }
             catch (MarketException)
             {
@@ -193,7 +193,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndRemoveDiscount(manager, existingProduct2);
-                Assert.IsNotNull(StoreDL.GetInstance().GetProductFromStore(store, existingProduct2).Discount);
+                Assert.IsNotNull(StoreDL.Instance.GetProductFromStore(store, existingProduct2).Discount);
             }
             catch (MarketException)
             {
@@ -207,7 +207,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndRemoveDiscount(manager2, existingProduct2);
-                Assert.IsNull(StoreDL.GetInstance().GetProductFromStore(store, existingProduct2).Discount);
+                Assert.IsNull(StoreDL.Instance.GetProductFromStore(store, existingProduct2).Discount);
             }
             catch (MarketException)
             {
@@ -221,7 +221,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndRemoveDiscount(owner, existingProduct2);
-                Assert.IsNull(StoreDL.GetInstance().GetProductFromStore(store, existingProduct2).Discount);
+                Assert.IsNull(StoreDL.Instance.GetProductFromStore(store, existingProduct2).Discount);
             }
             catch (MarketException)
             {
@@ -340,7 +340,7 @@ namespace IntegrationTests.UserSeller_Integration
         {
             SignIn(user);
             storeServiceSession.EditProduct(product, "Name", "Bambaa");
-            StoreDL.GetInstance().GetProductFromStore(store, "Bambaa");
+            StoreDL.Instance.GetProductFromStore(store, "Bambaa");
         }
 
         private void SignIn(string user)

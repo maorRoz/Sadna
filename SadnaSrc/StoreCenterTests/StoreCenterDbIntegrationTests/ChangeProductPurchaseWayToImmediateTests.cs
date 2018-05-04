@@ -8,71 +8,78 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
-    public class AddProductsTests
+    public class ChangeProductPurchaseWayToImmediateTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private I_StoreDL handler;
+        private IStoreDL handler;
         IUserService userService;
+        private LotterySaleManagmentTicket lotteryToDelete;
+
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
         }
         [TestMethod]
-        public void addProductWhenStoreNotExists()
+        public void ChangeToImmediateStoreNotFound()
         {
+
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
-            MarketAnswer ans = liorSession.AddNewProduct("name0", 1, "des", 4);
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status); 
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "NotAStore");
+            MarketAnswer ans = liorSession.ChangeProductPurchaseWayToImmediate("BOX");
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenHasNoPremmision()
+        public void ChangeToImmediateNoPremission()
         {
             userService.EnterSystem();
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("name0", 1, "des", 4);
+            MarketAnswer ans = liorSession.ChangeProductPurchaseWayToImmediate("BOX");
             Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenProductNameIsNotAvailableInStore()
+        public void ChangeToImmediateProductNotFound()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("BOX", 1, "des", 4);
-            Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, ans.Status);
+            MarketAnswer ans = liorSession.ChangeProductPurchaseWayToImmediate("noPorduct");
+            Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenquantityisNegative()
+        public void ChangeToImmediateSuccessLottery()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", -4);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
-        }
-        [TestMethod]
-        public void addProductSuccess()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", 4);
-            ProductToDelete = handler.GetProductFromStore("X", "item");
+            Product P = new Product("P1345678", "OBJ", 9, "des");
+            ProductToDelete = new StockListItem(4, P, null, PurchaseEnum.Lottery, "S1");
+            lotteryToDelete = new LotterySaleManagmentTicket("L1000", "X", P, DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2020"));
+            handler.AddStockListItemToDataBase(ProductToDelete);
+            handler.AddLottery(lotteryToDelete);
+            MarketAnswer ans = liorSession.ChangeProductPurchaseWayToImmediate("OBJ");
+            StockListItem find = handler.GetProductFromStore("X", "OBJ");
+            Assert.AreEqual((int)PurchaseEnum.Immediate, (int)find.PurchaseWay);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
-
-
+        [TestMethod]
+        public void ChangeToImmediateSuccessImmediate()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            MarketAnswer ans = liorSession.ChangeProductPurchaseWayToImmediate("BOX");
+            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
+        }
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {

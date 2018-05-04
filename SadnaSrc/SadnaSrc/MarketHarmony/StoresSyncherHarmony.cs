@@ -12,11 +12,11 @@ namespace SadnaSrc.MarketHarmony
     public class StoresSyncherHarmony : IStoresSyncher
     {
 
-        private OutsideModuleService _storeService;
+        private IStockSyncher _storeService;
         private IOrderSyncher orderSyncher;
         public StoresSyncherHarmony()
         {
-            _storeService = StoreSyncerImplementation.GetInstance();
+            _storeService = StockSyncher.Instance;
             orderSyncher = new OrderSyncherHarmony();
         }
 
@@ -39,7 +39,7 @@ namespace SadnaSrc.MarketHarmony
         {
             try
             {
-                StoreSyncerImplementation syncher = StoreSyncerImplementation.GetInstance();
+                StockSyncher syncher = StockSyncher.Instance;
                 syncher.UpdateLottery(store, itemName, moenyPayed, username, orderSyncher, cheatCode);
             }
             catch (StoreException e)

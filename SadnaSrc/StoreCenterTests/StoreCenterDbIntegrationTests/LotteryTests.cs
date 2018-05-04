@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
-using SadnaSrc.MarketHarmony;
 using SadnaSrc.StoreCenter;
 using System;
 using System.Collections.Generic;
@@ -8,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
     public class LotteryTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private StoreSyncerImplementation handler; // need to be here
+        private StockSyncher handler; // need to be here
         IUserService userService;
 
         [TestInitialize]
@@ -23,7 +22,7 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreSyncerImplementation.GetInstance();
+            handler = StockSyncher.Instance; 
             userService = market.GetUserService();
         }
         [TestMethod]

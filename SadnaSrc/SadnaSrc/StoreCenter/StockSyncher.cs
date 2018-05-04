@@ -6,22 +6,16 @@ using SadnaSrc.MarketFeed;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class StoreSyncerImplementation : OutsideModuleService
+    public class StockSyncher : IStockSyncher
     {
-        static StoreSyncerImplementation instance;
-        public I_StoreDL DataLayer { get; }
-        public static StoreSyncerImplementation GetInstance()
+        private static StockSyncher instance;
+
+        public IStoreDL DataLayer { get; }
+
+        public static StockSyncher Instance => instance ?? (instance = new StockSyncher());
+        private StockSyncher()
         {
-            if (instance == null)
-            {
-                instance = new StoreSyncerImplementation();
-                return instance;
-            }
-            return instance;
-        }
-        private StoreSyncerImplementation()
-        {
-            DataLayer = StoreDL.GetInstance();
+            DataLayer = StoreDL.Instance;
         }
         
         public StockListItem GetProductFromStore(string store, string productName)
@@ -49,20 +43,16 @@ namespace SadnaSrc.StoreCenter
             CheckThatStoreExitst(storeName);
             CheckThatProductExitst(storeName, product);
             StockListItem sli = DataLayer.GetProductFromStore(storeName, product);
-            if (sli!=null)
-                return sli.Quantity >= quantity;
-            return false;
+            return sli != null && sli.Quantity >= quantity;
         }
         
       
         public void UpdateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher, int cheatCode)
         {
-            LotterySaleManagmentTicket Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
-            if (Lotto.updateLottery(moenyPayed, DataLayer.GetUserIDFromUserName(UserName)))
-            {
-                syncher.CloseLottery(Lotto.Original.Name, Lotto.storeName, Lotto.getWinnerID(cheatCode));
-                Publisher.Instance.NotifyLotteryFinish(Lotto.SystemID,storeName,ProductName);
-            }
+            LotterySaleManagmentTicket lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
+            if (!lotto.updateLottery(moenyPayed, DataLayer.GetUserIDFromUserName(UserName))) return;
+            syncher.CloseLottery(lotto.Original.Name, lotto.storeName, lotto.getWinnerID(cheatCode));
+            Publisher.Instance.NotifyLotteryFinish(lotto.SystemID,storeName,ProductName);
         }
         // this fucntion calculate item price if it has Hidden discount. happend only in Purches time and this is way it's happening here
         public double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity)
@@ -93,7 +83,7 @@ namespace SadnaSrc.StoreCenter
 
         public bool HasActiveLottery(string storeName, string productName, double priceWantToPay)
         {
-            LotterySaleManagmentTicket Lotto;
+            LotterySaleManagmentTicket lotto;
             StockListItem item;
             try
             {
@@ -101,46 +91,41 @@ namespace SadnaSrc.StoreCenter
             }
             catch (Exception)
             { return false; }
-            if (item == null)
-                return false;
-            if (item.PurchaseWay != PurchaseEnum.Lottery)
+
+            if (item?.PurchaseWay != PurchaseEnum.Lottery)
                 return false;
             try
             {
-                Lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, productName);
+                lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, productName);
             }
             catch (Exception)
             { return false; }
-            if (Lotto == null)
+            if (lotto == null)
                 return false;
-            if (!Lotto.IsActive)
+            if (!lotto.IsActive)
                 return false;
             if (priceWantToPay <= 0)
                 return false;
-            if (!Lotto.CanPurchase(priceWantToPay))
-                return false;
-            if (!Lotto.CheckDatesWhenPurches())
-                return false;
-            return true;
+            return lotto.CanPurchase(priceWantToPay) && lotto.CheckDatesWhenPurches();
         }
 
         
         private bool IsProductNameAvailableInStore(string storeName, string productName)
         {
-            Product P = DataLayer.GetProductByNameFromStore(storeName, productName);
-            return (P == null);
+            var product = DataLayer.GetProductByNameFromStore(storeName, productName);
+            return product == null;
         }
         private void CheckThatProductExitst(string storeName, string product)
         {
-            Product P = DataLayer.GetProductByNameFromStore(storeName, product);
-            if (P == null)
+            var prod = DataLayer.GetProductByNameFromStore(storeName, product);
+            if (prod == null)
             { throw new StoreException(StoreEnum.ProductNotFound, "product not exists in store"); }
         }
 
         private void CheckThatStoreExitst(string storeName)
         {
-            Store S = DataLayer.GetStorebyName(storeName);
-            if (S == null)
+            Store store = DataLayer.GetStorebyName(storeName);
+            if (store == null)
             { throw new StoreException(StoreEnum.StoreNotExists, "store not exists"); }
         }
     }

@@ -99,7 +99,7 @@ namespace IntegrationTests.FullCycle_Integration
                 orderServiceSession.BuyItemFromImmediate(product, store, 3, 11, null);
                 userServiceSession3.SignIn(user, pass);
                 Assert.IsNull(((UserService)userServiceSession3).MarketUser.Cart.SearchInCart(store, product, 11));
-                StockListItem itemToCheck = StoreDL.GetInstance().GetProductFromStore(store, product);
+                StockListItem itemToCheck = StoreDL.Instance.GetProductFromStore(store, product);
                 Assert.AreEqual(33, itemToCheck.Quantity);
             }
             catch (MarketException)
@@ -124,7 +124,7 @@ namespace IntegrationTests.FullCycle_Integration
                 CartItem item = ((UserService) userServiceSession3).MarketUser.Cart.SearchInCart(store, product, 11);
                 Assert.IsNotNull(item);
                 Assert.AreEqual(2, item.Quantity);
-                StockListItem itemToCheck = StoreDL.GetInstance().GetProductFromStore(store, product);
+                StockListItem itemToCheck = StoreDL.Instance.GetProductFromStore(store, product);
                 Assert.AreEqual(35, itemToCheck.Quantity);
             }
             catch (MarketException)

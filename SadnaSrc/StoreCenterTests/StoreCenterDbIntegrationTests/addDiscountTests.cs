@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
     public class AddDiscountTests
     {
         private MarketYard market;
         public StockListItem ProductToDelete;
-        private I_StoreDL handler;
+        private IStoreDL handler;
         IUserService userService;
             
         [TestInitialize]
@@ -23,7 +23,7 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
             MarketYard.SetDateTime(new DateTime(2018,4,14));
         }

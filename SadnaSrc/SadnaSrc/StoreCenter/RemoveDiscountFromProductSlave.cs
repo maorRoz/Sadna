@@ -4,15 +4,15 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class RemoveDiscountFromProductSlave : AbstractStoreCenterSlave
+    public class RemoveDiscountFromProductSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer Answer;
+        public MarketAnswer Answer;
 
-        public RemoveDiscountFromProductSlave(string storeName, IUserSeller storeManager) :base(storeName,storeManager)
+        public RemoveDiscountFromProductSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
 
-        internal void RemoveDiscountFromProduct(string productName)
+        public void RemoveDiscountFromProduct(string productName)
         {
             try
             {

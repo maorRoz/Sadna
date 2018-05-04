@@ -4,15 +4,15 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class EditDiscountSlave : AbstractStoreCenterSlave
+    public class EditDiscountSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
 
-        public EditDiscountSlave(string storeName, IUserSeller storeManager) : base(storeName, storeManager)
+        public EditDiscountSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
 
-        internal void EditDiscount(string productName, string whatToEdit, string newValue)
+        public void EditDiscount(string productName, string whatToEdit, string newValue)
         {
             try
             {
@@ -129,8 +129,7 @@ namespace SadnaSrc.StoreCenter
         private Discount EditDiscountPercentagesPrivateMehtod(Discount discount, string newValue, string productName)
         {
             MarketLog.Log("StoreCenter", "try to edit precenteges");
-            bool newboolValue = true;
-            if (!Boolean.TryParse(newValue, out newboolValue))
+            if (!bool.TryParse(newValue, out bool newboolValue))
             {
                 MarketLog.Log("StoreCenter", "value is not legal");
                 throw new StoreException(DiscountStatus.precentegesIsNotBoolean, "value is not legal");
@@ -182,25 +181,24 @@ namespace SadnaSrc.StoreCenter
 
             MarketLog.Log("StoreCenter", " edit start date");
             MarketLog.Log("StoreCenter", " checking that the start date is legal");
-            DateTime EndDate = DateTime.MaxValue;
-            if (!DateTime.TryParse(newValue, out EndDate))
+            if (!DateTime.TryParse(newValue, out var endDate))
             {
                 MarketLog.Log("StoreCenter", "date format is not legal");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal");
             }
-            if (EndDate.Date < MarketYard.MarketDate)
+            if (endDate.Date < MarketYard.MarketDate)
             {
                 MarketLog.Log("StoreCenter", "can't set end time in the past");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time in the past");
             }
-            if (EndDate.Date < discount.startDate.Date)
+            if (endDate.Date < discount.startDate.Date)
             {
                 MarketLog.Log("StoreCenter", "can't set end time that is sooner then the discount start time");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time that is sooner then the discount start time");
             }
-            discount.EndDate = EndDate;
+            discount.EndDate = endDate;
             MarketLog.Log("StoreCenter", " start date changed successfully");
-            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount End Date become " + EndDate);
+            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount End Date become " + endDate);
             return discount;
         }
     }

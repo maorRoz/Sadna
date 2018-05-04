@@ -8,21 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
     public class EditProductTests
     {
         private MarketYard market;
-        public StockListItem ProductToDelete;
-        private I_StoreDL handler;
+        private IStoreDL handler;
         IUserService userService;
         [TestInitialize]
         public void BuildStore()
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
         }
         [TestMethod]
@@ -68,7 +67,6 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "Name", "MOMO");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "MOMO");
             Assert.IsNotNull(find);
@@ -81,7 +79,6 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "0");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
@@ -95,7 +92,6 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "NotA-Number");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
@@ -109,7 +105,6 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "-4");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
@@ -123,7 +118,6 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "10");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
@@ -137,7 +131,6 @@ namespace StoreCenterTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "GOLD");
             MarketAnswer ans = liorSession.EditProduct("GOLD", "Description", "MOMO");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);

@@ -5,32 +5,20 @@ using SadnaSrc.Main;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StoreCenterTests
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
     public class StoreDLTests
     {
 
-        private MarketYard market;
         private StoreDL handler;
-        private Product toDeleteProduct;
-        private Discount toDeleteDiscount;
-        private Store toDeleteStore;
-        private LotterySaleManagmentTicket toDeleteLottery;
         private LotteryTicket toDeleteTicket;
-        private StockListItem toDeleteStockItem;
         [TestInitialize]
         public void BuildSupplyPoint()
         {
             MarketDB.Instance.InsertByForce();
-            market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
-            toDeleteProduct = null;
-            toDeleteDiscount = null;
-            toDeleteStore = null;
-            toDeleteLottery = null;
+            handler = StoreDL.Instance;
             toDeleteTicket = null;
-            toDeleteStockItem = null;
         }
         [TestMethod]
         public void GetProductID()
@@ -45,7 +33,6 @@ namespace StoreCenterTests
             Product product = new Product("P105", "X", 100, "Exits ForTests Only");
             handler.AddProductToDatabase(product);
             Product find = handler.GetProductID("P105");
-            toDeleteProduct = product;
             Assert.AreEqual(product, find);
         }
         [TestMethod]
@@ -91,7 +78,6 @@ namespace StoreCenterTests
             product.BasePrice = 110;
             handler.EditProductInDatabase(product);
             Product find = handler.GetProductID("P105");
-            toDeleteProduct = product;
             Assert.AreEqual("lili", find.Name);
             Assert.AreEqual("momo", find.Description);
             Assert.AreEqual(110, find.BasePrice);
@@ -116,7 +102,6 @@ namespace StoreCenterTests
             Store expected = new Store("Stest", "X2", "Here 4");
             handler.AddStore(expected);
             Store find = handler.GetStorebyID("Stest");
-            toDeleteStore = find;
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
@@ -127,7 +112,6 @@ namespace StoreCenterTests
 
             handler.AddStore(expected);
             find = handler.GetStorebyID("S9");
-            toDeleteStore = expected;
             Assert.IsTrue(expected.Equals(find));
 
             expected.Name = "mojo";
@@ -152,7 +136,6 @@ namespace StoreCenterTests
             Discount expected = new Discount("D102", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
             handler.AddDiscount(expected);
             Discount find = handler.GetDiscount("D102");
-            toDeleteDiscount = find;
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
@@ -161,7 +144,6 @@ namespace StoreCenterTests
             Discount expected = new Discount("D103", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
             handler.AddDiscount(expected);
             Discount find = handler.GetDiscount("D103");
-            toDeleteDiscount = expected;
             Assert.AreEqual(expected, find);
             expected.DiscountAmount = 30;
             handler.EditDiscountInDatabase(expected);
@@ -201,7 +183,6 @@ namespace StoreCenterTests
             Assert.IsNull(find);
             handler.AddStockListItemToDataBase(expected);
             find = handler.GetStockListItembyProductID("P110");
-            toDeleteStockItem = expected;
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
@@ -215,7 +196,6 @@ namespace StoreCenterTests
             Assert.AreEqual(expected, find);
             handler.RemoveStockListItem(expected);
             find = handler.GetStockListItembyProductID("P110");
-            toDeleteStockItem = expected;
             Assert.IsNull(find);
         }
         [TestMethod]
@@ -226,7 +206,6 @@ namespace StoreCenterTests
             StockListItem expected = new StockListItem(10, product, discount, PurchaseEnum.Immediate, "S1");
             handler.AddStockListItemToDataBase(expected);
             StockListItem find = handler.GetStockListItembyProductID("P111");
-            toDeleteStockItem = find;
             Assert.AreEqual(expected, find);
             expected.Quantity = 3;
             Assert.AreNotEqual(expected, find);
@@ -248,7 +227,6 @@ namespace StoreCenterTests
             Product P = handler.GetProductID("P3");//exist in DL by SQL injection
             LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L101", "X", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
             LotterySaleManagmentTicket find = handler.GetLotteryByProductID(P.SystemId);
-            toDeleteLottery = expected;
             Assert.IsNull(find);
             handler.AddLottery(expected);
             find = handler.GetLotteryByProductID(P.SystemId);
@@ -273,7 +251,6 @@ namespace StoreCenterTests
             LotterySaleManagmentTicket expected = new LotterySaleManagmentTicket("L101", "X", P, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"));
             handler.AddLottery(expected);
             LotterySaleManagmentTicket find = handler.GetLotteryByProductID(P.SystemId);
-            toDeleteLottery = expected;
             Assert.AreEqual(expected, find);
             expected.TotalMoneyPayed = 50;
             Assert.AreNotEqual(expected, find);

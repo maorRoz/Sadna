@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StoreCenterTests
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
     public class AddToCartTests
@@ -21,7 +21,7 @@ namespace StoreCenterTests
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
         }
 
@@ -69,7 +69,7 @@ namespace StoreCenterTests
             liorSession.MakeGuest();
             Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 0);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
         }
         [TestMethod]
         public void AddToCartWhenQuantityisNegative()
@@ -78,7 +78,7 @@ namespace StoreCenterTests
             liorSession.MakeGuest();
             Store find = handler.GetStorebyName("X");
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", -1);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, ans.Status);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
         }
         [TestMethod]
         public void AddToCartSuccess()
