@@ -65,7 +65,7 @@ namespace SadnaSrc.StoreCenter
 
         private void CheckIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
         {
-            if (stockListItem.Discount?.discountType != discountTypeEnum.Visible) return;
+            if (stockListItem.Discount?.discountType != DiscountTypeEnum.Visible) return;
             if (stockListItem.Discount.CheckTime())
                 stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
         }

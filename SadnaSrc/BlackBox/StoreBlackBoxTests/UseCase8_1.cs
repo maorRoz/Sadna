@@ -187,7 +187,7 @@ namespace BlackBox.StoreBlackBoxTests
 			CheckNoDiscountAdded();
 
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), -5, "VISIBLE", false);
-			Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, res.Status);
+			Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, res.Status);
 
 			CheckNoDiscountAdded();
 		}
@@ -210,7 +210,7 @@ namespace BlackBox.StoreBlackBoxTests
 			CheckNoDiscountAdded();
 
 			_storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", true);
-			Assert.AreEqual((int)DiscountStatus.thereIsAlreadyAnotherDiscount, _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", true).Status);
+			Assert.AreEqual((int)DiscountStatus.ThereIsAlreadyAnotherDiscount, _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "VISIBLE", true).Status);
 
 
 		}

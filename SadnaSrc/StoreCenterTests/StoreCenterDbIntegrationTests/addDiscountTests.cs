@@ -75,7 +75,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
-            Assert.AreEqual((int)DiscountStatus.thereIsAlreadyAnotherDiscount, ans.Status);
+            Assert.AreEqual((int)DiscountStatus.ThereIsAlreadyAnotherDiscount, ans.Status);
         }
         [TestMethod]
         public void AddDiscountsuccessfully()

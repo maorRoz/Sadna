@@ -45,7 +45,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             public void changeToImmediatePass()
             {
                 Product P = new Product("NEWPROD", 150, "desc");
-                Discount discount = new Discount(discountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
+                Discount discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
                 StockListItem SLI = new StockListItem(10, P, discount, PurchaseEnum.Lottery, "BLA");
                 LotterySaleManagmentTicket LSMT = new LotterySaleManagmentTicket("X", P, DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
 

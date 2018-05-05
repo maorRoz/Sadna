@@ -126,14 +126,14 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void GetDiscount()
         {
-            Discount discount = new Discount("D1", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
+            Discount discount = new Discount("D1", DiscountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
             Discount find = handler.GetDiscount("D1");
             Assert.AreEqual(discount, find);
         }
         [TestMethod]
         public void AddDiscount()
         {
-            Discount expected = new Discount("D102", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
+            Discount expected = new Discount("D102", DiscountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true); // THIS exists in DB by SQL injection
             handler.AddDiscount(expected);
             Discount find = handler.GetDiscount("D102");
             Assert.AreEqual(expected, find);
@@ -141,7 +141,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void EditDiscount()
         {
-            Discount expected = new Discount("D103", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
+            Discount expected = new Discount("D103", DiscountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
             handler.AddDiscount(expected);
             Discount find = handler.GetDiscount("D103");
             Assert.AreEqual(expected, find);
@@ -153,7 +153,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void RemoveDiscount()
         {
-            Discount expected = new Discount("D104", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
+            Discount expected = new Discount("D104", DiscountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
             handler.AddDiscount(expected);
             Discount find = handler.GetDiscount("D104");
             Assert.IsTrue(expected.Equals(find));
@@ -176,7 +176,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void AddStockListItemToDataBase()
         {
-            Discount discount = new Discount("D105", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
+            Discount discount = new Discount("D105", DiscountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
             Product product = new Product("P110", "BOX", 100, "this is a plastic box");
             StockListItem expected = new StockListItem(10, product, discount, PurchaseEnum.Immediate, "S1");
             StockListItem find = handler.GetStockListItembyProductID("P110");
@@ -188,7 +188,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void RemoveStockListItem()
         {
-            Discount discount = new Discount("D106", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
+            Discount discount = new Discount("D106", DiscountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
             Product product = new Product("P110", "BOX", 100, "this is a plastic box");
             StockListItem expected = new StockListItem(10, product, discount, PurchaseEnum.Immediate, "S1");
             handler.AddStockListItemToDataBase(expected);
@@ -201,7 +201,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void EditStockInDatabase()
         {
-            Discount discount = new Discount("D107", discountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
+            Discount discount = new Discount("D107", DiscountTypeEnum.Hidden, DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"), 50, true);
             Product product = new Product("P111", "BOX", 100, "this is a plastic box");
             StockListItem expected = new StockListItem(10, product, discount, PurchaseEnum.Immediate, "S1");
             handler.AddStockListItemToDataBase(expected);

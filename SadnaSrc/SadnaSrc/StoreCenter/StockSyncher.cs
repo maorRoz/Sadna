@@ -63,15 +63,15 @@ namespace SadnaSrc.StoreCenter
                 throw new StoreException(CalculateEnum.ProductNotFound, "Product Not Found");
             StockListItem item = DataLayer.GetProductFromStore(storeName, productName);
             if (_quantity > item.Quantity)
-                throw new StoreException(CalculateEnum.quantityIsGreaterThenStack, "quantity Is Greater Then Stack");
+                throw new StoreException(CalculateEnum.QuantityIsGreaterThenStack, "quantity Is Greater Then Stack");
             if (_quantity <= 0)
-                throw new StoreException(CalculateEnum.quanitityIsNonPositive, "quanitity is <=0");
+                throw new StoreException(CalculateEnum.QuanitityIsNonPositive, "quanitity is <=0");
             if (item.Discount == null)
                 throw new StoreException(CalculateEnum.ProductHasNoDiscount, "product has no discount");
             if (item.Discount.discountCode != _DiscountCode)
                 throw new StoreException(CalculateEnum.DiscountCodeIsWrong, "discount code is wrong");
-            if (item.Discount.discountType != discountTypeEnum.Hidden)
-                throw new StoreException(CalculateEnum.discountIsNotHidden, "discount Is Not Hiddeng");
+            if (item.Discount.discountType != DiscountTypeEnum.Hidden)
+                throw new StoreException(CalculateEnum.DiscountIsNotHidden, "discount Is Not Hiddeng");
             if (MarketYard.MarketDate < item.Discount.startDate.Date)
                 throw new StoreException(CalculateEnum.DiscountNotStarted, "Discount Time Not Started Yet");
             if (MarketYard.MarketDate > item.Discount.EndDate.Date)

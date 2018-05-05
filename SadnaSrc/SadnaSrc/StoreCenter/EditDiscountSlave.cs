@@ -132,7 +132,7 @@ namespace SadnaSrc.StoreCenter
             if (!bool.TryParse(newValue, out bool newboolValue))
             {
                 MarketLog.Log("StoreCenter", "value is not legal");
-                throw new StoreException(DiscountStatus.precentegesIsNotBoolean, "value is not legal");
+                throw new StoreException(DiscountStatus.PrecentegesIsNotBoolean, "value is not legal");
             }
             MarketLog.Log("StoreCenter", "checking that the discount amount is fit to precenteges");
             if ((newboolValue) && (discount.DiscountAmount >= 100))
@@ -154,7 +154,7 @@ namespace SadnaSrc.StoreCenter
             if (!Int32.TryParse(newValue, out newintValue))
             {
                 MarketLog.Log("StoreCenter", "value is not legal");
-                throw new StoreException(DiscountStatus.discountAmountIsNotNumber, "value is not legal");
+                throw new StoreException(DiscountStatus.DiscountAmountIsNotNumber, "value is not legal");
             }
             if ((discount.Percentages) && (newintValue >= 100))
             {
@@ -169,7 +169,7 @@ namespace SadnaSrc.StoreCenter
             if (newintValue <= 0)
             {
                 MarketLog.Log("StoreCenter", "discount amount <=0");
-                throw new StoreException(DiscountStatus.discountAmountIsNegativeOrZero, "DiscountAmount is >= 100%");
+                throw new StoreException(DiscountStatus.DiscountAmountIsNegativeOrZero, "DiscountAmount is >= 100%");
             }
             discount.DiscountAmount = newintValue;
             MarketLog.Log("StoreCenter", "discount amount set to " + newintValue);

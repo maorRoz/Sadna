@@ -91,7 +91,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), -5, "HIDDEN", false);
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, slave.answer.Status);
+            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, slave.answer.Status);
         }
 
         [TestMethod]
@@ -99,7 +99,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 0, "HIDDEN", false);
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, slave.answer.Status);
+            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, slave.answer.Status);
         }
 
         [TestMethod]
@@ -107,7 +107,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 2000, "HIDDEN", false);
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, slave.answer.Status);
+            Assert.AreEqual((int)DiscountStatus.DiscountGreaterThenProductPrice, slave.answer.Status);
         }
         
         [TestMethod]
