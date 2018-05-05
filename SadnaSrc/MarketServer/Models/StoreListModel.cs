@@ -8,21 +8,21 @@ namespace MarketWeb.Models
 {
     public class StoreListModel : UserModel
 	{
-		public StoreItem[] Items { get; set; }
+		public StoreItemModel[] Items { get; set; }
 		public StoreListModel(int systemId, string state, string[] itemData) : base(systemId, state,null)
 		{
-			Items = new StoreItem[itemData.Length];
+			Items = new StoreItemModel[itemData.Length];
 			for (int i = 0; i < Items.Length; i++)
 			{
-				Items[i] = new StoreItem(itemData[i]);
+				Items[i] = new StoreItemModel(itemData[i]);
 			}
 		}
 
-		public class StoreItem
+		public class StoreItemModel
 		{
 			public string Name { get; set; }
 
-			public StoreItem(string data)
+			public StoreItemModel(string data)
 			{
 				Name = data;
 			}
