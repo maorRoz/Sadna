@@ -20,6 +20,8 @@ namespace SadnaSrc.StoreCenter
 
         private static int storeIdCounter = FindMaxStoreId();
 
+        public PurchasePolicy Policy { get; set; }
+
         public Store(string name, string address)
         {
             SystemId = GetNextStoreId();
@@ -131,6 +133,12 @@ namespace SadnaSrc.StoreCenter
         {
             storeIdCounter++;
             return "S" + storeIdCounter;
+        }
+
+        public void CheckPolicy(int quantity, string user)
+        {
+            if(Policy != null)
+                Policy.Isvalid(quantity, user);
         }
 
     }

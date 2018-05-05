@@ -7,11 +7,11 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.StoreCenter
 {
-    class PurchasePolicy
+    public class PurchasePolicy
     {
         private string _name;
-        private int _minAmount;
-        private int _maxAmount;
+        public int _minAmount { get; set; }
+        public int _maxAmount { get; set; }
         private List<string> blocked;
         private List<string> bypass;
         private List<string> relevant;

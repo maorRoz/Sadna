@@ -36,6 +36,7 @@ namespace SadnaSrc.OrderPool
                 if (coupon != null)
                     toBuy.Price = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
                 Order order = CreateOrderOneItem(toBuy, UserName, UserAddress);
+                _storesSync.CheckPurchasePolicy(order);
                 orderId = order.GetOrderID();
                 ProcessOrder(order, CreditCard);
                 RemoveItemFromCart(itemName, store, quantity, unitPrice);

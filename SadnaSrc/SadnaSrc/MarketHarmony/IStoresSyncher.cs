@@ -37,5 +37,7 @@ namespace SadnaSrc.MarketHarmony
         /// returns an order item with the updated price after discount, if coupon is invalid return null
         /// </summary>
         double GetPriceFromCoupon(string itemName, string store, int quantity, string coupon);
+
+        void CheckPurchasePolicy(Order order);
     }
 }

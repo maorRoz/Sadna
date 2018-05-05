@@ -109,6 +109,17 @@ namespace SadnaSrc.StoreCenter
             return lotto.CanPurchase(priceWantToPay) && lotto.CheckDatesWhenPurches();
         }
 
+        public void CheckPurchasePolicy(string[] stores, string[] products, int[] quantities, string user)
+        {
+            for (int i = 0; i < stores.Length; i++)
+            {
+                Store store = DataLayer.GetStorebyName(stores[i]);
+                store.CheckPolicy(quantities[i], user);
+                StockListItem item = DataLayer.GetProductFromStore(stores[i], products[i]);
+                item.CheckPolicy(quantities[i], user);
+            }
+        }
+
         
         private bool IsProductNameAvailableInStore(string storeName, string productName)
         {

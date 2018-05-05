@@ -78,5 +78,31 @@ namespace SadnaSrc.MarketHarmony
             
         }
 
+        public void CheckPurchasePolicy(Order order)
+        {
+            string user = order.GetShippingAddress();
+            OrderItem[] items = order.GetItems().ToArray();
+            int count = items.Length;
+            string[] store = new string[count];
+            string[] product = new string[count];
+            int[] quantity = new int[count];
+            for (int i = 0; i < items.Length; i++)
+            {
+                store[i] = items[i].Store;
+                product[i] = items[i].Name;
+                quantity[i] = items[i].Quantity;
+            }
+
+            try
+            {
+                _storeService.CheckPurchasePolicy(store, product, quantity, user);
+            }
+            catch (StoreException e)
+            {
+                throw new OrderException(OrderItemStatus.InvalidDetails, e.GetErrorMessage());
+            }
+
+        }
+
     }
 }
