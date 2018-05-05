@@ -47,13 +47,13 @@ namespace SadnaSrc.StoreCenter
         }
         
       
-        public void UpdateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher, int cheatCode)
+        public void UpdateLottery(string storeName, string productName, double moenyPayed, string UserName, IOrderSyncher syncher, int cheatCode)
         {
-            LotterySaleManagmentTicket lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, ProductName);
+            LotterySaleManagmentTicket lotto = DataLayer.GetLotteryByProductNameAndStore(storeName, productName);
             if (!lotto.updateLottery(moenyPayed, DataLayer.GetUserIDFromUserName(UserName))) return;
             syncher.CloseLottery(lotto.Original.Name, lotto.storeName, lotto.getWinnerID(cheatCode));
-            UpdateQuantityAfterPurchase(storeName, ProductName, 1);
-            Publisher.Instance.NotifyLotteryFinish(lotto.SystemID,storeName,ProductName);
+            UpdateQuantityAfterPurchase(storeName,productName,1);
+            Publisher.Instance.NotifyLotteryFinish(lotto.SystemID,storeName, productName);
         }
         // this fucntion calculate item price if it has Hidden discount. happend only in Purches time and this is way it's happening here
         public double CalculateItemPriceWithDiscount(string storeName, string productName, string _DiscountCode, int _quantity)

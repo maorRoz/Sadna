@@ -186,6 +186,7 @@
     <Compile Include="MarketHarmony\IUserAdmin.cs" />
     <Compile Include="MarketHarmony\IUserBuyer.cs" />
     <Compile Include="MarketHarmony\IUserShopper.cs" />
+    <Compile Include="UserSpot\GetUserDetailsSlave.cs" />
     <Compile Include="UserSpot\EditCartItemSlave.cs" />
     <Compile Include="UserSpot\EnterSystemSlave.cs" />
     <Compile Include="UserSpot\GetControlledStoreNamesSlave.cs" />

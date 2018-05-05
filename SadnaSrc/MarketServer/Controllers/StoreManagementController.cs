@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MarketWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using SadnaSrc.Main;
+using static MarketWeb.Models.StoreListModel;
 
 namespace MarketWeb.Controllers
 {
@@ -12,9 +13,20 @@ namespace MarketWeb.Controllers
     {
         public IActionResult StoreControl(int systemId, string state)
         {
-            var userService = MarketServer.users[systemId];
+            var userService = MarketServer.Users[systemId];
             string[] storesData = userService.GetControlledStoreNames().ReportList;
             return View(new StoreListModel(systemId, state, storesData));
         }
+
+	    public IActionResult ManageStoreOptions(int systemId, string state, string store)
+	    {
+		    string[] data = {store};
+		    return View(new StoreListModel(systemId,state,data));
+	    }
+
+	    public IActionResult ManageStore(int systemId, string state, string option)
+	    {
+		    return RedirectToAction(option, new { systemId, state = "Registered"});
+		}
     }
 }
