@@ -24,7 +24,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             _userService = new Mock<IUserSeller>();
         }
         [TestMethod]
-        public void AddCategoryWhenStoreNotExists()
+        public void RemoveCategoryWhenStoreNotExists()
         {
             RemoveCategorySlave slave = new RemoveCategorySlave("noStore", _userService.Object, _handler.Object);
             slave.RemoveCategory("items");
@@ -32,7 +32,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
 
         }
         [TestMethod]
-        public void AddCategoryWhenHasNoPremmision()
+        public void RemoveCategoryWhenHasNoPremmision()
         {
 
             RemoveCategorySlave slave = new RemoveCategorySlave("T", _userService.Object, _handler.Object);
@@ -43,7 +43,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             Assert.AreEqual((int)StoreEnum.NoPremmision, slave.Answer.Status);
         }
         [TestMethod]
-        public void AddCategoryWhenCategoryAlreadyExists()
+        public void RemoveCategoryWhenCategoryNotExists()
         {
             RemoveCategorySlave slave = new RemoveCategorySlave("T", _userService.Object, _handler.Object);
             _handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
@@ -52,7 +52,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             Assert.AreEqual((int)StoreEnum.CategoryNotExistsInStore, slave.Answer.Status);
         }
         [TestMethod]
-        public void AddCategorySuccess()
+        public void RemoveCategorySuccess()
         {
             RemoveCategorySlave slave = new RemoveCategorySlave("T", _userService.Object, _handler.Object);
             _handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
