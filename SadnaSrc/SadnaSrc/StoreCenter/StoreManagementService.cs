@@ -14,7 +14,7 @@ namespace SadnaSrc.StoreCenter
 
         public Store store;
         StockSyncher global;
-        private IUserSeller _storeManager;
+        private readonly IUserSeller _storeManager;
         public string StoreName;
         private IOrderSyncher syncher;
         private LinkedList<StockListItem> stockListItemToRemove;
@@ -137,6 +137,12 @@ namespace SadnaSrc.StoreCenter
         {
             RemoveCategorySlave slave = new RemoveCategorySlave(StoreName, _storeManager, storeDL);
             slave.RemoveCategory(categoryName);
+            return slave.Answer;
+        }
+        public MarketAnswer AddProductToCategory(string categoryName, string productName)
+        {
+            AddProductToCategorySlave slave = new AddProductToCategorySlave(StoreName, _storeManager, storeDL);
+            slave.AddProductToCategory(categoryName, productName);
             return slave.Answer;
         }
     }

@@ -23,7 +23,7 @@ namespace SadnaSrc.StoreCenter
                 checkIfStoreExistsAndActive();
 
                 MarketLog.Log("StoreCenter", " store exists");
-                MarketLog.Log("StoreCenter", " check if has premmision to edit products");
+                MarketLog.Log("StoreCenter", " check if has premmision to handle categorys");
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if category name exists in the store " + _storeName);

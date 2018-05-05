@@ -1,21 +1,24 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class RemoveCategorySlave : AbstractStoreCenterSlave
+    internal class AddProductToCategorySlave : AbstractStoreCenterSlave
     {
         public MarketAnswer Answer { get; set; }
-
-        public RemoveCategorySlave(string storeName, IUserSeller storeManager, IStoreDL storedl) : base(storeName,storeManager, storedl)
+        public AddProductToCategorySlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
-        public void RemoveCategory(string categoryName)
+
+        
+
+        public void AddProductToCategory(string categoryName, string productName)
         {
-            try
+             try
             {
-                MarketLog.Log("StoreCenter", "trying to remove category from the store");
+                MarketLog.Log("StoreCenter", "trying to add product to category to in the store");
                 MarketLog.Log("StoreCenter", "check if store exists");
                 checkIfStoreExistsAndActive();
                 MarketLog.Log("StoreCenter", " store exists");
@@ -25,10 +28,16 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if category name exists in the store " + _storeName);
                 string storeid = GetStoreIDbyName();
                 CheckIfCategoryExistsInStore(categoryName, storeid);
-                MarketLog.Log("StoreCenter", " removing category");
+                MarketLog.Log("StoreCenter", "Check if Product exists in store");
+                Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
+                checkifProductExists(P);
+                MarketLog.Log("StoreCenter", "Product exists");
+                MarketLog.Log("StoreCenter", "Check if product not in this category already");
+                CheckifProductNotInCategory(P, categoryName);
+                MarketLog.Log("StoreCenter", "Product not alrady exists in category");
                 Category category = DataLayerInstance.getCategoryByName(storeid, categoryName);
-                DataLayerInstance.RemoveCategory(category);
-                Answer = new StoreAnswer(StoreEnum.Success, "category" + categoryName + " removed successfully");
+                DataLayerInstance.AddProductToCategory(category.SystemId, P.SystemId);
+                Answer = new StoreAnswer(StoreEnum.Success, "product" + productName + " add successfully to category" + categoryName);
             }
             catch (StoreException e)
             {
@@ -37,6 +46,18 @@ namespace SadnaSrc.StoreCenter
             catch (MarketException)
             {
                 Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+            }
+        }
+
+        private void CheckifProductNotInCategory(Product P, string categoryName)
+        {
+            LinkedList<Product> products = DataLayerInstance.GetAllCategoryProducts(categoryName);
+            foreach (Product product in products)
+            {
+                if (P.Equals(product))
+                {
+                    throw new StoreException(StoreEnum.ProductAlreadyInCategory, "Product alrady exists in category, ");
+                }
             }
         }
         private string GetStoreIDbyName()
@@ -55,6 +76,5 @@ namespace SadnaSrc.StoreCenter
                 throw new StoreException(StoreEnum.CategoryNotExistsInStore, "category not exists in the store");
             }
         }
-
     }
 }

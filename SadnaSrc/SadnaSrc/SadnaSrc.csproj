@@ -142,6 +142,7 @@
     <Compile Include="StoreCenter\AddNewLotterySlave.cs" />
     <Compile Include="StoreCenter\AddNewProductSlave.cs" />
     <Compile Include="StoreCenter\AddProductToCartSlave.cs" />
+    <Compile Include="StoreCenter\AddProductToCategorySlave.cs" />
     <Compile Include="StoreCenter\AddQuanitityToProductSlave.cs" />
     <Compile Include="StoreCenter\Category.cs" />
     <Compile Include="StoreCenter\ChangeProductPurchaseWayToImmediateSlave.cs" />
