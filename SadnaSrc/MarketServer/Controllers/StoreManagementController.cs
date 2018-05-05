@@ -13,7 +13,7 @@ namespace MarketWeb.Controllers
     {
         public IActionResult StoreControl(int systemId, string state)
         {
-            var userService = MarketServer.users[systemId];
+            var userService = MarketServer.Users[systemId];
             string[] storesData = userService.GetControlledStoreNames().ReportList;
             return View(new StoreListModel(systemId, state, storesData));
         }

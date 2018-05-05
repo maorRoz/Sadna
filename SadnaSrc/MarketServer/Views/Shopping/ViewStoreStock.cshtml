@@ -56,7 +56,9 @@
                             }
                             else
                             {
-                                <img src="\images\addTicket.png" />
+                                <a asp-controller="Purchase" asp-action="BuyLotteryTicketForm" asp-route-systemId="@Model.SystemId"
+                                   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name" 
+                                   asp-route-realPrice=@item.Price><img src="\images\addTicket.png" /></a> 
                             }
 
 
