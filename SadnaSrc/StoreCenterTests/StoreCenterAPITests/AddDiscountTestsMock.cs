@@ -18,7 +18,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         private Mock<IUserSeller> userService;
         private Mock<IMarketDB> marketDbMocker;
         private Product prod;
-
+        private AddDiscountToProductSlave slave;
 
         [TestInitialize]
         public void BuildStore()
@@ -28,6 +28,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
             userService = new Mock<IUserSeller>();
+            slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             MarketYard.SetDateTime(new DateTime(2018, 4, 14));
             prod = new Product("item", 1, "des");
             handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
@@ -36,28 +37,25 @@ namespace StoreCenterTests.StoreCenterUnitTests
             handler.Setup(x => x.GetProductFromStore("X", "item")).Returns(new StockListItem(4, prod, null, PurchaseEnum.Immediate, "100"));
         }
         [TestMethod]
-        public void AddDiscountNoStore()
+        public void NoStore()
         {
-            handler.Setup(x => x.GetStorebyName("X")).Returns((Store)null);
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("noStore", userService.Object, handler.Object);
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.NoStore, slave.answer.Status);
         }
         [TestMethod]
-        public void AddDiscountNoPermission()
+        public void NoPermission()
         {
            
             userService.Setup(x => x.CanDeclareDiscountPolicy()).Throws(new MarketException(0,""));
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
             Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
         }
 
         [TestMethod]
-        public void AddDiscountNoProduct()
+        public void NoProduct()
         {
             handler.Setup(x => x.GetProductByNameFromStore("X", "item")).Returns((Product)null);
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.ProductNotFound, slave.answer.Status);
         }
@@ -65,7 +63,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
         [TestMethod]
         public void BadDiscountDates1()
         {            
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2020"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, slave.answer.Status);
         }
@@ -73,7 +70,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
         [TestMethod]
         public void BadDiscountPercentages1()
         {
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 100, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, slave.answer.Status);
         }
@@ -81,7 +77,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
         [TestMethod]
         public void BadDiscountPercentages2()
         {
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 200, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, slave.answer.Status);
         }
@@ -89,7 +84,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
         [TestMethod]
         public void BadDiscountAmmount1()
         {
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), -5, "HIDDEN", false);
             Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, slave.answer.Status);
         }
@@ -97,7 +91,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
         [TestMethod]
         public void BadDiscountAmmount2()
         {
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 0, "HIDDEN", false);
             Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, slave.answer.Status);
         }
@@ -105,22 +98,18 @@ namespace StoreCenterTests.StoreCenterUnitTests
         [TestMethod]
         public void BadDiscountAmmount3()
         {
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 2000, "HIDDEN", false);
             Assert.AreEqual((int)DiscountStatus.DiscountGreaterThenProductPrice, slave.answer.Status);
         }
         
         [TestMethod]
-        public void AddDiscountPass()
-        {
-            Product prod = new Product("item", 1, "des");
-           
-            AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
+        public void AddDiscountSuccess()
+        {           
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.Success, slave.answer.Status);
         }
 
-
+   
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
