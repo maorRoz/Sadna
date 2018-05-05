@@ -155,7 +155,7 @@
     <Compile Include="StoreCenter\Discount.cs" />
     <Compile Include="StoreCenter\Product.cs" />
     <Compile Include="StoreCenter\PromoteToStoreManagerSlave.cs" />
-    <Compile Include="StoreCenter\PurchesPolicy.cs" />
+    <Compile Include="StoreCenter\PurchasePolicy.cs" />
     <Compile Include="StoreCenter\RemoveDiscountFromProductSlave.cs" />
     <Compile Include="StoreCenter\RemoveProductSlave.cs" />
     <Compile Include="StoreCenter\StockListItem.cs" />

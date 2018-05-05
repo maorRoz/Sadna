@@ -125,6 +125,12 @@ namespace SadnaSrc.Main
         DatesAreWrong,
     }
 
+    public enum PurchasePolicyStatus
+    {
+        UserBlocked,
+        AmountExceeded
+    }
+
 
     public enum PurchaseEnum { Immediate, Lottery };
     public enum discountTypeEnum { Hidden, Visible };
