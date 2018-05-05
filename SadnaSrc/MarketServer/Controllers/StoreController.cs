@@ -15,7 +15,7 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.users[systemId];
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			string[] usersData = storeShoppingService.GetAllStores().ReportList;
-			return View(new StoreListModel(systemId, state, message, usersData));
+			return View(new StoreListModel(systemId, state, usersData));
 		}
 
 		public IActionResult ProductManagement(int systemId, string state, string message, string store)
