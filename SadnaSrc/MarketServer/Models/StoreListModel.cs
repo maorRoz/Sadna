@@ -14,17 +14,7 @@ namespace MarketWeb.Models
 			Items = new StoreItemModel[itemData.Length];
 			for (int i = 0; i < Items.Length; i++)
 			{
-				Items[i] = new StoreItemModel(itemData[i]);
-			}
-		}
-
-		public class StoreItemModel
-		{
-			public string Name { get; set; }
-
-			public StoreItemModel(string data)
-			{
-				Name = data;
+				Items[i] = new StoreItemModel(systemId,state,null,itemData[i]);
 			}
 		}
 	}

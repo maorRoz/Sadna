@@ -18,15 +18,21 @@ namespace MarketWeb.Controllers
             return View(new StoreListModel(systemId, state, storesData));
         }
 
-	    public IActionResult ManageStoreOptions(int systemId, string state, string store)
+	    public IActionResult ManageStoreOptions(int systemId, string state,string message, string store)
 	    {
-		    string[] data = {store};
-		    return View(new StoreListModel(systemId,state,data));
+		    return View(new StoreItemModel(systemId,state,message,store));
 	    }
 
-	    public IActionResult ManageStore(int systemId, string state, string option)
+	    public IActionResult ManageStore(int systemId, string state, string store, string option)
 	    {
-		    return RedirectToAction(option, new { systemId, state = "Registered"});
+		    var userService = MarketServer.users[systemId];
+		    var answer = userService.GetStoreManagerPolicies(store);
+			string[] userPolicies = answer.ReportList;
+		    if (userPolicies.Contains(option))
+		    {
+			    return RedirectToAction(option, new { systemId, state});
+			}
+			return RedirectToAction("ManageStoreOptions", new { systemId, state , message = "The user doesn't have the permission to operate this action!",store});
 		}
     }
 }

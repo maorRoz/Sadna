@@ -17,6 +17,7 @@ namespace SadnaSrc.Main
         MarketAnswer RemoveFromCart(string store, string product, double unitPrice);
         MarketAnswer ViewUsers();
         MarketAnswer GetControlledStoreNames();
+	    MarketAnswer GetStoreManagerPolicies(string store);
 
     }
 
@@ -77,6 +78,12 @@ namespace SadnaSrc.Main
         Success,
         DidntEnterSystem
     }
+
+	public enum GetStoreManagerPoliciesStatus
+	{
+		Success,
+		DidntEnterSystem
+	}
 
     public enum BrowseMarketStatus
     {
