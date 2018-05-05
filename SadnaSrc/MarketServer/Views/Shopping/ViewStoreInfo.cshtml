@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = @Model.StoreName + " page";
+    ViewData["Title"] = @Model.Name + " page";
 }
 
 <div class="row top-space">
@@ -9,7 +9,7 @@
 	        <div id="alertContainer">
 		        @if (Model.Message != null)
 		        {
-			        <div class='error'>
+			        <div class='success'>
 				        <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
 				        @Model.Message
 			        </div>
@@ -23,14 +23,10 @@
 			        <th>Address </th>
 		        </tr>
 		        </thead>
-		        @foreach (var item in Model.Items)
-		        {
-			        <tr>
-				        <td>@item.Name</td>
-				        <td>@item.Address</td>
-				        
-			        </tr>
-		        }
+		      
+				<td>@Model.Name</td>
+				<td>@Model.Address</td>     
+		        
 	        </table>
         </div>
     </div>

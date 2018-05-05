@@ -52,10 +52,12 @@ namespace MarketWeb.Controllers
             var userService = MarketServer.users[systemId];
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.ViewStoreInfo(store);
-            if (answer.Status == 0)
+	        string storeInfo = "Name : " + answer.ReportList[0] + " Address : " + answer.ReportList[1];
+
+			if (answer.Status == 0)
             {
 
-                return View(new StoreDetailsModel(systemId,state, answer.Answer, answer.ReportList));
+                return View(new StoreDetailsModel(systemId,state, answer.Answer, storeInfo));
             }
             return RedirectToAction("BrowseMarket", new { systemId, state, answer.Answer });
         }
