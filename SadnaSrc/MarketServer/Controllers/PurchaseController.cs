@@ -31,6 +31,17 @@ namespace MarketWeb.Controllers
             return View(new BuyAllCartModel(systemId, state, message, cartData, userDetails[0], userDetails[1], userDetails[2]));
         }
 
+        public IActionResult BuyLotteryTicketForm(int systemId, string state, string message, string store,
+            string product,double realPrice)
+        {
+            var userService = MarketServer.Users[systemId];
+            var userDetails = userService.GetUserDetails().ReportList;
+            return View(new TicketBuyModel(systemId, state, message, store, product, realPrice, userDetails[0], userDetails[1],
+                userDetails[2]));
+        }
+
+
+
         public IActionResult MakeImmediateBuy(int systemId, string state,string store,string product,double unitPrice,int quantity,
             string couponEntry,string usernameEntry, string addressEntry, string creditCardEntry)
         {
@@ -62,6 +73,22 @@ namespace MarketWeb.Controllers
             return answer.Status == Success ? 
                 RedirectToAction("MainLobby", "Home", new { systemId, state, message = answer.Answer }) :
                 RedirectToAction("BuyAllForm", new { systemId, state, message = answer.Answer});
+        }
+
+        public IActionResult MakeLotteryBuy(int systemId, string state, string store, string product,double realPrice, string usernameEntry,
+            string addressEntry, string creditCardEntry,double suggestedPriceEntry)
+        {
+            InitiateOrder(systemId, usernameEntry, addressEntry, creditCardEntry);
+            if (answer.Status != Success)
+            {
+                return RedirectToAction("BuyLotteryTicketForm",
+                    new { systemId, state, message = answer.Answer,store,product, realPrice });
+            }
+
+            answer = orderService.BuyLotteryTicket(product,store,1, suggestedPriceEntry);
+            return answer.Status == Success ?
+                RedirectToAction("MainLobby", "Home", new { systemId, state, message = answer.Answer }) :
+                RedirectToAction("BuyLotteryTicketForm", new { systemId, state, message = answer.Answer, store, product,realPrice });
         }
 
         private void InitiateOrder(int systemId, string userName, string userAddress, string userCreditCard)
