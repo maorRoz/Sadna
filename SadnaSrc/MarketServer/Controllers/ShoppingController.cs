@@ -12,7 +12,7 @@ namespace MarketWeb.Controllers
     {
 		public IActionResult BrowseMarket(int systemId, string state)
 		{
-			var userService = MarketServer.users[systemId];
+			var userService = MarketServer.Users[systemId];
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			string[] usersData = storeShoppingService.GetAllStores().ReportList;
 			return View(new StoreListModel(systemId, state, usersData));
@@ -20,7 +20,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult ViewStoreStock(int systemId, string state, string store, bool valid, string message)
         {
-            var userService = MarketServer.users[systemId];
+            var userService = MarketServer.Users[systemId];
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.ViewStoreStock(store);
             ViewBag.valid = valid;
@@ -33,7 +33,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult AddToCart(int systemId, string state, string store, string product, int quantity)
         {
-            var userService = MarketServer.users[systemId];
+            var userService = MarketServer.Users[systemId];
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.AddProductToCart(store,product,quantity);
             return RedirectToAction("ViewStoreStock", answer.Status == 0 ? 
@@ -49,7 +49,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult ViewStoreInfo(int systemId, string state, string store)
         {
-            var userService = MarketServer.users[systemId];
+            var userService = MarketServer.Users[systemId];
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.ViewStoreInfo(store);
 	        string storeInfo = "Name : " + answer.ReportList[0] + " Address : " + answer.ReportList[1];

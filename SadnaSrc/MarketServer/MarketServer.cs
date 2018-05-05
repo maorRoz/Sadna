@@ -12,9 +12,8 @@ namespace MarketWeb
 {
     public class MarketServer : WebSocketHandler,IListener
     {
-        private const int Success = 0;
-        public static Dictionary<int,IUserService> users = new Dictionary<int, IUserService>();
-        private MarketYard marketSession;
+        public static readonly Dictionary<int,IUserService> Users = new Dictionary<int, IUserService>();
+        private readonly MarketYard marketSession;
         public MarketServer(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
         {
             marketSession = MarketYard.Instance;
@@ -25,7 +24,7 @@ namespace MarketWeb
         {
             var userService = marketSession.GetUserService();
             var id = Convert.ToInt32(userService.EnterSystem().ReportList[0]);
-            users.Add(id, userService);
+            Users.Add(id, userService);
             await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
         }
 
