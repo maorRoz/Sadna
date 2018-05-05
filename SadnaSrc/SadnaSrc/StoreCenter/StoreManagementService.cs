@@ -146,7 +146,7 @@ namespace SadnaSrc.StoreCenter
             return slave.Answer;
         }
 
-        public MarketAnswer RemoveProductFromCategory(string productName, string categoryName)
+        public MarketAnswer RemoveProductFromCategory(string categoryName, string productName)
         {
             RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave(_storeName, _storeManager, storeDL);
             slave.RemoveProductFromCategory(categoryName, productName);

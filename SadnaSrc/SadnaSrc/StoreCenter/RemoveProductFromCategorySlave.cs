@@ -35,9 +35,9 @@ namespace SadnaSrc.StoreCenter
                 checkifProductExists(product);
                 MarketLog.Log("StoreCenter", "Product exists");
                 MarketLog.Log("StoreCenter", "Check if product in this category");
-                CheckifProductInCategory(product, categoryName);
-                MarketLog.Log("StoreCenter", "Product is in category");
                 Category category = DataLayerInstance.getCategoryByName(storeid, categoryName);
+                CheckifProductInCategory(product, category.SystemId);
+                MarketLog.Log("StoreCenter", "Product is in category");
                 DataLayerInstance.RemoveProductFromCategory(category.SystemId, product.SystemId);
                 Answer = new StoreAnswer(StoreEnum.Success,
                     "product" + productName + " removed successfully from category" + categoryName);

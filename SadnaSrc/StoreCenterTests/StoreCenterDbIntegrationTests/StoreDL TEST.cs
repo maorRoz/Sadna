@@ -374,10 +374,10 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
             LinkedList<Product> expected = new LinkedList<Product>();
             expected.AddLast(new Product("P21", "Fraid Egg", 10, "yami"));
-            var newProd = new Product("P22","bla",10,"da");
+            var newProd = new Product("P10023","bla",10,"da");
             handler.AddProductToDatabase(newProd);
-            expected.AddLast(newProd);
-            handler.AddProductToCategory("C1","P22");
+            expected.AddFirst(newProd);
+            handler.AddProductToCategory("C1", "P10023");
             var find = handler.GetAllCategoryProducts("C1");
             Product[] expectedresults = new Product[expected.Count];
             Product[] findresults = new Product[find.Count];

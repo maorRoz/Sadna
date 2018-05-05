@@ -30,9 +30,9 @@ namespace SadnaSrc.StoreCenter
                 checkifProductExists(P);
                 MarketLog.Log("StoreCenter", "Product exists");
                 MarketLog.Log("StoreCenter", "Check if product not in this category already");
-                CheckifProductNotInCategory(P, categoryName);
-                MarketLog.Log("StoreCenter", "Product not alrady exists in category");
                 Category category = DataLayerInstance.getCategoryByName(storeid, categoryName);
+                CheckifProductNotInCategory(P, category.SystemId);
+                MarketLog.Log("StoreCenter", "Product not alrady exists in category");
                 DataLayerInstance.AddProductToCategory(category.SystemId, P.SystemId);
                 Answer = new StoreAnswer(StoreEnum.Success, "product" + productName + " add successfully to category" + categoryName);
             }
@@ -46,9 +46,9 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void CheckifProductNotInCategory(Product P, string categoryName)
+        private void CheckifProductNotInCategory(Product P, string categoryID)
         {
-            LinkedList<Product> products = DataLayerInstance.GetAllCategoryProducts(categoryName);
+            LinkedList<Product> products = DataLayerInstance.GetAllCategoryProducts(categoryID);
             foreach (Product product in products)
             {
                 if (P.Equals(product))

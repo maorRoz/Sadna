@@ -162,6 +162,7 @@
     <Compile Include="StoreCenter\RemoveCategorySlave.cs" />
     <Compile Include="StoreCenter\RemoveDiscountFromProductSlave.cs" />
     <Compile Include="StoreCenter\RemoveProductFromCategorySlave.cs" />
+    <Compile Include="StoreCenter\RemoveProductFromCategoryTests.cs" />
     <Compile Include="StoreCenter\RemoveProductSlave.cs" />
     <Compile Include="StoreCenter\StockListItem.cs" />
     <Compile Include="StoreCenter\Store.cs" />
