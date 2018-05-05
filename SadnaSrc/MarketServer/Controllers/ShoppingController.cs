@@ -51,11 +51,11 @@ namespace MarketWeb.Controllers
         {
             var userService = MarketServer.users[systemId];
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-            var answer = storeShoppingService.ViewStoreStock(store);
+            var answer = storeShoppingService.ViewStoreInfo(store);
             if (answer.Status == 0)
             {
-                //TODO: implement model and page
-                return View();
+
+                return View(new StoreDetailsModel(systemId,state, answer.Answer, answer.ReportList));
             }
             return RedirectToAction("BrowseMarket", new { systemId, state, answer.Answer });
         }
