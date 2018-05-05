@@ -573,8 +573,6 @@ namespace SadnaSrc.StoreCenter
                 {
                     category = new Category(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2));
                 }
-                if (category!=null)
-                category.products = GetAllCategoryProducts(category.SystemId);
             }
             return category;
         }

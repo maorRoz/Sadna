@@ -1,33 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
     public class Category
     {
         public readonly string SystemId;
-        string name { get; set; }
+        string Name { get; set; }
         string storeID;
         public LinkedList<Product> products { get; set; }
         private static int globalCategoryID = FindMaxCategoryID();
 
-        public Category (string _Categoryname, string _storeID)
+        public Category (string categoryname, string storeid)
         {
             SystemId = getNextCategoryID();
-            name = _Categoryname;
-            storeID = _storeID;
+            Name = categoryname;
+            storeID = storeid;
             products = new LinkedList<Product>();
         }
 
-        public Category (string _SystemId, string _name, string _storeID)
+        public Category (string systemid, string name, string storeid)
         {
             IStoreDL instacne = StoreDL.Instance;
-            SystemId = _SystemId;
-            name = _name;
-            storeID = _storeID;
+            SystemId = systemid;
+            Name = name;
+            storeID = storeid;
             products = instacne.GetAllCategoryProducts(SystemId);
         }
         public object[] GetCategoryValuesArray()
@@ -35,7 +32,7 @@ namespace SadnaSrc.StoreCenter
             return new object[]
             {
                 SystemId,
-                name,
+                Name,
                 storeID
             };
         }
@@ -45,7 +42,7 @@ namespace SadnaSrc.StoreCenter
             return new[]
             {
                 "'" + SystemId + "'",
-                "'" + name + "'",
+                "'" + Name + "'",
                 "'" + storeID + "'"
             };
         }
@@ -74,6 +71,18 @@ namespace SadnaSrc.StoreCenter
 
             globalCategoryID++;
             return "C" + globalCategoryID;
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            return obj.GetType() == GetType() && Equals((Category)obj);
+        }
+        private bool Equals(Category obj)
+        {
+            return obj.SystemId == SystemId && obj.Name == Name && obj.storeID == storeID;
         }
     }
 }

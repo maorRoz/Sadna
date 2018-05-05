@@ -35,7 +35,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             AddDiscountToProductSlave slave = new AddDiscountToProductSlave("noStore", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
-            Assert.AreEqual((int)DiscountStatus.NoStore, slave.answer.Status);
+            Assert.AreEqual((int)DiscountStatus.NoStore, slave.Answer.Status);
         }
         [TestMethod]
         public void AddDiscountPass()
@@ -47,9 +47,9 @@ namespace StoreCenterTests.StoreCenterUnitTests
             handler.Setup(x => x.GetProductFromStore("X", "item")).Returns(new StockListItem(4, p, null, PurchaseEnum.Immediate, "100"));
             AddDiscountToProductSlave slave = new AddDiscountToProductSlave("X", userService.Object, handler.Object);
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
-            Assert.AreEqual((int)DiscountStatus.Success, slave.answer.Status);
+            Assert.AreEqual((int)DiscountStatus.Success, slave.Answer.Status);
         }
-
+    
 
         [TestCleanup]
         public void CleanUpOpenStoreTest()
