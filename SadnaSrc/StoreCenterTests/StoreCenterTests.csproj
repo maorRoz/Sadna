@@ -77,7 +77,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RemoveCategoryTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\RemoveCategoryTestsMock.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\AddCategoryTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\addDiscountTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\RemoveCategoryTests.cs" />
