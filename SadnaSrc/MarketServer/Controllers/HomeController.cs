@@ -24,7 +24,6 @@ namespace MarketWeb.Controllers
 
         public IActionResult SignIn(int systemId, string state, string message)
         { 
-
             return View(new UserModel(systemId, state,message));
         }
 
