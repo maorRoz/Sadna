@@ -25,7 +25,10 @@ namespace MarketWeb.Controllers
 
         public IActionResult BuyAllForm(int systemId, string state, string message)
         {
-            return View();
+            var userService = MarketServer.Users[systemId];
+            var cartData = userService.ViewCart().ReportList;
+            var userDetails = userService.GetUserDetails().ReportList;
+            return View(new BuyAllCartModel(systemId, state, message, cartData, userDetails[0], userDetails[1], userDetails[2]));
         }
 
         public IActionResult MakeImmediateBuy(int systemId, string state,string store,string product,double unitPrice,int quantity,

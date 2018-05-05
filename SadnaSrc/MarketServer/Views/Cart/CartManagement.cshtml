@@ -37,23 +37,24 @@
                         <td>@item.UnitPrice</td>
                         <td>@item.FinalPrice</td>
                         <td>
+                            <a asp-controller="Purchase" asp-action="BuyImmediateForm" asp-route-systemId="@Model.SystemId"
+                               asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
+                               asp-route-unitPrice="@item.UnitPrice" asp-route-quantity="@item.Quantity" 
+                               asp-route-finalPrice="@item.FinalPrice">
+                                <img src="\images\buyout.png" /></a>
+
                             <a asp-controller="Cart" asp-action="IncreaseCartItem" asp-route-systemId="@Model.SystemId"
                                asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
                                asp-route-unitPrice="@item.UnitPrice"><img src="\images\plus.png"></a>
 
                             <a asp-controller="Cart" asp-action="DecreaseCartItem" asp-route-systemId="@Model.SystemId"
                                asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
-                               asp-route-unitPrice="@item.UnitPrice"><img src="\images\minus.png" /></a>
+                               asp-route-unitPrice="@item.UnitPrice"><img src="\images\minus.png"/></a>
 
                             <a asp-controller="Cart" asp-action="RemoveCartItem" asp-route-systemId="@Model.SystemId"
                                asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
-                               asp-route-unitPrice="@item.UnitPrice"><img src="\images\cancelation.png" /></a>
+                               asp-route-unitPrice="@item.UnitPrice"><img src="\images\cancelation.png"/></a>
 
-                            <a asp-controller="Purchase" asp-action="BuyImmediateForm" asp-route-systemId="@Model.SystemId"
-                               asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
-                               asp-route-unitPrice="@item.UnitPrice" asp-route-quantity="@item.Quantity" 
-                               asp-route-finalPrice="@item.FinalPrice">
-                                <img src="\images\buyout.png" /></a>
                         </td>
                     </tr>
                 }

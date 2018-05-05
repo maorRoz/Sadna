@@ -46,7 +46,14 @@ namespace MarketWeb
 
         private async Task SendFeed(string socketId, string message)
         {
-            await InvokeClientMethodAsync(socketId, "NotifyFeed", new object[]{message});
+            try
+            {
+                await InvokeClientMethodAsync(socketId, "NotifyFeed", new object[] {message});
+            }
+            catch (Exception)
+            {
+              //  UnSubscribeSocket(socketId);
+            }
         }
     }
 }
