@@ -18,6 +18,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         private Mock<IStoreDL> handler;
         private Mock<IUserSeller> userService;
         private Mock<IMarketDB> marketDbMocker;
+        private AddNewProductSlave slave;
 
         //TODO: improve this
 
@@ -30,25 +31,51 @@ namespace StoreCenterTests.StoreCenterUnitTests
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
             userService = new Mock<IUserSeller>();
+            MarketYard.SetDateTime(new DateTime(2018, 4, 14));
+            handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
+            handler.Setup(x => x.GetProductByNameFromStore("X", "item")).Returns((Product)null);
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
+            slave = new AddNewProductSlave(userService.Object, "X", handler.Object);
         }
-        [TestMethod]
-        public void AddProductFail()
-        {
-            AddNewProductSlave slave = new AddNewProductSlave(userService.Object, "bla", handler.Object);
-            slave.AddNewProduct("p", 9, "bla", 4);
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
 
+
+        [TestMethod]
+        public void NoStore()
+        {
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
+            slave.AddNewProduct("item", 1, "des", 5);
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
         }
+
+        [TestMethod]
+        public void NoPemrission()
+        {
+            userService.Setup(x => x.CanManageProducts()).Throws(new MarketException(0, ""));
+            slave.AddNewProduct("item", 1, "des", 5);
+            Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void ProductNameTaken()
+        {
+            handler.Setup(x => x.GetProductByNameFromStore("X", "item")).Returns(new Product("item", 1, "des"));
+            slave.AddNewProduct("item", 1, "des", 5);
+            Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void BadQuantity()
+        {
+            slave.AddNewProduct("item", 1, "des", -5);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, slave.answer.Status);
+        }
+
+
         [TestMethod]
         public void AddProductSuccess()
         {
-
-            handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
-            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
-            AddNewProductSlave slave = new AddNewProductSlave(userService.Object, "X", handler.Object);
-            slave.AddNewProduct("p", 9, "bla", 4);
+            slave.AddNewProduct("item", 1, "des", 5);
             Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
-
         }
     }
 }

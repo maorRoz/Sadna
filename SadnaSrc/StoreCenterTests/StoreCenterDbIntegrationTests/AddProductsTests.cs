@@ -35,7 +35,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status); 
         }
         [TestMethod]
-        public void addProductWhenHasNoPremmision()
+        public void AddProductWhenHasNoPremmision()
         {
             userService.EnterSystem();
             userService.SignIn("Big Smoke", "123");
@@ -44,7 +44,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenProductNameIsNotAvailableInStore()
+        public void AddProductWhenProductNameIsNotAvailableInStore()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
@@ -52,17 +52,9 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.AddNewProduct("BOX", 1, "des", 4);
             Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, ans.Status);
         }
+     
         [TestMethod]
-        public void addProductWhenquantityisNegative()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewProduct("item", 1, "des", -4);
-            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
-        }
-        [TestMethod]
-        public void addProductSuccess()
+        public void AddProductSuccess()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
