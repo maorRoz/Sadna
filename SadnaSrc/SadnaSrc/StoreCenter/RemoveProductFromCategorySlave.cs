@@ -1,21 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class AddProductToCategorySlave : AbstractStoreCenterSlave
+    public class RemoveProductFromCategorySlave : AbstractStoreCenterSlave
     {
         public MarketAnswer Answer { get; set; }
-        public AddProductToCategorySlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
+
+        public RemoveProductFromCategorySlave(string storeName, IUserSeller storeManager, IStoreDL storedl) : base(
+            storeName, storeManager, storedl)
         {
         }
-        public void AddProductToCategory(string categoryName, string productName)
+
+
+
+        public void RemoveProductFromCategory(string categoryName, string productName)
         {
-             try
+
+            try
             {
-                MarketLog.Log("StoreCenter", "trying to add product to category to in the store");
+                MarketLog.Log("StoreCenter", "trying to remove product from category in the store");
                 MarketLog.Log("StoreCenter", "check if store exists");
                 checkIfStoreExistsAndActive();
                 MarketLog.Log("StoreCenter", " store exists");
@@ -26,15 +31,16 @@ namespace SadnaSrc.StoreCenter
                 string storeid = GetStoreIDbyName();
                 CheckIfCategoryExistsInStore(categoryName, storeid);
                 MarketLog.Log("StoreCenter", "Check if Product exists in store");
-                Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
-                checkifProductExists(P);
+                var product = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
+                checkifProductExists(product);
                 MarketLog.Log("StoreCenter", "Product exists");
-                MarketLog.Log("StoreCenter", "Check if product not in this category already");
-                CheckifProductNotInCategory(P, categoryName);
-                MarketLog.Log("StoreCenter", "Product not alrady exists in category");
+                MarketLog.Log("StoreCenter", "Check if product in this category");
+                CheckifProductInCategory(product, categoryName);
+                MarketLog.Log("StoreCenter", "Product is in category");
                 Category category = DataLayerInstance.getCategoryByName(storeid, categoryName);
-                DataLayerInstance.AddProductToCategory(category.SystemId, P.SystemId);
-                Answer = new StoreAnswer(StoreEnum.Success, "product" + productName + " add successfully to category" + categoryName);
+                DataLayerInstance.RemoveProductFromCategory(category.SystemId, product.SystemId);
+                Answer = new StoreAnswer(StoreEnum.Success,
+                    "product" + productName + " removed successfully from category" + categoryName);
             }
             catch (StoreException e)
             {
@@ -46,17 +52,24 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void CheckifProductNotInCategory(Product P, string categoryName)
+        private void CheckifProductInCategory(Product product, string categoryName)
         {
             LinkedList<Product> products = DataLayerInstance.GetAllCategoryProducts(categoryName);
-            foreach (Product product in products)
+            bool check = false;
+            foreach (Product aProduct in products)
             {
-                if (P.Equals(product))
+                if (product.Equals(aProduct))
                 {
-                    throw new StoreException(StoreEnum.ProductAlreadyInCategory, "Product alrady exists in category, ");
+                    check = true;
                 }
             }
+
+            if (!check)
+            {
+                throw new StoreException(StoreEnum.ProductNotInCategory, "Product not exists in category, ");
+            }
         }
+
         private string GetStoreIDbyName()
         {
             Store store = DataLayerInstance.GetStorebyName(_storeName);

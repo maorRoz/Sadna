@@ -145,5 +145,12 @@ namespace SadnaSrc.StoreCenter
             slave.AddProductToCategory(categoryName, productName);
             return slave.Answer;
         }
+
+        public MarketAnswer RemoveProductFromCategory(string productName, string categoryName)
+        {
+            RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave(StoreName, _storeManager, storeDL);
+            slave.RemoveProductFromCategory(categoryName, productName);
+            return slave.Answer;
+        }
     }
 }

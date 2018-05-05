@@ -31,12 +31,13 @@ namespace SadnaSrc.Main
          **/
         MarketAnswer AddCategory(string categoryname);
         MarketAnswer RemoveCategory(string categoryname);
-    //    MarketAnswer AddProductToCategory(string productName, string categoryName);
-       /**
-        * Discounts Management
-        **/
+        MarketAnswer AddProductToCategory(string productName, string categoryName);
+        MarketAnswer RemoveProductFromCategory(string productName, string categoryName);
+        /**
+         * Discounts Management
+         **/
 
-       MarketAnswer AddDiscountToProduct(string productName, DateTime _startDate, DateTime _endDate, 
+        MarketAnswer AddDiscountToProduct(string productName, DateTime _startDate, DateTime _endDate, 
             int _discountAmount,string discountType, bool presenteges);
         MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue);
         MarketAnswer RemoveDiscountFromProduct(string productName);

@@ -1,10 +1,9 @@
-﻿using System;
-using SadnaSrc.Main;
+﻿using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class RemoveCategorySlave : AbstractStoreCenterSlave
+    public class RemoveCategorySlave : AbstractStoreCenterSlave
     {
         public MarketAnswer Answer { get; set; }
 
