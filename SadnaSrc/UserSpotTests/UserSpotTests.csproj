@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="UserSpotApiTests\EditCartTests.cs" />
     <Compile Include="UserSpotApiTests\GetAllControlledStoresTests.cs" />
+    <Compile Include="UserSpotApiTests\GetUserDetailsTests.cs" />
     <Compile Include="UserSpotApiTests\RemoveFromCartTests.cs" />
     <Compile Include="UserSpotApiTests\SignInTests.cs" />
     <Compile Include="UserSpotApiTests\SignUpTests.cs" />

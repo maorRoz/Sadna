@@ -105,8 +105,8 @@ namespace SadnaSrc.MarketFeed
 
         public void HasBeenRead(string notificationId)
         {
-            dbConnection.UpdateTable("Notifications","NotificationID = '"+notificationId +"'",new[]{"NotificationID"},
-                new[]{"@id"},new object[]{notificationId});
+            dbConnection.UpdateTable("Notifications","NotificationID = '"+notificationId +"'",new[]{"Status"},
+                new[]{"@status"},new object[]{"Read"});
         }
     }
 }
