@@ -46,7 +46,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         }
 
         [TestMethod]
-        public void NoPemrission()
+        public void NoPermission()
         {
             userService.Setup(x => x.CanManageProducts()).Throws(new MarketException(0, ""));
             slave.AddQuanitityToProduct("item", 10);

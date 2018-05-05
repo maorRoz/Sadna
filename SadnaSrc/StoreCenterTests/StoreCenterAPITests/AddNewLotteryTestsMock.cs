@@ -49,7 +49,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         }
 
         [TestMethod]
-        public void NoPemrission()
+        public void NoPermission()
         {
             userService.Setup(x => x.CanManageProducts()).Throws(new MarketException(0, ""));
             slave.AddNewLottery("item", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));

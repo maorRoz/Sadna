@@ -48,7 +48,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         }
 
         [TestMethod]
-        public void NoPemrission()
+        public void NoPermission()
         {
             userService.Setup(x => x.CanManageProducts()).Throws(new MarketException(0, ""));
             slave.AddNewProduct("item", 1, "des", 5);
@@ -64,9 +64,16 @@ namespace StoreCenterTests.StoreCenterUnitTests
         }
 
         [TestMethod]
-        public void BadQuantity()
+        public void BadQuantity1()
         {
             slave.AddNewProduct("item", 1, "des", -5);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void BadQuantity2()
+        {
+            slave.AddNewProduct("item", 1, "des", 0);
             Assert.AreEqual((int)StoreEnum.QuantityIsNegative, slave.answer.Status);
         }
 

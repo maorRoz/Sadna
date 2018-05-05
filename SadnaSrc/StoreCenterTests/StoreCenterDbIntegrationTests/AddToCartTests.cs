@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
+    //TODO: maybe remove these tests
+
     [TestClass]
     public class AddToCartTests
     {
