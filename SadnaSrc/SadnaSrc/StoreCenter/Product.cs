@@ -32,12 +32,11 @@ namespace SadnaSrc.StoreCenter
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
+            if (obj == null)
             {
                 return false;
             }
-
-            return Equals((Product)obj);
+            return obj.GetType() == GetType() && Equals((Product)obj);
         }
 
 
@@ -90,13 +89,12 @@ namespace SadnaSrc.StoreCenter
 
         private static int FindMaxProductId()
         {
-            StoreDL DL = StoreDL.GetInstance();
+            StoreDL DL = StoreDL.Instance;
             LinkedList<string> list = DL.GetAllProductIDs();
             int max = -5;
-            int temp = 0;
             foreach (string s in list)
             {
-                temp = Int32.Parse(s.Substring(1));
+                var temp = Int32.Parse(s.Substring(1));
                 if (temp > max)
                 {
                     max = temp;

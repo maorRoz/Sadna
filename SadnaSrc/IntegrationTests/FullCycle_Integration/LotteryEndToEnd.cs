@@ -29,7 +29,7 @@ namespace IntegrationTests.FullCycle_Integration
         {
             MarketDB.Instance.InsertByForce();
             market = MarketYard.Instance;
-            handler = StoreDL.GetInstance();
+            handler = StoreDL.Instance;
             userService = market.GetUserService();
             otherUser = market.GetUserService();
             userService.EnterSystem();
@@ -87,7 +87,7 @@ namespace IntegrationTests.FullCycle_Integration
             orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             MarketAnswer ans = orderService.BuyLotteryTicket("name", "T", 1, 0);
-            Assert.AreEqual(ans.Status, (int)OrderStatus.InvalidCoupon);
+            Assert.AreEqual(ans.Status, (int)LotteryOrderStatus.InvalidLotteryTicket);
 
         }
         [TestMethod]
@@ -96,7 +96,7 @@ namespace IntegrationTests.FullCycle_Integration
             orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             MarketAnswer ans = orderService.BuyLotteryTicket("name", "T", 1, -5);
-            Assert.AreEqual(ans.Status, (int)OrderStatus.InvalidCoupon);
+            Assert.AreEqual(ans.Status, (int)LotteryOrderStatus.InvalidLotteryTicket);
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace IntegrationTests.FullCycle_Integration
             orderService = market.GetOrderService(ref otherUser);
             ((OrderService)orderService).LoginBuyer("Arik3", "123");
             MarketAnswer ans = orderService.BuyLotteryTicket("name", "T", 1, 900000);
-            Assert.AreEqual(ans.Status, (int)OrderStatus.InvalidCoupon);
+            Assert.AreEqual(ans.Status, (int)LotteryOrderStatus.InvalidLotteryTicket);
         }
         [TestCleanup]
         public void CleanUpOpenStoreTest()

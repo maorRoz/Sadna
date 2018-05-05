@@ -69,7 +69,7 @@ namespace OrderPoolWallaterSupplyPointTests
             Order order = slave.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.00, null, "Big Smoke", "Grove Street",
                 "12345678");
             Assert.IsNull(order);
-            Assert.AreEqual((int)OrderStatus.InvalidUser, slave.Answer.Status);
+            Assert.AreEqual((int)OrderItemStatus.InvalidDetails, slave.Answer.Status);
         }
 
         [TestMethod]
@@ -147,13 +147,13 @@ namespace OrderPoolWallaterSupplyPointTests
                 (It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>())).Returns(item);
             storeSyncherMock.Setup(x => x.GetPriceFromCoupon
                 (It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>()))
-                .Throws(new MarketException(MarketError.LogicError, "some message"));
+                .Throws(new OrderException(OrderItemStatus.InvalidDetails, "some message"));
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             slave = new PurchaseItemSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object, publisherMock.Object);
             Order order = slave.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.00, "D1", "Big Smoke", "Grove Street",
                 "12345678");
             Assert.IsNull(order);
-            Assert.AreEqual((int)OrderStatus.InvalidCoupon, slave.Answer.Status);
+            Assert.AreEqual((int)OrderItemStatus.InvalidDetails, slave.Answer.Status);
         }
 
         [TestCleanup]

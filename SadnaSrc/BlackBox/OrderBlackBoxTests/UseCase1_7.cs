@@ -110,14 +110,14 @@ namespace BlackBox.OrderBlackBoxTests
 			MarketAnswer stock1 = _shoppingBridge.ViewStoreStock("Yalla");
 			string[] expectedYallaStock =
 			{
-				" name: Tea base price: 10 description: CherryFlavour , Immediate , 2"
-			};
+                " name: Tea base price: 10 description: CherryFlavour Discount: {null} Purchase Way: Immediate Quantity: 2"
+            };
 			Assert.AreEqual(expectedYallaStock[0], stock1.ReportList[0]);
 			MarketAnswer stock2 = _shoppingBridge.ViewStoreStock("HAHAHA");
 			string[] expectedHahahaStock =
 			{
-				" name: Coffee base price: 10 description: Black , Immediate , 3"
-			};
+                " name: Coffee base price: 10 description: Black Discount: {null} Purchase Way: Immediate Quantity: 3"
+            };
 			Assert.AreEqual(expectedHahahaStock[0], stock2.ReportList[0]);
 		}
 
@@ -170,14 +170,14 @@ namespace BlackBox.OrderBlackBoxTests
 			MarketAnswer stock1 = _shoppingBridge.ViewStoreStock("Yalla");
 			string[] expectedYallaStock =
 			{
-				" name: Tea base price: 10 description: CherryFlavour , Immediate , 2"
-			};
+                " name: Tea base price: 10 description: CherryFlavour Discount: {null} Purchase Way: Immediate Quantity: 2"
+            };
 			Assert.AreEqual(expectedYallaStock[0], stock1.ReportList[0]);
 			MarketAnswer stock2 = _shoppingBridge.ViewStoreStock("HAHAHA");
 			string[] expectedHahahaStock =
 			{
-				" name: Coffee base price: 10 description: Black , Immediate , 3"
-			};
+                " name: Coffee base price: 10 description: Black Discount: {null} Purchase Way: Immediate Quantity: 3"
+            };
 			Assert.AreEqual(expectedHahahaStock[0], stock2.ReportList[0]);
 		}
 
@@ -241,7 +241,7 @@ namespace BlackBox.OrderBlackBoxTests
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			_orderBridge.DisablePaymentSystem();
 			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1, null);
-			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, res.Status);
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
 		}
@@ -253,7 +253,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea","Yalla",2100,10, null);
-			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, res.Status);
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
 		}

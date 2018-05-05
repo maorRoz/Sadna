@@ -10,20 +10,12 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    public class StoreDL : I_StoreDL
+    public class StoreDL : IStoreDL
     {
 
         private static StoreDL _instance;
-        
-        public static StoreDL GetInstance()
-        {
-                if (_instance == null)
-                {
-                    _instance = new StoreDL();
-                    return _instance;
-                }
-                return _instance;
-        }
+
+        public static StoreDL Instance => _instance ?? (_instance = new StoreDL());
 
         private MarketDB dbConnection;
 
@@ -168,7 +160,7 @@ namespace SadnaSrc.StoreCenter
 
         public LinkedList<LotteryTicket> GetAllTickets(string systemID)
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "*", "LotteryID = '" + systemID + "'"))
             {
@@ -198,7 +190,7 @@ namespace SadnaSrc.StoreCenter
         public StockListItem GetStockListItembyProductID(string product)
         {
             Product _product = GetProductID(product);
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             StockListItem stockListItem = null;
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "*", "ProductSystemID = '" + product + "'"))
             {
@@ -218,7 +210,7 @@ namespace SadnaSrc.StoreCenter
         {
             Discount discount = null;
 
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             using (var discountReader =
                 dbConnection.SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + discountCode + "'"))
             {
@@ -253,7 +245,7 @@ namespace SadnaSrc.StoreCenter
 
         public LotteryTicket GetLotteryTicket(string ticketID)
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "*", "myID = '" + ticketID + "'"))
             {
                 while (dbReader.Read())
@@ -340,7 +332,7 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveStockListItem(StockListItem stockListItem)
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
             {
                 LotterySaleManagmentTicket LSMT = GetLotteryByProductID(stockListItem.Product.SystemId);
@@ -412,20 +404,18 @@ namespace SadnaSrc.StoreCenter
             dbConnection.DeleteFromTable("Store", "SystemID = '" + store.SystemId + "'");
         }
 
-        public LinkedList<Store> GetAllActiveStores() // all active stores
+        public string[] GetAllActiveStoreNames()
         {
-            LinkedList<Store> result = new LinkedList<Store>();
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "*", "Status = 'Active'"))
+            var result = new List<string>();
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "Name", "Status = 'Active'"))
             {
                 while (dbReader.Read())
                 {
-                    Store store = new Store(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2),
-                        dbReader.GetString(3));
-                    result.AddLast(store);
+                    result.Add(dbReader.GetString(0));
                 }
             }
 
-            return result;
+            return result.ToArray();
         }
         public string[] GetStoreInfo(string store)
         {
@@ -471,6 +461,7 @@ namespace SadnaSrc.StoreCenter
         public StockListItem GetProductFromStore(string store, string productName)
         {
             Product product = GetProductByNameFromStore(store, productName);
+            if (product == null) return null;
             return GetStockListItembyProductID(product.SystemId);
 
         }

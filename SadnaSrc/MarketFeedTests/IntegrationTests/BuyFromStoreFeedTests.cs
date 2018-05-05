@@ -13,7 +13,6 @@ namespace MarketFeedTests.IntegrationTests
         
         private Mock<IListener> serverMocker;
         private int countMessagesToServer;
-        private Publisher publisher;
         private OrderService orderService;
         private int owner1 = 5;
         private int owner2 = 2;
@@ -22,6 +21,9 @@ namespace MarketFeedTests.IntegrationTests
         [TestInitialize]
         public void IntegrationFeedTestsBuilder()
         {
+            var marketDbMocker = new Mock<IMarketDB>();
+            MarketException.SetDB(marketDbMocker.Object);
+            MarketLog.SetDB(marketDbMocker.Object);
             countMessagesToServer = 0;
             serverMocker = new Mock<IListener>();
             serverMocker.Setup(x => x.GetMessage(owner1.ToString(), "#9 has been sold in Cluckin Bell!")).Callback(SendMessageToServer);
@@ -108,7 +110,7 @@ namespace MarketFeedTests.IntegrationTests
         }
 
         [TestMethod]
-        public void GetMessagesOfflineTest()
+        public void GetBuyMessagesOfflineTest()
         {
             var answer = orderService.BuyItemFromImmediate("#9", "Cluckin Bell", 1, 5.00, null);
             Assert.AreEqual(0, answer.Status);

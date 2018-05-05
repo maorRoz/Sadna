@@ -4,22 +4,23 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ViewStoreInfoSlave
+    public class ViewStoreInfoSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private IUserShopper _shopper;
-        StoreDL storeLogic;
+        IStoreDL storeLogic;
 
-        public ViewStoreInfoSlave(IUserShopper shopper)
+        public ViewStoreInfoSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.GetInstance();
+            storeLogic = storeDL;
         }
 
-        internal void ViewStoreInfo(string store)
+        public void ViewStoreInfo(string store)
         {
             try
             {
+                CheckIfStoreExistsAndActive(store);
                 MarketLog.Log("StoreCenter", "check that have premission to view store info");
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "premission gained");
@@ -45,6 +46,11 @@ namespace SadnaSrc.StoreCenter
         {
             if (item == null)
             { throw new StoreException(ViewStoreStatus.NoStore, "No store found"); }
+        }
+        private void CheckIfStoreExistsAndActive(string _storename)
+        {
+            if (!storeLogic.IsStoreExistAndActive(_storename))
+            { throw new StoreException(ViewStoreStatus.NoStore, "store not exists or active"); }
         }
     }
 }

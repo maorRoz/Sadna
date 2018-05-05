@@ -4,19 +4,19 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddProductToCartSlave
+    public class AddProductToCartSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private IUserShopper _shopper;
-        StoreDL storeLogic;
-
-        public AddProductToCartSlave(IUserShopper shopper)
+        IStoreDL storeLogic;
+        
+        public AddProductToCartSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.GetInstance();
+            storeLogic = storeDL;
         }
 
-        internal void AddProductToCart(string store, string productName, int quantity)
+        public void AddProductToCart(string store, string productName, int quantity)
         {
             try
             {
@@ -28,8 +28,8 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "checking if product exists");
                 CheckIsProductNameAvailableInStore(store, productName);
                 StockListItem stockListItem = storeLogic.GetProductFromStore(store, productName);
-                checkifQuantityIsOK(quantity, stockListItem);   
-                checkIfDiscountExistsAndCalcValue(ref stockListItem);
+                CheckifQuantityIsOK(quantity, stockListItem);   
+                CheckIfDiscountExistsAndCalcValue(ref stockListItem);
                 _shopper.AddToCart(stockListItem.Product, store, quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
                 answer = new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
@@ -49,7 +49,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void checkifQuantityIsOK(int quantity, StockListItem stockListItem)
+        private void CheckifQuantityIsOK(int quantity, StockListItem stockListItem)
         {
             MarketLog.Log("StoreCenter", "checking that the required quantity is not too big");
             if (quantity > stockListItem.Quantity)
@@ -58,30 +58,23 @@ namespace SadnaSrc.StoreCenter
                 throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big");
             }
             MarketLog.Log("StoreCenter", "checking that the required quantity is not negative or zero");
-            if (quantity <= 0)
-            {
-                MarketLog.Log("StoreCenter", "required quantity is negative or zero");
-                throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
-            }
+            if (quantity > 0) return;
+            MarketLog.Log("StoreCenter", "required quantity is negative or zero");
+            throw new StoreException(StoreEnum.QuantityIsNegative, "required quantity is negative");
         }
 
-        private void checkIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
+        private void CheckIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
         {
-            if (stockListItem.Discount != null)
-            {
-                if (stockListItem.Discount.discountType == discountTypeEnum.Visible)
-                    if (stockListItem.Discount.CheckTime())
-                        stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
-            }
+            if (stockListItem.Discount?.discountType != discountTypeEnum.Visible) return;
+            if (stockListItem.Discount.CheckTime())
+                stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
         }
 
         private void CheckIsProductNameAvailableInStore(string store, string productName)
         {
-            if (IsProductNameAvailableInStore(store, productName)) //aka product is NotFiniteNumberException in store
-            {
-                MarketLog.Log("StoreCenter", "Product is not exists in the store");
-                throw new StoreException(StoreEnum.ProductNotFound, "product is not exists");
-            }
+            if (!IsProductNameAvailableInStore(store, productName)) return;
+            MarketLog.Log("StoreCenter", "Product is not exists in the store");
+            throw new StoreException(StoreEnum.ProductNotFound, "product is not exists");
         }
 
         private void CheckIfStoreExitsts(string store)
@@ -92,8 +85,8 @@ namespace SadnaSrc.StoreCenter
 
         private bool IsProductNameAvailableInStore(string storeName, string productName)
         {
-            Product P = storeLogic.GetProductByNameFromStore(storeName, productName);
-            return (P == null);
+            Product product = storeLogic.GetProductByNameFromStore(storeName, productName);
+            return product == null;
         }
     }
 }

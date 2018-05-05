@@ -123,7 +123,7 @@ namespace OrderPoolWallaterSupplyPointTests
             userBuyerMocker.Setup(x => x.CheckoutAll()).Returns(new OrderItem[] { item1 });
             storeSyncherMock.Setup(x => x.GetPriceFromCoupon
                     (It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>()))
-                .Throws(new MarketException(MarketError.LogicError, "some message"));
+                .Throws(new OrderException(OrderStatus.InvalidCoupon, "some message"));
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             slave = new PurchaseEverythingSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object, publisherMock.Object);
             Order order = slave.BuyEverythingFromCart(new string[] { "D1" }, "Big Smoke", "Grove Street", "12345678");
@@ -139,7 +139,7 @@ namespace OrderPoolWallaterSupplyPointTests
                 (item1.Name, item1.Store, item1.Quantity, It.IsAny<string>())).Returns(3.0);
             storeSyncherMock.Setup(x => x.GetPriceFromCoupon
                 (item2.Name, item2.Store, item2.Quantity, It.IsAny<string>()))
-                .Throws(new MarketException(MarketError.LogicError, "some message"));
+                .Throws(new OrderException(OrderStatus.InvalidCoupon, "some message"));
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             slave = new PurchaseEverythingSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object, publisherMock.Object);
             Order order = slave.BuyEverythingFromCart(new string[] { "D1", "D2" }, "Big Smoke", "Grove Street", "12345678");

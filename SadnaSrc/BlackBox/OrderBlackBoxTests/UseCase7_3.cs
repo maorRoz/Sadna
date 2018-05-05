@@ -28,6 +28,7 @@ namespace BlackBox.OrderBlackBoxTests
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MarketDB.Instance.InsertByForce();
             SignUpStoreOwner("Pnina", "mishol", "666", "66666666");
             OpenStoreAndAddProducts();
@@ -51,7 +52,6 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void LotteryStillGoing()
         {
-            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShoppers();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             string[] expectedHistoryFirstBuyer =
@@ -70,7 +70,6 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void FirstBuyerWin()
         {
-            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShoppers();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge2.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
@@ -99,7 +98,6 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void SecondBuyerWin()
         {
-            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShoppers();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge2.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
@@ -128,7 +126,6 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void ThirdBuyerWin()
         {
-            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShoppers();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge2.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
@@ -187,7 +184,6 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void LotteryFailGuest()
         {
-            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             _buyerGuestBridge = UserDriver.getBridge();
             _buyerGuestBridge.EnterSystem();
             _orderBridge1 = OrderDriver.getBridge();
@@ -198,7 +194,6 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void FailPurchaseLotterySupplySystemCollapsed()
         {
-            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShopper1();
             _orderBridge1.DisableSupplySystem();
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
@@ -217,7 +212,6 @@ namespace BlackBox.OrderBlackBoxTests
         [TestMethod]
         public void FailPurchaseLotteryPaymentSystemCollapsed()
         {
-            MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
             MakeRegisteredShopper1();
             _orderBridge1.DisablePaymentSystem();
             Assert.AreEqual((int)WalleterStatus.PaymentSystemError, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
@@ -281,8 +275,8 @@ namespace BlackBox.OrderBlackBoxTests
             _shoppingBridge.OpenStore(storeName, "Great Place");
             _storeManagementBridge = StoreManagementDriver.getBridge();
             _storeManagementBridge.GetStoreManagementService(_storeOwnerBridge.GetUserSession(), storeName);
-            _storeManagementBridge.AddNewLottery("Fanta", 12, "very nice fanta", Convert.ToDateTime("01/03/2018"), Convert.ToDateTime("28/12/2018"));
-            _storeManagementBridge.AddNewLottery("Cola", 24, "very nice cola", Convert.ToDateTime("01/03/2018"), Convert.ToDateTime("28/12/2018"));
+            _storeManagementBridge.AddNewLottery("Fanta", 12, "very nice fanta", Convert.ToDateTime("14/04/2018"), Convert.ToDateTime("28/12/2018"));
+            _storeManagementBridge.AddNewLottery("Cola", 24, "very nice cola", Convert.ToDateTime("14/04/2018"), Convert.ToDateTime("28/12/2018"));
         }
 
         private void lotteryEventReport(string[] expected1, string[] expected2, string[] expected3,

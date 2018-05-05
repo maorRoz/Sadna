@@ -46,6 +46,11 @@ namespace SadnaSrc.UserSpot
             return PolicyService.FilteredStorePolicies(store);
         }
 
+        public string[] GetControlledStores()
+        {
+            return PolicyService.GetControlledStoresNames();
+        }
+
         public virtual object[] ToData()
         {
             object[] ret = {SystemID, null, null, null,null};

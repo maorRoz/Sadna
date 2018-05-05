@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UserSpotApiTests\EditCartTests.cs" />
+    <Compile Include="UserSpotApiTests\GetAllControlledStoresTests.cs" />
     <Compile Include="UserSpotApiTests\RemoveFromCartTests.cs" />
     <Compile Include="UserSpotApiTests\SignInTests.cs" />
     <Compile Include="UserSpotApiTests\SignUpTests.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="DbUserSpotIntegration\StoreManagerPolicy_Test.cs" />
     <Compile Include="UseCaseTests\UseCase_1_6_Test.cs" />
     <Compile Include="UserSpotApiTests\ViewCartTests.cs" />
+    <Compile Include="UserSpotApiTests\ViewUsersTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

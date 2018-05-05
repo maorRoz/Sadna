@@ -202,7 +202,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeBridge3 = StoreShoppingDriver.getBridge();
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStore", "bisli", -5);
-			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, res1.Status);
+			Assert.AreEqual((int)StoreEnum.QuantityIsNegative, res1.Status);
 			//the cart should remain empty
 			MarketAnswer cartDetails = _bridgeSignUp.ViewCart();
 			string[] cartItemsReceived = cartDetails.ReportList;
@@ -214,7 +214,7 @@ namespace BlackBox.StoreBlackBoxTests
         public void ProductQuantityNegativeRegisteredUser()
         {
             MarketAnswer res1 = _storeBridge.AddProductToCart("BlahStore", "bisli", 0);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, res1.Status);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, res1.Status);
             //the cart should remain empty
             MarketAnswer cartDetails = _signInBridge.ViewCart();
             string[] cartItemsReceived = cartDetails.ReportList;

@@ -4,17 +4,17 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddNewLotterySlave : AbstractStoreCenterSlave
+    public class AddNewLotterySlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
-        Store store;
+        public MarketAnswer answer;
+        private readonly Store store;
 
-        public AddNewLotterySlave(string storeName, IUserSeller storeManager) : base(storeName, storeManager)
+        public AddNewLotterySlave(string storeName, IUserSeller storeManager,IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
             store = DataLayerInstance.GetStorebyName(storeName);
         }
 
-        internal StockListItem AddNewLottery(string name, double price, string description, DateTime startDate, DateTime endDate)
+        public StockListItem AddNewLottery(string name, double price, string description, DateTime startDate, DateTime endDate)
         {
             MarketLog.Log("StoreCenter", "trying to add product to store");
             MarketLog.Log("StoreCenter", "check if store exists");
@@ -27,6 +27,9 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
                 CheckIfProductNameAvailable(name);
+                MarketLog.Log("StoreCenter", "check that dates are OK");
+                CheckIfDatesAreOK(startDate, endDate);
+                MarketLog.Log("StoreCenter", "Dates are fine");
                 Product product = new Product(name, price, description);
                 StockListItem stockListItem = new StockListItem(1, product, null, PurchaseEnum.Lottery, store.SystemId);
                 DataLayerInstance.AddStockListItemToDataBase(stockListItem);
@@ -50,10 +53,17 @@ namespace SadnaSrc.StoreCenter
             return null;
         }
 
+        private static void CheckIfDatesAreOK(DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= MarketYard.MarketDate && startDate < endDate) return;
+            MarketLog.Log("StoreCenter", "something wrong with the dates");
+            throw new StoreException(StoreEnum.DatesAreWrong, "dates are not leagal");
+        }
+
         private void CheckIfProductNameAvailable(string name)
         {
-            Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
-            if (P != null)
+            Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
+            if (product != null)
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
         }
     }

@@ -9,15 +9,15 @@ namespace SadnaSrc.StoreCenter
 {
     public class LotteryTicket
     {
-        public double IntervalStart { get; set; }
-        public double IntervalEnd { get; set; }
-        public string LotteryNumber { get; set; }
-        public string myID { get; set; }
+        public double IntervalStart { get;}
+        public double IntervalEnd { get;}
+        public string LotteryNumber { get;}
+        public string myID { get; }
         public LotteryTicketStatus myStatus { get; set; }
-        public int UserID { get; set; }
+        public int UserID { get;}
         
 
-        public double Cost { get; set; }
+        public double Cost { get; }
         private static int globalLotteryTicketID = FindMaxLotteryTicketId;
         public LotteryTicket(string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
         {
@@ -42,7 +42,7 @@ namespace SadnaSrc.StoreCenter
 
         internal bool IsWinning(int winningNumber)
         {
-            return ((winningNumber <= IntervalEnd) && (winningNumber > IntervalStart));
+            return winningNumber <= IntervalEnd && winningNumber > IntervalStart;
         }
 
         internal void RunWinning()
@@ -54,11 +54,6 @@ namespace SadnaSrc.StoreCenter
         {
             myStatus = LotteryTicketStatus.Losing;
         }
-
-        internal void RunCancel()
-        {
-            myStatus = LotteryTicketStatus.Cancel;
-        }
         public override bool Equals(object obj)
         {
             if (obj.GetType() != GetType())
@@ -67,7 +62,7 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(LotteryTicket obj)
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             return (obj.IntervalStart == IntervalStart &&
                     obj.IntervalEnd == IntervalEnd &&
                     obj.LotteryNumber == LotteryNumber &&
@@ -107,7 +102,6 @@ namespace SadnaSrc.StoreCenter
         }
         public string[] GetTicketStringValues()
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
             return new[]
             {
                 "'" + myID + "'",
@@ -128,8 +122,8 @@ namespace SadnaSrc.StoreCenter
         {
             get
             {
-                StoreDL DL = StoreDL.GetInstance();
-                LinkedList<string> list = DL.GetAllLotteryTicketIDs();
+                StoreDL datalayer = StoreDL.Instance;
+                LinkedList<string> list = datalayer.GetAllLotteryTicketIDs();
                 int max = -5;
                 foreach (string s in list)
                 {

@@ -49,8 +49,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock = stock.ReportList;
 			string[] expectedStock =
 			{
-				" name: Ouch base price: 30 description: Ouchouch , type is: hidden , Immediate , 6"
-			};
+                " name: Ouch base price: 30 description: Ouchouch Discount: {type is: hidden} Purchase Way: Immediate Quantity: 6"
+            };
 			Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 			for (int i = 0; i < receivedStock.Length; i++)
 			{
@@ -115,8 +115,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock = stock.ReportList;
 			string[] expectedStock =
 			{
-				" name: Ouch base price: 30 description: Ouchouch , type is: hidden , Immediate , 6"
-			};
+                " name: Ouch base price: 30 description: Ouchouch Discount: {type is: hidden} Purchase Way: Immediate Quantity: 6"
+            };
 			Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 			for (int i = 0; i < receivedStock.Length; i++)
 			{
@@ -276,8 +276,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock1 = stock1.ReportList;
 			string[] expectedStock1 =
 			{
-				" name: Ouch base price: 30 description: Ouchouch , Immediate , 6"
-			};
+                " name: Ouch base price: 30 description: Ouchouch Discount: {null} Purchase Way: Immediate Quantity: 6"
+            };
 
 			Assert.AreEqual(expectedStock1.Length, receivedStock1.Length);
 			for (int i = 0; i < receivedStock1.Length; i++)

@@ -29,13 +29,13 @@ namespace SadnaSrc.UserSpot
 			{
 				ApproveEnetered();
 				MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved all users info...");
-				Answer = new UserAnswer(ViewCartStatus.Success, "View of users has been granted successfully!",
-					_userDB.UserNamesInSystem());
+				Answer = new UserAnswer(ViewUsersStatus.Success, "View of users has been granted successfully!",
+				_userDB.UserNamesInSystem());
 			}
 			catch (UserException e)
 			{
 				MarketLog.Log("UserSpot", "User " + userID + " has failed to View Other users. Error message has been created!");
-				Answer = new UserAnswer((ViewCartStatus)e.Status, e.GetErrorMessage(), null);
+				Answer = new UserAnswer((ViewUsersStatus)e.Status, e.GetErrorMessage());
 			}
 
 		}
@@ -43,8 +43,8 @@ namespace SadnaSrc.UserSpot
 		private void ApproveEnetered()
 		{
 			if (_user != null) { return; }
-			throw new UserException(ViewCartStatus.DidntEnterSystem,
-				"View Cart action has been requested by User which hasn't fully entered the system yet!");
+			throw new UserException(ViewUsersStatus.DidntEnterSystem,
+				"View users action has been requested by User which hasn't fully entered the system yet!");
 
 		}
 	}

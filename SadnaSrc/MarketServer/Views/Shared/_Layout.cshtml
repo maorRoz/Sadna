@@ -31,7 +31,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="BrowseMarket" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State" >Browse Market</a></li>
+                    <li><a asp-area="" asp-controller="Shopping" asp-action="BrowseMarket" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State" >Browse Market</a></li>
                     <li><a asp-area="" asp-controller="Cart" asp-action="CartManagement" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Cart</a></li>
                     @if (Model.State != null && Model.State.Equals("Guest")){ 
                         <li><a asp-area="" asp-controller="Home" asp-action="SignUp" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Sign Up</a></li>
@@ -39,7 +39,7 @@
                     }
                     @if (Model.State != null && (Model.State.Equals("Registered") || Model.State.Equals("Admin")))
                     {
-                        // inser registered user pages here
+                        <li><a asp-area="" asp-controller="StoreManagement" asp-action="StoreControl" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Store Management</a></li>
                         if(Model.State.Equals("Admin"))
                         {
                             <li><a asp-area="" asp-controller="Admin" asp-action="RemoveUserView" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Remove Users</a></li>

@@ -48,16 +48,21 @@ namespace SadnaSrc.StoreCenter
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType().Equals(GetType()))
+            if (obj == null)
             {
-                return (((Discount)obj).discountCode == discountCode) &&
-                    (((Discount)obj).DiscountAmount == DiscountAmount);
+                return false;
             }
-            return false;
+            return obj.GetType() == GetType() && Equals((Discount)obj);
+        }
+
+
+        private bool Equals(Discount obj)
+        {
+            return obj.discountCode == discountCode && obj.DiscountAmount == DiscountAmount;
         }
         public override string ToString()
         {
-            StoreSyncerImplementation handler = StoreSyncerImplementation.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             if (EnumStringConverter.PrintEnum(discountType) == EnumStringConverter.PrintEnum(discountTypeEnum.Hidden))
                 return "type is: hidden";
             if (Percentages)
@@ -113,7 +118,7 @@ namespace SadnaSrc.StoreCenter
         }
         private static int FindMaxDiscountId()
         {
-            StoreDL DL = StoreDL.GetInstance();
+            StoreDL DL = StoreDL.Instance;
             LinkedList<string> list = DL.GetAllDiscountIDs();
             int max = -5;
             int temp = 0;

@@ -4,35 +4,27 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class CloseStoreSlave : AbstractStoreCenterSlave
+    public class CloseStoreSlave : AbstractStoreCenterSlave
     {
-        internal MarketAnswer answer;
-        public Store store;
-        public CloseStoreSlave(IUserSeller storeManager, ref string _storeName) : base(_storeName, storeManager)
+        public MarketAnswer answer;
+        private Store store;
+        public CloseStoreSlave(IUserSeller storeManager, string _storeName, IStoreDL storeDL) : base(_storeName, storeManager, storeDL)
         {
             store = DataLayerInstance.GetStorebyName(_storeName);
-            DataLayerInstance = StoreDL.GetInstance();
         }
-
-        internal void CloseStore()
+        
+        public void CloseStore()
         {
             try
             {
                 checkIfStoreExistsAndActive();
-            }
-            catch (Exception)
-            {
-                answer = new StoreAnswer(StoreEnum.StoreNotExists, "the store doesn't exists");
-            }
-            try
-            {
-                _storeManager.CanPromoteStoreOwner(); // can do anything
+                _storeManager.CanPromoteStoreOwner(); 
                 answer = store.CloseStore();
             }
-            catch (StoreException)
+            catch (StoreException exe)
             {
                 MarketLog.Log("StoreCenter", "closing store failed");
-                answer = new StoreAnswer(StoreEnum.CloseStoreFail, "Store is not active");
+                answer = new StoreAnswer(exe);
             }
             catch (MarketException)
             {

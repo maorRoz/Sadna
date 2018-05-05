@@ -58,7 +58,7 @@ namespace BlackBox.StoreBlackBoxTests
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			//didn't succeed in removing the product, there is still one product
-			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack Discount: {null} Purchase Way: Immediate Quantity: 30" };
 			Assert.AreEqual(expectedResult.Length, actualResult.Length);
 			for (int i = 0; i < actualResult.Length; i++)
 			{
@@ -77,7 +77,7 @@ namespace BlackBox.StoreBlackBoxTests
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			//didn't succeed in removing the product, there is still one product
-			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack Discount: {null} Purchase Way: Immediate Quantity: 30" };
 			Assert.AreEqual(expectedResult.Length, actualResult.Length);
 			for (int i = 0; i < actualResult.Length; i++)
 			{
