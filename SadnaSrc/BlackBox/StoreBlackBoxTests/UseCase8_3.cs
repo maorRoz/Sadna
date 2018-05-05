@@ -243,7 +243,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManagementBridge2 = StoreManagementDriver.getBridge();
 			_storeManagementBridge2.GetStoreManagementService(_userBuyer.GetUserSession(), "Toy");
 			MarketAnswer res = _storeManagementBridge2.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "HIDDEN", true);
-			Assert.AreEqual((int)StoreEnum.NoPremmision, res.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission, res.Status);
 		}
 
 		private void OpenStoreAndProducts()

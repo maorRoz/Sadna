@@ -48,7 +48,7 @@ namespace SadnaSrc.StoreCenter
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
             }
             return null;
         }

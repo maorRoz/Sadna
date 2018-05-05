@@ -275,9 +275,9 @@ namespace BlackBox.StoreBlackBoxTests
 			}
 			else
 			{
-				Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.AddNewProduct(product, 50, "tool", 5).Status);
-				Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.EditProduct(product, "Price", "3").Status);
-				Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.RemoveProduct(product).Status);
+				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.AddNewProduct(product, 50, "tool", 5).Status);
+				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.EditProduct(product, "Price", "3").Status);
+				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.RemoveProduct(product).Status);
 			}
 
 			if (permissions[2])
@@ -302,7 +302,7 @@ namespace BlackBox.StoreBlackBoxTests
 			}
 			else
 			{
-				Assert.AreEqual((int)StoreEnum.NoPremmision,
+				Assert.AreEqual((int)StoreEnum.NoPermission,
 					_storeManager2.AddDiscountToProduct("Lets", Convert.ToDateTime("14/04/2018"), Convert.ToDateTime("20/04/2018"), 5, "VISIBLE", false).Status);
 
 			}

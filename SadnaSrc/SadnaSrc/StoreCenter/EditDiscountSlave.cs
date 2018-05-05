@@ -74,7 +74,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (MarketException)
             {
-                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
             }
         }
         private Discount CheckIfDiscountExistsPrivateMethod(string productName)

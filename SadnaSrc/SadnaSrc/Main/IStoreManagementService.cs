@@ -51,7 +51,7 @@ namespace SadnaSrc.Main
         CloseStoreFail,
         StoreNotExists,
         ProductNameNotAvlaiableInShop,
-        NoPremmision,
+        NoPermission,
         QuantityIsNegative,
         QuantityIsTooBig,
         EnumValueNotExists,
@@ -61,7 +61,6 @@ namespace SadnaSrc.Main
     {
         Success,
         NoStore,
-        NoProduct,
         DatesAreWrong,
         AmountIsHundredAndpresenteges,
         DiscountGreaterThenProductPrice,
