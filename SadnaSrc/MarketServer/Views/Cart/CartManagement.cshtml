@@ -51,7 +51,8 @@
 
                             <a asp-controller="Purchase" asp-action="BuyImmediateForm" asp-route-systemId="@Model.SystemId"
                                asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
-                               asp-route-unitPrice="@item.UnitPrice" asp-route-quantity="@item.Quantity">
+                               asp-route-unitPrice="@item.UnitPrice" asp-route-quantity="@item.Quantity" 
+                               asp-route-finalPrice="@item.FinalPrice">
                                 <img src="\images\buyout.png" /></a>
                         </td>
                     </tr>

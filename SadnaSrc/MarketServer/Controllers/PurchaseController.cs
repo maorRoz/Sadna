@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MarketWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using SadnaSrc.Main;
 
@@ -14,9 +15,12 @@ namespace MarketWeb.Controllers
         private IOrderService orderService;
         private MarketAnswer answer;
         public IActionResult BuyImmediateForm(int systemId, string state,string message,string store,
-            string product,double unitPrice,int quantity)
+            string product,double unitPrice,int quantity, double finalPrice)
         {
-            return View();
+            var userService = MarketServer.Users[systemId];
+            var userDetails = userService.GetUserDetails().ReportList;
+            return View(new SingleBuyItemModel(systemId,state,message,store,product,unitPrice,quantity,finalPrice,
+            userDetails[0],userDetails[1],userDetails[2]));
         }
 
         public IActionResult BuyAllForm(int systemId, string state, string message)
@@ -25,24 +29,26 @@ namespace MarketWeb.Controllers
         }
 
         public IActionResult MakeImmediateBuy(int systemId, string state,string store,string product,double unitPrice,int quantity,
-            string coupon,string userName,string userAddress,string userCreditCard)
+            string couponEntry,string usernameEntry, string addressEntry, string creditCardEntry)
         {
-            InitiateOrder(systemId, userName, userAddress, userCreditCard);
+            InitiateOrder(systemId, usernameEntry, addressEntry, creditCardEntry);
             if (answer.Status != Success)
             {
                 return RedirectToAction("BuyImmediateForm",
                     new {systemId, state, message = answer.Answer, store, product, unitPrice, quantity});
             }
 
-            answer = orderService.BuyItemFromImmediate(product, store, quantity, unitPrice, coupon);
-            return answer.Status == Success ? RedirectToAction("MainLobby", "Home", new {systemId, state, answer.Answer}) :
-                RedirectToAction("BuyImmediateForm", new { systemId, state, message = answer.Answer,store,product,unitPrice,quantity });
+            answer = orderService.BuyItemFromImmediate(product, store, quantity, unitPrice, couponEntry);
+            return answer.Status == Success ? 
+                RedirectToAction("MainLobby", "Home", new {systemId, state, message = answer.Answer}) :
+                RedirectToAction("BuyImmediateForm", new { systemId, state, message = answer.Answer,store,product,
+                    unitPrice, quantity });
         }
 
         public IActionResult MakeBuyAll(int systemId, string state, string[] coupons,
-            string userName, string userAddress, string userCreditCard)
+            string usernameEntry, string addressEntry, string creditCardEntry)
         {
-            InitiateOrder(systemId, userName, userAddress, userCreditCard);
+            InitiateOrder(systemId, usernameEntry, addressEntry, creditCardEntry);
             if (answer.Status != Success)
             {
                 return RedirectToAction("BuyAllForm",
@@ -50,7 +56,8 @@ namespace MarketWeb.Controllers
             }
 
             answer = orderService.BuyEverythingFromCart(coupons);
-            return answer.Status == Success ? RedirectToAction("MainLobby", "Home", new { systemId, state, answer.Answer }) :
+            return answer.Status == Success ? 
+                RedirectToAction("MainLobby", "Home", new { systemId, state, message = answer.Answer }) :
                 RedirectToAction("BuyAllForm", new { systemId, state, message = answer.Answer});
         }
 
