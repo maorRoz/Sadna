@@ -60,6 +60,26 @@ namespace SadnaSrc.StoreCenter
             }
             return ids;
         }
+        public void AddCategory(Category category)
+        {
+            dbConnection.InsertTable("Category", "SystemID, name, StoreID",
+                category.GetCategoryStringValues(), category.GetCategoryValuesArray());
+        }
+        public void RemoveCategory(Category category)
+        {
+            dbConnection.DeleteFromTable("Category", "SystemID = '" + category.SystemId + "'");
+        }
+        public void AddProductToCategory(string CategoryID, string ProductID)
+        {
+            string[] a = { "'" + CategoryID + "'", "'" + ProductID + "'" };
+            string[] b = { CategoryID, ProductID };
+            dbConnection.InsertTable("CategoryProductConnection", "CategoryID, ProductID",
+               a,b);
+        }
+        public void RemoveProductFromCategory(string CategoryID, string ProductID)
+        {
+            dbConnection.DeleteFromTable("CategoryProductConnection", "ProductID = '" + ProductID + "' AND CategoryID = '"+ CategoryID +"'");
+        }
         public LinkedList<string> GetAllLotteryTicketIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
@@ -552,6 +572,52 @@ namespace SadnaSrc.StoreCenter
             dbConnection.UpdateTable("LotteryTable", "SystemID = '" + lotteryManagment.SystemID + "'", columnNames,
                 lotteryManagment.GetLotteryManagmentStringValues(), lotteryManagment.GetLotteryManagmentValuesArray());
         }
+        public Category getCategoryByName(string StoreID, string CategoryName)
+        {
+            Category category = null;
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("Category", "*", "name = '" + CategoryName + "' AND StoreID = '"+ StoreID+"'"))
+            {
+                while (dbReader.Read())
+                {
+                    category = new Category(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2));
+                }
+                category.products = GetAllCategoryProducts(category.SystemId);
+            }
+            return category;
+        }
+        public LinkedList<Product> GetAllCategoryProducts(string CategoryID)
+        {
+            LinkedList<Product> products = new LinkedList<Product>();
+            LinkedList<string> productsIDS = new LinkedList<string>();
+            Product P;
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("CategoryProductConnection", "ProductID", "CategoryID = '" + CategoryID + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    productsIDS.AddLast(dbReader.GetString(0));
+                }
+            }
+            foreach (string id in productsIDS)
+            {
+                P = GetProductID(id);
+                products.AddLast(P);
+            }
+            return products;
+        }
 
+        public LinkedList<string> GetAllCategorysIDs()
+        {
+            LinkedList<string> ids = new LinkedList<string>();
+            using (var dbReader = dbConnection.SelectFromTable("Category", "SystemID"))
+            {
+                while (dbReader.Read())
+                {
+                    ids.AddLast(dbReader.GetString(0));
+                }
+            }
+            return ids;
+        }
     }
 }

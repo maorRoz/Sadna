@@ -44,5 +44,12 @@ namespace SadnaSrc.StoreCenter
         Product GetProductByNameFromStore(string storeName, string ProductName);
         StockListItem GetProductFromStore(string store, string productName);
         LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName);
+        LinkedList<string> GetAllCategorysIDs();
+        Category getCategoryByName(string StoreID, string CategoryName);
+        LinkedList<Product> GetAllCategoryProducts(string CategoryID);
+        void AddCategory(Category category);
+        void RemoveCategory(Category category);
+        void AddProductToCategory(string CategoryID, string ProductID);
+        void RemoveProductFromCategory(string CategoryID, string ProductID);
         }
     }

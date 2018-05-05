@@ -67,7 +67,9 @@ namespace SadnaSrc.Main
                 CreatePurchaseHistoryTable(),
                 CreateOrderTable(),
                 CreateOrderItemTable(),
-                CreateNotificationsTable()
+                CreateNotificationsTable(),
+                CreateCategoryTable(),
+                CreateCategoryProductConnectionTable()
             };
 
             for (var i = 0; i < createTableStrings.Length; i++)
@@ -229,8 +231,9 @@ namespace SadnaSrc.Main
                 "PurchaseHistory",
                 "Orders",
                 "OrderItem",
-                "Notifications"
-
+                "Notifications",
+                "Category",
+                "CategoryProductConnection"
             };
 
             for (int i = 0; i < tableNames.Length; i++)
@@ -435,6 +438,26 @@ namespace SadnaSrc.Main
                                     [Status]            TEXT,
                                     FOREIGN KEY([Receiver])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([NotificationID])
+                                    )";
+        }
+        private static string CreateCategoryTable()
+        {
+            return @"Create TABLE IF NOT EXISTS [Category] (
+                                    [SystemID]    TEXT,
+                                    [name]          TEXT,
+                                    [StoreID]           TEXT,
+                                    FOREIGN KEY([StoreID])     REFERENCES [Store]([SystemID]) ON DELETE CASCADE,
+                                    PRIMARY KEY([SystemID])
+                                    )";
+        }
+        private string CreateCategoryProductConnectionTable()
+        {
+            return @"Create TABLE IF NOT EXISTS [CategoryProductConnection] (
+                                    [CategoryID]    TEXT,
+                                    [ProductID]          TEXT,
+                                    FOREIGN KEY([CategoryID])     REFERENCES [Category]([SystemID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([ProductID])     REFERENCES [Product]([SystemID]) ON DELETE CASCADE,
+                                    PRIMARY KEY([CategoryID], [ProductID])
                                     )";
         }
         public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)

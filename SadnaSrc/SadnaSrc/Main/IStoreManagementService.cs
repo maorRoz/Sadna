@@ -26,12 +26,17 @@ namespace SadnaSrc.Main
 
         MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
             DateTime endDate);
-
         /**
-         * Discounts Management
+         * Category Managment
          **/
+    //    MarketAnswer AddNewCategory(string categoryname);
+    //    MarketAnswer RemoveCategory(string categoryname);
+    //    MarketAnswer AddProductToCategory(string productName, string categoryName);
+       /**
+        * Discounts Management
+        **/
 
-        MarketAnswer AddDiscountToProduct(string productName, DateTime _startDate, DateTime _endDate, 
+       MarketAnswer AddDiscountToProduct(string productName, DateTime _startDate, DateTime _endDate, 
             int _discountAmount,string discountType, bool presenteges);
         MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue);
         MarketAnswer RemoveDiscountFromProduct(string productName);
