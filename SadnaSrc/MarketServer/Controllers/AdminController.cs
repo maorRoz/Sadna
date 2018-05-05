@@ -19,9 +19,7 @@ namespace MarketWeb.Controllers
         {
             var userService = MarketServer.users[systemId];
             string[] usersData = userService.ViewUsers().ReportList;
-            int status = userService.ViewUsers().Status;
             ViewBag.valid = valid;
-
             return View(new UserListModel(systemId, state, message, usersData));
         }
 

@@ -31,17 +31,17 @@ $(document).ready(function() {
         if (systemId === undefined || systemId === 0) {
             socket.invoke('EnterSystem', socketId);
         } else {
-            var status = extractQuery('status', 'Status');
-            console.log('your status is : ' + status);
-            if (status !== 'Guest') {
+            var state = extractQuery('state', 'State');
+            console.log('your state is : ' + state);
+            if (state !== 'Guest') {
                 socket.invoke('SubscribeSocket', systemId, socketId);
             }
         }
     }
 
     socket.connectionMethods.onDisconnected = () => {
-        var status = extractQuery('status', 'Status');
-        if (status !== 'Guest') {
+        var state = extractQuery('state', 'State');
+        if (state !== 'Guest') {
             socket.invoke('UnSubscribeSocket', socketId);
         }
     }

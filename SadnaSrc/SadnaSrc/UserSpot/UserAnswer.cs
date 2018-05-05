@@ -43,6 +43,16 @@ namespace SadnaSrc.UserSpot
 
         }
 
+        public UserAnswer(GetControlledStoresStatus status, string answer, string[] usersNames) : base((int)status, answer, usersNames)
+        {
+
+        }
+
+        public UserAnswer(GetControlledStoresStatus status, string answer) : base((int)status, answer)
+        {
+
+        }
+
         public UserAnswer(EditCartItemStatus status, string answer) : base((int)status, answer)
         {
 

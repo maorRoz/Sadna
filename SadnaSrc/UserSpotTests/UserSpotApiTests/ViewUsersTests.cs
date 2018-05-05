@@ -49,7 +49,6 @@ namespace UserSpotTests.UserSpotApiTests
 
         }
 
-
         [TestMethod]
         public void DidntEnterTest()
         {

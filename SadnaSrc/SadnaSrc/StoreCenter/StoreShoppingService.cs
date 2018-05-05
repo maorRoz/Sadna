@@ -59,10 +59,10 @@ namespace SadnaSrc.StoreCenter
         }
         public MarketAnswer GetAllStores()
         {
-            StoreDL dataLayer = StoreDL.Instance;
-            var allStores = dataLayer.GetAllActiveStoreNames();
-            return new StoreAnswer(StoreEnum.Success,"You got all store names!",allStores);
-        }
+			      ViewStoreNamesSlave slave = new ViewStoreNamesSlave(_shopper,storeDL);
+			      slave.ViewStores();
+			      return slave.answer;
+		    }
     }
 }
  
