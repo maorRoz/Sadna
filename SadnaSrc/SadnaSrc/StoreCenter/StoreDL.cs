@@ -87,7 +87,6 @@ namespace SadnaSrc.StoreCenter
       
         public Store GetStorebyName(string storeName)
         {
-
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "'"))
             {
                 while (dbReader.Read())
@@ -564,6 +563,21 @@ namespace SadnaSrc.StoreCenter
         }
 
         public void AddPurchasePolicy(StockListItem item, PurchasePolicy policy)
+        {
+            //TODO: implement this
+        }
+
+        public void EditPurchasePolicy(PurchasePolicy policy)
+        {
+            //TODO: implement this
+        }
+
+        public void EditPurchasePolicy(Store store, PurchasePolicy policy)
+        {
+            //TODO: implement this
+        }
+
+        public void EditPurchasePolicy(StockListItem item, PurchasePolicy policy)
         {
             //TODO: implement this
         }

@@ -134,6 +134,20 @@ namespace SadnaSrc.StoreCenter
             return slave.answer;
         }
 
+        public MarketAnswer EditPurchasePolicy(int newAmount, bool max)
+        {
+            EditStorePolicySlave slave = new EditStorePolicySlave(store.Name, _storeManager, storeDL);
+            slave.EditPolicy(newAmount, max);
+            return slave.answer;
+        }
+
+        public MarketAnswer AddPolicyConstraints(int newAmount, bool max)
+        {
+            EditStorePolicySlave slave = new EditStorePolicySlave(store.Name, _storeManager, storeDL);
+            slave.EditPolicy(newAmount, max);
+            return slave.answer;
+        }
+
         public MarketAnswer AddPurchasePolicyToProduct(string product, int minAmount, int maxAmount)
         {
             AddItemPolicySlave slave = new AddItemPolicySlave(store.Name, _storeManager, storeDL);

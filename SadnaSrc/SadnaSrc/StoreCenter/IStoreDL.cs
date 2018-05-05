@@ -47,5 +47,8 @@ namespace SadnaSrc.StoreCenter
         void AddPurchasePolicy(Store store, PurchasePolicy policy);
         void AddPurchasePolicy(StockListItem item, PurchasePolicy policy);
         void AddPurchasePolicy(PurchasePolicy policy);
+        void EditPurchasePolicy(Store store, PurchasePolicy policy);
+        void EditPurchasePolicy(StockListItem item, PurchasePolicy policy);
+        void EditPurchasePolicy(PurchasePolicy policy);
     }
     }
