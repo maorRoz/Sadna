@@ -12,7 +12,10 @@ namespace SadnaSrc.StoreCenter
 
         public IStoreDL DataLayer { get; }
 
+        private static List<PurchasePolicy> globalPolicies = new List<PurchasePolicy>();
+
         public static StockSyncher Instance => instance ?? (instance = new StockSyncher());
+
         private StockSyncher()
         {
             DataLayer = StoreDL.Instance;

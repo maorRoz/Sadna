@@ -16,7 +16,7 @@ namespace SadnaSrc.StoreCenter
 
         public PurchaseEnum PurchaseWay { get; set; }
 
-        private PurchasePolicy Policy { get; set; }
+        public PurchasePolicy Policy { get; set; }
 
         public StockListItem(int quantity, Product product, Discount discount, PurchaseEnum purchaseWay,
             string id)

@@ -553,5 +553,19 @@ namespace SadnaSrc.StoreCenter
                 lotteryManagment.GetLotteryManagmentStringValues(), lotteryManagment.GetLotteryManagmentValuesArray());
         }
 
+        public void AddPurchasePolicy(PurchasePolicy policy)
+        {
+            //TODO: implement this
+        }
+
+        public void AddPurchasePolicy(Store store, PurchasePolicy policy)
+        {
+            //TODO: implement this
+        }
+
+        public void AddPurchasePolicy(StockListItem item, PurchasePolicy policy)
+        {
+            //TODO: implement this
+        }
     }
 }

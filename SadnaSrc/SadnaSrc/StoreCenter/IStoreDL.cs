@@ -44,5 +44,8 @@ namespace SadnaSrc.StoreCenter
         Product GetProductByNameFromStore(string storeName, string ProductName);
         StockListItem GetProductFromStore(string store, string productName);
         LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName);
-        }
+        void AddPurchasePolicy(Store store, PurchasePolicy policy);
+        void AddPurchasePolicy(StockListItem item, PurchasePolicy policy);
+        void AddPurchasePolicy(PurchasePolicy policy);
+    }
     }
