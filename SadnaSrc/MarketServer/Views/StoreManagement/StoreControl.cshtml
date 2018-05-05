@@ -27,9 +27,12 @@
                 @foreach (var item in Model.Items)
                 {
                     <tr>
-                        <td>@item.Name</td>
-                        <td><img src="\images\cashier.png">
-                        </td>
+	                    <td>@item.Name</td>
+	                    <td>
+		                    <a asp-controller="StoreManagement" asp-action="ManageStoreOptions" asp-route-systemId="@Model.SystemId"
+		                       asp-route-state="@Model.State" asp-route-store="@item.Name" ><img src="\images\cashier.png"></a> 
+	                    </td>
+	                    
                     </tr>
                 }
             </table>
