@@ -29,7 +29,7 @@
 				<tr>
 					<td>@item.Name</td>
 					<td>
-						<a asp-controller="Store" asp-action="ProductManagement" asp-route-systemId="@Model.SystemId"
+						<a asp-controller="Shopping" asp-action="ViewStoreStock" asp-route-systemId="@Model.SystemId"
 						   asp-route-state="@Model.State" asp-route-message="@Model.Message" asp-route-store="@item.Name"><img src="\images\cancel.png" /></a>
 					</td>
 				</tr>
