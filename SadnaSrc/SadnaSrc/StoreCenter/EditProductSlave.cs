@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class EditProductSlave : AbstractStoreCenterSlave
     {
-        public MarketAnswer answer;
+        public MarketAnswer Answer;
         
 
         public EditProductSlave(string storename, IUserSeller storeManager, IStoreDL storeDL) : base(storename, storeManager, storeDL)
@@ -37,18 +37,18 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                answer =  new StoreAnswer(exe);
+                Answer =  new StoreAnswer(exe);
             }
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
 
         private void CheckIfNoLegalFound()
         {
-            if (answer != null) return;
+            if (Answer != null) return;
             MarketLog.Log("StoreCenter", "no leagal attrebute or founed non-leagal value");
             throw new StoreException(StoreEnum.UpdateProductFail, "no leagal attrebute found");
         }
@@ -57,7 +57,7 @@ namespace SadnaSrc.StoreCenter
         {
             if (whatToEdit != "Description" && whatToEdit != "desccription") return;
             MarketLog.Log("StoreCenter", "edit description");
-            answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
+            Answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
             product.Description = newValue;
         }
 
@@ -69,7 +69,7 @@ namespace SadnaSrc.StoreCenter
             if (!double.TryParse(newValue, out var newBasePrice))
             { throw new StoreException(StoreEnum.UpdateProductFail, "value is not leagal"); }
             if (newBasePrice <= 0) { throw new StoreException(StoreEnum.UpdateProductFail, "price can not be negative"); }
-            answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " price has been updated to " + newValue);
+            Answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " price has been updated to " + newValue);
             product.BasePrice = newBasePrice;
         }
 
@@ -85,7 +85,7 @@ namespace SadnaSrc.StoreCenter
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
             }
             CheckIfProductNameAvailable(newValue);
-            answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
+            Answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
             product.Name = newValue;
         }
         private void CheckIfProductNameAvailable(string name)

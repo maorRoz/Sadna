@@ -38,7 +38,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             EditProductSlave slave = new EditProductSlave("noStore", userService.Object, handler.Object);
             slave.EditProduct("BOX", "price", "10");
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.Answer.Status);
         }
         [TestMethod]
         public void EditProductPass()
@@ -52,7 +52,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(SLI);
             EditProductSlave slave = new EditProductSlave("X", userService.Object, handler.Object);
             slave.EditProduct("NEWPROD", "BasePrice", "10");
-            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
+            Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
         }
 
         [TestCleanup]

@@ -37,7 +37,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             AddProductToCartSlave slave = new AddProductToCartSlave(userService.Object, handler.Object);
             slave.AddProductToCart("noStore", "NEWPROD", 1);
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.Answer.Status);
         }
         [TestMethod]
         public void AddToCartPass()
@@ -53,7 +53,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
 
             AddProductToCartSlave slave = new AddProductToCartSlave(userService.Object, handler.Object);
             slave.AddProductToCart("X", "NEWPROD", 1);
-            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
+            Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
         }
 
 

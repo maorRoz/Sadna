@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class AddDiscountToProductSlave : AbstractStoreCenterSlave
     {
-        public MarketAnswer answer;
+        public MarketAnswer Answer;
         public AddDiscountToProductSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) :base(storeName,storeManager, storeDL)
         {
         }
@@ -40,17 +40,17 @@ namespace SadnaSrc.StoreCenter
                 DataLayerInstance.EditStockInDatabase(stockListItem);
                 MarketLog.Log("StoreCenter", "discount added successfully");
                 string[] coupon = { discount.discountCode};
-                answer = new StoreAnswer(DiscountStatus.Success, "discount added successfully", coupon);
+                Answer = new StoreAnswer(DiscountStatus.Success, "discount added successfully", coupon);
                 return discount;
             }
             catch (StoreException exe)
             {
-                answer = new StoreAnswer(exe);
+                Answer = new StoreAnswer(exe);
                 return null;
             }
             catch (MarketException)
             {
-                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
                 return null;
             }
         }

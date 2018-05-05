@@ -79,9 +79,9 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("new", 5, "MOMO", 5);
-            ProductToDelete = handler.GetProductFromStore(liorSession._storeName, "new");
+            ProductToDelete = handler.GetProductFromStore(liorSession.StoreName, "new");
             MarketAnswer ans = liorSession.AddQuanitityToProduct("new", 10);
-            StockListItem find = handler.GetProductFromStore(liorSession._storeName, "new");
+            StockListItem find = handler.GetProductFromStore(liorSession.StoreName, "new");
             Assert.AreEqual(find.Quantity, 15);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }

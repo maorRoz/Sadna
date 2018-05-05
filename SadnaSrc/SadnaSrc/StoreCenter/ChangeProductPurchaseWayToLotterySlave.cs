@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class ChangeProductPurchaseWayToLotterySlave : AbstractStoreCenterSlave
     {
-        public MarketAnswer answer;
+        public MarketAnswer Answer;
 
         public ChangeProductPurchaseWayToLotterySlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
@@ -34,15 +34,15 @@ namespace SadnaSrc.StoreCenter
                     _storeName, stockListItem.Product, startDate, endDate);
                 DataLayerInstance.AddLottery(lotterySaleManagmentTicket);
 
-                answer = new StoreAnswer(ChangeToLotteryEnum.Success, "type changed");
+                Answer = new StoreAnswer(ChangeToLotteryEnum.Success, "type changed");
             }
             catch (StoreException exe)
             {
-                answer = new StoreAnswer(exe);
+                Answer = new StoreAnswer(exe);
             }
             catch (MarketException)
             {
-                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
 
         }

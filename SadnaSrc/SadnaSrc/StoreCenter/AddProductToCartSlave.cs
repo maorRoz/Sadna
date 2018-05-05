@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class AddProductToCartSlave
     {
-        public MarketAnswer answer;
+        public MarketAnswer Answer;
         private IUserShopper _shopper;
         IStoreDL storeLogic;
         
@@ -32,19 +32,19 @@ namespace SadnaSrc.StoreCenter
                 CheckIfDiscountExistsAndCalcValue(ref stockListItem);
                 _shopper.AddToCart(stockListItem.Product, store, quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
-                answer = new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
+                Answer = new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
                                                                  " successfully added to the user's cart!");
             }
             catch (StoreException e)
             {
                 MarketLog.Log("StoreCenter", "adding to cart failed");
-                answer = new StoreAnswer((AddProductStatus)e.Status, "There is no product or store or quantity of that type in the market." +
+                Answer = new StoreAnswer((AddProductStatus)e.Status, "There is no product or store or quantity of that type in the market." +
                                                                   " request has been denied. Error message has been created!");
             }
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                answer = new StoreAnswer(StoreEnum.NoPremmision,
+                Answer = new StoreAnswer(StoreEnum.NoPremmision,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
         }

@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class AddNewProductSlave : AbstractStoreCenterSlave
     {
-        public MarketAnswer answer;
+        public MarketAnswer Answer;
         private Store _store;
         public AddNewProductSlave(IUserSeller storeManager, string storeName, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
@@ -35,18 +35,18 @@ namespace SadnaSrc.StoreCenter
                 StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, _store.SystemId);
                 DataLayerInstance.AddStockListItemToDataBase(stockListItem);
                 MarketLog.Log("StoreCenter", "product added");
-                answer = new StoreAnswer(StoreEnum.Success, "product added");
+                Answer = new StoreAnswer(StoreEnum.Success, "product added");
                 return stockListItem;
             }
             catch (StoreException exe)
             {
-                answer = new StoreAnswer(exe);
+                Answer = new StoreAnswer(exe);
                 return null;
             }
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
                 return null;
             }
         }

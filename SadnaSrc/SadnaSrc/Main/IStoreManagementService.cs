@@ -29,8 +29,8 @@ namespace SadnaSrc.Main
         /**
          * Category Managment
          **/
-    //    MarketAnswer AddNewCategory(string categoryname);
-    //    MarketAnswer RemoveCategory(string categoryname);
+        MarketAnswer AddCategory(string categoryname);
+        MarketAnswer RemoveCategory(string categoryname);
     //    MarketAnswer AddProductToCategory(string productName, string categoryName);
        /**
         * Discounts Management
@@ -60,7 +60,9 @@ namespace SadnaSrc.Main
         QuantityIsNegative,
         QuantityIsTooBig,
         EnumValueNotExists,
-        DatesAreWrong
+        DatesAreWrong,
+        CategoryExistsInStore,
+        CategoryNotExistsInStore
     }
     public enum DiscountStatus
     {
