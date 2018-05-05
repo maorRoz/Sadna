@@ -14,8 +14,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         private Mock<IStoreDL> handler;
         private Mock<IUserSeller> userService;
         private Mock<IMarketDB> marketDbMocker;
-
-        //TODO: improve this
+       
 
 
         [TestInitialize]
@@ -40,8 +39,9 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
 
             AddCategorySlave slave = new AddCategorySlave("T", userService.Object, handler.Object);
+            handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
-            userService.Setup(x => x.CanManageProducts()).Throws(new Exception());
+            userService.Setup(x => x.CanManageProducts()).Throws(new MarketException(9, "bla"));
             slave.AddCategory("items");
             Assert.AreEqual((int)StoreEnum.NoPremmision, slave.Answer.Status);
         }
@@ -49,6 +49,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void AddCategoryWhenCategoryAlreadyExists()
         {
             AddCategorySlave slave = new AddCategorySlave("T", userService.Object, handler.Object);
+            handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
             handler.Setup(x => x.getCategoryByName("S7", "items")).Returns(new Category("items", "S7"));
             slave.AddCategory("items");
@@ -58,6 +59,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void AddCategorySuccess()
         {
             AddCategorySlave slave = new AddCategorySlave("T", userService.Object, handler.Object);
+            handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
             slave.AddCategory("items");
             Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
