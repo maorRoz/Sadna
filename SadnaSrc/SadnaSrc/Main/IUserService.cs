@@ -72,6 +72,12 @@ namespace SadnaSrc.Main
         DidntEnterSystem
     }
 
+    public enum GetControlledStoresStatus
+    {
+        Success,
+        DidntEnterSystem
+    }
+
     public enum BrowseMarketStatus
     {
         DidntEnterSystem,

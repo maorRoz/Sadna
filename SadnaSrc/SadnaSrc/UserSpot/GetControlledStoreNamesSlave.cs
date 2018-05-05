@@ -28,21 +28,21 @@ namespace SadnaSrc.UserSpot
             {
                 ApproveEnetered();
                 MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved all store names...");
-                Answer = new UserAnswer(ViewUsersStatus.Success, "View of store names has been granted successfully!",
+                Answer = new UserAnswer(GetControlledStoresStatus.Success, "View of store names has been granted successfully!",
                     _user.GetControlledStores());
             }
             catch (UserException e)
             {
                 MarketLog.Log("UserSpot", "User " + userID + " has failed to View his controlled stores." +
                                           " Error message has been created!");
-                Answer = new UserAnswer((ViewUsersStatus)e.Status, e.GetErrorMessage());
+                Answer = new UserAnswer((GetControlledStoresStatus)e.Status, e.GetErrorMessage());
             }
         }
 
         private void ApproveEnetered()
         {
             if (_user != null) { return; }
-            throw new UserException(ViewUsersStatus.DidntEnterSystem,
+            throw new UserException(GetControlledStoresStatus.DidntEnterSystem,
                 "View controlled stores names has been requested by User which hasn't fully entered the system yet!");
 
         }
