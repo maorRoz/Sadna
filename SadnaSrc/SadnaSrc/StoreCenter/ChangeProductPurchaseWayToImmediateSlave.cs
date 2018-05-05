@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class ChangeProductPurchaseWayToImmediateSlave : AbstractStoreCenterSlave
     {
-        public MarketAnswer Answer;
+        public MarketAnswer answer;
         private IOrderSyncher syncher;
 
         public ChangeProductPurchaseWayToImmediateSlave(string storeName, IUserSeller storeManager,
@@ -30,15 +30,15 @@ namespace SadnaSrc.StoreCenter
                 ValidateLottery(stockList);
                 stockList.PurchaseWay = PurchaseEnum.Immediate;
                 DataLayerInstance.EditStockInDatabase(stockList);
-                Answer = new StoreAnswer(StoreEnum.Success, "purches way changed");
+                answer = new StoreAnswer(StoreEnum.Success, "purches way changed");
             }
             catch (StoreException exe)
             {
-                Answer = new StoreAnswer(exe);
+                answer = new StoreAnswer(exe);
             }
             catch (MarketException)
             {
-                Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
 

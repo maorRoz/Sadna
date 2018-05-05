@@ -39,7 +39,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
                 ChangeProductPurchaseWayToImmediateSlave slave = new ChangeProductPurchaseWayToImmediateSlave("noStore", userService.Object,syncer.Object, handler.Object);
                 slave.ChangeProductPurchaseWayToImmediate("newProd");
-                Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.Answer.Status);
+                Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
             }
             [TestMethod]
             public void changeToImmediatePass()
@@ -56,7 +56,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 handler.Setup(x => x.GetLotteryByProductID(P.SystemId)).Returns(LSMT);
                 ChangeProductPurchaseWayToImmediateSlave slave = new ChangeProductPurchaseWayToImmediateSlave("X", userService.Object, syncer.Object, handler.Object);
                 slave.ChangeProductPurchaseWayToImmediate("NEWPROD");
-                    Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
+                    Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
             }
 
 

@@ -36,7 +36,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             AddNewProductSlave slave = new AddNewProductSlave(userService.Object, "bla", handler.Object);
             slave.AddNewProduct("p", 9, "bla", 4);
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.Answer.Status);
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
 
         }
         [TestMethod]
@@ -47,7 +47,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
             AddNewProductSlave slave = new AddNewProductSlave(userService.Object, "X", handler.Object);
             slave.AddNewProduct("p", 9, "bla", 4);
-            Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
+            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
 
         }
     }

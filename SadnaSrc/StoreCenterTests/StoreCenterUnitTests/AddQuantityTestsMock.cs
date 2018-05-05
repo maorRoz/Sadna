@@ -35,7 +35,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             AddQuanitityToProductSlave slave = new AddQuanitityToProductSlave("noStore", userService.Object, handler.Object);
             slave.AddQuanitityToProduct("item", 10);
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.Answer.Status);
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
         }
         [TestMethod]
         public void addDiscountPass()
@@ -47,7 +47,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             handler.Setup(x => x.GetProductFromStore("X", "item")).Returns(new StockListItem(4, p, null, PurchaseEnum.Immediate, "100"));
             AddQuanitityToProductSlave slave = new AddQuanitityToProductSlave("X", userService.Object, handler.Object);
             slave.AddQuanitityToProduct("item", 10);
-            Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
+            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
         }
 
 

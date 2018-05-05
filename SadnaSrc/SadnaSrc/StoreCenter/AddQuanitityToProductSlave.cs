@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class AddQuanitityToProductSlave : AbstractStoreCenterSlave
     {
-        public MarketAnswer Answer;
+        public MarketAnswer answer;
 
         public AddQuanitityToProductSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
@@ -27,17 +27,17 @@ namespace SadnaSrc.StoreCenter
                 CheckIfQuanityIsOK(quantity);
                 stockListItem.Quantity += quantity;
                 DataLayerInstance.EditStockInDatabase(stockListItem);
-                Answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " added by amound of " + quantity);
+                answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " added by amound of " + quantity);
             }
             catch (StoreException exe)
             {
-                Answer = new StoreAnswer(exe);
+                answer = new StoreAnswer(exe);
             }
             catch (MarketException e)
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"
                                              + _storeName + " and therefore has been denied. Error message has been created!");
-                Answer = new StoreAnswer(StoreEnum.NoPremmision, e.GetErrorMessage());
+                answer = new StoreAnswer(StoreEnum.NoPremmision, e.GetErrorMessage());
             }
         }
 

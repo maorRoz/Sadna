@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class CloseStoreSlave : AbstractStoreCenterSlave
     {
-        public MarketAnswer Answer;
+        public MarketAnswer answer;
         private Store store;
         public CloseStoreSlave(IUserSeller storeManager, string _storeName, IStoreDL storeDL) : base(_storeName, storeManager, storeDL)
         {
@@ -19,17 +19,17 @@ namespace SadnaSrc.StoreCenter
             {
                 checkIfStoreExistsAndActive();
                 _storeManager.CanPromoteStoreOwner(); 
-                Answer = store.CloseStore();
+                answer = store.CloseStore();
             }
             catch (StoreException exe)
             {
                 MarketLog.Log("StoreCenter", "closing store failed");
-                Answer = new StoreAnswer(exe);
+                answer = new StoreAnswer(exe);
             }
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "closing store failed");
-                Answer = new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
+                answer = new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
             }
         }
     }

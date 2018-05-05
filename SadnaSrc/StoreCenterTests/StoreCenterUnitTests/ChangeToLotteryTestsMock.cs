@@ -36,7 +36,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
                 ChangeProductPurchaseWayToLotterySlave slave = new ChangeProductPurchaseWayToLotterySlave("noStore", userService.Object, handler.Object);
                 slave.ChangeProductPurchaseWayToLottery("newProd", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
-                Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.Answer.Status);
+                Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
             }
             [TestMethod]
             public void ChangeToLotteryPass()
@@ -53,7 +53,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 
                 ChangeProductPurchaseWayToLotterySlave slave = new ChangeProductPurchaseWayToLotterySlave("X", userService.Object, handler.Object);
                 slave.ChangeProductPurchaseWayToLottery("NEWPROD", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
-                Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
+                Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
             }
 
 

@@ -36,7 +36,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             AddNewLotterySlave slave = new AddNewLotterySlave("bla", userService.Object, handler.Object);
             slave.AddNewLottery("name0", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.Answer.Status);
+            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
 
         }
         [TestMethod]
@@ -46,7 +46,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
             AddNewLotterySlave slave = new AddNewLotterySlave("X", userService.Object, handler.Object);
             slave.AddNewLottery("NEWPROD", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));
-            Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
+            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
 
         }
     }

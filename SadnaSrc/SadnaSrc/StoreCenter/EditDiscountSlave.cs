@@ -6,7 +6,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class EditDiscountSlave : AbstractStoreCenterSlave
     {
-        public MarketAnswer Answer;
+        public MarketAnswer answer;
 
         public EditDiscountSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
@@ -65,16 +65,16 @@ namespace SadnaSrc.StoreCenter
                         break;
                 }
 
-                if (Answer == null) { throw new StoreException(DiscountStatus.NoLegalAttrebute, "no legal attribute found"); }
+                if (answer == null) { throw new StoreException(DiscountStatus.NoLegalAttrebute, "no legal attribute found"); }
                 DataLayerInstance.EditDiscountInDatabase(discount);
             }
             catch (StoreException exe)
             {
-                Answer = new StoreAnswer(exe);
+                answer = new StoreAnswer(exe);
             }
             catch (MarketException)
             {
-                Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
             }
         }
         private Discount CheckIfDiscountExistsPrivateMethod(string productName)
@@ -96,7 +96,7 @@ namespace SadnaSrc.StoreCenter
             MarketLog.Log("StoreCenter", " edit discount type");
             discount.discountType = EnumStringConverter.GetdiscountTypeEnumString(newValue);
             MarketLog.Log("StoreCenter", " discount type changed successfully");
-            Answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount type become " + newValue);
+            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount type become " + newValue);
             return discount;
         }
         private Discount EditDiscountStartDatePrivateMethod(Discount discount, string newValue, string productName)
@@ -123,7 +123,7 @@ namespace SadnaSrc.StoreCenter
             }
             discount.startDate = startTime;
             MarketLog.Log("StoreCenter", " start date changed successfully");
-            Answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount Start Date become " + startTime);
+            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount Start Date become " + startTime);
             return discount;
         }
         private Discount EditDiscountPercentagesPrivateMehtod(Discount discount, string newValue, string productName)
@@ -142,8 +142,8 @@ namespace SadnaSrc.StoreCenter
             }
             discount.Percentages = newboolValue;
             if (newboolValue)
-                Answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become true");
-            Answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become false");
+                answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become true");
+            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become false");
             return discount;
         }
         private Discount EditDiscountDiscountAmountPrivateMehtod(Discount discount, string newValue, string productName)
@@ -173,7 +173,7 @@ namespace SadnaSrc.StoreCenter
             }
             discount.DiscountAmount = newintValue;
             MarketLog.Log("StoreCenter", "discount amount set to " + newintValue);
-            Answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount amount become " + newValue);
+            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount amount become " + newValue);
             return discount;
         }
         private Discount EditDiscountEndDatePrivateMethod(Discount discount, string newValue, string productName)
@@ -198,7 +198,7 @@ namespace SadnaSrc.StoreCenter
             }
             discount.EndDate = endDate;
             MarketLog.Log("StoreCenter", " start date changed successfully");
-            Answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount End Date become " + endDate);
+            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount End Date become " + endDate);
             return discount;
         }
     }

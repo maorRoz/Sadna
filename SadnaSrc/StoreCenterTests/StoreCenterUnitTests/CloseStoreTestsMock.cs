@@ -35,7 +35,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
                 CloseStoreSlave slave = new CloseStoreSlave(userService.Object, "noStore", handler.Object);
                 slave.CloseStore();
-                Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.Answer.Status);
+                Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
             }
             [TestMethod]
             public void CloseStorePass()
@@ -44,7 +44,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", "bala"));
                 CloseStoreSlave slave = new CloseStoreSlave(userService.Object, "X", handler.Object);
                 slave.CloseStore();
-                Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
+                Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
             }
 
 

@@ -39,7 +39,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
 
             ViewStoreHistorySlave slave = new ViewStoreHistorySlave("X", userService.Object, handler.Object);
             slave.ViewStoreHistory();
-            MarketAnswer ans = slave.Answer;
+            MarketAnswer ans = slave.answer;
             Assert.AreEqual((int)ManageStoreStatus.InvalidStore, ans.Status);
         }
         [TestMethod]
@@ -49,7 +49,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             ViewStoreHistorySlave slave = new ViewStoreHistorySlave("X", userService.Object, handler.Object);
             handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
             slave.ViewStoreHistory();
-            MarketAnswer ans = slave.Answer;
+            MarketAnswer ans = slave.answer;
             Assert.AreEqual((int)ManageStoreStatus.Success, ans.Status);
         }
         [TestCleanup]
