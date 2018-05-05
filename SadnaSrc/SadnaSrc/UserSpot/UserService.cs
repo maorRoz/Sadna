@@ -70,6 +70,13 @@ namespace SadnaSrc.UserSpot
             return slave.Answer;
         }
 
+        public MarketAnswer GetControlledStoreNames()
+        {
+            GetControlledStoreNamesSlave slave = new GetControlledStoreNamesSlave(MarketUser);
+            slave.GetControlledStoreNames();
+            return slave.Answer;
+        }
+
         public void AddToCart(string product, string store, int quantity, double unitPrice)
         {
             MarketUser.Cart.AddToCart(product, store, quantity,unitPrice);

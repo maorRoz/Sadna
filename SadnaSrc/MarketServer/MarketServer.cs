@@ -29,14 +29,15 @@ namespace MarketWeb
             await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
         }
 
+        //Todo: fix this, not working on disconnects
         public void UnSubscribeSocket(string socketId)
         {
-           // FeedSubscriber.UnSubscribeSocket(socketId);
+            FeedSubscriber.UnSubscribeSocket(socketId);
         }
 
-        public void SubscribeSocket(int userId, string socketId)
+        public void SubscribeSocket(string userId, string socketId)
         {
-         //   FeedSubscriber.SubscribeSocket(this,userId,socketId);
+               FeedSubscriber.SubscribeSocket(this,Convert.ToInt32(userId),socketId);
         }
 
         public async void GetMessage(string socketId, string message)

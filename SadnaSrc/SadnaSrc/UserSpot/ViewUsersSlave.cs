@@ -44,7 +44,7 @@ namespace SadnaSrc.UserSpot
 		{
 			if (_user != null) { return; }
 			throw new UserException(ViewUsersStatus.DidntEnterSystem,
-				"View Cart action has been requested by User which hasn't fully entered the system yet!");
+				"View users action has been requested by User which hasn't fully entered the system yet!");
 
 		}
 	}
