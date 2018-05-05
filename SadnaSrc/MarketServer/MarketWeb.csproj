@@ -26,4 +26,8 @@
     <ProjectReference Include="..\SadnaSrc\SadnaSrc.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Shopping\" />
+  </ItemGroup>
+
 </Project>

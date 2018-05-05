@@ -1,7 +1,6 @@
-﻿
-@{
-	ViewData["Title"] = "StoreManagement";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@{
+    ViewData["Title"] = "ProductManagement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row top-space">
@@ -11,31 +10,33 @@
 			<div id="alertContainer">
 				@if (Model.Message != null)
 				{
-					<div class='success'>
-						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-						@Model.Message
-					</div>
+				<div class='success'>
+					<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+					@Model.Message
+				</div>
 				}
 			</div>
 
 			<table class="table">
 				<thead>
 					<tr>
-						<th>StoreName</th>
+						<th>ProductName</th>
+						<th>BasePrice</th>
+						<th>Description</th>
+						<th>Type</th>
+						<th>Quantity</th>
+						<th></th>
 					</tr>
 				</thead>
 				@foreach (var item in Model.Items)
 				{
 				<tr>
 					<td>@item.Name</td>
-					<td>
-						<a asp-controller="Store" asp-action="ProductManagement" asp-route-systemId="@Model.SystemId"
-						   asp-route-state="@Model.State" asp-route-message="@Model.Message" asp-route-store="@item.Name"><img src="\images\cancel.png" /></a>
-					</td>
+					<td>@item</td>
+					
 				</tr>
 				}
 			</table>
-			<hr />
 		</div>
 	</div>
 </div>
@@ -43,4 +44,3 @@
 @section Scripts{
 	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
 }
-
