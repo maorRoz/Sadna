@@ -290,9 +290,9 @@ namespace BlackBox.StoreBlackBoxTests
 				string[] receivedStock = stock.ReportList;
 				string[] expectedStock =
 				{
-					" name: Lets base price: 10 description: haha , DiscountAmount: 5 Start Date: "+Convert.ToDateTime("14/04/2018").Date.ToString("d")+"" +
-					" End Date: "+ Convert.ToDateTime("20/04/2018").Date.ToString("d")+" type is: visible , Immediate , 10"
-				};
+					" name: Lets base price: 10 description: haha Discount: {DiscountAmount: 5 Start Date: "+Convert.ToDateTime("14/04/2018").Date.ToString("d")+"" +
+					" End Date: "+ Convert.ToDateTime("20/04/2018").Date.ToString("d")+" type is: visible} Purchase Way: Immediate Quantity: 10"
+                };
 				Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 				for (int i = 0; i < receivedStock.Length; i++)
 				{
@@ -348,8 +348,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock1 = stock1.ReportList;
 			string[] expectedStock1 =
 			{
-				" name: Ouch base price: 3 description: tool , Immediate , 5"
-			};
+                " name: Ouch base price: 3 description: tool Discount: {null} Purchase Way: Immediate Quantity: 5"
+            };
 			Assert.AreEqual(expectedStock1.Length, receivedStock1.Length);
 			for (int i = 0; i < expectedStock1.Length; i++)
 			{
@@ -364,9 +364,9 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock = stock.ReportList;
 			string[] expectedStock =
 			{
-				" name: Ouch base price: 50 description: tool , Immediate , 5"
-				
-			};
+                " name: Ouch base price: 50 description: tool Discount: {null} Purchase Way: Immediate Quantity: 5"
+
+            };
 			Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 			for (int i = 0; i < expectedStock.Length; i++)
 			{
