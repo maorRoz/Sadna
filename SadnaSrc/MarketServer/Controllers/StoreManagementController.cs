@@ -124,9 +124,9 @@ namespace MarketWeb.Controllers
 		    return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
 		}
 
-	    public IActionResult AddDiscountPage(int systemId, string state, string message, string store)
+	    public IActionResult AddDiscountPage(int systemId, string state, string message, string store, string product)
 	    {
-		    return View(new StoreItemModel(systemId, state, message, store));
+		    return View(new ProductInStoreModel(systemId, state, message, store,product));
 	    }
 
 	    public IActionResult AddDiscount(int systemId, string state, string message, string store, string productName,
@@ -141,7 +141,26 @@ namespace MarketWeb.Controllers
 			    return RedirectToAction("ProductsDiscountManaging", new { systemId, state, message = answer.Answer, store });
 		    }
 
-			return RedirectToAction("AddDiscountPage", new { systemId, state, message = answer.Answer, store });
+			return RedirectToAction("AddDiscountPage", new { systemId, state, message = answer.Answer, store,productName });
+		}
+
+	    public IActionResult EditDiscountPage(int systemId, string state, string message, string store, string product)
+	    {
+		    return View(new ProductInStoreModel(systemId, state, message, store, product));
+		}
+
+	    public IActionResult EditDiscount(int systemId, string state, string message, string store, string product,
+		    string whatToEdit, string newValue)
+	    {
+		    var userService = MarketServer.Users[systemId];
+		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    var answer = storeManagementService.EditDiscount(product, whatToEdit, newValue);
+		    if (answer.Status == Success)
+		    {
+			    return RedirectToAction("ProductsDiscountManaging", new { systemId, state, message = answer.Answer, store });
+		    }
+
+		    return RedirectToAction("EditDiscountPage", new { systemId, state, message = answer.Answer, store, product });
 		}
 	}
 }
