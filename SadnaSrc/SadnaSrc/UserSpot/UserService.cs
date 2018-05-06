@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
 using SadnaSrc.MarketFeed;
+using SadnaSrc.StoreCenter;
 
 namespace SadnaSrc.UserSpot
 {
@@ -72,7 +73,7 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer GetControlledStoreNames()
         {
-            GetControlledStoreNamesSlave slave = new GetControlledStoreNamesSlave(MarketUser);
+            GetControlledStoreNamesSlave slave = new GetControlledStoreNamesSlave(MarketUser,userDB);
             slave.GetControlledStoreNames();
             return slave.Answer;
         }
@@ -91,7 +92,14 @@ namespace SadnaSrc.UserSpot
             return slave.Answer;
         }
 
-        public void AddToCart(string product, string store, int quantity, double unitPrice)
+	    public MarketAnswer GetAllStores()
+	    {
+		    GetControlledStoreNamesSlave slave = new GetControlledStoreNamesSlave(MarketUser,userDB);
+			slave.ViewStores();
+			return slave.Answer;
+		}
+
+	    public void AddToCart(string product, string store, int quantity, double unitPrice)
         {
             MarketUser.Cart.AddToCart(product, store, quantity,unitPrice);
         }

@@ -168,7 +168,7 @@
     <Compile Include="StoreCenter\StoreShoppingService.cs" />
     <Compile Include="StoreCenter\ViewStoreHistorySlave.cs" />
     <Compile Include="StoreCenter\ViewStoreInfoSlave.cs" />
-    <Compile Include="StoreCenter\ViewStoreNamesSlave.cs" />
+    <Compile Include="UserSpot\ViewStoreNamesSlave.cs" />
     <Compile Include="StoreCenter\ViewStoreStockSlave.cs" />
     <Compile Include="SupplyPoint\SupplyAnswer.cs" />
     <Compile Include="SupplyPoint\SupplyException.cs" />

@@ -21,6 +21,11 @@ namespace SadnaSrc.UserSpot
         {
         }
 
+	    public UserException(ViewStoresStatus status, string message) : base((int) status, message)
+	    {
+
+	    }
+
         public UserException(GetControlledStoresStatus status, string message) : base((int)status, message)
         {
         }

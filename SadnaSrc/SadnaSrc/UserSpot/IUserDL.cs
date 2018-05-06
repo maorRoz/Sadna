@@ -21,5 +21,7 @@ namespace SadnaSrc.UserSpot
         void UpdateCartItemQuantity(CartItem item);
         void SaveUserStatePolicy(int userId, StatePolicy statePolicy);
         void SaveUserStorePolicy(int userId, StoreManagerPolicy storeOwnershipPermission);
+	    string[] GetAllActiveStoreNames();
+
     }
 }

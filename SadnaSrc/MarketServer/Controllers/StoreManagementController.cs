@@ -18,8 +18,7 @@ namespace MarketWeb.Controllers
 	        string[] storesData;
 	        if (state.Equals("Admin"))
 	        {
-		        var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-		        storesData = storeShoppingService.GetAllStores().ReportList;
+		        storesData = userService.GetAllStores().ReportList;
 
 	        }
 	        else

@@ -35,7 +35,7 @@ namespace UserSpotTests.UserSpotApiTests
         [TestMethod]
         public void NoControlledStoresTest()
         {
-            slave = new GetControlledStoreNamesSlave(guest);
+            slave = new GetControlledStoreNamesSlave(guest, userDbMocker.Object);
             slave.GetControlledStoreNames();
             var actual = slave.Answer.ReportList;
             Assert.AreEqual(0, actual.Length);
@@ -44,7 +44,7 @@ namespace UserSpotTests.UserSpotApiTests
         [TestMethod]
         public void GetControlledStoresTest()
         {
-            slave = new GetControlledStoreNamesSlave(registered);
+            slave = new GetControlledStoreNamesSlave(registered, userDbMocker.Object);
             slave.GetControlledStoreNames();
             var expectedStores = new[] { "Store1", "Store2"};
             var actual = slave.Answer.ReportList;
@@ -59,7 +59,7 @@ namespace UserSpotTests.UserSpotApiTests
         [TestMethod]
         public void DidntEnterTest()
         {
-            slave = new GetControlledStoreNamesSlave(null);
+            slave = new GetControlledStoreNamesSlave(null, userDbMocker.Object);
             slave.GetControlledStoreNames();
             Assert.IsNull(slave.Answer.ReportList);
         }
