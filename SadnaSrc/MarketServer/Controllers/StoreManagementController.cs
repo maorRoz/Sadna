@@ -63,19 +63,29 @@ namespace MarketWeb.Controllers
 
 		}
 
-	    public IActionResult EditProduct()
+	    public IActionResult EditProduct(int systemId, string state, string store, string product, string whatToEdit, string newValue)
 	    {
-		    return null;
-	    }
+			var userService = MarketServer.Users[systemId];
+		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    var answer = storeManagementService.EditDiscount(product,whatToEdit,newValue);
+		    return RedirectToAction("ManageProducts", new { systemId, state, message = "", store });
+		}
 
-	    public IActionResult AddQuanitityToProduct()
-	    {
-		    return null;
-	    }
+	    public IActionResult AddQuanitityToProduct(int systemId, string state, string store, string product, int quantity)
 
-	    public IActionResult AddNewProduct()
+		{
+			var userService = MarketServer.Users[systemId];
+		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    var answer = storeManagementService.AddQuanitityToProduct(product,quantity);
+		    return RedirectToAction("ManageProducts", new { systemId, state, message = "", store });
+		}
+
+	    public IActionResult AddNewProduct(int systemId, string state, string store, string product, double price, string description, int quantity)
 	    {
-		    return null;
-	    }
+			var userService = MarketServer.Users[systemId];
+		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    var answer = storeManagementService.AddNewProduct(product, price, description, quantity);
+		    return RedirectToAction("ManageProducts", new { systemId, state, message = "", store });
+		}
 	}
 }
