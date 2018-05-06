@@ -115,5 +115,33 @@ namespace MarketWeb.Controllers
 		    var answer = storeManagementService.ViewStoreHistory();
 		    return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
 		}
+
+	    public IActionResult ProductsDiscountManaging(int systemId, string state, string message, string store)
+	    {
+		    var userService = MarketServer.Users[systemId];
+		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+		    var answer = storeShoppingService.ViewStoreStock(store);
+		    return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
+		}
+
+	    public IActionResult AddDiscountPage(int systemId, string state, string message, string store)
+	    {
+		    return View(new StoreItemModel(systemId, state, message, store));
+	    }
+
+	    public IActionResult AddDiscount(int systemId, string state, string message, string store, string productName,
+		    DateTime startDate, DateTime endDate, int discountAmount, string discountType, bool presenteges)
+	    {
+		    var userService = MarketServer.Users[systemId];
+		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    var answer = storeManagementService.AddDiscountToProduct(productName, startDate, endDate, discountAmount,
+			    discountType, presenteges);
+		    if (answer.Status == Success)
+		    {
+			    return RedirectToAction("ProductsDiscountManaging", new { systemId, state, message = answer.Answer, store });
+		    }
+
+			return RedirectToAction("AddDiscountPage", new { systemId, state, message = answer.Answer, store });
+		}
 	}
 }
