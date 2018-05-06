@@ -34,5 +34,37 @@ namespace MarketWeb.Controllers
 			}
 			return RedirectToAction("ManageStoreOptions", new { systemId, state , message = "The user doesn't have the permission to operate this action!",store});
 		}
-    }
+
+	    public IActionResult ManageProducts(int systemId, string state, string message, string store)
+	    {
+		    var userService = MarketServer.users[systemId];
+		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+		    var answer = storeShoppingService.ViewStoreStock(store);
+			return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
+		}
+
+	    public IActionResult RemoveProduct(int systemId, string state, string store, string product)
+	    {
+			var userService = MarketServer.users[systemId];
+		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    var answer = storeManagementService.RemoveProduct(product);
+			return RedirectToAction("ManageProducts" , new { systemId, state , message = "", store});
+
+		}
+
+	    public IActionResult EditProduct()
+	    {
+		    return null;
+	    }
+
+	    public IActionResult AddQuanitityToProduct()
+	    {
+		    return null;
+	    }
+
+	    public IActionResult AddNewProduct()
+	    {
+		    return null;
+	    }
+	}
 }
