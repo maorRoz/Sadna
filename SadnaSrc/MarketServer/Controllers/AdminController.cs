@@ -17,7 +17,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult RemoveUserView(int systemId, string state, string message, bool valid)
         {
-            var userService = MarketServer.users[systemId];
+            var userService = MarketServer.Users[systemId];
             string[] usersData = userService.ViewUsers().ReportList;
             ViewBag.valid = valid;
             return View(new UserListModel(systemId, state, message, usersData));
@@ -25,7 +25,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult ToRemoveUser(int systemId, string state, string toDeleteName)
         {
-            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.users[systemId]);
+            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
             var answer = adminService.RemoveUser(toDeleteName);
             return RedirectToAction("RemoveUserView", new
             {
@@ -44,7 +44,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult AdminViewPurchaseHistory(int systemId, string state, string viewSubject, string viewKind)
         {
-            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.users[systemId]);
+            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
             var answer = viewKind == "Store"
                 ? adminService.ViewPurchaseHistoryByStore(viewSubject)
                 : adminService.ViewPurchaseHistoryByUser(viewSubject);

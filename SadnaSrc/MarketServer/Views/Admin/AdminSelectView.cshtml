@@ -12,12 +12,12 @@
 			<div id="alertContainer">
 
 				@if (Model.Message != null)
-		{
-			<div class='error'>
-				<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-				@Model.Message
-			</div>
-}
+		        {
+			        <div class='error'>
+				    <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+				    @Model.Message
+			         </div>
+                }
 
 			</div>
 			@using (Html.BeginForm("AdminViewPurchaseHistory", "Admin", new { Model.SystemId,Model.State }))
