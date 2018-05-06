@@ -40,7 +40,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                answer = new StoreAnswer(exe);
+                answer = new StoreAnswer(StoreEnum.UpdateProductFail,"Product was not added!");
                 return null;
             }
             catch (MarketException)

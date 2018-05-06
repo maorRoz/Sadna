@@ -60,6 +60,7 @@
 					</a>
 				</td>
 
+
 }
 else
 {
@@ -72,7 +73,7 @@ else
 				}
 			</table>
 			
-			@using (Html.BeginForm("AddNewProduct", "StoreManagement", new {Model.SystemId,Model.State}))
+			@using (Html.BeginForm("AddNewProductPage", "StoreManagement", new {Model.SystemId,Model.State, store = Model.StoreName }))
 			{
 				<input type="submit" class="btn btn-primary" value="Add new Product">
 			}

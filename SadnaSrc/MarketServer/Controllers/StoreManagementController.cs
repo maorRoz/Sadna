@@ -87,7 +87,7 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.Users[systemId];
 		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 		    var answer = storeManagementService.AddQuanitityToProduct(product,1);
-		    return RedirectToAction("ManageProducts", new { systemId, state, message = "", store });
+		    return RedirectToAction("ManageProducts", new { systemId, state, message = answer.Answer, store });
 		}
 
 	    public IActionResult AddNewProductPage(int systemId, string state, string message, string store)
@@ -100,7 +100,11 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.Users[systemId];
 		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 		    var answer = storeManagementService.AddNewProduct(product, price, description, quantity);
-		    return RedirectToAction("ManageProducts", new { systemId, state, message = "", store });
+		    if (answer.Status == 0)
+		    {
+			    return RedirectToAction("ManageProducts", new { systemId, state, message = answer.Answer, store });
+			}
+		    return RedirectToAction("AddNewProductPage", new { systemId, state, message = answer.Answer, store });
 		}
 	}
 }

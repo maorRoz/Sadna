@@ -47,10 +47,10 @@ namespace SadnaSrc.StoreCenter
             return slave.Answer;
         }
 
-        public MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity)
+        public MarketAnswer AddNewProduct(string name, double price, string description, int quantity)
         {
             AddNewProductSlave slave = new AddNewProductSlave(_storeManager, _storeName, storeDL);
-            StockListItem stockListItem = slave.AddNewProduct(_name, _price, _description, quantity);
+            StockListItem stockListItem = slave.AddNewProduct(name, price, description, quantity);
             if (stockListItem != null)
                 stockListItemToRemove.AddLast(stockListItem);
             return slave.answer;
