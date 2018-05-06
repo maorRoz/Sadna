@@ -39,7 +39,7 @@ namespace MarketWeb.Controllers
 		    var userService = MarketServer.Users[systemId];
 		    var answer = userService.GetStoreManagerPolicies(store);
 			string[] userPolicies = answer.ReportList;
-		    if (userPolicies.Contains(option))
+		    if (userPolicies.Contains(option) || userPolicies.Contains("StoreOwner"))
 		    {
 			    return RedirectToAction(option, new { systemId, state ,message = "", store } );
 			}
