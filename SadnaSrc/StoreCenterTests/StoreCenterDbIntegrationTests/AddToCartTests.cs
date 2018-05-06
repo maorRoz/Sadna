@@ -38,7 +38,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
         }
         [TestMethod]
-        public void AddToCartWhenHasNoPremmision()
+        public void AddToCartWhenHasNoPermission()
         {
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             Store find = handler.GetStorebyName("X");
@@ -64,24 +64,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 999999);
             Assert.AreEqual((int)StoreEnum.QuantityIsTooBig, ans.Status);
         }
-        [TestMethod]
-        public void AddToCartWhenQuantityisZero()
-        {
-            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
-            liorSession.MakeGuest();
-            Store find = handler.GetStorebyName("X");
-            MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", 0);
-            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
-        }
-        [TestMethod]
-        public void AddToCartWhenQuantityisNegative()
-        {
-            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
-            liorSession.MakeGuest();
-            Store find = handler.GetStorebyName("X");
-            MarketAnswer ans = liorSession.AddProductToCart("X", "BOX", -1);
-            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
-        }
+        
         [TestMethod]
         public void AddToCartSuccess()
         {
