@@ -14,7 +14,7 @@ namespace SadnaSrc.StoreCenter
 
         public Store store;
         StockSyncher global;
-        private IUserSeller _storeManager;
+        private readonly IUserSeller _storeManager;
         public string _storeName;
         private IOrderSyncher syncher;
         private LinkedList<StockListItem> stockListItemToRemove;
@@ -45,20 +45,20 @@ namespace SadnaSrc.StoreCenter
             return slave.Answer;
         }
 
-        public MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity)
+        public MarketAnswer AddNewProduct(string name, double price, string description, int quantity)
         {
             AddNewProductSlave slave = new AddNewProductSlave(_storeManager, _storeName, storeDL);
-            StockListItem stockListItem = slave.AddNewProduct(_name, _price, _description, quantity);
+            StockListItem stockListItem = slave.AddNewProduct(name, price, description, quantity);
             if (stockListItem != null)
                 stockListItemToRemove.AddLast(stockListItem);
             return slave.answer;
         }
 
-        public MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
+        public MarketAnswer AddNewLottery(string name, double price, string description, DateTime startDate,
             DateTime endDate)
         {
             AddNewLotterySlave slave = new AddNewLotterySlave(_storeName, _storeManager, storeDL);
-            StockListItem stockListItem = slave.AddNewLottery(_name, _price, _description, startDate, endDate);
+            StockListItem stockListItem = slave.AddNewLottery(name, price, description, startDate, endDate);
             if (stockListItem != null)
                 stockListItemToRemove.AddLast(stockListItem);
             return slave.answer;
@@ -125,6 +125,32 @@ namespace SadnaSrc.StoreCenter
             AddQuanitityToProductSlave slave = new AddQuanitityToProductSlave(_storeName, _storeManager, storeDL);
             slave.AddQuanitityToProduct(productName, quantity);
             return slave.answer;
+        }
+
+        public MarketAnswer AddCategory(string categoryName)
+        {
+            AddCategorySlave slave = new AddCategorySlave(_storeName, _storeManager, storeDL);
+            Category category =  slave.AddCategory(categoryName);
+            return slave.Answer;
+        }
+        public MarketAnswer RemoveCategory(string categoryName)
+        {
+            RemoveCategorySlave slave = new RemoveCategorySlave(_storeName, _storeManager, storeDL);
+            slave.RemoveCategory(categoryName);
+            return slave.Answer;
+        }
+        public MarketAnswer AddProductToCategory(string categoryName, string productName)
+        {
+            AddProductToCategorySlave slave = new AddProductToCategorySlave(_storeName, _storeManager, storeDL);
+            slave.AddProductToCategory(categoryName, productName);
+            return slave.Answer;
+        }
+
+        public MarketAnswer RemoveProductFromCategory(string categoryName, string productName)
+        {
+            RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave(_storeName, _storeManager, storeDL);
+            slave.RemoveProductFromCategory(categoryName, productName);
+            return slave.Answer;
         }
     }
 }

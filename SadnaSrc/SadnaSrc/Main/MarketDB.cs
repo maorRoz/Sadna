@@ -67,7 +67,9 @@ namespace SadnaSrc.Main
                 CreatePurchaseHistoryTable(),
                 CreateOrderTable(),
                 CreateOrderItemTable(),
-                CreateNotificationsTable()
+                CreateNotificationsTable(),
+                CreateCategoryTable(),
+                CreateCategoryProductConnectionTable()
             };
 
             for (var i = 0; i < createTableStrings.Length; i++)
@@ -108,6 +110,8 @@ namespace SadnaSrc.Main
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P18', 'Pizza', 60, 'food')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P19', '#9', 5, 'its just a fucking burger, ok?')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P20', '#45 With Cheese', 18, 'its just a fucking cheesburger, ok?')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P21', 'Fraid Egg', 10, 'yami')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P22', 'OnePunchManPoster', 10, 'yami')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D1', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D2', 'HIDDEN', '01/01/2019', '31/12/2030', 50, 'true')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D3', 'HIDDEN', '01/01/2017', '1/03/2017', 50, 'true')",
@@ -134,6 +138,10 @@ namespace SadnaSrc.Main
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P15', 10, 'null', 'Lottery')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P16', 10, 'null', 'Lottery')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P17', 10, 'null', 'Lottery')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P21', 10, 'null', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P22', 10, 'null', 'Immediate')",
+                "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
+                "INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C1', 'P21')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L1', 'P1', 100, 0 , 'X' ,'01/01/2018', '31/12/2018', 'true')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L2', 'P15', 200, 0 , 'T' ,'01/01/2018', '31/12/2018', 'false')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L3', 'P16', 200, 0 , 'T' ,'01/01/2018', '31/12/2018', 'true')",
@@ -229,8 +237,9 @@ namespace SadnaSrc.Main
                 "PurchaseHistory",
                 "Orders",
                 "OrderItem",
-                "Notifications"
-
+                "Notifications",
+                "Category",
+                "CategoryProductConnection"
             };
 
             for (int i = 0; i < tableNames.Length; i++)
@@ -435,6 +444,22 @@ namespace SadnaSrc.Main
                                     [Status]            TEXT,
                                     FOREIGN KEY([Receiver])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([NotificationID])
+                                    )";
+        }
+        private static string CreateCategoryTable()
+        {
+            return @"Create TABLE IF NOT EXISTS [Category] (
+                                    [SystemID]    TEXT,
+                                    [name]          TEXT,
+                                    PRIMARY KEY([SystemID])
+                                    )";
+        }
+        private string CreateCategoryProductConnectionTable()
+        {
+            return @"Create TABLE IF NOT EXISTS [CategoryProductConnection] (
+                                    [CategoryID]    TEXT,
+                                    [ProductID]          TEXT,
+                                    PRIMARY KEY([CategoryID], [ProductID])
                                     )";
         }
         public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
