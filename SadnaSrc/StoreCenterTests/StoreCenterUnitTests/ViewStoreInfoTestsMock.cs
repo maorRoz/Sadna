@@ -49,5 +49,11 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 slave.ViewStoreInfo("X");
                 Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
             }
-        }
+            [TestCleanup]
+            public void CleanUpOpenStoreTest()
+            {
+                MarketDB.Instance.CleanByForce();
+                MarketYard.CleanSession();
+            }
+    }
 }

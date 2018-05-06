@@ -34,8 +34,8 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeBridgeGuest.GetStoreShoppingService(_userWatchStore.GetUserSession());
 			MarketAnswer storeDetails = _storeBridgeGuest.ViewStoreInfo("OOF");
 			Assert.AreEqual((int)ViewStoreStatus.Success,storeDetails.Status);
-			string expectedAnswer = "StoreName: OOF StoreAddress: BASA";
-			string receivedAnswer = "StoreName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
+			string expectedAnswer = "_storeName: OOF StoreAddress: BASA";
+			string receivedAnswer = "_storeName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
 			Assert.AreEqual(expectedAnswer, receivedAnswer);
 
         }
@@ -45,8 +45,8 @@ namespace BlackBox.StoreBlackBoxTests
         {
             MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("OOF");
             Assert.AreEqual((int)ViewStoreStatus.Success, storeDetails.Status);
-            string expectedAnswer = "StoreName: OOF StoreAddress: BASA";
-            string receivedAnswer = "StoreName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
+            string expectedAnswer = "_storeName: OOF StoreAddress: BASA";
+            string receivedAnswer = "_storeName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
             Assert.AreEqual(expectedAnswer, receivedAnswer);
         }
 
