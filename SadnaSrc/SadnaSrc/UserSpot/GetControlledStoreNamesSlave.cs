@@ -31,7 +31,8 @@ namespace SadnaSrc.UserSpot
             {
 				ApproveEnetered();
                 MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved all store names...");
-	            string[] storeNames = _userDB.GetAllActiveStoreNames();
+	            _userDB.GetAllActiveStoreNames();
+				string[] storeNames = _userDB.GetAllActiveStoreNames();
 	            string[] storesUser = _user.GetControlledStores();
 	            List<string> res = new List<string>();
 	            foreach (string userStore in storesUser)

@@ -12,7 +12,9 @@ namespace MarketWeb.Controllers
 {
     public class StoreManagementController : Controller
     {
-        public IActionResult StoreControl(int systemId, string state)
+	    private const int Success = 0;
+
+		public IActionResult StoreControl(int systemId, string state)
         {
             var userService = MarketServer.Users[systemId];
 	        string[] storesData;
@@ -104,6 +106,14 @@ namespace MarketWeb.Controllers
 			    return RedirectToAction("ManageProducts", new { systemId, state, message = answer.Answer, store });
 			}
 		    return RedirectToAction("AddNewProductPage", new { systemId, state, message = answer.Answer, store });
+		}
+
+	    public IActionResult ViewPurchaseHistory(int systemId, string state, string message, string store)
+	    {
+		    var userService = MarketServer.Users[systemId];
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    var answer = storeManagementService.ViewStoreHistory();
+		    return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
 		}
 	}
 }
