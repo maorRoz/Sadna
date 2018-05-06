@@ -12,14 +12,16 @@ using System.Threading.Tasks;
 namespace StoreCenterTests.StoreCenterUnitTests
 {
         [TestClass]
-        public class ChangeToLotteryTestsMock
+        public class ChangeToImmediateTestsMock
         {
             private Mock<IStoreDL> handler;
             private Mock<IUserSeller> userService;
+            private Mock<IOrderSyncher> syncer;
             private Mock<IMarketDB> marketDbMocker;
 
 
             //TODO: improve this
+
 
             [TestInitialize]
             public void BuildStore()
@@ -29,31 +31,32 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 MarketLog.SetDB(marketDbMocker.Object);
                 handler = new Mock<IStoreDL>();
                 userService = new Mock<IUserSeller>();
+                syncer = new Mock<IOrderSyncher>();
             }
             [TestMethod]
-            public void ChangeToLotteryFail()
+            public void changeToImmediateFail()
             {
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
-                ChangeProductPurchaseWayToLotterySlave slave = new ChangeProductPurchaseWayToLotterySlave("noStore", userService.Object, handler.Object);
-                slave.ChangeProductPurchaseWayToLottery("newProd", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
+                ChangeProductPurchaseWayToImmediateSlave slave = new ChangeProductPurchaseWayToImmediateSlave("noStore", userService.Object,syncer.Object, handler.Object);
+                slave.ChangeProductPurchaseWayToImmediate("newProd");
                 Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
             }
             [TestMethod]
-            public void ChangeToLotteryPass()
+            public void changeToImmediatePass()
             {
                 Product P = new Product("NEWPROD", 150, "desc");
-                Discount discount = new Discount(discountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
-                StockListItem SLI = new StockListItem(10, P, discount, PurchaseEnum.Immediate, "BLA");
-                
+                Discount discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
+                StockListItem SLI = new StockListItem(10, P, discount, PurchaseEnum.Lottery, "BLA");
+                LotterySaleManagmentTicket LSMT = new LotterySaleManagmentTicket("X", P, DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
 
                 handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
                 handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns(P);
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
                 handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(SLI);
-                
-                ChangeProductPurchaseWayToLotterySlave slave = new ChangeProductPurchaseWayToLotterySlave("X", userService.Object, handler.Object);
-                slave.ChangeProductPurchaseWayToLottery("NEWPROD", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
-                Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
+                handler.Setup(x => x.GetLotteryByProductID(P.SystemId)).Returns(LSMT);
+                ChangeProductPurchaseWayToImmediateSlave slave = new ChangeProductPurchaseWayToImmediateSlave("X", userService.Object, syncer.Object, handler.Object);
+                slave.ChangeProductPurchaseWayToImmediate("NEWPROD");
+                    Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
             }
 
 
@@ -65,4 +68,3 @@ namespace StoreCenterTests.StoreCenterUnitTests
             }
         }
     }
-

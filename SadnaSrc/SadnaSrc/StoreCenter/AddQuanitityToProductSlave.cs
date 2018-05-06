@@ -37,7 +37,7 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"
                                              + _storeName + " and therefore has been denied. Error message has been created!");
-                answer = new StoreAnswer(StoreEnum.NoPremmision, e.GetErrorMessage());
+                answer = new StoreAnswer(StoreEnum.NoPermission, e.GetErrorMessage());
             }
         }
 

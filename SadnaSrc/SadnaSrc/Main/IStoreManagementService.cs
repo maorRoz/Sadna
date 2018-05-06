@@ -31,8 +31,8 @@ namespace SadnaSrc.Main
          * Discounts Management
          **/
 
-        MarketAnswer AddDiscountToProduct(string productName, DateTime _startDate, DateTime _endDate, 
-            int _discountAmount,string discountType, bool presenteges);
+        MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, 
+        int discountAmount,string discountType, bool presenteges);
         MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue);
         MarketAnswer RemoveDiscountFromProduct(string productName);
         /**
@@ -51,7 +51,7 @@ namespace SadnaSrc.Main
         CloseStoreFail,
         StoreNotExists,
         ProductNameNotAvlaiableInShop,
-        NoPremmision,
+        NoPermission,
         QuantityIsNegative,
         QuantityIsTooBig,
         EnumValueNotExists,
@@ -61,16 +61,15 @@ namespace SadnaSrc.Main
     {
         Success,
         NoStore,
-        NoProduct,
         DatesAreWrong,
         AmountIsHundredAndpresenteges,
         DiscountGreaterThenProductPrice,
-        thereIsAlreadyAnotherDiscount,
+        ThereIsAlreadyAnotherDiscount,
         ProductNotFound,
         DiscountNotFound,
-        discountAmountIsNegativeOrZero,
-        discountAmountIsNotNumber,
-        precentegesIsNotBoolean,
+        DiscountAmountIsNegativeOrZero,
+        DiscountAmountIsNotNumber,
+        PrecentegesIsNotBoolean,
         NoLegalAttrebute
     }
     public enum ManageStoreStatus
@@ -108,13 +107,13 @@ namespace SadnaSrc.Main
         Success,
         StoreNotExists,
         ProductNotFound,
-        quantityIsGreaterThenStack,
+        QuantityIsGreaterThenStack,
         ProductHasNoDiscount,
         DiscountCodeIsWrong,
         DiscountExpired,
         DiscountNotStarted,
-        quanitityIsNonPositive,
-        discountIsNotHidden
+        QuanitityIsNonPositive,
+        DiscountIsNotHidden
     }
     public enum ChangeToLotteryEnum
     {
@@ -127,6 +126,6 @@ namespace SadnaSrc.Main
 
 
     public enum PurchaseEnum { Immediate, Lottery };
-    public enum discountTypeEnum { Hidden, Visible };
+    public enum DiscountTypeEnum { Hidden, Visible };
     public enum LotteryTicketStatus { Waiting, Winning, Losing, Cancel };
 }

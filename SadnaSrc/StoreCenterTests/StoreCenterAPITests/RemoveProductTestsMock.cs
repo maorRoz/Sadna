@@ -45,7 +45,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void RemoveProductPass()
         {
             Product P = new Product("NEWPROD", 150, "desc");
-            Discount discount = new Discount(discountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
+            Discount discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
             StockListItem SLI = new StockListItem(10, P, discount, PurchaseEnum.Immediate, "BLA");
             handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
             handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns(P);

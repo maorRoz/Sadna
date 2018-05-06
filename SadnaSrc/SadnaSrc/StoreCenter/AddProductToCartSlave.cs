@@ -44,7 +44,7 @@ namespace SadnaSrc.StoreCenter
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                answer = new StoreAnswer(StoreEnum.NoPremmision,
+                answer = new StoreAnswer(StoreEnum.NoPermission,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
         }
@@ -65,7 +65,7 @@ namespace SadnaSrc.StoreCenter
 
         private void CheckIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
         {
-            if (stockListItem.Discount?.discountType != discountTypeEnum.Visible) return;
+            if (stockListItem.Discount?.discountType != DiscountTypeEnum.Visible) return;
             if (stockListItem.Discount.CheckTime())
                 stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
         }

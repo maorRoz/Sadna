@@ -41,7 +41,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditDiscount("BOX", "DiscountAmount", "10");
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
         [TestMethod]
         public void EditDiscountWhenProductNotExists()
@@ -138,7 +138,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditDiscount("BOX", "DiscountAmount", "ag88ado");
-            Assert.AreEqual((int)DiscountStatus.discountAmountIsNotNumber, ans.Status);
+            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNotNumber, ans.Status);
         }
         [TestMethod]
         public void EditDiscountDiscountAmountIsMoreThen100AndPercentages()
@@ -181,7 +181,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditDiscount("BOX", "DiscountAmount", "-30");
-            Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
+            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, ans.Status);
         }
         [TestMethod]
         public void EditDiscountDiscountAmountIsZero()
@@ -190,7 +190,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditDiscount("BOX", "DiscountAmount", "0");
-            Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
+            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, ans.Status);
         }
         
         [TestMethod]
@@ -200,7 +200,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditDiscount("BOX", "Percentages", "agado");
-            Assert.AreEqual((int)DiscountStatus.precentegesIsNotBoolean, ans.Status);
+            Assert.AreEqual((int)DiscountStatus.PrecentegesIsNotBoolean, ans.Status);
         }
         [TestMethod]
         public void EditDiscountPercentagesWhenDiscountAmountIsMoreThen100()
@@ -305,7 +305,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             liorSession.AddNewProduct("NEWPROD", 150, "desc", 3);
             liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, "VISIBLE", false);
             var product = handler.GetProductFromStore("X", "NEWPROD");
-            product.Discount.discountType = discountTypeEnum.Hidden;
+            product.Discount.discountType = DiscountTypeEnum.Hidden;
             MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "discountType", "Hidden");
             StockListItem find = handler.GetProductFromStore("X", "NEWPROD");
             Assert.AreEqual((int)find.Discount.discountType, (int)product.Discount.discountType);

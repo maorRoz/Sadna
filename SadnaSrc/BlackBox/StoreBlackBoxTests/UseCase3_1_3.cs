@@ -149,7 +149,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManage2 = StoreManagementDriver.getBridge();
 			_storeManage2.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.EditProduct("bambush", "BasePrice", "100");
-			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission,res2.Status);
 
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
@@ -226,7 +226,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManage2 = StoreManagementDriver.getBridge();
 			_storeManage2.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.AddQuanitityToProduct("bamba", 30);
-			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission,res2.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			string[] expectedResult = { " name: bamba base price: 90 description: nice snack Discount: {null} Purchase Way: Immediate Quantity: 30" };

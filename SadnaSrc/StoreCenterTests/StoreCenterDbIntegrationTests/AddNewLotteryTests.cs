@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
+    //TODO: maybe remove these tests
+
     [TestClass]
     public class AddNewLotteryTests
     {
@@ -24,9 +26,10 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             market = MarketYard.Instance;
             handler = StoreDL.Instance;
             userService = market.GetUserService();
+            MarketYard.SetDateTime(new DateTime(2018, 4, 14));
         }
         [TestMethod]
-        public void addProductWhenStoreNotExists()
+        public void AddLotteryWhenStoreNotExists()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
@@ -35,16 +38,16 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenHasNoPremmision()
+        public void AddLotteryWhenHasNoPremmision()
         {
             userService.EnterSystem();
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddNewLottery("name0", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenProductNameIsNotAvailableInStore()
+        public void AddLotteryWhenProductNameIsNotAvailableInStore()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
@@ -53,16 +56,16 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, ans.Status);
         }
         [TestMethod]
-        public void addProductWhenDatesAreWrong()
+        public void AddLotteryOldDates()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddNewLottery("name0", 1, "des", DateTime.Parse("30/12/2019"), DateTime.Parse("30/10/2019"));
+            MarketAnswer ans = liorSession.AddNewLottery("name0", 1, "des", DateTime.Parse("30/12/2000"), DateTime.Parse("30/10/2000"));
             Assert.AreEqual((int)StoreEnum.DatesAreWrong, ans.Status);
         }
         [TestMethod]
-        public void addProductSuccess()
+        public void AddLotterySuccess()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
+
+    //TODO: maybe remove these tests
     [TestClass]
     public class AddDiscountTests
     {
@@ -27,8 +29,9 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService = market.GetUserService();
             MarketYard.SetDateTime(new DateTime(2018,4,14));
         }
+
         [TestMethod]
-        public void addDiscountWhenStoreNotExists()
+        public void AddDiscountWhenStoreNotExists()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
@@ -36,118 +39,49 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.NoStore, ans.Status);
         }
+
         [TestMethod]
-        public void addDiscountWhenHasNoPremission()
+        public void AddDiscountWhenHasNoPremission()
         {
             userService.EnterSystem();
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
+
         [TestMethod]
-        public void addDisocuntWhenProductNotExists()
+        public void AddDisocuntWhenProductNotExists()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Lox", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Silver BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.ProductNotFound, ans.Status);
         }
-            [TestMethod]
-        public void addDiscountWhenStartDateIsOld()
+
+        [TestMethod]
+        public void AddDiscountOldDates()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/1990"), DateTime.Parse("31/01/2019"), 50, "HIDDEN", true);
+            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2000"), DateTime.Parse("31/01/2000"), 50, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
         }
+
         [TestMethod]
-        public void addDiscountWhenEndDateIsOld()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/1990"), 50, "HIDDEN", true);
-            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
-        }
-        [TestMethod]
-        public void addDiscountWhenEndDateIsSmallerThenStartDateIsOld()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("31/01/2018"), 50, "HIDDEN", true);
-            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
-        }
-        [TestMethod]
-        public void addDiscountWhenEndDateIsEqualToStartDateIsOld()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("01/01/2019"), 50, "HIDDEN", true);
-            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
-        }
-        [TestMethod]
-        public void addDiscountWhenDiscountAmountIsMoreThen100Precent()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 150, "HIDDEN", true);
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
-        }
-        [TestMethod]
-        public void addDiscountWhenDiscountAmountIsEqualTo100Precent()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 100, "HIDDEN", true);
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
-        }
-        [TestMethod]
-        public void addDiscountWhenDiscountAmountNegative()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), -5, "HIDDEN", false);
-            Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
-        }
-        [TestMethod]
-        public void addDiscountWhenDiscountAmountIsZero()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 0, "HIDDEN", false);
-            Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, ans.Status);
-        }
-        [TestMethod]
-        public void addDiscountWhenDiscountAmountIsMoreThenProductPrice()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddDiscountToProduct("Golden BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 9000, "HIDDEN", false);
-            Assert.AreEqual((int)DiscountStatus.DiscountGreaterThenProductPrice, ans.Status);
-        }
-            [TestMethod]
-        public void addDiscountWhenProductHasAnExistingDiscount()
+        public void AddDiscountWhenProductHasAnExistingDiscount()
         {
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddDiscountToProduct("BOX", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
-            Assert.AreEqual((int)DiscountStatus.thereIsAlreadyAnotherDiscount, ans.Status);
+            Assert.AreEqual((int)DiscountStatus.ThereIsAlreadyAnotherDiscount, ans.Status);
         }
         [TestMethod]
-        public void addDiscountsuccessfully()
+        public void AddDiscountsuccessfully()
         {
-
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
