@@ -18,19 +18,17 @@ namespace SadnaSrc.StoreCenter
 
         public PurchasePolicy EditPolicy(string product, int newAmount, bool max)
         {
-            MarketLog.Log("StoreCenter", "trying to edit policy of store");
-            MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
                 StockListItem item = GetItem(product);
                 CheckAmount(newAmount);
-                PurchasePolicy policy = item.Policy;
+                PurchasePolicy policy = item.GetPolicy();
                 if (max)
                     policy._maxAmount = newAmount;
                 else
                     policy._minAmount = newAmount;
                 DataLayerInstance.EditPurchasePolicy(item, policy);
-                MarketLog.Log("StoreCenter", "purchase policy added successfully");
+                MarketLog.Log("StoreCenter", "purchase policy updated successfully");
                 answer = new StoreAnswer(StoreEnum.Success, "purchase policy updated successfully");
                 return policy;
             }
@@ -48,12 +46,10 @@ namespace SadnaSrc.StoreCenter
 
         public PurchasePolicy AddPolicyConstraints(string product, int type, string value)
         {
-            MarketLog.Log("StoreCenter", "trying to add discount to product in store");
-            MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
                 StockListItem item = GetItem(product);
-                PurchasePolicy policy = item.Policy;
+                PurchasePolicy policy = item.GetPolicy();
                 switch (type)
                 {
                     case 1:
@@ -85,12 +81,10 @@ namespace SadnaSrc.StoreCenter
 
         public PurchasePolicy RemovePolicyConstraints(string product, int type, string value)
         {
-            MarketLog.Log("StoreCenter", "trying to add discount to product in store");
-            MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
                 StockListItem item = GetItem(product);
-                PurchasePolicy policy = item.Policy;
+                PurchasePolicy policy = item.GetPolicy();
                 switch (type)
                 {
                     case 1:
@@ -131,6 +125,8 @@ namespace SadnaSrc.StoreCenter
 
         private StockListItem GetItem(string product)
         {
+            MarketLog.Log("StoreCenter", "trying to edit policy of product in store");
+            MarketLog.Log("StoreCenter", "check if store exists");
             checkIfStoreExistsAndActive();
             MarketLog.Log("StoreCenter", " store exists");
             MarketLog.Log("StoreCenter", " check if has premmision to edit store");

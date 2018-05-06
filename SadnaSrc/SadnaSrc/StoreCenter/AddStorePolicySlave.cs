@@ -18,16 +18,16 @@ namespace SadnaSrc.StoreCenter
 
         public PurchasePolicy AddPolicy(int minAmount, int maxAmount)
         {
-            MarketLog.Log("StoreCenter", "trying to add discount to product in store");
+            MarketLog.Log("StoreCenter", "trying to add policy to store");
             MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
                 checkIfStoreExistsAndActive();
                 MarketLog.Log("StoreCenter", " store exists");
-                MarketLog.Log("StoreCenter", " check if has premmision to edit products");
+                MarketLog.Log("StoreCenter", " check if has premmision to edit store");
                 _storeManager.CanDeclarePurchasePolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
-                MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
+                MarketLog.Log("StoreCenter", " check if store " + _storeName + "exists");
                 Store store = DataLayerInstance.GetStorebyName(_storeName);
                 MarketLog.Log("StoreCenter", "check that amounts are OK");
                 CheckAmounts(minAmount, maxAmount);

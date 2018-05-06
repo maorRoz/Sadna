@@ -128,11 +128,13 @@ namespace SadnaSrc.Main
     public enum PurchasePolicyStatus
     {
         UserBlocked,
-        AmountExceeded
+        AmountExceeded,
+        NoPolicy
     }
 
 
     public enum PurchaseEnum { Immediate, Lottery };
     public enum discountTypeEnum { Hidden, Visible };
     public enum LotteryTicketStatus { Waiting, Winning, Losing, Cancel };
+    public enum PolicyConstraints { Blocked, Bypass, Relevant };
 }

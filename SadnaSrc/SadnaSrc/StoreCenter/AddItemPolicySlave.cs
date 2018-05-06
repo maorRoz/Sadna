@@ -27,8 +27,6 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
                 _storeManager.CanDeclarePurchasePolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
-                MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
-                Store store = DataLayerInstance.GetStorebyName(_storeName);
                 MarketLog.Log("StoreCenter", "check that amounts are OK");
                 CheckAmounts(minAmount, maxAmount);
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);

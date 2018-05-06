@@ -94,5 +94,12 @@ namespace SadnaSrc.StoreCenter
             if (Policy != null)
                 Policy.Isvalid(quantity, user);
         }
+
+        public PurchasePolicy GetPolicy()
+        {
+            if (Policy == null)
+                throw new StoreException(PurchasePolicyStatus.NoPolicy, "Purchase policy isn't set for this item");
+            return Policy;
+        }
     }
 }
