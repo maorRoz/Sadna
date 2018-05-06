@@ -16,6 +16,8 @@ namespace SadnaSrc.StoreCenter
 
         public PurchaseEnum PurchaseWay { get; set; }
 
+        public PurchasePolicy Policy { get; set; }
+
         public StockListItem(int quantity, Product product, Discount discount, PurchaseEnum purchaseWay,
             string id)
         {
@@ -85,6 +87,19 @@ namespace SadnaSrc.StoreCenter
                 "'" + ifDiscountNotExists + "'",
                 "'" + EnumStringConverter.PrintEnum(PurchaseWay) + "'"
             };
+        }
+
+        public void CheckPolicy(int quantity, string user)
+        {
+            if (Policy != null)
+                Policy.Isvalid(quantity, user);
+        }
+
+        public PurchasePolicy GetPolicy()
+        {
+            if (Policy == null)
+                throw new StoreException(PurchasePolicyStatus.NoPolicy, "Purchase policy isn't set for this item");
+            return Policy;
         }
     }
 }

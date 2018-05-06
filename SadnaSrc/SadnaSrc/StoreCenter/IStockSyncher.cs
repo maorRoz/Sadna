@@ -16,6 +16,6 @@ namespace SadnaSrc.StoreCenter
 
         bool HasActiveLottery(string storeName, string productName, double priceWantToPay);
         void UpdateLottery(string storeName, string ProductName, double moenyPayed, string UserName, IOrderSyncher syncher,int cheatCode);
-
+        void CheckPurchasePolicy(string[] store, string[] product, int[] quantity, string user);
     }
 }

@@ -13,6 +13,7 @@ namespace SadnaSrc.StoreCenter
         public IStoreDL DataLayer { get; }
 
         public static StockSyncher Instance => instance ?? (instance = new StockSyncher());
+
         private StockSyncher()
         {
             DataLayer = StoreDL.Instance;
@@ -24,7 +25,6 @@ namespace SadnaSrc.StoreCenter
             CheckThatProductExitst(store, productName);
             return DataLayer.GetProductFromStore(store, productName);
         }
-
         
 
         public void UpdateQuantityAfterPurchase(string storeName, string productName, int quantity)
@@ -108,6 +108,20 @@ namespace SadnaSrc.StoreCenter
             if (priceWantToPay <= 0)
                 return false;
             return lotto.CanPurchase(priceWantToPay) && lotto.CheckDatesWhenPurches();
+        }
+
+        public void CheckPurchasePolicy(string[] stores, string[] products, int[] quantities, string user)
+        {
+            for (int i = 0; i < stores.Length; i++)
+            {
+                //TODO: add a function somewhere to get a list of all global policies
+                //TODO: add a function somewhere that returns the store with its policy, or just the store policy
+                Store store = DataLayer.GetStorebyName(stores[i]);
+                store.CheckPolicy(quantities[i], user);
+                //TODO: same for StockListItem
+                StockListItem item = DataLayer.GetProductFromStore(stores[i], products[i]);
+                item.CheckPolicy(quantities[i], user);
+            }
         }
 
         

@@ -13,19 +13,21 @@ namespace SadnaSrc.StoreCenter
     public class Store
     {
         public string SystemId { get; }
-        private readonly LinkedList<PurchasePolicy> purchasePolicy;
+        //private readonly LinkedList<PurchasePolicy> purchasePolicy;
         private bool isActive;
         public string Name { get; set; }
         public string Address { private get; set; }
 
         private static int storeIdCounter = FindMaxStoreId();
 
+        public PurchasePolicy Policy { get; set; }
+
         public Store(string name, string address)
         {
             SystemId = GetNextStoreId();
             Name = name;
             Address = address;
-            purchasePolicy = new LinkedList<PurchasePolicy>();
+            //purchasePolicy = new LinkedList<PurchasePolicy>();
             isActive = true;
         }
         public Store(string id, string name, string address)
@@ -33,7 +35,7 @@ namespace SadnaSrc.StoreCenter
             SystemId = id;
             Name = name;
             Address = address;
-            purchasePolicy = new LinkedList<PurchasePolicy>();
+            //purchasePolicy = new LinkedList<PurchasePolicy>();
             isActive = true;
         }
 
@@ -42,7 +44,7 @@ namespace SadnaSrc.StoreCenter
             SystemId = id;
             Name = name;
             Address = address;
-            purchasePolicy = new LinkedList<PurchasePolicy>();
+            //purchasePolicy = new LinkedList<PurchasePolicy>();
             GetActiveFromString(active);
         }
 
@@ -86,7 +88,7 @@ namespace SadnaSrc.StoreCenter
         {
             var hashCode = 501679021;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemId);
-            hashCode = hashCode * -1521134295 + EqualityComparer<LinkedList<PurchasePolicy>>.Default.GetHashCode(purchasePolicy);
+            //hashCode = hashCode * -1521134295 + EqualityComparer<LinkedList<PurchasePolicy>>.Default.GetHashCode(purchasePolicy);
             hashCode = hashCode * -1521134295 + isActive.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Address);
@@ -131,6 +133,19 @@ namespace SadnaSrc.StoreCenter
         {
             storeIdCounter++;
             return "S" + storeIdCounter;
+        }
+
+        public void CheckPolicy(int quantity, string user)
+        {
+            if(Policy != null)
+                Policy.Isvalid(quantity, user);
+        }
+
+        public PurchasePolicy GetPolicy()
+        {
+            if (Policy == null)
+                throw new StoreException(PurchasePolicyStatus.NoPolicy, "Purchase policy isn't set for this item");
+            return Policy;
         }
 
     }

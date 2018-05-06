@@ -31,6 +31,7 @@ namespace SadnaSrc.OrderPool
             try
             {
                 Order order = CreateOrderAllCart(UserName, UserAddress, coupons);
+                _storesSync.CheckPurchasePolicy(order);
                 orderId = order.GetOrderID();
                 ProcessOrder(order, CreditCard);
                 EmptyCart();
