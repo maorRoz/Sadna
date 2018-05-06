@@ -9,6 +9,16 @@ namespace SadnaSrc.PolicyComponent
     public class PolicyHandler : IPolicyHandler
     {
         public List<PurchasePolicy> policies;
+
+        private static PolicyHandler _instance;
+
+        public static PolicyHandler Instance => _instance ?? (_instance = new PolicyHandler());
+
+        private PolicyHandler()
+        {
+            policies = new List<PurchasePolicy>();
+        }
+
         public PurchasePolicy CreatePolicy(PolicyType type, string subject, OperatorType op, PurchasePolicy cond1,
             PurchasePolicy cond2)
         {
