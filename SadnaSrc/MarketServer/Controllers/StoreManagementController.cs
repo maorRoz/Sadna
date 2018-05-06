@@ -14,7 +14,18 @@ namespace MarketWeb.Controllers
         public IActionResult StoreControl(int systemId, string state)
         {
             var userService = MarketServer.Users[systemId];
-            string[] storesData = userService.GetControlledStoreNames().ReportList;
+	        string[] storesData;
+	        if (state.Equals("Admin"))
+	        {
+		        var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+		        storesData = storeShoppingService.GetAllStores().ReportList;
+
+	        }
+	        else
+	        {
+		        storesData = userService.GetControlledStoreNames().ReportList;
+			}
+            
             return View(new StoreListModel(systemId, state, storesData));
         }
 
@@ -25,19 +36,19 @@ namespace MarketWeb.Controllers
 
 	    public IActionResult ManageStore(int systemId, string state, string store, string option)
 	    {
-		    var userService = MarketServer.users[systemId];
+		    var userService = MarketServer.Users[systemId];
 		    var answer = userService.GetStoreManagerPolicies(store);
 			string[] userPolicies = answer.ReportList;
 		    if (userPolicies.Contains(option))
 		    {
-			    return RedirectToAction(option, new { systemId, state});
+			    return RedirectToAction(option, new { systemId, state ,message = "", store } );
 			}
 			return RedirectToAction("ManageStoreOptions", new { systemId, state , message = "The user doesn't have the permission to operate this action!",store});
 		}
 
 	    public IActionResult ManageProducts(int systemId, string state, string message, string store)
 	    {
-		    var userService = MarketServer.users[systemId];
+		    var userService = MarketServer.Users[systemId];
 		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 		    var answer = storeShoppingService.ViewStoreStock(store);
 			return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
@@ -45,7 +56,7 @@ namespace MarketWeb.Controllers
 
 	    public IActionResult RemoveProduct(int systemId, string state, string store, string product)
 	    {
-			var userService = MarketServer.users[systemId];
+			var userService = MarketServer.Users[systemId];
 		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 		    var answer = storeManagementService.RemoveProduct(product);
 			return RedirectToAction("ManageProducts" , new { systemId, state , message = "", store});

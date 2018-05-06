@@ -70,7 +70,11 @@ namespace SadnaSrc.UserSpot
             var storeNamesList = new List<string>();
             foreach (var policy in StorePolicies)
             {
-                storeNamesList.Add(policy.Store);
+	            string store = policy.Store;
+	            if (!storeNamesList.Contains(store))
+	            {
+		            storeNamesList.Add(store);
+				}	
             }
 
             return storeNamesList.ToArray();
