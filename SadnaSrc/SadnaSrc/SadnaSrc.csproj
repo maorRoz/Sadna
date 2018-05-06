@@ -136,6 +136,7 @@
     <Compile Include="MarketHarmony\PurchaseHistory.cs" />
     <Compile Include="OrderPool\StoreOrderTools.cs" />
     <Compile Include="PolicyComponent\Condition.cs" />
+    <Compile Include="PolicyComponent\IPolicyDL.cs" />
     <Compile Include="PolicyComponent\UsernameEquals.cs" />
     <Compile Include="PolicyComponent\AddressEquals.cs" />
     <Compile Include="PolicyComponent\PriceGreaterThan.cs" />
