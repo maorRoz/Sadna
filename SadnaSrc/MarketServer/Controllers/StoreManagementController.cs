@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MarketServer.Models;
 using MarketWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using SadnaSrc.Main;
@@ -63,11 +64,16 @@ namespace MarketWeb.Controllers
 
 		}
 
-	    public IActionResult EditProduct(int systemId, string state, string store, string product, string whatToEdit, string newValue)
+	    public IActionResult EditProductPage(int systemId, string state, string store, string product)
+	    {
+		    return View(new ProductInStoreModel(systemId, state, null , store, product));
+	    }
+
+		public IActionResult EditProduct(int systemId, string state, string store, string product, string whatToEdit, string newValue)
 	    {
 			var userService = MarketServer.Users[systemId];
 		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-		    var answer = storeManagementService.EditDiscount(product,whatToEdit,newValue);
+		    var answer = storeManagementService.EditProduct(product,whatToEdit,newValue);
 		    return RedirectToAction("ManageProducts", new { systemId, state, message = "", store });
 		}
 
@@ -76,11 +82,12 @@ namespace MarketWeb.Controllers
 		{
 			var userService = MarketServer.Users[systemId];
 		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-		    var answer = storeManagementService.AddQuanitityToProduct(product,quantity);
+		    var answer = storeManagementService.AddQuanitityToProduct(product,1);
 		    return RedirectToAction("ManageProducts", new { systemId, state, message = "", store });
 		}
 
-	    public IActionResult AddNewProduct(int systemId, string state, string store, string product, double price, string description, int quantity)
+
+		public IActionResult AddNewProduct(int systemId, string state, string store, string product, double price, string description, int quantity)
 	    {
 			var userService = MarketServer.Users[systemId];
 		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);

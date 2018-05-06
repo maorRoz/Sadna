@@ -50,9 +50,10 @@
                         <td>@item.Quantity</td>
                         <td>
                             @if(item.PurchaseWay == "Immediate"){
-                                <a asp-controller="Shopping" asp-action="AddToCart" asp-route-systemId="@Model.SystemId"
-                                   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name" 
-                                   asp-route-quantity="1"><img src="\images\cartAdd.png" /></a> 
+	                            <a asp-controller="Shopping" asp-action="AddToCart" asp-route-systemId="@Model.SystemId"
+	                               asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
+		                            <img src="\images\cartAdd.png"/>
+	                            </a> 
                             }
                             else
                             {

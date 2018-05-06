@@ -39,28 +39,43 @@
 				</thead>
 				@foreach (var item in Model.Items)
 				{
-					<tr>
-						<td>@item.Name</td>
-						<td>@item.Price</td>
-						<td>@item.Description</td>
-						<td>@item.Discount</td>
-						<td>@item.PurchaseWay</td>
-						<td>@item.Quantity</td>
-						<td>
-							@if (item.PurchaseWay == "Immediate")
-							{
-								<a asp-controller="StoreManagement" asp-action="RemoveProduct" asp-route-systemId="@Model.SystemId"
-								   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
-									<img src="\images\cancelation.png" /></a>
-								
-							}
-							else
-							{
-								<img src="\images\addTicket.png" />
-							}
+				<tr>
+					<td>@item.Name</td>
+					<td>@item.Price</td>
+					<td>@item.Description</td>
+					<td>@item.Discount</td>
+					<td>@item.PurchaseWay</td>
+					<td>@item.Quantity</td>
+					<td>
+						@if (item.PurchaseWay == "Immediate")
+		{
+				<td>
+					<a asp-controller="StoreManagement" asp-action="RemoveProduct" asp-route-systemId="@Model.SystemId"
+					   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
+						<img src="\images\cancelation.png" />
+					</a>
+				</td>
+				<td>
+					<a asp-controller="StoreManagement" asp-action="AddQuanitityToProduct" asp-route-systemId="@Model.SystemId"
+					   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
+						<img src="\images\plus.png">
+					</a>
+				</td>
+				<td>
+					<a asp-controller="StoreManagement" asp-action="EditProductPage" asp-route-systemId="@Model.SystemId"
+					   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
+						<img src="\images\edit.png">
+					</a>
+				</td>
+
+}
+else
+{
+				<img src="\images\addTicket.png" />
+}
 
 
-						</td>
+
 					</tr>
 				}
 			</table>
