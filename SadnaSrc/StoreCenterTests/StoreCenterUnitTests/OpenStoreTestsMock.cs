@@ -41,5 +41,12 @@ namespace StoreCenterTests.StoreCenterUnitTests
             slave.OpenStore("newStoreName", "bla");
             Assert.AreEqual((int)OpenStoreStatus.Success, slave.Answer.Status);    
         }
+        [TestCleanup]
+        public void CleanUpOpenStoreTest()
+        {
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
+        }
+
     }
 }

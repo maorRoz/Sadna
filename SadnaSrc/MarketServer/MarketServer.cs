@@ -17,7 +17,7 @@ namespace MarketWeb
         public MarketServer(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
         {
             marketSession = MarketYard.Instance;
-            MarketDB.Instance.InsertByForce();
+            MarketDB.Instance.InsertByForceClient();
         }
 
         public async Task EnterSystem(string socketId)
