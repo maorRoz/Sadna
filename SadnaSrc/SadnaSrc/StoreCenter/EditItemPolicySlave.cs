@@ -8,28 +8,28 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    class EditStorePolicySlave : AbstractStoreCenterSlave
+    class EditItemPolicySlave : AbstractStoreCenterSlave
     {
         public StoreAnswer answer;
 
-        public EditStorePolicySlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
+        public EditItemPolicySlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
 
-        public PurchasePolicy EditPolicy(int newAmount, bool max)
+        public PurchasePolicy EditPolicy(string product, int newAmount, bool max)
         {
             MarketLog.Log("StoreCenter", "trying to edit policy of store");
             MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
-                Store store = GetStore();
+                StockListItem item = GetItem(product);
                 CheckAmount(newAmount);
-                PurchasePolicy policy = store.Policy;
+                PurchasePolicy policy = item.Policy;
                 if (max)
                     policy._maxAmount = newAmount;
                 else
                     policy._minAmount = newAmount;
-                DataLayerInstance.EditPurchasePolicy(store, policy);
+                DataLayerInstance.EditPurchasePolicy(item, policy);
                 MarketLog.Log("StoreCenter", "purchase policy added successfully");
                 answer = new StoreAnswer(StoreEnum.Success, "purchase policy updated successfully");
                 return policy;
@@ -46,14 +46,14 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        public PurchasePolicy AddPolicyConstraints(int type, string value)
+        public PurchasePolicy AddPolicyConstraints(string product, int type, string value)
         {
             MarketLog.Log("StoreCenter", "trying to add discount to product in store");
             MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
-                Store store = GetStore();
-                PurchasePolicy policy = store.Policy;
+                StockListItem item = GetItem(product);
+                PurchasePolicy policy = item.Policy;
                 switch (type)
                 {
                     case 1:
@@ -66,7 +66,7 @@ namespace SadnaSrc.StoreCenter
                         policy.AddRelevant(value);
                         break;
                 }
-                DataLayerInstance.EditPurchasePolicy(store, policy);
+                DataLayerInstance.EditPurchasePolicy(item, policy);
                 MarketLog.Log("StoreCenter", "purchase policy updated successfully");
                 answer = new StoreAnswer(StoreEnum.Success, "purchase policy updated successfully");
                 return policy;
@@ -83,14 +83,14 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        public PurchasePolicy RemovePolicyConstraints(int type, string value)
+        public PurchasePolicy RemovePolicyConstraints(string product, int type, string value)
         {
             MarketLog.Log("StoreCenter", "trying to add discount to product in store");
             MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
-                Store store = GetStore();
-                PurchasePolicy policy = store.Policy;
+                StockListItem item = GetItem(product);
+                PurchasePolicy policy = item.Policy;
                 switch (type)
                 {
                     case 1:
@@ -103,7 +103,7 @@ namespace SadnaSrc.StoreCenter
                         policy.RemoveRelevant(value);
                         break;
                 }
-                DataLayerInstance.EditPurchasePolicy(store, policy);
+                DataLayerInstance.EditPurchasePolicy(item, policy);
                 MarketLog.Log("StoreCenter", "purchase policy updated successfully");
                 answer = new StoreAnswer(StoreEnum.Success, "purchase policy updated successfully");
                 return policy;
@@ -129,7 +129,7 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private Store GetStore()
+        private StockListItem GetItem(string product)
         {
             checkIfStoreExistsAndActive();
             MarketLog.Log("StoreCenter", " store exists");
@@ -137,7 +137,9 @@ namespace SadnaSrc.StoreCenter
             _storeManager.CanDeclarePurchasePolicy();
             MarketLog.Log("StoreCenter", " has premmission");
             MarketLog.Log("StoreCenter", " get store " + _storeName);
-            return DataLayerInstance.GetStorebyName(_storeName);
+            Store store = DataLayerInstance.GetStorebyName(_storeName);
+            MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
+            return DataLayerInstance.GetProductFromStore(_storeName, product);
         }
     }
 }

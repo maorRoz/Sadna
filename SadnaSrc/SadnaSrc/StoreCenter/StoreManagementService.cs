@@ -141,10 +141,17 @@ namespace SadnaSrc.StoreCenter
             return slave.answer;
         }
 
-        public MarketAnswer AddPolicyConstraints(int newAmount, bool max)
+        public MarketAnswer AddPolicyConstraints(int type, string value)
         {
             EditStorePolicySlave slave = new EditStorePolicySlave(store.Name, _storeManager, storeDL);
-            slave.EditPolicy(newAmount, max);
+            slave.AddPolicyConstraints(type, value);
+            return slave.answer;
+        }
+
+        public MarketAnswer RemovePolicyConstraints(int type, string value)
+        {
+            EditStorePolicySlave slave = new EditStorePolicySlave(store.Name, _storeManager, storeDL);
+            slave.RemovePolicyConstraints(type, value);
             return slave.answer;
         }
 
@@ -152,6 +159,27 @@ namespace SadnaSrc.StoreCenter
         {
             AddItemPolicySlave slave = new AddItemPolicySlave(store.Name, _storeManager, storeDL);
             slave.AddPolicy(product, minAmount, maxAmount);
+            return slave.answer;
+        }
+
+        public MarketAnswer EditProductPurchasePolicy(string product, int newAmount, bool max)
+        {
+            EditItemPolicySlave slave = new EditItemPolicySlave(store.Name, _storeManager, storeDL);
+            slave.EditPolicy(product, newAmount, max);
+            return slave.answer;
+        }
+
+        public MarketAnswer AddProductPolicyConstraints(string product, int type, string value)
+        {
+            EditItemPolicySlave slave = new EditItemPolicySlave(store.Name, _storeManager, storeDL);
+            slave.AddPolicyConstraints(product, type, value);
+            return slave.answer;
+        }
+
+        public MarketAnswer RemoveProductPolicyConstraints(string product, int type, string value)
+        {
+            EditItemPolicySlave slave = new EditItemPolicySlave(store.Name, _storeManager, storeDL);
+            slave.RemovePolicyConstraints(product, type, value);
             return slave.answer;
         }
     }
