@@ -216,7 +216,36 @@ namespace SadnaSrc.Main
 
         }
 
-        public void InsertByForceClient() { }
+        public void InsertByForceClient()
+        {
+            string[] thingsToInsertByForce =
+            {
+                "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S1','Avi`s Chocolate Kingdom','Here 4','Active')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P1', 'Dark Chocolate', 5, 'Join the darkside, we have chocolate')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P2', 'White Chocolate', 7, 'All your bases are belong to us')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P1', 30, 'null', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P2', 30, 'null', 'Immediate')",
+                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Avi','Ben-Gurion University','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
+
+
+
+            };
+            for (int i = 0; i < thingsToInsertByForce.Length; i++)
+            {
+                var insertCommand = new SQLiteCommand(thingsToInsertByForce[i], _dbConnection);
+                try
+                {
+                    insertCommand.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    //dont care
+                }
+            }
+        }
 
         public void CleanByForce()
         {

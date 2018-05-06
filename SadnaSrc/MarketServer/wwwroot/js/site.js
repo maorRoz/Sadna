@@ -1,6 +1,7 @@
 ﻿// Write your JavaScript code.
 $(document).ready(function() {
-    var socket = new WebSocketManager.Connection('ws://localhost:3000/market');
+    var socketUrl = "ws://" + window.location.host + "/market";
+    var socket = new WebSocketManager.Connection(socketUrl);
     var socketId = null;
     socket.enableLogging = true;
 
@@ -42,6 +43,7 @@ $(document).ready(function() {
     socket.connectionMethods.onDisconnected = () => {
         var state = extractQuery('state', 'State');
         if (state !== 'Guest') {
+            console.log('im not a guest!!!');
             socket.invoke('UnSubscribeSocket', socketId);
         }
     }
