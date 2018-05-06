@@ -137,6 +137,7 @@
     <Compile Include="OrderPool\StoreOrderTools.cs" />
     <Compile Include="PolicyComponent\Condition.cs" />
     <Compile Include="PolicyComponent\IPolicyDL.cs" />
+    <Compile Include="PolicyComponent\PolicyDL.cs" />
     <Compile Include="PolicyComponent\UsernameEquals.cs" />
     <Compile Include="PolicyComponent\AddressEquals.cs" />
     <Compile Include="PolicyComponent\PriceGreaterThan.cs" />

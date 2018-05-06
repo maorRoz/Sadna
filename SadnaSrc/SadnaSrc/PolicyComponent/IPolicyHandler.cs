@@ -15,6 +15,10 @@ namespace SadnaSrc.PolicyComponent
         void AddPolicy(PurchasePolicy policy);
         void RemovePolicy(PolicyType type, string subject);
         bool CheckRelevantPolicies(string product, string store, string category, string username, string address, int quantity, double price);
+
+        string[] PolicyTypeStrings();
+        string[] OperatorTypeStrings();
+        string[] ConditionTypeStrings();
     }
 
     public enum PolicyType

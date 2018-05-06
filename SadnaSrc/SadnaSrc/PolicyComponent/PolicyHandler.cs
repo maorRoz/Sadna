@@ -76,7 +76,7 @@ namespace SadnaSrc.PolicyComponent
         public void AddPolicy(PurchasePolicy policy)
         {
             policies.Add(policy);
-            _dataLayer.SavePolicy(policy);
+            //_dataLayer.SavePolicy(policy);
         }
 
         public void RemovePolicy(PolicyType type, string subject)
@@ -86,7 +86,7 @@ namespace SadnaSrc.PolicyComponent
                 if (policy._type == type && policy._subject == subject)
                 {
                     policies.Remove(policy);
-                    _dataLayer.RemovePolicy(policy);
+                    //_dataLayer.RemovePolicy(policy);
                 }
                     
             }
@@ -103,6 +103,21 @@ namespace SadnaSrc.PolicyComponent
             CheckPolicy(PolicyType.StockItem, store + "." + product, username, address, quantity, price);
         }
 
+        public string[] PolicyTypeStrings()
+        {
+            return new[] {"Global", "Store", "Stock Item", "Product", "Category"};
+        }
+
+        public string[] OperatorTypeStrings()
+        {
+            return new[] {"AND", "OR", "NOT"};
+        }
+
+        public string[] ConditionTypeStrings()
+        {
+            return new[] {"Price >=", "Price <=", "Quantity >=", "Quantity <=", "Username =", "Address ="};
+        }
+
         public PurchasePolicy GetPolicy(PolicyType type, string subject)
         {
             foreach (PurchasePolicy policy in policies)
@@ -117,8 +132,10 @@ namespace SadnaSrc.PolicyComponent
         private bool CheckPolicy(PolicyType type, string subject, string username, string address, int quantity, double price)
         {
             PurchasePolicy policy = GetPolicy(type, subject);
-            if (policy == null) return false;
+            if (policy == null) return true;
             return policy.Evaluate(username, address, quantity, price);
         }
+
+
     }
 }
