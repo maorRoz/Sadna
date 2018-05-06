@@ -23,9 +23,9 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if category name exists in the store " + _storeName);
                 string storeid = GetStoreIDbyName();
-                CheckIfCategoryExistsInStore(categoryName, storeid);
+                CheckIfCategoryExists(categoryName);
                 MarketLog.Log("StoreCenter", " removing category");
-                Category category = DataLayerInstance.getCategoryByName(storeid, categoryName);
+                Category category = DataLayerInstance.getCategoryByName(categoryName);
                 DataLayerInstance.RemoveCategory(category);
                 Answer = new StoreAnswer(StoreEnum.Success, "category" + categoryName + " removed successfully");
             }
@@ -46,9 +46,9 @@ namespace SadnaSrc.StoreCenter
             return store.SystemId;
         }
 
-        private void CheckIfCategoryExistsInStore(string categoryName, string storeid)
+        private void CheckIfCategoryExists(string categoryName)
         {
-            Category category = DataLayerInstance.getCategoryByName(storeid, categoryName);
+            Category category = DataLayerInstance.getCategoryByName(categoryName);
             if (category == null)
             {
                 throw new StoreException(StoreEnum.CategoryNotExistsInStore, "category not exists in the store");

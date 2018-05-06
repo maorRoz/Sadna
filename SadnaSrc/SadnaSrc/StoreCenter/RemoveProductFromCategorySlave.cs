@@ -35,7 +35,7 @@ namespace SadnaSrc.StoreCenter
                 checkifProductExists(product);
                 MarketLog.Log("StoreCenter", "Product exists");
                 MarketLog.Log("StoreCenter", "Check if product in this category");
-                Category category = DataLayerInstance.getCategoryByName(storeid, categoryName);
+                Category category = DataLayerInstance.getCategoryByName(categoryName);
                 CheckifProductInCategory(product, category.SystemId);
                 MarketLog.Log("StoreCenter", "Product is in category");
                 DataLayerInstance.RemoveProductFromCategory(category.SystemId, product.SystemId);
@@ -80,7 +80,7 @@ namespace SadnaSrc.StoreCenter
 
         private void CheckIfCategoryExistsInStore(string categoryName, string storeid)
         {
-            Category category = DataLayerInstance.getCategoryByName(storeid, categoryName);
+            Category category = DataLayerInstance.getCategoryByName(categoryName);
             if (category == null)
             {
                 throw new StoreException(StoreEnum.CategoryNotExistsInStore, "category not exists in the store");

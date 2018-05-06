@@ -140,7 +140,7 @@ namespace SadnaSrc.Main
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P17', 10, 'null', 'Lottery')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P21', 10, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P22', 10, 'null', 'Immediate')",
-                "INSERT INTO Category (SystemID, name, StoreID) VALUES ('C1', 'WanderlandItems', 'S7')",
+                "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
                 "INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C1', 'P21')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L1', 'P1', 100, 0 , 'X' ,'01/01/2018', '31/12/2018', 'true')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L2', 'P15', 200, 0 , 'T' ,'01/01/2018', '31/12/2018', 'false')",
@@ -451,8 +451,6 @@ namespace SadnaSrc.Main
             return @"Create TABLE IF NOT EXISTS [Category] (
                                     [SystemID]    TEXT,
                                     [name]          TEXT,
-                                    [StoreID]           TEXT,
-                                    FOREIGN KEY([StoreID])     REFERENCES [Store]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -461,8 +459,6 @@ namespace SadnaSrc.Main
             return @"Create TABLE IF NOT EXISTS [CategoryProductConnection] (
                                     [CategoryID]    TEXT,
                                     [ProductID]          TEXT,
-                                    FOREIGN KEY([CategoryID])     REFERENCES [Category]([SystemID]) ON DELETE CASCADE,
-                                    FOREIGN KEY([ProductID])     REFERENCES [Products]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([CategoryID], [ProductID])
                                     )";
         }

@@ -61,8 +61,8 @@ namespace StoreCenterTests.StoreCenterUnitTests
             RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave("T", userService.Object, handler.Object);
             handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
-            handler.Setup(x => x.getCategoryByName("S7", "WanderlandItems"))
-                .Returns(new Category("C1", "WanderlandItems", "S7"));
+            handler.Setup(x => x.getCategoryByName("WanderlandItems"))
+                .Returns(new Category("C1", "WanderlandItems"));
             slave.RemoveProductFromCategory("WanderlandItems", "OnePunchManPoster");
             Assert.AreEqual((int)StoreEnum.ProductNotFound, slave.Answer.Status);
         }
@@ -72,8 +72,8 @@ namespace StoreCenterTests.StoreCenterUnitTests
             RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave("T", userService.Object, handler.Object);
             handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
-            handler.Setup(x => x.getCategoryByName("S7", "WanderlandItems"))
-                .Returns(new Category("C1", "WanderlandItems", "S7"));
+            handler.Setup(x => x.getCategoryByName("WanderlandItems"))
+                .Returns(new Category("C1", "WanderlandItems"));
             handler.Setup(x => x.GetProductByNameFromStore("T", "OnePunchManPoster"))
                 .Returns(new Product("S21", "OnePunchManPoster", 10, "bla"));
             LinkedList<Product> expected = new LinkedList<Product>();
@@ -87,8 +87,8 @@ namespace StoreCenterTests.StoreCenterUnitTests
             RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave("T", userService.Object, handler.Object);
             handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
-            handler.Setup(x => x.getCategoryByName("S7", "WanderlandItems"))
-                .Returns(new Category("C1", "WanderlandItems", "S7"));
+            handler.Setup(x => x.getCategoryByName("WanderlandItems"))
+                .Returns(new Category("C1", "WanderlandItems"));
             handler.Setup(x => x.GetProductByNameFromStore("T", "Fraid Egg")).Returns(new Product("S21", "Fraid Egg", 10, "bla"));
             LinkedList<Product> expected = new LinkedList<Product>();
             expected.AddLast(new Product("S21", "Fraid Egg", 10, "bla"));

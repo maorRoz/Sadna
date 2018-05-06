@@ -7,24 +7,21 @@ namespace SadnaSrc.StoreCenter
     {
         public readonly string SystemId;
         string Name { get; set; }
-        string storeID;
         public LinkedList<Product> products { get; set; }
         private static int globalCategoryID = FindMaxCategoryID();
 
-        public Category (string categoryname, string storeid)
+        public Category (string categoryname)
         {
             SystemId = getNextCategoryID();
             Name = categoryname;
-            storeID = storeid;
             products = new LinkedList<Product>();
         }
 
-        public Category (string systemid, string name, string storeid)
+        public Category (string systemid, string name)
         {
             IStoreDL instacne = StoreDL.Instance;
             SystemId = systemid;
             Name = name;
-            storeID = storeid;
             products = instacne.GetAllCategoryProducts(SystemId);
         }
         public object[] GetCategoryValuesArray()
@@ -33,7 +30,6 @@ namespace SadnaSrc.StoreCenter
             {
                 SystemId,
                 Name,
-                storeID
             };
         }
 
@@ -42,8 +38,7 @@ namespace SadnaSrc.StoreCenter
             return new[]
             {
                 "'" + SystemId + "'",
-                "'" + Name + "'",
-                "'" + storeID + "'"
+                "'" + Name + "'"
             };
         }
         public void addProductToCategory(Product product)
@@ -82,7 +77,7 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(Category obj)
         {
-            return obj.SystemId == SystemId && obj.Name == Name && obj.storeID == storeID;
+            return obj.SystemId == SystemId && obj.Name == Name;
         }
     }
 }

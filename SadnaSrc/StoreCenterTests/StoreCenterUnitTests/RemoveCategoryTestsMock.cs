@@ -57,7 +57,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             RemoveCategorySlave slave = new RemoveCategorySlave("T", _userService.Object, _handler.Object);
             _handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             _handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
-            _handler.Setup(x => x.getCategoryByName("S7", "items")).Returns(new Category("items", "S7"));
+            _handler.Setup(x => x.getCategoryByName("items")).Returns(new Category("items"));
             slave.RemoveCategory("items");
             Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
         }

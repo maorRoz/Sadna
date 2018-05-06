@@ -329,33 +329,33 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void GetCategoryByName()
         {
-            var expected = new Category("C1", "WanderlandItems", "S7"); // THIS exists in DB by SQL injection
-            var find = handler.getCategoryByName("S7", "WanderlandItems");
+            var expected = new Category("C1", "WanderlandItems"); // THIS exists in DB by SQL injection
+            var find = handler.getCategoryByName("WanderlandItems");
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
         public void AddCategory()
         {
 
-            var expected = new Category("C2", "Items", "S7");
-            var find = handler.getCategoryByName("S7", "Items");
+            var expected = new Category("C2", "Items");
+            var find = handler.getCategoryByName("Items");
             Assert.IsNull(find);
             handler.AddCategory(expected);
-            find = handler.getCategoryByName("S7", "Items");
+            find = handler.getCategoryByName("Items");
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
         public void RemoveCategory()
         {
 
-            var expected = new Category("C2", "Items", "S7");
-            var find = handler.getCategoryByName("S7", "Items");
+            var expected = new Category("C2", "Items");
+            var find = handler.getCategoryByName("Items");
             Assert.IsNull(find);
             handler.AddCategory(expected);
-            find = handler.getCategoryByName("S7", "Items");
+            find = handler.getCategoryByName("Items");
             Assert.AreEqual(expected, find);
             handler.RemoveCategory(expected);
-            find = handler.getCategoryByName("S7", "Items");
+            find = handler.getCategoryByName("Items");
             Assert.IsNull(find);
         }
         [TestMethod]

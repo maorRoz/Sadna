@@ -51,7 +51,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             AddCategorySlave slave = new AddCategorySlave("T", userService.Object, handler.Object);
             handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
-            handler.Setup(x => x.getCategoryByName("S7", "items")).Returns(new Category("items", "S7"));
+            handler.Setup(x => x.getCategoryByName("items")).Returns(new Category("items"));
             slave.AddCategory("items");
             Assert.AreEqual((int)StoreEnum.CategoryExistsInStore, slave.Answer.Status);
         }

@@ -60,7 +60,7 @@ namespace SadnaSrc.StoreCenter
         }
         public void AddCategory(Category category)
         {
-            dbConnection.InsertTable("Category", "SystemID, name, StoreID",
+            dbConnection.InsertTable("Category", "SystemID, name",
                 category.GetCategoryStringValues(), category.GetCategoryValuesArray());
         }
         public void RemoveCategory(Category category)
@@ -208,7 +208,7 @@ namespace SadnaSrc.StoreCenter
         {
             Product product = GetProductID(productid);
             StockListItem stockListItem = null;
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "*", "ProductSystemID = '" + product + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "*", "ProductSystemID = '" + productid + "'"))
             {
                 while (dbReader.Read())
                 {
@@ -563,15 +563,15 @@ namespace SadnaSrc.StoreCenter
             dbConnection.UpdateTable("LotteryTable", "SystemID = '" + lotteryManagment.SystemID + "'", columnNames,
                 lotteryManagment.GetLotteryManagmentStringValues(), lotteryManagment.GetLotteryManagmentValuesArray());
         }
-        public Category getCategoryByName(string storeid, string categoryname)
+        public Category getCategoryByName(string categoryname)
         {
             Category category = null;
             using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("Category", "*", "name = '" + categoryname + "' AND StoreID = '"+ storeid+"'"))
+                dbConnection.SelectFromTableWithCondition("Category", "*", "name = '" + categoryname + "'"))
             {
                 while (dbReader.Read())
                 {
-                    category = new Category(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2));
+                    category = new Category(dbReader.GetString(0), dbReader.GetString(1));
                 }
             }
             return category;
