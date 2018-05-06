@@ -7,17 +7,9 @@
 		<div id="feedContainer" style="float: right;width:20%"></div>
 		<div style="float: left;width:70%">
 			<div id="alertContainer">
-				@if (Model.Message != null && ViewBag.valid)
+				@if (Model.Message != null)
 				{
 					<div class='success'>
-						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-						@Model.Message
-					</div>
-				}
-
-				@if (Model.Message != null && !ViewBag.valid)
-				{
-					<div class='error'>
 						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
 						@Model.Message
 					</div>
@@ -79,6 +71,11 @@ else
 					</tr>
 				}
 			</table>
+			
+			@using (Html.BeginForm("AddNewProduct", "StoreManagement", new {Model.SystemId,Model.State}))
+			{
+				<input type="submit" class="btn btn-primary" value="Add new Product">
+			}
 
 		</div>
 	</div>

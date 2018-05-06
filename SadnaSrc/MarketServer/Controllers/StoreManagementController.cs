@@ -64,9 +64,9 @@ namespace MarketWeb.Controllers
 
 		}
 
-	    public IActionResult EditProductPage(int systemId, string state, string store, string product)
+	    public IActionResult EditProductPage(int systemId, string state, string message, string store, string product)
 	    {
-		    return View(new ProductInStoreModel(systemId, state, null , store, product));
+		    return View(new ProductInStoreModel(systemId, state, message , store, product));
 	    }
 
 		public IActionResult EditProduct(int systemId, string state, string store, string product, string whatToEdit, string newValue)
@@ -74,7 +74,11 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.Users[systemId];
 		    var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 		    var answer = storeManagementService.EditProduct(product,whatToEdit,newValue);
-		    return RedirectToAction("ManageProducts", new { systemId, state, message = "", store });
+		    if (answer.Status == 0)
+		    {
+			    return RedirectToAction("ManageProducts", new { systemId, state, message = answer.Answer, store });
+			}
+		     return RedirectToAction("EditProductPage", new { systemId, state, message = answer.Answer, store, product });
 		}
 
 	    public IActionResult AddQuanitityToProduct(int systemId, string state, string store, string product, int quantity)
@@ -86,6 +90,10 @@ namespace MarketWeb.Controllers
 		    return RedirectToAction("ManageProducts", new { systemId, state, message = "", store });
 		}
 
+	    public IActionResult AddNewProductPage(int systemId, string state, string message, string store)
+	    {
+		    return View(new StoreItemModel(systemId, state, message, store));
+	    }
 
 		public IActionResult AddNewProduct(int systemId, string state, string store, string product, double price, string description, int quantity)
 	    {
