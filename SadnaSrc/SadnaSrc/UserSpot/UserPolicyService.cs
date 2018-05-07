@@ -55,12 +55,12 @@ namespace SadnaSrc.UserSpot
         }
 
         public StoreManagerPolicy[] FilteredStorePolicies(string store)
-        {
+        { 
             List<StoreManagerPolicy> storePolicies = new List<StoreManagerPolicy>();
             foreach (StoreManagerPolicy policy in StorePolicies)
             {
                 if(policy.Store.Equals(store))
-                storePolicies.Add(policy);
+					storePolicies.Add(policy);
             }
             return SortStorePolicy(storePolicies.ToArray());
         }
@@ -70,7 +70,11 @@ namespace SadnaSrc.UserSpot
             var storeNamesList = new List<string>();
             foreach (var policy in StorePolicies)
             {
-                storeNamesList.Add(policy.Store);
+	            string store = policy.Store;
+	            if (!storeNamesList.Contains(store))
+	            {
+		            storeNamesList.Add(store);
+				}	
             }
 
             return storeNamesList.ToArray();

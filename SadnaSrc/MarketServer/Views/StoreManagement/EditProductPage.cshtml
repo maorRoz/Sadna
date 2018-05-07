@@ -1,0 +1,50 @@
+﻿@{
+	ViewData["Title"] = "Edit Product Page";
+}
+<h2>@ViewData["Title"]</h2>
+<hr/>
+<div class="row top-space">
+	<div class="col-lg-10">
+
+		<div id="feedContainer" style="float: right;width:20%">
+			<br/>
+		</div>
+
+		<div style="float: left;width:30%">
+			<div id="alertContainer">
+				@if (Model.Message != null)
+				{
+					<div class='error'><span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span> 
+						@Model.Message 
+					</div>
+				}
+			</div>
+			
+
+			@using (Html.BeginForm("EditProduct", "StoreManagement", new { Model.SystemId,Model.State,Model.Message,Model.Store,Model.Product}))
+			{
+				<fieldset>
+				Choose: <select name="whatToEdit">
+
+				<option value="Description">Description</option>
+
+				<option value="Name">Name</option>
+						
+				<option value="BasePrice">BasePrice</option>
+
+				</select>
+			    <br />
+				<input type="text" class="form-control" id="user-name-entry" name="newValue"/>
+				<br />
+			   <input type="submit" class="btn btn-primary" value="Edit">
+			</fieldset>
+			}
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+}
+
+

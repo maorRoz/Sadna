@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SadnaSrc.AdminView;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -39,7 +40,8 @@ namespace SadnaSrc.StoreCenter
             slave.CloseStore();
             return slave.answer;
         }
-        public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
+
+	    public MarketAnswer PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
             PromoteToStoreManagerSlave slave = new PromoteToStoreManagerSlave(_storeManager, _storeName, storeDL);
             slave.PromoteToStoreManager(someoneToPromoteName, actions);

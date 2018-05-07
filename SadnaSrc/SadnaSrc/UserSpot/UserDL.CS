@@ -222,7 +222,22 @@ namespace SadnaSrc.UserSpot
             dbConnection.UpdateTable("CartItem", item.GetDbIdentifier(), columnNames, valuesNames, values);
         }
 
-        public void CleanSession()
+
+	    public string[] GetAllActiveStoreNames()
+	    {
+		    var result = new List<string>();
+		    using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "Name", "Status = 'Active'"))
+		    {
+			    while (dbReader.Read())
+			    {
+				    result.Add(dbReader.GetString(0));
+			    }
+		    }
+
+		    return result.ToArray();
+	    }
+
+		public void CleanSession()
         {
             foreach(var userID in userIDs)
             {

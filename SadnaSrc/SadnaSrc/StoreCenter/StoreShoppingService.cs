@@ -57,12 +57,7 @@ namespace SadnaSrc.StoreCenter
             slave.AddProductToCart(store, productName, quantity);
             return slave.answer;
         }
-        public MarketAnswer GetAllStores()
-        {
-			      ViewStoreNamesSlave slave = new ViewStoreNamesSlave(_shopper,storeDL);
-			      slave.ViewStores();
-			      return slave.answer;
-		    }
+
     }
 }
  

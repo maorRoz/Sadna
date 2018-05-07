@@ -1,4 +1,5 @@
 ﻿using System;
+using Castle.Core.Internal;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
@@ -37,7 +38,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                answer =  new StoreAnswer(exe);
+                answer =  new StoreAnswer((StoreEnum)exe.Status, "Product couldn't have been updated!");
             }
             catch (MarketException)
             {
@@ -57,6 +58,12 @@ namespace SadnaSrc.StoreCenter
         {
             if (whatToEdit != "Description" && whatToEdit != "desccription") return;
             MarketLog.Log("StoreCenter", "edit description");
+	        if (newValue.IsNullOrEmpty())
+	        {
+		        MarketLog.Log("StoreCenter",
+			        "The product was not edited with the new description because it is either null or empty");
+				throw new StoreException(StoreEnum.UpdateProductFail, "Illegal description given");
+	        }
             answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
             product.Description = newValue;
         }
@@ -84,6 +91,14 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "name exists in shop");
                 throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
             }
+
+	        if (newValue.IsNullOrEmpty())
+	        {
+		        MarketLog.Log("StoreCenter",
+			        "The product was not edited with the new name because it is either null or empty");
+		        throw new StoreException(StoreEnum.UpdateProductFail, "Illegal name given");
+			}
+
             CheckIfProductNameAvailable(newValue);
             answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
             product.Name = newValue;

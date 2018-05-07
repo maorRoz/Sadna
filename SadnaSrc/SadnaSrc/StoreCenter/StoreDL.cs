@@ -406,19 +406,6 @@ namespace SadnaSrc.StoreCenter
             dbConnection.DeleteFromTable("Store", "SystemID = '" + store.SystemId + "'");
         }
 
-        public string[] GetAllActiveStoreNames()
-        {
-            var result = new List<string>();
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "Name", "Status = 'Active'"))
-            {
-                while (dbReader.Read())
-                {
-                    result.Add(dbReader.GetString(0));
-                }
-            }
-
-            return result.ToArray();
-        }
         public string[] GetStoreInfo(string store)
         {
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "Name,Address",
