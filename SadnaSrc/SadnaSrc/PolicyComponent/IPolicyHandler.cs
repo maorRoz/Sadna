@@ -8,11 +8,10 @@ namespace SadnaSrc.PolicyComponent
 {
     public interface IPolicyHandler
     {
-        PurchasePolicy CreatePolicy(PolicyType type, string subject, OperatorType op, PurchasePolicy cond1, PurchasePolicy cond2);
-        PurchasePolicy CreateCondition(PolicyType type, string subject, ConditionType cond, string value);
-        PurchasePolicy CreateStockItemCondition(string store, string product, ConditionType cond, string value);
-        PurchasePolicy GetPolicy(PolicyType type, string subject);
-        void AddPolicy(PurchasePolicy policy);
+        string[] CreatePolicy(PolicyType type, string subject, OperatorType op, int id1, int id2);
+        string[] CreateCondition(PolicyType type, string subject, ConditionType cond, string value);
+        string[] CreateStockItemCondition(string store, string product, ConditionType cond, string value);
+        void AddPolicy(int policyId);
         void RemovePolicy(PolicyType type, string subject);
         bool CheckRelevantPolicies(string product, string store, string category, string username, string address, int quantity, double price);
 

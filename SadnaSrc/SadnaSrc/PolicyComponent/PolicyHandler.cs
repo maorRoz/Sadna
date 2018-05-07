@@ -21,27 +21,26 @@ namespace SadnaSrc.PolicyComponent
             policies = new List<PurchasePolicy>();
         }
 
-        public PurchasePolicy CreatePolicy(PolicyType type, string subject, OperatorType op, PurchasePolicy cond1,
-            PurchasePolicy cond2)
+        public string[] CreatePolicy(PolicyType type, string subject, OperatorType op, int id1, int id2)
         {
             PurchasePolicy policy = null;
             switch (op)
             {
                 case OperatorType.AND:
-                    policy = new AndOperator(type, subject, cond1, cond2, SessionPolicies.Count);
+                    policy = new AndOperator(type, subject, GetPolicy(id1), GetPolicy(id2), SessionPolicies.Count);
                     break;
                 case OperatorType.OR:
-                    policy = new OrOperator(type, subject, cond1, cond2, SessionPolicies.Count);
+                    policy = new OrOperator(type, subject, GetPolicy(id1), GetPolicy(id2), SessionPolicies.Count);
                     break;
                 case OperatorType.NOT:
-                    policy = new NotOperator(type, subject, cond1, null, SessionPolicies.Count);
+                    policy = new NotOperator(type, subject, GetPolicy(id1), null, SessionPolicies.Count);
                     break;
             }
             SessionPolicies.Add(policy);
-            return policy;
+            return policy.GetData();
         }
 
-        public PurchasePolicy CreateCondition(PolicyType type, string subject, ConditionType cond, string value)
+        public string[] CreateCondition(PolicyType type, string subject, ConditionType cond, string value)
         {
             PurchasePolicy policy = null;
             switch (cond)
@@ -66,18 +65,19 @@ namespace SadnaSrc.PolicyComponent
                     break;
             }
             SessionPolicies.Add(policy);
-            return policy;
+            return policy.GetData();
         }
 
-        public PurchasePolicy CreateStockItemCondition(string store, string product, ConditionType cond, string value)
+        public string[] CreateStockItemCondition(string store, string product, ConditionType cond, string value)
         {
             return CreateCondition(PolicyType.StockItem, store + "." + product, cond, value);
         }
 
-        public void AddPolicy(PurchasePolicy policy)
+        public void AddPolicy(int policyId)
         {
-            policy._id = GeneratePolicyID();
-            policies.Add(policy);
+            PurchasePolicy toAdd = GetPolicy(policyId);
+            toAdd.ID = GeneratePolicyID();
+            policies.Add(toAdd);
             SessionPolicies.Clear();
             //_dataLayer.SavePolicy(policy);
         }
@@ -86,7 +86,7 @@ namespace SadnaSrc.PolicyComponent
         {
             foreach (PurchasePolicy policy in policies)
             {
-                if (policy._type == type && policy._subject == subject)
+                if (policy.Type == type && policy.Subject == subject)
                 {
                     policies.Remove(policy);
                     //_dataLayer.RemovePolicy(policy);
@@ -121,11 +121,11 @@ namespace SadnaSrc.PolicyComponent
             return new[] {"Price >=", "Price <=", "Quantity >=", "Quantity <=", "Username =", "Address ="};
         }
 
-        public PurchasePolicy GetPolicy(PolicyType type, string subject)
+        private PurchasePolicy GetPolicy(PolicyType type, string subject)
         {
             foreach (PurchasePolicy policy in policies)
             {
-                if (policy._type == type && policy._subject == subject)
+                if (policy.Type == type && policy.Subject == subject)
                     return policy;
             }
 
@@ -136,7 +136,7 @@ namespace SadnaSrc.PolicyComponent
         {
             foreach (PurchasePolicy policy in policies)
             {
-                if (policy._id == id)
+                if (policy.ID == id)
                     return policy;
             }
 
