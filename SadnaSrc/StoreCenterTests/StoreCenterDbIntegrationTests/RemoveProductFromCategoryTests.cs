@@ -32,7 +32,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             _userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)_market.GetStoreManagementService(_userService, "X");
             MarketAnswer ans = liorSession.RemoveProductFromCategory("WanderlandItems", "BOX");
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
 
         [TestMethod]

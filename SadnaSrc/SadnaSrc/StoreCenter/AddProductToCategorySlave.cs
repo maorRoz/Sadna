@@ -42,7 +42,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (MarketException)
             {
-                Answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
             }
         }
 

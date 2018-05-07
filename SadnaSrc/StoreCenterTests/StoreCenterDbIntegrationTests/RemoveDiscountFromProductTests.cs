@@ -42,7 +42,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.RemoveDiscountFromProduct("BOX");
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
         [TestMethod]
         public void RemoveDiscountWhenProductNotExists()

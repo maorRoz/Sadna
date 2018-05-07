@@ -10,7 +10,7 @@ namespace SadnaSrc.StoreCenter
     public class Discount
     {
         public string discountCode { get; }
-        public discountTypeEnum discountType { get; set; }
+        public DiscountTypeEnum discountType { get; set; }
         public DateTime startDate { get; set; }
         public DateTime EndDate { get; set; }
         public int DiscountAmount { get; set; }
@@ -18,7 +18,7 @@ namespace SadnaSrc.StoreCenter
         private static int globalDiscountCode = FindMaxDiscountId();
         //assume that the startDate < EndDate
 
-        public Discount(discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
+        public Discount(DiscountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
         {
             discountCode = GetDiscountCode();
             discountType = _discountType;
@@ -28,7 +28,7 @@ namespace SadnaSrc.StoreCenter
             Percentages = _presenteges;
 
         }
-        public Discount(string _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
+        public Discount(string _discountCode, DiscountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
         {
             discountCode = _discountCode;
             discountType = _discountType;
@@ -63,7 +63,7 @@ namespace SadnaSrc.StoreCenter
         public override string ToString()
         {
             StockSyncher handler = StockSyncher.Instance;
-            if (EnumStringConverter.PrintEnum(discountType) == EnumStringConverter.PrintEnum(discountTypeEnum.Hidden))
+            if (EnumStringConverter.PrintEnum(discountType) == EnumStringConverter.PrintEnum(DiscountTypeEnum.Hidden))
                 return "type is: hidden";
             if (Percentages)
             {

@@ -9,9 +9,9 @@ using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.StoreCenter
 {
-	class ViewStoreNamesSlave
+	public class ViewStoreNamesSlave
 	{
-		internal MarketAnswer answer;
+		public MarketAnswer answer;
 	    private IStoreDL storeLogic;
 
 		public ViewStoreNamesSlave(IStoreDL storeDl)
@@ -20,7 +20,7 @@ namespace SadnaSrc.StoreCenter
 		    storeLogic = storeDl;
 		}
 
-		internal void ViewStores()
+		public void ViewStores()
 		{
             try
 			{
@@ -34,7 +34,7 @@ namespace SadnaSrc.StoreCenter
 			catch (MarketException)
 			{
 				MarketLog.Log("StoreCenter", "no premission");
-				answer = new StoreAnswer(StoreEnum.NoPremmision,
+				answer = new StoreAnswer(StoreEnum.NoPermission,
 					"User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
 			}
 		}

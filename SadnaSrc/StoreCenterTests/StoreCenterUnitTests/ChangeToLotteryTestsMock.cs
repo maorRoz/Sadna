@@ -17,11 +17,14 @@ namespace StoreCenterTests.StoreCenterUnitTests
             private Mock<IStoreDL> handler;
             private Mock<IUserSeller> userService;
             private Mock<IMarketDB> marketDbMocker;
+            private Product prod;
+            private ChangeProductPurchaseWayToLotterySlave slave;
+            private StockListItem stock;
 
 
-            //TODO: improve this
+        //TODO: improve this
 
-            [TestInitialize]
+        [TestInitialize]
             public void BuildStore()
             {
                 marketDbMocker = new Mock<IMarketDB>();
@@ -29,30 +32,59 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 MarketLog.SetDB(marketDbMocker.Object);
                 handler = new Mock<IStoreDL>();
                 userService = new Mock<IUserSeller>();
-            }
+                slave = new ChangeProductPurchaseWayToLotterySlave("X", userService.Object, handler.Object);
+                MarketYard.SetDateTime(new DateTime(2018, 4, 14));
+                prod = new Product("item", 1, "des");
+                Discount discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
+                stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
+                handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
+                handler.Setup(x => x.GetProductByNameFromStore("X", "item")).Returns(prod);
+                handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
+                handler.Setup(x => x.GetProductFromStore("X", "item")).Returns(stock);
+        }
             [TestMethod]
-            public void ChangeToLotteryFail()
+            public void NoStore()
             {
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
-                ChangeProductPurchaseWayToLotterySlave slave = new ChangeProductPurchaseWayToLotterySlave("noStore", userService.Object, handler.Object);
-                slave.ChangeProductPurchaseWayToLottery("newProd", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
+                slave.ChangeProductPurchaseWayToLottery("item", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
                 Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
             }
             [TestMethod]
-            public void ChangeToLotteryPass()
+            public void NoPermission()
             {
-                Product P = new Product("NEWPROD", 150, "desc");
-                Discount discount = new Discount(discountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
-                StockListItem SLI = new StockListItem(10, P, discount, PurchaseEnum.Immediate, "BLA");
-                
+                userService.Setup(x => x.CanManageProducts()).Throws(new MarketException(0, ""));
+                slave.ChangeProductPurchaseWayToLottery("item", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
+                Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
+            }
 
-                handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
-                handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns(P);
-                handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
-                handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(SLI);
-                
-                ChangeProductPurchaseWayToLotterySlave slave = new ChangeProductPurchaseWayToLotterySlave("X", userService.Object, handler.Object);
-                slave.ChangeProductPurchaseWayToLottery("NEWPROD", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
+            [TestMethod]
+            public void NoProduct()
+            {
+                handler.Setup(x => x.GetProductByNameFromStore("X", "item")).Returns((Product)null);
+                slave.ChangeProductPurchaseWayToLottery("item", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
+                Assert.AreEqual((int)StoreEnum.ProductNotFound, slave.answer.Status);
+            }
+
+            [TestMethod]
+            public void AlreadyLottery()
+            {
+                stock.PurchaseWay = PurchaseEnum.Lottery;
+                handler.Setup(x => x.GetProductFromStore("X", "item")).Returns(stock);
+                slave.ChangeProductPurchaseWayToLottery("item", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
+                Assert.AreEqual((int)ChangeToLotteryEnum.LotteryExists, slave.answer.Status);
+            }
+
+            [TestMethod]
+            public void BadDates()
+            {
+                slave.ChangeProductPurchaseWayToLottery("item", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2017"));
+                Assert.AreEqual((int)ChangeToLotteryEnum.DatesAreWrong, slave.answer.Status);
+            }
+
+        [TestMethod]
+            public void ChangeToLotterySuccess()
+            {
+                slave.ChangeProductPurchaseWayToLottery("item", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2019"));
                 Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
             }
 

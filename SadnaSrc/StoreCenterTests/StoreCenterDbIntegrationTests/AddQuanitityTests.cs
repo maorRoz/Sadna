@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
+    //TODO: maybe remove these tests
+
     [TestClass]
     public class AddQuantityTests
     {
@@ -25,7 +27,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             handler = StoreDL.Instance;
             userService = market.GetUserService();
         }
-
 
         [TestMethod]
         public void AddQuanitityWhenStoreNotExists()
@@ -43,7 +44,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 1);
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
         [TestMethod]
         public void AddQuanitiyWhenProductIsNotAvailableInStore()
@@ -54,24 +55,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.AddQuanitityToProduct("LOX", 1);
             Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
-        [TestMethod]
-        public void AddQuanitiyWhenQuantityIsNegative()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", -1);
-            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
-        }
-        [TestMethod]
-        public void AddQuanitiyWhenQuantityIsZero()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.AddQuanitityToProduct("BOX", 0);
-            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, ans.Status);
-        }
+        
         [TestMethod]
         public void AddQuanitiySuccess()
         {

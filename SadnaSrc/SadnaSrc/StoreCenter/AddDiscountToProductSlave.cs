@@ -50,7 +50,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (MarketException)
             {
-                answer = new StoreAnswer(StoreEnum.NoPremmision, "you have no premmision to do that");
+                answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
                 return null;
             }
         }
@@ -72,7 +72,7 @@ namespace SadnaSrc.StoreCenter
         {
             if (stockListItem.Discount == null) return;
             MarketLog.Log("StoreCenter", "the product have another discount");
-            throw new StoreException(DiscountStatus.thereIsAlreadyAnotherDiscount, "the product have another discount");
+            throw new StoreException(DiscountStatus.ThereIsAlreadyAnotherDiscount, "the product have another discount");
         }
 
         private static void CheckPresentegesAndAmountOK(int discountAmount, bool presenteges, Product product)
@@ -90,7 +90,7 @@ namespace SadnaSrc.StoreCenter
             if (discountAmount <= 0)
             {
                 MarketLog.Log("StoreCenter", "discount amount <=0");
-                throw new StoreException(DiscountStatus.discountAmountIsNegativeOrZero, "DiscountAmount is >= 100%");
+                throw new StoreException(DiscountStatus.DiscountAmountIsNegativeOrZero, "DiscountAmount is >= 100%");
             }
         }
 

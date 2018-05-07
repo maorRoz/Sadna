@@ -36,7 +36,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTestss
 
             StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
             MarketAnswer ans = liorSession.ViewStoreStock("X");
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
         [TestMethod]
         public void ViewStoreStockSuccess()

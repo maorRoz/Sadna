@@ -18,13 +18,12 @@ namespace StoreCenterTests.StoreCenterUnitTests
         private Mock<IStoreDL> handler;
         private Mock<IUserSeller> userService;
         private Mock<IMarketDB> marketDbMocker;
+        private ViewStoreHistorySlave slave;
 
 
 
-        //TODO: improve this
 
-
-        [TestInitialize]
+       [TestInitialize]
         public void BuildStore()
         {
             marketDbMocker = new Mock<IMarketDB>();
@@ -32,16 +31,27 @@ namespace StoreCenterTests.StoreCenterUnitTests
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
             userService = new Mock<IUserSeller>();
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
+
+            slave = new ViewStoreHistorySlave("X", userService.Object, handler.Object);
+
         }
         [TestMethod]
-        public void ViewStoreHistoryStoreNotExists()
+        public void NoStore()
         {
-
-            ViewStoreHistorySlave slave = new ViewStoreHistorySlave("X", userService.Object, handler.Object);
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
             slave.ViewStoreHistory();
-            MarketAnswer ans = slave.answer;
-            Assert.AreEqual((int)ManageStoreStatus.InvalidStore, ans.Status);
+            Assert.AreEqual((int)ManageStoreStatus.InvalidStore, slave.answer.Status);
         }
+        [TestMethod]
+        public void NoPermission()
+        {
+            userService.Setup(x => x.CanViewPurchaseHistory()).Throws(new MarketException(0, ""));
+            slave.ViewStoreHistory();
+            Assert.AreEqual((int)ManageStoreStatus.InvalidManager, slave.answer.Status);
+        }
+
+   
         [TestMethod]
         public void ViewStoreHistorySuccess()
         {

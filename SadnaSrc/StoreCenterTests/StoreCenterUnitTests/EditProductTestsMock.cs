@@ -18,10 +18,10 @@ namespace StoreCenterTests.StoreCenterUnitTests
         private Mock<IStoreDL> handler;
         private Mock<IUserSeller> userService;
         private Mock<IMarketDB> marketDbMocker;
-
-
-
-        //TODO: improve this
+        private EditProductSlave slave;
+        private Product prod;
+        private Discount discount;
+        private StockListItem stock;
 
 
         [TestInitialize]
@@ -32,26 +32,87 @@ namespace StoreCenterTests.StoreCenterUnitTests
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
             userService = new Mock<IUserSeller>();
+            prod = new Product("NEWPROD", 150, "desc");
+            discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, true);
+            stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
+            handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
+            handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns(prod);
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
+            handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);
+            slave = new EditProductSlave("X", userService.Object, handler.Object);
         }
         [TestMethod]
-        public void EditProductFail()
+        public void NoStore()
         {
-            EditProductSlave slave = new EditProductSlave("noStore", userService.Object, handler.Object);
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
             slave.EditProduct("BOX", "price", "10");
             Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
         }
+
         [TestMethod]
-        public void EditProductPass()
+        public void NoPermission()
         {
-            Product P = new Product("NEWPROD", 150, "desc");
-            Discount discount = new Discount(discountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
-            StockListItem SLI = new StockListItem(10, P, discount, PurchaseEnum.Immediate, "BLA");
-            handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
-            handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns(P);
-            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
-            handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(SLI);
-            EditProductSlave slave = new EditProductSlave("X", userService.Object, handler.Object);
+            userService.Setup(x => x.CanManageProducts()).Throws(new MarketException(0, ""));
+            slave.EditProduct("BOX", "price", "10");
+            Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void NoProduct()
+        {
+            handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns((Product)null);
+            slave.EditProduct("NEWPROD", "price", "10");
+            Assert.AreEqual((int)StoreEnum.ProductNotFound, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void ProductNameExists()
+        {
+            slave.EditProduct("NEWPROD", "Name", "NEWPROD");
+            Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, slave.answer.Status);            
+        }
+
+        [TestMethod]
+        public void BadPrice1()
+        {
+            slave.EditProduct("NEWPROD", "BasePrice", "0");
+            Assert.AreEqual((int)StoreEnum.UpdateProductFail, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void BadPrice2()
+        {
+            slave.EditProduct("NEWPROD", "BasePrice", "-50");
+            Assert.AreEqual((int)StoreEnum.UpdateProductFail, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void BadPrice3()
+        {
+            slave.EditProduct("NEWPROD", "BasePrice", "asd");
+            Assert.AreEqual((int)StoreEnum.UpdateProductFail, slave.answer.Status);
+
+        }
+        //TODO: Add check of null and empty strings in the slave implementation and test these cases
+        [TestMethod]
+        public void EditProductPriceSuccess()
+        {
             slave.EditProduct("NEWPROD", "BasePrice", "10");
+            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void EditProductNameSuccess()
+        {
+            slave.EditProduct("NEWPROD", "Name", "OLDPROD");
+            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
+        }
+
+
+        [TestMethod]
+        public void EditProductDescSuccess()
+        {
+            slave.EditProduct("NEWPROD", "Description", "good shit");
             Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
         }
 
