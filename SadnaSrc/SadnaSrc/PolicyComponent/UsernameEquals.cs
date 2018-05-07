@@ -8,7 +8,7 @@ namespace SadnaSrc.PolicyComponent
 {
     public class UsernameEquals : Condition
     {
-        public UsernameEquals(PolicyType type, string subject, string value) : base(type, subject, value)
+        public UsernameEquals(PolicyType type, string subject, string value, int id) : base(type, subject, value, id)
         {
         }
 

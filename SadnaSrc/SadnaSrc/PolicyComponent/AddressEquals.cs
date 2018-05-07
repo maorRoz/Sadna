@@ -8,7 +8,7 @@ namespace SadnaSrc.PolicyComponent
 {
     public class AddressEquals : Condition
     {
-        public AddressEquals(PolicyType type, string subject, string value) : base(type, subject, value)
+        public AddressEquals(PolicyType type, string subject, string value, int id) : base(type, subject, value, id)
         {
         }
 

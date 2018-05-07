@@ -8,7 +8,7 @@ namespace SadnaSrc.PolicyComponent
 {
     public class QuantityLessThan : Condition
     {
-        public QuantityLessThan(PolicyType type, string subject, string value) : base(type, subject, value)
+        public QuantityLessThan(PolicyType type, string subject, string value, int id) : base(type, subject, value, id)
         {
         }
 

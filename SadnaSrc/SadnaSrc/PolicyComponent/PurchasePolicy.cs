@@ -8,11 +8,13 @@ namespace SadnaSrc.PolicyComponent
 {
     public abstract class PurchasePolicy
     {
+        public int _id;
         public readonly PolicyType _type;
         public readonly string _subject;
 
-        public PurchasePolicy(PolicyType type, string subject)
+        public PurchasePolicy(PolicyType type, string subject, int id)
         {
+            _id = id;
             _type = type;
             _subject = subject;
         }

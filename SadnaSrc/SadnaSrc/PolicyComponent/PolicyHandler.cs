@@ -9,6 +9,7 @@ namespace SadnaSrc.PolicyComponent
     public class PolicyHandler : IPolicyHandler
     {
         public List<PurchasePolicy> policies;
+        private List<PurchasePolicy> SessionPolicies;
 
         private static PolicyHandler _instance;
         private static IPolicyDL _dataLayer;
@@ -27,16 +28,16 @@ namespace SadnaSrc.PolicyComponent
             switch (op)
             {
                 case OperatorType.AND:
-                    policy = new AndOperator(type, subject, cond1, cond2);
+                    policy = new AndOperator(type, subject, cond1, cond2, SessionPolicies.Count);
                     break;
                 case OperatorType.OR:
-                    policy = new OrOperator(type, subject, cond1, cond2);
+                    policy = new OrOperator(type, subject, cond1, cond2, SessionPolicies.Count);
                     break;
                 case OperatorType.NOT:
-                    policy = new NotOperator(type, subject, cond1, null);
+                    policy = new NotOperator(type, subject, cond1, null, SessionPolicies.Count);
                     break;
             }
-
+            SessionPolicies.Add(policy);
             return policy;
         }
 
@@ -46,25 +47,25 @@ namespace SadnaSrc.PolicyComponent
             switch (cond)
             {
                 case ConditionType.AddressEqual:
-                    policy = new AddressEquals(type, subject, value);
+                    policy = new AddressEquals(type, subject, value, SessionPolicies.Count);
                     break;
                 case ConditionType.PriceGreater:
-                    policy = new PriceGreaterThan(type, subject, value);
+                    policy = new PriceGreaterThan(type, subject, value, SessionPolicies.Count);
                     break;
                 case ConditionType.PriceLesser:
-                    policy = new PriceLessThan(type, subject, value);
+                    policy = new PriceLessThan(type, subject, value, SessionPolicies.Count);
                     break;
                 case ConditionType.QuantityGreater:
-                    policy = new QuantityGreaterThan(type, subject, value);
+                    policy = new QuantityGreaterThan(type, subject, value, SessionPolicies.Count);
                     break;
                 case ConditionType.QuantityLesser:
-                    policy = new QuantityLessThan(type, subject, value);
+                    policy = new QuantityLessThan(type, subject, value, SessionPolicies.Count);
                     break;
                 case ConditionType.UsernameEqual:
-                    policy = new UsernameEquals(type, subject, value);
+                    policy = new UsernameEquals(type, subject, value, SessionPolicies.Count);
                     break;
             }
-
+            SessionPolicies.Add(policy);
             return policy;
         }
 
@@ -75,7 +76,9 @@ namespace SadnaSrc.PolicyComponent
 
         public void AddPolicy(PurchasePolicy policy)
         {
+            policy._id = GeneratePolicyID();
             policies.Add(policy);
+            SessionPolicies.Clear();
             //_dataLayer.SavePolicy(policy);
         }
 
@@ -129,6 +132,17 @@ namespace SadnaSrc.PolicyComponent
             return null;
         }
 
+        private PurchasePolicy GetPolicy(int id)
+        {
+            foreach (PurchasePolicy policy in policies)
+            {
+                if (policy._id == id)
+                    return policy;
+            }
+
+            return null;
+        }
+
         private bool CheckPolicy(PolicyType type, string subject, string username, string address, int quantity, double price)
         {
             PurchasePolicy policy = GetPolicy(type, subject);
@@ -136,6 +150,16 @@ namespace SadnaSrc.PolicyComponent
             return policy.Evaluate(username, address, quantity, price);
         }
 
+        private int GeneratePolicyID()
+        {
+            Random random = new Random();
+            var newID = random.Next(1000, 10000);
+            while (GetPolicy(newID) != null)
+            {
+                newID = random.Next(1000, 10000);
+            }
 
+            return newID;
+        }
     }
 }

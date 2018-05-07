@@ -8,7 +8,7 @@ namespace SadnaSrc.PolicyComponent
 {
     public class NotOperator : Operator
     {
-        public NotOperator(PolicyType type, string subject, PurchasePolicy cond1, PurchasePolicy cond2) : base(type, subject, cond1, cond2)
+        public NotOperator(PolicyType type, string subject, PurchasePolicy cond1, PurchasePolicy cond2, int id) : base(type, subject, cond1, cond2, id)
         {
         }
 
