@@ -41,11 +41,6 @@ $(document).ready(function() {
     }
 
     socket.connectionMethods.onDisconnected = () => {
-        var state = extractQuery('state', 'State');
-        if (state !== 'Guest') {
-            console.log('im not a guest!!!');
-            socket.invoke('UnSubscribeSocket', socketId);
-        }
     }
 
     socket.clientMethods['IdentifyClient'] = (userId) => {
@@ -62,4 +57,10 @@ $(document).ready(function() {
 
     socket.start();
 
+    $(window).on("unload", function (e) {
+        var state = extractQuery('state', 'State');
+        if (state === 'Registered' || state === 'Admin') {
+            socket.invoke('UnSubscribeSocket', socketId);
+         }
+    });
 })

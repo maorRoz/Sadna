@@ -48,6 +48,7 @@ namespace MarketWeb
         {
             try
             {
+                
                 await InvokeClientMethodAsync(socketId, "NotifyFeed", new object[] {message});
             }
             catch (Exception)
