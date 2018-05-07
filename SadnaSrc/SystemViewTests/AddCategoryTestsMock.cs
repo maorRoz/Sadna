@@ -12,7 +12,7 @@ namespace SystemViewTests
         private Mock<IAdminDL> handler;
         private Mock<IUserSeller> userService;
         private Mock<IMarketDB> marketDbMocker;
-       
+
 
 
         [TestInitialize]
@@ -25,20 +25,12 @@ namespace SystemViewTests
             userService = new Mock<IUserSeller>();
         }
         [TestMethod]
-        public void AddCategoryWhenStoreNotExists()
-        {
-            AddCategorySlave slave = new AddCategorySlave(handler.Object);
-            slave.AddCategory("items");
-            Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.Answer.Status);
-
-        }
-        [TestMethod]
         public void AddCategoryWhenCategoryAlreadyExists()
         {
             AddCategorySlave slave = new AddCategorySlave(handler.Object);
             handler.Setup(x => x.GetCategoryByName("items")).Returns(new Category("items"));
             slave.AddCategory("items");
-            Assert.AreEqual((int)StoreEnum.CategoryExistsInStore, slave.Answer.Status);
+            Assert.AreEqual((int)EditCategoryStatus.CategoryAlradyExist, slave.Answer.Status);
         }
         [TestMethod]
         public void AddCategorySuccess()
