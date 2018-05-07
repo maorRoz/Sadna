@@ -44,7 +44,7 @@
 							@if (item.PurchaseWay == "Immediate")
 							{
 							<td>
-								<a asp-controller="StoreManagement" asp-action="RemoveProduct" asp-route-systemId="@Model.SystemId"
+								<a asp-controller="StoreManagement" asp-action="RemoveDiscount" asp-route-systemId="@Model.SystemId"
 								   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
 									<img src="\images\cancelation.png" />
 								</a>
