@@ -48,12 +48,11 @@ namespace MarketWeb
         {
             try
             {
-                
                 await InvokeClientMethodAsync(socketId, "NotifyFeed", new object[] {message});
             }
             catch (Exception)
             {
-              //  UnSubscribeSocket(socketId);
+              //  dont care
             }
         }
     }
