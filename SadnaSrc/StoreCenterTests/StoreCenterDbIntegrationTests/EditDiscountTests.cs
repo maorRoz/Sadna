@@ -63,7 +63,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)DiscountStatus.DiscountNotFound, ans.Status);
         }
 
-
+    
         [TestMethod]
         public void EditDiscountStartDateInPast()
         {
@@ -73,7 +73,9 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.EditDiscount("BOX", "startDate", "01/01/1990");
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
         }
+       
 
+       
         [TestMethod]
         public void EditDiscountEndDateInPast()
         {
@@ -85,6 +87,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "EndDate", "31/12/1998");
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
         }
+      
 
         [TestMethod]
         public void EditDiscountStartDateSuccessfully()

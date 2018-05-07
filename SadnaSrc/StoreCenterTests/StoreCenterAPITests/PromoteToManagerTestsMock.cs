@@ -44,6 +44,8 @@ namespace StoreCenterTests.StoreCenterUnitTests
         [TestMethod]
         public void NoPermission()
         {
+            userService.Setup(x => x.CanPromoteStoreAdmin()).Throws(new MarketException((int)PromoteStoreStatus.InvalidStore, ""));
+
             slave.PromoteToStoreManager("X", "");
             Assert.AreEqual((int)PromoteStoreStatus.InvalidStore, slave.Answer.Status);
         }
