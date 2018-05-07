@@ -24,6 +24,8 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             market = MarketYard.Instance;
             handler = StoreDL.Instance;
             userService = market.GetUserService();
+            MarketYard.SetDateTime(new DateTime(2018, 4, 14));
+
         }
         [TestMethod]
         public void EditDiscountWhenStoreNotExists()
@@ -82,9 +84,9 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 10, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 10, "VISIBLE", true);
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "EndDate", "31/12/1998");
+            liorSession.AddNewProduct("BOX", 10, "desc", 3);
+            liorSession.AddDiscountToProduct("BOX", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 10, "VISIBLE", true);
+            MarketAnswer ans = liorSession.EditDiscount("BOX", "EndDate", "31/12/1998");
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
         }
       
@@ -95,12 +97,11 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 150, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 100, "VISIBLE", false);
-            var product = handler.GetProductFromStore("X", "NEWPROD");
-            product.Discount.startDate = DateTime.Parse("05/04/2020");
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "startDate", "05/04/2020");
-            StockListItem find = handler.GetProductFromStore("X", "NEWPROD");
+          
+            var product = handler.GetProductFromStore("X", "BOX");
+            product.Discount.startDate = DateTime.Parse("06/06/2018");
+            MarketAnswer ans = liorSession.EditDiscount("BOX", "startDate", "06/06/2018");
+            StockListItem find = handler.GetProductFromStore("X", "BOX");
             Assert.AreEqual(find.Discount.startDate, product.Discount.startDate);
             Assert.AreEqual((int)DiscountStatus.Success, ans.Status);
         }
@@ -110,12 +111,12 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 150, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 100, "VISIBLE", false);
-            var product = handler.GetProductFromStore("X", "NEWPROD");
+            liorSession.AddNewProduct("BOX", 150, "desc", 3);
+            liorSession.AddDiscountToProduct("BOX", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 100, "VISIBLE", false);
+            var product = handler.GetProductFromStore("X", "BOX");
             product.Discount.EndDate = DateTime.Parse("05/09/2021");
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "EndDate", "05/09/2021");
-            StockListItem find = handler.GetProductFromStore("X", "NEWPROD");
+            MarketAnswer ans = liorSession.EditDiscount("BOX", "EndDate", "05/09/2021");
+            StockListItem find = handler.GetProductFromStore("X", "BOX");
             Assert.AreEqual(find.Discount.EndDate, product.Discount.EndDate);
             Assert.AreEqual((int)DiscountStatus.Success, ans.Status);
 
@@ -126,12 +127,12 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 150, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 100, "VISIBLE", false);
-            var product = handler.GetProductFromStore("X", "NEWPROD");
-            product.Discount.DiscountAmount = 130;
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "DiscountAmount", "130");
-            StockListItem find = handler.GetProductFromStore("X", "NEWPROD");
+            liorSession.AddNewProduct("BOX", 150, "desc", 3);
+            liorSession.AddDiscountToProduct("BOX", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 100, "VISIBLE", false);
+            var product = handler.GetProductFromStore("X", "BOX");
+            product.Discount.DiscountAmount = 80;
+            MarketAnswer ans = liorSession.EditDiscount("BOX", "DiscountAmount", "80");
+            StockListItem find = handler.GetProductFromStore("X", "BOX");
             Assert.AreEqual(product.Discount.DiscountAmount, find.Discount.DiscountAmount);
             Assert.AreEqual((int)DiscountStatus.Success, ans.Status);
         }
@@ -141,11 +142,11 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 150, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, "VISIBLE", false);
-            var product = handler.GetProductFromStore("X", "NEWPROD");
+            liorSession.AddNewProduct("BOX", 150, "desc", 3);
+            liorSession.AddDiscountToProduct("BOX", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, "VISIBLE", false);
+            var product = handler.GetProductFromStore("X", "BOX");
             product.Discount.Percentages = true;
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "Percentages", "true");
+            MarketAnswer ans = liorSession.EditDiscount("BOX", "Percentages", "true");
             Assert.AreEqual((int)DiscountStatus.Success, ans.Status);
         }
 
@@ -155,12 +156,12 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 150, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, "VISIBLE", false);
-            var product = handler.GetProductFromStore("X", "NEWPROD");
+            liorSession.AddNewProduct("BOX", 150, "desc", 3);
+            liorSession.AddDiscountToProduct("BOX", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, "VISIBLE", false);
+            var product = handler.GetProductFromStore("X", "BOX");
             product.Discount.discountType = DiscountTypeEnum.Hidden;
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "discountType", "Hidden");
-            StockListItem find = handler.GetProductFromStore("X", "NEWPROD");
+            MarketAnswer ans = liorSession.EditDiscount("BOX", "discountType", "Hidden");
+            StockListItem find = handler.GetProductFromStore("X", "BOX");
             Assert.AreEqual((int)find.Discount.discountType, (int)product.Discount.discountType);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
