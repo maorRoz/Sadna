@@ -121,8 +121,9 @@ namespace MarketWeb.Controllers
 			return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
 		}
 
-		public IActionResult DeclareDiscountPolicy(int systemId, string state, string message, string store)
+		public IActionResult DeclareDiscountPolicy(int systemId, string state, string message, string store, bool valid)
 		{
+			ViewBag.valid = valid;
 			var userService = MarketServer.Users[systemId];
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			var answer = storeShoppingService.ViewStoreStock(store);
@@ -144,7 +145,7 @@ namespace MarketWeb.Controllers
 				discountType, precent);
 			if (answer.Status == Success)
 			{
-				return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store});
+				return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, valid = true});
 			}
 
 			return RedirectToAction("AddDiscountPage", new {systemId, state, message = answer.Answer, store, productName});
@@ -163,7 +164,7 @@ namespace MarketWeb.Controllers
 			var answer = storeManagementService.EditDiscount(product, whatToEdit, newValue);
 			if (answer.Status == Success)
 			{
-				return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store});
+				return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, valid = true});
 			}
 
 			return RedirectToAction("EditDiscountPage", new {systemId, state, message = answer.Answer, store, product});
@@ -174,7 +175,11 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.Users[systemId];
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.RemoveDiscountFromProduct(product);
-			return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, product});
+			if (answer.Status != Success)
+			{
+				return RedirectToAction("DeclareDiscountPolicy", new { systemId, state, message = answer.Answer, store, product , valid = false});
+			}
+			return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, product, valid = true});
 		}
 	}
 }
