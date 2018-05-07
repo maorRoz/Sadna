@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -45,10 +46,8 @@ namespace SadnaSrc.StoreCenter
         StockListItem GetProductFromStore(string store, string productName);
         LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName);
         LinkedList<string> GetAllCategorysIDs();
-        Category getCategoryByName(string CategoryName);
-        LinkedList<Product> GetAllCategoryProducts(string CategoryID);
-        void AddCategory(Category category);
-        void RemoveCategory(Category category);
+        Category GetCategoryByName(string categoryName);
+        LinkedList<Product> GetAllCategoryProducts(string categoryid);
         void AddProductToCategory(string CategoryID, string ProductID);
         void RemoveProductFromCategory(string CategoryID, string ProductID);
         }

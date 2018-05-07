@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using SadnaSrc.StoreCenter;
 
-namespace SadnaSrc.StoreCenter
+namespace SadnaSrc.MarketHarmony
 {
     public class Category
     {

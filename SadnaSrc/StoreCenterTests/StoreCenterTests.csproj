@@ -77,14 +77,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StoreCenterDbIntegrationTests\addDiscountTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\AddProductToCategoryTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\RemoveProductFromCategoryTests.cs" />
     <Compile Include="StoreCenterUnitTests\AddProductToCategoryTestsMock.cs" />
-    <Compile Include="StoreCenterUnitTests\RemoveCategoryTestsMock.cs" />
-    <Compile Include="StoreCenterDbIntegrationTests\AddCategoryTests.cs" />
-    <Compile Include="StoreCenterDbIntegrationTests\addDiscountTests.cs" />
-    <Compile Include="StoreCenterDbIntegrationTests\RemoveCategoryTests.cs" />
-    <Compile Include="StoreCenterUnitTests\AddCategoryTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\AddDiscountTestsMock.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\AddNewLotteryTests.cs" />
     <Compile Include="StoreCenterUnitTests\AddNewLotteryTestsMock.cs" />

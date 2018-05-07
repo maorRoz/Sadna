@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.AdminView;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
@@ -125,19 +126,6 @@ namespace SadnaSrc.StoreCenter
             AddQuanitityToProductSlave slave = new AddQuanitityToProductSlave(_storeName, _storeManager, storeDL);
             slave.AddQuanitityToProduct(productName, quantity);
             return slave.answer;
-        }
-
-        public MarketAnswer AddCategory(string categoryName)
-        {
-            AddCategorySlave slave = new AddCategorySlave(_storeName, _storeManager, storeDL);
-            Category category =  slave.AddCategory(categoryName);
-            return slave.Answer;
-        }
-        public MarketAnswer RemoveCategory(string categoryName)
-        {
-            RemoveCategorySlave slave = new RemoveCategorySlave(_storeName, _storeManager, storeDL);
-            slave.RemoveCategory(categoryName);
-            return slave.Answer;
         }
         public MarketAnswer AddProductToCategory(string categoryName, string productName)
         {

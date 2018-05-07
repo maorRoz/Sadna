@@ -4,6 +4,7 @@ using SadnaSrc.StoreCenter;
 using SadnaSrc.Main;
 using System.Collections.Generic;
 using System.Linq;
+using SadnaSrc.MarketHarmony;
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
@@ -330,34 +331,10 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         public void GetCategoryByName()
         {
             var expected = new Category("C1", "WanderlandItems"); // THIS exists in DB by SQL injection
-            var find = handler.getCategoryByName("WanderlandItems");
+            var find = handler.GetCategoryByName("WanderlandItems");
             Assert.AreEqual(expected, find);
         }
-        [TestMethod]
-        public void AddCategory()
-        {
-
-            var expected = new Category("C2", "Items");
-            var find = handler.getCategoryByName("Items");
-            Assert.IsNull(find);
-            handler.AddCategory(expected);
-            find = handler.getCategoryByName("Items");
-            Assert.AreEqual(expected, find);
-        }
-        [TestMethod]
-        public void RemoveCategory()
-        {
-
-            var expected = new Category("C2", "Items");
-            var find = handler.getCategoryByName("Items");
-            Assert.IsNull(find);
-            handler.AddCategory(expected);
-            find = handler.getCategoryByName("Items");
-            Assert.AreEqual(expected, find);
-            handler.RemoveCategory(expected);
-            find = handler.getCategoryByName("Items");
-            Assert.IsNull(find);
-        }
+        
         [TestMethod]
         public void GetAllCategoryProducts()
         {

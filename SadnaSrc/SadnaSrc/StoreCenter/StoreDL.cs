@@ -58,15 +58,6 @@ namespace SadnaSrc.StoreCenter
             }
             return ids;
         }
-        public void AddCategory(Category category)
-        {
-            dbConnection.InsertTable("Category", "SystemID, name",
-                category.GetCategoryStringValues(), category.GetCategoryValuesArray());
-        }
-        public void RemoveCategory(Category category)
-        {
-            dbConnection.DeleteFromTable("Category", "SystemID = '" + category.SystemId + "'");
-        }
         public void AddProductToCategory(string categoryid, string productid)
         {
             string[] a = { "'" + categoryid + "'", "'" + productid + "'" };
@@ -563,7 +554,7 @@ namespace SadnaSrc.StoreCenter
             dbConnection.UpdateTable("LotteryTable", "SystemID = '" + lotteryManagment.SystemID + "'", columnNames,
                 lotteryManagment.GetLotteryManagmentStringValues(), lotteryManagment.GetLotteryManagmentValuesArray());
         }
-        public Category getCategoryByName(string categoryname)
+        public Category GetCategoryByName(string categoryname)
         {
             Category category = null;
             using (var dbReader =
