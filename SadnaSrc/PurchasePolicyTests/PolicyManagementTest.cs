@@ -112,7 +112,7 @@ namespace PurchasePolicyTests
         {
             InitPolicies();
             string[] policyData =
-                handler.CreatePolicy(OperatorType.AND, 0, 1);
+                handler.CreatePolicy(OperatorType.OR, 0, 1);
             string[] expectedData = { "2", "OR", "0", "1" };
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(3, handler.GetSessionPolicies().Length);

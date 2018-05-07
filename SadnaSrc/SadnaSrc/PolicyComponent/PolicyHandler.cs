@@ -84,24 +84,28 @@ namespace SadnaSrc.PolicyComponent
 
         public void RemovePolicy(PolicyType type, string subject)
         {
+            PurchasePolicy toRemove = null;
             foreach (PurchasePolicy policy in Policies)
             {
                 if (policy.Type == type && policy.Subject == subject)
                 {
-                    Policies.Remove(policy);
+                    toRemove = policy;
                     //_dataLayer.RemovePolicy(policy);
                 }
                     
             }
+            Policies.Remove(toRemove);
         }
 
         public void RemoveSessionPolicy(int policyId)
         {
+            PurchasePolicy toRemove = null;
             foreach (PurchasePolicy policy in SessionPolicies)
             {
                 if (policy.ID == policyId)
-                    SessionPolicies.Remove(policy);
+                    toRemove = policy;
             }
+            SessionPolicies.Remove(toRemove);
         }
 
         public bool CheckRelevantPolicies(string product, string store, string category, string username,
@@ -163,7 +167,7 @@ namespace SadnaSrc.PolicyComponent
 
         private PurchasePolicy GetPolicy(int id)
         {
-            foreach (PurchasePolicy policy in Policies)
+            foreach (PurchasePolicy policy in SessionPolicies)
             {
                 if (policy.ID == id)
                     return policy;

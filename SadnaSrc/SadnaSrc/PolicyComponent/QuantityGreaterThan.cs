@@ -14,7 +14,7 @@ namespace SadnaSrc.PolicyComponent
 
         public override bool Evaluate(string username, string address, int quantity, double price)
         {
-            return quantity > Int32.Parse(_value);
+            return quantity >= Int32.Parse(_value);
         }
 
         public override string[] GetData()

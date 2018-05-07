@@ -48,7 +48,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PolicyTest.cs" />
+    <Compile Include="PolicyCheckingTest.cs" />
+    <Compile Include="PolicyManagementTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
