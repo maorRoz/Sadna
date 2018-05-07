@@ -14,6 +14,7 @@ namespace SadnaSrc.PolicyComponent
         void AddPolicy(int policyId);
         void RemovePolicy(PolicyType type, string subject);
         bool CheckRelevantPolicies(string product, string store, string category, string username, string address, int quantity, double price);
+        int[] GetSessionPolicies();
 
         string[] PolicyTypeStrings();
         string[] OperatorTypeStrings();

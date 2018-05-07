@@ -8,7 +8,7 @@ namespace SadnaSrc.PolicyComponent
 {
     public class PolicyHandler : IPolicyHandler
     {
-        public List<PurchasePolicy> policies;
+        public List<PurchasePolicy> Policies;
         private List<PurchasePolicy> SessionPolicies;
 
         private static PolicyHandler _instance;
@@ -18,7 +18,7 @@ namespace SadnaSrc.PolicyComponent
 
         private PolicyHandler()
         {
-            policies = new List<PurchasePolicy>();
+            Policies = new List<PurchasePolicy>();
         }
 
         public string[] CreatePolicy(PolicyType type, string subject, OperatorType op, int id1, int id2)
@@ -77,18 +77,18 @@ namespace SadnaSrc.PolicyComponent
         {
             PurchasePolicy toAdd = GetPolicy(policyId);
             toAdd.ID = GeneratePolicyID();
-            policies.Add(toAdd);
+            Policies.Add(toAdd);
             SessionPolicies.Clear();
             //_dataLayer.SavePolicy(policy);
         }
 
         public void RemovePolicy(PolicyType type, string subject)
         {
-            foreach (PurchasePolicy policy in policies)
+            foreach (PurchasePolicy policy in Policies)
             {
                 if (policy.Type == type && policy.Subject == subject)
                 {
-                    policies.Remove(policy);
+                    Policies.Remove(policy);
                     //_dataLayer.RemovePolicy(policy);
                 }
                     
@@ -104,6 +104,15 @@ namespace SadnaSrc.PolicyComponent
             CheckPolicy(PolicyType.Product, product, username, address, quantity, price) &&
             CheckPolicy(PolicyType.Store, store, username, address, quantity, price) &&
             CheckPolicy(PolicyType.StockItem, store + "." + product, username, address, quantity, price);
+        }
+
+        public int[] GetSessionPolicies()
+        {
+            PurchasePolicy[] policiesArr = SessionPolicies.ToArray();
+            int[] idArr = new int[policiesArr.Length];
+            for (int i = 0; i < idArr.Length; i++)
+                idArr[i] = policiesArr[i].ID;
+            return idArr;
         }
 
         public string[] PolicyTypeStrings()
@@ -123,7 +132,7 @@ namespace SadnaSrc.PolicyComponent
 
         private PurchasePolicy GetPolicy(PolicyType type, string subject)
         {
-            foreach (PurchasePolicy policy in policies)
+            foreach (PurchasePolicy policy in Policies)
             {
                 if (policy.Type == type && policy.Subject == subject)
                     return policy;
@@ -134,7 +143,7 @@ namespace SadnaSrc.PolicyComponent
 
         private PurchasePolicy GetPolicy(int id)
         {
-            foreach (PurchasePolicy policy in policies)
+            foreach (PurchasePolicy policy in Policies)
             {
                 if (policy.ID == id)
                     return policy;
