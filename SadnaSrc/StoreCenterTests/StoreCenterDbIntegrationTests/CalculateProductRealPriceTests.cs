@@ -82,7 +82,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             }
             catch (StoreException exe)
             {
-                Assert.AreEqual((int)CalculateEnum.quantityIsGreaterThenStack, exe.Status);
+                Assert.AreEqual((int)CalculateEnum.QuantityIsGreaterThenStack, exe.Status);
             }
         }
         [TestMethod]
@@ -94,7 +94,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             }
             catch (StoreException exe)
             {
-                Assert.AreEqual((int)CalculateEnum.quanitityIsNonPositive, exe.Status);
+                Assert.AreEqual((int)CalculateEnum.QuanitityIsNonPositive, exe.Status);
             }
         }
         [TestMethod]
@@ -106,7 +106,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             }
             catch (StoreException exe)
             {
-                Assert.AreEqual((int)CalculateEnum.quanitityIsNonPositive, exe.Status);
+                Assert.AreEqual((int)CalculateEnum.QuanitityIsNonPositive, exe.Status);
             }
         }
         [TestMethod]
@@ -142,7 +142,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             }
             catch (StoreException exe)
             {
-                Assert.AreEqual((int)CalculateEnum.discountIsNotHidden, exe.Status);
+                Assert.AreEqual((int)CalculateEnum.DiscountIsNotHidden, exe.Status);
             }
         }
         [TestMethod]

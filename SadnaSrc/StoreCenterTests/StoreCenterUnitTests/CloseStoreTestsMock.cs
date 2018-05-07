@@ -17,8 +17,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             private Mock<IStoreDL> handler;
             private Mock<IUserSeller> userService;
             private Mock<IMarketDB> marketDbMocker;
-
-            //TODO: improve this
+            private CloseStoreSlave slave;
 
             [TestInitialize]
             public void BuildStore()
@@ -28,21 +27,30 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 MarketLog.SetDB(marketDbMocker.Object);
                 handler = new Mock<IStoreDL>();
                 userService = new Mock<IUserSeller>();
+                handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
+                handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
+                slave = new CloseStoreSlave(userService.Object, "X", handler.Object);
             }
             [TestMethod]
-            public void CloseStoreFail()
+            public void NoStore()
             {
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
-                CloseStoreSlave slave = new CloseStoreSlave(userService.Object, "noStore", handler.Object);
                 slave.CloseStore();
                 Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
             }
+
+            [TestMethod]
+            public void NoPermission()
+            {
+                userService.Setup(x => x.CanPromoteStoreOwner()).Throws(new MarketException(0, ""));
+                slave.CloseStore();
+                Assert.AreEqual((int)StoreEnum.CloseStoreFail, slave.answer.Status);
+            }
+        
             [TestMethod]
             public void CloseStorePass()
             {
-                handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
-                handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", "bala"));
-                CloseStoreSlave slave = new CloseStoreSlave(userService.Object, "X", handler.Object);
+
                 slave.CloseStore();
                 Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
             }

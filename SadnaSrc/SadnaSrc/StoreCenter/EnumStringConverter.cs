@@ -21,12 +21,12 @@ namespace SadnaSrc.StoreCenter
             }
 
         }
-        public static string PrintEnum(discountTypeEnum type)
+        public static string PrintEnum(DiscountTypeEnum type)
         {
             switch (type)
             {
-                case discountTypeEnum.Hidden: return "HIDDEN";
-                case discountTypeEnum.Visible: return "VISIBLE";
+                case DiscountTypeEnum.Hidden: return "HIDDEN";
+                case DiscountTypeEnum.Visible: return "VISIBLE";
                 default: throw new StoreException(MarketError.LogicError, "Enum value not exists");
             }
         }
@@ -39,18 +39,18 @@ namespace SadnaSrc.StoreCenter
                 default: throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");
             }
         }
-        public static discountTypeEnum GetdiscountTypeEnumString(string discountType)
+        public static DiscountTypeEnum GetdiscountTypeEnumString(string discountType)
         {
             switch (discountType)
             {
                 case "HIDDEN":
                 case "hidden":
                 case "Hidden":
-                    return discountTypeEnum.Hidden;
+                    return DiscountTypeEnum.Hidden;
                 case "VISIBLE":
                 case "visible":
                 case "Visible":
-                    return discountTypeEnum.Visible;
+                    return DiscountTypeEnum.Visible;
             }
 
             throw new StoreException(StoreEnum.EnumValueNotExists, "Enum value not exists");

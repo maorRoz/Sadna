@@ -40,7 +40,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditProduct("name0", "Name", "0");
-            Assert.AreEqual((int)StoreEnum.NoPremmision, ans.Status);
+            Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
         [TestMethod]
         public void EditProductWhenProductIsNotAvailableInStore()
@@ -51,15 +51,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.EditProduct("name0", "Name", "0");
             Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
-        [TestMethod]
-        public void EditProductFailNameExists()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditProduct("BOX", "Name", "BOX");
-            Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, ans.Status);
-        }
+        
         [TestMethod]
         public void EditProductNameSuccessfully()
         {
@@ -72,45 +64,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.IsNotNull(find);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
-        [TestMethod]
-        public void EditProductBasePriceFailPriceZero()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "0");
-            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
-            Assert.IsNotNull(find);
-            Assert.AreEqual(5, find.BasePrice);
-            Assert.AreEqual((int)StoreEnum.UpdateProductFail, ans.Status);
-        }
-        [TestMethod]
-        public void EditProductBasePriceFailPriceIsNotNumber()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "NotA-Number");
-            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
-            Assert.IsNotNull(find);
-            Assert.AreEqual(5, find.BasePrice);
-            Assert.AreEqual((int)StoreEnum.UpdateProductFail, ans.Status);
-        }
-        [TestMethod]
-        public void EditProductBasePriceFailPriceNegative()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "-4");
-            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
-            Assert.IsNotNull(find);
-            Assert.AreEqual(5, find.BasePrice);
-            Assert.AreEqual((int)StoreEnum.UpdateProductFail, ans.Status);
-        }
+        
         [TestMethod]
         public void EditProductBasePriceSuccessfully()
         {

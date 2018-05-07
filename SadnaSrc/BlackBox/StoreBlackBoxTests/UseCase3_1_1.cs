@@ -63,7 +63,7 @@ namespace BlackBox.StoreBlackBoxTests
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
 			_storeManage1.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.NoPremmision, res.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission, res.Status);
 
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;

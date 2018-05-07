@@ -17,10 +17,9 @@ namespace StoreCenterTests.StoreCenterUnitTests
         private Mock<IStoreDL> handler;
         private Mock<IUserSeller> userService;
         private Mock<IMarketDB> marketDbMocker;
+        private PromoteToStoreManagerSlave slave;
 
 
-
-        //TODO: improve this
 
 
         [TestInitialize]
@@ -31,19 +30,37 @@ namespace StoreCenterTests.StoreCenterUnitTests
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
             userService = new Mock<IUserSeller>();
+            slave = new PromoteToStoreManagerSlave(userService.Object, "X", handler.Object);
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
+
         }
         [TestMethod]
-        public void PromoteToManagerNoStore()
+        public void NoStore()
         {
-            PromoteToStoreManagerSlave slave = new PromoteToStoreManagerSlave(userService.Object, "bla", handler.Object);
-            slave.PromoteToStoreManager("bla", "");
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
+            slave.PromoteToStoreManager("X", "");
             Assert.AreEqual((int)PromoteStoreStatus.InvalidStore, slave.Answer.Status);
+        }
+        [TestMethod]
+        public void NoPermission()
+        {
+            userService.Setup(x => x.CanPromoteStoreAdmin()).Throws(new MarketException((int)PromoteStoreStatus.InvalidStore, ""));
+
+            slave.PromoteToStoreManager("X", "");
+            Assert.AreEqual((int)PromoteStoreStatus.InvalidStore, slave.Answer.Status);
+        }
+
+        [TestMethod]
+        public void PromoteMyself()
+        {
+            userService.Setup(x => x.ValidateNotPromotingHimself(It.IsAny<string>()))
+                .Throws(new MarketException((int) PromoteStoreStatus.PromoteSelf, ""));
+            slave.PromoteToStoreManager("bla", "");
+            Assert.AreEqual((int)PromoteStoreStatus.PromoteSelf, slave.Answer.Status);
         }
         [TestMethod]
         public void PromoteToManagerSuccess()
         {
-            PromoteToStoreManagerSlave slave = new PromoteToStoreManagerSlave(userService.Object, "X", handler.Object);
-            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
             slave.PromoteToStoreManager("bla", "");
             Assert.AreEqual((int)PromoteStoreStatus.Success, slave.Answer.Status);
         }

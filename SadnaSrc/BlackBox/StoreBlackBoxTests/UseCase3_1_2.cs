@@ -54,7 +54,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManage2 = StoreManagementDriver.getBridge();
 			_storeManage2.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.RemoveProduct("bamba");
-			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission,res2.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			//didn't succeed in removing the product, there is still one product
