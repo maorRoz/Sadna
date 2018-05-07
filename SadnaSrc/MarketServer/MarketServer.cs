@@ -52,7 +52,7 @@ namespace MarketWeb
             }
             catch (Exception)
             {
-              //  UnSubscribeSocket(socketId);
+              //  dont care
             }
         }
     }
