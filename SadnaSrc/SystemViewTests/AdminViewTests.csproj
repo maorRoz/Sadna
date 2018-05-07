@@ -77,12 +77,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddCategoryTests.cs" />
-    <Compile Include="AddCategoryTestsMock.cs" />
+    <Compile Include="AdminViewApiTest\AddCategoryTests.cs" />
+    <Compile Include="UseCaseUnitTest\AddCategoryTestsMock.cs" />
     <Compile Include="AdminViewApiTest\RemoveUserTests.cs" />
     <Compile Include="AdminViewApiTest\AdminViewPurchaseHistoryTests.cs" />
-    <Compile Include="RemoveCategoryTests.cs" />
-    <Compile Include="RemoveCategoryTestsMock.cs" />
+    <Compile Include="AdminViewApiTest\RemoveCategoryTests.cs" />
+    <Compile Include="UseCaseUnitTest\RemoveCategoryTestsMock.cs" />
     <Compile Include="UseCaseUnitTest\AdminViewCategoryTestsDL.cs" />
     <Compile Include="UseCaseUnitTest\UseCase5_4_Tests.cs" />
     <Compile Include="UseCaseUnitTest\UseCase5_2_Tests.cs" />
