@@ -55,32 +55,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.ChangeProductPurchaseWayToLottery("noPorduct", DateTime.Parse("30/03/2019"), DateTime.Parse("31/12/2019"));
             Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
-        [TestMethod]
-        public void ChangeToLotteryHasLottery()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            Product P = new Product("P1345678", "OBJ", 9, "des");
-            ProductToDelete = new StockListItem(4, P, null, PurchaseEnum.Lottery, "S1");
-            LotteryToDelete = new LotterySaleManagmentTicket("L1000", "X", P, DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2020"));
-            handler.AddStockListItemToDataBase(ProductToDelete);
-            handler.AddLottery(LotteryToDelete);
-            MarketAnswer ans = liorSession.ChangeProductPurchaseWayToLottery("OBJ", DateTime.Parse("31/12/2018"), DateTime.Parse("31/12/2020"));
-            Assert.AreEqual((int)ChangeToLotteryEnum.LotteryExists, ans.Status);
-        }
-        [TestMethod]
-        public void ChangeToLotteryDatesAreWrong()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            Product P = new Product("P1345678", "OBJ", 9, "des");
-            ProductToDelete = new StockListItem(4, P, null, PurchaseEnum.Immediate, "S1");
-            handler.AddStockListItemToDataBase(ProductToDelete);
-            MarketAnswer ans = liorSession.ChangeProductPurchaseWayToLottery("OBJ", DateTime.Parse("31/12/2020"), DateTime.Parse("31/12/2018"));
-            Assert.AreEqual((int)ChangeToLotteryEnum.DatesAreWrong, ans.Status);
-        }
+     
         [TestMethod]
         public void ChangeToLotterySuccess()
         {
