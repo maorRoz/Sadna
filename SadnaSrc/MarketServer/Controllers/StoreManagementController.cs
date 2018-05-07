@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using MarketServer.Models;
 using MarketWeb.Models;
@@ -181,5 +182,42 @@ namespace MarketWeb.Controllers
 			}
 			return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, product, valid = true});
 		}
+
+		public IActionResult PromoteStoreAdmin(int systemId, string state, string message, string store)
+		{
+			List<CheckBoxModel> lst = new List<CheckBoxModel>();
+			lst.Add(new CheckBoxModel(){ Name = "StoreOwner" , IsChecked = false});
+			lst.Add(new CheckBoxModel() { Name = "ManageProducts", IsChecked = false });
+			lst.Add(new CheckBoxModel() { Name = "PromoteStoreAdmin", IsChecked = false });
+			lst.Add(new CheckBoxModel() { Name = "DeclareDiscountPolicy", IsChecked = false });
+			lst.Add(new CheckBoxModel() { Name = "ViewPurchaseHistory", IsChecked = false });
+			CheckBoxListModel optionList = new CheckBoxListModel(systemId, state, message, store);
+			optionList.Items = lst;
+			return View(optionList);
+		}
+
+		[HttpPost]
+		public IActionResult HandleOptionsSelected(int systemId, string state, string message, string store, CheckBoxListModel model, string user)
+		{
+			StringBuilder actions = new StringBuilder();
+			foreach (var item in model.Items)
+			{
+				if (item.IsChecked)
+				{
+					actions.Append(item.Name + ",");
+				}
+			}
+			return RedirectToAction("PromoteStoreAdminCall", new { systemId, state, message = "",store , user, actions});
+		}
+
+		public IActionResult PromoteStoreAdminCall(int systemId, string state, string store, string userToPromote,
+			string actions)
+		{
+			var userService = MarketServer.Users[systemId];
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.PromoteToStoreManager(userToPromote, actions);
+			return RedirectToAction("PromoteStoreAdmin", new { systemId, state, message = answer.Answer, store});
+		}
+
 	}
 }
