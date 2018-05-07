@@ -33,16 +33,10 @@ namespace StoreCenterTests.StoreCenterUnitTests
             userService = new Mock<IUserShopper>();
             handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
 
-            slave = new ViewStoreNamesSlave( userService.Object, handler.Object);
+            slave = new ViewStoreNamesSlave(handler.Object);
 
         }
-        [TestMethod]
-        public void NoPermission()
-        {
-            userService.Setup(x => x.ValidateCanBrowseMarket()).Throws(new MarketException(0, ""));
-            slave.ViewStores();
-            Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
-        }
+       
 
 
         [TestMethod]

@@ -44,7 +44,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
             userService.Setup(x => x.CanManageProducts()).Throws(new MarketException(9, "bla"));
             slave.AddProductToCategory("WanderlandItems", "OnePunchManPoster");
-            Assert.AreEqual((int)StoreEnum.NoPremmision, slave.Answer.Status);
+            Assert.AreEqual((int)StoreEnum.NoPermission, slave.Answer.Status);
         }
         [TestMethod]
         public void AddProductToCategoryWhenCategoryNotExists()
