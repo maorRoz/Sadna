@@ -16,5 +16,10 @@ namespace SadnaSrc.PolicyComponent
         {
             return username == _value;
         }
+
+        public override string[] GetData()
+        {
+            return new[] { "" + _id, _type.ToString(), _subject, "Username", "=", _value };
+        }
     }
 }

@@ -16,5 +16,10 @@ namespace SadnaSrc.PolicyComponent
         {
             return address.Contains(_value);
         }
+
+        public override string[] GetData()
+        {
+            return new[] { "" + _id, _type.ToString(), _subject, "Address", "=", _value };
+        }
     }
 }

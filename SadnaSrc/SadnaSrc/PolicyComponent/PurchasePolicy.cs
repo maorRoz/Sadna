@@ -20,5 +20,7 @@ namespace SadnaSrc.PolicyComponent
         }
 
         public abstract bool Evaluate(string username, string address, int quantity, double price);
+
+        public abstract string[] GetData();
     }
 }

@@ -16,5 +16,10 @@ namespace SadnaSrc.PolicyComponent
         {
             return quantity < Int32.Parse(_value);
         }
+
+        public override string[] GetData()
+        {
+            return new[] {""+_id, _type.ToString(), _subject, "Quantity", "<=", _value };
+        }
     }
 }

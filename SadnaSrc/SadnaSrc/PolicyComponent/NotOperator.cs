@@ -16,5 +16,20 @@ namespace SadnaSrc.PolicyComponent
         {
             return !_cond1.Evaluate(username, address, quantity, price);
         }
+
+        public override string[] GetData()
+        {
+            string[] op1 = _cond1.GetData();
+            List<string> res = new List<string>();
+            res.Add("NOT");
+            foreach (string str in op1)
+            {
+                res.Add(str);
+            }
+
+            return res.ToArray();
+        }
     }
+
+
 }
