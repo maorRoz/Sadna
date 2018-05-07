@@ -17,11 +17,13 @@ namespace StoreCenterTests.StoreCenterUnitTests
             private Mock<IStoreDL> handler;
             private Mock<IUserShopper> userService;
             private Mock<IMarketDB> marketDbMocker;
+            private Product prod;
+            private Discount discount;
+            private StockListItem stock;
+            private ViewStoreStockSlave slave;
+            private LinkedList<string> ids;
 
-            
-            //TODO: improve this
-
-            [TestInitialize]
+        [TestInitialize]
             public void BuildStore()
             {
                 marketDbMocker = new Mock<IMarketDB>();
@@ -29,14 +31,22 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 MarketLog.SetDB(marketDbMocker.Object);
                 handler = new Mock<IStoreDL>();
                 userService = new Mock<IUserShopper>();
+                handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
+                handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
+                ids = new LinkedList<string>();
+                ids.AddFirst("S-4");
+                handler.Setup(x => x.GetAllStoreProductsID("S-4")).Returns(ids);
 
-            }
+
+            slave = new ViewStoreStockSlave(userService.Object, handler.Object);
+
+        }
             [TestMethod]
-            public void ViewStoreStockFail()
+            public void NoPermission()
             {
-                ViewStoreStockSlave slave = new ViewStoreStockSlave(userService.Object, handler.Object);
-                slave.ViewStoreStock("noStore");
-                Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
+                userService.Setup(x => x.ValidateCanBrowseMarket()).Throws(new MarketException(0, ""));
+                slave.ViewStoreStock("X");
+                Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
             }
 
             //TODO : FIX THIS

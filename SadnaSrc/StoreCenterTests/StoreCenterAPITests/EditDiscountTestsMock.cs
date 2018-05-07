@@ -32,7 +32,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             handler = new Mock<IStoreDL>();
             userService = new Mock<IUserSeller>();
             prod = new Product("NEWPROD", 150, "desc");
-            discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
+            discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, true);
             stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
             handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
             handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns(prod);
@@ -73,181 +73,98 @@ namespace StoreCenterTests.StoreCenterUnitTests
             slave.EditDiscount("NEWPROD", "DiscountAmount", "10");
             Assert.AreEqual((int)DiscountStatus.DiscountNotFound, slave.answer.Status);
         }
-        /*
 
         [TestMethod]
-        public void EditDiscountInsertInvalidDiscountType()
+        public void InvalidDiscountType()
         {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditDiscount("BOX", "discountType", "agado");
-            Assert.AreEqual((int)StoreEnum.EnumValueNotExists, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountStartDateInvalid()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditDiscount("BOX", "startDate", "agado");
-            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountStartDateInPast()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditDiscount("BOX", "startDate", "01/01/1990");
-            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountStartDateLaterThenEndDate()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditDiscount("BOX", "startDate", "31/12/2590");
-            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
+
+            slave.EditDiscount("NEWPROD", "asd", "agado");
+            Assert.AreEqual((int)DiscountStatus.NoLegalAttrebute, slave.answer.Status);
         }
 
         [TestMethod]
-        public void EditDiscountEndDateInvalid()
+        public void StartDateInvalid1()
         {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditDiscount("BOX", "EndDate", "agado");
-            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountEndDateInPast()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 10, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 10, "VISIBLE", true);
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "EndDate", "31/12/1998");
-            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountEndDateSoonerThenStartDate()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 10, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 10, "VISIBLE", true);
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "EndDate", "31/12/2018");
-            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountDiscountAmountInvalid()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditDiscount("BOX", "DiscountAmount", "ag88ado");
-            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNotNumber, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountDiscountAmountIsMoreThen100AndPercentages()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 10, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 10, "VISIBLE", true);
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "DiscountAmount", "500");
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountDiscountAmountIs100AndPercentages()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 10, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 10, "VISIBLE", true);
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "DiscountAmount", "100");
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountDiscountAmountIsGreaterThenProductPriceNoPercentages()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 100, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 10, "VISIBLE", false);
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "DiscountAmount", "150");
-            Assert.AreEqual((int)DiscountStatus.DiscountGreaterThenProductPrice, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountDiscountAmountIsNegative()
-        {
-
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditDiscount("BOX", "DiscountAmount", "-30");
-            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, ans.Status);
-        }
-        [TestMethod]
-        public void EditDiscountDiscountAmountIsZero()
-        {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditDiscount("BOX", "DiscountAmount", "0");
-            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, ans.Status);
+            slave.EditDiscount("NEWPROD", "startdate", "agado");
+            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, slave.answer.Status);
         }
 
         [TestMethod]
-        public void EditDiscountPercentagesIsNotBoolean()
+        public void StartDateInvalid2()
         {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditDiscount("BOX", "Percentages", "agado");
-            Assert.AreEqual((int)DiscountStatus.PrecentegesIsNotBoolean, ans.Status);
+            slave.EditDiscount("NEWPROD", "startdate", "30/08/2020");
+            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, slave.answer.Status);
         }
+
         [TestMethod]
-        public void EditDiscountPercentagesWhenDiscountAmountIsMoreThen100()
+        public void EndDateInvalid1()
         {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 150, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 101, "VISIBLE", false);
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "Percentages", "True");
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
+            slave.EditDiscount("NEWPROD", "EndDate", "agado");
+            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, slave.answer.Status);
         }
+
         [TestMethod]
-        public void EditDiscountPercentagesWhenDiscountAmountIs100()
+        public void EndDateInvalid2()
         {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 150, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 100, "VISIBLE", false);
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "Percentages", "True");
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, ans.Status);
+            slave.EditDiscount("NEWPROD", "EndDate", "03/04/2020");
+            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, slave.answer.Status);
         }
+
+
         [TestMethod]
-        public void EditDiscountNoLegalAttrebute()
+        public void DiscountAmountInvalid()
         {
-            userService.EnterSystem();
-            userService.SignIn("Arik1", "123");
-            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            liorSession.AddNewProduct("NEWPROD", 150, "desc", 3);
-            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 100, "VISIBLE", false);
-            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "golo-golo", "true");
-            Assert.AreEqual((int)DiscountStatus.NoLegalAttrebute, ans.Status);
+            slave.EditDiscount("NEWPROD", "DiscountAmount", "satan");
+            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNotNumber, slave.answer.Status);
+          
         }
-        */
+
+        [TestMethod]
+        public void DiscountBadPercentage1()
+        {
+            slave.EditDiscount("NEWPROD", "DiscountAmount", "500");
+            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, slave.answer.Status);
+
+        }
+
+        [TestMethod]
+        public void DiscountBadPercentage2()
+        {
+            slave.EditDiscount("NEWPROD", "DiscountAmount", "100");
+            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, slave.answer.Status);
+
+        }
+
+        [TestMethod]
+        public void DiscountBadAmmount1()
+        {
+            discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
+            stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
+            handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);
+            slave.EditDiscount("NEWPROD", "DiscountAmount", "500");
+            Assert.AreEqual((int)DiscountStatus.DiscountGreaterThenProductPrice, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void DiscountBadAmmount2()
+        {
+            discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
+            stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
+            handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);
+            slave.EditDiscount("NEWPROD", "DiscountAmount", "-2");
+            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void DiscountBadAmmount3()
+        {
+            discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
+            stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
+            handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);
+            slave.EditDiscount("NEWPROD", "DiscountAmount", "0");
+            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, slave.answer.Status);
+        }
+       
         [TestMethod]
         public void EditDiscountSuccess()
         {

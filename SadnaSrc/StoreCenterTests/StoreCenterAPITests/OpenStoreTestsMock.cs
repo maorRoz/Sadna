@@ -17,6 +17,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         private Mock<IStoreDL> handler;
         private Mock<IUserShopper> userService;
         private Mock<IMarketDB> marketDbMocker;
+        private OpenStoreSlave slave;
         [TestInitialize]
         public void BuildStore()
         {
@@ -25,19 +26,27 @@ namespace StoreCenterTests.StoreCenterUnitTests
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
             userService = new Mock<IUserShopper>();
+
+            slave = new OpenStoreSlave(userService.Object, handler.Object);
+        }
+
+        [TestMethod]
+        public void NotRegistered()
+        {
+            userService.Setup(x => x.ValidateRegistered()).Throws(new MarketException(0, ""));
+            slave.OpenStore("newStoreName", "bla");
+            Assert.AreEqual((int)OpenStoreStatus.InvalidUser, slave.Answer.Status);
         }
         [TestMethod]
-        public void OpenStoreInterfaceLevelFail()
+        public void StoreNameTaken()
         {
-            OpenStoreSlave slave = new OpenStoreSlave(userService.Object, handler.Object);
             handler.Setup(x => x.GetStorebyName("newStoreName")).Returns(new Store("newStoreName", ""));
             slave.OpenStore("newStoreName", "bla");
             Assert.AreEqual((int)OpenStoreStatus.AlreadyExist, slave.Answer.Status);
         }
         [TestMethod]
-        public void OpenStoreInterfaceLevelPass()
+        public void OpenStoreSuccess()
         {
-            OpenStoreSlave slave = new OpenStoreSlave(userService.Object, handler.Object);
             slave.OpenStore("newStoreName", "bla");
             Assert.AreEqual((int)OpenStoreStatus.Success, slave.Answer.Status);    
         }

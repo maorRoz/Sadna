@@ -65,6 +65,28 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 
 
         [TestMethod]
+        public void EditDiscountStartDateInPast()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            MarketAnswer ans = liorSession.EditDiscount("BOX", "startDate", "01/01/1990");
+            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
+        }
+
+        [TestMethod]
+        public void EditDiscountEndDateInPast()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            liorSession.AddNewProduct("NEWPROD", 10, "desc", 3);
+            liorSession.AddDiscountToProduct("NEWPROD", DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 10, "VISIBLE", true);
+            MarketAnswer ans = liorSession.EditDiscount("NEWPROD", "EndDate", "31/12/1998");
+            Assert.AreEqual((int)DiscountStatus.DatesAreWrong, ans.Status);
+        }
+
+        [TestMethod]
         public void EditDiscountStartDateSuccessfully()
         {
             userService.EnterSystem();

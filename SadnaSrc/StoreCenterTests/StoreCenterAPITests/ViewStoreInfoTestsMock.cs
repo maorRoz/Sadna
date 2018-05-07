@@ -17,10 +17,10 @@ namespace StoreCenterTests.StoreCenterUnitTests
             private Mock<IStoreDL> handler;
             private Mock<IUserShopper> userService;
             private Mock<IMarketDB> marketDbMocker;
+            private ViewStoreInfoSlave slave;
 
 
 
-            //TODO: improve this
 
         [TestInitialize]
             public void BuildStore()
@@ -30,24 +30,45 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 MarketLog.SetDB(marketDbMocker.Object);
                 handler = new Mock<IStoreDL>();
                 userService = new Mock<IUserShopper>();
+                handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
 
+            slave = new ViewStoreInfoSlave(userService.Object, handler.Object);
             }
             [TestMethod]
-            public void ViewStoreFail()
+            public void NoStore()
             {
-                ViewStoreInfoSlave slave = new ViewStoreInfoSlave(userService.Object, handler.Object);
-                slave.ViewStoreInfo("noStore");
+                handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
+                slave.ViewStoreInfo("X");
+            Assert.AreEqual((int)ViewStoreStatus.NoStore, slave.answer.Status);
+            }
+            [TestMethod]
+            public void NoPermission()
+            {
+                userService.Setup(x => x.ValidateCanBrowseMarket()).Throws(new MarketException(0, ""));
+                slave.ViewStoreInfo("X"); ;
+                Assert.AreEqual((int)ManageStoreStatus.InvalidManager, slave.answer.Status);
+            }
+
+
+            [TestMethod]
+            public void NullStore()
+            {
+                slave.ViewStoreInfo(null);
                 Assert.AreEqual((int)ViewStoreStatus.NoStore, slave.answer.Status);
             }
             [TestMethod]
             public void ViewStorePass()
             {
             
-                handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", "bla"));
-                handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
-                ViewStoreInfoSlave slave = new ViewStoreInfoSlave(userService.Object, handler.Object);
                 slave.ViewStoreInfo("X");
                 Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
             }
-        }
+            [TestCleanup]
+            public void CleanUpOpenStoreTest()
+            {
+                MarketDB.Instance.CleanByForce();
+                MarketYard.CleanSession();
+            }
+    }
+
 }

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.StoreCenter
 {
-	class ViewStoreNamesSlave
+    public class ViewStoreNamesSlave
 	{
-		internal MarketAnswer answer;
+		public MarketAnswer answer;
 		private IUserShopper _shopper;
 	    private IStoreDL storeLogic;
 
@@ -20,7 +20,7 @@ namespace SadnaSrc.StoreCenter
 		    storeLogic = storeDl;
 		}
 
-		internal void ViewStores()
+		public void ViewStores()
 		{
             try
 			{
