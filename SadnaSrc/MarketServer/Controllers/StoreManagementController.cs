@@ -25,7 +25,13 @@ namespace MarketWeb.Controllers
 	    {
 		    var userService = MarketServer.Users[systemId];
 		    var answer = userService.GetStoreManagerPolicies(store);
-			return View(new PermissionOptionsModel(systemId,state,message,store,answer.ReportList));
+		    string[] options = {"ManageProducts", "PromoteStoreAdmin", "DeclareDiscountPolicy", "ViewPurchaseHistory"};
+		    if (!answer.ReportList.Contains("StoreOwner"))
+		    {
+			    options = answer.ReportList;
+
+		    }
+			return View(new PermissionOptionsModel(systemId,state,message,store, options));
 	    }
 
 	    public IActionResult ManageStore(int systemId, string state, string store, string option)
