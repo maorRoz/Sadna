@@ -1,8 +1,72 @@
 ﻿
 @{
-    ViewData["Title"] = "AddDiscountPage";
+    ViewData["Title"] = "Add Discount Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>AddDiscountPage</h2>
+<h2>@ViewData["Title"]</h2>
+<hr/>
+<div class="row top-space">
+	<div class="col-lg-10">
+
+		<div id="feedContainer" style="float: right;width:20%">
+			<br/>
+		</div>
+
+		<div style="float: left;width:30%">
+			<div id="alertContainer">
+				@if (Model.Message != null)
+		{
+			<div class='error'>
+				<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+				@Model.Message
+			</div>
+}
+			</div>
+
+			@using (Html.BeginForm("AddDiscount", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, Model.Store, productName = Model.Product }))
+			{
+				<label for="start-date">Start Date:</label>
+				<input type="text" class="form-control" id="start-date" name="startDate" />
+				<label for="end-date">End Date:</label>
+				<input type="text" class="form-control" id="end-date" name="endDate" />
+				<label for="discount-amount">Discount Amount:</label>
+				<input class="form-control" id="discount-amount" name="discountAmount" />
+				<br />
+				<fieldset>
+					Discount Type: <select name="discountType">
+
+						<option value="Hidden">Hidden</option>
+
+						<option value="Visible">Visible</option>
+
+					</select>
+				</fieldset>
+				<br />
+
+				<br />
+				<fieldset>
+					Percenteges: <select name="presenteges">
+
+						<option value="Yes">Yes</option>
+
+						<option value="No">No</option>
+
+					</select>
+				</fieldset>
+				<br />
+
+				<br />
+				<input type="submit" class="btn btn-primary" value="Add">
+
+				}
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+}
+
+
 

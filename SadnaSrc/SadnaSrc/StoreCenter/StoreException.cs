@@ -56,7 +56,7 @@ namespace SadnaSrc.StoreCenter
 
         protected override string WrapErrorMessageForDb(string message)
         {
-            return "User " + storeName + " Error: " + message;
+            return " Error: " + message;
         }
     }
 }
