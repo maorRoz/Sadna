@@ -1,12 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
-using SadnaSrc.MarketHarmony;
 using SadnaSrc.StoreCenter;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {

@@ -61,7 +61,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             AddProductToCategorySlave slave = new AddProductToCategorySlave("T", userService.Object, handler.Object);
             handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
-            handler.Setup(x => x.getCategoryByName("WanderlandItems"))
+            handler.Setup(x => x.GetCategoryByName("WanderlandItems"))
                 .Returns(new Category("C1", "WanderlandItems"));
             slave.AddProductToCategory("WanderlandItems", "OnePunchManPoster");
             Assert.AreEqual((int)StoreEnum.ProductNotFound, slave.Answer.Status);
@@ -72,7 +72,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             AddProductToCategorySlave slave = new AddProductToCategorySlave("T", userService.Object, handler.Object);
             handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
-            handler.Setup(x => x.getCategoryByName("WanderlandItems"))
+            handler.Setup(x => x.GetCategoryByName("WanderlandItems"))
                 .Returns(new Category("C1", "WanderlandItems"));
             handler.Setup(x => x.GetProductByNameFromStore("T", "Fraid Egg")).Returns(new Product("S21", "Fraid Egg",10,"bla"));
             LinkedList<Product> expected = new LinkedList<Product>();
@@ -87,7 +87,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             AddProductToCategorySlave slave = new AddProductToCategorySlave("T", userService.Object, handler.Object);
             handler.Setup(x => x.IsStoreExistAndActive("T")).Returns(true);
             handler.Setup(x => x.GetStorebyName("T")).Returns(new Store("S7", "T", "bla"));
-            handler.Setup(x => x.getCategoryByName("WanderlandItems"))
+            handler.Setup(x => x.GetCategoryByName("WanderlandItems"))
                 .Returns(new Category("C1", "WanderlandItems"));
             handler.Setup(x => x.GetProductByNameFromStore("T", "OnePunchManPoster")).Returns(new Product("S22", "OnePunchManPoster", 10, "bla"));
             LinkedList<Product> expected = new LinkedList<Product>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
 {
@@ -15,5 +16,8 @@ namespace SadnaSrc.AdminView
         string[] FindSolelyOwnedStores();
         void CloseStore(string store);
         bool IsUserExist(string userName);
+        void AddCategory(Category category);
+        void RemoveCategory(Category category);
+        Category GetCategoryByName(string categoryName);
     }
 }
