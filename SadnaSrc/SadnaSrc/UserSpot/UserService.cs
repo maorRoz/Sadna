@@ -77,6 +77,7 @@ namespace SadnaSrc.UserSpot
             slave.GetControlledStoreNames();
             return slave.Answer;
         }
+		
 
         public MarketAnswer GetStoreManagerPolicies(string store)
         {

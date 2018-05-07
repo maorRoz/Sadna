@@ -25,14 +25,18 @@ namespace SadnaSrc.UserSpot
 				ApproveEnetered();
 				MarketLog.Log("UserSpot", "User " + userID + " has successfully viewing his policies in this store...");
 				StoreManagerPolicy[] policies = _user.GetStoreManagerPolicies(store);
-				string[] stringPolicies = new string[policies.Length];
-				int count = 0;
-				foreach (StoreManagerPolicy policy in policies)
+				string[] stringPolicies = { "ManageProducts", "DeclareDiscountPolicy", "PromoteStoreAdmin", $"ViewPurchaseHistory"};
+				if (!_user.IsSystemAdmin())
 				{
+					stringPolicies = new string[policies.Length];
+					int count = 0;
+					foreach (StoreManagerPolicy policy in policies)
+					{
 
-					stringPolicies[count] = Enum.GetName(policy.Action.GetType(), policy.Action);
-					count++;
-					
+						stringPolicies[count] = Enum.GetName(policy.Action.GetType(), policy.Action);
+						count++;
+
+					}
 				}
 				Answer = new UserAnswer(GetStoreManagerPoliciesStatus.Success, "View of store policies has been successfully granted!",
 					stringPolicies);

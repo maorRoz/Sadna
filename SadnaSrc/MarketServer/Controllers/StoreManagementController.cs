@@ -17,23 +17,15 @@ namespace MarketWeb.Controllers
 		public IActionResult StoreControl(int systemId, string state)
         {
             var userService = MarketServer.Users[systemId];
-	        string[] storesData;
-	        if (state.Equals("Admin"))
-	        {
-		        storesData = userService.GetAllStores().ReportList;
-
-	        }
-	        else
-	        {
-		        storesData = userService.GetControlledStoreNames().ReportList;
-			}
-            
+		    string[] storesData = userService.GetControlledStoreNames().ReportList;
             return View(new StoreListModel(systemId, state, storesData));
         }
 
 	    public IActionResult ManageStoreOptions(int systemId, string state,string message, string store)
 	    {
-		    return View(new StoreItemModel(systemId,state,message,store));
+		    var userService = MarketServer.Users[systemId];
+		    var answer = userService.GetStoreManagerPolicies(store);
+			return View(new PermissionOptionsModel(systemId,state,message,store,answer.ReportList));
 	    }
 
 	    public IActionResult ManageStore(int systemId, string state, string store, string option)

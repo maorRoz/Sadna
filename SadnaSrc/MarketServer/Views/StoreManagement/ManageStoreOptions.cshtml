@@ -24,16 +24,12 @@
 				<fieldset>
 					<br />
 					Choose: <select name="option">
+				@foreach (var item in Model.Items)
+				{
+					<option value=@item.Name>@item.Name</option>
+				}
 
-						<option value="ManageProducts">Manage Products</option>
-
-						<option value="DeclareDiscountPolicy">Declare Discount Policy</option>
-						
-						<option value="PromoteStoreAdmin">Promote Store Admin</option>
-						
-						<option value="ViewPurchaseHistory">View Purchase History</option>
-
-					</select>
+				</select>
 					<br />
 					<input type="submit" class="btn btn-primary">
 				</fieldset>

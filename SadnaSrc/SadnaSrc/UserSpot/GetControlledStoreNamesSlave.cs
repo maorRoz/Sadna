@@ -42,8 +42,15 @@ namespace SadnaSrc.UserSpot
 			            res.Add(userStore);
 					}
 	            }
-				Answer = new UserAnswer(GetControlledStoresStatus.Success, "View of store names has been granted successfully!",
-                    res.ToArray());
+	            Answer = new UserAnswer(GetControlledStoresStatus.Success, "View of store names has been granted successfully!",
+		            res.ToArray());
+
+				if (_user.IsSystemAdmin())
+	            {
+		            Answer = new UserAnswer(GetControlledStoresStatus.Success, "View of store names has been granted successfully!",
+			            storeNames);
+				}
+				
             }
             catch (UserException e)
             {

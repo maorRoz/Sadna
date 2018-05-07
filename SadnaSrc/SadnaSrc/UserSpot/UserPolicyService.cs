@@ -55,12 +55,12 @@ namespace SadnaSrc.UserSpot
         }
 
         public StoreManagerPolicy[] FilteredStorePolicies(string store)
-        {
+        { 
             List<StoreManagerPolicy> storePolicies = new List<StoreManagerPolicy>();
             foreach (StoreManagerPolicy policy in StorePolicies)
             {
                 if(policy.Store.Equals(store))
-                storePolicies.Add(policy);
+					storePolicies.Add(policy);
             }
             return SortStorePolicy(storePolicies.ToArray());
         }
