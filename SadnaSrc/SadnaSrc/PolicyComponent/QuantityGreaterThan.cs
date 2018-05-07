@@ -8,13 +8,18 @@ namespace SadnaSrc.PolicyComponent
 {
     public class QuantityGreaterThan : Condition
     {
-        public QuantityGreaterThan(PolicyType type, string subject, string value) : base(type, subject, value)
+        public QuantityGreaterThan(PolicyType type, string subject, string value, int id) : base(type, subject, value, id)
         {
         }
 
         public override bool Evaluate(string username, string address, int quantity, double price)
         {
-            return quantity > Int32.Parse(_value);
+            return quantity >= Int32.Parse(_value);
+        }
+
+        public override string[] GetData()
+        {
+            return new[] { "" + ID, "Quantity", ">=", _value};
         }
     }
 }

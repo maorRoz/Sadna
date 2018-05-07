@@ -10,7 +10,7 @@ namespace SadnaSrc.PolicyComponent
     {
         protected readonly string _value;
 
-        protected Condition(PolicyType type, string subject, string value) : base(type, subject)
+        protected Condition(PolicyType type, string subject, string value, int id) : base(type, subject, id)
         {
             _value = value;
         }

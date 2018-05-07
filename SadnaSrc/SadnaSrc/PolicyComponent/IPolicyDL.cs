@@ -13,5 +13,6 @@ namespace SadnaSrc.PolicyComponent
         PurchasePolicy GetPolicy(PolicyType type, string subject);
         List<PurchasePolicy> GetPoliciesOfType(PolicyType type);
         List<PurchasePolicy> GetAllPolicies();
+        void CleanSession();
     }
 }
