@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace StoreCenterTests.StoreCenterUnitTests
 {
+    // 
         [TestClass]
         public class CloseStoreTestsMock
         {
