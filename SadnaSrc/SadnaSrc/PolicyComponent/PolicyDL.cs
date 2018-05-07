@@ -32,5 +32,10 @@ namespace SadnaSrc.PolicyComponent
         {
             throw new NotImplementedException();
         }
+
+        public void CleanSession()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace SadnaSrc.PolicyComponent
 
         public override string[] GetData()
         {
-            return new[] { "" + ID, Type.ToString(), Subject, "Username", "=", _value };
+            return new[] { "" + ID, "Username", "=", _value };
         }
     }
 }

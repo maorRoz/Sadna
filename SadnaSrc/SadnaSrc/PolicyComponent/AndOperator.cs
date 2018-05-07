@@ -20,20 +20,7 @@ namespace SadnaSrc.PolicyComponent
 
         public override string[] GetData()
         {
-            string[] op1 = _cond1.GetData();
-            string[] op2 = _cond2.GetData();
-            List<string> res = new List<string>();
-            foreach (string str in op1)
-            {
-                res.Add(str);
-            }
-            res.Add("AND");
-            foreach (string str in op2)
-            {
-                res.Add(str);
-            }
-
-            return res.ToArray();
+            return new[] {"" + ID, "AND", "" + _cond1.ID, "" + _cond2.ID};
         }
     }
 }
