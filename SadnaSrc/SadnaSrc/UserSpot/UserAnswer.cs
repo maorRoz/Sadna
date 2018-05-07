@@ -33,7 +33,17 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        public UserAnswer(ViewUsersStatus status, string answer, string[] usersNames) : base((int)status, answer, usersNames)
+	    public UserAnswer(ViewStoresStatus status, string answer, string[] storeNames) : base((int)status, answer,storeNames)
+	    {
+
+	    }
+
+	    public UserAnswer(ViewStoresStatus status, string answer) : base((int)status, answer)
+	    {
+
+	    }
+
+		public UserAnswer(ViewUsersStatus status, string answer, string[] usersNames) : base((int)status, answer, usersNames)
         {
 
         }
@@ -53,6 +63,17 @@ namespace SadnaSrc.UserSpot
 
         }
 
+        public UserAnswer(GetStoreManagerPoliciesStatus status, string answer, string[] policies) : base((int) status,
+          answer,policies)
+        {
+
+        }
+
+        public UserAnswer(GetStoreManagerPoliciesStatus status, string answer) : base((int)status,
+          answer)
+        {
+
+        }
         public UserAnswer(GetUserDetails status, string answer, string[] usersNames) : base((int)status, answer, usersNames)
         {
 

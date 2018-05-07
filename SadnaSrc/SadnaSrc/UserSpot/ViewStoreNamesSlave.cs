@@ -5,18 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.StoreCenter
 {
 	class ViewStoreNamesSlave
 	{
 		internal MarketAnswer answer;
-		private IUserShopper _shopper;
 	    private IStoreDL storeLogic;
 
-		public ViewStoreNamesSlave(IUserShopper shopper,IStoreDL storeDl)
+		public ViewStoreNamesSlave(IStoreDL storeDl)
 		{
-			_shopper = shopper;
+		
 		    storeLogic = storeDl;
 		}
 
@@ -24,8 +24,7 @@ namespace SadnaSrc.StoreCenter
 		{
             try
 			{
-			    _shopper.ValidateCanBrowseMarket();
-                var storeNames = storeLogic.GetAllActiveStoreNames();
+                var storeNames = UserDL.Instance.GetAllActiveStoreNames();
 				answer = new StoreAnswer(StoreEnum.Success, "you've got all the store names!", storeNames);
 			}
 			catch (StoreException e)

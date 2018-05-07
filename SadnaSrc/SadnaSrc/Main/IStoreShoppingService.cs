@@ -9,7 +9,7 @@ namespace SadnaSrc.Main
 {
     public interface IStoreShoppingService
     {
-        MarketAnswer GetAllStores();
+        
         MarketAnswer OpenStore(string storeName, string storeAddress);
 
         MarketAnswer ViewStoreInfo(string store);

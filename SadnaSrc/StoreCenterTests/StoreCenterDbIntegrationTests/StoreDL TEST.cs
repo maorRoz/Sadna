@@ -4,6 +4,7 @@ using SadnaSrc.StoreCenter;
 using SadnaSrc.Main;
 using System.Collections.Generic;
 using System.Linq;
+using SadnaSrc.MarketHarmony;
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
@@ -12,13 +13,13 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
     {
 
         private StoreDL handler;
-        private LotteryTicket toDeleteTicket;
+        private LotteryTicket _toDeleteTicket;
         [TestInitialize]
         public void BuildSupplyPoint()
         {
             MarketDB.Instance.InsertByForce();
             handler = StoreDL.Instance;
-            toDeleteTicket = null;
+            _toDeleteTicket = null;
         }
         [TestMethod]
         public void GetProductID()
@@ -60,12 +61,12 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void EditLotteryTicketInDatabase()
         {
-            toDeleteTicket = new LotteryTicket("T99", "L4", 0, 1, 1, 5);
-            handler.AddLotteryTicket(toDeleteTicket);
-            toDeleteTicket.myStatus = LotteryTicketStatus.Cancel;
-            handler.EditLotteryTicketInDatabase(toDeleteTicket);
+            _toDeleteTicket = new LotteryTicket("T99", "L4", 0, 1, 1, 5);
+            handler.AddLotteryTicket(_toDeleteTicket);
+            _toDeleteTicket.myStatus = LotteryTicketStatus.Cancel;
+            handler.EditLotteryTicketInDatabase(_toDeleteTicket);
             LotteryTicket find = handler.GetLotteryTicket("T99");
-            Assert.AreEqual(toDeleteTicket, find);
+            Assert.AreEqual(_toDeleteTicket, find);
         }
 
         [TestMethod]
@@ -270,7 +271,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
             LotteryTicket expected = new LotteryTicket("T15", "L1", 0, 0, 0, 0); ;
             LotteryTicket find = handler.GetLotteryTicket("T15");
-            toDeleteTicket = expected;
+            _toDeleteTicket = expected;
             Assert.IsNull(find);
             handler.AddLotteryTicket(expected);
             find = handler.GetLotteryTicket("T15");
@@ -294,7 +295,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             LotteryTicket ticket1 = new LotteryTicket("T1", "L1", 0, 0, 0, 0); ; //Exists in DB
             LotteryTicket ticket2 = new LotteryTicket("T3", "L1", 0, 0, 0, 0);
             handler.AddLotteryTicket(ticket2);
-            toDeleteTicket = ticket2;
+            _toDeleteTicket = ticket2;
             expected.AddLast(ticket1);
             expected.AddLast(ticket2);
             LinkedList<LotteryTicket> find = handler.GetAllTickets("L1");
@@ -323,6 +324,64 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             for (int i = 0; i < findResults.Length; i++)
             {
                 Assert.AreEqual(findResults[i], expectedResults[i]);
+            }
+        }
+
+        [TestMethod]
+        public void GetCategoryByName()
+        {
+            var expected = new Category("C1", "WanderlandItems"); // THIS exists in DB by SQL injection
+            var find = handler.GetCategoryByName("WanderlandItems");
+            Assert.AreEqual(expected, find);
+        }
+        
+        [TestMethod]
+        public void GetAllCategoryProducts()
+        {
+            LinkedList<Product> expected = new LinkedList<Product>();
+            expected.AddLast(new Product("P21", "Fraid Egg", 10, "yami"));
+            var find = handler.GetAllCategoryProducts("C1");
+            foreach (Product product in find)
+            {
+                Assert.AreEqual(product, expected.First.Value);
+            }
+        }
+        [TestMethod]
+        public void AddProductToCategory()
+        {
+            LinkedList<Product> expected = new LinkedList<Product>();
+            expected.AddLast(new Product("P21", "Fraid Egg", 10, "yami"));
+            var newProd = new Product("P10023","bla",10,"da");
+            handler.AddProductToDatabase(newProd);
+            expected.AddFirst(newProd);
+            handler.AddProductToCategory("C1", "P10023");
+            var find = handler.GetAllCategoryProducts("C1");
+            Product[] expectedresults = new Product[expected.Count];
+            Product[] findresults = new Product[find.Count];
+            expected.CopyTo(expectedresults,0);
+            find.CopyTo(findresults,0);
+            for (int i = 0; i < expectedresults.Length; i++)
+            {
+                Assert.AreEqual(expectedresults[i],findresults[i]);
+            }
+        }
+        [TestMethod]
+        public void RemoveProductFromCategory()
+        {
+            LinkedList<Product> expected = new LinkedList<Product>();
+            expected.AddLast(new Product("P21", "Fraid Egg", 10, "yami"));
+            var find = handler.GetAllCategoryProducts("C1");
+            foreach (Product product in find)
+            {
+                Assert.AreEqual(product, expected.First.Value);
+            }
+
+            expected.RemoveLast();
+            handler.RemoveProductFromCategory("C1", "P21");
+            find = handler.GetAllCategoryProducts("C1");
+            foreach (Product product in find)
+            {
+                Assert.AreEqual(product, expected.First.Value);
             }
         }
 

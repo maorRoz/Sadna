@@ -78,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StoreCenterDbIntegrationTests\addDiscountTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\AddProductToCategoryTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\RemoveProductFromCategoryTests.cs" />
+    <Compile Include="StoreCenterUnitTests\AddProductToCategoryTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\AddDiscountTestsMock.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\AddNewLotteryTests.cs" />
     <Compile Include="StoreCenterUnitTests\AddNewLotteryTestsMock.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="StoreCenterUnitTests\OpenStoreTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\PromoteToManagerTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\RemoveDiscountTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\RemoveProductFromCategoryTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\RemoveProductTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\ViewStoreHistoryTestsMock.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\ViewStoreInfoTests.cs" />

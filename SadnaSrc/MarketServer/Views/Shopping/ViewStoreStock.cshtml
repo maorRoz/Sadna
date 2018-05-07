@@ -27,7 +27,7 @@
 
             </div>
             <h2>@Model.StoreName Stock List</h2>
-            <hr/>
+            <hr />
             <table class="table">
                 <thead>
                     <tr>
@@ -49,16 +49,17 @@
                         <td>@item.PurchaseWay</td>
                         <td>@item.Quantity</td>
                         <td>
-                            @if(item.PurchaseWay == "Immediate"){
+                            @if (item.PurchaseWay == "Immediate")
+                            {
                                 <a asp-controller="Shopping" asp-action="AddToCart" asp-route-systemId="@Model.SystemId"
-                                   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name" 
-                                   asp-route-quantity="1"><img src="\images\cartAdd.png" /></a> 
+                                   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name"
+                                   asp-route-quantity="1"><img src="\images\cartAdd.png" /></a>
                             }
                             else
                             {
                                 <a asp-controller="Purchase" asp-action="BuyLotteryTicketForm" asp-route-systemId="@Model.SystemId"
-                                   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name" 
-                                   asp-route-realPrice=@item.Price><img src="\images\addTicket.png" /></a> 
+                                   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name"
+                                   asp-route-realPrice=@item.Price><img src="\images\addTicket.png" /></a>
                             }
 
 
@@ -70,3 +71,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+}

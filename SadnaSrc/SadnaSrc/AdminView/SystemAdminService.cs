@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
@@ -39,6 +34,18 @@ namespace SadnaSrc.AdminView
             return slave.Answer;
         }
 
-		
-	}
+        public MarketAnswer AddCategory(string categoryName)
+        {
+            AddCategorySlave slave = new AddCategorySlave(adminDB);
+            Category category = slave.AddCategory(categoryName);
+            return slave.Answer;
+        }
+        public MarketAnswer RemoveCategory(string categoryName)
+        {
+            RemoveCategorySlave slave = new RemoveCategorySlave(adminDB);
+            slave.RemoveCategory(categoryName);
+            return slave.Answer;
+        }
+
+    }
 }

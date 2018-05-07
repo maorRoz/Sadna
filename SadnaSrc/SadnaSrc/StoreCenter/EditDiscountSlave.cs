@@ -70,7 +70,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                answer = new StoreAnswer(exe);
+                answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
             }
             catch (MarketException)
             {
@@ -141,9 +141,16 @@ namespace SadnaSrc.StoreCenter
                 throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100, cant make it presenteges");
             }
             discount.Percentages = newboolValue;
-            if (newboolValue)
-                answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become true");
-            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become false");
+	        if (newboolValue)
+	        {
+		        answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become true");
+			}
+                
+            else
+            {
+				answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become false");
+			}
+	        
             return discount;
         }
         private Discount EditDiscountDiscountAmountPrivateMehtod(Discount discount, string newValue, string productName)

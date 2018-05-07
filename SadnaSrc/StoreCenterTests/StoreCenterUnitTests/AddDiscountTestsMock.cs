@@ -49,7 +49,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             slave.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
             Assert.AreEqual((int)DiscountStatus.Success, slave.answer.Status);
         }
-
+    
 
         [TestCleanup]
         public void CleanUpOpenStoreTest()

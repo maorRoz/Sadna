@@ -13,8 +13,7 @@ namespace MarketWeb.Controllers
 		public IActionResult BrowseMarket(int systemId, string state)
 		{
 			var userService = MarketServer.Users[systemId];
-			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-			string[] usersData = storeShoppingService.GetAllStores().ReportList;
+			string[] usersData = userService.GetAllStores().ReportList;
 			return View(new StoreListModel(systemId, state, usersData));
 		}
 

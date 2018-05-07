@@ -26,7 +26,11 @@ namespace SadnaSrc.Main
 
         MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
             DateTime endDate);
-
+        /**
+         * Category Managment
+         **/
+        MarketAnswer AddProductToCategory(string productName, string categoryName);
+        MarketAnswer RemoveProductFromCategory(string productName, string categoryName);
         /**
          * Discounts Management
          **/
@@ -42,6 +46,7 @@ namespace SadnaSrc.Main
         MarketAnswer ViewStoreHistory();
 	    MarketAnswer CloseStore();
 
+
     }
     public enum StoreEnum
     {
@@ -55,7 +60,11 @@ namespace SadnaSrc.Main
         QuantityIsNegative,
         QuantityIsTooBig,
         EnumValueNotExists,
-        DatesAreWrong
+        DatesAreWrong,
+        CategoryExistsInStore,
+        CategoryNotExistsInStore,
+        ProductAlreadyInCategory,
+        ProductNotInCategory
     }
     public enum DiscountStatus
     {

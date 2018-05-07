@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "Discount Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row top-space">
+	<div class="col-lg-12">
+		<div id="feedContainer" style="float: right;width:20%"></div>
+		<div style="float: left;width:70%">
+			<div id="alertContainer">
+				@if (Model.Message != null && ViewBag.valid)
+				{
+					<div class='success'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
+				}
+				
+				@if (Model.Message != null && !ViewBag.valid)
+				{
+					<div class='error'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
+				}
+
+			</div>
+			<h2>@Model.StoreName Stock List - Manage a Discount</h2>
+			<hr />
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Base Price </th>
+						<th>Description </th>
+						<th>Discount</th>
+						<th>Purchase Way</th>
+						<th>Quantity</th>
+					</tr>
+				</thead>
+				@foreach (var item in Model.Items)
+				{
+					<tr>
+						<td>@item.Name</td>
+						<td>@item.Price</td>
+						<td>@item.Description</td>
+						<td>@item.Discount</td>
+						<td>@item.PurchaseWay</td>
+						<td>@item.Quantity</td>
+						<td>
+							@if (item.PurchaseWay == "Immediate")
+							{
+							<td>
+								<a asp-controller="StoreManagement" asp-action="RemoveDiscount" asp-route-systemId="@Model.SystemId"
+								   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
+									<img src="\images\cancelation.png" />
+								</a>
+							</td>
+							<td>
+								<a asp-controller="StoreManagement" asp-action="AddDiscountPage" asp-route-systemId="@Model.SystemId"
+								   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
+									<img src="\images\plus.png">
+								</a>
+							</td>
+							<td>
+								<a asp-controller="StoreManagement" asp-action="EditDiscountPage" asp-route-systemId="@Model.SystemId"
+								   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
+									<img src="\images\edit.png">
+								</a>
+							</td>
+
+
+						}
+						else
+						{
+							<img src="\images\addTicket.png" />
+						}
+
+
+
+						</tr>
+					}
+			</table>
+
+		</div>
+	</div>
+</div>
+
