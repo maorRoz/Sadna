@@ -20,15 +20,23 @@ namespace SadnaSrc.PolicyComponent
             dbConnection = MarketDB.Instance;
         }
 
-        public void SavePolicy(Operator policy)
+        public void SavePolicy(PurchasePolicy policy)
         {
+            if (policy is Operator)
+                SavePolicy((Operator)policy);
+            else
+                SavePolicy((Condition)policy);
+        }
 
-
+        private void SavePolicy(Operator policy)
+        {
             string fields = "SystemID,ConditionType,PolicyType,Subject,COND1ID,COND2ID";
             dbConnection.InsertTable("Operator", fields,
                 policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
+                SavePolicy(policy._cond1);
+                SavePolicy(policy._cond2);
         }
-        public void SavePolicy(Condition policy)
+        private void SavePolicy(Condition policy)
         {
             string fields = "SystemID,ConditionType,PolicyType,Subject,value";
             dbConnection.InsertTable("Condition", fields,
@@ -37,9 +45,26 @@ namespace SadnaSrc.PolicyComponent
 
         public void RemovePolicy(PurchasePolicy policy)
         {
-            throw new NotImplementedException();
+            if (policy is Operator)
+                RemovePolicy((Operator)policy);
+            else
+                RemovePolicy((Condition)policy);
+        }
+        private void RemovePolicy(Operator policy)
+        {
+            dbConnection.DeleteFromTable("Operator", "SystemID = '" + policy.ID + "'");
+            RemovePolicy(policy._cond1);
+            RemovePolicy(policy._cond2);
+        }
+        private void RemovePolicy(Condition policy)
+        {
+            dbConnection.DeleteFromTable("Condition", "SystemID = '" + policy.ID + "'");
         }
 
+        public PurchasePolicy GetPolicy(int wantedid)
+        {
+            throw new NotImplementedException();
+        }
         public PurchasePolicy GetPolicy(PolicyType type, string subject)
         {
             throw new NotImplementedException();
@@ -61,3 +86,4 @@ namespace SadnaSrc.PolicyComponent
         }
     }
 }
+

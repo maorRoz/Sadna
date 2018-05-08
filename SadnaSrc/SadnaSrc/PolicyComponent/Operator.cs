@@ -8,8 +8,8 @@ namespace SadnaSrc.PolicyComponent
 {
     public abstract class Operator : PurchasePolicy
     {
-        protected readonly PurchasePolicy _cond1;
-        protected readonly PurchasePolicy _cond2;
+        internal readonly PurchasePolicy _cond1;
+        internal readonly PurchasePolicy _cond2;
 
         public Operator(PolicyType type, string subject, PurchasePolicy cond1, PurchasePolicy cond2, int id) : base(type,
             subject, id)

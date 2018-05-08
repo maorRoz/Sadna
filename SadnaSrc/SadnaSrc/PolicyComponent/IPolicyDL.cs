@@ -8,10 +8,10 @@ namespace SadnaSrc.PolicyComponent
 {
     interface IPolicyDL
     {
-        void SavePolicy(Operator policy);
-        void SavePolicy(Condition policy);
+        void SavePolicy(PurchasePolicy policy);
         void RemovePolicy(PurchasePolicy policy);
         PurchasePolicy GetPolicy(PolicyType type, string subject);
+        PurchasePolicy GetPolicy(int wantedid);
         List<PurchasePolicy> GetPoliciesOfType(PolicyType type);
         List<PurchasePolicy> GetAllPolicies();
         void CleanSession();
