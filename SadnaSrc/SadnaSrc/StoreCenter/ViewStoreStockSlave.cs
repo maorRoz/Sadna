@@ -72,9 +72,10 @@ namespace SadnaSrc.StoreCenter
             {
                 LotterySaleManagmentTicket managmentTicket =
                     storeLogic.GetLotteryByProductID((productID));
+                StockListItem sli = storeLogic.GetStockListItembyProductID(productID);
                 if ((managmentTicket.EndDate < MarketYard.MarketDate) ||
                     (managmentTicket.StartDate > MarketYard.MarketDate) ||
-                    (managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice))
+                    ((managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice)&& sli.Quantity==0))
                     return "";
             }
             string discount = " Discount: {";

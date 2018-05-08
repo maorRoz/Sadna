@@ -94,6 +94,35 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTestss
 
 
         }
+
+        [TestMethod]
+        public void ViewStoreStockSuccessCheckQuantityUpdated()
+        {
+            IStoreDL datalayer = StoreDL.Instance;
+            userService2.EnterSystem();
+            userService2.SignIn("Arik1", "123");
+            StoreManagementService anotherSession =
+                (StoreManagementService)market.GetStoreManagementService(userService2, "X");
+            MarketAnswer ans = anotherSession.AddNewLottery("blabla", 8, "da", DateTime.Parse("11/01/2020"), DateTime.Parse("12/01/2021"));
+
+            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
+            anotherSession.AddQuanitityToProduct("blabla", 3);
+            StockListItem sli = datalayer.GetProductFromStore("X","blabla");
+            MarketYard.SetDateTime(DateTime.Parse("13/01/2020"));
+            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
+            liorSession.LoginShoper("Arik3", "123");
+            ans = liorSession.ViewStoreStock("X");
+            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
+            string[] result1 = ans.ReportList;
+            IOrderService order = market.GetOrderService(ref userService);
+            ans = order.BuyLotteryTicket("blabla", "X", 1, 8);
+            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
+            ans = liorSession.ViewStoreStock("X");
+            string[] result2 = ans.ReportList;
+            Assert.AreNotEqual(result2[result2.Length-1],result1[result1.Length-1]);            
+            StockListItem sli2 = datalayer.GetProductFromStore("X","blabla");
+            Assert.AreEqual(sli2.Quantity+1, sli.Quantity);
+        }
         [TestMethod]
         public void ViewStoreStockSuccess()
         {
