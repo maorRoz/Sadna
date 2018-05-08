@@ -49,9 +49,18 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 userService.Setup(x => x.ValidateCanBrowseMarket()).Throws(new MarketException(0, ""));
                 slave.ViewStoreStock("X");
                 Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
-            }   
-        
+            }
+
             [TestMethod]
+            public void NoStore()
+            {
+            handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
+            slave.ViewStoreStock("X");
+                Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
+            }
+
+
+        [TestMethod]
             public void ViewStoreStockPass()
             {
                 Product p = new Product("P-4", "item", 1, "des");
