@@ -185,37 +185,38 @@ namespace MarketWeb.Controllers
 
 		public IActionResult PromoteStoreAdmin(int systemId, string state, string message, string store)
 		{
-			List<CheckBoxModel> lst = new List<CheckBoxModel>();
-			lst.Add(new CheckBoxModel(){ Name = "StoreOwner" , IsChecked = false});
-			lst.Add(new CheckBoxModel() { Name = "ManageProducts", IsChecked = false });
-			lst.Add(new CheckBoxModel() { Name = "PromoteStoreAdmin", IsChecked = false });
-			lst.Add(new CheckBoxModel() { Name = "DeclareDiscountPolicy", IsChecked = false });
-			lst.Add(new CheckBoxModel() { Name = "ViewPurchaseHistory", IsChecked = false });
-			CheckBoxListModel optionList = new CheckBoxListModel(systemId, state, message, store);
-			optionList.Items = lst;
-			return View(optionList);
+		    List<CheckBoxModel> lst = new List<CheckBoxModel>
+		    {
+		        new CheckBoxModel {Name = "StoreOwner"},
+		        new CheckBoxModel {Name = "ManageProducts"},
+		        new CheckBoxModel {Name = "PromoteStoreAdmin"},
+		        new CheckBoxModel {Name = "DeclareDiscountPolicy"},
+		        new CheckBoxModel {Name = "ViewPurchaseHistory"}
+		    };
+		    CheckBoxListModel optionList = new CheckBoxListModel(systemId, state, message, store) {Items = lst};
+		    return View(optionList);
 		}
 
 		[HttpPost]
-		public IActionResult HandleOptionsSelected(int systemId, string state, string message, string store, CheckBoxListModel model, string user)
+		public IActionResult HandleOptionsSelected(int systemId, string state, string message, string store, string[] permissions, string usernameEntry)
 		{
 			StringBuilder actions = new StringBuilder();
-			foreach (var item in model.Items)
+			foreach (var permission in permissions)
 			{
-				if (item.IsChecked)
+				if (permission != null)
 				{
-					actions.Append(item.Name + ",");
+					actions.Append(permission + ",");
 				}
 			}
-			return RedirectToAction("PromoteStoreAdminCall", new { systemId, state, message = "",store , user, actions});
+			return RedirectToAction("PromoteStoreAdminCall", new { systemId, state, store , usernameEntry, actions});
 		}
 
-		public IActionResult PromoteStoreAdminCall(int systemId, string state, string store, string userToPromote,
+		public IActionResult PromoteStoreAdminCall(int systemId, string state,string message, string store, string usernameEntry,
 			string actions)
 		{
 			var userService = MarketServer.Users[systemId];
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-			var answer = storeManagementService.PromoteToStoreManager(userToPromote, actions);
+			var answer = storeManagementService.PromoteToStoreManager(usernameEntry, actions);
 			return RedirectToAction("PromoteStoreAdmin", new { systemId, state, message = answer.Answer, store});
 		}
 

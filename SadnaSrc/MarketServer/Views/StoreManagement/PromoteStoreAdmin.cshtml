@@ -22,29 +22,30 @@
 					</div>
 				}
 			</div>
-			<table>
 		
-			@using (Html.BeginForm("HandleOptionsSelected", "StoreManagement",FormMethod.Post))
-			{
-				
-				for (int i = 0; i < Model.Items.Count; i++)
-				{
-					<tr>
-						<td>
-							@Html.CheckBoxFor(m => Model.Items[i].IsChecked)
-							@Model.Items[i].Name
-							@Html.HiddenFor(m => Model.Items[i].Name)
-						</td>
-					</tr>
-				}
-					
+			@using (Html.BeginForm("HandleOptionsSelected", "StoreManagement" , new { Model.SystemId, Model.State, Model.Message, store = Model.Name}))
+            {
+                <label for="user-name-entry">Username To Promote:</label>
+                <input class="form-control" id="user-name-entry" name="usernameEntry" />
+                <table>
+                    @for (var i = 0; i < Model.Items.Count; i++)
+                    {
+                    <tr>
+                        <td>
 
-				<div class="form-group text-center">
-					<input type="submit" class="btn btn-primary" value="Submit" />
-				</div>
+                            <label for="checkbox[@i]">@Model.Items[i].Name</label>
+                            <input type="checkbox" id="checkbox[@i]" name="permissions[@i]" value="@Model.Items[i].Name"/>
+                            <input type="hidden" name="permissions[@i]" value="" />
+                        </td>
+                        
+                    </tr>
+                    }
+                </table>
+		        <div class="form-group text-center">
+		            <input type="submit" class="btn btn-primary" value="Submit" />
+		        </div>
 			}
 				
-			</table>
 		</div>
 	</div>
 </div>
