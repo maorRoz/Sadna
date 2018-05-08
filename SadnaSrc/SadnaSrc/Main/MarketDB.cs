@@ -507,10 +507,11 @@ namespace SadnaSrc.Main
         {
             return @"Create TABLE IF NOT EXISTS [Condition] (
                                     [SystemID]               INTEGER,
-                                    [ConditionType]          INTEGER,
+                                    [ConditionType]          TEXT,
                                     [PolicyType]             TEXT,
                                     [Subject]                TEXT,
                                     [value]                  TEXT,
+                                    [isRoot]                  TEXT,
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -518,11 +519,12 @@ namespace SadnaSrc.Main
         {
             return @"Create TABLE IF NOT EXISTS [Operator] (
                                     [SystemID]               INTEGER,
-                                    [OperatorType]           INTEGER,
+                                    [OperatorType]           TEXT,
                                     [PolicyType]             TEXT,
                                     [Subject]                TEXT,
                                     [COND1ID]                INTEGER,
                                     [COND2ID]                INTEGER,
+                                    [isRoot]                 TEXT,
                                     PRIMARY KEY([SystemID])
                                     )";
         }

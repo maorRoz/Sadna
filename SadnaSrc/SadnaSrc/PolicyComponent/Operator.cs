@@ -27,6 +27,7 @@ namespace SadnaSrc.PolicyComponent
                 "'" + Subject + "'",
                 "'" + _cond1.ID + "'",
                 "'" + _cond2.ID + "'",
+                "'" + PrintBoolean(IsRoot) + "'"
 
             };
         }
@@ -40,7 +41,8 @@ namespace SadnaSrc.PolicyComponent
                 PrintEnum(Type),
                 Subject,
                 _cond1.ID,
-                _cond2.ID
+                _cond2.ID,
+                PrintBoolean(IsRoot)
             };
         }
     }

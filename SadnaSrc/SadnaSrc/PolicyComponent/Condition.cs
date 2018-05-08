@@ -23,7 +23,8 @@ namespace SadnaSrc.PolicyComponent
                 "'" + GetMyType() + "'",
                 "'" + PrintEnum(Type) + "'",
                 "'" + Subject + "'",
-                "'" + _value + "'"
+                "'" + _value + "'",
+                "'" + PrintBoolean(IsRoot) + "'"
             };
         }
 
@@ -36,6 +37,7 @@ namespace SadnaSrc.PolicyComponent
                 PrintEnum(Type),
                 Subject,
                 _value,
+                PrintBoolean(IsRoot)
             };
         }
     }
