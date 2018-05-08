@@ -16,7 +16,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
     public class AddNewLotteryTests
     {
         private MarketYard market;
-        public StockListItem ProductToDelete;
         private IStoreDL handler;
         IUserService userService;
         [TestInitialize]
@@ -71,7 +70,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.AddNewLottery("name0", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));
-            ProductToDelete = handler.GetProductFromStore("X", "name0");
+            handler.GetProductFromStore("X", "name0");
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 

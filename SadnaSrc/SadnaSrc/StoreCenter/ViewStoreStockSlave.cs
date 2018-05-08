@@ -27,7 +27,7 @@ namespace SadnaSrc.StoreCenter
             CheckIfStoreExists(storename);
             Store store = storeLogic.GetStorebyName(storename);
             LinkedList<string> result = new LinkedList<string>();
-            LinkedList<string> IDS = storeLogic.GetAllStoreProductsID(store.SystemId);
+            var IDS = storeLogic.GetAllStoreProductsID(store.SystemId);
             foreach (string item in IDS)
             {
                 result.AddLast(GetProductStockInformation(item));

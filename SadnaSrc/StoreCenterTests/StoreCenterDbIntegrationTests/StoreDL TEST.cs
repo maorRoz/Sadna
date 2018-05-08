@@ -315,9 +315,9 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             LinkedList<string> expected = new LinkedList<string>();
             expected.AddLast("P1");
             expected.AddLast("P2");
-            LinkedList<string> find = handler.GetAllStoreProductsID("S1");
-            Assert.AreEqual(expected.Count, find.Count);
-            string[] findResults = new string[find.Count];
+            var find = handler.GetAllStoreProductsID("S1");
+            Assert.AreEqual(expected.Count, find.Length);
+            string[] findResults = new string[find.Length];
             find.CopyTo(findResults, 0);
             string[] expectedResults = new string[expected.Count];
             expected.CopyTo(expectedResults, 0);

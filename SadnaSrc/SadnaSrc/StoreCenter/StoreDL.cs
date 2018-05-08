@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-
+using System.Linq;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -22,7 +22,7 @@ namespace SadnaSrc.StoreCenter
             dbConnection = MarketDB.Instance;
         }
 
-        public LinkedList<string> GetAllStoresIDs()
+        public string[] GetAllStoresIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("Store", "SystemID"))
@@ -32,9 +32,9 @@ namespace SadnaSrc.StoreCenter
                     ids.AddLast(dbReader.GetString(0));
                 }
             }
-            return ids;
+            return ids.ToArray();
         }
-        public LinkedList<string> GetAllProductIDs()
+        public string[] GetAllProductIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("Products", "SystemID"))
@@ -44,9 +44,9 @@ namespace SadnaSrc.StoreCenter
                     ids.AddLast(dbReader.GetString(0));
                 }
             }
-            return ids;
+            return ids.ToArray();
         }
-        public LinkedList<string> GetAllDiscountIDs()
+        public string[] GetAllDiscountIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("Discount", "DiscountCode"))
@@ -56,7 +56,7 @@ namespace SadnaSrc.StoreCenter
                     ids.AddLast(dbReader.GetString(0));
                 }
             }
-            return ids;
+            return ids.ToArray();
         }
         public void AddProductToCategory(string categoryid, string productid)
         {
@@ -69,7 +69,7 @@ namespace SadnaSrc.StoreCenter
         {
             dbConnection.DeleteFromTable("CategoryProductConnection", "ProductID = '" + productid + "' AND CategoryID = '"+ categoryid + "'");
         }
-        public LinkedList<string> GetAllLotteryTicketIDs()
+        public string[] GetAllLotteryTicketIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("LotteryTicket", "myID"))
@@ -79,9 +79,9 @@ namespace SadnaSrc.StoreCenter
                     ids.AddLast(dbReader.GetString(0));
                 }
             }
-            return ids;
+            return ids.ToArray();
         }
-        public LinkedList<string> GetAllLotteryManagmentIDs()
+        public string[] GetAllLotteryManagmentIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("LotteryTable", "SystemID"))
@@ -91,7 +91,7 @@ namespace SadnaSrc.StoreCenter
                     ids.AddLast(dbReader.GetString(0));
                 }
             }
-            return ids;
+            return ids.ToArray();
         }
       
         public Store GetStorebyName(string storeName)
@@ -422,7 +422,7 @@ namespace SadnaSrc.StoreCenter
         public Product GetProductByNameFromStore(string storeName, string productName)
         {
             Store store = GetStorebyName(storeName);
-            LinkedList<string> productsid = GetAllStoreProductsID(store.SystemId);
+            var productsid = GetAllStoreProductsID(store.SystemId);
             foreach (string id in productsid)
             {
                 Product product = GetProductID(id);
@@ -471,19 +471,19 @@ namespace SadnaSrc.StoreCenter
         }
 
 
-        public LinkedList<string> GetAllStoreProductsID(string systemid)
+        public string[] GetAllStoreProductsID(string systemid)
         {
-            LinkedList<string> result = new LinkedList<string>();
+            List<string> result = new List<string>();
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Stock", "ProductSystemID", "StockID = '" + systemid + "'"))
             {
                 while (dbReader.Read())
                 {
-                    result.AddLast(dbReader.GetString(0));
+                    result.Add(dbReader.GetString(0));
                 }
             }
 
-            return result;
+            return result.ToArray();
         }
 
         public LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName)
@@ -575,7 +575,7 @@ namespace SadnaSrc.StoreCenter
             return products;
         }
 
-        public LinkedList<string> GetAllCategorysIDs()
+        public string[] GetAllCategorysIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("Category", "SystemID"))
@@ -585,7 +585,7 @@ namespace SadnaSrc.StoreCenter
                     ids.AddLast(dbReader.GetString(0));
                 }
             }
-            return ids;
+            return ids.ToArray();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace SadnaSrc.StoreCenter
         
 
         public double Cost { get; }
-        private static int globalLotteryTicketID = FindMaxLotteryTicketId;
+        private static int globalLotteryTicketID = -1;
         public LotteryTicket(string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
         {
             LotteryNumber = _LotteryNumber;
@@ -115,26 +115,12 @@ namespace SadnaSrc.StoreCenter
         }
         private static string GetLotteryTicketID()
         {
+            if (globalLotteryTicketID == -1)
+            {
+                globalLotteryTicketID = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllLotteryTicketIDs());
+            }
             globalLotteryTicketID++;
             return "T" + globalLotteryTicketID;
-        }
-        private static int FindMaxLotteryTicketId
-        {
-            get
-            {
-                StoreDL datalayer = StoreDL.Instance;
-                LinkedList<string> list = datalayer.GetAllLotteryTicketIDs();
-                int max = -5;
-                foreach (string s in list)
-                {
-                    var temp = Parse(s.Substring(1));
-                    if (temp > max)
-                    {
-                        max = temp;
-                    }
-                }
-                return max;
-            }
         }
     }
 }
