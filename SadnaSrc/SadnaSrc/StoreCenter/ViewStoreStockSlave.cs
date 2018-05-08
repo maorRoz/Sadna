@@ -65,6 +65,16 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("storeCenter", "product not exists");
                 throw new StoreException(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
             }
+            if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
+            {
+                LotterySaleManagmentTicket managmentTicket =
+                    storeLogic.GetLotteryByProductID((productID));
+                if ((managmentTicket.EndDate < MarketYard.MarketDate) ||
+                    (managmentTicket.StartDate > MarketYard.MarketDate) ||
+                    (!managmentTicket.IsActive) ||
+                    (managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice))
+                    return "";
+            }
             string discount = " Discount: {";
             string product = stockListItem.Product.ToString();
             if (stockListItem.Discount != null)
