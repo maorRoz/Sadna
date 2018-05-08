@@ -8,7 +8,15 @@ namespace SadnaSrc.PolicyComponent
 {
     public class PolicyDL : IPolicyDL
     {
-        public void SavePolicy(PurchasePolicy policy)
+        public void SavePolicy(Operator policy)
+        {
+            throw new NotImplementedException();
+        }
+        public void SavePolicy(Condition policy)
+        {
+            throw new NotImplementedException();
+        }
+        public void SavePolicy(Condition policy)
         {
             throw new NotImplementedException();
         }

@@ -69,7 +69,9 @@ namespace SadnaSrc.Main
                 CreateOrderItemTable(),
                 CreateNotificationsTable(),
                 CreateCategoryTable(),
-                CreateCategoryProductConnectionTable()
+                CreateCategoryProductConnectionTable(),
+                CreateConditionTable(),
+                CreateOperatorTable()
             };
 
             for (var i = 0; i < createTableStrings.Length; i++)
@@ -275,7 +277,9 @@ namespace SadnaSrc.Main
                 "OrderItem",
                 "Notifications",
                 "Category",
-                "CategoryProductConnection"
+                "CategoryProductConnection",
+                "Condition",
+                "Operator"
             };
 
             for (int i = 0; i < tableNames.Length; i++)
@@ -493,6 +497,24 @@ namespace SadnaSrc.Main
         private string CreateCategoryProductConnectionTable()
         {
             return @"Create TABLE IF NOT EXISTS [CategoryProductConnection] (
+                                    [CategoryID]    TEXT,
+                                    [ProductID]          TEXT,
+                                    PRIMARY KEY([CategoryID], [ProductID])
+                                    )";
+        }
+
+        private static string CreateConditionTable()
+        {
+            return @"Create TABLE IF NOT EXISTS [Condition] (
+                                    [CategoryID]    TEXT,
+                                    [ProductID]          TEXT,
+                                    [value]             TEXT,
+                                    PRIMARY KEY([CategoryID], [ProductID])
+                                    )";
+        }
+        private static string CreateOperatorTable()
+        {
+            return @"Create TABLE IF NOT EXISTS [Operator] (
                                     [CategoryID]    TEXT,
                                     [ProductID]          TEXT,
                                     PRIMARY KEY([CategoryID], [ProductID])
