@@ -183,7 +183,7 @@ namespace MarketWeb.Controllers
 			return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, product, valid = true});
 		}
 
-		public IActionResult PromoteStoreAdmin(int systemId, string state, string message, string store)
+		public IActionResult PromoteStoreAdmin(int systemId, string state, string message, string store, bool valid)
 		{
 		    List<CheckBoxModel> lst = new List<CheckBoxModel>
 		    {
@@ -193,6 +193,7 @@ namespace MarketWeb.Controllers
 		        new CheckBoxModel {Name = "DeclareDiscountPolicy"},
 		        new CheckBoxModel {Name = "ViewPurchaseHistory"}
 		    };
+			ViewBag.valid = valid;
 		    CheckBoxListModel optionList = new CheckBoxListModel(systemId, state, message, store) {Items = lst};
 		    return View(optionList);
 		}
@@ -217,7 +218,11 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.Users[systemId];
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.PromoteToStoreManager(usernameEntry, actions);
-			return RedirectToAction("PromoteStoreAdmin", new { systemId, state, message = answer.Answer, store});
+			if (answer.Status == Success)
+			{
+				return RedirectToAction("PromoteStoreAdmin", new { systemId, state, message = answer.Answer, store, valid = true });
+			}
+			return RedirectToAction("PromoteStoreAdmin", new { systemId, state, message = answer.Answer, store , valid= false});
 		}
 
 	}

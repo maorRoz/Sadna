@@ -15,9 +15,16 @@
 
 		<div style="float: left;width:30%">
 			<div id="alertContainer">
-				@if (Model.Message != null)
+				@if (Model.Message != null && !ViewBag.valid)
 				{
 					<div class='error'><span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span> 
+						@Model.Message 
+					</div>
+				}
+				
+				@if (Model.Message != null && ViewBag.valid)
+				{
+					<div class='success'><span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span> 
 						@Model.Message 
 					</div>
 				}
