@@ -40,7 +40,8 @@ namespace SadnaSrc.PolicyComponent
             PurchasePolicy policy = SelectPolicyFromOperatorTable(type, subject);
             if (policy == null)
                 policy = SelectPolicyFromConditionTable(type, subject);
-            policy.IsRoot = true;
+            if (policy != null)
+                policy.IsRoot = true;
             return policy;
         }
         public List<PurchasePolicy> GetAllPolicies()
@@ -117,7 +118,7 @@ namespace SadnaSrc.PolicyComponent
         }
         private void SavePolicy(Operator policy)
         {
-            string fields = "SystemID,ConditionType,PolicyType,Subject,COND1ID,COND2ID,isRoot";
+            string fields = "SystemID,OperatorType,PolicyType,Subject,COND1ID,COND2ID,isRoot";
             dbConnection.InsertTable("Operator", fields,
                 policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
                 Save_NonRoot_Policy(policy._cond1);

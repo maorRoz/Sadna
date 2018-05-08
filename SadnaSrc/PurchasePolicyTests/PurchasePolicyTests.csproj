@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RemovePolicyTests.cs" />
     <Compile Include="SavePurchasePolicyTests.cs" />
     <Compile Include="PolicyCheckingTest.cs" />
     <Compile Include="PolicyManagementTest.cs" />
