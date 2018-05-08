@@ -19,8 +19,18 @@ namespace SadnaSrc.PolicyComponent
         }
         public string[] GetPolicyStringValues()
         {
+            String subjectVal;
+            if (Subject == null)
+                subjectVal = "'NULL'";
+            else
+                subjectVal = "'" + Subject + "'";
+            String cond1val;
+            if (_cond1 == null)
+                cond1val = "-1";
+            else
+                cond1val = "'" + _cond1.ID + "'";
             String cond2val;
-            if (GetMyType() == "NotOperator")
+            if (_cond2 == null)
                 cond2val = "-1";
             else
                 cond2val="'" + _cond2.ID + "'";
@@ -31,8 +41,8 @@ namespace SadnaSrc.PolicyComponent
                 "" + ID,
                 "'" + GetMyType() + "'",
                 "'" + PrintEnum(Type) + "'",
-                "'" + Subject + "'",
-                "" + _cond1.ID,
+                subjectVal,
+                cond1val,
                 cond2val,
                 "'" + PrintBoolean(IsRoot) + "'"
 
@@ -41,9 +51,18 @@ namespace SadnaSrc.PolicyComponent
 
         public object[] GetPolicyValuesArray()
         {
-
+            string subjectval;
+            if (Subject == null)
+                subjectval = "NULL";
+            else
+                subjectval = Subject;
+            int cond1val;
+            if (_cond1 == null)
+                cond1val = -1;
+            else
+                cond1val = _cond1.ID;
             int cond2val;
-            if (GetMyType() == "NotOperator")
+            if (_cond2 == null)
                 cond2val = -1;
             else
                 cond2val = _cond2.ID;
@@ -52,8 +71,8 @@ namespace SadnaSrc.PolicyComponent
                 ID,
                 GetMyType(),
                 PrintEnum(Type),
-                Subject,
-                _cond1.ID,
+                subjectval,
+                cond1val,
                 cond2val,
                 PrintBoolean(IsRoot)
             };

@@ -35,8 +35,17 @@ namespace SadnaSrc.PolicyComponent
         }
         private bool Equals(PriceLessThan obj)
         {
-            return obj._value.Equals(_value) && obj.ID.Equals(ID) && obj.Subject.Equals(Subject)
-                   && obj.Type.Equals(Type);
+            bool answer = true;
+            if (_value == null)
+                answer = answer && (obj._value == null);
+            if (Subject == null)
+                answer = answer && (obj.Subject == null);
+            if (_value != null)
+                answer = answer && (_value.Equals(obj._value));
+            if (Subject != null)
+                answer = answer && (Subject.Equals(obj.Subject));
+            answer = answer && obj.ID.Equals(ID) && obj.Type.Equals(Type);
+            return answer;
         }
     }
 }
