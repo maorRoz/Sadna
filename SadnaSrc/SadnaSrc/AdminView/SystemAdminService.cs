@@ -47,5 +47,19 @@ namespace SadnaSrc.AdminView
             return slave.Answer;
         }
 
+        public MarketAnswer CreatePolicy(string type, string subject, string op, string arg1, string optArg)
+        {
+            AddPolicySlave slave = new AddPolicySlave(_admin);
+            slave.CreatePolicy(type,subject,op,arg1,optArg);
+            return slave.Answer;
+        }
+
+        public MarketAnswer SavePolicy(string type, string subject, string op, string arg1, string optArg)
+        {
+            AddPolicySlave slave = new AddPolicySlave(_admin);
+            slave.SaveFullPolicy();
+            return slave.Answer;
+        }
+
     }
 }

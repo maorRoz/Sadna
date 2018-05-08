@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminView\AddPolicySlave.cs" />
     <Compile Include="AdminView\AdminAnswer.cs" />
     <Compile Include="AdminView\AdminViewPurchaseHistorySlave.cs" />
     <Compile Include="AdminView\IAdminDL.cs" />

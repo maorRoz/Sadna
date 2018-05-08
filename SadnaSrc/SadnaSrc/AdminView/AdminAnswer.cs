@@ -20,6 +20,10 @@ namespace SadnaSrc.AdminView
         public AdminAnswer(EditCategoryStatus status, string answer) : base((int) status, answer)
         {
         }
+
+        public AdminAnswer(EditPolicyStatus status, string answer) : base((int)status, answer)
+        {
+        }
         public AdminAnswer(AdminException e) : base(e.Status, e.Message)
         {
         }
