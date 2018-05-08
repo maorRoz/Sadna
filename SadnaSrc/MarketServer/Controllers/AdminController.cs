@@ -57,5 +57,30 @@ namespace MarketWeb.Controllers
 
             return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
         }
-    }
+
+	    public IActionResult HandlingCategoryView(int systemId, string state)
+	    {
+		    return View(new UserModel(systemId, state, null));
+	    }
+
+	    public IActionResult AddingCategoryPage(int systemId, string state, string message, bool valid)
+	    {
+		    ViewBag.valid = valid;
+		    return View(new UserModel(systemId, state, message));
+	    }
+
+	    public IActionResult AddCategory(int systemId,string state, string category)
+	    {
+		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
+		    var answer = adminService.AddCategory(category);
+		    if (answer.Status == Success)
+		    {
+			    return RedirectToAction("AddingCategoryPage", new {systemId, state, message = answer.Answer, valid = true});
+		    }
+		    return RedirectToAction("AddingCategoryPage", new { systemId, state, message = answer.Answer, valid = false });
+
+		}
+
+
+	}
 }
