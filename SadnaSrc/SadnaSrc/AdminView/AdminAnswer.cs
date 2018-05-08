@@ -24,6 +24,11 @@ namespace SadnaSrc.AdminView
         public AdminAnswer(EditPolicyStatus status, string answer) : base((int)status, answer)
         {
         }
+
+        public AdminAnswer(ViewPolicyStatus status, string answer,string[] policyIds) : base((int)status, answer, policyIds)
+        {
+        }
+
         public AdminAnswer(AdminException e) : base(e.Status, e.Message)
         {
         }

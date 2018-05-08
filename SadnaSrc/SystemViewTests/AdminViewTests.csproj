@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminViewApiTest\AddCategoryTests.cs" />
+    <Compile Include="AdminViewApiTest\AddPolicyTest.cs" />
     <Compile Include="UseCaseUnitTest\AddCategoryTestsMock.cs" />
     <Compile Include="AdminViewApiTest\RemoveUserTests.cs" />
     <Compile Include="AdminViewApiTest\AdminViewPurchaseHistoryTests.cs" />

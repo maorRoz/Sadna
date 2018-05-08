@@ -44,6 +44,14 @@ namespace SadnaSrc.Main
     {
         Success,
         InvalidPolicyData,
+        NoAuthority
         
+    }
+
+    public enum ViewPolicyStatus
+    {
+        Success,
+        NoAuthority
+
     }
 }

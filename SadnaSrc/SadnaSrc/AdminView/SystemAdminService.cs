@@ -49,15 +49,22 @@ namespace SadnaSrc.AdminView
 
         public MarketAnswer CreatePolicy(string type, string subject, string op, string arg1, string optArg)
         {
-            AddPolicySlave slave = new AddPolicySlave(_admin);
+            AddPolicySlave slave = new AddPolicySlave(_admin, MarketYard.Instance.GetGlobalPolicyManager());
             slave.CreatePolicy(type,subject,op,arg1,optArg);
             return slave.Answer;
         }
 
-        public MarketAnswer SavePolicy(string type, string subject, string op, string arg1, string optArg)
+        public MarketAnswer SavePolicy()
         {
-            AddPolicySlave slave = new AddPolicySlave(_admin);
+            AddPolicySlave slave = new AddPolicySlave(_admin, MarketYard.Instance.GetGlobalPolicyManager());
             slave.SaveFullPolicy();
+            return slave.Answer;
+        }
+
+        public MarketAnswer ViewPolicies()
+        {
+            ViewPoliciesSlave slave = new ViewPoliciesSlave(_admin, MarketYard.Instance.GetGlobalPolicyManager());
+            slave.ViewPolicies();
             return slave.Answer;
         }
 

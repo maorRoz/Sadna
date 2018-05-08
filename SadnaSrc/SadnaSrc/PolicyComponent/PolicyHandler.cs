@@ -82,7 +82,7 @@ namespace SadnaSrc.PolicyComponent
             toAdd.ID = GeneratePolicyID();
             Policies.Add(toAdd);
             SessionPolicies.Clear();
-            //_dataLayer.SavePolicy(policy);
+            _dataLayer.SavePolicy(toAdd);
         }
 
         public void RemovePolicy(PolicyType type, string subject)
@@ -93,10 +93,11 @@ namespace SadnaSrc.PolicyComponent
                 if (policy.Type == type && policy.Subject == subject)
                 {
                     toRemove = policy;
-                    //_dataLayer.RemovePolicy(policy);
+                   
                 }
                     
             }
+            _dataLayer.RemovePolicy(toRemove);
             Policies.Remove(toRemove);
         }
 

@@ -9,15 +9,15 @@ using SadnaSrc.PolicyComponent;
 
 namespace SadnaSrc.AdminView
 {
-    class AddPolicySlave
+    public class AddPolicySlave
     {
         public MarketAnswer Answer;
         private readonly IUserAdmin _admin;
-        private IGlobalPolicyManager manager;
+        private IGlobalPolicyManager _manager;
 
-        public AddPolicySlave(IUserAdmin admin)
+        public AddPolicySlave(IUserAdmin admin, IGlobalPolicyManager manager)
         {
-            manager = MarketYard.Instance.GetGlobalPolicyManager();
+            _manager = manager;
             _admin = admin;
         }
 
@@ -38,6 +38,10 @@ namespace SadnaSrc.AdminView
             {
                 Answer = new AdminAnswer((EditPolicyStatus)e.Status, e.GetErrorMessage());
             }
+            catch (MarketException e)
+            {
+                Answer = new AdminAnswer(EditPolicyStatus.NoAuthority, e.GetErrorMessage());
+            }
         }
 
         public void SaveFullPolicy()
@@ -46,7 +50,7 @@ namespace SadnaSrc.AdminView
             {
                 MarketLog.Log("AdminView", "Checking admin status.");
                 _admin.ValidateSystemAdmin();
-                manager.AddPolicy(manager.GetSessionPolicies().Length);
+                _manager.AddPolicy(_manager.GetSessionPolicies().Length);
                 MarketLog.Log("AdminView", "Policy saved.");
                 Answer = new AdminAnswer(EditPolicyStatus.Success, "Policy saved.");
 
@@ -55,21 +59,93 @@ namespace SadnaSrc.AdminView
             {
                 Answer = new AdminAnswer((EditPolicyStatus)e.Status, e.GetErrorMessage());
             }
+            catch (MarketException e)
+            {
+                Answer = new AdminAnswer(EditPolicyStatus.NoAuthority, e.GetErrorMessage());
+            }
         }
 
         private void BuildPolicy(string type, string subject, string op, string arg1, string optArg)
         {
-            int numericArg;
+            CheckOpArgsCombo(op, arg1, optArg);
+            int numericArg1, numericArg2;
             if (type == "Global" && subject == null)
             {
-                return;
+                if (IsCondtion(op))
+                {
+                    _manager.CreateGlobalSimplePolicy(GetConditionType(op), arg1);
+                    return;
+                }
+                if (IsOperator(op))
+                {
+                    Int32.TryParse(arg1, out numericArg1);
+                    Int32.TryParse(optArg, out numericArg2);
+                    _manager.CreateGlobalPolicy(GetOperand(op), numericArg1, numericArg2);
+                    return;
+                }
             }
-               
+            if (type == "Category")
+            {
+                if (IsCondtion(op))
+                {
+                    _manager.CreateCategorySimplePolicy(subject,GetConditionType(op), arg1);
+                    return;
+                }
+                if (IsOperator(op))
+                {
+                    Int32.TryParse(arg1, out numericArg1);
+                    Int32.TryParse(optArg, out numericArg2);
+                    _manager.CreateCategoryPolicy(subject, GetOperand(op), numericArg1, numericArg2);
+                    return;
+                }
+            }
+            if (type == "Product")
+            {
+                if (IsCondtion(op))
+                {
+                    _manager.CreateProductSimplePolicy(subject, GetConditionType(op), arg1);
+                    return;
+                }
+                if (IsOperator(op))
+                {
+                    Int32.TryParse(arg1, out numericArg1);
+                    Int32.TryParse(optArg, out numericArg2);
+                    _manager.CreateProductPolicy(subject, GetOperand(op), numericArg1, numericArg2);
+                    return;
+                }
+            }
             MarketLog.Log("AdminView", " Adding policy failed, invalid data.");
             throw new AdminException(EditPolicyStatus.InvalidPolicyData,"Invalid Policy data");
 
         }
-    
+
+        private void CheckOpArgsCombo(string op, string arg1, string optArg)
+        {
+            int numericArg1, numericArg2;
+            if (IsNumericCondtion(op) && Int32.TryParse(arg1, out numericArg1)) return;
+            if (IsOperator(op) && Int32.TryParse(arg1, out numericArg1) &&
+                Int32.TryParse(optArg, out numericArg2)) return;
+            MarketLog.Log("AdminView", " Adding policy failed, invalid data.");
+            throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
+        }
+        
+        private bool IsNumericCondtion(string cond)
+        {
+            return cond.Contains("Price >=") || cond.Contains("Price <=") || cond.Contains("Quantity >=") ||
+                   cond.Contains("Quantity <=");
+        }
+
+        private bool IsCondtion(string cond)
+        {
+            return cond.Contains("Price >=") || cond.Contains("Price <=") || cond.Contains("Quantity >=") ||
+                   cond.Contains("Quantity <=") || cond.Contains("Username =") || cond.Contains("Address =");
+        }
+
+        private bool IsOperator(string op)
+        {
+            return op.Contains("AND") || op.Contains("OR") || op.Contains("NOT");
+        }
+
         private ConditionType GetConditionType(string cond)
         {
             if (cond.Contains("Price >="))
