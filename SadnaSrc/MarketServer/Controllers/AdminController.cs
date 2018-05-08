@@ -81,6 +81,23 @@ namespace MarketWeb.Controllers
 
 		}
 
+	    public IActionResult RemovingCategoryPage(int systemId, string state, string message, bool valid)
+	    {
+		    ViewBag.valid = valid;
+		    return View(new UserModel(systemId, state, message));
+	    }
+
+	    public IActionResult RemoveCategory(int systemId, string state, string category)
+	    {
+		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
+		    var answer = adminService.RemoveCategory(category);
+		    if (answer.Status == Success)
+		    {
+			    return RedirectToAction("RemovingCategoryPage", new { systemId, state, message = answer.Answer, valid = true });
+		    }
+		    return RedirectToAction("RemovingCategoryPage", new { systemId, state, message = answer.Answer, valid = false });
+
+	    }
 
 	}
 }
