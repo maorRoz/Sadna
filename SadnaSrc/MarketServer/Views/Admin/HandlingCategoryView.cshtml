@@ -1,0 +1,40 @@
+﻿
+@{
+	ViewData["Title"] = "Handling Category View";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row top-space">
+	<div class="col-lg-12">
+		<div id="feedContainer" style="float: right;width:20%"></div>
+		<div style="float: left;width:70%">
+			<div id="alertContainer">
+				@if (Model.Message != null)
+				{
+					<div class='success'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
+				}
+
+			</div>
+			<hr />
+			<br/>
+			@using (Html.BeginForm("AddingCategoryPage", "Admin", new { Model.SystemId, Model.State }))
+			{
+				<input type="submit" class="btn btn-primary" value="Add Category">
+			}
+			<br/>
+			@using (Html.BeginForm("RemovingCategoryPage", "Admin", new { Model.SystemId, Model.State }))
+			{
+				<input type="submit" class="btn btn-primary" value="Remove Category">
+			}
+			<br/>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+}
+

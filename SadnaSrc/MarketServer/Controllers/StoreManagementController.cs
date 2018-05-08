@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using MarketServer.Models;
 using MarketWeb.Models;
@@ -112,7 +113,7 @@ namespace MarketWeb.Controllers
 
 			return RedirectToAction("AddNewProductPage", new {systemId, state, message = answer.Answer, store});
 		}
-
+		
 		public IActionResult ViewPurchaseHistory(int systemId, string state, string message, string store)
 		{
 			var userService = MarketServer.Users[systemId];
@@ -181,5 +182,90 @@ namespace MarketWeb.Controllers
 			}
 			return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, product, valid = true});
 		}
+
+		public IActionResult PromoteStoreAdmin(int systemId, string state, string message, string store, bool valid)
+		{
+		    List<CheckBoxModel> lst = new List<CheckBoxModel>
+		    {
+		        new CheckBoxModel {Name = "StoreOwner"},
+		        new CheckBoxModel {Name = "ManageProducts"},
+		        new CheckBoxModel {Name = "PromoteStoreAdmin"},
+		        new CheckBoxModel {Name = "DeclareDiscountPolicy"},
+		        new CheckBoxModel {Name = "ViewPurchaseHistory"}
+		    };
+			ViewBag.valid = valid;
+		    CheckBoxListModel optionList = new CheckBoxListModel(systemId, state, message, store) {Items = lst};
+		    return View(optionList);
+		}
+
+		[HttpPost]
+		public IActionResult HandleOptionsSelected(int systemId, string state, string message, string store, string[] permissions, string usernameEntry)
+		{
+			StringBuilder actions = new StringBuilder();
+			foreach (var permission in permissions)
+			{
+				if (permission != null)
+				{
+					actions.Append(permission + ",");
+				}
+			}
+			return RedirectToAction("PromoteStoreAdminCall", new { systemId, state, store , usernameEntry, actions});
+		}
+
+		public IActionResult PromoteStoreAdminCall(int systemId, string state,string message, string store, string usernameEntry,
+			string actions)
+		{
+			var userService = MarketServer.Users[systemId];
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.PromoteToStoreManager(usernameEntry, actions);
+			if (answer.Status == Success)
+			{
+				return RedirectToAction("PromoteStoreAdmin", new { systemId, state, message = answer.Answer, store, valid = true });
+			}
+			return RedirectToAction("PromoteStoreAdmin", new { systemId, state, message = answer.Answer, store , valid= false});
+		}
+
+		public IActionResult HandleCategoryProduct(int systemId, string state, string message, string store, string product)
+		{
+			return View(new ProductInStoreModel(systemId, state, message, store, product));
+		}
+
+		public IActionResult AddingProductCategoryPage(int systemId, string state,string message, string store, string product, bool valid)
+		{
+			ViewBag.valid = valid;
+			return View(new ProductInStoreModel(systemId, state, message,store,product));
+		}
+
+		public IActionResult AddCategoryProduct(int systemId, string state,string store, string product, string category)
+		{
+			var userService = MarketServer.Users[systemId];
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.AddProductToCategory(category, product);
+			if (answer.Status == Success)
+			{
+				return RedirectToAction("AddingProductCategoryPage", new { systemId, state, message = answer.Answer,store, product, valid = true });
+			}
+			return RedirectToAction("AddingProductCategoryPage", new { systemId, state, message = answer.Answer, store, product, valid = false });
+		}
+
+		public IActionResult RemovingProductCategoryPage(int systemId, string state, string message,string store, string product, bool valid)
+		{
+			ViewBag.valid = valid;
+			return View(new ProductInStoreModel(systemId, state, message, store, product));
+		}
+
+		public IActionResult RemoveCategoryProduct(int systemId, string state, string store, string product, string category)
+		{
+			var userService = MarketServer.Users[systemId];
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.RemoveProductFromCategory(category,product);
+			if (answer.Status == Success)
+			{
+				return RedirectToAction("RemovingProductCategoryPage", new { systemId, state, message = answer.Answer,store,product, valid = true });
+			}
+			return RedirectToAction("RemovingProductCategoryPage", new { systemId, state, message = answer.Answer,store, product, valid = false });
+
+		}
+
 	}
 }

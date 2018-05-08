@@ -27,7 +27,7 @@ namespace SadnaSrc.AdminView
             }
             catch (AdminException e)
             {
-                Answer = new AdminAnswer(e);
+                Answer = new AdminAnswer((EditCategoryStatus)e.Status,e.GetErrorMessage());
                 return null;
             }
         }
