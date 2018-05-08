@@ -32,6 +32,7 @@ namespace SadnaSrc.OrderPool
             {
                 Order order = CreateOrderAllCart(UserName, UserAddress, coupons);
                 orderId = order.GetOrderID();
+                CheckPurchasePolicy(order);
                 ProcessOrder(order, CreditCard);
                 EmptyCart();
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in the cart.");

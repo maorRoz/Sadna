@@ -40,7 +40,8 @@ namespace SadnaSrc.Main
         Success,
         NoOrderItemInOrder,
         ItemAlreadyInOrder,
-        InvalidDetails
+        InvalidDetails,
+        NotComplyWithPolicy
     }
 
     public enum LotteryOrderStatus

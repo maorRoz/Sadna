@@ -6,6 +6,7 @@ using SadnaSrc.Main;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
+using SadnaSrc.PolicyComponent;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.UserSpot;
@@ -21,6 +22,7 @@ namespace OrderPoolWallaterSupplyPointTests
         private Mock<IUserBuyer> userBuyerMocker;
         private Mock<IStoresSyncher> storeSyncherMock;
         private Mock<IPublisher> publisherMock;
+        private Mock<IPolicyChecker> checkerMock;
 
         private PurchaseItemSlave slave;
         private OrderItem item;
@@ -154,6 +156,22 @@ namespace OrderPoolWallaterSupplyPointTests
                 "12345678");
             Assert.IsNull(order);
             Assert.AreEqual((int)OrderItemStatus.InvalidDetails, slave.Answer.Status);
+        }
+
+        [TestMethod]
+        public void BuyItemFailedPolicyTest()
+        {
+            userBuyerMocker.Setup(x => x.CheckoutItem
+                (It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>())).Returns(item);
+            checkerMock.Setup(x => x.CheckRelevantPolicies
+                    (It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>()))
+                .Throws(new OrderException(OrderItemStatus.NotComplyWithPolicy, "some message"));
+            orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
+            slave = new PurchaseItemSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object, publisherMock.Object);
+            Order order = slave.BuyItemFromImmediate("#9 Large", "Cluckin Bell", 1, 7.00, "D1", "Big Smoke", "Grove Street",
+                "12345678");
+            Assert.IsNull(order);
+            Assert.AreEqual((int)OrderItemStatus.NotComplyWithPolicy, slave.Answer.Status);
         }
 
         [TestCleanup]
