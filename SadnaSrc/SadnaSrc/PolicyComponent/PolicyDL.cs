@@ -158,12 +158,21 @@ namespace SadnaSrc.PolicyComponent
                     string s = dbReader.GetString(3);
                     int cond1Id = dbReader.GetInt32(4);
                     int cond2Id = dbReader.GetInt32(5);
+                    PurchasePolicy cond1OptionalNull = null;
+                    PurchasePolicy cond2OptionalNull = null;
+                    string subjectOptionalNull = null;
+                    if (cond1Id != -1)
+                        cond1OptionalNull = GetPolicyById(cond1Id);
+                    if (cond2Id != -1)
+                        cond2OptionalNull = GetPolicyById(cond2Id);
+                    if (s != "'NULL'")
+                        subjectOptionalNull = s;
                     if (operatorType == "AndOperator")
-                        return new AndOperator(PurchasePolicy.GetEnumFromStringValue(policyType), s, GetPolicyById(cond1Id), GetPolicyById(cond2Id), id);
+                        return new AndOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
                     if (operatorType == "OrOperator")
-                        return new OrOperator(PurchasePolicy.GetEnumFromStringValue(policyType), s, GetPolicyById(cond1Id), GetPolicyById(cond2Id), id);
+                        return new OrOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
                     if (operatorType == "NotOperator")
-                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), s, GetPolicyById(cond1Id),null, id);
+                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), s, cond1OptionalNull, cond2OptionalNull, id);
                 }
             }
 
@@ -185,18 +194,24 @@ namespace SadnaSrc.PolicyComponent
                     string policyType = dbReader.GetString(2);
                     string s = dbReader.GetString(3);
                     string value = dbReader.GetString(4);
+                    string subjectOptionalNull = null;
+                    if (s != "'NULL'")
+                        subjectOptionalNull = s;
+                    string valueOptionalNull = null;
+                    if (value!="'NULL'")
+                        valueOptionalNull = value;
                     if (conditionType == "AddressEquals")
-                        return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                        return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
                     if (conditionType == "PriceGreaterThan")
-                        return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                        return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
                     if (conditionType == "PriceLessThan")
-                        return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                        return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
                     if (conditionType == "QuantityGreaterThan")
-                        return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                        return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
                     if (conditionType == "QuantityLessThan")
-                        return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                        return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
                     if (conditionType == "UsernameEquals")
-                        return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                        return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
                 }
             }
 
@@ -226,23 +241,29 @@ namespace SadnaSrc.PolicyComponent
                         string policyType = dbReader.GetString(2);
                         string subject = dbReader.GetString(3);
                         string value = dbReader.GetString(4);
+                        string subjectOptionalNull = null;
+                        if (subject != "'NULL'")
+                            subjectOptionalNull = subject;
+                        string valueOptionalNull = null;
+                        if (value != "'NULL'")
+                            valueOptionalNull = value;
                         if (conditionType == "AddressEquals")
-                            return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value,
+                            return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, subjectOptionalNull,
                                 id);
                         if (conditionType == "PriceGreaterThan")
-                            return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject,
-                                value, id);
+                            return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull,
+                                subjectOptionalNull, id);
                         if (conditionType == "PriceLessThan")
-                            return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value,
+                            return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, subjectOptionalNull,
                                 id);
                         if (conditionType == "QuantityGreaterThan")
-                            return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject,
-                                value, id);
+                            return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull,
+                                subjectOptionalNull, id);
                         if (conditionType == "QuantityLessThan")
-                            return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject,
-                                value, id);
+                            return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull,
+                                subjectOptionalNull, id);
                         if (conditionType == "UsernameEquals")
-                            return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value,
+                            return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, subjectOptionalNull,
                                 id);
                     }
                 }
@@ -265,12 +286,21 @@ namespace SadnaSrc.PolicyComponent
                     string subject = dbReader.GetString(3);
                     int cond1Id = dbReader.GetInt32(4);
                     int cond2Id = dbReader.GetInt32(5);
+                    PurchasePolicy cond1OptionalNull = null;
+                    PurchasePolicy cond2OptionalNull = null;
+                    string subjectOptionalNull = null;
+                    if (cond1Id != -1)
+                        cond1OptionalNull = GetPolicyById(cond1Id);
+                    if (cond2Id != -1)
+                        cond2OptionalNull = GetPolicyById(cond2Id);
+                    if (subject != "'NULL'")
+                        subjectOptionalNull = subject;
                     if (operatorType == "AndOperator")
-                        return new AndOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subject, GetPolicyById(cond1Id), GetPolicyById(cond2Id), id);
+                        return new AndOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
                     if (operatorType == "OrOperator")
-                        return new OrOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subject, GetPolicyById(cond1Id), GetPolicyById(cond2Id), id);
+                        return new OrOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
                     if (operatorType == "NotOperator")
-                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subject, GetPolicyById(cond1Id), null, id);
+                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
                 }
             }
             return null;
