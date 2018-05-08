@@ -310,17 +310,9 @@ namespace BlackBox.StoreBlackBoxTests
         [TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_storeBridge.CleanSession();
-			_bridgeSignUp.CleanSession();
-			_userToPromoteBridge.CleanSession();
-			_userToPromoteBridge2.CleanSession();
-			_storeManager1.CleanSession();
-			_storeManager2?.CleanSession();
-			_signInBridge?.CleanSession();
-		    _adminBridge?.CleanSession();
-		    _guestBridge?.CleanSession();
-            _bridgeSignUp.CleanMarket();
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+        }
 
         /*
          * Private helper functions
@@ -380,9 +372,9 @@ namespace BlackBox.StoreBlackBoxTests
             }
 	        else
 	        {
-	            Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.AddNewProduct(product, 50, "tool", 5).Status);
-	            Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.EditProduct(product, "Price", "3").Status);
-	            Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.RemoveProduct(product).Status);
+	            Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.AddNewProduct(product, 50, "tool", 5).Status);
+	            Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.EditProduct(product, "Price", "3").Status);
+	            Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.RemoveProduct(product).Status);
             }
 
 	        if (permissions[2])
@@ -395,11 +387,11 @@ namespace BlackBox.StoreBlackBoxTests
             }
 	        else
 	        {
-	            Assert.AreEqual((int)StoreEnum.NoPremmision,
+	            Assert.AreEqual((int)StoreEnum.NoPermission,
 	                _storeManager2.AddDiscountToProduct("Product", DateTime.Today, DateTime.Today.AddDays(3), 50,
 	                    "VISIBLE", true).Status);
-	            Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.EditDiscount(product, "DiscountAmount", "20").Status);
-	            Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.RemoveDiscountFromProduct(product).Status);
+	            Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.EditDiscount(product, "DiscountAmount", "20").Status);
+	            Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.RemoveDiscountFromProduct(product).Status);
             }
 
 	        if (permissions[3])

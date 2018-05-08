@@ -4,26 +4,28 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ViewStoreInfoSlave
+    public class ViewStoreInfoSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private IUserShopper _shopper;
-        StoreDL storeLogic;
+        IStoreDL storeLogic;
 
-        public ViewStoreInfoSlave(IUserShopper shopper)
+        public ViewStoreInfoSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.Instance;
+            storeLogic = storeDL;
         }
 
-        internal void ViewStoreInfo(string store)
+        public void ViewStoreInfo(string store)
         {
             try
             {
+                CheckIfStoreExistsAndActive(store);
                 MarketLog.Log("StoreCenter", "check that have premission to view store info");
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "premission gained");
                 string[] storeInfo = storeLogic.GetStoreInfo(store);
+                CheckIfStoreInfoIsNotNull(storeInfo);
                 MarketLog.Log("StoreCenter", "info gained");
                 answer = new StoreAnswer(ViewStoreStatus.Success, "Store info has been successfully granted!", storeInfo);
             }
@@ -38,7 +40,17 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "no premission");
                 answer = new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
-            }
+            } 
+        }
+        private void CheckIfStoreInfoIsNotNull(object item)
+        {
+            if (item == null)
+            { throw new StoreException(ViewStoreStatus.NoStore, "No store found"); }
+        }
+        private void CheckIfStoreExistsAndActive(string _storename)
+        {
+            if (!storeLogic.IsStoreExistAndActive(_storename))
+            { throw new StoreException(ViewStoreStatus.NoStore, "store not exists or active"); }
         }
     }
 }

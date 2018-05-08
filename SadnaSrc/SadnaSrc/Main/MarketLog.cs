@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
-    public class MarketLog
+    public static class MarketLog
     {
-        private static readonly List<string> publishedLogsIDs = new List<string>();
         private static readonly Random random = new Random();
         private static IMarketDB _dbConnection = MarketDB.Instance;
 
@@ -25,24 +24,26 @@ namespace SadnaSrc.Main
         }
         public static void Log(string moduleName, string description)
         {
-            string logID = GenerateLogID();
-            InsertLog(logID,moduleName,description);
-            publishedLogsIDs.Add(logID);
+            string logId = GenerateLogID();
+            while (!InsertLog(logId, moduleName, description))
+            {
+                logId = GenerateLogID();
+            }
         }
 
-        private static void InsertLog(string logID, string moduleName, string description)
+        private static bool InsertLog(string logID, string moduleName, string description)
         {
-            _dbConnection.InsertTable("System_Log", "LogID,Date,ModuleName,Description",
-                new[] { "@idValue", "@dateValue", "@moduleParam", "@descriptionParam" },
-                new object[] { logID, DateTime.Now, moduleName, description });
-        }
-        public static void RemoveLogs()
-        {
-            foreach (var logID in publishedLogsIDs)
+            try
             {
-                _dbConnection.DeleteFromTable("System_Log","LogID = '"+logID+"'");
+                _dbConnection.InsertTable("System_Log", "LogID,Date,ModuleName,Description",
+                    new[] {"@idValue", "@dateValue", "@moduleParam", "@descriptionParam"},
+                    new object[] {logID, DateTime.Now, moduleName, description});
+                return true;
             }
-            publishedLogsIDs.Clear();
+            catch (MarketException)
+            {
+                return false;
+            }
         }
     }
 }

@@ -311,8 +311,7 @@ namespace IntegrationTests.UserShopper_Integration
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            storeServiceSession.CleanSeesion();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

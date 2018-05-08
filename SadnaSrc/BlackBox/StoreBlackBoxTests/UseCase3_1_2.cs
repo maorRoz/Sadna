@@ -54,11 +54,11 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManage2 = StoreManagementDriver.getBridge();
 			_storeManage2.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res2 = _storeManage2.RemoveProduct("bamba");
-			Assert.AreEqual((int)StoreEnum.NoPremmision,res2.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission,res2.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			//didn't succeed in removing the product, there is still one product
-			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack Discount: {null} Purchase Way: Immediate Quantity: 30" };
 			Assert.AreEqual(expectedResult.Length, actualResult.Length);
 			for (int i = 0; i < actualResult.Length; i++)
 			{
@@ -77,7 +77,7 @@ namespace BlackBox.StoreBlackBoxTests
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			//didn't succeed in removing the product, there is still one product
-			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30" };
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack Discount: {null} Purchase Way: Immediate Quantity: 30" };
 			Assert.AreEqual(expectedResult.Length, actualResult.Length);
 			for (int i = 0; i < actualResult.Length; i++)
 			{
@@ -96,12 +96,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_userBridge.CleanSession();
-			_storeManage1.CleanSession();
-			_userBridge2?.CleanSession();
-			_storeBridge.CleanSession();
-			_storeManage2?.CleanSession();
-			_userBridge.CleanMarket();
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+        }
 	}
 }

@@ -78,19 +78,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UserSpotApiTests\EditCartTests.cs" />
+    <Compile Include="UserSpotApiTests\GetAllControlledStoresTests.cs" />
+    <Compile Include="UserSpotApiTests\GetUserDetailsTests.cs" />
     <Compile Include="UserSpotApiTests\RemoveFromCartTests.cs" />
     <Compile Include="UserSpotApiTests\SignInTests.cs" />
     <Compile Include="UserSpotApiTests\SignUpTests.cs" />
-    <Compile Include="UseCaseUnitTest\UseCase1_6_1_Test.cs" />
+    <Compile Include="UseCaseTests\UseCase1_6_1_Test.cs" />
     <Compile Include="DbUserSpotIntegration\CartService_Test.cs" />
-    <Compile Include="UseCaseUnitTest\UseCase1_6_2_Test.cs" />
-    <Compile Include="UseCaseUnitTest\UseCase2_1_Test.cs" />
-    <Compile Include="UseCaseUnitTest\UseCase1_2_Test.cs" />
+    <Compile Include="UseCaseTests\UseCase1_6_2_Test.cs" />
+    <Compile Include="UseCaseTests\UseCase2_1_Test.cs" />
+    <Compile Include="UseCaseTests\UseCase1_2_Test.cs" />
     <Compile Include="UserSpotApiTests\EnterSystemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DbUserSpotIntegration\StoreManagerPolicy_Test.cs" />
-    <Compile Include="UseCaseUnitTest\UseCase_1_6_Test.cs" />
+    <Compile Include="UseCaseTests\UseCase_1_6_Test.cs" />
     <Compile Include="UserSpotApiTests\ViewCartTests.cs" />
+    <Compile Include="UserSpotApiTests\ViewUsersTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

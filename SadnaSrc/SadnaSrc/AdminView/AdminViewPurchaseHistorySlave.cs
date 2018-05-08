@@ -82,7 +82,7 @@ namespace SadnaSrc.AdminView
             if (!_adminDB.IsUserNameExistInHistory(userName))
             {
                 throw new AdminException(ViewPurchaseHistoryStatus.NoUserFound, "Couldn't find any User with " +
-                                                                                "that ID in history records");
+                                                                                "that name in history records");
             }
 
         }

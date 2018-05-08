@@ -1,9 +1,9 @@
 ﻿// Write your JavaScript code.
 $(document).ready(function() {
-    var socket = new WebSocketManager.Connection('ws://localhost:3000/market');
+    var socketUrl = "ws://" + window.location.host + "/market";
+    var socket = new WebSocketManager.Connection(socketUrl);
     var socketId = null;
     socket.enableLogging = true;
-
 
     function getParameterValues(param) {
         var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -15,52 +15,28 @@ $(document).ready(function() {
         }
     }
 
-    function submitSignUp() {
-        var nameEntry = $('#user-name-entry').val().trim();
-        var addressEntry = $('#user-address-entry').val().trim();
-        var passEntry = $('#user-password-entry').val().trim();
-        var creditEntry = $('#user-creditcard-entry').val().trim();
-        socket.invoke('SignUpUser',
-            socketId,
-            getParameterValues('SystemId'),
-            nameEntry,
-            addressEntry,
-            passEntry,
-            creditEntry);
-        console.log(socketId);
-        console.log(getParameterValues('SystemId'));
-        console.log(nameEntry);
-        console.log(addressEntry);
-        console.log(passEntry);
-        console.log(creditEntry);
-        console.log('clicking submit signup!!!');
+    function extractQuery(param1,param2) {
+        var queryValue = getParameterValues(param1);
+        if (queryValue === undefined) {
+            queryValue = getParameterValues(param2);
+        }
+        return queryValue;
     }
-
-    function submitSignIn() {
-        var nameEntry = $('#user-name-entry').val().trim();
-        var passEntry = $('#user-password-entry').val().trim();
-        socket.invoke('SignInUser',
-            socketId,
-            getParameterValues('SystemId'),
-            nameEntry,
-            passEntry);
-        console.log(socketId);
-        console.log(getParameterValues('SystemId'));
-        console.log(nameEntry);
-        console.log(passEntry);
-        console.log('clicking submit signin!!!');
-    }
-
-
 
     socket.connectionMethods.onConnected = () => {
         console.log('client has been connected!');
         socketId = socket.connectionId;
         console.log('your SocketId is : ' + socketId);
-        var systemId = getParameterValues('SystemId');
-        console.log('your SystemId is : ' +systemId);
+        var systemId = extractQuery('systemId','SystemId');
+        console.log('your systemId is : ' +systemId);
         if (systemId === undefined || systemId === 0) {
             socket.invoke('EnterSystem', socketId);
+        } else {
+            var state = extractQuery('state', 'State');
+            console.log('your state is : ' + state);
+            if (state !== 'Guest') {
+                socket.invoke('SubscribeSocket', systemId, socketId);
+            }
         }
     }
 
@@ -68,49 +44,23 @@ $(document).ready(function() {
     }
 
     socket.clientMethods['IdentifyClient'] = (userId) => {
-        location.href = window.location.href + '?SystemId=' + userId;
+        location.href = window.location.href + '?systemId=' + userId + '&state=Guest';
     }
 
-    socket.clientMethods['LoggingMarket'] = (statusCode, message,userId) => {
-        console.log(statusCode);
-        console.log(message);
-        if (statusCode === 0) {
-            var successMessage =
-                $(
-                    "<div class='success'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
-                    message +
-                    "</div>");
-            $('#alertContainer').append(successMessage);
-            location.href = 'BrowseMarket' + '?SystemId=' + userId;
-        } else {
-            var alertMessage =
-                $(
-                    "<div class='error'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
-                    message +
-                    "</div>");
-            $('#alertContainer').append(alertMessage);
-        }
-    }
-
-    /*<div class="alert">
-    <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
-    This is an alert box.
-</div>*/
-
-    socket.clientMethods['GetApiAnswer'] = (answer) => {
-        console.log(answer);
+    socket.clientMethods['NotifyFeed'] = (feedMessage) => {
+        var feedBox = $(
+            "<div class='marketFeed'><span class='closebtn' onclick=\"this.parentElement.style.display = 'none';\">&times;</span>" +
+            feedMessage +
+            "</div>");
+        $('#feedContainer').append(feedBox);
     }
 
     socket.start();
 
-    var $submitSignupButton = document.getElementById('submit-signup-button');
-    if ($submitSignupButton !== undefined && $submitSignupButton !== null) {
-        $submitSignupButton.onclick = function () { submitSignUp(); }
-    }
-
-    var $submitSigninButton = document.getElementById('submit-signin-button');
-    if ($submitSigninButton !== undefined && $submitSigninButton !== null) {
-        $submitSigninButton.onclick = function () { submitSignIn(); }
-    }
-
+    $(window).on("unload", function (e) {
+        var state = extractQuery('state', 'State');
+        if (state === 'Registered' || state === 'Admin') {
+            socket.invoke('UnSubscribeSocket', socketId);
+         }
+    });
 })

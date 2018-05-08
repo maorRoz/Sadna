@@ -39,9 +39,9 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock = stock.ReportList;
 			string[] expectedStock =
 			{
-				" name: Ouch base price: 30 description: Ouchouch , DiscountAmount: 10 Start Date: "+Convert.ToDateTime("14/04/2018").Date.ToString("d")+"" +
-				" End Date: "+ Convert.ToDateTime("20/04/2018").Date.ToString("d")+" type is: visible , Immediate , 6"
-			};
+				" name: Ouch base price: 30 description: Ouchouch Discount: {DiscountAmount: 10 Start Date: "+Convert.ToDateTime("14/04/2018").Date.ToString("d")+"" +
+				" End Date: "+ Convert.ToDateTime("20/04/2018").Date.ToString("d")+" type is: visible} Purchase Way: Immediate Quantity: 6"
+            };
 			Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 			for (int i = 0; i < receivedStock.Length; i++)
 			{
@@ -65,8 +65,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock = stock.ReportList;
 			string[] expectedStock =
 			{
-				" name: Ouch base price: 30 description: Ouchouch , type is: hidden , Immediate , 6"
-			};
+                " name: Ouch base price: 30 description: Ouchouch Discount: {type is: hidden} Purchase Way: Immediate Quantity: 6"
+            };
 			Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 			for (int i = 0; i < receivedStock.Length; i++)
 			{
@@ -117,7 +117,7 @@ namespace BlackBox.StoreBlackBoxTests
 			CheckNoDiscountAdded();
 
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), -5, "VISIBLE", false);
-			Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, res.Status);
+			Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, res.Status);
 
 			CheckNoDiscountAdded();
 		}
@@ -139,7 +139,7 @@ namespace BlackBox.StoreBlackBoxTests
 			CheckNoDiscountAdded();
 
 			_storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "HIDDEN", true);
-			Assert.AreEqual((int)DiscountStatus.thereIsAlreadyAnotherDiscount, _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "HIDDEN", true).Status);
+			Assert.AreEqual((int)DiscountStatus.ThereIsAlreadyAnotherDiscount, _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "HIDDEN", true).Status);
 
 		}
 
@@ -150,7 +150,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManagementBridge2 = StoreManagementDriver.getBridge();
 			_storeManagementBridge2.GetStoreManagementService(_userBuyer.GetUserSession(), "Toy");
 			MarketAnswer res = _storeManagementBridge2.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "HIDDEN", true);
-			Assert.AreEqual((int)StoreEnum.NoPremmision, res.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission, res.Status);
 		}
 
 
@@ -191,8 +191,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock1 = stock1.ReportList;
 			string[] expectedStock1 =
 			{
-				" name: Ouch base price: 30 description: Ouchouch , Immediate , 6"
-			};
+                " name: Ouch base price: 30 description: Ouchouch Discount: {null} Purchase Way: Immediate Quantity: 6"
+            };
 
 			Assert.AreEqual(expectedStock1.Length, receivedStock1.Length);
 			for (int i = 0; i < receivedStock1.Length; i++)
@@ -204,14 +204,9 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_storeOwnerUserBridge.CleanSession();
-			_storeShoppingBridge.CleanSession();
-			_storeShoppingBridge2?.CleanSession();
-			_storeManagementBridge.CleanSession();
-			_storeManagementBridge2?.CleanSession();
-			_userBuyer?.CleanSession();
-			_storeOwnerUserBridge.CleanMarket();
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+        }
 
 
 	}

@@ -202,7 +202,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeBridge3 = StoreShoppingDriver.getBridge();
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStore", "bisli", -5);
-			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, res1.Status);
+			Assert.AreEqual((int)StoreEnum.QuantityIsNegative, res1.Status);
 			//the cart should remain empty
 			MarketAnswer cartDetails = _bridgeSignUp.ViewCart();
 			string[] cartItemsReceived = cartDetails.ReportList;
@@ -214,7 +214,7 @@ namespace BlackBox.StoreBlackBoxTests
         public void ProductQuantityNegativeRegisteredUser()
         {
             MarketAnswer res1 = _storeBridge.AddProductToCart("BlahStore", "bisli", 0);
-            Assert.AreEqual((int)StoreEnum.quantityIsNegatie, res1.Status);
+            Assert.AreEqual((int)StoreEnum.QuantityIsNegative, res1.Status);
             //the cart should remain empty
             MarketAnswer cartDetails = _signInBridge.ViewCart();
             string[] cartItemsReceived = cartDetails.ReportList;
@@ -230,7 +230,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeBridge3.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			MarketAnswer res1 = _storeBridge3.AddProductToCart("BlahStore", "bisli", 1);
 			//TODO: when lior fixes the states - this should be invalid user
-			Assert.AreEqual((int)StoreEnum.NoPremmision, res1.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission, res1.Status);
 			//the user can't even watch his cart until entering the system
 			MarketAnswer cartDetails = _bridgeSignUp.ViewCart();
 			Assert.AreEqual((int)ViewCartStatus.DidntEnterSystem ,cartDetails.Status);
@@ -273,14 +273,8 @@ namespace BlackBox.StoreBlackBoxTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            _signInBridge.CleanSession();
-            _bridgeSignUp.CleanSession();
-            _storeBridge.CleanSession();
-            _storeManage1.CleanSession();
-            _storeBridge2.CleanSession();
-            _storeManage2.CleanSession();
-            _storeBridge3?.CleanSession();
-            _bridgeSignUp.CleanMarket();
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
         }
 
     }

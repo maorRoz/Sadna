@@ -84,29 +84,5 @@ namespace BlackBox
             }
         }
 
-        public void CleanSession()
-        {
-            if (real != null)
-            {
-                real.CleanSession();
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public void CleanMarket()
-        {
-            if (real != null)
-            {
-                real.CleanMarket();
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
-
     }
 }

@@ -10,15 +10,24 @@ namespace SadnaSrc.StoreCenter
     public class Discount
     {
         public string discountCode { get; }
-        public discountTypeEnum discountType { get; set; }
+        public DiscountTypeEnum discountType { get; set; }
         public DateTime startDate { get; set; }
         public DateTime EndDate { get; set; }
         public int DiscountAmount { get; set; }
         public bool Percentages { get; set; }
+        private static int globalDiscountCode = -1;
 
-        //assume that the startDate < EndDate
+        public Discount(DiscountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
+        {
+            discountCode = GetDiscountCode();
+            discountType = _discountType;
+            startDate = _startDate;
+            EndDate = _EndDate;
+            DiscountAmount = _discountAmount;
+            Percentages = _presenteges;
 
-        public Discount(string _discountCode, discountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
+        }
+        public Discount(string _discountCode, DiscountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
         {
             discountCode = _discountCode;
             discountType = _discountType;
@@ -38,17 +47,22 @@ namespace SadnaSrc.StoreCenter
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType().Equals(GetType()))
+            if (obj == null)
             {
-                return (((Discount)obj).discountCode == discountCode) &&
-                    (((Discount)obj).DiscountAmount == DiscountAmount);
+                return false;
             }
-            return false;
+            return obj.GetType() == GetType() && Equals((Discount)obj);
+        }
+
+
+        private bool Equals(Discount obj)
+        {
+            return obj.discountCode == discountCode && obj.DiscountAmount == DiscountAmount;
         }
         public override string ToString()
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            if (handler.PrintEnum(discountType) == handler.PrintEnum(discountTypeEnum.Hidden))
+            StockSyncher handler = StockSyncher.Instance;
+            if (EnumStringConverter.PrintEnum(discountType) == EnumStringConverter.PrintEnum(DiscountTypeEnum.Hidden))
                 return "type is: hidden";
             if (Percentages)
             {
@@ -60,7 +74,7 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-        internal bool checkTime()
+        internal bool CheckTime()
         {
             return ((startDate.Date <= MarketYard.MarketDate) && (MarketYard.MarketDate <= EndDate.Date));
         }
@@ -75,6 +89,40 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + DiscountAmount.GetHashCode();
             hashCode = hashCode * -1521134295 + Percentages.GetHashCode();
             return hashCode;
+        }
+        public string[] GetDiscountStringValues()
+        {
+            return new[]
+            {
+                "'" + discountCode + "'",
+                "'" + EnumStringConverter.PrintEnum(discountType) + "'",
+                "'" + startDate + "'",
+                "'" + EndDate + "'",
+                "'" + DiscountAmount + "'",
+                "'" + Percentages + "'"
+            };
+        }
+
+        public object[] GetDiscountValuesArray()
+        {
+            return new object[]
+            {
+                discountCode,
+                discountType,
+                startDate,
+                EndDate,
+                DiscountAmount,
+                Percentages
+            };
+        }
+        private static string GetDiscountCode()
+        {
+            if (globalDiscountCode == -1)
+            {
+                globalDiscountCode = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllDiscountIDs());
+            }
+            globalDiscountCode++;
+            return "D" + globalDiscountCode;
         }
     }
 }

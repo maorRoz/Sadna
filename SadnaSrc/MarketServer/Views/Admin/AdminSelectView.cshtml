@@ -1,0 +1,53 @@
+﻿@{
+	ViewData["Title"] = "MarketYard Hitory Purhcase";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<div class="row top-space">
+	<div class="col-lg-12">
+		<div id="feedContainer" style="float: right;width:20%"></div>
+		<div style="float: left;width:70%">
+			<div id="alertContainer">
+
+				@if (Model.Message != null)
+		        {
+			        <div class='error'>
+				    <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+				    @Model.Message
+			         </div>
+                }
+
+			</div>
+			@using (Html.BeginForm("AdminViewPurchaseHistory", "Admin", new { Model.SystemId,Model.State }))
+			{
+			    <br />
+			    <fieldset>
+			<input type="text" class="form-control" id="store-user-name" name="viewSubject" />
+			<br />
+			        Choose: <select name="viewKind">
+
+			            <option value="Store">Store</option>
+
+			            <option value="User">User</option>
+
+			        </select>
+			    <br />
+			<input type="submit" class="btn btn-primary">
+			    </fieldset>
+			}
+
+		</div>
+
+			</div>
+
+		</div>
+
+
+@section Scripts{
+	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+
+
+
+}

@@ -23,8 +23,6 @@ namespace SadnaSrc.UserSpot
             StorePolicies = new List<StoreManagerPolicy>();
         }
       
-
-        //TODO: fix this, it shouldn't be static at all
         public static void PromoteStorePolicies(string userName,string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
             var userDB = UserDL.Instance;
@@ -57,15 +55,30 @@ namespace SadnaSrc.UserSpot
         }
 
         public StoreManagerPolicy[] FilteredStorePolicies(string store)
-        {
+        { 
             List<StoreManagerPolicy> storePolicies = new List<StoreManagerPolicy>();
             foreach (StoreManagerPolicy policy in StorePolicies)
             {
                 if(policy.Store.Equals(store))
-                storePolicies.Add(policy);
+					storePolicies.Add(policy);
             }
             return SortStorePolicy(storePolicies.ToArray());
         }
+
+        public string[] GetControlledStoresNames()
+        {
+            var storeNamesList = new List<string>();
+            foreach (var policy in StorePolicies)
+            {
+	            string store = policy.Store;
+	            if (!storeNamesList.Contains(store))
+	            {
+		            storeNamesList.Add(store);
+				}	
+            }
+
+            return storeNamesList.ToArray();
+;        }
 
         private static StoreManagerPolicy[] SortStorePolicy(StoreManagerPolicy[] storePolicies)
         {

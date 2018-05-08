@@ -8,10 +8,19 @@ namespace SadnaSrc.StoreCenter
 {
     public class Product
     {
-        public string SystemId;
+        public readonly string SystemId;
         public string Name { get; set; }
         public double BasePrice { get; set; }
         public string Description { get; set; }
+        private static int globalProductID = -1;
+
+        public Product(string _name, double _price, string _description)
+        {
+            SystemId = GetProductID();
+            Name = _name;
+            BasePrice = _price;
+            Description = _description;
+        }
 
         public Product(string _SystemId, string _name, double _price, string _description)
         {
@@ -20,19 +29,14 @@ namespace SadnaSrc.StoreCenter
             BasePrice = _price;
             Description = _description;
         }
-        public object[] ToData()
-        {
-            return new object[] { SystemId, Name, BasePrice, Description };
-        }
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
+            if (obj == null)
             {
                 return false;
             }
-
-            return Equals((Product)obj);
+            return obj.GetType() == GetType() && Equals((Product)obj);
         }
 
 
@@ -55,5 +59,37 @@ namespace SadnaSrc.StoreCenter
                 return hashCode;
             }
         }
+        public object[] GetProductValuesArray()
+        {
+            return new object[]
+            {
+                SystemId,
+                Name,
+                BasePrice,
+                Description
+            };
+        }
+
+        public string[] GetProductStringValues()
+        {
+            return new[]
+            {
+                "'" + SystemId + "'",
+                "'" + Name + "'",
+                BasePrice + "",
+                "'" + Description + "'"
+            };
+        }
+        
+        private static string GetProductID()
+        {
+            if (globalProductID == -1)
+            {
+                globalProductID = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllProductIDs());
+            }
+            globalProductID++;
+            return "P" + globalProductID;
+        }
+
     }
 }

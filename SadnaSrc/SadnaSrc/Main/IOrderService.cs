@@ -10,21 +10,15 @@ namespace SadnaSrc.Main
 {
     public interface IOrderService
     {
-        MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice);
-
-        MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon);
+        MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon);
 
         MarketAnswer BuyLotteryTicket(string itemName, string store, int quantity,double unitPrice);
-
-        MarketAnswer BuyAllItemsFromStore(string store);
         
-        MarketAnswer BuyEverythingFromCart();
+        MarketAnswer BuyEverythingFromCart(string[] coupons);
 
         MarketAnswer GiveDetails(string userName, string address, string creditCard);
 
         void Cheat(int cheatResult);
-
-        void CleanSession();
     }
 
     public enum GiveDetailsStatus

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
+using SadnaSrc.StoreCenter;
 
 namespace SadnaSrc.UserSpot
 {
@@ -27,7 +29,7 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer SignUp(string name, string address, string password,string creditCard)
         {
-            SignUpSlave slave = new SignUpSlave(MarketUser,userDB);
+            SignUpSlave slave = new SignUpSlave(MarketUser,userDB,Publisher.Instance);
             MarketUser = slave.SignUp(name,address,password,creditCard);
             return slave.Answer;
         }
@@ -47,6 +49,13 @@ namespace SadnaSrc.UserSpot
 
         }
 
+		public MarketAnswer ViewUsers()
+		{
+			ViewUsersSlave slave = new ViewUsersSlave(MarketUser,userDB);
+			slave.ViewUsers();
+			return slave.Answer;
+		}
+
         public MarketAnswer EditCartItem(string store, string product, int quantity, double unitPrice)
         {
             EditCartItemSlave slave = new EditCartItemSlave(MarketUser);
@@ -62,16 +71,38 @@ namespace SadnaSrc.UserSpot
             return slave.Answer;
         }
 
-        public void AddToCart(string product, string store, int quantity, double unitPrice)
+        public MarketAnswer GetControlledStoreNames()
+        {
+            GetControlledStoreNamesSlave slave = new GetControlledStoreNamesSlave(MarketUser,userDB);
+            slave.GetControlledStoreNames();
+            return slave.Answer;
+        }
+		
+
+        public MarketAnswer GetStoreManagerPolicies(string store)
+        {
+          GetStoreManagerPoliciesSlave slave = new GetStoreManagerPoliciesSlave(MarketUser);
+          slave.GetStoreManagerPolicies(store);
+          return slave.Answer;
+
+        }
+        public MarketAnswer GetUserDetails()
+        {
+            GetUserDetailsSlave slave = new GetUserDetailsSlave(MarketUser);
+            slave.GetUserDetails();
+            return slave.Answer;
+        }
+
+	    public MarketAnswer GetAllStores()
+	    {
+		    GetControlledStoreNamesSlave slave = new GetControlledStoreNamesSlave(MarketUser,userDB);
+			slave.ViewStores();
+			return slave.Answer;
+		}
+
+	    public void AddToCart(string product, string store, int quantity, double unitPrice)
         {
             MarketUser.Cart.AddToCart(product, store, quantity,unitPrice);
         }
-
-
-        public void CleanSession()
-        {
-            userDB.CleanSession();
-        }
-
-    }
+	}
 }

@@ -88,7 +88,7 @@ namespace SystemViewTests.UseCaseUnitTest
         [TestCleanup]
         public void AdminTestCleanUp()
         {
-            userServiceSession.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

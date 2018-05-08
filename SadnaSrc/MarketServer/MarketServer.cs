@@ -4,55 +4,56 @@ using System.Linq;
 using System.Net.Cache;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using WebSocketManager;
 
 
-namespace MarketServer
+namespace MarketWeb
 {
-    public class MarketServer : WebSocketHandler
+    public class MarketServer : WebSocketHandler,IListener
     {
-        private const int SuccessLogin = 0;
-        private Dictionary<int,IUserService> users;
-        private MarketYard marketSession;
+        public static readonly Dictionary<int,IUserService> Users = new Dictionary<int, IUserService>();
+        private readonly MarketYard marketSession;
         public MarketServer(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
         {
             marketSession = MarketYard.Instance;
-            users = new Dictionary<int,IUserService>();
+            MarketDB.Instance.InsertByForceClient();
         }
 
         public async Task EnterSystem(string socketId)
         {
             var userService = marketSession.GetUserService();
             var id = Convert.ToInt32(userService.EnterSystem().ReportList[0]);
-            users.Add(id, userService);
+            Users.Add(id, userService);
             await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
         }
 
-
-        public async Task SignUpUser(string socketId,string userId, string userName, string address, string password,
-            string creditCard)
+        //Todo: fix this, not working on disconnects
+        public void UnSubscribeSocket(string socketId)
         {
-            var userService = users[Convert.ToInt32(userId)];
-            var answer = userService.SignUp(userName, address, password, creditCard);
-            await InvokeClientMethodAsync(socketId, "LoggingMarket", new object[]{answer.Status,answer.Answer,userId});
+            FeedSubscriber.UnSubscribeSocket(socketId);
         }
 
-        public async Task SignInUser(string socketId, string userId, string userName,string password)
+        public void SubscribeSocket(string userId, string socketId)
         {
-            int userIdNumber = Convert.ToInt32(userId);
-            var userService = users[userIdNumber];
-            var answer = userService.SignIn(userName, password);
-            if (answer.Status == SuccessLogin)
+               FeedSubscriber.SubscribeSocket(this,Convert.ToInt32(userId),socketId);
+        }
+
+        public async void GetMessage(string socketId, string message)
+        {
+            await SendFeed(socketId, message);
+        }
+
+        private async Task SendFeed(string socketId, string message)
+        {
+            try
             {
-                users.Remove(userIdNumber);
-                userIdNumber = Convert.ToInt32(answer.ReportList[0]);
-                if (!users.ContainsKey(userIdNumber))
-                {
-                    users.Add(Convert.ToInt32(userIdNumber), userService);
-                }
+                await InvokeClientMethodAsync(socketId, "NotifyFeed", new object[] {message});
             }
-            await InvokeClientMethodAsync(socketId, "LoggingMarket",
-                new object[] { answer.Status, answer.Answer, userIdNumber });
+            catch (Exception)
+            {
+              //  dont care
+            }
         }
     }
 }

@@ -9,6 +9,5 @@ namespace BlackBox
         MarketAnswer ViewStoreInfo(string store);
         MarketAnswer AddProductToCart(string store, string productName, int quantity);
         MarketAnswer ViewStoreStock(string store);
-        void CleanSession();
     }
 }

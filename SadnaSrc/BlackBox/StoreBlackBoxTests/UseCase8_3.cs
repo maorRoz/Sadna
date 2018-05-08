@@ -30,6 +30,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_userAdminBridge = null;
 			_orderBridge = null;
 			_userAdmin = null;
+            MarketYard.SetDateTime(new DateTime(2018,4,14));
 		}
 
 
@@ -48,8 +49,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock = stock.ReportList;
 			string[] expectedStock =
 			{
-				" name: Ouch base price: 30 description: Ouchouch , type is: hidden , Immediate , 6"
-			};
+                " name: Ouch base price: 30 description: Ouchouch Discount: {type is: hidden} Purchase Way: Immediate Quantity: 6"
+            };
 			Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 			for (int i = 0; i < receivedStock.Length; i++)
 			{
@@ -88,7 +89,7 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] purchaseExpected =
 			{
 				"User: Vika Product: Ouch Store: Toy Sale: Immediate Quantity: 2 Price: 40 Date: " +
-				DateTime.Now.Date.ToString("d"),
+			    DateTime.Now.Date.ToString("yyyy-MM-dd"),
 			};
 			Assert.AreEqual(purchaseExpected.Length, purchaseReceived.Length);
 			for (int i = 0; i < purchaseReceived.Length; i++)
@@ -114,8 +115,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock = stock.ReportList;
 			string[] expectedStock =
 			{
-				" name: Ouch base price: 30 description: Ouchouch , type is: hidden , Immediate , 6"
-			};
+                " name: Ouch base price: 30 description: Ouchouch Discount: {type is: hidden} Purchase Way: Immediate Quantity: 6"
+            };
 			Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 			for (int i = 0; i < receivedStock.Length; i++)
 			{
@@ -207,7 +208,7 @@ namespace BlackBox.StoreBlackBoxTests
 			CheckNoDiscountAdded();
 
 			MarketAnswer res = _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), -5, "HIDDEN", false);
-			Assert.AreEqual((int)DiscountStatus.discountAmountIsNegativeOrZero, res.Status);
+			Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, res.Status);
 
 			CheckNoDiscountAdded();
 		}
@@ -230,7 +231,7 @@ namespace BlackBox.StoreBlackBoxTests
 			CheckNoDiscountAdded();
 
 			_storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "HIDDEN", true);
-			Assert.AreEqual((int)DiscountStatus.thereIsAlreadyAnotherDiscount, _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "HIDDEN", true).Status);
+			Assert.AreEqual((int)DiscountStatus.ThereIsAlreadyAnotherDiscount, _storeManagementBridge.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "HIDDEN", true).Status);
 
 
 		}
@@ -242,7 +243,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManagementBridge2 = StoreManagementDriver.getBridge();
 			_storeManagementBridge2.GetStoreManagementService(_userBuyer.GetUserSession(), "Toy");
 			MarketAnswer res = _storeManagementBridge2.AddDiscountToProduct("Ouch", Convert.ToDateTime("15/04/2018"), Convert.ToDateTime("20/04/2018"), 10, "HIDDEN", true);
-			Assert.AreEqual((int)StoreEnum.NoPremmision, res.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission, res.Status);
 		}
 
 		private void OpenStoreAndProducts()
@@ -275,8 +276,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock1 = stock1.ReportList;
 			string[] expectedStock1 =
 			{
-				" name: Ouch base price: 30 description: Ouchouch , Immediate , 6"
-			};
+                " name: Ouch base price: 30 description: Ouchouch Discount: {null} Purchase Way: Immediate Quantity: 6"
+            };
 
 			Assert.AreEqual(expectedStock1.Length, receivedStock1.Length);
 			for (int i = 0; i < receivedStock1.Length; i++)
@@ -296,14 +297,14 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
-			_orderBridge.BuyEverythingFromCart();
+			_orderBridge.BuyEverythingFromCart(new string[] {null});
 		}
 
 		private void CreateOrderWithCoupon(string coupon)
 		{
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
-			MarketAnswer res =_orderBridge.BuyItemWithCoupon("Ouch", "Toy", 2, 30, coupon);
+			MarketAnswer res =_orderBridge.BuyItemFromImmediate("Ouch", "Toy", 2, 30, coupon);
 			Assert.AreEqual((int)OrderStatus.Success,res.Status);
 		}
 
@@ -311,7 +312,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_userBuyer.GetUserSession());
-			MarketAnswer res = _orderBridge.BuyItemWithCoupon("Ouch", "Toy", 2, 30, coupon);
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Ouch", "Toy", 2, 30, coupon);
 			Assert.AreEqual((int)OrderStatus.InvalidCoupon, res.Status);
 		}
 
@@ -320,16 +321,9 @@ namespace BlackBox.StoreBlackBoxTests
 		public void UserTestCleanUp()
 		{
 			MarketYard.SetDateTime(Convert.ToDateTime("14/04/2018"));
-			_userBuyer?.CleanSession();
-			_storeOwnerUserBridge.CleanSession();
-			_storeShoppingBridge.CleanSession();
-			_storeShoppingBridge2?.CleanSession();
-			_storeManagementBridge.CleanSession();
-			_storeManagementBridge2?.CleanSession();
-			_orderBridge?.CleanSession();
-			_userAdmin?.CleanSession();
-			_storeOwnerUserBridge.CleanMarket();
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+        }
 		
 	
 	}

@@ -206,7 +206,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                ModuleGlobalHandler.GetInstance().DataLayer.GetProductFromStore(store, newProduct);
+                StockSyncher.Instance.GetProductFromStore(store, newProduct);
                 Assert.Fail();
             }
             catch (MarketException)
@@ -221,7 +221,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(shopper, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                ModuleGlobalHandler.GetInstance().DataLayer.GetProductFromStore(store, newProduct);
+                StockSyncher.Instance.GetProductFromStore(store, newProduct);
                 Assert.Fail();
             }
             catch (MarketException)
@@ -236,7 +236,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(manager, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                Assert.AreEqual(50, ModuleGlobalHandler.GetInstance().DataLayer.GetProductFromStore(store, newProduct).Quantity);
+                Assert.AreEqual(50, StockSyncher.Instance.GetProductFromStore(store, newProduct).Quantity);
             }
             catch (MarketException)
             {
@@ -251,7 +251,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(manager2, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                ModuleGlobalHandler.GetInstance().DataLayer.GetProductFromStore(store, newProduct);
+                StockSyncher.Instance.GetProductFromStore(store, newProduct);
                 Assert.Fail();
             }
             catch (MarketException)
@@ -266,7 +266,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(owner, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                Assert.AreEqual(50, ModuleGlobalHandler.GetInstance().DataLayer.GetProductFromStore(store, newProduct).Quantity);
+                Assert.AreEqual(50, StockSyncher.Instance.GetProductFromStore(store, newProduct).Quantity);
             }
             catch (MarketException)
             {
@@ -281,7 +281,7 @@ namespace IntegrationTests.UserSeller_Integration
             {
                 userServiceSession.SignIn(sysadmin, pass);
                 storeServiceSession.AddNewProduct(newProduct, 8, "munch", 50);
-                Assert.AreEqual(50, ModuleGlobalHandler.GetInstance().DataLayer.GetProductFromStore(store, newProduct).Quantity);
+                Assert.AreEqual(50, StockSyncher.Instance.GetProductFromStore(store, newProduct).Quantity);
             }
             catch (MarketException)
             {
@@ -430,9 +430,7 @@ namespace IntegrationTests.UserSeller_Integration
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            userServiceSession2.CleanSession();
-            storeServiceSession.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 
@@ -447,7 +445,7 @@ namespace IntegrationTests.UserSeller_Integration
         {
             SignIn(user);
             storeServiceSession.RemoveProduct(product);
-            ModuleGlobalHandler.GetInstance().DataLayer.GetProductFromStore(store, product);
+            StockSyncher.Instance.GetProductFromStore(store, product);
 
         }
 
@@ -455,7 +453,7 @@ namespace IntegrationTests.UserSeller_Integration
         {
             SignIn(user);
             storeServiceSession.EditProduct(product, "Name", "Bambaa");
-            ModuleGlobalHandler.GetInstance().DataLayer.GetProductFromStore(store, "Bambaa");
+            StockSyncher.Instance.GetProductFromStore(store, "Bambaa");
         }
 
         private void SignIn(string user)

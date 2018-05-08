@@ -1,22 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using static System.Int32;
 
 namespace SadnaSrc.StoreCenter
 {
     public class LotteryTicket
     {
-        public double IntervalStart { get; set; }
-        public double IntervalEnd { get; set; }
-        public string LotteryNumber { get; set; }
-        public string myID { get; set; }
+        public double IntervalStart { get;}
+        public double IntervalEnd { get;}
+        public string LotteryNumber { get;}
+        public string myID { get; }
         public LotteryTicketStatus myStatus { get; set; }
-        public int UserID { get; set; }
+        public int UserID { get;}
+        
 
-        public double Cost { get; set; }
+        public double Cost { get; }
+        private static int globalLotteryTicketID = -1;
+        public LotteryTicket(string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
+        {
+            LotteryNumber = _LotteryNumber;
+            myID = GetLotteryTicketID();
+            IntervalStart = _IntervalStart;
+            IntervalEnd = _IntervalEnd;
+            Cost = cost;
+            myStatus = LotteryTicketStatus.Waiting;
+            UserID = _userID;
+        }
         public LotteryTicket(string _myID, string _LotteryNumber, double _IntervalStart, double _IntervalEnd, double cost, int _userID)
         {
             LotteryNumber = _LotteryNumber;
@@ -30,7 +42,7 @@ namespace SadnaSrc.StoreCenter
 
         internal bool IsWinning(int winningNumber)
         {
-            return ((winningNumber <= IntervalEnd) && (winningNumber > IntervalStart));
+            return winningNumber <= IntervalEnd && winningNumber > IntervalStart;
         }
 
         internal void RunWinning()
@@ -42,11 +54,6 @@ namespace SadnaSrc.StoreCenter
         {
             myStatus = LotteryTicketStatus.Losing;
         }
-
-        internal void RunCancel()
-        {
-            myStatus = LotteryTicketStatus.Cancel;
-        }
         public override bool Equals(object obj)
         {
             if (obj.GetType() != GetType())
@@ -55,12 +62,12 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(LotteryTicket obj)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StockSyncher handler = StockSyncher.Instance;
             return (obj.IntervalStart == IntervalStart &&
                     obj.IntervalEnd == IntervalEnd &&
                     obj.LotteryNumber == LotteryNumber &&
                     obj.myID == myID &&
-                    handler.PrintEnum(obj.myStatus).Equals(handler.PrintEnum(myStatus)) &&
+                    EnumStringConverter.PrintEnum(obj.myStatus).Equals(EnumStringConverter.PrintEnum(myStatus)) &&
                     obj.UserID == UserID
                     );
         }
@@ -79,6 +86,41 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + myStatus.GetHashCode();
             hashCode = hashCode * -1521134295 + UserID.GetHashCode();
             return hashCode;
+        }
+        public object[] GetTicketValuesArray()
+        {
+
+            return new object[]
+            {
+                myID,
+                LotteryNumber,
+                IntervalStart,
+                IntervalEnd,
+                myStatus,
+                UserID
+            };
+        }
+        public string[] GetTicketStringValues()
+        {
+            return new[]
+            {
+                "'" + myID + "'",
+                "'" + LotteryNumber + "'",
+                "'" + IntervalStart + "'",
+                "'" + IntervalEnd + "'",
+                "'" + Cost + "'",
+                "'" + EnumStringConverter.PrintEnum(myStatus) + "'",
+                "'" + UserID + "'"
+            };
+        }
+        private static string GetLotteryTicketID()
+        {
+            if (globalLotteryTicketID == -1)
+            {
+                globalLotteryTicketID = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllLotteryTicketIDs());
+            }
+            globalLotteryTicketID++;
+            return "T" + globalLotteryTicketID;
         }
     }
 }

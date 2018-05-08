@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SadnaSrc.StoreCenter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace SadnaSrc.Main
 {
     public interface IStoreShoppingService
     {
+        
         MarketAnswer OpenStore(string storeName, string storeAddress);
 
         MarketAnswer ViewStoreInfo(string store);
@@ -16,7 +18,6 @@ namespace SadnaSrc.Main
 
         MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
-        void CleanSeesion();
     }
 
     public enum OpenStoreStatus

@@ -82,10 +82,6 @@ namespace SadnaSrc.Main
 
         public static void RemoveErrors()
         {
-            foreach (var errorID in publishedErrorIDs)
-            {
-                _dbConnection.DeleteFromTable("System_Errors","ErrorID = '"+errorID+"'");
-            }
             publishedErrorIDs.Clear();
         }
     }

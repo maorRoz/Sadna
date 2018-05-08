@@ -85,8 +85,8 @@ namespace BlackBox.StoreBlackBoxTests
 			Assert.AreEqual((int)StoreEnum.Success, stockDetails.Status);
 			string[] expectedAnswer =
 			{
-				" name: Toy base price: 20 description: OuchOuch , Immediate , 10"
-			};
+                " name: Toy base price: 20 description: OuchOuch Discount: {null} Purchase Way: Immediate Quantity: 10"
+            };
 
 			string[] receivedAnswer = stockDetails.ReportList;
 			Assert.AreEqual(expectedAnswer.Length, receivedAnswer.Length);
@@ -106,12 +106,9 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_bridgeSignUp.CleanSession();
-			_storeBridge.CleanSession();
-			_userWatchStock?.CleanSession();
-			_storeBridgeGuest?.CleanSession();
-			_bridgeSignUp.CleanMarket();
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+        }
 
 	}
 }

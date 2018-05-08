@@ -170,15 +170,15 @@ namespace IntegrationTests.UserAdmin_Integration
             storeShoppingService = marketSession.GetStoreShoppingService(ref userServiceSession);
             Assert.AreEqual((int)StoreEnum.Success, storeShoppingService.AddProductToCart("The Red Rock", "Goldstar", 5).Status);
             orderService = marketSession.GetOrderService(ref userServiceSession);
-            Assert.AreEqual((int)OrderStatus.Success, orderService.BuyEverythingFromCart().Status);
+            Assert.AreEqual((int)OrderStatus.Success, orderService.BuyEverythingFromCart(new string[] {null}).Status);
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByUser("Arik1").Status);
             string[] actualHistory = adminServiceSession.ViewPurchaseHistoryByUser("Arik1").ReportList;
             string[] expectedHistory =
             {
-                new PurchaseHistory("Arik1", "Goldstar","The Red Rock", "Immediate",5,55, DateTime.Now.ToShortDateString()).ToString(),
-                new PurchaseHistory("Arik1", "Health Potion", "X", "Immediate",2,11.5, "Today").ToString(),
-                new PurchaseHistory("Arik1", "INT Potion","Y", "Lottery",2,8.0, "Yesterday").ToString(),
-                new PurchaseHistory("Arik1", "Mana Potion", "Y", "Lottery",3,12.0, "Yesterday").ToString()
+                new PurchaseHistory("Arik1", "Goldstar","The Red Rock", "Immediate",5,55, DateTime.Now.Date.ToString("yyyy-MM-dd")).ToString(),
+                new PurchaseHistory("Arik1", "Health Potion", "X", "Immediate",2,11.5, "2018-12-29").ToString(),
+                new PurchaseHistory("Arik1", "INT Potion","Y", "Lottery",2,8.0, "2018-12-29").ToString(),
+                new PurchaseHistory("Arik1", "Mana Potion", "Y", "Lottery",3,12.0, "2018-12-29").ToString()
             };
             Assert.AreEqual(expectedHistory.Length, actualHistory.Length);
             for (int i = 0; i < expectedHistory.Length; i++)
@@ -195,13 +195,13 @@ namespace IntegrationTests.UserAdmin_Integration
             storeShoppingService = marketSession.GetStoreShoppingService(ref userServiceSession);
             Assert.AreEqual((int)StoreEnum.Success, storeShoppingService.AddProductToCart("X", "BOX", 3).Status);
             orderService = marketSession.GetOrderService(ref userServiceSession);
-            Assert.AreEqual((int)OrderStatus.Success, orderService.BuyEverythingFromCart().Status);
+            Assert.AreEqual((int)OrderStatus.Success, orderService.BuyEverythingFromCart(new string[] {null}).Status);
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, adminServiceSession.ViewPurchaseHistoryByUser("Arik1").Status);
             string[] actualHistory = adminServiceSession.ViewPurchaseHistoryByStore("X").ReportList;
             string[] expectedHistory =
             {
-                new PurchaseHistory("Arik1", "Health Potion","X", "Immediate",2,11.5, "Today").ToString(),
-                new PurchaseHistory("Arik1", "BOX", "X", "Immediate", 3, 300, DateTime.Now.ToShortDateString()).ToString(),
+                new PurchaseHistory("Arik1", "Health Potion","X", "Immediate",2,11.5, "2018-12-29").ToString(),
+                new PurchaseHistory("Arik1", "BOX", "X", "Immediate", 3, 300, DateTime.Now.Date.ToString("yyyy-MM-dd")).ToString(),
             };
             Assert.AreEqual(expectedHistory.Length,actualHistory.Length);
             for (int i = 0; i < expectedHistory.Length; i++)
@@ -216,11 +216,7 @@ namespace IntegrationTests.UserAdmin_Integration
         [TestCleanup]
         public void UserAdminTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            deletedUserSession?.CleanSession();
-            deletedUserSession2?.CleanSession();
-            storeShoppingService?.CleanSeesion();
-            orderService?.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 

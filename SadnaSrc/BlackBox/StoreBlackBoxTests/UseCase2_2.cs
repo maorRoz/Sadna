@@ -24,8 +24,8 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeBridge.GetStoreShoppingService(_bridgeSignUp.GetUserSession());
 			Assert.AreEqual((int)OpenStoreStatus.Success, _storeBridge.OpenStore("PninaStore", "Ben-Gurion").Status);
 			MarketAnswer storeDetails = _storeBridge.ViewStoreInfo("PninaStore");
-			string expectedAnswer = "StoreName: PninaStore StoreAddress: Ben-Gurion";
-			string receivedAnswer = "StoreName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
+			string expectedAnswer = "_storeName: PninaStore StoreAddress: Ben-Gurion";
+			string receivedAnswer = "_storeName: " + storeDetails.ReportList[0] + " StoreAddress: " + storeDetails.ReportList[1];
 			Assert.AreEqual(expectedAnswer, receivedAnswer);
 		}
 
@@ -79,9 +79,8 @@ namespace BlackBox.StoreBlackBoxTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            _storeBridge.CleanSession();
-            _bridgeSignUp.CleanSession();
-            _bridgeSignUp.CleanMarket();
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
         }
 
 

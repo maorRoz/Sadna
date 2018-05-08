@@ -55,12 +55,11 @@ namespace SadnaSrc.UserSpot
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
+            if (obj == null)
             {
                 return false;
             }
-
-            return Equals((CartItem)obj);
+            return obj.GetType() == GetType() && Equals((CartItem)obj);
         }
 
 

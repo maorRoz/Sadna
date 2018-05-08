@@ -53,7 +53,7 @@ namespace IntegrationTests.FullCycle_Integration
                 storeServiceSession.MakeGuest();
                 storeServiceSession.AddProductToCart(store, product, 3);
                 orderServiceSession.GiveDetails("Someone", "Somewhere", "12345689");
-                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11);
+                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11, null);
                 Assert.AreEqual(2, sysadminSession.ViewPurchaseHistoryByStore(store).ReportList.Length);
                 string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[1];
                 Assert.AreEqual(PurchaseString("Someone"), actual);
@@ -72,7 +72,8 @@ namespace IntegrationTests.FullCycle_Integration
             {
                 storeServiceSession.LoginShoper(user, pass);
                 storeServiceSession.AddProductToCart(store, product, 3);
-                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11);
+                orderServiceSession.LoginBuyer(user, pass);
+                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11, null);
                 Assert.AreEqual(2, sysadminSession.ViewPurchaseHistoryByStore(store).ReportList.Length);
                 string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[1];
                 Assert.AreEqual(PurchaseString(user), actual);
@@ -94,11 +95,37 @@ namespace IntegrationTests.FullCycle_Integration
                 storeServiceSession.AddProductToCart(store, product, 3);
                 CartItem expected = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart(store, product, 11);
                 Assert.AreEqual(3, expected.Quantity);
-                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11);
+                orderServiceSession.LoginBuyer(user, pass);
+                orderServiceSession.BuyItemFromImmediate(product, store, 3, 11, null);
                 userServiceSession3.SignIn(user, pass);
                 Assert.IsNull(((UserService)userServiceSession3).MarketUser.Cart.SearchInCart(store, product, 11));
-                StockListItem itemToCheck = ModuleGlobalHandler.GetInstance().GetProductFromStore(store, product);
+                StockListItem itemToCheck = StoreDL.Instance.GetProductFromStore(store, product);
                 Assert.AreEqual(33, itemToCheck.Quantity);
+            }
+            catch (MarketException)
+            {
+                Assert.Fail();
+            }
+        }
+
+        [TestMethod]
+        public void BuyPartiallyTestEverything()
+        {
+            try
+            {
+                storeServiceSession.LoginShoper(user, pass);
+                Assert.AreEqual(8, ((UserService)userServiceSession).MarketUser.SystemID);
+                storeServiceSession.AddProductToCart(store, product, 3);
+                CartItem expected = ((UserService)userServiceSession).MarketUser.Cart.SearchInCart(store, product, 11);
+                Assert.AreEqual(3, expected.Quantity);
+                orderServiceSession.LoginBuyer(user, pass);
+                orderServiceSession.BuyItemFromImmediate(product, store, 1, 11, null);
+                userServiceSession3.SignIn(user, pass);
+                CartItem item = ((UserService) userServiceSession3).MarketUser.Cart.SearchInCart(store, product, 11);
+                Assert.IsNotNull(item);
+                Assert.AreEqual(2, item.Quantity);
+                StockListItem itemToCheck = StoreDL.Instance.GetProductFromStore(store, product);
+                Assert.AreEqual(35, itemToCheck.Quantity);
             }
             catch (MarketException)
             {
@@ -109,18 +136,14 @@ namespace IntegrationTests.FullCycle_Integration
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            userServiceSession2.CleanSession();
-            userServiceSession3.CleanSession();
-            orderServiceSession.CleanSession();
-            storeServiceSession.CleanSeesion();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
 
         private string PurchaseString(string buyer)
         {
             return "User: " + buyer + " Product: Goldstar Store: The Red Rock" + 
-                   " Sale: Immediate Quantity: 3 Price: 33 Date: " + DateTime.Now.ToShortDateString();
+                   " Sale: Immediate Quantity: 3 Price: 33 Date: " + DateTime.Now.Date.ToString("yyyy-MM-dd");
         }
     }
 }

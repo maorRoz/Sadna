@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketFeed;
 using SadnaSrc.OrderPool;
 using SadnaSrc.UserSpot;
 
@@ -99,7 +100,7 @@ namespace SadnaSrc.MarketHarmony
         }
         private static OrderItem ConvertCartItemToOrderItem(CartItem item, int quantity)
         {
-            return new OrderItem(item.Store, item.Name, item.FinalPrice, quantity);
+            return new OrderItem(item.Store, item.Name, item.UnitPrice * quantity, quantity);
         }
 
         private void ValidUserEnteredSystem()
@@ -140,11 +141,6 @@ namespace SadnaSrc.MarketHarmony
         {
             return IsRegisteredUser() ?
                 ((RegisteredUser)_userService.MarketUser).CreditCard : null;
-        }
-
-        public void CleanSession()
-        {
-            _userService.CleanSession();
         }
 
         //only for unit tests of OrderPool(and not for Integration)

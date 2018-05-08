@@ -11,14 +11,15 @@ namespace SadnaSrc.Main
     {
         MarketAnswer EnterSystem();
         MarketAnswer SignUp(string name,string address,string password,string creditCard);
-
         MarketAnswer SignIn(string name, string password);
-
         MarketAnswer ViewCart();
-
-        MarketAnswer EditCartItem(string store, string product, int quantity , double unitPrice);
+		MarketAnswer EditCartItem(string store, string product, int quantity , double unitPrice);
         MarketAnswer RemoveFromCart(string store, string product, double unitPrice);
-        void CleanSession(); // only for tests
+        MarketAnswer ViewUsers();
+        MarketAnswer GetControlledStoreNames();
+	    MarketAnswer GetStoreManagerPolicies(string store);
+        MarketAnswer GetUserDetails();
+	    MarketAnswer GetAllStores();
 
     }
 
@@ -53,7 +54,7 @@ namespace SadnaSrc.Main
         DidntEnterSystem,
     }
 
-    public enum EditCartItemStatus
+	public enum EditCartItemStatus
     {
         Success,
         DidntEnterSystem,
@@ -68,6 +69,35 @@ namespace SadnaSrc.Main
         NoItemFound
     }
 
+    public enum ViewUsersStatus
+    {
+        Success,
+        DidntEnterSystem
+    }
+
+    public enum GetControlledStoresStatus
+    {
+        Success,
+        DidntEnterSystem
+    }
+
+	public enum ViewStoresStatus
+	{
+		Success,
+		NoPermission
+	}
+
+	public enum GetStoreManagerPoliciesStatus
+	{
+		Success,
+		DidntEnterSystem
+	}
+    public enum GetUserDetails
+    {
+        Success,
+        DidntEnterSystem
+    }
+
     public enum BrowseMarketStatus
     {
         DidntEnterSystem,
@@ -79,5 +109,8 @@ namespace SadnaSrc.Main
         NotSystemAdmin
     }
 
+
+
+	
     
 }

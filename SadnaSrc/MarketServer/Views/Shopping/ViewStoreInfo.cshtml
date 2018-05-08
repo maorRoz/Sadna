@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = @Model.Name + " page";
+}
+
+<div class="row top-space">
+    <div class="col-lg-12">
+        <div id="feedContainer" style="float: right;width:20%"></div>
+        <div style="float: left;width:70%">
+            <div id="alertContainer">
+                @if (Model.Message != null)
+                {
+                    <div class='success'>
+                        <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+                        @Model.Message
+                    </div>
+                }
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address </th>
+                    </tr>
+                </thead>
+
+                <td>@Model.Name</td>
+                <td>@Model.Address</td>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+}

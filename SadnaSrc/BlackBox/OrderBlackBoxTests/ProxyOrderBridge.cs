@@ -19,20 +19,20 @@ namespace BlackBox.OrderBlackBoxTests
 			}
 		}
 
-		public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice)
+		public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon)
 		{
 			if (real != null)
 			{
-				return real.BuyItemFromImmediate(itemName, store, quantity, unitPrice);
+				return real.BuyItemFromImmediate(itemName, store, quantity, unitPrice, coupon);
 			}
 			throw new NotImplementedException();
 		}
 
-		public MarketAnswer BuyEverythingFromCart()
+		public MarketAnswer BuyEverythingFromCart(string[] coupons)
 		{
 			if (real != null)
 			{
-				return real.BuyEverythingFromCart();
+				return real.BuyEverythingFromCart(coupons);
 			}
 			throw new NotImplementedException();
 		}
@@ -45,14 +45,6 @@ namespace BlackBox.OrderBlackBoxTests
 	        }
 	        throw new NotImplementedException();
         }
-		public MarketAnswer BuyItemWithCoupon(string itemName, string store, int quantity, double unitPrice, string coupon)
-		{
-			if (real != null)
-			{
-				return real.BuyItemWithCoupon(itemName, store, quantity, unitPrice, coupon);
-			}
-			throw new NotImplementedException();
-		}
 
         public MarketAnswer GiveDetails(string userName, string address, string creditCard)
 		{
@@ -125,16 +117,5 @@ namespace BlackBox.OrderBlackBoxTests
 	        }
 	    }
 
-        public void CleanSession()
-		{
-			if (real != null)
-			{
-				real.CleanSession();
-			}
-			else
-			{
-				throw new NotImplementedException();
-			}
-		}
 	}
 }

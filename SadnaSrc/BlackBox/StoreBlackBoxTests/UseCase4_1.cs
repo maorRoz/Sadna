@@ -275,9 +275,9 @@ namespace BlackBox.StoreBlackBoxTests
 			}
 			else
 			{
-				Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.AddNewProduct(product, 50, "tool", 5).Status);
-				Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.EditProduct(product, "Price", "3").Status);
-				Assert.AreEqual((int)StoreEnum.NoPremmision, _storeManager2.RemoveProduct(product).Status);
+				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.AddNewProduct(product, 50, "tool", 5).Status);
+				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.EditProduct(product, "Price", "3").Status);
+				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.RemoveProduct(product).Status);
 			}
 
 			if (permissions[2])
@@ -290,9 +290,9 @@ namespace BlackBox.StoreBlackBoxTests
 				string[] receivedStock = stock.ReportList;
 				string[] expectedStock =
 				{
-					" name: Lets base price: 10 description: haha , DiscountAmount: 5 Start Date: "+Convert.ToDateTime("14/04/2018").Date.ToString("d")+"" +
-					" End Date: "+ Convert.ToDateTime("20/04/2018").Date.ToString("d")+" type is: visible , Immediate , 10"
-				};
+					" name: Lets base price: 10 description: haha Discount: {DiscountAmount: 5 Start Date: "+Convert.ToDateTime("14/04/2018").Date.ToString("d")+"" +
+					" End Date: "+ Convert.ToDateTime("20/04/2018").Date.ToString("d")+" type is: visible} Purchase Way: Immediate Quantity: 10"
+                };
 				Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 				for (int i = 0; i < receivedStock.Length; i++)
 				{
@@ -302,7 +302,7 @@ namespace BlackBox.StoreBlackBoxTests
 			}
 			else
 			{
-				Assert.AreEqual((int)StoreEnum.NoPremmision,
+				Assert.AreEqual((int)StoreEnum.NoPermission,
 					_storeManager2.AddDiscountToProduct("Lets", Convert.ToDateTime("14/04/2018"), Convert.ToDateTime("20/04/2018"), 5, "VISIBLE", false).Status);
 
 			}
@@ -316,7 +316,7 @@ namespace BlackBox.StoreBlackBoxTests
 				string[] expected =
 				{
 					"User: Odin Product: Yolo Store: Volcano Sale: Immediate Quantity: 2 Price: 10 Date: " +
-					DateTime.Now.Date.ToString("d"),
+				    DateTime.Now.Date.ToString("yyyy-MM-dd"),
 				};
 
 				Assert.AreEqual(expected.Length, received.Length);
@@ -339,7 +339,7 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeBridge.AddProductToCart("Volcano", "Yolo", 2);
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_bridgeSignUp.GetUserSession());
-			_orderBridge.BuyEverythingFromCart();
+			_orderBridge.BuyEverythingFromCart(new string[]{null});
 		}
 
 		private void CheckProductEditedInStock()
@@ -348,8 +348,8 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock1 = stock1.ReportList;
 			string[] expectedStock1 =
 			{
-				" name: Ouch base price: 3 description: tool , Immediate , 5"
-			};
+                " name: Ouch base price: 3 description: tool Discount: {null} Purchase Way: Immediate Quantity: 5"
+            };
 			Assert.AreEqual(expectedStock1.Length, receivedStock1.Length);
 			for (int i = 0; i < expectedStock1.Length; i++)
 			{
@@ -364,9 +364,9 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] receivedStock = stock.ReportList;
 			string[] expectedStock =
 			{
-				" name: Ouch base price: 50 description: tool , Immediate , 5"
-				
-			};
+                " name: Ouch base price: 50 description: tool Discount: {null} Purchase Way: Immediate Quantity: 5"
+
+            };
 			Assert.AreEqual(expectedStock.Length, receivedStock.Length);
 			for (int i = 0; i < expectedStock.Length; i++)
 			{
@@ -384,17 +384,8 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_storeBridge.CleanSession();
-			_bridgeSignUp.CleanSession();
-			_userToPromoteBridge.CleanSession();
-			_userToPromoteBridge2.CleanSession();
-			_storeManager1.CleanSession();
-			_storeManager2?.CleanSession();
-			_signInBridge?.CleanSession();
-			_adminBridge?.CleanSession();
-			_guestBridge?.CleanSession();
-			_orderBridge?.CleanSession();
-			_bridgeSignUp.CleanMarket();
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+        }
 	}
 }

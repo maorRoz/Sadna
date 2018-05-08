@@ -4,32 +4,32 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddProductToCartSlave
+    public class AddProductToCartSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private IUserShopper _shopper;
-        StoreDL storeLogic;
-
-        public AddProductToCartSlave(IUserShopper shopper)
+        IStoreDL storeLogic;
+        
+        public AddProductToCartSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.Instance;
+            storeLogic = storeDL;
         }
 
-        internal void AddProductToCart(string store, string productName, int quantity)
+        public void AddProductToCart(string store, string productName, int quantity)
         {
             try
             {
                 MarketLog.Log("StoreCenter", "trying to add something to the cart");
                 MarketLog.Log("StoreCenter", "checking if store exists");
-                checkIfStoreExitsts(store);
+                CheckIfStoreExitsts(store);
                 MarketLog.Log("StoreCenter", "checking if user has premmisions");
                 _shopper.ValidateCanBrowseMarket();
                 MarketLog.Log("StoreCenter", "checking if product exists");
-                checkIsProductNameAvailableInStore(store, productName);
+                CheckIsProductNameAvailableInStore(store, productName);
                 StockListItem stockListItem = storeLogic.GetProductFromStore(store, productName);
-                checkifQuantityIsOK(quantity, stockListItem);   
-                checkIfDiscountExistsAndCalcValue(ref stockListItem);
+                CheckifQuantityIsOK(quantity, stockListItem);   
+                CheckIfDiscountExistsAndCalcValue(ref stockListItem);
                 _shopper.AddToCart(stockListItem.Product, store, quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
                 answer = new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
@@ -44,12 +44,12 @@ namespace SadnaSrc.StoreCenter
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                answer = new StoreAnswer(StoreEnum.NoPremmision,
+                answer = new StoreAnswer(StoreEnum.NoPermission,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
         }
 
-        private void checkifQuantityIsOK(int quantity, StockListItem stockListItem)
+        private void CheckifQuantityIsOK(int quantity, StockListItem stockListItem)
         {
             MarketLog.Log("StoreCenter", "checking that the required quantity is not too big");
             if (quantity > stockListItem.Quantity)
@@ -58,33 +58,26 @@ namespace SadnaSrc.StoreCenter
                 throw new StoreException(StoreEnum.QuantityIsTooBig, "required quantity is not too big");
             }
             MarketLog.Log("StoreCenter", "checking that the required quantity is not negative or zero");
-            if (quantity <= 0)
-            {
-                MarketLog.Log("StoreCenter", "required quantity is negative or zero");
-                throw new StoreException(StoreEnum.quantityIsNegatie, "required quantity is negative");
-            }
+            if (quantity > 0) return;
+            MarketLog.Log("StoreCenter", "required quantity is negative or zero");
+            throw new StoreException(StoreEnum.QuantityIsNegative, "required quantity is negative");
         }
 
-        private void checkIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
+        private void CheckIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
         {
-            if (stockListItem.Discount != null)
-            {
-                if (stockListItem.Discount.discountType == discountTypeEnum.Visible)
-                    if (stockListItem.Discount.checkTime())
-                        stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
-            }
+            if (stockListItem.Discount?.discountType != DiscountTypeEnum.Visible) return;
+            if (stockListItem.Discount.CheckTime())
+                stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
         }
 
-        private void checkIsProductNameAvailableInStore(string store, string productName)
+        private void CheckIsProductNameAvailableInStore(string store, string productName)
         {
-            if (IsProductNameAvailableInStore(store, productName)) //aka product is NotFiniteNumberException in store
-            {
-                MarketLog.Log("StoreCenter", "Product is not exists in the store");
-                throw new StoreException(StoreEnum.ProductNotFound, "product is not exists");
-            }
+            if (!IsProductNameAvailableInStore(store, productName)) return;
+            MarketLog.Log("StoreCenter", "Product is not exists in the store");
+            throw new StoreException(StoreEnum.ProductNotFound, "product is not exists");
         }
 
-        private void checkIfStoreExitsts(string store)
+        private void CheckIfStoreExitsts(string store)
         {
             if (!storeLogic.IsStoreExistAndActive(store))
             { throw new StoreException(StoreEnum.StoreNotExists, "store not exists or active"); }
@@ -92,8 +85,8 @@ namespace SadnaSrc.StoreCenter
 
         private bool IsProductNameAvailableInStore(string storeName, string productName)
         {
-            Product P = storeLogic.getProductByNameFromStore(storeName, productName);
-            return (P == null);
+            Product product = storeLogic.GetProductByNameFromStore(storeName, productName);
+            return product == null;
         }
     }
 }

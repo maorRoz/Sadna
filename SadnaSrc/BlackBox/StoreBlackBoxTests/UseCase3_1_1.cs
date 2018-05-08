@@ -34,7 +34,7 @@ namespace BlackBox.StoreBlackBoxTests
 			Assert.AreEqual((int)StoreEnum.Success, result.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
-			string[] expectedResult = { " name: bamba base price: 90 description: nice snack , Immediate , 30"};
+			string[] expectedResult = { " name: bamba base price: 90 description: nice snack Discount: {null} Purchase Way: Immediate Quantity: 30" };
 			Assert.AreEqual(expectedResult.Length,actualResult.Length);
 			for (int i = 0; i < actualResult.Length; i++)
 			{
@@ -63,7 +63,7 @@ namespace BlackBox.StoreBlackBoxTests
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
 			_storeManage1.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
 			MarketAnswer res = _storeManage1.AddNewProduct("bamba", 90, "nice snack", 30);
-			Assert.AreEqual((int)StoreEnum.NoPremmision, res.Status);
+			Assert.AreEqual((int)StoreEnum.NoPermission, res.Status);
 
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
@@ -81,7 +81,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", -1);
-			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
+			Assert.AreEqual((int)StoreEnum.QuantityIsNegative, result.Status);
 
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
@@ -99,7 +99,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_storeManage1.GetStoreManagementService(_userBridge.GetUserSession(), "lokef");
 			MarketAnswer result = _storeManage1.AddNewProduct("bamba", 80, "nice snack", 0);
-			Assert.AreEqual((int)StoreEnum.quantityIsNegatie, result.Status);
+			Assert.AreEqual((int)StoreEnum.QuantityIsNegative, result.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
 			
@@ -138,11 +138,8 @@ namespace BlackBox.StoreBlackBoxTests
         [TestCleanup]
         public void UserTestCleanUp()
         {
-            _userBridge.CleanSession();
-            _userBridge2?.CleanSession();
-            _storeBridge.CleanSession();
-            _storeManage1.CleanSession();
-            _userBridge.CleanMarket();
+            MarketDB.Instance.CleanByForce();
+            MarketYard.CleanSession();
         }
 
     }

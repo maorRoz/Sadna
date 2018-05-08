@@ -5,29 +5,29 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class ViewStoreStockSlave
+    public class ViewStoreStockSlave
     {
-        internal MarketAnswer answer;
+        public MarketAnswer answer;
         private IUserShopper _shopper;
-        StoreDL storeLogic;
+        IStoreDL storeLogic;
 
-        public ViewStoreStockSlave(IUserShopper shopper)
+        public ViewStoreStockSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
-            storeLogic = StoreDL.Instance;
+            storeLogic = storeDL;
         }
 
-        internal void ViewStoreStock(string storename)
+        public void ViewStoreStock(string storename)
         {
             try
             {
-             MarketLog.Log("StoreCenter", "checking store stack");
+            MarketLog.Log("StoreCenter", "checking store stack");
             _shopper.ValidateCanBrowseMarket();
             MarketLog.Log("StoreCenter", "check if store exists");
-            checkIfStoreExists(storename);
-            Store store = storeLogic.getStorebyName(storename);
+            CheckIfStoreExists(storename);
+            Store store = storeLogic.GetStorebyName(storename);
             LinkedList<string> result = new LinkedList<string>();
-            LinkedList<string> IDS = storeLogic.GetAllStoreProductsID(store.SystemId);
+            var IDS = storeLogic.GetAllStoreProductsID(store.SystemId);
             foreach (string item in IDS)
             {
                 result.AddLast(GetProductStockInformation(item));
@@ -43,12 +43,12 @@ namespace SadnaSrc.StoreCenter
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
-                answer = new StoreAnswer(StoreEnum.NoPremmision,
+                answer = new StoreAnswer(StoreEnum.NoPermission,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
         }
 
-        private void checkIfStoreExists(string storename)
+        private void CheckIfStoreExists(string storename)
         {
             if (!storeLogic.IsStoreExistAndActive(storename))
             {
@@ -57,22 +57,26 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private string GetProductStockInformation(string ProductID)
+        private string GetProductStockInformation(string productID)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            StockListItem stockListItem = handler.DataLayer.GetStockListItembyProductID(ProductID);
+            StockListItem stockListItem = storeLogic.GetStockListItembyProductID(productID);
             if (stockListItem == null)
             {
                 MarketLog.Log("storeCenter", "product not exists");
-                throw new StoreException(StoreEnum.ProductNotFound, "product " + ProductID + " does not exist in Stock");
+                throw new StoreException(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
             }
-            string discount = "";
+            string discount = " Discount: {";
             string product = stockListItem.Product.ToString();
             if (stockListItem.Discount != null)
-                discount = stockListItem.Discount.ToString() + " , ";
-            string purchaseWay = handler.PrintEnum(stockListItem.PurchaseWay);
-            string quanitity = stockListItem.Quantity + "";
-            string result = product + " , " + discount + purchaseWay + " , " + quanitity;
+                discount += stockListItem.Discount;
+            else
+            {
+                discount += "null";
+            }
+            discount += "}";
+            string purchaseWay = " Purchase Way: " + EnumStringConverter.PrintEnum(stockListItem.PurchaseWay);
+            string quanitity = " Quantity: "+stockListItem.Quantity ;
+            string result = product + discount + purchaseWay + quanitity;
             return result;
         }
     }

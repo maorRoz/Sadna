@@ -48,16 +48,16 @@ namespace BlackBox.AdminBlackBoxTests
 		{
 			_orderBridge2 = OrderDriver.getBridge();
 			_orderBridge2.GetOrderService(_userBridge2.GetUserSession());
-			_orderBridge2.BuyItemFromImmediate("hello2", "blahblah", 2, 20);
-			_orderBridge2.BuyItemFromImmediate("Goodbye2", "blahblah2", 2, 20);
+			_orderBridge2.BuyItemFromImmediate("hello2", "blahblah", 2, 20, null);
+			_orderBridge2.BuyItemFromImmediate("Goodbye2", "blahblah2", 2, 20, null);
 		}
 
 		private void User1MakeOrder()
 		{
 			_orderBridge = OrderDriver.getBridge();
 			_orderBridge.GetOrderService(_userBridge.GetUserSession());
-			_orderBridge.BuyItemFromImmediate("hello", "blahblah", 2, 10);
-			_orderBridge.BuyItemFromImmediate("Goodbye", "blahblah2", 2, 10);
+			_orderBridge.BuyItemFromImmediate("hello", "blahblah", 2, 10, null);
+			_orderBridge.BuyItemFromImmediate("Goodbye", "blahblah2", 2, 10, null);
 		}
 
 		private void User2AddToCart()
@@ -126,9 +126,9 @@ namespace BlackBox.AdminBlackBoxTests
 			string[] purchaseUserHistory = res.ReportList;
 			string[] expectedHistory =
 			{
-				"User: Pnina Product: Goodbye Store: blahblah2 Sale: Immediate Quantity: 2 Price: 30 Date: "+DateTime.Now.Date.ToString("d"),
-				"User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 50 Date: "+DateTime.Now.Date.ToString("d")
-			};
+				"User: Pnina Product: Goodbye Store: blahblah2 Sale: Immediate Quantity: 2 Price: 20 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+				"User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 20 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd")
+            };
 		
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success,res.Status);
 			for (int i = 0; i < purchaseUserHistory.Length; i++)
@@ -146,9 +146,9 @@ namespace BlackBox.AdminBlackBoxTests
 			string[] purchaseUserHistory = res.ReportList;
 			string[] expectedHistory =
 			{
-				"User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 50 Date: "+DateTime.Now.Date.ToString("d"),
-				"User: Maor Product: hello2 Store: blahblah Sale: Immediate Quantity: 2 Price: 100 Date: "+DateTime.Now.Date.ToString("d")
-			};
+				"User: Pnina Product: hello Store: blahblah Sale: Immediate Quantity: 2 Price: 20 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+				"User: Maor Product: hello2 Store: blahblah Sale: Immediate Quantity: 2 Price: 40 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd")
+            };
 			
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, res.Status);
 			for (int i = 0; i < purchaseUserHistory.Length; i++)
@@ -261,18 +261,10 @@ namespace BlackBox.AdminBlackBoxTests
 
 		public void UserTestCleanUp()
 		{
-			_adminSignInBridge.CleanSession();
-			_userBridge.CleanSession();
-			_userBridge2.CleanSession();
-			_storeShopping.CleanSession();
-			_storeShopping2.CleanSession();
-			_managerBridge.CleanSession();
-			_managerBridge2.CleanSession();
-			_orderBridge.CleanSession();
-			_orderBridge2.CleanSession();
-			_adminSignInBridge.CleanMarket();
-			
-		}
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
+
+        }
 		
 
 	}

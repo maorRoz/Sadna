@@ -17,7 +17,7 @@ namespace IntegrationTests.OrderSyncher_Integration
     {
         private IUserService userServiceSession;
         private OrderService orderServiceSession;
-        private ModuleGlobalHandler storeServiceSession;
+        private StockSyncher storeServiceSession;
         private OrderSyncherHarmony orderSyncherHarmony;
 
         private MarketYard marketSession;
@@ -34,7 +34,7 @@ namespace IntegrationTests.OrderSyncher_Integration
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
             orderServiceSession = (OrderService)marketSession.GetOrderService(ref userServiceSession);
-            storeServiceSession = ModuleGlobalHandler.GetInstance();
+            storeServiceSession = StockSyncher.Instance;
             orderSyncherHarmony = new OrderSyncherHarmony();
         }
 
@@ -46,20 +46,19 @@ namespace IntegrationTests.OrderSyncher_Integration
             {
                 orderSyncherHarmony.CancelLottery("L2");
                 OrderDL _orderDL = OrderDL.Instance;
-                _orderDL.GetTicketParticipantID("T2");
-                Assert.Fail();
+                int userID = _orderDL.GetTicketParticipantID("T2");
+                Assert.AreEqual(-1, userID);
             }
-            catch (MarketException e)
+            catch (MarketException)
             {
-                Assert.AreEqual((int)LotteryOrderStatus.InvalidLotteryTicket, e.Status);
+                Assert.Fail();
             }
         }
 
         [TestCleanup]
         public void StoreOrderTestCleanUp()
         {
-            userServiceSession.CleanSession();
-            orderSyncherHarmony.CleanSession();
+            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
     }

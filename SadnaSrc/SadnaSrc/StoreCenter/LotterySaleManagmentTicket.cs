@@ -10,15 +10,27 @@ namespace SadnaSrc.StoreCenter
 {
     public class LotterySaleManagmentTicket
     {
-        public string SystemID { get; set; }
+        public string SystemID { get; }
         public Product Original { get; }
         public double ProductNormalPrice { get; }
-        public string storeName { get; set; }
+        public string storeName { get; }
         public double TotalMoneyPayed { get; set; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
         public bool IsActive { get; set; }
+        private static int globalLotteryID = -1;
 
+        public LotterySaleManagmentTicket(string _storeName, Product _original, DateTime _StartDate, DateTime _EndDate)
+        {
+            SystemID = GetLottyerID() ;
+            Original = _original;
+            ProductNormalPrice = _original.BasePrice;
+            TotalMoneyPayed = 0;
+            StartDate = _StartDate;
+            EndDate = _EndDate;
+            storeName = _storeName;
+            IsActive = true;
+        }
         public LotterySaleManagmentTicket(string _SystemID, string _storeName, Product _original, DateTime _StartDate, DateTime _EndDate)
         {
             SystemID = _SystemID;
@@ -39,7 +51,7 @@ namespace SadnaSrc.StoreCenter
         {
             return (TotalMoneyPayed + moneyPayed <= ProductNormalPrice);
         }
-        public bool checkDatesWhenPurches()
+        public bool CheckDatesWhenPurches()
         {
             return ((StartDate.Date <= MarketYard.MarketDate) && (EndDate.Date >= MarketYard.MarketDate));
         }
@@ -49,33 +61,24 @@ namespace SadnaSrc.StoreCenter
         }
         public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LotteryTicket lottery = new LotteryTicket(handler.GetLotteryTicketID(), SystemID, (int)TotalMoneyPayed,
+            StoreDL handler = StoreDL.Instance;
+            LotteryTicket lottery = new LotteryTicket(SystemID, (int)TotalMoneyPayed,
                (int)(TotalMoneyPayed + moneyPayed), moneyPayed, userID);
-            handler.DataLayer.AddLotteryTicket(lottery);
+            handler.AddLotteryTicket(lottery);
             TotalMoneyPayed += moneyPayed;
-            handler.DataLayer.EditLotteryInDatabase(this);
+            handler.EditLotteryInDatabase(this);
             return lottery;
         }
         public LotteryTicket Dolottery()
         {
-            if (TotalMoneyPayed == ProductNormalPrice)
-            {
-                return InformAllWinner(Random());
-            }
-            return null;
+            return TotalMoneyPayed == ProductNormalPrice ? InformAllWinner(RandomLotteryNumber()) : null;
         }
         public LotteryTicket Dolottery(int numberForTests)
         {
-            if (TotalMoneyPayed == ProductNormalPrice)
-            {
-                return InformAllWinner(numberForTests);
-            }
-            return null;
+            return TotalMoneyPayed == ProductNormalPrice ? InformAllWinner(numberForTests) : null;
         }
-        private int Random()
+        private int RandomLotteryNumber()
         {
-
             Random r = new Random(DateTime.Now.Millisecond);
             int winningNumber = r.Next(0, (int)ProductNormalPrice);
             return winningNumber;
@@ -83,8 +86,8 @@ namespace SadnaSrc.StoreCenter
         private LotteryTicket InformAllWinner(int winningNumber)
         {
             LotteryTicket winner = null;
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
-            LinkedList<LotteryTicket> tickets = handler.DataLayer.getAllTickets(SystemID);
+            StoreDL handler = StoreDL.Instance;
+            LinkedList<LotteryTicket> tickets = handler.GetAllTickets(SystemID);
             foreach (LotteryTicket lotter in tickets)
             {
                 if (lotter.IsWinning(winningNumber))
@@ -96,15 +99,17 @@ namespace SadnaSrc.StoreCenter
                 {
                     lotter.RunLosing();
                 }
-                handler.DataLayer.EditLotteryTicketInDatabase(lotter);
+                handler.EditLotteryTicketInDatabase(lotter);
             }
             return winner;
         }
         public override bool Equals(object obj)
         {
-            if (obj.GetType() != GetType())
+            if (obj == null)
+            {
                 return false;
-            return Equals((LotterySaleManagmentTicket)obj);
+            }
+            return obj.GetType() == GetType() && Equals((LotterySaleManagmentTicket)obj);
         }
         private bool Equals(LotterySaleManagmentTicket obj)
         {
@@ -118,9 +123,9 @@ namespace SadnaSrc.StoreCenter
         }
         internal void InformCancel(IOrderSyncher syncher)
         {
-            ModuleGlobalHandler handler = ModuleGlobalHandler.GetInstance();
+            StoreDL handler = StoreDL.Instance;
             IsActive = false;
-            handler.DataLayer.EditLotteryInDatabase(this);
+            handler.EditLotteryInDatabase(this);
             syncher.CancelLottery(SystemID);
         }
 
@@ -138,20 +143,65 @@ namespace SadnaSrc.StoreCenter
         }
         internal bool updateLottery(double moneyPayed, int userID)
         {
-            LotteryTicket lotteryTicket = PurchaseALotteryTicket(moneyPayed, userID);
-            if (TotalMoneyPayed == ProductNormalPrice)
-                return true;
-            return false;
+            PurchaseALotteryTicket(moneyPayed, userID);
+            return TotalMoneyPayed == ProductNormalPrice;
         }
 
         internal int getWinnerID(int cheatCode)
         {
-            int winnerResult = Random();
+            int winnerResult = RandomLotteryNumber();
             if (cheatCode != -1)
             {
                 winnerResult = cheatCode;
             }
             return InformAllWinner(winnerResult).UserID;
+        }
+        public string[] GetLotteryManagmentStringValues()
+        {
+            string isActive = "";
+            if (IsActive)
+            {
+                isActive = "true";
+            }
+            else
+            {
+                isActive = "false";
+            }
+
+            return new[]
+            {
+                "'" + SystemID + "'",
+                "'" + Original.SystemId + "'",
+                "'" + ProductNormalPrice + "'",
+                "'" + TotalMoneyPayed + "'",
+                "'" + storeName + "'",
+                "'" + StartDate + "'",
+                "'" + EndDate + "'",
+                "'" + isActive + "'"
+            };
+        }
+        public object[] GetLotteryManagmentValuesArray()
+        {
+            return new object[]
+            {
+                SystemID,
+                Original.SystemId,
+                ProductNormalPrice,
+                TotalMoneyPayed,
+                storeName,
+                StartDate,
+                EndDate,
+                IsActive
+            };
+        }
+        private static string GetLottyerID()
+        {
+            if (globalLotteryID == -1)
+            {
+                globalLotteryID = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllLotteryManagmentIDs());
+            }
+            globalLotteryID++;
+            return "L" + globalLotteryID;
         }
     }
 }

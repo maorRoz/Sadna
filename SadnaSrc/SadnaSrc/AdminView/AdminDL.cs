@@ -10,7 +10,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
 {
-    class AdminDL : IAdminDL
+    public class AdminDL : IAdminDL
     {
 
         private static AdminDL _instance;
@@ -96,6 +96,28 @@ namespace SadnaSrc.AdminView
             {
                 return GetPurchaseHistory(dbReader);
             }
+        }
+        public void AddCategory(Category category)
+        {
+            dbConnection.InsertTable("Category", "SystemID, name",
+                category.GetCategoryStringValues(), category.GetCategoryValuesArray());
+        }
+        public void RemoveCategory(Category category)
+        {
+            dbConnection.DeleteFromTable("Category", "SystemID = '" + category.SystemId + "'");
+        }
+        public Category GetCategoryByName(string categoryname)
+        {
+            Category category = null;
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("Category", "*", "name = '" + categoryname + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    category = new Category(dbReader.GetString(0), dbReader.GetString(1));
+                }
+            }
+            return category;
         }
 
     }

@@ -2,6 +2,8 @@
 using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.SupplyPoint;
+using SadnaSrc.Walleter;
 
 namespace BlackBox.OrderBlackBoxTests
 {
@@ -33,7 +35,9 @@ namespace BlackBox.OrderBlackBoxTests
 			_adminBridge.GetAdminService(_userAdminBridge.GetUserSession());
 			_buyerRegisteredUserBridge = null;
 			_buyerGuestBridge = null;
-		}
+		    PaymentService.Instance.FixExternal();
+		    SupplyService.Instance.FixExternal();
+        }
 
 		private void SignUp(string name, string address, string password, string creditCard)
 		{
@@ -82,7 +86,7 @@ namespace BlackBox.OrderBlackBoxTests
 		{
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
-			MarketAnswer res = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer res = _orderBridge.BuyEverythingFromCart(new string[]{null, null});
 			Assert.AreEqual((int)OrderStatus.Success,res.Status);
 			MarketAnswer puchaseHistory = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, puchaseHistory.Status);
@@ -90,10 +94,10 @@ namespace BlackBox.OrderBlackBoxTests
 			string[] expectedHistory =
 			{
 				"User: Shalom Product: Coffee Store: HAHAHA Sale: Immediate Quantity: 3 Price: 30 Date: " +
-				DateTime.Now.Date.ToString("d"),
+			    DateTime.Now.Date.ToString("yyyy-MM-dd"),
 				"User: Shalom Product: Tea Store: Yalla Sale: Immediate Quantity: 4 Price: 40 Date: " +
-				DateTime.Now.Date.ToString("d")
-			};
+				DateTime.Now.Date.ToString("yyyy-MM-dd")
+            };
 			Assert.AreEqual(expectedHistory.Length,receivedHistory.Length);
 			for (int i = 0; i < expectedHistory.Length; i++)
 			{
@@ -106,16 +110,48 @@ namespace BlackBox.OrderBlackBoxTests
 			MarketAnswer stock1 = _shoppingBridge.ViewStoreStock("Yalla");
 			string[] expectedYallaStock =
 			{
-				" name: Tea base price: 10 description: CherryFlavour , Immediate , 2"
-			};
+                " name: Tea base price: 10 description: CherryFlavour Discount: {null} Purchase Way: Immediate Quantity: 2"
+            };
 			Assert.AreEqual(expectedYallaStock[0], stock1.ReportList[0]);
 			MarketAnswer stock2 = _shoppingBridge.ViewStoreStock("HAHAHA");
 			string[] expectedHahahaStock =
 			{
-				" name: Coffee base price: 10 description: Black , Immediate , 3"
-			};
+                " name: Coffee base price: 10 description: Black Discount: {null} Purchase Way: Immediate Quantity: 3"
+            };
 			Assert.AreEqual(expectedHahahaStock[0], stock2.ReportList[0]);
 		}
+
+	    [TestMethod]
+	    public void SuccessBuyingLessThenInCart()
+	    {
+	        AddProductsToCartRegisteredUser();
+	        _orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
+	        MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea","Yalla",3,10,null);
+	        Assert.AreEqual((int)OrderStatus.Success, res.Status);
+	        res = _orderBridge.BuyItemFromImmediate("Coffee", "HAHAHA", 1, 10, null);
+	        Assert.AreEqual((int)OrderStatus.Success, res.Status);
+	        res = _orderBridge.BuyEverythingFromCart(null);
+	        Assert.AreEqual((int)OrderStatus.Success, res.Status);
+            MarketAnswer puchaseHistory = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
+	        Assert.AreEqual((int)ViewPurchaseHistoryStatus.Success, puchaseHistory.Status);
+	        string[] receivedHistory = puchaseHistory.ReportList;
+	        string[] expectedHistory =
+	        {
+	            "User: Shalom Product: Coffee Store: HAHAHA Sale: Immediate Quantity: 1 Price: 10 Date: " +
+	            DateTime.Now.Date.ToString("yyyy-MM-dd"),
+	            "User: Shalom Product: Coffee Store: HAHAHA Sale: Immediate Quantity: 2 Price: 20 Date: " +
+	            DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom Product: Tea Store: Yalla Sale: Immediate Quantity: 3 Price: 30 Date: " +
+	            DateTime.Now.Date.ToString("yyyy-MM-dd"),
+	            "User: Shalom Product: Tea Store: Yalla Sale: Immediate Quantity: 1 Price: 10 Date: " +
+	            DateTime.Now.Date.ToString("yyyy-MM-dd"),
+            };
+	        Assert.AreEqual(expectedHistory.Length, receivedHistory.Length);
+	        for (int i = 0; i < expectedHistory.Length; i++)
+	        {
+	            Assert.AreEqual(expectedHistory[i], receivedHistory[i]);
+	        }
+        }
 
 		[TestMethod]
 		public void SuccessBuyingProductsGuest()
@@ -123,7 +159,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails("PninaGuest", "MisholGuest", "77777777");
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderStatus.Success, order.Status);
 			
 			MarketAnswer cartDetails = _buyerGuestBridge.ViewCart();
@@ -134,14 +170,14 @@ namespace BlackBox.OrderBlackBoxTests
 			MarketAnswer stock1 = _shoppingBridge.ViewStoreStock("Yalla");
 			string[] expectedYallaStock =
 			{
-				" name: Tea base price: 10 description: CherryFlavour , Immediate , 2"
-			};
+                " name: Tea base price: 10 description: CherryFlavour Discount: {null} Purchase Way: Immediate Quantity: 2"
+            };
 			Assert.AreEqual(expectedYallaStock[0], stock1.ReportList[0]);
 			MarketAnswer stock2 = _shoppingBridge.ViewStoreStock("HAHAHA");
 			string[] expectedHahahaStock =
 			{
-				" name: Coffee base price: 10 description: Black , Immediate , 3"
-			};
+                " name: Coffee base price: 10 description: Black Discount: {null} Purchase Way: Immediate Quantity: 3"
+            };
 			Assert.AreEqual(expectedHahahaStock[0], stock2.ReportList[0]);
 		}
 
@@ -151,7 +187,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails(null, "MisholGuest", "77777777");
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 
 		}
@@ -162,7 +198,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails("PninaGuest", null, "77777777");
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 		}
 
@@ -172,7 +208,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
 			_orderBridge.GiveDetails("PninaGuest", "MisholGuest", "");
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 
 		}
@@ -182,7 +218,7 @@ namespace BlackBox.OrderBlackBoxTests
 		{
 			AddProductsToCartGuest();
 			_orderBridge.GetOrderService(_buyerGuestBridge.GetUserSession());
-			MarketAnswer order = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer order = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, order.Status);
 		}
 
@@ -192,7 +228,7 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			_orderBridge.DisableSupplySystem();
-			MarketAnswer res = _orderBridge.BuyEverythingFromCart();
+			MarketAnswer res = _orderBridge.BuyEverythingFromCart(null);
 			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
@@ -204,8 +240,8 @@ namespace BlackBox.OrderBlackBoxTests
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
 			_orderBridge.DisablePaymentSystem();
-			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1);
-			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea", "Yalla", 2, 1, null);
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, res.Status);
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
 		}
@@ -216,8 +252,8 @@ namespace BlackBox.OrderBlackBoxTests
 		{
 			AddProductsToCartRegisteredUser();
 			_orderBridge.GetOrderService(_buyerRegisteredUserBridge.GetUserSession());
-			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea","Yalla",2100,10);
-			Assert.AreEqual((int)OrderItemStatus.NoOrderItemInOrder, res.Status);
+			MarketAnswer res = _orderBridge.BuyItemFromImmediate("Tea","Yalla",2100,10, null);
+			Assert.AreEqual((int)OrderItemStatus.InvalidDetails, res.Status);
 			MarketAnswer history = _adminBridge.ViewPurchaseHistoryByUser("Shalom");
 			Assert.IsNull(history.ReportList);
 		}
@@ -225,20 +261,10 @@ namespace BlackBox.OrderBlackBoxTests
 		[TestCleanup]
 		public void UserTestCleanUp()
 		{
-			_userAdminBridge.CleanSession();
-			_buyerRegisteredUserBridge?.CleanSession();
-			_buyerGuestBridge?.CleanSession();
-			_storeOwnerBridge.CleanSession();
-			_shoppingBridge.CleanSession();
-			_shoppingBridge2?.CleanSession();
-			_storeManagementBridge.CleanSession();
-			_storeManagementBridge2.CleanSession();
-			_orderBridge.CleanSession();
-			_orderBridge.EnableSupplySystem();
-			_orderBridge.EnablePaymentSystem();
-			_userAdminBridge.CleanMarket();
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
 
-		}
+        }
 
 	
 

@@ -58,8 +58,8 @@ namespace BlackBox.AdminBlackBoxTests
 			Assert.AreEqual((int)RemoveUserStatus.Success, _adminBridge.RemoveUser(userSoleStoreOwner).Status);
 			_managerBridge = StoreManagementDriver.getBridge();
 			_managerBridge.GetStoreManagementService(_adminSignInBridge.GetUserSession(),"blah");
-			MarketAnswer res = _managerBridge.CloseStore();
-			Assert.AreEqual((int)StoreEnum.CloseStoreFail, res.Status);
+			var res = _managerBridge.CloseStore();
+			Assert.AreEqual((int)StoreEnum.StoreNotExists, res.Status);
 			Assert.AreEqual((int)SignInStatus.NoUserFound, _signInBridge.SignIn(userSoleStoreOwner, userSoleStoreOwnerPass).Status);
 
 		}
@@ -127,14 +127,9 @@ namespace BlackBox.AdminBlackBoxTests
 
 		public void UserTestCleanUp()
 		{
-			_adminSignInBridge.CleanSession();
-			_signUpBridge1.CleanSession();
-			_signUpBridge2.CleanSession();
-			_signInBridge?.CleanSession();
-			_storeBridge.CleanSession();
-			_managerBridge?.CleanSession();
-			_signUpBridge1.CleanMarket();
+		    MarketDB.Instance.CleanByForce();
+		    MarketYard.CleanSession();
 
-		}
+        }
 	}
 }

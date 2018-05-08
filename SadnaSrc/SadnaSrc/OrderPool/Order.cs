@@ -33,7 +33,7 @@ namespace SadnaSrc.OrderPool
             _shippingAddress = "default"; 
             _items = new List<OrderItem>();
             _orderId = orderId;
-            _date = DateTime.Today;
+            _date = DateTime.Now;
         }
 
         public Order(int orderId, string userName, string shippingAddress)
@@ -42,7 +42,7 @@ namespace SadnaSrc.OrderPool
             _shippingAddress = shippingAddress;
             _items = new List<OrderItem>();
             _orderId = orderId;
-            _date = DateTime.Today;
+            _date = DateTime.Now;
         }
 
         public Order(int orderId, string userName, string shippingAddress, double price, string dateString,
@@ -87,17 +87,6 @@ namespace SadnaSrc.OrderPool
 
             _items.Add(item);
             _totalPrice += item.Price*item.Quantity;
-        }
-
-        public void RemoveOrderItem(OrderItem item)
-        {
-            if (GetOrderItem(item.Name, item.Store) == null)
-            {
-                throw new OrderException(OrderItemStatus.NoOrderItemInOrder, "Order item is not listed in the order.");
-            }
-
-            _items.Remove(item);
-            _totalPrice -= item.Price * item.Quantity;
         }
 
         public void ComputeTotalPrice()

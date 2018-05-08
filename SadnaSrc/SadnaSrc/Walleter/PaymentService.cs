@@ -11,19 +11,11 @@ namespace SadnaSrc.Walleter
 {
     public class PaymentService : IPaymentService
     {
-        private PaymentSystem sock;
+        private readonly PaymentSystem sock = PaymentSystem.Instance;
 
         private static PaymentService _instance;
 
         public static PaymentService Instance => _instance ?? (_instance = new PaymentService());
-
-        public MarketAnswer AttachExternalSystem()
-        {
-            sock = new PaymentSystem();
-            MarketLog.Log("Walleter", "Connection to external payment system established successfully ! ");
-            return new WalleterAnswer(WalleterStatus.Success, "Connection to external payment system established successfully !");
-
-        }
 
         public void ProccesPayment(Order order, string creditCardetails)
         {
@@ -65,7 +57,7 @@ namespace SadnaSrc.Walleter
         public void CheckCreditCard(string details)
         {
             int x;
-            if (details.Length != 8 || !Int32.TryParse(details, out x))
+            if (details == null || details.Length != 8 || !Int32.TryParse(details, out x))
             {
                 throw new WalleterException(WalleterStatus.InvalidCreditCardSyntax, "Failed, Invalid credit card details..");
             }
@@ -82,12 +74,12 @@ namespace SadnaSrc.Walleter
 
         public void BreakExternal()
         {
-            sock.fuckUp();
+            PaymentSystem.FuckUp();
         }
 
         public void FixExternal()
         {
-            sock.fuckDown();
+            PaymentSystem.FuckDown();
         }
     }
 }

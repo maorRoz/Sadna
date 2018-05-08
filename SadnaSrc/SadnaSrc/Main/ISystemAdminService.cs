@@ -12,6 +12,9 @@ namespace SadnaSrc.Main
         MarketAnswer RemoveUser(string userName);
         MarketAnswer ViewPurchaseHistoryByUser(string userName);
         MarketAnswer ViewPurchaseHistoryByStore(string storeName);
+        MarketAnswer AddCategory(string categoryname);
+        MarketAnswer RemoveCategory(string categoryname);
+
     }
 
     public enum RemoveUserStatus
@@ -28,5 +31,12 @@ namespace SadnaSrc.Main
         NotSystemAdmin,
         NoUserFound,
         NoStoreFound
+    }
+
+    public enum EditCategoryStatus
+    {
+        Success,
+        CategoryNotExistsInSystem,
+        CategoryAlradyExist
     }
 }

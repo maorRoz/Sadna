@@ -16,11 +16,9 @@ namespace SadnaSrc.Main
 
     public enum WalleterStatus
     {
-        Success,
         InvalidCreditCardSyntax,
         PaymentSystemError,
         NoPaymentSystem,
-        InvalidOrder,
         InvalidData
     }
 
