@@ -28,9 +28,12 @@ namespace SadnaSrc.StoreCenter
             Store store = storeLogic.GetStorebyName(storename);
             LinkedList<string> result = new LinkedList<string>();
             var IDS = storeLogic.GetAllStoreProductsID(store.SystemId);
+            string info;
             foreach (string item in IDS)
             {
-                result.AddLast(GetProductStockInformation(item));
+                info = GetProductStockInformation(item);
+                if (info!="")
+                    result.AddLast(info);
             }
             string[] resultArray = new string[result.Count];
             result.CopyTo(resultArray, 0);
@@ -71,7 +74,6 @@ namespace SadnaSrc.StoreCenter
                     storeLogic.GetLotteryByProductID((productID));
                 if ((managmentTicket.EndDate < MarketYard.MarketDate) ||
                     (managmentTicket.StartDate > MarketYard.MarketDate) ||
-                    (!managmentTicket.IsActive) ||
                     (managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice))
                     return "";
             }
