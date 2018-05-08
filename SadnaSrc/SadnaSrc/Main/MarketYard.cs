@@ -9,6 +9,7 @@ using SadnaSrc.AdminView;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
+using SadnaSrc.PolicyComponent;
 using SadnaSrc.StoreCenter;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.UserSpot;
@@ -72,6 +73,21 @@ namespace SadnaSrc.Main
         public ISupplyService GetSupplyService()
         {
             return SupplyService.Instance;
+        }
+
+        public IGlobalPolicyManager GetGlobalPolicyManager()
+        {
+            return PolicyHandler.Instance;
+        }
+
+        public IStorePolicyManager GetStorePolicyManager()
+        {
+            return PolicyHandler.Instance;
+        }
+
+        public IPolicyChecker GetPolicyChecker()
+        {
+            return PolicyHandler.Instance;
         }
 
         public static void CleanSession()

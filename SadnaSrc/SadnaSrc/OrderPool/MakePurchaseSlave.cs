@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SadnaSrc.Main;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.PolicyComponent;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.Walleter;
 
@@ -39,6 +40,21 @@ namespace SadnaSrc.OrderPool
             {
                 MarketLog.Log("OrderPool", "User entered item details which are invalid by the system standards!");
                 throw new OrderException(OrderItemStatus.InvalidDetails, "User entered invalid item details");
+            }
+        }
+
+        public void CheckPurchasePolicy(Order order)
+        {
+            IPolicyChecker checker = MarketYard.Instance.GetPolicyChecker();
+            string username = order.GetUserName();
+            string address = order.GetShippingAddress();
+            List<OrderItem> items = order.GetItems();
+            foreach (OrderItem item in items)
+            {
+                if (!checker.CheckRelevantPolicies(item.Name, item.Store, null, username, address, item.Quantity,
+                    item.Price))
+                    throw new OrderException(OrderItemStatus.NotComplyWithPolicy,
+                        "Item " + item.Name + "from Store" + item.Store + "Doesn't comply with Policy conditions.");
             }
         }
 

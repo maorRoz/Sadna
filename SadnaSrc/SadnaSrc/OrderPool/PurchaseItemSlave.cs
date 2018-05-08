@@ -37,6 +37,7 @@ namespace SadnaSrc.OrderPool
                     toBuy.Price = _storesSync.GetPriceFromCoupon(itemName, store, quantity, coupon);
                 Order order = CreateOrderOneItem(toBuy, UserName, UserAddress);
                 orderId = order.GetOrderID();
+                CheckPurchasePolicy(order);
                 ProcessOrder(order, CreditCard);
                 RemoveItemFromCart(itemName, store, quantity, unitPrice);
                 MarketLog.Log("OrderPool",
