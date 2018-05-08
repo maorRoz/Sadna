@@ -73,8 +73,9 @@ namespace SadnaSrc.PolicyComponent
             }
             return result;
         }
-
-        public List<PurchasePolicy> GetPoliciesOfType(PolicyType type)
+        // Zohar said he dont think he will need it, but let's not remove until we have full implemntation
+        // this fucntion has no tests because of the last commant
+        /**public List<PurchasePolicy> GetPoliciesOfType(PolicyType type)
         {
 
             List<int> listOfIDs = new List<int>();
@@ -105,7 +106,7 @@ namespace SadnaSrc.PolicyComponent
                 result.Add(policy);
             }
             return result;
-        }
+        }**/
         private void Save_NonRoot_Policy(PurchasePolicy policy)
         {
             if (policy != null)
