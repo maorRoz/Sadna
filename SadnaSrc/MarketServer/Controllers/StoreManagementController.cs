@@ -258,7 +258,7 @@ namespace MarketWeb.Controllers
 		{
 			var userService = MarketServer.Users[systemId];
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-			var answer = storeManagementService.RemoveProductFromCategory(product, category);
+			var answer = storeManagementService.RemoveProductFromCategory(category,product);
 			if (answer.Status == Success)
 			{
 				return RedirectToAction("RemovingProductCategoryPage", new { systemId, state, message = answer.Answer,store,product, valid = true });

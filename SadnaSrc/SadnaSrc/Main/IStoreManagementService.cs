@@ -30,7 +30,7 @@ namespace SadnaSrc.Main
          * Category Managment
          **/
         MarketAnswer AddProductToCategory(string productName, string categoryName);
-        MarketAnswer RemoveProductFromCategory(string productName, string categoryName);
+        MarketAnswer RemoveProductFromCategory(string categoryName, string productName);
         /**
          * Discounts Management
          **/
