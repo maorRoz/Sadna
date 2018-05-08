@@ -16,7 +16,6 @@ namespace SadnaSrc.StoreCenter
         public int DiscountAmount { get; set; }
         public bool Percentages { get; set; }
         private static int globalDiscountCode = -1;
-        //assume that the startDate < EndDate
 
         public Discount(DiscountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
         {
