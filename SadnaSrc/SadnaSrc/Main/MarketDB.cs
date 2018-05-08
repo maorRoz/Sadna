@@ -69,7 +69,9 @@ namespace SadnaSrc.Main
                 CreateOrderItemTable(),
                 CreateNotificationsTable(),
                 CreateCategoryTable(),
-                CreateCategoryProductConnectionTable()
+                CreateCategoryProductConnectionTable(),
+                CreateConditionTable(),
+                CreateOperatorTable()
             };
 
             for (var i = 0; i < createTableStrings.Length; i++)
@@ -275,7 +277,9 @@ namespace SadnaSrc.Main
                 "OrderItem",
                 "Notifications",
                 "Category",
-                "CategoryProductConnection"
+                "CategoryProductConnection",
+                "conditions",
+                "Operator"
             };
 
             for (int i = 0; i < tableNames.Length; i++)
@@ -496,6 +500,32 @@ namespace SadnaSrc.Main
                                     [CategoryID]    TEXT,
                                     [ProductID]          TEXT,
                                     PRIMARY KEY([CategoryID], [ProductID])
+                                    )";
+        }
+
+        private static string CreateConditionTable()
+        {
+            return @"Create TABLE IF NOT EXISTS [conditions] (
+                                    [SystemID]               INTEGER,
+                                    [conditionsType]          TEXT,
+                                    [PolicyType]             TEXT,
+                                    [Subject]                TEXT,
+                                    [value]                  TEXT,
+                                    [isRoot]                  TEXT,
+                                    PRIMARY KEY([SystemID])
+                                    )";
+        }
+        private static string CreateOperatorTable()
+        {
+            return @"Create TABLE IF NOT EXISTS [Operator] (
+                                    [SystemID]               INTEGER,
+                                    [OperatorType]           TEXT,
+                                    [PolicyType]             TEXT,
+                                    [Subject]                TEXT,
+                                    [COND1ID]                INTEGER,
+                                    [COND2ID]                INTEGER,
+                                    [isRoot]                 TEXT,
+                                    PRIMARY KEY([SystemID])
                                     )";
         }
         public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)

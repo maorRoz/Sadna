@@ -49,7 +49,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 userService.Setup(x => x.ValidateCanBrowseMarket()).Throws(new MarketException(0, ""));
                 slave.ViewStoreStock("X");
                 Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
-            }
+            }   
         
             [TestMethod]
             public void ViewStoreStockPass()

@@ -22,5 +22,32 @@ namespace SadnaSrc.PolicyComponent
         {
             return new[] { "" + ID, "OR", "" + _cond1.ID, "" + _cond2.ID };
         }
+
+        public override string GetMyType()
+        {
+            return "OrOperator";
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            return obj.GetType() == GetType() && Equals((OrOperator)obj);
+        }
+        private bool Equals(OrOperator obj)
+        {
+            bool answer = true;
+            if (_cond1 == null)
+                answer = answer && (obj._cond1 == null);
+            if (Subject == null)
+                answer = answer && (obj.Subject == null);
+            if (_cond1 != null)
+                answer = answer && (_cond1.Equals(obj._cond1));
+            if (Subject != null)
+                answer = answer && (Subject.Equals(obj.Subject));
+            answer = answer && obj.ID.Equals(ID) && obj.Type.Equals(Type);
+            return answer;
+        }
     }
 }
