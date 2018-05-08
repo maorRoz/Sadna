@@ -25,5 +25,18 @@ namespace SadnaSrc.PolicyComponent
         {
             return "PriceGreaterThan";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            return obj.GetType() == GetType() && Equals((PriceGreaterThan)obj);
+        }
+        private bool Equals(PriceGreaterThan obj)
+        {
+            return obj._value.Equals(_value) && obj.ID.Equals(ID) && obj.Subject.Equals(Subject)
+                   && obj.Type.Equals(Type);
+        }
     }
 }

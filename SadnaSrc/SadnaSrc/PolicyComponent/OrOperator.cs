@@ -27,5 +27,18 @@ namespace SadnaSrc.PolicyComponent
         {
             return "OrOperator";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            return obj.GetType() == GetType() && Equals((OrOperator)obj);
+        }
+        private bool Equals(OrOperator obj)
+        {
+            return obj.ID.Equals(ID) && obj.Subject.Equals(Subject)
+                                     && obj.Type.Equals(Type) && obj._cond1.Equals(_cond1) && obj._cond2.Equals(_cond2);
+        }
     }
 }

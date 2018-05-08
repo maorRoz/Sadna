@@ -26,5 +26,18 @@ namespace SadnaSrc.PolicyComponent
         {
             return "AddressEquals";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            return obj.GetType() == GetType() && Equals((AddressEquals)obj);
+        }
+        private bool Equals(AddressEquals obj)
+        {
+            return obj._value.Equals(_value) && obj.ID.Equals(ID) && obj.Subject.Equals(Subject)
+                   && obj.Type.Equals(Type);
+        }
     }
 }

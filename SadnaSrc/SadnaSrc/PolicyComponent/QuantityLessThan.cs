@@ -25,5 +25,18 @@ namespace SadnaSrc.PolicyComponent
         {
             return "QuantityLessThan";
         }
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            return obj.GetType() == GetType() && Equals((QuantityLessThan)obj);
+        }
+        private bool Equals(QuantityLessThan obj)
+        {
+            return obj._value.Equals(_value) && obj.ID.Equals(ID) && obj.Subject.Equals(Subject)
+                   && obj.Type.Equals(Type);
+        }
     }
 }
