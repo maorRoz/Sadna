@@ -23,19 +23,10 @@ namespace PurchasePolicyTests
         }
 
         [TestMethod]
-        public void TestStartSession()
-        {
-            handler.StartSession(PolicyType.Category, "Food");
-            Assert.AreEqual(PolicyType.Category, handler.Type);
-            Assert.AreEqual("Food", handler.Subject);
-        }
-
-        [TestMethod]
         public void TestCreateCondition1()
         {
-            handler.StartSession(PolicyType.Category, "Food");
             string[] policyData =
-                handler.CreateCondition(ConditionType.AddressEqual, "Grove Street");
+                handler.CreateCategorySimplePolicy("Food", ConditionType.AddressEqual, "Grove Street");
             string[] expectedData = {"0", "Address", "=", "Grove Street"};
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(1, handler.GetSessionPolicies().Length);
@@ -44,9 +35,8 @@ namespace PurchasePolicyTests
         [TestMethod]
         public void TestCreateCondition2()
         {
-            handler.StartSession(PolicyType.Store, "Cluckin' Bell");
             string[] policyData =
-                handler.CreateCondition(ConditionType.PriceGreater, "7");
+                handler.CreateStoreSimplePolicy("Cluckin' Bell", ConditionType.PriceGreater, "7");
             string[] expectedData = { "0", "Price", ">=", "7" };
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(1, handler.GetSessionPolicies().Length);
@@ -55,9 +45,8 @@ namespace PurchasePolicyTests
         [TestMethod]
         public void TestCreateCondition3()
         {
-            handler.StartSession(PolicyType.Product, "#9");
             string[] policyData =
-                handler.CreateCondition(ConditionType.PriceLesser, "7");
+                handler.CreateProductSimplePolicy("#9", ConditionType.PriceLesser, "7");
             string[] expectedData = { "0", "Price", "<=", "7" };
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(1, handler.GetSessionPolicies().Length);
@@ -66,9 +55,8 @@ namespace PurchasePolicyTests
         [TestMethod]
         public void TestCreateCondition4()
         {
-            handler.StartSession(PolicyType.Category, "Food");
             string[] policyData =
-                handler.CreateCondition(ConditionType.QuantityGreater, "2");
+                handler.CreateCategorySimplePolicy("Food", ConditionType.QuantityGreater, "2");
             string[] expectedData = { "0", "Quantity", ">=", "2" };
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(1, handler.GetSessionPolicies().Length);
@@ -77,9 +65,8 @@ namespace PurchasePolicyTests
         [TestMethod]
         public void TestCreateCondition5()
         {
-            handler.StartSession(PolicyType.Global, null);
             string[] policyData =
-                handler.CreateCondition(ConditionType.QuantityLesser, "2");
+                handler.CreateGlobalSimplePolicy(ConditionType.QuantityLesser, "2");
             string[] expectedData = { "0", "Quantity", "<=", "2" };
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(1, handler.GetSessionPolicies().Length);
@@ -88,9 +75,8 @@ namespace PurchasePolicyTests
         [TestMethod]
         public void TestCreateCondition6()
         {
-            handler.StartSession(PolicyType.StockItem, "Cluckin Bell.#9 Large");
             string[] policyData =
-                handler.CreateCondition(ConditionType.UsernameEqual, "Big Smoke");
+                handler.CreateStockItemSimplePolicy("Cluckin Bell", "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
             string[] expectedData = { "0", "Username", "=", "Big Smoke" };
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(1, handler.GetSessionPolicies().Length);
@@ -101,7 +87,7 @@ namespace PurchasePolicyTests
         {
             InitPolicies();
             string[] policyData =
-                handler.CreatePolicy(OperatorType.AND, 0, 1);
+                handler.CreateCategoryPolicy("Food", OperatorType.AND, 0, 1);
             string[] expectedData = { "2", "AND", "0", "1" };
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(3, handler.GetSessionPolicies().Length);
@@ -112,7 +98,7 @@ namespace PurchasePolicyTests
         {
             InitPolicies();
             string[] policyData =
-                handler.CreatePolicy(OperatorType.OR, 0, 1);
+                handler.CreateCategoryPolicy("Food", OperatorType.OR, 0, 1);
             string[] expectedData = { "2", "OR", "0", "1" };
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(3, handler.GetSessionPolicies().Length);
@@ -123,7 +109,7 @@ namespace PurchasePolicyTests
         {
             InitPolicies();
             string[] policyData =
-                handler.CreatePolicy(OperatorType.NOT, 0, 1);
+                handler.CreateCategoryPolicy("Food", OperatorType.NOT, 0, 1);
             string[] expectedData = { "2", "NOT", "0"};
             CompareArrays(expectedData, policyData);
             Assert.AreEqual(3, handler.GetSessionPolicies().Length);
@@ -132,9 +118,8 @@ namespace PurchasePolicyTests
         [TestMethod]
         public void TestAddSimplePolicy()
         {
-            handler.StartSession(PolicyType.Category, "Food");
             string[] policyData =
-                handler.CreateCondition(ConditionType.UsernameEqual, "Big Smoke");
+                handler.CreateCategorySimplePolicy("Food", ConditionType.UsernameEqual, "Big Smoke");
             handler.AddPolicy(Int32.Parse(policyData[0]));
             string[] actualData = handler.GetPolicyData(PolicyType.Category, "Food");
             Assert.IsNotNull(actualData);
@@ -148,7 +133,7 @@ namespace PurchasePolicyTests
         {
             InitPolicies();
             string[] policyData =
-                handler.CreatePolicy(OperatorType.AND, 0, 1);
+                handler.CreateCategoryPolicy("Food", OperatorType.AND, 0, 1);
             handler.AddPolicy(Int32.Parse(policyData[0]));
             string[] actualData = handler.GetPolicyData(PolicyType.Category, "Food");
             Assert.IsNotNull(actualData);
@@ -214,9 +199,8 @@ namespace PurchasePolicyTests
 
         private void InitPolicies()
         {
-            handler.StartSession(PolicyType.Category, "Food");
-            handler.CreateCondition(ConditionType.AddressEqual, "Grove Street");
-            handler.CreateCondition(ConditionType.QuantityGreater, "2");
+            handler.CreateCategorySimplePolicy("Food", ConditionType.AddressEqual, "Grove Street");
+            handler.CreateCategorySimplePolicy("Food", ConditionType.QuantityGreater, "2");
         }
     }
 }

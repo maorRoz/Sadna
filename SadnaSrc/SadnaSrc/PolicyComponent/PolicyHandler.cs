@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.PolicyComponent
 {
-    public class PolicyHandler : IPolicyHandler
+    public class PolicyHandler : IGlobalPolicyManager, IStorePolicyManager, IPolicyChecker
     {
         public List<PurchasePolicy> Policies;
         private List<PurchasePolicy> SessionPolicies;
@@ -26,51 +26,54 @@ namespace SadnaSrc.PolicyComponent
             SessionPolicies = new List<PurchasePolicy>();
         }
 
-        public string[] CreatePolicy(OperatorType op, int id1, int id2)
+        public string[] CreateGlobalSimplePolicy(ConditionType cond, string value)
         {
-            PurchasePolicy policy = null;
-            switch (op)
-            {
-                case OperatorType.AND:
-                    policy = new AndOperator(Type, Subject, GetPolicy(id1), GetPolicy(id2), SessionPolicies.Count);
-                    break;
-                case OperatorType.OR:
-                    policy = new OrOperator(Type, Subject, GetPolicy(id1), GetPolicy(id2), SessionPolicies.Count);
-                    break;
-                case OperatorType.NOT:
-                    policy = new NotOperator(Type, Subject, GetPolicy(id1), null, SessionPolicies.Count);
-                    break;
-            }
-            SessionPolicies.Add(policy);
-            return policy.GetData();
+            return CreateCondition(PolicyType.Global, null, cond, value).GetData();
         }
 
-        public string[] CreateCondition(ConditionType cond, string value)
+        public string[] CreateCategorySimplePolicy(string category, ConditionType cond, string value)
         {
-            PurchasePolicy policy = null;
-            switch (cond)
-            {
-                case ConditionType.AddressEqual:
-                    policy = new AddressEquals(Type, Subject, value, SessionPolicies.Count);
-                    break;
-                case ConditionType.PriceGreater:
-                    policy = new PriceGreaterThan(Type, Subject, value, SessionPolicies.Count);
-                    break;
-                case ConditionType.PriceLesser:
-                    policy = new PriceLessThan(Type, Subject, value, SessionPolicies.Count);
-                    break;
-                case ConditionType.QuantityGreater:
-                    policy = new QuantityGreaterThan(Type, Subject, value, SessionPolicies.Count);
-                    break;
-                case ConditionType.QuantityLesser:
-                    policy = new QuantityLessThan(Type, Subject, value, SessionPolicies.Count);
-                    break;
-                case ConditionType.UsernameEqual:
-                    policy = new UsernameEquals(Type, Subject, value, SessionPolicies.Count);
-                    break;
-            }
-            SessionPolicies.Add(policy);
-            return policy.GetData();
+            return CreateCondition(PolicyType.Category, category, cond, value).GetData();
+        }
+
+        public string[] CreateProductSimplePolicy(string product, ConditionType cond, string value)
+        {
+            return CreateCondition(PolicyType.Product, product, cond, value).GetData();
+        }
+
+        public string[] CreateStoreSimplePolicy(string store, ConditionType cond, string value)
+        {
+            return CreateCondition(PolicyType.Store, store, cond, value).GetData();
+        }
+
+        public string[] CreateStockItemSimplePolicy(string store, string product, ConditionType cond, string value)
+        {
+            return CreateCondition(PolicyType.StockItem, store + "." + product, cond, value).GetData();
+        }
+
+        public string[] CreateGlobalPolicy(OperatorType op, int id1, int id2)
+        {
+            return CreatePolicy(PolicyType.Global, null, op, id1, id2).GetData();
+        }
+
+        public string[] CreateCategoryPolicy(string category, OperatorType op, int id1, int id2)
+        {
+            return CreatePolicy(PolicyType.Category, category, op, id1, id2).GetData();
+        }
+
+        public string[] CreateProductPolicy(string product, OperatorType op, int id1, int id2)
+        {
+            return CreatePolicy(PolicyType.Product, product, op, id1, id2).GetData();
+        }
+
+        public string[] CreateStorePolicy(string store, OperatorType op, int id1, int id2)
+        {
+            return CreatePolicy(PolicyType.Store, store, op, id1, id2).GetData();
+        }
+
+        public string[] CreateStockItemPolicy(string store, string product, OperatorType op, int id1, int id2)
+        {
+            return CreatePolicy(PolicyType.StockItem, store + "." + product, op, id1, id2).GetData();
         }
 
         public void AddPolicy(int policyId)
@@ -195,24 +198,57 @@ namespace SadnaSrc.PolicyComponent
             return newID;
         }
 
-        public void StartSession(PolicyType type, string subject)
+        private PurchasePolicy CreatePolicy(PolicyType type, string subject, OperatorType op, int id1, int id2)
         {
-            Type = type;
-            Subject = subject;
+            PurchasePolicy policy = null;
+            switch (op)
+            {
+                case OperatorType.AND:
+                    policy = new AndOperator(type, subject, GetPolicy(id1), GetPolicy(id2), SessionPolicies.Count);
+                    break;
+                case OperatorType.OR:
+                    policy = new OrOperator(type, subject, GetPolicy(id1), GetPolicy(id2), SessionPolicies.Count);
+                    break;
+                case OperatorType.NOT:
+                    policy = new NotOperator(type, subject, GetPolicy(id1), null, SessionPolicies.Count);
+                    break;
+            }
+            SessionPolicies.Add(policy);
+            return policy;
         }
 
-        public void EndSession()
+        private PurchasePolicy CreateCondition(PolicyType type, string subject, ConditionType cond, string value)
         {
-            Type = PolicyType.Global;
-            Subject = null;
-            SessionPolicies.Clear();
+            PurchasePolicy policy = null;
+            switch (cond)
+            {
+                case ConditionType.AddressEqual:
+                    policy = new AddressEquals(type, subject, value, SessionPolicies.Count);
+                    break;
+                case ConditionType.PriceGreater:
+                    policy = new PriceGreaterThan(type, subject, value, SessionPolicies.Count);
+                    break;
+                case ConditionType.PriceLesser:
+                    policy = new PriceLessThan(type, subject, value, SessionPolicies.Count);
+                    break;
+                case ConditionType.QuantityGreater:
+                    policy = new QuantityGreaterThan(type, subject, value, SessionPolicies.Count);
+                    break;
+                case ConditionType.QuantityLesser:
+                    policy = new QuantityLessThan(type, subject, value, SessionPolicies.Count);
+                    break;
+                case ConditionType.UsernameEqual:
+                    policy = new UsernameEquals(type, subject, value, SessionPolicies.Count);
+                    break;
+            }
+            SessionPolicies.Add(policy);
+            return policy;
         }
 
         public void CleanSession()
         {
             Policies.Clear();
             SessionPolicies.Clear();
-            //_dataLayer.CleanSession();
         }
     }
 }
