@@ -60,12 +60,11 @@
 									</a>
 								</td>
 								<td>
-									@using (Html.BeginForm("HandleCategoryProduct", "StoreManagement", new { Model.SystemId, Model.State, store = Model.StoreName }))
+									@using (Html.BeginForm("HandleCategoryProduct", "StoreManagement", new { Model.SystemId, Model.State, store = Model.StoreName, product = @item.Name }))
 									{
 										<input type="submit" class="btn btn-primary" value="Category">
 									}
 								</td>
-
 
 						}
 						else

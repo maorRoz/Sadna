@@ -20,12 +20,12 @@
 			</div>
 			<hr />
 			<br />
-			@using (Html.BeginForm("AddingProductCategoryPage", "StoreManagement", new { Model.SystemId, Model.State }))
+			@using (Html.BeginForm("AddingProductCategoryPage", "StoreManagement", new { Model.SystemId, Model.State, Model.Store, Model.Product }))
 			{
 				<input type="submit" class="btn btn-primary" value="Add Category">
 			}
 			<br />
-			@using (Html.BeginForm("RemovingProductCategoryPage", "StoreManagement", new { Model.SystemId, Model.State }))
+			@using (Html.BeginForm("RemovingProductCategoryPage", "StoreManagement", new { Model.SystemId, Model.State , Model.Store, Model.Product}))
 			{
 				<input type="submit" class="btn btn-primary" value="Remove Category">
 			}

@@ -240,7 +240,7 @@ namespace MarketWeb.Controllers
 		{
 			var userService = MarketServer.Users[systemId];
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-			var answer = storeManagementService.AddProductToCategory(product, category);
+			var answer = storeManagementService.AddProductToCategory(category, product);
 			if (answer.Status == Success)
 			{
 				return RedirectToAction("AddingProductCategoryPage", new { systemId, state, message = answer.Answer,store, product, valid = true });
