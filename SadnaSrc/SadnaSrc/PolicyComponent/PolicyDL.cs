@@ -125,7 +125,7 @@ namespace SadnaSrc.PolicyComponent
         }
         private void SavePolicy(Condition policy)
         {
-            string fields = "SystemID,ConditionType,PolicyType,Subject,value,isRoot";
+            string fields = "SystemID,conditionsType,PolicyType,Subject,value,isRoot";
             dbConnection.InsertTable("conditions", fields,
                 policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
         }
@@ -175,24 +175,27 @@ namespace SadnaSrc.PolicyComponent
                     "PolicyType = '" + PurchasePolicy.PrintEnum(type) + "' AND " +
                     " Subject = '" + subject + "' AND isRoot = 'true'"))
             {
+                while (dbReader.Read())
+                {
 
-                int id = dbReader.GetInt32(0);
-                string conditionType = dbReader.GetString(1);
-                string policyType = dbReader.GetString(2);
-                string s = dbReader.GetString(3);
-                string value = dbReader.GetString(4);
-                if (conditionType == "AddressEquals")
-                    return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
-                if (conditionType == "PriceGreaterThan")
-                    return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
-                if (conditionType == "PriceLessThan")
-                    return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
-                if (conditionType == "QuantityGreaterThan")
-                    return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
-                if (conditionType == "QuantityLessThan")
-                    return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
-                if (policyType == "UsernameEquals")
-                    return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                    int id = dbReader.GetInt32(0);
+                    string conditionType = dbReader.GetString(1);
+                    string policyType = dbReader.GetString(2);
+                    string s = dbReader.GetString(3);
+                    string value = dbReader.GetString(4);
+                    if (conditionType == "AddressEquals")
+                        return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                    if (conditionType == "PriceGreaterThan")
+                        return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                    if (conditionType == "PriceLessThan")
+                        return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                    if (conditionType == "QuantityGreaterThan")
+                        return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                    if (conditionType == "QuantityLessThan")
+                        return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                    if (conditionType == "UsernameEquals")
+                        return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), s, value, id);
+                }
             }
 
             return null;
@@ -214,24 +217,32 @@ namespace SadnaSrc.PolicyComponent
                     dbConnection.SelectFromTableWithCondition("conditions", "*",
                         "SystemID = '"+ systemid + "'"))
                 {
-
-                    int id = dbReader.GetInt32(0);
-                    string conditionType = dbReader.GetString(1);
-                    string policyType = dbReader.GetString(2);
-                    string subject = dbReader.GetString(3);
-                    string value = dbReader.GetString(4);
-                    if (conditionType == "AddressEquals")
-                        return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value, id);
-                    if (conditionType == "PriceGreaterThan")
-                        return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value, id);
-                    if (conditionType == "PriceLessThan")
-                        return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value, id);
-                    if (conditionType == "QuantityGreaterThan")
-                        return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value, id);
-                    if (conditionType == "QuantityLessThan")
-                        return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value, id);
-                    if (policyType == "UsernameEquals")
-                        return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value, id);
+                    while (dbReader.Read())
+                    {
+                        int id = dbReader.GetInt32(0);
+                        string conditionType = dbReader.GetString(1);
+                        string policyType = dbReader.GetString(2);
+                        string subject = dbReader.GetString(3);
+                        string value = dbReader.GetString(4);
+                        if (conditionType == "AddressEquals")
+                            return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value,
+                                id);
+                        if (conditionType == "PriceGreaterThan")
+                            return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject,
+                                value, id);
+                        if (conditionType == "PriceLessThan")
+                            return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value,
+                                id);
+                        if (conditionType == "QuantityGreaterThan")
+                            return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject,
+                                value, id);
+                        if (conditionType == "QuantityLessThan")
+                            return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subject,
+                                value, id);
+                        if (conditionType == "UsernameEquals")
+                            return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subject, value,
+                                id);
+                    }
                 }
 
                 return null;

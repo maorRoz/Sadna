@@ -19,7 +19,7 @@ namespace SadnaSrc.PolicyComponent
         {
             return new[]
             {
-                "'" + ID + "'",
+                "" + ID,
                 "'" + GetMyType() + "'",
                 "'" + PrintEnum(Type) + "'",
                 "'" + Subject + "'",

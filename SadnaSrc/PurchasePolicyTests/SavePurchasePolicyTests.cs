@@ -71,6 +71,7 @@ namespace PurchasePolicyTests
         [TestMethod]
         public void SaveUsernameEqualsLeaf2()
         {
+                UsernameEqualsLeaf2.IsRoot = true;
                 datalayer.SavePolicy(UsernameEqualsLeaf2);
                 Assert.AreEqual(UsernameEqualsLeaf2, datalayer.GetPolicy(PolicyType.Global, "bla"));
         }
