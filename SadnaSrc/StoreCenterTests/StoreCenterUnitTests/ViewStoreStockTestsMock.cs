@@ -21,7 +21,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             private Discount discount;
             private StockListItem stock;
             private ViewStoreStockSlave slave;
-            private LinkedList<string> ids;
+            private string[] ids;
 
         [TestInitialize]
             public void BuildStore()
@@ -33,8 +33,10 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 userService = new Mock<IUserShopper>();
                 handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
-                ids = new LinkedList<string>();
-                ids.AddFirst("S-4");
+                ids = new []
+                {
+                    "S-4"
+                };
                 handler.Setup(x => x.GetAllStoreProductsID("S-4")).Returns(ids);
 
 
@@ -59,8 +61,10 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
                 handler.Setup(x => x.GetProductFromStore("X", "item")).Returns(new StockListItem(4, p, null, PurchaseEnum.Immediate, "100"));
                 handler.Setup(x => x.GetStockListItembyProductID("P-4")).Returns(new StockListItem(4, p, null, PurchaseEnum.Immediate, "100"));
-                LinkedList<string> IDS = new LinkedList<string>();
-                IDS.AddLast(p.SystemId);
+                var IDS = new[]
+                {
+                    p.SystemId
+                };
                 handler.Setup(x => x.GetAllStoreProductsID(S.SystemId)).Returns(IDS);
                 ViewStoreStockSlave slave = new ViewStoreStockSlave(userService.Object, handler.Object);
                 slave.ViewStoreStock("X");

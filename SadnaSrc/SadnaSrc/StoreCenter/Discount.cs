@@ -15,7 +15,7 @@ namespace SadnaSrc.StoreCenter
         public DateTime EndDate { get; set; }
         public int DiscountAmount { get; set; }
         public bool Percentages { get; set; }
-        private static int globalDiscountCode = FindMaxDiscountId();
+        private static int globalDiscountCode = -1;
         //assume that the startDate < EndDate
 
         public Discount(DiscountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
@@ -116,24 +116,12 @@ namespace SadnaSrc.StoreCenter
                 Percentages
             };
         }
-        private static int FindMaxDiscountId()
-        {
-            StoreDL DL = StoreDL.Instance;
-            LinkedList<string> list = DL.GetAllDiscountIDs();
-            int max = -5;
-            int temp = 0;
-            foreach (string s in list)
-            {
-                temp = Int32.Parse(s.Substring(1));
-                if (temp > max)
-                {
-                    max = temp;
-                }
-            }
-            return max;
-        }
         private static string GetDiscountCode()
         {
+            if (globalDiscountCode == -1)
+            {
+                globalDiscountCode = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllDiscountIDs());
+            }
             globalDiscountCode++;
             return "D" + globalDiscountCode;
         }

@@ -12,7 +12,7 @@ namespace SadnaSrc.StoreCenter
         public string Name { get; set; }
         public double BasePrice { get; set; }
         public string Description { get; set; }
-        private static int globalProductID = FindMaxProductId();
+        private static int globalProductID = -1;
 
         public Product(string _name, double _price, string _description)
         {
@@ -83,24 +83,12 @@ namespace SadnaSrc.StoreCenter
         
         private static string GetProductID()
         {
+            if (globalProductID == -1)
+            {
+                globalProductID = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllProductIDs());
+            }
             globalProductID++;
             return "P" + globalProductID;
-        }
-
-        private static int FindMaxProductId()
-        {
-            StoreDL DL = StoreDL.Instance;
-            LinkedList<string> list = DL.GetAllProductIDs();
-            int max = -5;
-            foreach (string s in list)
-            {
-                var temp = Int32.Parse(s.Substring(1));
-                if (temp > max)
-                {
-                    max = temp;
-                }
-            }
-            return max;
         }
 
     }

@@ -27,7 +27,7 @@ namespace SadnaSrc.StoreCenter
         LotterySaleManagmentTicket GetLotteryByProductID(string productID);
         void EditLotteryInDatabase(LotterySaleManagmentTicket lotteryManagment);
         void AddLottery(LotterySaleManagmentTicket lotteryManagment);
-        LinkedList<string> GetAllStoreProductsID(string systemID);
+        string[] GetAllStoreProductsID(string systemID);
         Product GetProductID(string iD);
         void RemoveLottery(LotterySaleManagmentTicket lotteryManagment);
         void RemoveStockListItem(StockListItem stockListItem);
@@ -44,7 +44,7 @@ namespace SadnaSrc.StoreCenter
         Product GetProductByNameFromStore(string storeName, string ProductName);
         StockListItem GetProductFromStore(string store, string productName);
         LotterySaleManagmentTicket GetLotteryByProductNameAndStore(string storeName, string productName);
-        LinkedList<string> GetAllCategorysIDs();
+        string[] GetAllCategorysIDs();
         Category GetCategoryByName(string categoryName);
         LinkedList<Product> GetAllCategoryProducts(string categoryid);
         void AddProductToCategory(string CategoryID, string ProductID);

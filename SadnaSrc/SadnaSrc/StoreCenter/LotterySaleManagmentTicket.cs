@@ -18,7 +18,7 @@ namespace SadnaSrc.StoreCenter
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
         public bool IsActive { get; set; }
-        private static int globalLotteryID = FindMaxLotteryId;
+        private static int globalLotteryID = -1;
 
         public LotterySaleManagmentTicket(string _storeName, Product _original, DateTime _StartDate, DateTime _EndDate)
         {
@@ -71,19 +71,11 @@ namespace SadnaSrc.StoreCenter
         }
         public LotteryTicket Dolottery()
         {
-            if (TotalMoneyPayed == ProductNormalPrice)
-            {
-                return InformAllWinner(RandomLotteryNumber());
-            }
-            return null;
+            return TotalMoneyPayed == ProductNormalPrice ? InformAllWinner(RandomLotteryNumber()) : null;
         }
         public LotteryTicket Dolottery(int numberForTests)
         {
-            if (TotalMoneyPayed == ProductNormalPrice)
-            {
-                return InformAllWinner(numberForTests);
-            }
-            return null;
+            return TotalMoneyPayed == ProductNormalPrice ? InformAllWinner(numberForTests) : null;
         }
         private int RandomLotteryNumber()
         {
@@ -151,10 +143,8 @@ namespace SadnaSrc.StoreCenter
         }
         internal bool updateLottery(double moneyPayed, int userID)
         {
-            LotteryTicket lotteryTicket = PurchaseALotteryTicket(moneyPayed, userID);
-            if (TotalMoneyPayed == ProductNormalPrice)
-                return true;
-            return false;
+            PurchaseALotteryTicket(moneyPayed, userID);
+            return TotalMoneyPayed == ProductNormalPrice;
         }
 
         internal int getWinnerID(int cheatCode)
@@ -206,26 +196,12 @@ namespace SadnaSrc.StoreCenter
         }
         private static string GetLottyerID()
         {
+            if (globalLotteryID == -1)
+            {
+                globalLotteryID = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllLotteryManagmentIDs());
+            }
             globalLotteryID++;
             return "L" + globalLotteryID;
-        }
-        private static int FindMaxLotteryId
-        {
-            get
-            {
-                StoreDL DL = StoreDL.Instance;
-                LinkedList<string> list = DL.GetAllLotteryManagmentIDs();
-                var max = -5;
-                foreach (string s in list)
-                {
-                    var temp = int.Parse(s.Substring(1));
-                    if (temp > max)
-                    {
-                        max = temp;
-                    }
-                }
-                return max;
-            }
         }
     }
 }

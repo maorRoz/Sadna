@@ -18,7 +18,7 @@ namespace SadnaSrc.StoreCenter
         public string Name { get; set; }
         public string Address { private get; set; }
 
-        private static int storeIdCounter = FindMaxStoreId();
+        private static int storeIdCounter = -1;
 
         public Store(string name, string address)
         {
@@ -112,23 +112,12 @@ namespace SadnaSrc.StoreCenter
                 GetStringFromActive()
             };
         }
-        private static int FindMaxStoreId()
-        {
-            StoreDL DL = StoreDL.Instance;
-            LinkedList<string> list = DL.GetAllStoresIDs();
-            int max = -5;
-            foreach (string s in list)
-            {
-                var temp = Int32.Parse(s.Substring(1));
-                if (temp > max)
-                {
-                    max = temp;
-                }
-            }
-            return max;
-        }
         private static string GetNextStoreId()
         {
+            if (storeIdCounter == -1)
+            {
+                storeIdCounter = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllStoresIDs());
+            }
             storeIdCounter++;
             return "S" + storeIdCounter;
         }

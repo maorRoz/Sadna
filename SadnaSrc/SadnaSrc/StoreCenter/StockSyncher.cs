@@ -129,5 +129,19 @@ namespace SadnaSrc.StoreCenter
             if (store == null)
             { throw new StoreException(StoreEnum.StoreNotExists, "store not exists"); }
         }
+
+        public static int GetMaxEntityID(string[] existsIds)
+        {
+            var max = 0;
+            foreach (var id in existsIds)
+            {
+                var temp = int.Parse(id.Substring(1));
+                if (temp > max)
+                {
+                    max = temp;
+                }
+            }
+            return max;
+        }
     }
 }

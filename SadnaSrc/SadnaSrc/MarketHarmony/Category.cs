@@ -8,8 +8,8 @@ namespace SadnaSrc.MarketHarmony
     {
         public readonly string SystemId;
         string Name { get; set; }
-        public LinkedList<Product> products { get; set; }
-        private static int globalCategoryID = FindMaxCategoryID();
+        public LinkedList<Product> products { get;}
+        private static int globalCategoryID = -1;
 
         public Category (string categoryname)
         {
@@ -46,25 +46,12 @@ namespace SadnaSrc.MarketHarmony
         {
             products.AddLast(product);
         }
-        private static int FindMaxCategoryID()
-        {
-            StoreDL DL = StoreDL.Instance;
-            LinkedList<string> list = DL.GetAllCategorysIDs();
-            int max = -5;
-            foreach (string s in list)
-            {
-                var temp = Int32.Parse(s.Substring(1));
-                if (temp > max)
-                {
-                    max = temp;
-                }
-            }
-            if (max < 0) return 1;
-            return max;
-        }
         private string getNextCategoryID()
         {
-
+            if (globalCategoryID == -1)
+            {
+                globalCategoryID = StockSyncher.GetMaxEntityID(StoreDL.Instance.GetAllCategorysIDs());
+            }
             globalCategoryID++;
             return "C" + globalCategoryID;
         }
