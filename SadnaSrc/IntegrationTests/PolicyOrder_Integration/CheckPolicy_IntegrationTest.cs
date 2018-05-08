@@ -45,7 +45,7 @@ namespace IntegrationTests.PolicyOrder_Integration
             marketSession = MarketYard.Instance;
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
-            slave = new PurchaseItemSlave(userBuyerMocker.Object, new StoresSyncherHarmony(), OrderDL.Instance, publisherMock.Object);
+            slave = new PurchaseItemSlave(userBuyerMocker.Object, new StoresSyncherHarmony(), OrderDL.Instance, publisherMock.Object, marketSession.GetPolicyChecker());
             InitPolicies();
         }
 
