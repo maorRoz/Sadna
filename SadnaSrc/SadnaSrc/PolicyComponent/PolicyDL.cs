@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
-using SadnaSrc.Main;
+﻿using SadnaSrc.Main;
+
+using System;
+using System.Collections.Generic;
+using System.Data.SQLite;
+
 
 namespace SadnaSrc.PolicyComponent
 {
@@ -9,11 +13,11 @@ namespace SadnaSrc.PolicyComponent
 
         public static PolicyDL Instance => _instance ?? (_instance = new PolicyDL());
 
-        private readonly MarketDB _dbConnection;
+        private MarketDB dbConnection;
 
         private PolicyDL()
         {
-            _dbConnection = MarketDB.Instance;
+            dbConnection = MarketDB.Instance;
         }
 
         public void SavePolicy(PurchasePolicy policy)
@@ -21,17 +25,100 @@ namespace SadnaSrc.PolicyComponent
             policy.IsRoot = true;
             Save_NonRoot_Policy(policy);
         }
+        public void RemovePolicy(PurchasePolicy policy)
+        {
+            if (policy != null)
+            {
+                if (policy is Operator)
+                    RemovePolicy((Operator) policy);
+                else
+                    RemovePolicy((Condition) policy);
+            }
+        }
+        public PurchasePolicy GetPolicy(PolicyType type, string subject)
+        {
+            PurchasePolicy policy = SelectPolicyFromOperatorTable(type, subject);
+            if (policy == null)
+                policy = SelectPolicyFromConditionTable(type, subject);
+            policy.IsRoot = true;
+            return policy;
+        }
+        public List<PurchasePolicy> GetAllPolicies()
+        {
+            List<int> listOfIDs = new List<int>();
+            List<PurchasePolicy> result = new List<PurchasePolicy>();
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("Operator", "SystemID", "isRoot = 'true'"))
+            {
+                while (dbReader.Read())
+                {
+                    listOfIDs.Add(dbReader.GetInt32(0));
+                }
+            }
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("conditions", "SystemID", "isRoot = 'true'"))
+            {
+                while (dbReader.Read())
+                {
+                    listOfIDs.Add(dbReader.GetInt32(0));
+                }
+            }
+
+            foreach (int idNumber in listOfIDs)
+            {
+                PurchasePolicy policy = GetPolicyById(idNumber);
+                policy.IsRoot = true;
+                result.Add(policy);
+            }
+            return result;
+        }
+
+        public List<PurchasePolicy> GetPoliciesOfType(PolicyType type)
+        {
+
+            List<int> listOfIDs = new List<int>();
+            List<PurchasePolicy> result = new List<PurchasePolicy>();
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("Operator", "SystemID", "PolicyType = '" +
+            PurchasePolicy.PrintEnum(type) + "' AND isRoot = 'true'"))
+            {
+                while (dbReader.Read())
+                {
+                    listOfIDs.Add(dbReader.GetInt32(0));
+                }
+            }
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("conditions", "SystemID", "PolicyType = '" +
+            PurchasePolicy.PrintEnum(type) + "' AND isRoot = 'true'"))
+            {
+                while (dbReader.Read())
+                {
+                    listOfIDs.Add(dbReader.GetInt32(0));
+                }
+            }
+
+            foreach (int idNumber in listOfIDs)
+            {
+                PurchasePolicy policy = GetPolicyById(idNumber);
+                policy.IsRoot = true;
+                result.Add(policy);
+            }
+            return result;
+        }
         private void Save_NonRoot_Policy(PurchasePolicy policy)
         {
-            if (policy is Operator)
-                SavePolicy((Operator)policy);
-            else
-                SavePolicy((Condition)policy);
+            if (policy != null)
+            {
+                if (policy is Operator)
+                    SavePolicy((Operator) policy);
+                else
+                    SavePolicy((Condition) policy);
+            }
         }
         private void SavePolicy(Operator policy)
         {
             string fields = "SystemID,ConditionType,PolicyType,Subject,COND1ID,COND2ID,isRoot";
-            _dbConnection.InsertTable("Operator", fields,
+            dbConnection.InsertTable("Operator", fields,
                 policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
                 Save_NonRoot_Policy(policy._cond1);
                 Save_NonRoot_Policy(policy._cond2);
@@ -39,41 +126,26 @@ namespace SadnaSrc.PolicyComponent
         private void SavePolicy(Condition policy)
         {
             string fields = "SystemID,ConditionType,PolicyType,Subject,value,isRoot";
-            _dbConnection.InsertTable("Condition", fields,
+            dbConnection.InsertTable("conditions", fields,
                 policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
         }
 
-        public void RemovePolicy(PurchasePolicy policy)
-        {
-            if (policy is Operator)
-                RemovePolicy((Operator)policy);
-            else
-                RemovePolicy((Condition)policy);
-        }
+        
         private void RemovePolicy(Operator policy)
         {
-            _dbConnection.DeleteFromTable("Operator", "SystemID = '" + policy.ID + "'");
+            dbConnection.DeleteFromTable("Operator", "SystemID = '" + policy.ID + "'");
             RemovePolicy(policy._cond1);
             RemovePolicy(policy._cond2);
         }
         private void RemovePolicy(Condition policy)
         {
-            _dbConnection.DeleteFromTable("Condition", "SystemID = '" + policy.ID + "'");
+            dbConnection.DeleteFromTable("conditions", "SystemID = '" + policy.ID + "'");
         }
         
-        public PurchasePolicy GetPolicy(PolicyType type, string subject)
-        {
-            PurchasePolicy policy =  SelectPolicyFromOperatorTable(type, subject);
-            if (policy == null)
-                policy = SelectPolicyFromConditionTable(type, subject);
-            policy.IsRoot = true;
-            return policy;
-        }
-
         private PurchasePolicy SelectPolicyFromOperatorTable(PolicyType type, string subject)
         {
             using (var dbReader =
-                _dbConnection.SelectFromTableWithCondition("Operator", "*", "PolicyType = '" + PurchasePolicy.PrintEnum(type) + "' AND " +
+                dbConnection.SelectFromTableWithCondition("Operator", "*", "PolicyType = '" + PurchasePolicy.PrintEnum(type) + "' AND " +
                                                                                      " Subject = '" + subject + "' AND isRoot = 'true'"))
             {
                 while (dbReader.Read())
@@ -89,7 +161,7 @@ namespace SadnaSrc.PolicyComponent
                     if (operatorType == "OrOperator")
                         return new OrOperator(PurchasePolicy.GetEnumFromStringValue(policyType), s, GetPolicyById(cond1Id), GetPolicyById(cond2Id), id);
                     if (operatorType == "NotOperator")
-                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), s, GetPolicyById(cond1Id), GetPolicyById(cond2Id), id);
+                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), s, GetPolicyById(cond1Id),null, id);
                 }
             }
 
@@ -99,7 +171,7 @@ namespace SadnaSrc.PolicyComponent
         private PurchasePolicy SelectPolicyFromConditionTable(PolicyType type, string subject)
         {
             using (var dbReader =
-                _dbConnection.SelectFromTableWithCondition("Condition", "*",
+                dbConnection.SelectFromTableWithCondition("conditions", "*",
                     "PolicyType = '" + PurchasePolicy.PrintEnum(type) + "' AND " +
                     " Subject = '" + subject + "' AND isRoot = 'true'"))
             {
@@ -139,7 +211,7 @@ namespace SadnaSrc.PolicyComponent
         {
             {
                 using (var dbReader =
-                    _dbConnection.SelectFromTableWithCondition("Condition", "*",
+                    dbConnection.SelectFromTableWithCondition("conditions", "*",
                         "SystemID = '"+ systemid + "'"))
                 {
 
@@ -170,7 +242,7 @@ namespace SadnaSrc.PolicyComponent
         {
 
             using (var dbReader =
-                _dbConnection.SelectFromTableWithCondition("Operator", "*", "SystemID = '" + systemid + "'"))
+                dbConnection.SelectFromTableWithCondition("Operator", "*", "SystemID = '" + systemid + "'"))
             {
                 while (dbReader.Read())
                 {
@@ -185,74 +257,12 @@ namespace SadnaSrc.PolicyComponent
                     if (operatorType == "OrOperator")
                         return new OrOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subject, GetPolicyById(cond1Id), GetPolicyById(cond2Id), id);
                     if (operatorType == "NotOperator")
-                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subject, GetPolicyById(cond1Id), GetPolicyById(cond2Id), id);
+                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subject, GetPolicyById(cond1Id), null, id);
                 }
             }
             return null;
         }
 
-        public List<PurchasePolicy> GetAllPolicies()
-        {
-            List<int> listOfIDs = new List<int>();
-            List<PurchasePolicy> result = new List<PurchasePolicy>();
-            using (var dbReader =
-                _dbConnection.SelectFromTableWithCondition("Operator", "SystemID", "isRoot = 'true'"))
-            {
-                while (dbReader.Read())
-                {
-                    listOfIDs.Add(dbReader.GetInt32(0));
-                }
-            }
-            using (var dbReader =
-                _dbConnection.SelectFromTableWithCondition("Condition", "SystemID", "isRoot = 'true'"))
-            {
-                while (dbReader.Read())
-                {
-                    listOfIDs.Add(dbReader.GetInt32(0));
-                }
-            }
-
-            foreach (int idNumber in listOfIDs)
-            {
-                PurchasePolicy policy = GetPolicyById(idNumber);
-                policy.IsRoot = true;
-                result.Add(policy);
-            }
-            return result;
-        }
-
-        public List<PurchasePolicy> GetPoliciesOfType(PolicyType type)
-        {
-
-            List<int> listOfIDs = new List<int>();
-            List<PurchasePolicy> result = new List<PurchasePolicy>();
-            using (var dbReader =
-                _dbConnection.SelectFromTableWithCondition("Operator", "SystemID", "PolicyType = '"+
-            PurchasePolicy.PrintEnum(type)+ "' AND isRoot = 'true'"))
-            {
-                while (dbReader.Read())
-                {
-                    listOfIDs.Add(dbReader.GetInt32(0));
-                }
-            }
-            using (var dbReader =
-                _dbConnection.SelectFromTableWithCondition("Condition", "SystemID", "PolicyType = '"+
-            PurchasePolicy.PrintEnum(type) + "' AND isRoot = 'true'"))
-            {
-                while (dbReader.Read())
-                {
-                    listOfIDs.Add(dbReader.GetInt32(0));
-                }
-            }
-
-            foreach (int idNumber in listOfIDs)
-            {
-                PurchasePolicy policy = GetPolicyById(idNumber);
-                policy.IsRoot = true;
-                result.Add(policy);
-            }
-            return result;
-        }
     }
 }
 

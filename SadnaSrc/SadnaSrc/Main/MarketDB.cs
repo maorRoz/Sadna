@@ -278,7 +278,7 @@ namespace SadnaSrc.Main
                 "Notifications",
                 "Category",
                 "CategoryProductConnection",
-                "Condition",
+                "conditions",
                 "Operator"
             };
 
@@ -505,9 +505,9 @@ namespace SadnaSrc.Main
 
         private static string CreateConditionTable()
         {
-            return @"Create TABLE IF NOT EXISTS [Condition] (
+            return @"Create TABLE IF NOT EXISTS [conditions] (
                                     [SystemID]               INTEGER,
-                                    [ConditionType]          TEXT,
+                                    [conditionsType]          TEXT,
                                     [PolicyType]             TEXT,
                                     [Subject]                TEXT,
                                     [value]                  TEXT,
