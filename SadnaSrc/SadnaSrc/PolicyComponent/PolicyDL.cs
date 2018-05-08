@@ -172,7 +172,7 @@ namespace SadnaSrc.PolicyComponent
                     if (operatorType == "OrOperator")
                         return new OrOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
                     if (operatorType == "NotOperator")
-                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), s, cond1OptionalNull, cond2OptionalNull, id);
+                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
                 }
             }
 
@@ -248,22 +248,22 @@ namespace SadnaSrc.PolicyComponent
                         if (value != "'NULL'")
                             valueOptionalNull = value;
                         if (conditionType == "AddressEquals")
-                            return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, subjectOptionalNull,
+                            return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull,
                                 id);
                         if (conditionType == "PriceGreaterThan")
                             return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull,
-                                subjectOptionalNull, id);
+                                valueOptionalNull, id);
                         if (conditionType == "PriceLessThan")
-                            return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, subjectOptionalNull,
+                            return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull,
                                 id);
                         if (conditionType == "QuantityGreaterThan")
                             return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull,
-                                subjectOptionalNull, id);
+                                valueOptionalNull, id);
                         if (conditionType == "QuantityLessThan")
                             return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull,
-                                subjectOptionalNull, id);
+                                valueOptionalNull, id);
                         if (conditionType == "UsernameEquals")
-                            return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, subjectOptionalNull,
+                            return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull,
                                 id);
                     }
                 }

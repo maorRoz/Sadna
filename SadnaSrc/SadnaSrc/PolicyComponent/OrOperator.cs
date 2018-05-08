@@ -37,8 +37,17 @@ namespace SadnaSrc.PolicyComponent
         }
         private bool Equals(OrOperator obj)
         {
-            return obj.ID.Equals(ID) && obj.Subject.Equals(Subject)
-                                     && obj.Type.Equals(Type) && obj._cond1.Equals(_cond1) && obj._cond2.Equals(_cond2);
+            bool answer = true;
+            if (_cond1 == null)
+                answer = answer && (obj._cond1 == null);
+            if (Subject == null)
+                answer = answer && (obj.Subject == null);
+            if (_cond1 != null)
+                answer = answer && (_cond1.Equals(obj._cond1));
+            if (Subject != null)
+                answer = answer && (Subject.Equals(obj.Subject));
+            answer = answer && obj.ID.Equals(ID) && obj.Type.Equals(Type);
+            return answer;
         }
     }
 }
