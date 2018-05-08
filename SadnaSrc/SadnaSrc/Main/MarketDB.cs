@@ -506,18 +506,24 @@ namespace SadnaSrc.Main
         private static string CreateConditionTable()
         {
             return @"Create TABLE IF NOT EXISTS [Condition] (
-                                    [CategoryID]    TEXT,
-                                    [ProductID]          TEXT,
-                                    [value]             TEXT,
-                                    PRIMARY KEY([CategoryID], [ProductID])
+                                    [SystemID]               INTEGER,
+                                    [ConditionType]          INTEGER,
+                                    [PolicyType]             TEXT,
+                                    [Subject]                TEXT,
+                                    [value]                  TEXT,
+                                    PRIMARY KEY([SystemID])
                                     )";
         }
         private static string CreateOperatorTable()
         {
             return @"Create TABLE IF NOT EXISTS [Operator] (
-                                    [CategoryID]    TEXT,
-                                    [ProductID]          TEXT,
-                                    PRIMARY KEY([CategoryID], [ProductID])
+                                    [SystemID]               INTEGER,
+                                    [OperatorType]           INTEGER,
+                                    [PolicyType]             TEXT,
+                                    [Subject]                TEXT,
+                                    [COND1ID]                INTEGER,
+                                    [COND2ID]                INTEGER,
+                                    PRIMARY KEY([SystemID])
                                     )";
         }
         public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)

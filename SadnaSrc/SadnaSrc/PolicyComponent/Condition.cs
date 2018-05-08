@@ -14,5 +14,29 @@ namespace SadnaSrc.PolicyComponent
         {
             _value = value;
         }
+
+        public string[] GetPolicyStringValues()
+        {
+            return new[]
+            {
+                "'" + ID + "'",
+                "'" + GetMyType() + "'",
+                "'" + PrintEnum(Type) + "'",
+                "'" + Subject + "'",
+                "'" + _value + "'"
+            };
+        }
+
+        public object[] GetPolicyValuesArray()
+        {
+            return new object[]
+            {
+                ID,
+                GetMyType(),
+                PrintEnum(Type),
+                Subject,
+                _value,
+            };
+        }
     }
 }

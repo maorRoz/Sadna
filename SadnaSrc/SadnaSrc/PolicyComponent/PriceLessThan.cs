@@ -21,5 +21,9 @@ namespace SadnaSrc.PolicyComponent
         {
             return new[] { "" + ID, "Price", "<=", _value };
         }
+        public override string GetMyType()
+        {
+            return "PriceLessThan";
+        }
     }
 }

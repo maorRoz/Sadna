@@ -21,5 +21,9 @@ namespace SadnaSrc.PolicyComponent
         {
             return new[] {""+ID, "Quantity", "<=", _value };
         }
+        public override string GetMyType()
+        {
+            return "QuantityLessThan";
+        }
     }
 }

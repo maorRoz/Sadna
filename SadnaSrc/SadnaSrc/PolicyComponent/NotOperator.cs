@@ -21,6 +21,10 @@ namespace SadnaSrc.PolicyComponent
         {
             return new[] { "" + ID, "NOT", "" + _cond1.ID };
         }
+        public override string GetMyType()
+        {
+            return "NotOperator";
+        }
     }
 
 

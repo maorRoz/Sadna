@@ -21,5 +21,10 @@ namespace SadnaSrc.PolicyComponent
         {
             return new[] { "" + ID, "Address", "=", _value };
         }
+
+        public override string GetMyType()
+        {
+            return "AddressEquals";
+        }
     }
 }

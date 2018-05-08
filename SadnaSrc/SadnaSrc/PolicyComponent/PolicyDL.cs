@@ -3,22 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.PolicyComponent
 {
     public class PolicyDL : IPolicyDL
     {
+        private static PolicyDL _instance;
+
+        public static PolicyDL Instance => _instance ?? (_instance = new PolicyDL());
+
+        private MarketDB dbConnection;
+
+        private PolicyDL()
+        {
+            dbConnection = MarketDB.Instance;
+        }
+
         public void SavePolicy(Operator policy)
         {
-            throw new NotImplementedException();
+
+
+            string fields = "SystemID,ConditionType,PolicyType,Subject,COND1ID,COND2ID";
+            dbConnection.InsertTable("Operator", fields,
+                policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
         }
         public void SavePolicy(Condition policy)
         {
-            throw new NotImplementedException();
-        }
-        public void SavePolicy(Condition policy)
-        {
-            throw new NotImplementedException();
+            string fields = "SystemID,ConditionType,PolicyType,Subject,value";
+            dbConnection.InsertTable("Condition", fields,
+                policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
         }
 
         public void RemovePolicy(PurchasePolicy policy)

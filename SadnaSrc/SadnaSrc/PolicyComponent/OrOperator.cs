@@ -22,5 +22,10 @@ namespace SadnaSrc.PolicyComponent
         {
             return new[] { "" + ID, "OR", "" + _cond1.ID, "" + _cond2.ID };
         }
+
+        public override string GetMyType()
+        {
+            return "OrOperator";
+        }
     }
 }
