@@ -139,7 +139,7 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer RemoveProductFromCategory(string categoryName, string productName)
         {
             RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave(_storeName, _storeManager, storeDL);
-            slave.RemoveProductFromCategory(productName, categoryName);
+            slave.RemoveProductFromCategory(categoryName,productName);
             return slave.Answer;
         }
     }
