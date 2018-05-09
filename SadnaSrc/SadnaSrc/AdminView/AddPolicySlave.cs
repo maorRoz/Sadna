@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.PolicyComponent;
@@ -84,7 +85,7 @@ namespace SadnaSrc.AdminView
                     return;
                 }
             }
-            if (type == "Category")
+            if (type == "Category" && !subject.IsNullOrEmpty())
             {
                 if (IsCondtion(op))
                 {
@@ -99,7 +100,7 @@ namespace SadnaSrc.AdminView
                     return;
                 }
             }
-            if (type == "Product")
+            if (type == "Product" && !subject.IsNullOrEmpty())
             {
                 if (IsCondtion(op))
                 {
