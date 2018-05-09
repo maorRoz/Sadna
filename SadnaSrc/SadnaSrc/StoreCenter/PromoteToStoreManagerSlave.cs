@@ -21,6 +21,8 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has been authorized. granting " +
                                              someoneToPromoteName + " manager options in Store" + _storeName + "...");
+                string [] allUserNames = DataLayerInstance.GetAllUserNames();
+                
                 _storeManager.Promote(someoneToPromoteName, actions);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " granted " +
                                              someoneToPromoteName + " manager options in Store" + _storeName + "successfully");

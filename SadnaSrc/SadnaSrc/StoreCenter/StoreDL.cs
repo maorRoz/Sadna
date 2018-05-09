@@ -69,6 +69,19 @@ namespace SadnaSrc.StoreCenter
         {
             dbConnection.DeleteFromTable("CategoryProductConnection", "ProductID = '" + productid + "' AND CategoryID = '"+ categoryid + "'");
         }
+
+        public string[] GetAllUserNames()
+        {
+            LinkedList<string> resultList = new LinkedList<string>();
+            using (var dbReader = dbConnection.SelectFromTable("User", "Name"))
+                while (dbReader.Read())
+                {
+                    resultList.AddLast(dbReader.GetString(0));
+                }
+
+            return resultList.ToArray();
+        }
+
         public string[] GetAllLotteryTicketIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();

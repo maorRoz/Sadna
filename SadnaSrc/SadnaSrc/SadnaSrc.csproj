@@ -117,6 +117,7 @@
     <Compile Include="MarketHarmony\IUserSeller.cs" />
     <Compile Include="MarketHarmony\OrderSyncherHarmony.cs" />
     <Compile Include="MarketHarmony\StoresSyncherHarmony.cs" />
+    <Compile Include="MarketHarmony\String_Compare.cs" />
     <Compile Include="MarketHarmony\UserAdminHarmony.cs" />
     <Compile Include="MarketHarmony\UserBuyerHarmony.cs" />
     <Compile Include="MarketHarmony\UserSellerHarmony.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="StoreCenter\ChangeProductPurchaseWayToImmediateSlave.cs" />
     <Compile Include="StoreCenter\ChangeProductPurchaseWayToLotterySlave.cs" />
     <Compile Include="StoreCenter\CloseStoreSlave.cs" />
+    <Compile Include="StoreCenter\CreateStoreSimplePolicySlave.cs" />
     <Compile Include="StoreCenter\EditDiscountSlave.cs" />
     <Compile Include="StoreCenter\EditProductSlave.cs" />
     <Compile Include="StoreCenter\EnumStringConverter.cs" />
