@@ -119,7 +119,7 @@ namespace MarketWeb.Controllers
 		    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = false });
 		}
 
-	    public IActionResult SavePolicy(int systemId, string state, string message)
+	    public IActionResult SavePolicy(int systemId, string state)
 	    {
 		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
 		    var answer = adminService.SavePolicy();

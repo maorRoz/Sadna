@@ -134,6 +134,9 @@
 					<br/>
 					<input type="submit" class="btn btn-primary" value="Create">
 
+				}
+		@using (Html.BeginForm("CreatePolicy", "Admin", new {Model.SystemId, Model.State}))
+		{
 
 					<hr/>
 					<br/>
@@ -164,53 +167,57 @@
 								</select>
 							</td>
 						</tr>
-						<tr>
+					<tr>
+					<td>
+						<select name="type">
 							@foreach (var item in Model.Conditions)
-							{
-								<td>
-									<select name="type">
-
-										<option value="@item">@item</option>
-
-									</select>
-									<br/>
-								</td>
+							{	
+									<option value="@item">@item</option>
 
 							}
-
-							@foreach (var item in Model.Operators)
-							{
-								<td>
-									<select name="type">
-
-										<option value="@item">@item</option>
-
 									</select>
-									<br />
-								</td>
-							}
+								<br/>
+							</td>
 
-							@foreach (var item in Model.Conditions)
-							{
-								<td>
-									<select name="type">
+						<td>
+							<select name="type">
+								@foreach (var item in Model.Operators)
+								{
 
-										<option value="@item">@item</option>
+									<option value="@item">@item</option>
 
-									</select>
-									<br />
-								</td>
-								
-							}
+								}
+								<br/>
+							</select>
+							
+						</td>
+						<td>
+							<select name="type">
+								@foreach (var item in Model.Conditions)
+								{
 
+
+
+									<option value="@item">@item</option>
+
+
+								}
+							</select>
+							<br />
+						</td>
 						</tr>
 						<tr>
 							<td>
+								<br />
 								<input type="submit" class="btn btn-primary" value="Create">
 								<br/>
 							</td>
 							<td>
-								<input type="submit" class="btn btn-primary" value="Save">
+								<br />
+								@using (Html.BeginForm("SavePolicy", "Admin", new {Model.SystemId, Model.State}))
+								{
+									<input type="submit" class="btn btn-primary" value="Save">
+								}
 								<br/>
 							</td>
 						</tr>
@@ -218,7 +225,7 @@
 					</table>
 					
 				}
-
+		
 		</div>
 
 	</div>
