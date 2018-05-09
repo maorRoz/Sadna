@@ -36,11 +36,11 @@ namespace SadnaSrc.UserSpot
 					}
 				}
 
-				if (isStoreOwner)
+				/*if (isStoreOwner)
 				{
 					string[] res = { "ManageProducts", "DeclareDiscountPolicy", "PromoteStoreAdmin", "ViewPurchaseHistory","PurchasePolicy"};
 					stringPolicies = res;
-				}
+				}*/
 			
 				if (!_user.IsSystemAdmin())
 				{

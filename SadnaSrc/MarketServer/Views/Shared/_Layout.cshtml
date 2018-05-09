@@ -47,8 +47,6 @@
                             <li><a asp-area="" asp-controller="Admin" asp-action="RemoveUserView" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Remove Users</a></li>
 	                        <li><a asp-area="" asp-controller="Admin" asp-action="AdminSelectView" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">View History</a></li>
 	                        <li><a asp-area="" asp-controller="Admin" asp-action="HandlingCategoryView" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Handle Category</a></li>
-	                        <li><a asp-area="" asp-controller="Admin" asp-action="PurchasePolicy" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Handle Purchase Policy</a></li>
-
 
                         }
                         var userService = MarketServer.Users[Model.SystemId];

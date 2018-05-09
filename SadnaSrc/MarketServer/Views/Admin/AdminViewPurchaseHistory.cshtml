@@ -1,4 +1,8 @@
-﻿@{
+﻿<br />
+<br />
+<br />
+
+@{
 	ViewData["Title"] = "MarketYard View Purchase History";
 }
 
@@ -23,15 +27,15 @@
 				</thead>
 				@foreach (var item in Model.Items)
 				{
-				<tr>
-					<td>@item.User</td>
-					<td>@item.Product</td>
-					<td>@item.Store</td>
-					<td>@item.Sale</td>
-					<td>@item.Quantity</td>
-					<td>@item.Price</td>
-					<td>@item.Date</td>
-				</tr>
+					<tr>
+						<td>@item.User</td>
+						<td>@item.Product</td>
+						<td>@item.Store</td>
+						<td>@item.Sale</td>
+						<td>@item.Quantity</td>
+						<td>@item.Price</td>
+						<td>@item.Date</td>
+					</tr>
 				}
 			</table>
 			<hr />
