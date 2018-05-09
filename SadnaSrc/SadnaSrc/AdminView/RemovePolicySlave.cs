@@ -51,8 +51,7 @@ namespace SadnaSrc.AdminView
         private void CheckInput(string type, string subject)
         {
             if (type == "Global" && subject == null) return;
-            if (type == "Category" && !subject.IsNullOrEmpty()) return;
-            if (type == "Product" && !subject.IsNullOrEmpty()) return;
+            if ((type == "Category" || type == "Product") && !subject.IsNullOrEmpty()) return;
             MarketLog.Log("AdminView", " Removing policy failed, invalid data.");
             throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
 

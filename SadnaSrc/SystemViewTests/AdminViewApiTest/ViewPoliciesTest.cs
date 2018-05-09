@@ -13,12 +13,16 @@ namespace SystemViewTests.AdminViewApiTest
     [TestClass]
     public class ViewPoliciesTest
     {
+        private Mock<IMarketDB> marketDbMocker;
         private Mock<IUserAdmin> admin;
         private Mock<IGlobalPolicyManager> manager;
 
         [TestInitialize]
         public void MarketBuilder()
         {
+            marketDbMocker = new Mock<IMarketDB>();
+            MarketException.SetDB(marketDbMocker.Object);
+            MarketLog.SetDB(marketDbMocker.Object);
             admin = new Mock<IUserAdmin>();
             manager = new Mock<IGlobalPolicyManager>();
         }
@@ -43,13 +47,6 @@ namespace SystemViewTests.AdminViewApiTest
             Assert.AreEqual((int)ViewPolicyStatus.Success, slave.Answer.Status);
 
         }
-
-        [TestCleanup]
-        public void UserTestCleanUp()
-        {
-            MarketYard.CleanSession();
-        }
-
 
     }
 }

@@ -134,11 +134,8 @@ namespace SadnaSrc.PolicyComponent
 
         public string[] GetSessionPoliciesStrings()
         {
-            PurchasePolicy[] policiesArr = SessionPolicies.ToArray();
-            string[] idArr = new string[policiesArr.Length];
-            for (int i = 0; i < idArr.Length; i++)
-                idArr[i] = "" + policiesArr[i].ID;
-            return idArr;
+            int[] idArr = GetSessionPolicies();
+            return idArr.Select(x => x.ToString()).ToArray();
         }
 
         public string[] GetPolicyData(PolicyType type, string subject)
