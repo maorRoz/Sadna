@@ -54,7 +54,7 @@ namespace MarketWeb.Controllers
 		{
 			var userService = MarketServer.Users[systemId];
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-			var answer = storeShoppingService.ViewStoreStock(store);
+			var answer = storeShoppingService.ViewStoreStockAll(store);
 			return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
 		}
 
@@ -146,7 +146,7 @@ namespace MarketWeb.Controllers
 			ViewBag.valid = valid;
 			var userService = MarketServer.Users[systemId];
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-			var answer = storeShoppingService.ViewStoreStock(store);
+			var answer = storeShoppingService.ViewStoreStockAll(store);
 			return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
 		}
 

@@ -58,7 +58,6 @@ namespace SadnaSrc.StoreCenter
 		    return slave.answer;
 	    }
 	
-
 		public MarketAnswer AddProductToCart(string store, string productName, int quantity)
         {
             AddProductToCartSlave slave = new AddProductToCartSlave(_shopper, storeDL);
