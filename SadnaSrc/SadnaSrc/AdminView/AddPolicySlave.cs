@@ -181,14 +181,18 @@ namespace SadnaSrc.AdminView
 
         private OperatorType GetOperand(string op)
         {
-            if (op.Contains("AND"))
-                return OperatorType.AND;
-            if (op.Contains("OR"))
-                return OperatorType.OR;
-            if (op.Contains("NOT"))
-                return OperatorType.NOT;
-            MarketLog.Log("AdminView", " Adding policy failed, invalid data.");
-            throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
+            switch (op)
+            {
+                case "AND":
+                    return OperatorType.AND;
+                case "OR":
+                    return OperatorType.OR;
+                case "NOT":
+                    return OperatorType.NOT;
+                default:
+                    MarketLog.Log("AdminView", " Adding policy failed, invalid data.");
+                    throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
+            }          
         }
     }
 

@@ -56,16 +56,20 @@ namespace SadnaSrc.AdminView
             throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
 
         }
-        private PolicyType GetPolicyType(string op)
+        private PolicyType GetPolicyType(string type)
         {
-            if (op.Contains("Global"))
-                return PolicyType.Global;
-            if (op.Contains("Product"))
-                return PolicyType.Product;
-            if (op.Contains("Category"))
-                return PolicyType.Category;
-            MarketLog.Log("AdminView", " Removing policy failed, invalid data.");
-            throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
+            switch (type)
+            {
+                case "Global":
+                    return PolicyType.Global;
+                case "Product":
+                    return PolicyType.Product;
+                case "Category":
+                    return PolicyType.Category;
+                default:
+                    MarketLog.Log("AdminView", " Adding policy failed, invalid data.");
+                    throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
+            }           
         }
     }
 
