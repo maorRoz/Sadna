@@ -14,7 +14,7 @@ namespace SadnaSrc.AdminView
     {
         public MarketAnswer Answer;
         private readonly IUserAdmin _admin;
-        private IGlobalPolicyManager _manager;
+        private readonly IGlobalPolicyManager _manager;
 
         public RemovePolicySlave(IUserAdmin admin, IGlobalPolicyManager manager)
         {
