@@ -136,6 +136,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTestss
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
+            MarketYard.SetDateTime(DateTime.Parse("14/04/2018"));
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
