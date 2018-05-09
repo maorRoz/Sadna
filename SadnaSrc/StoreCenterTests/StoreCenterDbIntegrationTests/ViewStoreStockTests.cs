@@ -24,7 +24,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTestss
             market = MarketYard.Instance;
             userService = market.GetUserService();
             userService2 = market.GetUserService();
-            MarketYard.SetDateTime(DateTime.Parse("14/04/2018"));
         }
         [TestMethod]
         public void ViewStoreStockWhenStoreNotExists()
@@ -137,7 +136,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTestss
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
-         
+            MarketYard.SetDateTime(DateTime.Parse("14/04/2018"));
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
