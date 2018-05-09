@@ -28,9 +28,12 @@ namespace SadnaSrc.StoreCenter
             Store store = storeLogic.GetStorebyName(storename);
             LinkedList<string> result = new LinkedList<string>();
             var IDS = storeLogic.GetAllStoreProductsID(store.SystemId);
+            string info;
             foreach (string item in IDS)
             {
-                result.AddLast(GetProductStockInformation(item));
+                info = GetProductStockInformation(item);
+                if (info!="")
+                    result.AddLast(info);
             }
             string[] resultArray = new string[result.Count];
             result.CopyTo(resultArray, 0);
@@ -64,6 +67,16 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("storeCenter", "product not exists");
                 throw new StoreException(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
+            }
+            if (stockListItem.PurchaseWay == PurchaseEnum.Lottery)
+            {
+                LotterySaleManagmentTicket managmentTicket =
+                    storeLogic.GetLotteryByProductID((productID));
+                StockListItem sli = storeLogic.GetStockListItembyProductID(productID);
+                if ((managmentTicket.EndDate < MarketYard.MarketDate) ||
+                    (managmentTicket.StartDate > MarketYard.MarketDate) ||
+                    ((managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice)&& sli.Quantity==0))
+                    return "";
             }
             string discount = " Discount: {";
             string product = stockListItem.Product.ToString();

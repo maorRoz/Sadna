@@ -39,7 +39,7 @@ namespace SadnaSrc.OrderPool
             _storesSync = storesSync;
             _orderDL = OrderDL.Instance;
 
-            ltSlave = new LotteryTicketSlave(_buyer, _storesSync, _orderDL,Publisher.Instance);
+            ltSlave = new LotteryTicketSlave(_buyer, _storesSync, _orderDL,Publisher.Instance, MarketYard.Instance.GetPolicyChecker());
         }
 
         //only for Unit Tests of developer!!(not for integration or blackbox or real usage)
@@ -62,7 +62,7 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyItemFromImmediate(string itemName, string store, int quantity, double unitPrice, string coupon)
         {
-            PurchaseItemSlave piSlave = new PurchaseItemSlave(_buyer, _storesSync, _orderDL,Publisher.Instance);
+            PurchaseItemSlave piSlave = new PurchaseItemSlave(_buyer, _storesSync, _orderDL,Publisher.Instance, MarketYard.Instance.GetPolicyChecker());
             Order newOrder = piSlave.BuyItemFromImmediate(itemName, store, quantity, unitPrice, coupon, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);
@@ -81,7 +81,7 @@ namespace SadnaSrc.OrderPool
 
         public MarketAnswer BuyEverythingFromCart(string[] coupons) 
         {
-            PurchaseEverythingSlave peSlave = new PurchaseEverythingSlave(_buyer, _storesSync, _orderDL, Publisher.Instance);
+            PurchaseEverythingSlave peSlave = new PurchaseEverythingSlave(_buyer, _storesSync, _orderDL, Publisher.Instance, MarketYard.Instance.GetPolicyChecker());
             Order newOrder = peSlave.BuyEverythingFromCart(coupons, UserName, UserAddress, CreditCard);
             if (newOrder != null)
                 Orders.Add(newOrder);

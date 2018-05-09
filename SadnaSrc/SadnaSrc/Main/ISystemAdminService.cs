@@ -39,4 +39,19 @@ namespace SadnaSrc.Main
         CategoryNotExistsInSystem,
         CategoryAlradyExist
     }
+
+    public enum EditPolicyStatus
+    {
+        Success,
+        InvalidPolicyData,
+        NoAuthority
+        
+    }
+
+    public enum ViewPolicyStatus
+    {
+        Success,
+        NoAuthority
+
+    }
 }

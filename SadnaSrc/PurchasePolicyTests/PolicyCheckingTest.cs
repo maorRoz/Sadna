@@ -31,70 +31,80 @@ namespace PurchasePolicyTests
         [TestMethod]
         public void TestCheckPolicySuccess1()
         {
-            InitSimplePolicy(PolicyType.Category, "Food", ConditionType.AddressEqual, "Grove Street");
+            handler.CreateCategorySimplePolicy("Food", ConditionType.AddressEqual, "Grove Street");
+            handler.AddPolicy(0);
             Assert.IsTrue(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 2, 14.00));
         }
 
         [TestMethod]
         public void TestCheckPolicySuccess2()
         {
-            InitSimplePolicy(PolicyType.Product, "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
+            handler.CreateProductSimplePolicy("#9 Large", ConditionType.UsernameEqual, "Big Smoke");
+            handler.AddPolicy(0);
             Assert.IsTrue(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 2, 14.00));
         }
 
         [TestMethod]
         public void TestCheckPolicySuccess3()
         {
-            InitSimplePolicy(PolicyType.Store, "Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            handler.CreateStoreSimplePolicy("Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            handler.AddPolicy(0);
             Assert.IsTrue(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 2, 14.00));
         }
 
         [TestMethod]
         public void TestCheckPolicySuccess4()
         {
-            InitSimplePolicy(PolicyType.StockItem, "Cluckin Bell.#9 Large", ConditionType.PriceLesser, "21.0");
+            handler.CreateStockItemSimplePolicy("Cluckin Bell", "#9 Large", ConditionType.PriceLesser, "21.0");
+            handler.AddPolicy(0);
             Assert.IsTrue(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 2, 14.00));
         }
 
         [TestMethod]
         public void TestCheckPolicySuccess5()
         {
-            InitSimplePolicy(PolicyType.Global, null, ConditionType.QuantityLesser, "5");
+            handler.CreateGlobalSimplePolicy(ConditionType.QuantityLesser, "5");
+            handler.AddPolicy(0);
             Assert.IsTrue(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 2, 14.00));
         }
 
         [TestMethod]
         public void TestCheckPolicyFail1()
         {
-            InitSimplePolicy(PolicyType.Category, "Food", ConditionType.AddressEqual, "Grove Street");
+            handler.CreateCategorySimplePolicy("Food", ConditionType.AddressEqual, "Grove Street");
+            handler.AddPolicy(0);
             Assert.IsFalse(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Vinewood", 2, 14.00));
         }
 
         [TestMethod]
         public void TestCheckPolicyFail2()
         {
-            InitSimplePolicy(PolicyType.Product, "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
+            handler.CreateProductSimplePolicy("#9 Large", ConditionType.UsernameEqual, "Big Smoke");
+            handler.AddPolicy(0);
             Assert.IsFalse(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Ryder", "Grove Street", 2, 14.00));
         }
 
         [TestMethod]
         public void TestCheckPolicyFail3()
         {
-            InitSimplePolicy(PolicyType.Store, "Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            handler.CreateStoreSimplePolicy("Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            handler.AddPolicy(0);
             Assert.IsFalse(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 2, 5.00));
         }
 
         [TestMethod]
         public void TestCheckPolicyFail4()
         {
-            InitSimplePolicy(PolicyType.StockItem, "Cluckin Bell.#9 Large", ConditionType.PriceLesser, "21.0");
+            handler.CreateStockItemSimplePolicy("Cluckin Bell", "#9 Large", ConditionType.PriceLesser, "21.0");
+            handler.AddPolicy(0);
             Assert.IsFalse(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 2, 25.00));
         }
 
         [TestMethod]
         public void TestCheckPolicyFail5()
         {
-            InitSimplePolicy(PolicyType.Global, null, ConditionType.QuantityLesser, "5");
+            handler.CreateGlobalSimplePolicy(ConditionType.QuantityLesser, "5");
+            handler.AddPolicy(0);
             Assert.IsFalse(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 6, 14.00));
         }
 
@@ -171,48 +181,42 @@ namespace PurchasePolicyTests
         [TestMethod]
         public void TestSeveralPoliciesSuccess1()
         {
-            InitSimplePolicy(PolicyType.Product, "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
-            InitSimplePolicy(PolicyType.Store, "Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            InitTwoPolicies();
             Assert.IsTrue(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 2, 14.00));
         }
 
         [TestMethod]
         public void TestSeveralPoliciesSuccess2()
         {
-            InitSimplePolicy(PolicyType.Product, "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
-            InitSimplePolicy(PolicyType.Store, "Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            InitTwoPolicies();
             Assert.IsTrue(handler.CheckRelevantPolicies("#9", "Cluckin Bell", "Food", "CJ", "Grove Street", 2, 14.00));
         }
 
         [TestMethod]
         public void TestSeveralPoliciesSuccess3()
         {
-            InitSimplePolicy(PolicyType.Product, "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
-            InitSimplePolicy(PolicyType.Store, "Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            InitTwoPolicies();
             Assert.IsTrue(handler.CheckRelevantPolicies("#9 Large", "Taco Bell", "Food", "Big Smoke", "Grove Street", 2, 5.00));
         }
 
         [TestMethod]
         public void TestSeveralPoliciesFail1()
         {
-            InitSimplePolicy(PolicyType.Product, "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
-            InitSimplePolicy(PolicyType.Store, "Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            InitTwoPolicies();
             Assert.IsFalse(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "Big Smoke", "Grove Street", 2, 5.00));
         }
 
         [TestMethod]
         public void TestSeveralPoliciesFail2()
         {
-            InitSimplePolicy(PolicyType.Product, "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
-            InitSimplePolicy(PolicyType.Store, "Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            InitTwoPolicies();
             Assert.IsFalse(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "CJ", "Grove Street", 2, 14.00));
         }
 
         [TestMethod]
         public void TestSeveralPoliciesFail3()
         {
-            InitSimplePolicy(PolicyType.Product, "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
-            InitSimplePolicy(PolicyType.Store, "Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            InitTwoPolicies();
             Assert.IsFalse(handler.CheckRelevantPolicies("#9 Large", "Cluckin Bell", "Food", "CJ", "Grove Street", 2, 5.00));
         }
 
@@ -247,27 +251,33 @@ namespace PurchasePolicyTests
 
         private void InitSimplePolicies()
         {
-            InitSimplePolicy(PolicyType.Category, "Food", ConditionType.QuantityGreater, "2");
-            InitSimplePolicy(PolicyType.Product, "#9 Large", ConditionType.UsernameEqual, "Big Smoke");
-            InitSimplePolicy(PolicyType.Store, "Cluckin Bell", ConditionType.PriceGreater, "7.0");
-            InitSimplePolicy(PolicyType.StockItem, "Cluckin Bell.#9 Large", ConditionType.PriceLesser, "21.0");
-            InitSimplePolicy(PolicyType.Global, null, ConditionType.QuantityLesser, "5");
-        }
-
-        private void InitSimplePolicy(PolicyType type, string subject, ConditionType cond, string value)
-        {
-            handler.StartSession(type, subject);
-            handler.CreateCondition(cond, value);
+            handler.CreateCategorySimplePolicy("Food", ConditionType.QuantityGreater, "2");
+            handler.AddPolicy(0);
+            handler.CreateProductSimplePolicy("#9 Large", ConditionType.UsernameEqual, "Big Smoke");
+            handler.AddPolicy(0);
+            handler.CreateStoreSimplePolicy("Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            handler.AddPolicy(0);
+            handler.CreateStockItemSimplePolicy("Cluckin Bell", "#9 Large", ConditionType.PriceLesser, "21.0");
+            handler.AddPolicy(0);
+            handler.CreateGlobalSimplePolicy(ConditionType.QuantityLesser, "5");
             handler.AddPolicy(0);
         }
 
+
         private void InitComplexPolicy(OperatorType type)
         {
-            handler.StartSession(PolicyType.Category, "Food");
-            handler.CreateCondition(ConditionType.QuantityGreater, "2");
-            handler.CreateCondition(ConditionType.UsernameEqual, "Big Smoke");
-            handler.CreatePolicy(type, 0, 1);
+            handler.CreateCategorySimplePolicy("Food", ConditionType.QuantityGreater, "2");
+            handler.CreateCategorySimplePolicy("Food", ConditionType.UsernameEqual, "Big Smoke");
+            handler.CreateCategoryPolicy("Food", type, 0, 1);
             handler.AddPolicy(2);
+        }
+
+        private void InitTwoPolicies()
+        {
+            handler.CreateProductSimplePolicy("#9 Large", ConditionType.UsernameEqual, "Big Smoke");
+            handler.AddPolicy(0);
+            handler.CreateStoreSimplePolicy("Cluckin Bell", ConditionType.PriceGreater, "7.0");
+            handler.AddPolicy(0);
         }
     }
 }
