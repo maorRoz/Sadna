@@ -26,7 +26,7 @@ namespace MarketWeb.Controllers
 		{
 			var userService = MarketServer.Users[systemId];
 			var answer = userService.GetStoreManagerPolicies(store);
-			string[] options = {"ManageProducts", "PromoteStoreAdmin", "DeclareDiscountPolicy", "ViewPurchaseHistory"};
+			string[] options = {"ManageProducts", "PromoteStoreAdmin", "DeclareDiscountPolicy", "ViewPurchaseHistory", "PurchasePolicy"};
 			if (!answer.ReportList.Contains("StoreOwner"))
 			{
 				options = answer.ReportList;
@@ -264,8 +264,14 @@ namespace MarketWeb.Controllers
 				return RedirectToAction("RemovingProductCategoryPage", new { systemId, state, message = answer.Answer,store,product, valid = true });
 			}
 			return RedirectToAction("RemovingProductCategoryPage", new { systemId, state, message = answer.Answer,store, product, valid = false });
-
 		}
+
+
+		public IActionResult PurchasePolicy(int systemId, string state, string message, string store)
+		{
+			return View(new StoreItemModel(systemId, state, message, store));
+		}
+		
 
 	}
 }
