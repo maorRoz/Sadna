@@ -67,7 +67,7 @@
 								</td>
 
 						}
-						else
+						@if (item.PurchaseWay == "Lottery")
 						{
 							<img src="\images\addTicket.png" />
 						}
@@ -81,6 +81,12 @@
 			@using (Html.BeginForm("AddNewProductPage", "StoreManagement", new { Model.SystemId, Model.State, store = Model.StoreName }))
 			{
 				<input type="submit" class="btn btn-primary" value="Add new Product">
+			}
+			
+			<br/>
+			@using (Html.BeginForm("AddNewLotteryPage", "StoreManagement", new { Model.SystemId, Model.State, store = Model.StoreName }))
+			{
+				<input type="submit" class="btn btn-primary" value="Add new Lottery">
 			}
 
 		</div>
