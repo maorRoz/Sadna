@@ -39,7 +39,8 @@ namespace SadnaSrc.Main
     {
         Success,
         CategoryNotExistsInSystem,
-        CategoryAlradyExist
+        CategoryAlradyExist,
+		InvalidCategory
     }
 
     public enum EditPolicyStatus

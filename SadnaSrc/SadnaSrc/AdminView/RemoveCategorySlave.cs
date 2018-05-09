@@ -1,4 +1,5 @@
-﻿using SadnaSrc.Main;
+﻿using Castle.Core.Internal;
+using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
@@ -19,7 +20,11 @@ namespace SadnaSrc.AdminView
                 MarketLog.Log("StoreCenter", " check if category name exists");
                 CheckIfCategoryExists(categoryName);
                 MarketLog.Log("StoreCenter", " removing category");
-                Category category = _adminDlInstacne.GetCategoryByName(categoryName);
+	            if (categoryName.IsNullOrEmpty())
+	            {
+		            Answer = new AdminAnswer(EditCategoryStatus.InvalidCategory, "The category name is empty!");
+	            }
+				Category category = _adminDlInstacne.GetCategoryByName(categoryName);
                 _adminDlInstacne.RemoveCategory(category);
                 Answer = new AdminAnswer(EditCategoryStatus.Success, "category" + categoryName + " removed successfully");
             }

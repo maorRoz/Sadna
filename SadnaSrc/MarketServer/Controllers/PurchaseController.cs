@@ -40,8 +40,6 @@ namespace MarketWeb.Controllers
                 userDetails[2]));
         }
 
-
-
         public IActionResult MakeImmediateBuy(int systemId, string state,string store,string product,double unitPrice,int quantity,
             string couponEntry,string usernameEntry, string addressEntry, string creditCardEntry)
         {
