@@ -22,6 +22,9 @@ namespace SadnaSrc.AdminView
         public AdminException(EditCategoryStatus status, string message) : base((int) status, message)
         {
         }
+        public AdminException(EditPolicyStatus status, string message) : base((int)status, message)
+        {
+        }
 
         protected override string GetModuleName()
         {

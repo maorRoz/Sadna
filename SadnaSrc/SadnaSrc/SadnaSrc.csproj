@@ -82,12 +82,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminView\AddPolicySlave.cs" />
     <Compile Include="AdminView\AdminAnswer.cs" />
     <Compile Include="AdminView\AdminViewPurchaseHistorySlave.cs" />
     <Compile Include="AdminView\IAdminDL.cs" />
+    <Compile Include="AdminView\RemovePolicySlave.cs" />
     <Compile Include="AdminView\RemoveUserSlave.cs" />
     <Compile Include="AdminView\AdminDL.cs" />
     <Compile Include="AdminView\AdminException.cs" />
+    <Compile Include="AdminView\ViewPoliciesSlave.cs" />
     <Compile Include="Main\IMarketDB.cs" />
     <Compile Include="Main\IOrderService.cs" />
     <Compile Include="Main\IPaymentService.cs" />

@@ -12,6 +12,7 @@ namespace SadnaSrc.PolicyComponent
         void RemovePolicy(PolicyType type, string subject);
         void RemoveSessionPolicy(int policyId);
         int[] GetSessionPolicies();
+        string[] GetSessionPoliciesStrings();
         string[] GetPolicyData(PolicyType type, string subject);
 
         string[] PolicyTypeStrings();
