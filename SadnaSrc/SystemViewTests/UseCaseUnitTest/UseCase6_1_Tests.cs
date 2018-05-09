@@ -76,7 +76,7 @@ namespace SystemViewTests.UseCaseUnitTest
             Assert.AreEqual((int)EditPolicyStatus.Success, ans.Status);
             ans = adminServiceSession.SavePolicy();
             Assert.AreEqual((int)EditPolicyStatus.Success, ans.Status);
-            Assert.AreEqual("2", marketSession.GetGlobalPolicyManager().GetPolicyData(PolicyType.Product, "#9")[2]);
+            Assert.AreEqual("2", marketSession.GetGlobalPolicyManager().GetPolicyData(PolicyType.Product, "#9")[3]);
             Assert.AreEqual(3, PolicyDL.Instance.GetAllPolicies().Count);
 
         }
@@ -103,16 +103,15 @@ namespace SystemViewTests.UseCaseUnitTest
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             adminServiceSession.CreatePolicy("Product", "#9", "Quantity >=", "2", "");
             adminServiceSession.CreatePolicy("Product", "#9", "Username =", "Big Smoke", "");
-            adminServiceSession.CreatePolicy("Product", "#9", "AND", "0", "1");
             adminServiceSession.CreatePolicy("Product", "#9", "Quantity <=", "6", "");
             adminServiceSession.CreatePolicy("Product", "#9", "Address =", "Vinewood", "");
-            adminServiceSession.CreatePolicy("Product", "#9", "OR", "3", "4");
-            adminServiceSession.CreatePolicy("Product", "#9", "AND", "2", "5");
+            adminServiceSession.CreatePolicy("Product", "#9", "AND", "0", "1");           
+            adminServiceSession.CreatePolicy("Product", "#9", "OR", "2", "3");
+            adminServiceSession.CreatePolicy("Product", "#9", "AND", "4", "5");
             MarketAnswer ans = adminServiceSession.SavePolicy();
             Assert.AreEqual((int)EditPolicyStatus.Success, ans.Status);
-            Assert.AreEqual("2", marketSession.GetGlobalPolicyManager().GetPolicyData(PolicyType.Product, "#9")[2]);
-            Assert.AreEqual("5", marketSession.GetGlobalPolicyManager().GetPolicyData(PolicyType.Product, "#9")[3]);
             Assert.AreEqual("AND", marketSession.GetGlobalPolicyManager().GetPolicyData(PolicyType.Product, "#9")[1]);
+            Assert.AreEqual(5, marketSession.GetGlobalPolicyManager().GetPolicyData(PolicyType.Product, "#9")[2].Length);
             Assert.AreEqual(3, PolicyDL.Instance.GetAllPolicies().Count);
 
         }
@@ -122,6 +121,7 @@ namespace SystemViewTests.UseCaseUnitTest
         {
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
+            PolicyHandler.Instance.CleanSession();
         }
 
         private void DoSignInToAdmin()

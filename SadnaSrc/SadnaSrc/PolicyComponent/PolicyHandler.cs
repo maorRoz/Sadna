@@ -145,7 +145,7 @@ namespace SadnaSrc.PolicyComponent
         {
             foreach (PurchasePolicy policy in Policies)
             {
-                if (policy.Type == type && policy.Subject == subject)
+                if (policy.Type == type && policy.Subject == subject && policy.IsRoot)
                     return policy.GetData();
             }
 

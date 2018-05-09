@@ -48,18 +48,18 @@ namespace SystemViewTests.UseCaseUnitTest
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             MarketAnswer ans = adminServiceSession.RemovePolicy("Product", "#9");
             Assert.AreEqual((int)EditPolicyStatus.Success, ans.Status);
-            Assert.AreEqual(1, PolicyDL.Instance.GetAllPolicies().Count);
+            Assert.AreEqual(2, PolicyDL.Instance.GetAllPolicies().Count);
 
         }
 
         [TestMethod]
-        public void RemoveSimplePolicySuccess()
+        public void RemovePolicySuccess()
         {
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             MarketAnswer ans = adminServiceSession.RemovePolicy("Category", "WanderlandItems");
             Assert.AreEqual((int)EditPolicyStatus.Success, ans.Status);
-            Assert.AreEqual(0, PolicyDL.Instance.GetAllPolicies().Count);
+            Assert.AreEqual(1, PolicyDL.Instance.GetAllPolicies().Count);
 
         }
 
@@ -88,7 +88,7 @@ namespace SystemViewTests.UseCaseUnitTest
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             MarketAnswer ans = adminServiceSession.ViewPolicies();
             Assert.AreEqual((int)ViewPolicyStatus.Success, ans.Status);
-            Assert.AreEqual(3, ((AdminAnswer)ans).ReportList.Length);
+            Assert.AreEqual(0, ((AdminAnswer)ans).ReportList.Length);
         }
         
         [TestCleanup]
@@ -96,6 +96,8 @@ namespace SystemViewTests.UseCaseUnitTest
         {
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
+            PolicyHandler.Instance.CleanSession();
+
         }
 
         private void DoSignInToAdmin()
