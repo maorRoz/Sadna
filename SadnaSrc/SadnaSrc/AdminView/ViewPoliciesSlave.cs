@@ -28,10 +28,10 @@ namespace SadnaSrc.AdminView
             {
                 MarketLog.Log("AdminView", "Checking admin status.");
                 _admin.ValidateSystemAdmin();
-                MarketLog.Log("AdminView", "Trying to add policy.");
+                MarketLog.Log("AdminView", "Trying to view policies.");
                 string[] result = _manager.GetSessionPoliciesStrings();
-                MarketLog.Log("AdminView", " Adding policy successfully.");
-                Answer = new AdminAnswer(ViewPolicyStatus.Success, "Policy created.", result);
+                MarketLog.Log("AdminView", "Successfully got policiy ids.");
+                Answer = new AdminAnswer(ViewPolicyStatus.Success, "Successfully got policiy ids.", result);
 
             }
             catch (AdminException e)
