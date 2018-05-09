@@ -18,14 +18,13 @@ namespace SadnaSrc.StoreCenter
             {
                 checkIfStoreExistsAndActive();   
                 ValidatePromotionEligible(actions);
-                _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
+                string realUser = getRealUserName(someoneToPromoteName);
+                _storeManager.ValidateNotPromotingHimself(realUser);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has been authorized. granting " +
-                                             someoneToPromoteName + " manager options in Store" + _storeName + "...");
-                string [] allUserNames = DataLayerInstance.GetAllUserNames();
-                
-                _storeManager.Promote(someoneToPromoteName, actions);
+                                             realUser + " manager options in Store" + _storeName + "...");
+                _storeManager.Promote(realUser, actions);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " granted " +
-                                             someoneToPromoteName + " manager options in Store" + _storeName + "successfully");
+                                             realUser + " manager options in Store" + _storeName + "successfully");
                 Answer = new StoreAnswer(PromoteStoreStatus.Success, "promote with manager options has been successful!");
 
             }
@@ -42,6 +41,23 @@ namespace SadnaSrc.StoreCenter
                 Answer = new StoreAnswer((PromoteStoreStatus)e.Status, e.GetErrorMessage());
             }
 
+        }
+
+        private string getRealUserName(string username)
+        {
+            string [] allUserNames = DataLayerInstance.GetAllUserNames();
+            
+            foreach (string user in allUserNames)
+            {
+                if (user == username)
+                    return user;
+            }
+            foreach (string user in allUserNames)
+            {
+                if (MarketMistakeService.IsSimilar(user,username))
+                    return user;
+            }
+            throw new StoreException(StoreEnum.UserNameNotFound, "User Name Not Found");
         }
         private void ValidatePromotionEligible(string actions)
         {

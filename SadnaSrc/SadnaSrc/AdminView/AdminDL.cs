@@ -119,6 +119,28 @@ namespace SadnaSrc.AdminView
             }
             return category;
         }
+        public string[] GetAllUserNames()
+        {
+            LinkedList<string> resultList = new LinkedList<string>();
+            using (var dbReader = dbConnection.SelectFromTable("User", "Name"))
+                while (dbReader.Read())
+                {
+                    resultList.AddLast(dbReader.GetString(0));
+                }
+
+            return resultList.ToArray();
+        }
+        public string[] GetAllStoreNames()
+        {
+            LinkedList<string> resultList = new LinkedList<string>();
+            using (var dbReader = dbConnection.SelectFromTable("Store", "Name"))
+                while (dbReader.Read())
+                {
+                    resultList.AddLast(dbReader.GetString(0));
+                }
+
+            return resultList.ToArray();
+        }
 
     }
 }

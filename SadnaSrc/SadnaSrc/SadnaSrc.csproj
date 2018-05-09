@@ -168,7 +168,6 @@
     <Compile Include="StoreCenter\ChangeProductPurchaseWayToImmediateSlave.cs" />
     <Compile Include="StoreCenter\ChangeProductPurchaseWayToLotterySlave.cs" />
     <Compile Include="StoreCenter\CloseStoreSlave.cs" />
-    <Compile Include="StoreCenter\CreateStoreSimplePolicySlave.cs" />
     <Compile Include="StoreCenter\EditDiscountSlave.cs" />
     <Compile Include="StoreCenter\EditProductSlave.cs" />
     <Compile Include="StoreCenter\EnumStringConverter.cs" />
