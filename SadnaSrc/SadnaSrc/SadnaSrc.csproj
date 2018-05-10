@@ -120,6 +120,7 @@
     <Compile Include="MarketHarmony\IUserSeller.cs" />
     <Compile Include="MarketHarmony\OrderSyncherHarmony.cs" />
     <Compile Include="MarketHarmony\StoresSyncherHarmony.cs" />
+    <Compile Include="MarketHarmony\String_Compare.cs" />
     <Compile Include="MarketHarmony\UserAdminHarmony.cs" />
     <Compile Include="MarketHarmony\UserBuyerHarmony.cs" />
     <Compile Include="MarketHarmony\UserSellerHarmony.cs" />

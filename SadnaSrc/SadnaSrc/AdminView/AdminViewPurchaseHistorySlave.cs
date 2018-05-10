@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.StoreCenter;
 
 namespace SadnaSrc.AdminView
 {
@@ -46,10 +47,12 @@ namespace SadnaSrc.AdminView
         {
             MarketLog.Log("AdminView", "System Admin " + adminSystemID +
                                        " attempting to view purchase history of User " + userName + " ...");
+
             try
             {
-                ValidateUserNameExistInPurchaseHistory(userName);
-                ViewPurchaseHistory("UserName", userName);
+                string realname = getRealUserName(userName);
+                ValidateUserNameExistInPurchaseHistory(realname);
+                ViewPurchaseHistory("UserName", realname);
             }
             catch (AdminException e)
             {
@@ -65,8 +68,9 @@ namespace SadnaSrc.AdminView
                                        " attempting to view purchase history of Store " + storeName + " ...");
             try
             {
-                ValidateStoreNameExistInPurchaseHistory(storeName);
-                ViewPurchaseHistory("Store", storeName);
+                string realname = getRealStoreName(storeName);
+                ValidateStoreNameExistInPurchaseHistory(realname);
+                ViewPurchaseHistory("Store", realname);
 
             }
             catch (AdminException e)
@@ -94,6 +98,38 @@ namespace SadnaSrc.AdminView
                 throw new AdminException(ViewPurchaseHistoryStatus.NoStoreFound, "Couldn't find any Store" +
                                                                                  " with that name in history records");
             }
+        }
+        private string getRealUserName(string username)
+        {
+            string[] allUserNames = _adminDB.GetAllUserNames();
+
+            foreach (string user in allUserNames)
+            {
+                if (user == username)
+                    return user;
+            }
+            foreach (string user in allUserNames)
+            {
+                if (MarketMistakeService.IsSimilar(user, username))
+                    return user;
+            }
+            throw new AdminException(ViewPurchaseHistoryStatus.NoUserFound, "User Name Not Found");
+        }
+        private string getRealStoreName(string storename)
+        {
+            string[] allStoreNames = _adminDB.GetAllStoreNames();
+
+            foreach (string store in allStoreNames)
+            {
+                if (store == storename)
+                    return store;
+            }
+            foreach (string user in allStoreNames)
+            {
+                if (MarketMistakeService.IsSimilar(user, storename))
+                    return user;
+            }
+            throw new AdminException(ViewPurchaseHistoryStatus.NoStoreFound, "Store Name Not Found");
         }
     }
 }

@@ -19,5 +19,7 @@ namespace SadnaSrc.AdminView
         void AddCategory(Category category);
         void RemoveCategory(Category category);
         Category GetCategoryByName(string categoryName);
+        string[] GetAllUserNames();
+        string[] GetAllStoreNames();
     }
 }

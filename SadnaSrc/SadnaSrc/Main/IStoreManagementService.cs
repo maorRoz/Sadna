@@ -61,10 +61,11 @@ namespace SadnaSrc.Main
         QuantityIsTooBig,
         EnumValueNotExists,
         DatesAreWrong,
-        CategoryExistsInStore,
-        CategoryNotExistsInStore,
+        CategoryExists,
+        CategoryNotExists,
         ProductAlreadyInCategory,
-        ProductNotInCategory
+        ProductNotInCategory,
+        UserNameNotFound
     }
     public enum DiscountStatus
     {
