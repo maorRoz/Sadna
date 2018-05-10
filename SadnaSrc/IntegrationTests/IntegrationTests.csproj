@@ -80,6 +80,7 @@
     <Compile Include="FullCycle_Integration\FullCycle_ImmediateBuy_IntegrationTest.cs" />
     <Compile Include="FullCycle_Integration\LotteryEndToEnd.cs" />
     <Compile Include="OrderSyncher_Integration\OrderSyncher_IntegrationTest.cs" />
+    <Compile Include="PolicyOrder_Integration\CheckPolicy_IntegrationTest.cs" />
     <Compile Include="UserAdmin_Integration\AdminView_UserSpot_UserAdmin_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreSyncher_Integration\StoreCenter_OrderPool_IntegrationTest.cs" />

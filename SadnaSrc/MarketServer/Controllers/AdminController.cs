@@ -99,5 +99,32 @@ namespace MarketWeb.Controllers
 
 	    }
 
+		public IActionResult PurchasePolicy(int systemId, string state, string message, bool valid)
+		{
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
+			var answer = adminService.ViewPolicies();
+			string[] operators = {"AND", "OR", "NOT"};
+			string[] conditions = answer.ReportList;
+			return View(new ConditionsOperatorsModel(systemId, state, message,operators,conditions));
+		}
+
+	    public IActionResult CreatePolicy(int systemId, string state, string message, string type, string subject, string op, string arg1, string optArg)
+	    {
+		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
+		    var answer = adminService.CreatePolicy(type, subject, op, arg1, optArg);
+		    if (answer.Status == Success)
+		    {
+			    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = true });
+			}
+		    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = false });
+		}
+
+	    public IActionResult SavePolicy(int systemId, string state)
+	    {
+		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
+		    var answer = adminService.SavePolicy();
+		    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = true });
+		}
+
 	}
 }

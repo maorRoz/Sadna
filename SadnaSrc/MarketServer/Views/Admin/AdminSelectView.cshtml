@@ -1,5 +1,6 @@
-﻿@{
-	ViewData["Title"] = "MarketYard Hitory Purhcase";
+﻿
+@{
+	ViewData["Title"] = "MarketYard History Purchase";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -12,37 +13,37 @@
 			<div id="alertContainer">
 
 				@if (Model.Message != null)
-		        {
-			        <div class='error'>
-				    <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-				    @Model.Message
-			         </div>
-                }
+				{
+					<div class='error'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
+				}
 
 			</div>
-			@using (Html.BeginForm("AdminViewPurchaseHistory", "Admin", new { Model.SystemId,Model.State }))
+			@using (Html.BeginForm("AdminViewPurchaseHistory", "Admin", new { Model.SystemId, Model.State }))
 			{
-			    <br />
-			    <fieldset>
-			<input type="text" class="form-control" id="store-user-name" name="viewSubject" />
-			<br />
-			        Choose: <select name="viewKind">
+				<br />
+				<fieldset>
+					<input type="text" class="form-control" id="store-user-name" name="viewSubject" />
+					<br />
+					Choose: <select name="viewKind">
 
-			            <option value="Store">Store</option>
+						<option value="Store">Store</option>
 
-			            <option value="User">User</option>
+						<option value="User">User</option>
 
-			        </select>
-			    <br />
-			<input type="submit" class="btn btn-primary">
-			    </fieldset>
+					</select>
+					<br />
+					<input type="submit" class="btn btn-primary">
+				</fieldset>
 			}
 
 		</div>
 
-			</div>
+	</div>
 
-		</div>
+</div>
 
 
 @section Scripts{

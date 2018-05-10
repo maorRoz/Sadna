@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
@@ -25,7 +26,22 @@ namespace SadnaSrc.UserSpot
 				ApproveEnetered();
 				MarketLog.Log("UserSpot", "User " + userID + " has successfully viewing his policies in this store...");
 				StoreManagerPolicy[] policies = _user.GetStoreManagerPolicies(store);
-				string[] stringPolicies = { "ManageProducts", "DeclareDiscountPolicy", "PromoteStoreAdmin", $"ViewPurchaseHistory"};
+				string[] stringPolicies = { "ManageProducts", "DeclareDiscountPolicy", "PromoteStoreAdmin", "ViewPurchaseHistory"};
+				bool isStoreOwner = false;
+				foreach (StoreManagerPolicy policy in policies)
+				{
+					if (Enum.GetName(policy.Action.GetType(), policy.Action) == "StoreOwner")
+					{
+						isStoreOwner = true;
+					}
+				}
+
+				/*if (isStoreOwner)
+				{
+					string[] res = { "ManageProducts", "DeclareDiscountPolicy", "PromoteStoreAdmin", "ViewPurchaseHistory","PurchasePolicy"};
+					stringPolicies = res;
+				}*/
+			
 				if (!_user.IsSystemAdmin())
 				{
 					stringPolicies = new string[policies.Length];

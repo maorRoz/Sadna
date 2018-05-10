@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace SadnaSrc.PolicyComponent
 {
-    interface IPolicyDL
+    public interface IPolicyDL
     {
         void SavePolicy(PurchasePolicy policy);
         void RemovePolicy(PurchasePolicy policy);
         PurchasePolicy GetPolicy(PolicyType type, string subject);
-        List<PurchasePolicy> GetPoliciesOfType(PolicyType type);
+       // List<PurchasePolicy> GetPoliciesOfType(PolicyType type);
         List<PurchasePolicy> GetAllPolicies();
-        void CleanSession();
     }
 }

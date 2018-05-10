@@ -1,4 +1,6 @@
-﻿
+﻿<br />
+<br />
+<br />
 @{
 	ViewData["Title"] = "Handling Category View";
 	Layout = "~/Views/Shared/_Layout.cshtml";
@@ -25,7 +27,7 @@
 				<input type="submit" class="btn btn-primary" value="Add Category">
 			}
 			<br />
-			@using (Html.BeginForm("RemovingProductCategoryPage", "StoreManagement", new { Model.SystemId, Model.State , Model.Store, Model.Product}))
+			@using (Html.BeginForm("RemovingProductCategoryPage", "StoreManagement", new { Model.SystemId, Model.State, Model.Store, Model.Product }))
 			{
 				<input type="submit" class="btn btn-primary" value="Remove Category">
 			}

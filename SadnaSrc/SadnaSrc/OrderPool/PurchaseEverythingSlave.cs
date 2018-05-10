@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SadnaSrc.Main;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.PolicyComponent;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.Walleter;
 
@@ -15,8 +16,8 @@ namespace SadnaSrc.OrderPool
     {
         public OrderAnswer Answer { get; private set; }
 
-        public PurchaseEverythingSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL,IPublisher publisher) :
-            base(buyer, storesSync, orderDL,publisher){}
+        public PurchaseEverythingSlave(IUserBuyer buyer, IStoresSyncher storesSync, IOrderDL orderDL,IPublisher publisher, IPolicyChecker checker) :
+            base(buyer, storesSync, orderDL,publisher, checker){}
 
         public Order BuyEverythingFromCart(string[] coupons, string UserName, string UserAddress, string CreditCard)
         {
@@ -32,6 +33,7 @@ namespace SadnaSrc.OrderPool
             {
                 Order order = CreateOrderAllCart(UserName, UserAddress, coupons);
                 orderId = order.GetOrderID();
+                CheckPurchasePolicy(order);
                 ProcessOrder(order, CreditCard);
                 EmptyCart();
                 MarketLog.Log("OrderPool", "User " + UserName + " successfully bought all the items in the cart.");

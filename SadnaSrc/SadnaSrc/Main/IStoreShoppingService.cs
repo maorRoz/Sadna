@@ -16,7 +16,10 @@ namespace SadnaSrc.Main
 
         MarketAnswer ViewStoreStock(string store);
 
-        MarketAnswer AddProductToCart(string store, string productName, int quantity);
+	    MarketAnswer ViewStoreStockAll(string storename);
+
+
+		MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
     }
 

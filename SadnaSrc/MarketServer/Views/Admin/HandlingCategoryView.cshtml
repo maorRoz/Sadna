@@ -1,8 +1,12 @@
-﻿
+﻿<br />
+<br />
+<br />
 @{
 	ViewData["Title"] = "Handling Category View";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<h2>@ViewData["Title"]</h2>
 
 <div class="row top-space">
 	<div class="col-lg-12">
@@ -19,17 +23,17 @@
 
 			</div>
 			<hr />
-			<br/>
+			<br />
 			@using (Html.BeginForm("AddingCategoryPage", "Admin", new { Model.SystemId, Model.State }))
 			{
 				<input type="submit" class="btn btn-primary" value="Add Category">
 			}
-			<br/>
+			<br />
 			@using (Html.BeginForm("RemovingCategoryPage", "Admin", new { Model.SystemId, Model.State }))
 			{
 				<input type="submit" class="btn btn-primary" value="Remove Category">
 			}
-			<br/>
+			<br />
 		</div>
 	</div>
 </div>

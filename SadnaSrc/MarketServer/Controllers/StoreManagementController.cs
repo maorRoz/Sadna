@@ -54,7 +54,7 @@ namespace MarketWeb.Controllers
 		{
 			var userService = MarketServer.Users[systemId];
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-			var answer = storeShoppingService.ViewStoreStock(store);
+			var answer = storeShoppingService.ViewStoreStockAll(store);
 			return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
 		}
 
@@ -113,7 +113,26 @@ namespace MarketWeb.Controllers
 
 			return RedirectToAction("AddNewProductPage", new {systemId, state, message = answer.Answer, store});
 		}
-		
+
+		public IActionResult AddNewLotteryPage(int systemId, string state, string message, string store)
+		{
+			return View(new StoreItemModel(systemId, state, message, store));
+		}
+
+		public IActionResult AddNewLottery(int systemId, string state, string store, string product, double price,
+			string description, DateTime startDate, DateTime endDate)
+		{
+			var userService = MarketServer.Users[systemId];
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.AddNewLottery(product, price, description, startDate,endDate);
+			if (answer.Status == 0)
+			{
+				return RedirectToAction("ManageProducts", new { systemId, state, message = answer.Answer, store });
+			}
+
+			return RedirectToAction("AddNewLotteryPage", new { systemId, state, message = answer.Answer, store });
+		}
+
 		public IActionResult ViewPurchaseHistory(int systemId, string state, string message, string store)
 		{
 			var userService = MarketServer.Users[systemId];
@@ -127,7 +146,7 @@ namespace MarketWeb.Controllers
 			ViewBag.valid = valid;
 			var userService = MarketServer.Users[systemId];
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-			var answer = storeShoppingService.ViewStoreStock(store);
+			var answer = storeShoppingService.ViewStoreStockAll(store);
 			return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
 		}
 
@@ -264,8 +283,14 @@ namespace MarketWeb.Controllers
 				return RedirectToAction("RemovingProductCategoryPage", new { systemId, state, message = answer.Answer,store,product, valid = true });
 			}
 			return RedirectToAction("RemovingProductCategoryPage", new { systemId, state, message = answer.Answer,store, product, valid = false });
-
 		}
+
+
+		public IActionResult PurchasePolicy(int systemId, string state, string message, string store)
+		{
+			return View(new StoreItemModel(systemId, state, message, store));
+		}
+		
 
 	}
 }

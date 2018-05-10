@@ -14,7 +14,9 @@ namespace SadnaSrc.Main
         MarketAnswer ViewPurchaseHistoryByStore(string storeName);
         MarketAnswer AddCategory(string categoryname);
         MarketAnswer RemoveCategory(string categoryname);
-
+	    MarketAnswer CreatePolicy(string type, string subject, string op, string arg1, string optArg);
+	    MarketAnswer ViewPolicies();
+		MarketAnswer SavePolicy();
     }
 
     public enum RemoveUserStatus
@@ -37,6 +39,22 @@ namespace SadnaSrc.Main
     {
         Success,
         CategoryNotExistsInSystem,
-        CategoryAlradyExist
+        CategoryAlradyExist,
+		InvalidCategory
+    }
+
+    public enum EditPolicyStatus
+    {
+        Success,
+        InvalidPolicyData,
+        NoAuthority
+        
+    }
+
+    public enum ViewPolicyStatus
+    {
+        Success,
+        NoAuthority
+
     }
 }
