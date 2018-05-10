@@ -201,6 +201,11 @@ namespace SadnaSrc.Main
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik1','INT Potion','Y','Lottery',2,8.0,'2018-12-29')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik3','STR Potion','Y','Immediate',1,4.0,'2018-12-29')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Vadim Chernov','Goldstar','The Red Rock','Immediate',1,11.00,'2018-12-29')",
+                "INSERT INTO conditions (SystemID,conditionsType,PolicyType,Subject,value,isRoot) VALUES ('9999','QuantityGreaterThan','Product','#45',10,'true')",
+                "INSERT INTO conditions (SystemID,conditionsType,PolicyType,Subject,value,isRoot) VALUES ('10000','QuantityGreaterThan','Category','WanderlandItems',10,'false')",
+                "INSERT INTO conditions (SystemID,conditionsType,PolicyType,Subject,value,isRoot) VALUES ('10001','UsernameEquals','Category','WanderlandItems','Big Smoke','false')",
+                "INSERT INTO Operator (SystemID,OperatorType,PolicyType,Subject,COND1ID,COND2ID,isRoot) VALUES ('1000','AndOperator','Category','WanderlandItems',10,99,'true')",
+
             };
 
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
@@ -210,8 +215,9 @@ namespace SadnaSrc.Main
                 {
                     insertCommand.ExecuteNonQuery();
                 }
-                catch (Exception)
+                catch (Exception e) 
                 {
+                    string s= e.Message;
                     //dont care
                 }
             }

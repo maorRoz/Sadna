@@ -147,7 +147,7 @@ namespace SystemViewTests.AdminViewApiTest
         {
 
             AddPolicySlave slave = new AddPolicySlave(admin.Object, manager.Object);
-            slave.CreatePolicy("Product", "Shit", "Quantity <=", "5", "");
+            slave.CreatePolicy("Product", "Shit", "Username =", "Shitty", "");
             Assert.AreEqual((int)EditPolicyStatus.Success, slave.Answer.Status);
         }
 

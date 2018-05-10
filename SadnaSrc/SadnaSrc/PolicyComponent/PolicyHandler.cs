@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.PolicyComponent
 {
@@ -18,12 +19,14 @@ namespace SadnaSrc.PolicyComponent
         public PolicyType Type;
         public string Subject;
 
-        public static PolicyHandler Instance => _instance ?? (_instance = new PolicyHandler());
+        public static PolicyHandler Instance => _instance ?? (_instance = new PolicyHandler(PolicyDL.Instance));
 
-        private PolicyHandler()
+        private PolicyHandler(IPolicyDL dataLayer)
         {
-            Policies = new List<PurchasePolicy>();
+           // Policies = new List<PurchasePolicy>();
             SessionPolicies = new List<PurchasePolicy>();
+            _dataLayer = dataLayer;
+            Policies = dataLayer.GetAllPolicies();
         }
 
         public string[] CreateGlobalSimplePolicy(ConditionType cond, string value)
@@ -142,7 +145,7 @@ namespace SadnaSrc.PolicyComponent
         {
             foreach (PurchasePolicy policy in Policies)
             {
-                if (policy.Type == type && policy.Subject == subject)
+                if (policy.Type == type && policy.Subject == subject && policy.IsRoot)
                     return policy.GetData();
             }
 

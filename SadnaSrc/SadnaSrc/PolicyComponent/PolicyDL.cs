@@ -13,6 +13,8 @@ namespace SadnaSrc.PolicyComponent
 
         public static PolicyDL Instance => _instance ?? (_instance = new PolicyDL());
 
+        private int SubPolicyCounter;
+
         private MarketDB dbConnection;
 
         private PolicyDL()
@@ -23,6 +25,7 @@ namespace SadnaSrc.PolicyComponent
         public void SavePolicy(PurchasePolicy policy)
         {
             policy.IsRoot = true;
+            SubPolicyCounter = 0;
             Save_NonRoot_Policy(policy);
         }
         public void RemovePolicy(PurchasePolicy policy)
@@ -73,40 +76,7 @@ namespace SadnaSrc.PolicyComponent
             }
             return result;
         }
-        // Zohar said he dont think he will need it, but let's not remove until we have full implemntation
-        // this fucntion has no tests because of the last commant
-        /**public List<PurchasePolicy> GetPoliciesOfType(PolicyType type)
-        {
-
-            List<int> listOfIDs = new List<int>();
-            List<PurchasePolicy> result = new List<PurchasePolicy>();
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("Operator", "SystemID", "PolicyType = '" +
-            PurchasePolicy.PrintEnum(type) + "' AND isRoot = 'true'"))
-            {
-                while (dbReader.Read())
-                {
-                    listOfIDs.Add(dbReader.GetInt32(0));
-                }
-            }
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("conditions", "SystemID", "PolicyType = '" +
-            PurchasePolicy.PrintEnum(type) + "' AND isRoot = 'true'"))
-            {
-                while (dbReader.Read())
-                {
-                    listOfIDs.Add(dbReader.GetInt32(0));
-                }
-            }
-
-            foreach (int idNumber in listOfIDs)
-            {
-                PurchasePolicy policy = GetPolicyById(idNumber);
-                policy.IsRoot = true;
-                result.Add(policy);
-            }
-            return result;
-        }**/
+       
         private void Save_NonRoot_Policy(PurchasePolicy policy)
         {
             if (policy != null)
@@ -119,11 +89,14 @@ namespace SadnaSrc.PolicyComponent
         }
         private void SavePolicy(Operator policy)
         {
+            policy._cond1.ID = Int32.Parse(""+policy.ID+""+SubPolicyCounter);
+            policy._cond2.ID = Int32.Parse("" + policy.ID + "" + (SubPolicyCounter + 1));
             string fields = "SystemID,OperatorType,PolicyType,Subject,COND1ID,COND2ID,isRoot";
             dbConnection.InsertTable("Operator", fields,
                 policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
                 Save_NonRoot_Policy(policy._cond1);
                 Save_NonRoot_Policy(policy._cond2);
+            SubPolicyCounter += 2;
         }
         private void SavePolicy(Condition policy)
         {

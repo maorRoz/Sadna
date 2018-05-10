@@ -51,7 +51,8 @@ namespace SadnaSrc.AdminView
             {
                 MarketLog.Log("AdminView", "Checking admin status.");
                 _admin.ValidateSystemAdmin();
-                _manager.AddPolicy(_manager.GetSessionPolicies().Length);
+                int[] policies =  _manager.GetSessionPolicies();
+                _manager.AddPolicy(policies.Length - 1);
                 MarketLog.Log("AdminView", "Policy saved.");
                 Answer = new AdminAnswer(EditPolicyStatus.Success, "Policy saved.");
 
@@ -129,6 +130,7 @@ namespace SadnaSrc.AdminView
             if (CheckPolicySubject(type, subject) && IsNumericCondtion(op) && Int32.TryParse(arg1, out numericArg1)) return;
             if (CheckPolicySubject(type, subject) && IsOperator(op) && Int32.TryParse(arg1, out numericArg1) &&
                 Int32.TryParse(optArg, out numericArg2)) return;
+            if (CheckPolicySubject(type, subject) && IsStringCondtion(op)) return;
             MarketLog.Log("AdminView", " Adding policy failed, invalid data.");
             throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
         }
@@ -137,6 +139,11 @@ namespace SadnaSrc.AdminView
         {
             return cond.Contains("Price >=") || cond.Contains("Price <=") || cond.Contains("Quantity >=") ||
                    cond.Contains("Quantity <=");
+        }
+
+        private bool IsStringCondtion(string cond)
+        {
+            return cond.Contains("Address =") || cond.Contains("Username =");
         }
 
         private bool IsCondtion(string cond)
