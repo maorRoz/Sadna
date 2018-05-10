@@ -73,40 +73,6 @@ namespace SadnaSrc.PolicyComponent
             }
             return result;
         }
-        // Zohar said he dont think he will need it, but let's not remove until we have full implemntation
-        // this fucntion has no tests because of the last commant
-        /**public List<PurchasePolicy> GetPoliciesOfType(PolicyType type)
-        {
-
-            List<int> listOfIDs = new List<int>();
-            List<PurchasePolicy> result = new List<PurchasePolicy>();
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("Operator", "SystemID", "PolicyType = '" +
-            PurchasePolicy.PrintEnum(type) + "' AND isRoot = 'true'"))
-            {
-                while (dbReader.Read())
-                {
-                    listOfIDs.Add(dbReader.GetInt32(0));
-                }
-            }
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("conditions", "SystemID", "PolicyType = '" +
-            PurchasePolicy.PrintEnum(type) + "' AND isRoot = 'true'"))
-            {
-                while (dbReader.Read())
-                {
-                    listOfIDs.Add(dbReader.GetInt32(0));
-                }
-            }
-
-            foreach (int idNumber in listOfIDs)
-            {
-                PurchasePolicy policy = GetPolicyById(idNumber);
-                policy.IsRoot = true;
-                result.Add(policy);
-            }
-            return result;
-        }**/
         private void Save_NonRoot_Policy(PurchasePolicy policy)
         {
             if (policy != null)
@@ -200,18 +166,21 @@ namespace SadnaSrc.PolicyComponent
                     string valueOptionalNull = null;
                     if (value!="'NULL'")
                         valueOptionalNull = value;
-                    if (conditionType == "AddressEquals")
-                        return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
-                    if (conditionType == "PriceGreaterThan")
-                        return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
-                    if (conditionType == "PriceLessThan")
-                        return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
-                    if (conditionType == "QuantityGreaterThan")
-                        return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
-                    if (conditionType == "QuantityLessThan")
-                        return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
-                    if (conditionType == "UsernameEquals")
-                        return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                    switch (conditionType)
+                    {
+                        case "AddressEquals":
+                            return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                        case "PriceGreaterThan":
+                            return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                        case "PriceLessThan":
+                            return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                        case "QuantityGreaterThan":
+                            return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                        case "QuantityLessThan":
+                            return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                        case "UsernameEquals":
+                            return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                    }
                 }
             }
 
