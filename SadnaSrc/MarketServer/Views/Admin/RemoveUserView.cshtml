@@ -1,4 +1,8 @@
-﻿@{
+﻿<br />
+<br />
+<br />
+
+@{
 	ViewData["Title"] = "MarketYard Remove User";
 }
 
@@ -12,18 +16,18 @@
 			<div id="alertContainer">
 				@if (Model.Message != null && ViewBag.valid)
 				{
-			<div class='success'>
-				<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-				@Model.Message
-			</div>
+					<div class='success'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
 				}
 
 				@if (Model.Message != null && !ViewBag.valid)
 				{
-			<div class='error'>
-				<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-				@Model.Message
-			</div>
+					<div class='error'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
 				}
 
 
@@ -42,8 +46,8 @@
 						<td>
 
 							<a asp-controller="Admin" asp-action="ToRemoveUser" asp-route-systemId="@Model.SystemId"
-							   asp-route-state="@Model.State" asp-route-toDeleteName="@item.Name" ><img src="\images\skull.png" /></a> 
-							
+							   asp-route-state="@Model.State" asp-route-toDeleteName="@item.Name"><img src="\images\skull.png" /></a>
+
 						</td>
 					</tr>
 				}

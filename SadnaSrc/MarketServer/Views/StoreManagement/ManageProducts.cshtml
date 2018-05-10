@@ -1,4 +1,7 @@
-﻿@{
+﻿<br />
+<br />
+<br />
+@{
 	ViewData["Title"] = "Manage products in " + @Model.StoreName;
 }
 
@@ -39,48 +42,64 @@
 						<td>@item.PurchaseWay</td>
 						<td>@item.Quantity</td>
 						<td>
-							@if (item.PurchaseWay == "Immediate")
-							{
-							<td>
-								<a asp-controller="StoreManagement" asp-action="RemoveProduct" asp-route-systemId="@Model.SystemId"
-								   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
-									<img src="\images\cancelation.png" />
-								</a>
-							</td>
+
+						<td>
+							<a asp-controller="StoreManagement" asp-action="RemoveProduct" asp-route-systemId="@Model.SystemId"
+							   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
+								<img src="\images\cancelation.png" />
+							</a>
+						</td>
+						@if (item.PurchaseWay == "Immediate")
+						{
 							<td>
 								<a asp-controller="StoreManagement" asp-action="AddQuanitityToProduct" asp-route-systemId="@Model.SystemId"
 								   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
 									<img src="\images\plus.png">
 								</a>
 							</td>
-								<td>
-									<a asp-controller="StoreManagement" asp-action="EditProductPage" asp-route-systemId="@Model.SystemId"
-									   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
-										<img src="\images\edit.png">
-									</a>
-								</td>
-								<td>
-									@using (Html.BeginForm("HandleCategoryProduct", "StoreManagement", new { Model.SystemId, Model.State, store = Model.StoreName, product = @item.Name }))
-									{
-										<input type="submit" class="btn btn-primary" value="Category">
-									}
-								</td>
-
 						}
-						else
+						@if (item.PurchaseWay == "Lottery")
 						{
-							<img src="\images\addTicket.png" />
+							<td>
+								<img src="\images\disabled_plus.jpeg">
+							</td>
 						}
 
+						<td>
+							<a asp-controller="StoreManagement" asp-action="EditProductPage" asp-route-systemId="@Model.SystemId"
+							   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name">
+								<img src="\images\edit.png">
+							</a>
+						</td>
+						<td>
+							@using (Html.BeginForm("HandleCategoryProduct", "StoreManagement", new { Model.SystemId, Model.State, store = Model.StoreName, product = @item.Name }))
+							{
+								<input type="submit" class="btn btn-primary" value="Category">
+							}
+						</td>
+
+						<td>
+							@if (item.PurchaseWay == "Lottery")
+							{
+
+								<img src="\images\addTicket.png" />
+							}
+						</td>
 
 
-						</tr>
-					}
+					</tr>
+				}
 			</table>
 
 			@using (Html.BeginForm("AddNewProductPage", "StoreManagement", new { Model.SystemId, Model.State, store = Model.StoreName }))
 			{
 				<input type="submit" class="btn btn-primary" value="Add new Product">
+			}
+
+			<br />
+			@using (Html.BeginForm("AddNewLotteryPage", "StoreManagement", new { Model.SystemId, Model.State, store = Model.StoreName }))
+			{
+				<input type="submit" class="btn btn-primary" value="Add new Lottery">
 			}
 
 		</div>

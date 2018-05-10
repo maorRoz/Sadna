@@ -2,7 +2,7 @@
 <br/>
 <br/>
 @{
-    ViewData["Title"] = "Add New Product Page";
+    ViewData["Title"] = "Add New Lottery Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,7 +23,7 @@
 			</div>
 }
 			</div>
-			@using (Html.BeginForm("AddNewProduct", "StoreManagement", new { Model.SystemId, Model.State, store = Model.Name }))
+			@using (Html.BeginForm("AddNewLottery", "StoreManagement", new { Model.SystemId, Model.State, store = Model.Name }))
 	{
 		<label for="user-name-entry">Name:</label>
 		<input type="text" class="form-control" id="user-name-entry" name="product" />
@@ -31,8 +31,10 @@
 		<input class="form-control" id="product-price" name="price" />
 		<label for="product-description">Description:</label>
 		<input class="form-control" id="product-description" name="description" />
-		<label for="product-quantity">Quantity:</label>
-		<input class="form-control" id="product-quantity" name="quantity" />
+		<label for="product-quantity">StartDate:</label>
+		<input class="form-control" id="product-startDate" name="startDate" />
+		<label for="product-quantity">EndDate:</label>
+		<input class="form-control" id="product-endDate" name="endDate" />
 		<br />
 		<input type="submit" class="btn btn-primary" value="Add">
 
@@ -46,4 +48,5 @@
 @section Scripts{
 	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
 }
+
 
