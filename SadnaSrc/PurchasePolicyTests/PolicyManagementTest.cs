@@ -186,6 +186,7 @@ namespace PurchasePolicyTests
         public void UserOrderTestCleanUp()
         {
             handler.CleanSession();
+            MarketDB.Instance.CleanByForce();
         }
 
         private void CompareArrays(string[] arr1, string[] arr2)

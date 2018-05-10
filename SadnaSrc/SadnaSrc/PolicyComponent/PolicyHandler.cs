@@ -12,6 +12,8 @@ namespace SadnaSrc.PolicyComponent
         public List<PurchasePolicy> Policies;
         private List<PurchasePolicy> SessionPolicies;
 
+        private static readonly Random random = new Random();
+
         private static PolicyHandler _instance;
         private static IPolicyDL _dataLayer;
 
@@ -24,6 +26,7 @@ namespace SadnaSrc.PolicyComponent
         {
             Policies = new List<PurchasePolicy>();
             SessionPolicies = new List<PurchasePolicy>();
+            _dataLayer = PolicyDL.Instance;
         }
 
         public string[] CreateGlobalSimplePolicy(ConditionType cond, string value)
@@ -195,7 +198,6 @@ namespace SadnaSrc.PolicyComponent
 
         private int GeneratePolicyID()
         {
-            Random random = new Random();
             var newID = random.Next(1000, 10000);
             while (GetPolicy(newID) != null)
             {

@@ -240,14 +240,15 @@ namespace IntegrationTests.PolicyOrder_Integration
 
         private void InitPolicies()
         {
-            PolicyHandler.Instance.CreateProductSimplePolicy(product1, ConditionType.QuantityGreater, "2");
-            PolicyHandler.Instance.AddPolicy(0);
-            PolicyHandler.Instance.CreateStoreSimplePolicy(store1, ConditionType.PriceGreater, "10.00");
-            PolicyHandler.Instance.AddPolicy(0);
-            PolicyHandler.Instance.CreateStockItemSimplePolicy(product2, store2, ConditionType.PriceLesser, "50.00");
-            PolicyHandler.Instance.CreateStockItemSimplePolicy(product2, store2, ConditionType.QuantityLesser, "5");
-            PolicyHandler.Instance.CreateStockItemPolicy(store2, product2, OperatorType.AND, 0, 1);
-            PolicyHandler.Instance.AddPolicy(2);
+            var policyHandler = PolicyHandler.Instance;
+            policyHandler.CreateProductSimplePolicy(product1, ConditionType.QuantityGreater, "2");
+            policyHandler.AddPolicy(0);
+            policyHandler.CreateStoreSimplePolicy(store1, ConditionType.PriceGreater, "10.00");
+            policyHandler.AddPolicy(0);
+            policyHandler.CreateStockItemSimplePolicy(product2, store2, ConditionType.PriceLesser, "50.00");
+            policyHandler.CreateStockItemSimplePolicy(product2, store2, ConditionType.QuantityLesser, "5");
+            policyHandler.CreateStockItemPolicy(store2, product2, OperatorType.AND, 0, 1);
+            policyHandler.AddPolicy(2);
         }
 
         private Order CreateOrder1()
