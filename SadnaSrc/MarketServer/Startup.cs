@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataBaseProject;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace MarketWeb
         {
             services.AddWebSocketManager();
             services.AddMvc();
+            services.AddScoped(_ => new MarketData());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

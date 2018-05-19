@@ -26,7 +26,6 @@ namespace IntegrationTests.UserAdmin_Integration
         private string soleOwnerName = "Arik2";
         private string soleOwnerPass = "123";
         private string notSoleOwnerName = "Arik3";
-        private string notSoleOwnerPass = "123";
         [TestInitialize]
         public void MarketBuilder()
         {

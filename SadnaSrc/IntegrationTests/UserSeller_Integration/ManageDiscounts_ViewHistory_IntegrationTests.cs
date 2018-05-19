@@ -22,11 +22,6 @@ namespace IntegrationTests.UserSeller_Integration
         private string shopper = "Arik2";
         private string sysadmin = "Arik1";
         private string pass = "123";
-        private string storeAction1 = "ViewPurchaseHistory";
-        private string storeAction2 = "ManageProducts";
-        private string storeAction3 = "PromoteStoreAdmin";
-        private string storeAction4 = "DeclareDiscountPolicy";
-        private string storeOwner = "StoreOwner";
         private string existingProduct = "Bamba";
         private string existingProduct2 = "Goldstar";
 

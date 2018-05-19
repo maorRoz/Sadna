@@ -21,7 +21,6 @@ namespace BlackBox.OrderBlackBoxTests
         private IUserBridge _buyerGuestBridge;
         private IUserBridge _storeOwnerBridge;
         private IStoreShoppingBridge _shoppingBridge;
-        private IStoreShoppingBridge _shoppingBridge2;
         private IStoreManagementBridge _storeManagementBridge;
         private string storeName = "LotteryStore";
 

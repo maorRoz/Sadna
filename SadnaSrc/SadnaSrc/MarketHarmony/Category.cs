@@ -67,5 +67,14 @@ namespace SadnaSrc.MarketHarmony
         {
             return obj.SystemId == SystemId && obj.Name == Name;
         }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -1305757020;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(SystemId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + EqualityComparer<LinkedList<Product>>.Default.GetHashCode(products);
+            return hashCode;
+        }
     }
 }

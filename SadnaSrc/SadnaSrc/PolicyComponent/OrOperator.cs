@@ -49,5 +49,15 @@ namespace SadnaSrc.PolicyComponent
             answer = answer && obj.ID.Equals(ID) && obj.Type.Equals(Type);
             return answer;
         }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

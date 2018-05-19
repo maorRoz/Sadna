@@ -10,7 +10,6 @@ namespace BlackBox.StoreBlackBoxTests
 	{
 		private IUserBridge _storeOwnerUserBridge;
 		private IStoreShoppingBridge _storeShoppingBridge;
-		private IStoreShoppingBridge _storeShoppingBridge2;
 		private IStoreManagementBridge _storeManagementBridge;
 		private IStoreManagementBridge _storeManagementBridge2;
 		private IUserBridge _userBuyer;
@@ -21,7 +20,6 @@ namespace BlackBox.StoreBlackBoxTests
 		    MarketDB.Instance.InsertByForce();
             SignUp(ref _storeOwnerUserBridge, "Pnina", "Mishol", "7777", "77777777");
 			OpenStoreAndProducts();
-			_storeShoppingBridge2 = null;
 			_storeManagementBridge2 = null;
 			_userBuyer = null;
 		}

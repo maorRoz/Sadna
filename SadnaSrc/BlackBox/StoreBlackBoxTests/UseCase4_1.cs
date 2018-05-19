@@ -14,7 +14,6 @@ namespace BlackBox.StoreBlackBoxTests
 		private IStoreShoppingBridge _storeBridge;
 		private IStoreManagementBridge _storeManager1;
 		private IStoreManagementBridge _storeManager2;
-		private IUserBridge _adminBridge;
 		private IUserBridge _guestBridge;
 		private IOrderBridge _orderBridge;
 		private readonly string storeAction1 = "PromoteStoreAdmin";
@@ -39,7 +38,6 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "Volcano");
 			_storeManager2 = null;
 			_signInBridge = null;
-			_adminBridge = null;
 			_guestBridge = null;
 			_orderBridge = null;
 		}
