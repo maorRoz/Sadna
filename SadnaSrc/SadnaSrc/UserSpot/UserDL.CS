@@ -4,6 +4,8 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataBaseProject;
+
 using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
@@ -134,6 +136,7 @@ namespace SadnaSrc.UserSpot
             dbConnection.InsertTable("User", "SystemID,Name,Address,Password,CreditCard",
                 new [] { "@idParam", "@nameParam", "@addressParam", "@passParam","@creditParam" }, user.ToData());
             userIDs.Add(user.SystemID);
+          //  Fetcher.AddUser(user.SystemID);
         }
 
         public string[] UserNamesInSystem()
@@ -236,14 +239,6 @@ namespace SadnaSrc.UserSpot
 
 		    return result.ToArray();
 	    }
-
-		public void CleanSession()
-        {
-            foreach(var userID in userIDs)
-            {
-                dbConnection.DeleteFromTable("User", "SystemID = " + userID);
-            }
-        }
 
     }
 }
