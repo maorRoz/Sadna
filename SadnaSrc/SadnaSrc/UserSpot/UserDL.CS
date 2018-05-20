@@ -136,7 +136,7 @@ namespace SadnaSrc.UserSpot
             dbConnection.InsertTable("User", "SystemID,Name,Address,Password,CreditCard",
                 new [] { "@idParam", "@nameParam", "@addressParam", "@passParam","@creditParam" }, user.ToData());
             userIDs.Add(user.SystemID);
-            Fetcher.AddUser(user.SystemID);
+           // Fetcher.AddUser(user.SystemID);
         }
 
         public string[] UserNamesInSystem()

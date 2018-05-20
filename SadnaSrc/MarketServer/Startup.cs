@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using DataBaseProject;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SadnaSrc.UserSpot;
 using WebSocketManager;
 
 namespace MarketWeb
@@ -27,7 +25,6 @@ namespace MarketWeb
         {
             services.AddWebSocketManager();
             services.AddMvc();
-            services.AddScoped(_ => new MarketData());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
