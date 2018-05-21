@@ -27,9 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketFeedTests", "MarketFe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PurchasePolicyTests", "PurchasePolicyTests\PurchasePolicyTests.csproj", "{5953E5C3-A2E8-43CD-917C-B78F7FFF562A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseProject", "DataBaseProject\DataBaseProject.csproj", "{672A78DF-FA44-4F96-8E50-734092AB359A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketYardWebApp", "MarketYardWebApp\MarketYardWebApp.csproj", "{EEA62EDC-0843-4D5F-BDCC-7FF594D6337D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketYardWebApp", "MarketYardWebApp\MarketYardWebApp.csproj", "{EEA62EDC-0843-4D5F-BDCC-7FF594D6337D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,10 +79,6 @@ Global
 		{5953E5C3-A2E8-43CD-917C-B78F7FFF562A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5953E5C3-A2E8-43CD-917C-B78F7FFF562A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5953E5C3-A2E8-43CD-917C-B78F7FFF562A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{672A78DF-FA44-4F96-8E50-734092AB359A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{672A78DF-FA44-4F96-8E50-734092AB359A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{672A78DF-FA44-4F96-8E50-734092AB359A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{672A78DF-FA44-4F96-8E50-734092AB359A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EEA62EDC-0843-4D5F-BDCC-7FF594D6337D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEA62EDC-0843-4D5F-BDCC-7FF594D6337D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEA62EDC-0843-4D5F-BDCC-7FF594D6337D}.Release|Any CPU.ActiveCfg = Release|Any CPU

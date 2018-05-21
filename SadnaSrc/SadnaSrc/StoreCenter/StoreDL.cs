@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Linq;
 using SadnaSrc.MarketHarmony;
@@ -183,7 +184,7 @@ namespace SadnaSrc.StoreCenter
             return result;
         }
 
-        private PurchaseHistory[] GetPurchaseHistory(SQLiteDataReader dbReader)
+        private PurchaseHistory[] GetPurchaseHistory(SqlDataReader dbReader)
         {
             List<PurchaseHistory> historyData = new List<PurchaseHistory>();
             while (dbReader.Read())

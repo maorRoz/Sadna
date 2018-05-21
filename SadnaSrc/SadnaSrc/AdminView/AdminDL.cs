@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
@@ -76,7 +77,7 @@ namespace SadnaSrc.AdminView
             dbConnection.DeleteFromTable("User", "Name = '" + userName +"'");
         }
 
-        private string[] GetPurchaseHistory(SQLiteDataReader dbReader)
+        private string[] GetPurchaseHistory(SqlDataReader dbReader)
         {
             List<string> historyData = new List<string>();
             while (dbReader.Read())

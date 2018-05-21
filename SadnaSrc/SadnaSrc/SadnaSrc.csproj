@@ -239,10 +239,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataBaseProject\DataBaseProject.csproj">
-      <Project>{672a78df-fa44-4f96-8e50-734092ab359a}</Project>
-      <Name>DataBaseProject</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ProxyExternalSystems\ProxyExternalSystems.csproj">
       <Project>{f4484437-aa89-4a9d-994b-36b603202356}</Project>
       <Name>ProxyExternalSystems</Name>

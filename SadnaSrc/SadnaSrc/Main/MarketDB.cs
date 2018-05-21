@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Common;
+using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace SadnaSrc.Main
 
         public static MarketDB Instance => _instance ?? (_instance = new MarketDB());
 
-        private SQLiteConnection _dbConnection;
+        private SqlConnection _dbConnection;
         private MarketDB()
         {
             InitiateDb();
@@ -24,27 +25,9 @@ namespace SadnaSrc.Main
         }
         private void InitiateDb()
         {
-            var programPath = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\", "");
-            programPath = programPath.Replace("\\bin\\Debug", "");
-            string[] programPathParts = programPath.Split('\\');
-            if (programPathParts[programPathParts.Length-1].IsNullOrEmpty())
-            {
-                programPathParts[programPathParts.Length-2] = "SadnaSrc";
-            }
-            else
-            {
-                programPathParts[programPathParts.Length - 1] = "SadnaSrc\\";
-            }
-
-            programPath = string.Join("\\", programPathParts); 
-            var dbPath = "URI=file:" + programPath + "MarketYardDB.db";
-
-            _dbConnection = new SQLiteConnection(dbPath);
+            var dbPath = "Data Source=DESKTOP-NHU1RB6\\SQLEXPRESS;Initial Catalog=MarketData;Integrated Security=True";
+            _dbConnection = new SqlConnection(dbPath);
              _dbConnection.Open();
-
-            var makeFK = new SQLiteCommand("PRAGMA foreign_keys = ON", _dbConnection);
-            makeFK.ExecuteNonQuery();
-
         }
 
         private void CreateTables()
@@ -75,7 +58,7 @@ namespace SadnaSrc.Main
 
             for (var i = 0; i < createTableStrings.Length; i++)
             {
-                var createTableCommand = new SQLiteCommand(createTableStrings[i], _dbConnection);
+                var createTableCommand = new SqlCommand(createTableStrings[i], _dbConnection);
                 createTableCommand.ExecuteNonQuery();
             }
         }
@@ -204,7 +187,7 @@ namespace SadnaSrc.Main
 
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
-                var insertCommand = new SQLiteCommand(thingsToInsertByForce[i], _dbConnection);
+                var insertCommand = new SqlCommand(thingsToInsertByForce[i], _dbConnection);
                 try
                 {
                     insertCommand.ExecuteNonQuery();
@@ -243,7 +226,7 @@ namespace SadnaSrc.Main
 			};
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
-                var insertCommand = new SQLiteCommand(thingsToInsertByForce[i], _dbConnection);
+                var insertCommand = new SqlCommand(thingsToInsertByForce[i], _dbConnection);
                 try
                 {
                     insertCommand.ExecuteNonQuery();
@@ -283,7 +266,7 @@ namespace SadnaSrc.Main
 
             for (int i = 0; i < tableNames.Length; i++)
             {
-                var deleateTableCommand = new SQLiteCommand("Delete FROM " +tableNames[i], _dbConnection);
+                var deleateTableCommand = new SqlCommand("Delete FROM " +tableNames[i], _dbConnection);
                 deleateTableCommand.ExecuteNonQuery();
             }
         }
@@ -291,53 +274,58 @@ namespace SadnaSrc.Main
 
         private static string CreateSystemLogTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [System_Log] (
-                                    [LogID]         TEXT,
-                                    [DATE]          TEXT,
-                                    [ModuleName]    TEXT,
-                                    [Description]   TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='System_Log' AND xtype='U')
+                        CREATE TABLE [System_Log] (
+                                    [LogID]         VARCHAR(64),
+                                    [DATE]          VARCHAR(64),
+                                    [ModuleName]    VARCHAR(64),
+                                    [Description]   VARCHAR(64),
                                     PRIMARY KEY([LogID])
                                     )";
         }
 
         private static string CreateSystemErrorsTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [System_Errors] (
-                                    [ErrorID]       TEXT,
-                                    [ModuleName]    TEXT,
-                                    [Description]   TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='System_Errors' AND xtype='U') 
+                        CREATE TABLE [System_Errors] (
+                                    [ErrorID]       VARCHAR(64),
+                                    [ModuleName]    VARCHAR(64),
+                                    [Description]   VARCHAR(64),
                                     PRIMARY KEY([ErrorID])
                                     )";
         }
 
         private static string CreateUserTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [User] (
-                                    [SystemID]      INTEGER,
-                                    [Name]          TEXT,
-                                    [Address]       TEXT,
-                                    [Password]      TEXT,
-                                    [CreditCard]    TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='User' AND xtype='U') 
+                        CREATE TABLE [User] (
+                                    [SystemID]      INT,
+                                    [Name]          VARCHAR(64),
+                                    [Address]       VARCHAR(64),
+                                    [Password]      VARCHAR(64),
+                                    [CreditCard]    VARCHAR(64),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
 
         private static string CreateStoreTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [Store] (
-                                    [SystemID]      TEXT,
-                                    [Name]          TEXT, 
-                                    [Address]       TEXT,
-                                    [Status]        TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Store' AND xtype='U') 
+                        CREATE TABLE [Store] (
+                                    [SystemID]      VARCHAR(64),
+                                    [Name]          VARCHAR(64), 
+                                    [Address]       VARCHAR(64),
+                                    [Status]        VARCHAR(64),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
 
         private static string CreateUserStatePolicyTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [StatePolicy] (
-                                    [SystemID]      INTEGER,
-                                    [State]         TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='StatePolicy' AND xtype='U') 
+                        CREATE TABLE [StatePolicy] (
+                                    [SystemID]      INT,
+                                    [State]         VARCHAR(64),
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID],[State])
                                     )";
@@ -345,10 +333,11 @@ namespace SadnaSrc.Main
 
         private static string CreateUserStorePolicyTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [StoreManagerPolicy] (
-                                    [SystemID]      INTEGER,
-                                    [Store]         TEXT,
-                                    [Action]        TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='StoreManagerPolicy' AND xtype='U') 
+                        CREATE TABLE [StoreManagerPolicy] (
+                                    [SystemID]      INT,
+                                    [Store]         VARCHAR(64),
+                                    [Action]        VARCHAR(64),
                                     FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID],[Store],[Action])
                                     )";
@@ -356,10 +345,11 @@ namespace SadnaSrc.Main
 
         private static string CreateCartItemTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [CartItem] (
-                                    [SystemID]      INTEGER,
-                                    [Name]          TEXT,
-                                    [Store]         TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CartItem' AND xtype='U') 
+                        CREATE TABLE [CartItem] (
+                                    [SystemID]      INT,
+                                    [Name]          VARCHAR(64),
+                                    [Store]         VARCHAR(64),
                                     [Quantity]      INTEGER,
                                     [UnitPrice]     REAL,
                                     [FinalPrice]    REAL,
@@ -371,48 +361,52 @@ namespace SadnaSrc.Main
         //                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
         private static string CreatePurchaseHistoryTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [PurchaseHistory] (
-                                    [UserName]      TEXT,
-                                    [Product]       TEXT,
-                                    [Store]         TEXT,
-                                    [SaleType]      TEXT,
-                                    [Quantity]      INTEGER,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='PurchaseHistory' AND xtype='U') 
+                        CREATE TABLE [PurchaseHistory] (
+                                    [UserName]      VARCHAR(64),
+                                    [Product]       VARCHAR(64),
+                                    [Store]         VARCHAR(64),
+                                    [SaleType]      VARCHAR(64),
+                                    [Quantity]      INT,
                                     [Price]         REAL,
-                                    [Date]          TEXT,
+                                    [Date]          VARCHAR(64),
                                     PRIMARY KEY([UserName],[Product],[Store],[SaleType],[Date])
                                     )";
         }
 
         private static string CreateProductTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [Products] (
-                                    [SystemID]     TEXT,
-                                    [Name]         TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Products' AND xtype='U') 
+                        CREATE TABLE [Products] (
+                                    [SystemID]     VARCHAR(64),
+                                    [Name]         VARCHAR(64),
                                     [BasePrice]    REAL,
-                                    [Description]  TEXT,
+                                    [Description]  VARCHAR(64),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
         private static string CreateDiscountTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [Discount] (
-                                    [DiscountCode]          TEXT,
-                                    [DiscountType]          TEXT,
-                                    [StartDate]             TEXT,
-                                    [EndDate]               TEXT,
-                                    [DiscountAmount]        INTEGER,
-                                    [Percentages]           TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Discount' AND xtype='U') 
+                        CREATE TABLE [Discount] (
+                                    [DiscountCode]          VARCHAR(64),
+                                    [DiscountType]          VARCHAR(64),
+                                    [StartDate]             VARCHAR(64),
+                                    [EndDate]               VARCHAR(64),
+                                    [DiscountAmount]        INT,
+                                    [Percentages]           VARCHAR(64),
                                     PRIMARY KEY([DiscountCode])
                                     )";
         }
         private static string CreateStockTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [Stock] (
-                                    [StockID]               TEXT,
-                                    [ProductSystemID]       TEXT,
-                                    [Quantity]              INTEGER,
-                                    [Discount]              TEXT,
-                                    [PurchaseWay]           TEXT, CHECK (PurchaseWay IN ('Immediate', 'Lottery')),
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Stock' AND xtype='U') 
+                        CREATE TABLE [Stock] (
+                                    [StockID]               VARCHAR(64),
+                                    [ProductSystemID]       VARCHAR(64),
+                                    [Quantity]              INT,
+                                    [Discount]              VARCHAR(64),
+                                    [PurchaseWay]           VARCHAR(64), CHECK (PurchaseWay IN ('Immediate', 'Lottery')),
                                     PRIMARY KEY([ProductSystemID]),
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
                                     )";
@@ -420,14 +414,15 @@ namespace SadnaSrc.Main
         
         private static string CreateLotteryTicketsTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [LotteryTicket] (
-                                    [myID]              TEXT,
-                                    [LotteryID]         TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='LotteryTicket' AND xtype='U') 
+                        CREATE TABLE [LotteryTicket] (
+                                    [myID]              VARCHAR(64),
+                                    [LotteryID]         VARCHAR(64),
                                     [IntervalStart]     REAL,
                                     [IntervalEnd]       REAL,
                                     [Cost]              REAL,
-                                    [Status]            TEXT,
-                                    [UserID]            INTEGER,
+                                    [Status]            VARCHAR(64),
+                                    [UserID]            INT,
                                     PRIMARY KEY([myID]),
                                     FOREIGN KEY([LotteryID]) REFERENCES [LotteryTable]([SystemID]) ON DELETE CASCADE
                                     )";
@@ -435,15 +430,16 @@ namespace SadnaSrc.Main
 
         private static string CreateLotteryTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [LotteryTable] (
-                                    [SystemID]              TEXT,
-                                    [ProductSystemID]       TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='LotteryTable' AND xtype='U') 
+                        CREATE TABLE [LotteryTable] (
+                                    [SystemID]              VARCHAR(64),
+                                    [ProductSystemID]       VARCHAR(64),
                                     [ProductNormalPrice]    REAL,
                                     [TotalMoneyPayed]       REAL,
-                                    [storeName]             TEXT,
-                                    [StartDate]             TEXT,
-                                    [EndDate]               TEXT,
-                                    [isActive]              TEXT,
+                                    [storeName]             VARCHAR(64),
+                                    [StartDate]             VARCHAR(64),
+                                    [EndDate]               VARCHAR(64),
+                                    [isActive]              VARCHAR(64),
                                     PRIMARY KEY([SystemID]),
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
                                     )";
@@ -451,24 +447,26 @@ namespace SadnaSrc.Main
         
         private static string CreateOrderTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [Orders] (
-                                    [OrderID]           INTEGER,
-                                    [UserName]          TEXT,
-                                    [ShippingAddress]   TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Orders' AND xtype='U') 
+                        CREATE TABLE [Orders] (
+                                    [OrderID]           INT,
+                                    [UserName]          VARCHAR(64),
+                                    [ShippingAddress]   VARCHAR(64),
                                     [TotalPrice]        REAL,
-                                    [Date]              TEXT,
+                                    [Date]              VARCHAR(64),
                                     PRIMARY KEY([OrderID])
                                     )";
         }
 
         private static string CreateOrderItemTable()
         {
-            return @"CREATE TABLE IF NOT EXISTS [OrderItem] (
-                                    [OrderID]       INTEGER,
-                                    [Store]         TEXT,
-                                    [Name]          TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='OrderItem' AND xtype='U') 
+                        CREATE TABLE [OrderItem] (
+                                    [OrderID]       INT,
+                                    [Store]         VARCHAR(64),
+                                    [Name]          VARCHAR(64),
                                     [Price]         REAL,
-                                    [Quantity]      INTEGER,
+                                    [Quantity]      INT,
                                     FOREIGN KEY([OrderID])      REFERENCES [Orders]([OrderID]) ON DELETE CASCADE,                                
                                     PRIMARY KEY([OrderID],[Store],[Name])
                                     )";
@@ -476,54 +474,59 @@ namespace SadnaSrc.Main
 
         private static string CreateNotificationsTable()
         {
-            return @"Create TABLE IF NOT EXISTS [Notifications] (
-                                    [NotificationID]    TEXT,
-                                    [Receiver]          INTEGER,
-                                    [Message]           TEXT,
-                                    [Status]            TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Notification' AND xtype='U') 
+                        CREATE TABLE [Notification] (
+                                    [NotificationID]    VARCHAR(64),
+                                    [Receiver]          INT,
+                                    [Message]           VARCHAR(64),
+                                    [Status]            VARCHAR(64),
                                     FOREIGN KEY([Receiver])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([NotificationID])
                                     )";
         }
         private static string CreateCategoryTable()
         {
-            return @"Create TABLE IF NOT EXISTS [Category] (
-                                    [SystemID]    TEXT,
-                                    [name]          TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Category' AND xtype='U') 
+                        CREATE TABLE [Category] (
+                                    [SystemID]          VARCHAR(64),
+                                    [name]              VARCHAR(64),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
         private string CreateCategoryProductConnectionTable()
         {
-            return @"Create TABLE IF NOT EXISTS [CategoryProductConnection] (
-                                    [CategoryID]    TEXT,
-                                    [ProductID]          TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CategoryProductConnection' AND xtype='U') 
+                        CREATE TABLE [CategoryProductConnection] (
+                                    [CategoryID]        VARCHAR(64),
+                                    [ProductID]         VARCHAR(64),
                                     PRIMARY KEY([CategoryID], [ProductID])
                                     )";
         }
 
         private static string CreateConditionTable()
         {
-            return @"Create TABLE IF NOT EXISTS [conditions] (
-                                    [SystemID]               INTEGER,
-                                    [conditionsType]          TEXT,
-                                    [PolicyType]             TEXT,
-                                    [Subject]                TEXT,
-                                    [value]                  TEXT,
-                                    [isRoot]                  TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='conditions' AND xtype='U') 
+                        CREATE TABLE [conditions] (
+                                    [SystemID]              INT,
+                                    [conditionsType]        VARCHAR(64),
+                                    [PolicyType]            VARCHAR(64),
+                                    [Subject]               VARCHAR(64),
+                                    [value]                 VARCHAR(64),
+                                    [isRoot]                VARCHAR(64),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
         private static string CreateOperatorTable()
         {
-            return @"Create TABLE IF NOT EXISTS [Operator] (
-                                    [SystemID]               INTEGER,
-                                    [OperatorType]           TEXT,
-                                    [PolicyType]             TEXT,
-                                    [Subject]                TEXT,
-                                    [COND1ID]                INTEGER,
-                                    [COND2ID]                INTEGER,
-                                    [isRoot]                 TEXT,
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Operator' AND xtype='U') 
+                        CREATE TABLE [Operator] (
+                                    [SystemID]               INT,
+                                    [OperatorType]           VARCHAR(64),
+                                    [PolicyType]             VARCHAR(64),
+                                    [Subject]                VARCHAR(64),
+                                    [COND1ID]                INT,
+                                    [COND2ID]                INT,
+                                    [isRoot]                 VARCHAR(64),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -531,7 +534,7 @@ namespace SadnaSrc.Main
         {
             var insertRequest = "INSERT INTO "+table+" ("+ tableColumns + ") VALUES ("+ string.Join(",", valuesNames)
                                 + ")";
-            var commandDb = new SQLiteCommand(insertRequest, _dbConnection);
+            var commandDb = new SqlCommand(insertRequest, _dbConnection);
             for (int i = 0; i < values.Length;i++)
             {
                 commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
@@ -548,16 +551,16 @@ namespace SadnaSrc.Main
             }
         }
 
-        public SQLiteDataReader SelectFromTable(string table, string toSelect)
+        public SqlDataReader SelectFromTable(string table, string toSelect)
         {
             var selectRequest = "SELECT " + toSelect + " FROM " + table;
-            return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
+            return new SqlCommand(selectRequest, _dbConnection).ExecuteReader();
         }
 
-        public SQLiteDataReader SelectFromTableWithCondition(string table, string toSelect, string condition)
+        public SqlDataReader SelectFromTableWithCondition(string table, string toSelect, string condition)
         {
             var selectRequest = "SELECT " + toSelect + " FROM " + table + " WHERE "+condition;
-            return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
+            return new SqlCommand(selectRequest, _dbConnection).ExecuteReader();
         }
 
         public void UpdateTable(string table,string updateCondition,string[] columnNames, string[] valuesNames, object[] values)
@@ -569,7 +572,7 @@ namespace SadnaSrc.Main
             }
 
             var updateCommand = "UPDATE " + table + " SET " + string.Join(", ", setString) + " WHERE " + updateCondition;
-            var commandDb = new SQLiteCommand(updateCommand, _dbConnection);
+            var commandDb = new SqlCommand(updateCommand, _dbConnection);
             for (int i = 0; i < values.Length; i++)
             {
                 commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
@@ -588,7 +591,7 @@ namespace SadnaSrc.Main
         public void DeleteFromTable(string table,string deleteCondition)
         {
             var deleteCommand = "DELETE FROM " + table + " WHERE " + deleteCondition;
-            var commandDb = new SQLiteCommand(deleteCommand, _dbConnection);
+            var commandDb = new SqlCommand(deleteCommand, _dbConnection);
             try
             {
                 commandDb.ExecuteNonQuery();
@@ -600,9 +603,9 @@ namespace SadnaSrc.Main
 
         }
 
-        public SQLiteDataReader freeStyleSelect(string cmd)
+        public SqlDataReader freeStyleSelect(string cmd)
         {
-            return new SQLiteCommand(cmd, _dbConnection).ExecuteReader();
+            return new SqlCommand(cmd, _dbConnection).ExecuteReader();
         }
     } 
 }
