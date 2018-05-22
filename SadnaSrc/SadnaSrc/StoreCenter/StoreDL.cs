@@ -495,7 +495,7 @@ namespace SadnaSrc.StoreCenter
 
         public int GetUserIDFromUserName(string userName)
         {
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "SystemID", "Name = '" + userName + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "SystemID", "Name = '" + userName + "'"))
             {
                 while (dbReader.Read())
                 {

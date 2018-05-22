@@ -244,7 +244,7 @@ namespace SadnaSrc.Main
             {
                 "System_Log",
                 "System_Errors",
-                "User",
+                "Users",
                 "Products",
                 "Discount",
                 "Stock",
@@ -276,10 +276,10 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='System_Log' AND xtype='U')
                         CREATE TABLE [System_Log] (
-                                    [LogID]         VARCHAR(64),
-                                    [DATE]          VARCHAR(64),
-                                    [ModuleName]    VARCHAR(64),
-                                    [Description]   VARCHAR(64),
+                                    [LogID]         VARCHAR(256),
+                                    [LogDate]       DATETIME,
+                                    [ModuleName]    VARCHAR(256),
+                                    [Description]   VARCHAR(256),
                                     PRIMARY KEY([LogID])
                                     )";
         }
@@ -288,22 +288,22 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='System_Errors' AND xtype='U') 
                         CREATE TABLE [System_Errors] (
-                                    [ErrorID]       VARCHAR(64),
-                                    [ModuleName]    VARCHAR(64),
-                                    [Description]   VARCHAR(64),
+                                    [ErrorID]       VARCHAR(256),
+                                    [ModuleName]    VARCHAR(256),
+                                    [Description]   VARCHAR(256),
                                     PRIMARY KEY([ErrorID])
                                     )";
         }
 
         private static string CreateUserTable()
         {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='User' AND xtype='U') 
-                        CREATE TABLE [User] (
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Users' AND xtype='U') 
+                        CREATE TABLE [Users] (
                                     [SystemID]      INT,
-                                    [Name]          VARCHAR(64),
-                                    [Address]       VARCHAR(64),
-                                    [Password]      VARCHAR(64),
-                                    [CreditCard]    VARCHAR(64),
+                                    [Name]          VARCHAR(256),
+                                    [Address]       VARCHAR(256),
+                                    [Password]      VARCHAR(256),
+                                    [CreditCard]    VARCHAR(256),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -312,10 +312,10 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Store' AND xtype='U') 
                         CREATE TABLE [Store] (
-                                    [SystemID]      VARCHAR(64),
-                                    [Name]          VARCHAR(64), 
-                                    [Address]       VARCHAR(64),
-                                    [Status]        VARCHAR(64),
+                                    [SystemID]      VARCHAR(256),
+                                    [Name]          VARCHAR(256), 
+                                    [Address]       VARCHAR(256),
+                                    [Status]        VARCHAR(256),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -325,8 +325,8 @@ namespace SadnaSrc.Main
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='StatePolicy' AND xtype='U') 
                         CREATE TABLE [StatePolicy] (
                                     [SystemID]      INT,
-                                    [State]         VARCHAR(64),
-                                    FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    [State]         VARCHAR(256),
+                                    FOREIGN KEY([SystemID])     REFERENCES [Users]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID],[State])
                                     )";
         }
@@ -336,9 +336,9 @@ namespace SadnaSrc.Main
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='StoreManagerPolicy' AND xtype='U') 
                         CREATE TABLE [StoreManagerPolicy] (
                                     [SystemID]      INT,
-                                    [Store]         VARCHAR(64),
-                                    [Action]        VARCHAR(64),
-                                    FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    [Store]         VARCHAR(256),
+                                    [Action]        VARCHAR(256),
+                                    FOREIGN KEY([SystemID])     REFERENCES [Users]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID],[Store],[Action])
                                     )";
         }
@@ -348,12 +348,12 @@ namespace SadnaSrc.Main
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CartItem' AND xtype='U') 
                         CREATE TABLE [CartItem] (
                                     [SystemID]      INT,
-                                    [Name]          VARCHAR(64),
-                                    [Store]         VARCHAR(64),
+                                    [Name]          VARCHAR(256),
+                                    [Store]         VARCHAR(256),
                                     [Quantity]      INTEGER,
                                     [UnitPrice]     REAL,
                                     [FinalPrice]    REAL,
-                                    FOREIGN KEY([SystemID])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    FOREIGN KEY([SystemID])     REFERENCES [Users]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice])
                                     )";
 
@@ -363,13 +363,13 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='PurchaseHistory' AND xtype='U') 
                         CREATE TABLE [PurchaseHistory] (
-                                    [UserName]      VARCHAR(64),
-                                    [Product]       VARCHAR(64),
-                                    [Store]         VARCHAR(64),
-                                    [SaleType]      VARCHAR(64),
+                                    [UserName]      VARCHAR(256),
+                                    [Product]       VARCHAR(256),
+                                    [Store]         VARCHAR(256),
+                                    [SaleType]      VARCHAR(256),
                                     [Quantity]      INT,
                                     [Price]         REAL,
-                                    [Date]          VARCHAR(64),
+                                    [Date]          DATETIME,
                                     PRIMARY KEY([UserName],[Product],[Store],[SaleType],[Date])
                                     )";
         }
@@ -378,10 +378,10 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Products' AND xtype='U') 
                         CREATE TABLE [Products] (
-                                    [SystemID]     VARCHAR(64),
-                                    [Name]         VARCHAR(64),
+                                    [SystemID]     VARCHAR(256),
+                                    [Name]         VARCHAR(256),
                                     [BasePrice]    REAL,
-                                    [Description]  VARCHAR(64),
+                                    [Description]  VARCHAR(256),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -389,12 +389,12 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Discount' AND xtype='U') 
                         CREATE TABLE [Discount] (
-                                    [DiscountCode]          VARCHAR(64),
-                                    [DiscountType]          VARCHAR(64),
-                                    [StartDate]             VARCHAR(64),
-                                    [EndDate]               VARCHAR(64),
+                                    [DiscountCode]          VARCHAR(256),
+                                    [DiscountType]          VARCHAR(256),
+                                    [StartDate]             DATETIME,
+                                    [EndDate]               DATETIME,
                                     [DiscountAmount]        INT,
-                                    [Percentages]           VARCHAR(64),
+                                    [Percentages]           VARCHAR(256),
                                     PRIMARY KEY([DiscountCode])
                                     )";
         }
@@ -402,11 +402,11 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Stock' AND xtype='U') 
                         CREATE TABLE [Stock] (
-                                    [StockID]               VARCHAR(64),
-                                    [ProductSystemID]       VARCHAR(64),
+                                    [StockID]               VARCHAR(256),
+                                    [ProductSystemID]       VARCHAR(256),
                                     [Quantity]              INT,
-                                    [Discount]              VARCHAR(64),
-                                    [PurchaseWay]           VARCHAR(64), CHECK (PurchaseWay IN ('Immediate', 'Lottery')),
+                                    [Discount]              VARCHAR(256),
+                                    [PurchaseWay]           VARCHAR(256), CHECK (PurchaseWay IN ('Immediate', 'Lottery')),
                                     PRIMARY KEY([ProductSystemID]),
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
                                     )";
@@ -416,12 +416,12 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='LotteryTicket' AND xtype='U') 
                         CREATE TABLE [LotteryTicket] (
-                                    [myID]              VARCHAR(64),
-                                    [LotteryID]         VARCHAR(64),
+                                    [myID]              VARCHAR(256),
+                                    [LotteryID]         VARCHAR(256),
                                     [IntervalStart]     REAL,
                                     [IntervalEnd]       REAL,
                                     [Cost]              REAL,
-                                    [Status]            VARCHAR(64),
+                                    [Status]            VARCHAR(256),
                                     [UserID]            INT,
                                     PRIMARY KEY([myID]),
                                     FOREIGN KEY([LotteryID]) REFERENCES [LotteryTable]([SystemID]) ON DELETE CASCADE
@@ -432,14 +432,14 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='LotteryTable' AND xtype='U') 
                         CREATE TABLE [LotteryTable] (
-                                    [SystemID]              VARCHAR(64),
-                                    [ProductSystemID]       VARCHAR(64),
+                                    [SystemID]              VARCHAR(256),
+                                    [ProductSystemID]       VARCHAR(256),
                                     [ProductNormalPrice]    REAL,
                                     [TotalMoneyPayed]       REAL,
-                                    [storeName]             VARCHAR(64),
-                                    [StartDate]             VARCHAR(64),
-                                    [EndDate]               VARCHAR(64),
-                                    [isActive]              VARCHAR(64),
+                                    [storeName]             VARCHAR(256),
+                                    [StartDate]             DATETIME,
+                                    [EndDate]               DATETIME,
+                                    [isActive]              VARCHAR(256),
                                     PRIMARY KEY([SystemID]),
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
                                     )";
@@ -450,10 +450,10 @@ namespace SadnaSrc.Main
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Orders' AND xtype='U') 
                         CREATE TABLE [Orders] (
                                     [OrderID]           INT,
-                                    [UserName]          VARCHAR(64),
-                                    [ShippingAddress]   VARCHAR(64),
+                                    [UserName]          VARCHAR(256),
+                                    [ShippingAddress]   VARCHAR(256),
                                     [TotalPrice]        REAL,
-                                    [Date]              VARCHAR(64),
+                                    [Date]              VARCHAR(256),
                                     PRIMARY KEY([OrderID])
                                     )";
         }
@@ -463,8 +463,8 @@ namespace SadnaSrc.Main
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='OrderItem' AND xtype='U') 
                         CREATE TABLE [OrderItem] (
                                     [OrderID]       INT,
-                                    [Store]         VARCHAR(64),
-                                    [Name]          VARCHAR(64),
+                                    [Store]         VARCHAR(256),
+                                    [Name]          VARCHAR(256),
                                     [Price]         REAL,
                                     [Quantity]      INT,
                                     FOREIGN KEY([OrderID])      REFERENCES [Orders]([OrderID]) ON DELETE CASCADE,                                
@@ -474,13 +474,13 @@ namespace SadnaSrc.Main
 
         private static string CreateNotificationsTable()
         {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Notification' AND xtype='U') 
-                        CREATE TABLE [Notification] (
-                                    [NotificationID]    VARCHAR(64),
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Notifications' AND xtype='U') 
+                        CREATE TABLE [Notifications] (
+                                    [NotificationID]    VARCHAR(256),
                                     [Receiver]          INT,
-                                    [Message]           VARCHAR(64),
-                                    [Status]            VARCHAR(64),
-                                    FOREIGN KEY([Receiver])     REFERENCES [USER]([SystemID]) ON DELETE CASCADE,
+                                    [Message]           VARCHAR(256),
+                                    [Status]            VARCHAR(256),
+                                    FOREIGN KEY([Receiver])     REFERENCES [Users]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([NotificationID])
                                     )";
         }
@@ -488,8 +488,8 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Category' AND xtype='U') 
                         CREATE TABLE [Category] (
-                                    [SystemID]          VARCHAR(64),
-                                    [name]              VARCHAR(64),
+                                    [SystemID]          VARCHAR(256),
+                                    [name]              VARCHAR(256),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -497,8 +497,8 @@ namespace SadnaSrc.Main
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CategoryProductConnection' AND xtype='U') 
                         CREATE TABLE [CategoryProductConnection] (
-                                    [CategoryID]        VARCHAR(64),
-                                    [ProductID]         VARCHAR(64),
+                                    [CategoryID]        VARCHAR(256),
+                                    [ProductID]         VARCHAR(256),
                                     PRIMARY KEY([CategoryID], [ProductID])
                                     )";
         }
@@ -508,11 +508,11 @@ namespace SadnaSrc.Main
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='conditions' AND xtype='U') 
                         CREATE TABLE [conditions] (
                                     [SystemID]              INT,
-                                    [conditionsType]        VARCHAR(64),
-                                    [PolicyType]            VARCHAR(64),
-                                    [Subject]               VARCHAR(64),
-                                    [value]                 VARCHAR(64),
-                                    [isRoot]                VARCHAR(64),
+                                    [conditionsType]        VARCHAR(256),
+                                    [PolicyType]            VARCHAR(256),
+                                    [Subject]               VARCHAR(256),
+                                    [value]                 VARCHAR(256),
+                                    [isRoot]                VARCHAR(256),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -521,12 +521,12 @@ namespace SadnaSrc.Main
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Operator' AND xtype='U') 
                         CREATE TABLE [Operator] (
                                     [SystemID]               INT,
-                                    [OperatorType]           VARCHAR(64),
-                                    [PolicyType]             VARCHAR(64),
-                                    [Subject]                VARCHAR(64),
+                                    [OperatorType]           VARCHAR(256),
+                                    [PolicyType]             VARCHAR(256),
+                                    [Subject]                VARCHAR(256),
                                     [COND1ID]                INT,
                                     [COND2ID]                INT,
-                                    [isRoot]                 VARCHAR(64),
+                                    [isRoot]                 VARCHAR(256),
                                     PRIMARY KEY([SystemID])
                                     )";
         }
@@ -553,7 +553,7 @@ namespace SadnaSrc.Main
 
         public SqlDataReader SelectFromTable(string table, string toSelect)
         {
-            var selectRequest = "SELECT " + toSelect + " FROM " + table;
+            var selectRequest = "SELECT " + toSelect + " FROM " + table ;
             return new SqlCommand(selectRequest, _dbConnection).ExecuteReader();
         }
 

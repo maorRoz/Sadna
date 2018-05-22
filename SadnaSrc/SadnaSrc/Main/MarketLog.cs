@@ -35,7 +35,7 @@ namespace SadnaSrc.Main
         {
             try
             {
-                _dbConnection.InsertTable("System_Log", "LogID,Date,ModuleName,Description",
+                _dbConnection.InsertTable("System_Log", "LogID,LogDate,ModuleName,Description",
                     new[] {"@idValue", "@dateValue", "@moduleParam", "@descriptionParam"},
                     new object[] {logID, DateTime.Now, moduleName, description});
                 return true;

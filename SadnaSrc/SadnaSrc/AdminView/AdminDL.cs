@@ -50,7 +50,7 @@ namespace SadnaSrc.AdminView
 
         public bool IsUserExist(string userName)
         {
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "*", "Name = '" + userName +"'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "*", "Name = '" + userName +"'"))
             {
                 return dbReader.Read();
             }
@@ -74,7 +74,7 @@ namespace SadnaSrc.AdminView
 
         public void DeleteUser(string userName)
         {
-            dbConnection.DeleteFromTable("User", "Name = '" + userName +"'");
+            dbConnection.DeleteFromTable("Users", "Name = '" + userName +"'");
         }
 
         private string[] GetPurchaseHistory(SqlDataReader dbReader)

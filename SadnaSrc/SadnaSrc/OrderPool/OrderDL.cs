@@ -248,7 +248,7 @@ namespace SadnaSrc.OrderPool
         
         public string GetCreditCardToRefund(int userID)
         {
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "CreditCard", "SystemID ='" + userID + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "CreditCard", "SystemID ='" + userID + "'"))
             {
                 if (dbReader.Read())
                 {
@@ -260,7 +260,7 @@ namespace SadnaSrc.OrderPool
         
         public string GetNameToRefund(int userID)
         {
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "Name", "SystemID ='" + userID + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "Name", "SystemID ='" + userID + "'"))
             {
                 if (dbReader.Read())
                 {
@@ -272,7 +272,7 @@ namespace SadnaSrc.OrderPool
         
         public string GetAddressToSendPackage(int userID)
         {
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "Name", "SystemID ='" + userID + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "Name", "SystemID ='" + userID + "'"))
             {
                 if (dbReader.Read())
                 {
