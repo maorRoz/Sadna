@@ -33,15 +33,6 @@ namespace SadnaSrc.MarketHarmony
                 Name,
             };
         }
-
-        public string[] GetCategoryStringValues()
-        {
-            return new[]
-            {
-                "'" + SystemId + "'",
-                "'" + Name + "'"
-            };
-        }
         public void addProductToCategory(Product product)
         {
             products.AddLast(product);

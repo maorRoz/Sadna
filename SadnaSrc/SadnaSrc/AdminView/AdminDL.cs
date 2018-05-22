@@ -84,7 +84,7 @@ namespace SadnaSrc.AdminView
             {
                 PurchaseHistory record = new PurchaseHistory(dbReader.GetString(0), dbReader.GetString(1),
                     dbReader.GetString(2),dbReader.GetString(3),dbReader.GetInt32(4),dbReader.GetDouble(5),
-                    dbReader.GetString(6));
+                    dbReader.GetDateTime(6).ToString());
                 historyData.Add(record.ToString());
             }
 
@@ -101,7 +101,7 @@ namespace SadnaSrc.AdminView
         public void AddCategory(Category category)
         {
             dbConnection.InsertTable("Category", "SystemID, name",
-                category.GetCategoryStringValues(), category.GetCategoryValuesArray());
+                new[]{"@idParam","@nameParam"}, category.GetCategoryValuesArray());
         }
         public void RemoveCategory(Category category)
         {

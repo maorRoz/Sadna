@@ -25,7 +25,7 @@ namespace SadnaSrc.Main
         }
         private void InitiateDb()
         {
-            var dbPath = "Data Source=DESKTOP-NHU1RB6\\SQLEXPRESS;Initial Catalog=MarketData;Integrated Security=True";
+            var dbPath = "Data Source=DESKTOP-NHU1RB6\\SQLEXPRESS;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
             _dbConnection = new SqlConnection(dbPath);
              _dbConnection.Open();
         }
@@ -134,14 +134,14 @@ namespace SadnaSrc.Main
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L6', 'P20', 18, 0 , 'T' ,'01/01/2018', '31/12/2018', 'true')",
                 "INSERT INTO LotteryTicket (myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID) VALUES('T1', 'L1', 0, 0,0, 'WAITING', 0)",
                 "INSERT INTO LotteryTicket (myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID) VALUES('T2', 'L2', 0, 0,2, 'WAITING', 8)",
-                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70','12345678')",
-                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (2,'Arik2','H3','202cb962ac59075b964b07152d234b70','12345678')",
-                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (3,'Arik3','H3','202cb962ac59075b964b07152d234b70','12345678')",
-                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (4,'Big Smoke','Los Santos','202cb962ac59075b964b07152d234b70','12345678')",
-                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (5,'CJ','Los Santos','202cb962ac59075b964b07152d234b70','12345678')",
-                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (6,'Ryder','Los Santos','202cb962ac59075b964b07152d234b70','12345678')",
-                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (7,'Vadim Chernov','Mivtza Kilshon','202cb962ac59075b964b07152d234b70','12345678')",
-                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (8,'Vova','Menahem Donkelblum','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Arik1','H3','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (2,'Arik2','H3','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (3,'Arik3','H3','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (4,'Big Smoke','Los Santos','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (5,'CJ','Los Santos','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (6,'Ryder','Los Santos','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (7,'Vadim Chernov','Mivtza Kilshon','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (8,'Vova','Menahem Donkelblum','202cb962ac59075b964b07152d234b70','12345678')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
@@ -351,8 +351,8 @@ namespace SadnaSrc.Main
                                     [Name]          VARCHAR(256),
                                     [Store]         VARCHAR(256),
                                     [Quantity]      INTEGER,
-                                    [UnitPrice]     REAL,
-                                    [FinalPrice]    REAL,
+                                    [UnitPrice]     FLOAT,
+                                    [FinalPrice]    FLOAT,
                                     FOREIGN KEY([SystemID])     REFERENCES [Users]([SystemID]) ON DELETE CASCADE,
                                     PRIMARY KEY([SystemID],[Name],[Store],[UnitPrice])
                                     )";
@@ -368,7 +368,7 @@ namespace SadnaSrc.Main
                                     [Store]         VARCHAR(256),
                                     [SaleType]      VARCHAR(256),
                                     [Quantity]      INT,
-                                    [Price]         REAL,
+                                    [Price]         FLOAT,
                                     [Date]          DATETIME,
                                     PRIMARY KEY([UserName],[Product],[Store],[SaleType],[Date])
                                     )";
@@ -380,7 +380,7 @@ namespace SadnaSrc.Main
                         CREATE TABLE [Products] (
                                     [SystemID]     VARCHAR(256),
                                     [Name]         VARCHAR(256),
-                                    [BasePrice]    REAL,
+                                    [BasePrice]    FLOAT,
                                     [Description]  VARCHAR(256),
                                     PRIMARY KEY([SystemID])
                                     )";
@@ -418,9 +418,9 @@ namespace SadnaSrc.Main
                         CREATE TABLE [LotteryTicket] (
                                     [myID]              VARCHAR(256),
                                     [LotteryID]         VARCHAR(256),
-                                    [IntervalStart]     REAL,
-                                    [IntervalEnd]       REAL,
-                                    [Cost]              REAL,
+                                    [IntervalStart]     FLOAT,
+                                    [IntervalEnd]       FLOAT,
+                                    [Cost]              FLOAT,
                                     [Status]            VARCHAR(256),
                                     [UserID]            INT,
                                     PRIMARY KEY([myID]),
@@ -434,8 +434,8 @@ namespace SadnaSrc.Main
                         CREATE TABLE [LotteryTable] (
                                     [SystemID]              VARCHAR(256),
                                     [ProductSystemID]       VARCHAR(256),
-                                    [ProductNormalPrice]    REAL,
-                                    [TotalMoneyPayed]       REAL,
+                                    [ProductNormalPrice]    FLOAT,
+                                    [TotalMoneyPayed]       FLOAT,
                                     [storeName]             VARCHAR(256),
                                     [StartDate]             DATETIME,
                                     [EndDate]               DATETIME,
@@ -452,7 +452,7 @@ namespace SadnaSrc.Main
                                     [OrderID]           INT,
                                     [UserName]          VARCHAR(256),
                                     [ShippingAddress]   VARCHAR(256),
-                                    [TotalPrice]        REAL,
+                                    [TotalPrice]        FLOAT,
                                     [Date]              VARCHAR(256),
                                     PRIMARY KEY([OrderID])
                                     )";
@@ -465,7 +465,7 @@ namespace SadnaSrc.Main
                                     [OrderID]       INT,
                                     [Store]         VARCHAR(256),
                                     [Name]          VARCHAR(256),
-                                    [Price]         REAL,
+                                    [Price]         FLOAT,
                                     [Quantity]      INT,
                                     FOREIGN KEY([OrderID])      REFERENCES [Orders]([OrderID]) ON DELETE CASCADE,                                
                                     PRIMARY KEY([OrderID],[Store],[Name])

@@ -55,7 +55,7 @@ namespace BlackBox.OrderBlackBoxTests
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             string[] expectedHistoryFirstBuyer =
             {
-                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
             };
             string[] actualHistoryFirstBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom1").ReportList;
             Assert.AreEqual(expectedHistoryFirstBuyer.Length, actualHistoryFirstBuyer.Length);
@@ -76,16 +76,16 @@ namespace BlackBox.OrderBlackBoxTests
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge3.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             string[] expectedHistoryFirstBuyer =
             {
-                "User: Shalom1 Product: DELIVERY : Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 1 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
-                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom1 Product: DELIVERY : Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 1 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
+                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
             };
             string[] expectedHistorySecondBuyer =
             {
-                "User: Shalom2 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom2 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
             };
             string[] expectedHistoryThirdBuyer =
             {
-                "User: Shalom3 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom3 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
             };
             string[] actualHistoryFirstBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom1").ReportList;
             string[] actualHistorySecondBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom2").ReportList;
@@ -104,16 +104,16 @@ namespace BlackBox.OrderBlackBoxTests
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge3.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             string[] expectedHistoryFirstBuyer =
             {
-                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy")
             };
             string[] expectedHistorySecondBuyer =
             {
-                "User: Shalom2 Product: DELIVERY : Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 1 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
-                "User: Shalom2 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom2 Product: DELIVERY : Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 1 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
+                "User: Shalom2 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy")
             };
             string[] expectedHistoryThirdBuyer =
             {
-                "User: Shalom3 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom3 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy")
             };
             string[] actualHistoryFirstBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom1").ReportList;
             string[] actualHistorySecondBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom2").ReportList;
@@ -132,16 +132,16 @@ namespace BlackBox.OrderBlackBoxTests
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge3.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             string[] expectedHistoryFirstBuyer =
             {
-                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
             };
             string[] expectedHistorySecondBuyer =
             {
-                "User: Shalom2 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom2 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
             };
             string[] expectedHistoryThirdBuyer =
             {
-                "User: Shalom3 Product: DELIVERY : Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 1 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
-                "User: Shalom3 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom3 Product: DELIVERY : Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 1 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
+                "User: Shalom3 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
             };
             string[] actualHistoryFirstBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom1").ReportList;
             string[] actualHistorySecondBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom2").ReportList;
@@ -159,13 +159,13 @@ namespace BlackBox.OrderBlackBoxTests
             MarketYard.SetDateTime(Convert.ToDateTime("01/01/2019"));
             string[] expectedHistoryFirstBuyer =
             {
-                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
-                "User: Shalom1 Product: REFUND: Lottery Ticket Store: --- Sale: Lottery Quantity: 1 Price: -4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd")
+                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
+                "User: Shalom1 Product: REFUND: Lottery Ticket Store: --- Sale: Lottery Quantity: 1 Price: -4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy")
             };
             string[] expectedHistorySecondBuyer =
             {
-                "User: Shalom2 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
-                "User: Shalom2 Product: REFUND: Lottery Ticket Store: --- Sale: Lottery Quantity: 1 Price: -4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd")
+                "User: Shalom2 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
+                "User: Shalom2 Product: REFUND: Lottery Ticket Store: --- Sale: Lottery Quantity: 1 Price: -4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy")
             };
             string[] actualHistoryFirstBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom1").ReportList;
             string[] actualHistorySecondBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom2").ReportList;
@@ -198,7 +198,7 @@ namespace BlackBox.OrderBlackBoxTests
             Assert.AreEqual((int)OrderStatus.Success, _orderBridge1.BuyLotteryTicket("Fanta", storeName, 1, 4).Status);
             string[] expectedHistoryFirstBuyer =
             {
-                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("yyyy-MM-dd"),
+                "User: Shalom1 Product: Fanta Store: LotteryStore Sale: Lottery Quantity: 1 Price: 4 Date: "+DateTime.Now.Date.ToString("dd/MM/yyyy"),
             };
             string[] actualHistoryFirstBuyer = _adminBridge.ViewPurchaseHistoryByUser("Shalom1").ReportList;
             Assert.AreEqual(expectedHistoryFirstBuyer.Length,actualHistoryFirstBuyer.Length);

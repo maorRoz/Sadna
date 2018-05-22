@@ -112,7 +112,7 @@ namespace SadnaSrc.StoreCenter
 
       
 
-        public void EditLotteryTicketInDatabase(LotteryTicket lotter)
+        public void EditLotteryTicketInDatabase(LotteryTicket ticket)
         {
 
             string[] columnNames =
@@ -125,8 +125,8 @@ namespace SadnaSrc.StoreCenter
                 "Status",
                 "UserID"
             };
-            dbConnection.UpdateTable("LotteryTicket", "myID = '" + lotter.myID + "'", columnNames,
-                lotter.GetTicketStringValues(), lotter.GetTicketValuesArray());
+            dbConnection.UpdateTable("LotteryTicket", "myID = '" + ticket.myID + "'", columnNames,
+                new []{"@idParam","@lotteryParam","@interStart","@interEnd","@cost","@stat","@user"}, ticket.GetTicketValuesArray());
         }
 
 
@@ -152,7 +152,7 @@ namespace SadnaSrc.StoreCenter
         public void AddProductToDatabase(Product product)
         {
             dbConnection.InsertTable("Products", "SystemID, name, BasePrice, description",
-                product.GetProductStringValues(), product.GetProductValuesArray());
+                new []{"@idParam","@name","@price","@desc"}, product.GetProductValuesArray());
         }
 
         public void EditProductInDatabase(Product product)
@@ -165,7 +165,7 @@ namespace SadnaSrc.StoreCenter
                 "description"
             };
             dbConnection.UpdateTable("Products", "SystemID = '" + product.SystemId + "'", columnNames,
-                product.GetProductStringValues(), product.GetProductValuesArray());
+                new[] { "@idParam", "@name", "@price", "@desc" }, product.GetProductValuesArray());
         }
 
         public LinkedList<LotteryTicket> GetAllTickets(string systemid)
@@ -243,10 +243,10 @@ namespace SadnaSrc.StoreCenter
             }
         }
        
-        public void AddStore(Store toAdd)
+        public void AddStore(Store store)
         {
             dbConnection.InsertTable("Store", "SystemID, Name, Address, Status",
-                toAdd.GetStoreStringValues(), toAdd.GetStoreArray());
+                new []{"@idParam","@nameParam","@addressParam","@statParam"}, store.GetStoreArray());
         }
 
         public LotteryTicket GetLotteryTicket(string ticketid)
@@ -270,10 +270,11 @@ namespace SadnaSrc.StoreCenter
             dbConnection.DeleteFromTable("LotteryTicket", "myID = '" + lottery.myID + "'");
         }
 
-        public void AddLotteryTicket(LotteryTicket lottery)
+        public void AddLotteryTicket(LotteryTicket ticket)
         {
             dbConnection.InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID",
-                lottery.GetTicketStringValues(), lottery.GetTicketValuesArray());
+                new[] { "@idParam", "@lotteryParam", "@interStart", "@interEnd", "@cost", "@stat", "@user" },
+                ticket.GetTicketValuesArray());
         }
 
         public Product GetProductID(string iD)
@@ -324,7 +325,7 @@ namespace SadnaSrc.StoreCenter
 
             AddProductToDatabase(stockListItem.Product);
             dbConnection.InsertTable("Stock", "StockID, ProductSystemID, quantity, discount, PurchaseWay",
-                stockListItem.GetStockListItemStringValues(), stockListItem.GetStockListItemArray());
+                new []{"@idParam","@productIdParam","@quantParam","@discountParam","@purchParam"}, stockListItem.GetStockListItemArray());
         }
 
 
@@ -377,7 +378,7 @@ namespace SadnaSrc.StoreCenter
                 "Status",
             };
             dbConnection.UpdateTable("Store", "SystemID = '" + store.SystemId + "'", columnNames,
-                store.GetStoreStringValues(), store.GetStoreArray());
+                new[] { "@idParam", "@nameParam", "@addressParam", "@statParam" }, store.GetStoreArray());
         }
 
 
@@ -398,8 +399,9 @@ namespace SadnaSrc.StoreCenter
                 "discount",
                 "PurchaseWay"
             };
-            dbConnection.UpdateTable("Stock", "ProductSystemID = '" + stockListItem.Product.SystemId + "'", columnNames,
-                stockListItem.GetStockListItemStringValues(), stockListItem.GetStockListItemArray());
+            dbConnection.UpdateTable("Stock", "ProductSystemID = '" + stockListItem.Product.SystemId + "'",
+                columnNames, new[] { "@idParam", "@productIdParam", "@quantParam", "@discountParam", "@purchParam" },
+                stockListItem.GetStockListItemArray());
         }
 
         public void RemoveStore(Store store)

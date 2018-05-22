@@ -89,7 +89,7 @@ namespace BlackBox.StoreBlackBoxTests
 			string[] purchaseExpected =
 			{
 				"User: Vika Product: Ouch Store: Toy Sale: Immediate Quantity: 2 Price: 40 Date: " +
-			    DateTime.Now.Date.ToString("yyyy-MM-dd"),
+			    DateTime.Now.Date.ToString("dd/MM/yyyy"),
 			};
 			Assert.AreEqual(purchaseExpected.Length, purchaseReceived.Length);
 			for (int i = 0; i < purchaseReceived.Length; i++)
