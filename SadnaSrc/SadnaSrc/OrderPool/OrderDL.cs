@@ -201,7 +201,7 @@ namespace SadnaSrc.OrderPool
                 while (dbReader.Read())
                 {
                     string lotteryID = dbReader.GetString(0);
-                    DateTime endDate = Convert.ToDateTime(dbReader.GetString(1));
+                    DateTime endDate = dbReader.GetDateTime(1);
                     if (endDate < MarketYard.MarketDate)
                     {
                         expiredLotteries.Add(lotteryID);

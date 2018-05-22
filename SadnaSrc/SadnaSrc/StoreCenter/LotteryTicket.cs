@@ -96,6 +96,7 @@ namespace SadnaSrc.StoreCenter
                 LotteryNumber,
                 IntervalStart,
                 IntervalEnd,
+                Cost,
                 EnumStringConverter.PrintEnum(myStatus),
                 UserID
             };

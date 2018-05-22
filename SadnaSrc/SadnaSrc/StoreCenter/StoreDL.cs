@@ -469,7 +469,8 @@ namespace SadnaSrc.StoreCenter
         {
             dbConnection.InsertTable("LotteryTable",
                 "SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName ,StartDate,EndDate,IsActive ",
-                lotteryManagment.GetLotteryManagmentStringValues(), lotteryManagment.GetLotteryManagmentValuesArray());
+                new []{"@idParam","@prodIdParam","@prodPriceParam","@totalPriceParam","@storeParam","@startDateParam","@endDataParam","@activeParam"}
+                , lotteryManagment.GetLotteryManagmentValuesArray());
 
         }
 
@@ -519,10 +520,10 @@ namespace SadnaSrc.StoreCenter
                 while (dbReader.Read())
                 {
                     lotteryManagement = new LotterySaleManagmentTicket(dbReader.GetString(0), dbReader.GetString(4), product,
-                        DateTime.Parse(dbReader.GetString(5)), DateTime.Parse(dbReader.GetString(6)));
+                        dbReader.GetDateTime(5), dbReader.GetDateTime(6));
                     lotteryManagement.TotalMoneyPayed = dbReader.GetDouble(3);
 
-                    lotteryManagement.IsActive = (Boolean.Parse(dbReader.GetString(7)));
+                    lotteryManagement.IsActive = (bool.Parse(dbReader.GetString(7)));
                 }
             }
 
@@ -542,7 +543,8 @@ namespace SadnaSrc.StoreCenter
                 "IsActive"
             };
             dbConnection.UpdateTable("LotteryTable", "SystemID = '" + lotteryManagment.SystemID + "'", columnNames,
-                lotteryManagment.GetLotteryManagmentStringValues(), lotteryManagment.GetLotteryManagmentValuesArray());
+                new[] { "@idParam", "@prodIdParam", "@prodPriceParam", "@totalPriceParam", "@storeParam", "@startDateParam", "@endDataParam", "@activeParam" }
+                , lotteryManagment.GetLotteryManagmentValuesArray());
         }
         public Category GetCategoryByName(string categoryname)
         {
