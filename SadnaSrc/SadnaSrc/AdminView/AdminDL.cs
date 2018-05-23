@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,7 +49,7 @@ namespace SadnaSrc.AdminView
 
         public bool IsUserExist(string userName)
         {
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "*", "Name = '" + userName +"'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "*", "Name = '" + userName +"'"))
             {
                 return dbReader.Read();
             }
@@ -73,17 +73,17 @@ namespace SadnaSrc.AdminView
 
         public void DeleteUser(string userName)
         {
-            dbConnection.DeleteFromTable("User", "Name = '" + userName +"'");
+            dbConnection.DeleteFromTable("Users", "Name = '" + userName +"'");
         }
 
-        private string[] GetPurchaseHistory(SQLiteDataReader dbReader)
+        private string[] GetPurchaseHistory(SqlDataReader dbReader)
         {
             List<string> historyData = new List<string>();
             while (dbReader.Read())
             {
                 PurchaseHistory record = new PurchaseHistory(dbReader.GetString(0), dbReader.GetString(1),
                     dbReader.GetString(2),dbReader.GetString(3),dbReader.GetInt32(4),dbReader.GetDouble(5),
-                    dbReader.GetString(6));
+                    dbReader.GetDateTime(6).ToString());
                 historyData.Add(record.ToString());
             }
 
@@ -100,7 +100,7 @@ namespace SadnaSrc.AdminView
         public void AddCategory(Category category)
         {
             dbConnection.InsertTable("Category", "SystemID, name",
-                category.GetCategoryStringValues(), category.GetCategoryValuesArray());
+                new[]{"@idParam","@nameParam"}, category.GetCategoryValuesArray());
         }
         public void RemoveCategory(Category category)
         {

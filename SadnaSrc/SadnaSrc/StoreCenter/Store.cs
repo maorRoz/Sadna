@@ -92,16 +92,6 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Address);
             return hashCode;
         }
-        public string[] GetStoreStringValues()
-        {
-            return new[]
-            {
-                "'" + SystemId + "'",
-                "'" + Name + "'",
-                "'" + Address + "'",
-                "'" + GetStringFromActive() + "'"
-            };
-        }
         public object[] GetStoreArray()
         {
             return new object[]

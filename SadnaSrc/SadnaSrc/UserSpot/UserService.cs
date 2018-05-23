@@ -1,11 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SadnaSrc.Main;
+﻿using SadnaSrc.Main;
 using SadnaSrc.MarketFeed;
-using SadnaSrc.StoreCenter;
 
 namespace SadnaSrc.UserSpot
 {

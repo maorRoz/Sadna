@@ -35,10 +35,10 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(StockListItem obj)
         {
+            var isDiscountsEqual = Discount?.Equals(obj.Discount) ?? obj.Discount == null;
             return systemId.Equals(obj.systemId) &&
                 Quantity == obj.Quantity &&
-                Product.SystemId == obj.Product.SystemId &&
-                Discount.discountCode == obj.Discount.discountCode &&
+                Product.SystemId == obj.Product.SystemId && isDiscountsEqual &&
                 EnumStringConverter.PrintEnum(PurchaseWay).Equals(EnumStringConverter.PrintEnum(obj.PurchaseWay));
         }
 
@@ -52,38 +52,22 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + PurchaseWay.GetHashCode();
             return hashCode;
         }
+
         public object[] GetStockListItemArray()
         {
-            object discountObject = "";
+            object discountCode = "null";
             if (Discount != null)
             {
-                discountObject = Discount;
-            }
-
-            return new []
-            {
-                systemId,
-                Product,
-                Quantity,
-                discountObject,
-                PurchaseWay
-            };
-        }
-        public string[] GetStockListItemStringValues()
-        {
-            string ifDiscountNotExists = "null";
-            if (Discount != null)
-            {
-                ifDiscountNotExists = Discount.discountCode;
+                discountCode = Discount.discountCode;
             }
 
             return new[]
             {
-                "'" + systemId + "'",
-                "'" + Product.SystemId + "'",
-                "'" + Quantity + "'",
-                "'" + ifDiscountNotExists + "'",
-                "'" + EnumStringConverter.PrintEnum(PurchaseWay) + "'"
+                systemId,
+                Product.SystemId,
+                Quantity,
+                discountCode,
+                EnumStringConverter.PrintEnum(PurchaseWay)
             };
         }
     }

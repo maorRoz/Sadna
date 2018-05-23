@@ -69,7 +69,7 @@ namespace SadnaSrc.UserSpot
 				var storeNames = _userDB.GetAllActiveStoreNames();
 			    Answer = new UserAnswer(ViewStoresStatus.Success, "you've got all the store names!", storeNames);
 		    }
-		    catch (UserException e)
+		    catch (UserException)
 		    {
 			    MarketLog.Log("UserSpot", "User " + userID + " has failed to view all store names." +
 			                              " Error message has been created!");

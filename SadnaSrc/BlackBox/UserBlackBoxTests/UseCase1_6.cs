@@ -10,7 +10,6 @@ namespace BlackBox.UserBlackBoxTests
 		private IUserBridge _bridge;
 		private IUserBridge _bridge1;
 		private IUserBridge _bridgeGuest;
-		private IUserBridge _bridgeGuest2;
 		private IStoreShoppingBridge _storeBridge;
 		private IStoreShoppingBridge _storeGuestBridge;
 		private IStoreManagementBridge _storeManage1;
@@ -31,7 +30,6 @@ namespace BlackBox.UserBlackBoxTests
 			User1AddToCart();
 			GuestAddToCart();
 			_storeGuestBridge = null;
-			_bridgeGuest2 = null;
 		}
 
 		private void GuestAddToCart()

@@ -166,9 +166,9 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void GetStockListItembyProductID()
         {
-            Discount D = handler.GetDiscount("D1");//exist in DL by SQL injection
-            Product P = handler.GetProductID("P1");//exist in DL by SQL injection
-            StockListItem expected = new StockListItem(5, P, D, PurchaseEnum.Immediate, "S1"); //exist in DL by SQL injection
+            Discount discount = handler.GetDiscount("D1");
+            Product product = handler.GetProductID("P1");
+            StockListItem expected = new StockListItem(5, product, discount, PurchaseEnum.Immediate, "S1");
             StockListItem find = handler.GetStockListItembyProductID("P1");
             Assert.AreEqual(expected, find);
 
