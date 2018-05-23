@@ -87,7 +87,8 @@ namespace SadnaSrc.PolicyComponent
         {
             string fields = "SystemID,OperatorType,PolicyType,Subject,COND1ID,COND2ID,isRoot";
             dbConnection.InsertTable("Operator", fields,
-                policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
+                new []{"@idParam","@typeParam","@policyParam","@subjectParam","@cond1Param","@cond2Param","@rootParam"},
+                policy.GetPolicyValuesArray());
                 Save_NonRoot_Policy(policy._cond1);
                 Save_NonRoot_Policy(policy._cond2);
         }
@@ -95,7 +96,8 @@ namespace SadnaSrc.PolicyComponent
         {
             string fields = "SystemID,conditionsType,PolicyType,Subject,value,isRoot";
             dbConnection.InsertTable("conditions", fields,
-                policy.GetPolicyStringValues(), policy.GetPolicyValuesArray());
+                new []{"@idParam","@conditionParam","@typeParam","@subjectParam","@valueParam","@rootParam"},
+                policy.GetPolicyValuesArray());
         }
 
         

@@ -186,11 +186,11 @@ namespace SadnaSrc.StoreCenter
 
         private PurchaseHistory[] GetPurchaseHistory(SqlDataReader dbReader)
         {
-            List<PurchaseHistory> historyData = new List<PurchaseHistory>();
+            var historyData = new List<PurchaseHistory>();
             while (dbReader.Read())
             {
                 historyData.Add(new PurchaseHistory(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetString(2),
-                    dbReader.GetString(3), dbReader.GetInt32(4), dbReader.GetDouble(5), dbReader.GetString(6)));
+                    dbReader.GetString(3), dbReader.GetInt32(4), dbReader.GetDouble(5), dbReader.GetDateTime(6).ToString()));
             }
 
             return historyData.ToArray();

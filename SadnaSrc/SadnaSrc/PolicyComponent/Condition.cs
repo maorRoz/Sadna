@@ -15,31 +15,6 @@ namespace SadnaSrc.PolicyComponent
             _value = value;
         }
 
-        public string[] GetPolicyStringValues()
-        {
-
-            string subjectval;
-            if (Subject == null)
-                subjectval = "'NULL'";
-            else
-                subjectval = "'"+Subject+ "'";
-
-            string valueVal;
-            if (_value == null)
-                valueVal = "'NULL'";
-            else
-                valueVal = "'"+ _value + "'";
-            return new[]
-            {
-                "" + ID,
-                "'" + GetMyType() + "'",
-                "'" + PrintEnum(Type) + "'",
-                subjectval,
-                valueVal,
-                "'" + PrintBoolean(IsRoot) + "'"
-            };
-        }
-
         public object[] GetPolicyValuesArray()
         {
 

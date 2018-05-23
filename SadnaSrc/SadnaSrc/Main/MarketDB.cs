@@ -187,12 +187,6 @@ namespace SadnaSrc.Main
 
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
-                if (thingsToInsertByForce[i] ==
-                    "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D1', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'True')"
-                )
-                {
-                    var me = 5;
-                }
                 var insertCommand = new SqlCommand(thingsToInsertByForce[i], _dbConnection);
                 try
                 {
