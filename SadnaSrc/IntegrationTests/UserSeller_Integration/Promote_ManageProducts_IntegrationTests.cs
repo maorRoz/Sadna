@@ -24,9 +24,6 @@ namespace IntegrationTests.UserSeller_Integration
         private string pass = "123";
         private string storeAction1 = "ViewPurchaseHistory";
         private string storeAction2 = "ManageProducts";
-        private string storeAction3 = "PromoteStoreAdmin";
-        private string storeAction4 = "DeclareDiscountPolicy";
-        private string storeOwner = "StoreOwner";
         private string newProduct = "Coated Peanuts";
         private string existingProduct = "Bamba";
 

@@ -126,9 +126,9 @@ namespace BlackBox.OrderBlackBoxTests
 			string[] expectedHistory =
 			{
 				"User: Shalom Product: Coffee Store: HAHAHA Sale: Immediate Quantity: 3 Price: 30 Date: " +
-			    DateTime.Now.Date.ToString("yyyy-MM-dd"),
+			    DateTime.Now.Date.ToString("dd/MM/yyyy"),
 				"User: Shalom Product: Tea Store: Yalla Sale: Immediate Quantity: 4 Price: 40 Date: " +
-				DateTime.Now.Date.ToString("yyyy-MM-dd")
+				DateTime.Now.Date.ToString("dd/MM/yyyy")
             };
 			Assert.AreEqual(expectedHistory.Length, receivedHistory.Length);
 			for (int i = 0; i < expectedHistory.Length; i++)

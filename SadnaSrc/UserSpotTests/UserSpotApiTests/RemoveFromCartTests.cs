@@ -16,10 +16,8 @@ namespace UserSpotTests.UserSpotApiTests
         private Mock<IMarketDB> marketDbMocker;
         private Mock<IUserDL> userDbMocker;
         private readonly int userID = 5000;
-        private string[] expectedCartStrings;
         private CartItem item1;
         private CartItem item2;
-        private CartItem[] expected;
 
         [TestInitialize]
         public void MarketBuilder()

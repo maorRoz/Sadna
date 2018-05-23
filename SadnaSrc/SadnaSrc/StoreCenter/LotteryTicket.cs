@@ -96,21 +96,9 @@ namespace SadnaSrc.StoreCenter
                 LotteryNumber,
                 IntervalStart,
                 IntervalEnd,
-                myStatus,
+                Cost,
+                EnumStringConverter.PrintEnum(myStatus),
                 UserID
-            };
-        }
-        public string[] GetTicketStringValues()
-        {
-            return new[]
-            {
-                "'" + myID + "'",
-                "'" + LotteryNumber + "'",
-                "'" + IntervalStart + "'",
-                "'" + IntervalEnd + "'",
-                "'" + Cost + "'",
-                "'" + EnumStringConverter.PrintEnum(myStatus) + "'",
-                "'" + UserID + "'"
             };
         }
         private static string GetLotteryTicketID()

@@ -26,7 +26,6 @@ namespace IntegrationTests.UserAdmin_Integration
         private string soleOwnerName = "Arik2";
         private string soleOwnerPass = "123";
         private string notSoleOwnerName = "Arik3";
-        private string notSoleOwnerPass = "123";
         [TestInitialize]
         public void MarketBuilder()
         {
@@ -175,10 +174,10 @@ namespace IntegrationTests.UserAdmin_Integration
             string[] actualHistory = adminServiceSession.ViewPurchaseHistoryByUser("Arik1").ReportList;
             string[] expectedHistory =
             {
-                new PurchaseHistory("Arik1", "Goldstar","The Red Rock", "Immediate",5,55, DateTime.Now.Date.ToString("yyyy-MM-dd")).ToString(),
-                new PurchaseHistory("Arik1", "Health Potion", "X", "Immediate",2,11.5, "2018-12-29").ToString(),
-                new PurchaseHistory("Arik1", "INT Potion","Y", "Lottery",2,8.0, "2018-12-29").ToString(),
-                new PurchaseHistory("Arik1", "Mana Potion", "Y", "Lottery",3,12.0, "2018-12-29").ToString()
+                new PurchaseHistory("Arik1", "Goldstar","The Red Rock", "Immediate",5,55, DateTime.Now.Date.ToString("dd/MM/yyyy")).ToString(),
+                new PurchaseHistory("Arik1", "Health Potion", "X", "Immediate",2,11.5, "29/12/2018").ToString(),
+                new PurchaseHistory("Arik1", "INT Potion","Y", "Lottery",2,8.0, "29/12/2018").ToString(),
+                new PurchaseHistory("Arik1", "Mana Potion", "Y", "Lottery",3,12.0, "29/12/2018").ToString()
             };
             Assert.AreEqual(expectedHistory.Length, actualHistory.Length);
             for (int i = 0; i < expectedHistory.Length; i++)
@@ -200,8 +199,8 @@ namespace IntegrationTests.UserAdmin_Integration
             string[] actualHistory = adminServiceSession.ViewPurchaseHistoryByStore("X").ReportList;
             string[] expectedHistory =
             {
-                new PurchaseHistory("Arik1", "Health Potion","X", "Immediate",2,11.5, "2018-12-29").ToString(),
-                new PurchaseHistory("Arik1", "BOX", "X", "Immediate", 3, 300, DateTime.Now.Date.ToString("yyyy-MM-dd")).ToString(),
+                new PurchaseHistory("Arik1", "BOX", "X", "Immediate", 3, 300, DateTime.Now.Date.ToString("dd/MM/yyyy")).ToString(),
+                new PurchaseHistory("Arik1", "Health Potion","X", "Immediate",2,11.5, "29/12/2018").ToString()
             };
             Assert.AreEqual(expectedHistory.Length,actualHistory.Length);
             for (int i = 0; i < expectedHistory.Length; i++)

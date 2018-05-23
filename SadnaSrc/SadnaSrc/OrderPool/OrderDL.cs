@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SadnaSrc.Main;
 
 namespace SadnaSrc.OrderPool
@@ -201,7 +197,7 @@ namespace SadnaSrc.OrderPool
                 while (dbReader.Read())
                 {
                     string lotteryID = dbReader.GetString(0);
-                    DateTime endDate = Convert.ToDateTime(dbReader.GetString(1));
+                    DateTime endDate = dbReader.GetDateTime(1);
                     if (endDate < MarketYard.MarketDate)
                     {
                         expiredLotteries.Add(lotteryID);
@@ -248,7 +244,7 @@ namespace SadnaSrc.OrderPool
         
         public string GetCreditCardToRefund(int userID)
         {
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "CreditCard", "SystemID ='" + userID + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "CreditCard", "SystemID ='" + userID + "'"))
             {
                 if (dbReader.Read())
                 {
@@ -260,7 +256,7 @@ namespace SadnaSrc.OrderPool
         
         public string GetNameToRefund(int userID)
         {
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "Name", "SystemID ='" + userID + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "Name", "SystemID ='" + userID + "'"))
             {
                 if (dbReader.Read())
                 {
@@ -272,7 +268,7 @@ namespace SadnaSrc.OrderPool
         
         public string GetAddressToSendPackage(int userID)
         {
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("User", "Name", "SystemID ='" + userID + "'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "Name", "SystemID ='" + userID + "'"))
             {
                 if (dbReader.Read())
                 {

@@ -83,8 +83,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             liorSession.AddNewProduct("item", 1, "des", 4);
             MarketAnswer ans = liorSession.AddDiscountToProduct("item", DateTime.Parse("01/01/2019"), DateTime.Parse("20/01/2019"), 10, "HIDDEN", true);
             ProductToDelete = handler.GetProductFromStore("X", "item");
-            Discount find = ProductToDelete.Discount;
-            Assert.IsNotNull(find);
+            Assert.IsNotNull(ProductToDelete.Discount);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
         

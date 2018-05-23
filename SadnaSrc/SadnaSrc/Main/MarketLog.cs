@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SadnaSrc.Main
 {
@@ -35,7 +29,7 @@ namespace SadnaSrc.Main
         {
             try
             {
-                _dbConnection.InsertTable("System_Log", "LogID,Date,ModuleName,Description",
+                _dbConnection.InsertTable("System_Log", "LogID,LogDate,ModuleName,Description",
                     new[] {"@idValue", "@dateValue", "@moduleParam", "@descriptionParam"},
                     new object[] {logID, DateTime.Now, moduleName, description});
                 return true;

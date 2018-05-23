@@ -55,7 +55,7 @@ namespace IntegrationTests.FullCycle_Integration
                 orderServiceSession.GiveDetails("Someone", "Somewhere", "12345689");
                 orderServiceSession.BuyItemFromImmediate(product, store, 3, 11, null);
                 Assert.AreEqual(2, sysadminSession.ViewPurchaseHistoryByStore(store).ReportList.Length);
-                string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[1];
+                string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[0];
                 Assert.AreEqual(PurchaseString("Someone"), actual);
 
             }
@@ -143,7 +143,7 @@ namespace IntegrationTests.FullCycle_Integration
         private string PurchaseString(string buyer)
         {
             return "User: " + buyer + " Product: Goldstar Store: The Red Rock" + 
-                   " Sale: Immediate Quantity: 3 Price: 33 Date: " + DateTime.Now.Date.ToString("yyyy-MM-dd");
+                   " Sale: Immediate Quantity: 3 Price: 33 Date: " + DateTime.Now.Date.ToString("dd/MM/yyyy");
         }
     }
 }

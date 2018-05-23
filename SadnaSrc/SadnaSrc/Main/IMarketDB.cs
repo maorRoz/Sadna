@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,10 +11,10 @@ namespace SadnaSrc.Main
     {
          void InsertTable(string table, string tableColumns, string[] valuesNames, object[] values);
 
-         SQLiteDataReader SelectFromTable(string table, string toSelect);
+        SqlDataReader SelectFromTable(string table, string toSelect);
 
 
-         SQLiteDataReader SelectFromTableWithCondition(string table, string toSelect, string condition);
+        SqlDataReader SelectFromTableWithCondition(string table, string toSelect, string condition);
 
 
          void UpdateTable(string table, string updateCondition, string[] columnNames,string[] valuesNames, object[] values);
@@ -22,7 +22,7 @@ namespace SadnaSrc.Main
 
          void DeleteFromTable(string table, string deleteCondition);
 
-         SQLiteDataReader freeStyleSelect(string cmd);
+        SqlDataReader freeStyleSelect(string cmd);
 
     }
 }

@@ -11,7 +11,6 @@ namespace MarketWeb.Controllers
 {
     public class CartController : Controller
     {
-        private int Success = 0;
         public IActionResult CartManagement(int systemId, string state,string message)
         {
             var userService = MarketServer.Users[systemId];

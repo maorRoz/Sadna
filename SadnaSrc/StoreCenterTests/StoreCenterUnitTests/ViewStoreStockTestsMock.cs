@@ -17,9 +17,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
             private Mock<IStoreDL> handler;
             private Mock<IUserShopper> userService;
             private Mock<IMarketDB> marketDbMocker;
-            private Product prod;
-            private Discount discount;
-            private StockListItem stock;
             private ViewStoreStockSlave slave;
             private string[] ids;
 

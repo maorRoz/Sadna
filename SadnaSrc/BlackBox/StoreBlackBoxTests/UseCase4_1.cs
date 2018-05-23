@@ -14,7 +14,6 @@ namespace BlackBox.StoreBlackBoxTests
 		private IStoreShoppingBridge _storeBridge;
 		private IStoreManagementBridge _storeManager1;
 		private IStoreManagementBridge _storeManager2;
-		private IUserBridge _adminBridge;
 		private IUserBridge _guestBridge;
 		private IOrderBridge _orderBridge;
 		private readonly string storeAction1 = "PromoteStoreAdmin";
@@ -39,7 +38,6 @@ namespace BlackBox.StoreBlackBoxTests
 			_storeManager1.GetStoreManagementService(_bridgeSignUp.GetUserSession(), "Volcano");
 			_storeManager2 = null;
 			_signInBridge = null;
-			_adminBridge = null;
 			_guestBridge = null;
 			_orderBridge = null;
 		}
@@ -316,7 +314,7 @@ namespace BlackBox.StoreBlackBoxTests
 				string[] expected =
 				{
 					"User: Odin Product: Yolo Store: Volcano Sale: Immediate Quantity: 2 Price: 10 Date: " +
-				    DateTime.Now.Date.ToString("yyyy-MM-dd"),
+				    DateTime.Now.Date.ToString("dd/MM/yyyy"),
 				};
 
 				Assert.AreEqual(expected.Length, received.Length);

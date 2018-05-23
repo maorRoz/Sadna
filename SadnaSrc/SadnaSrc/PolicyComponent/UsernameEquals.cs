@@ -49,5 +49,14 @@ namespace SadnaSrc.PolicyComponent
             return answer;
         }
 
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

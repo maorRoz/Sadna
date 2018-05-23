@@ -69,17 +69,6 @@ namespace SadnaSrc.StoreCenter
                 Description
             };
         }
-
-        public string[] GetProductStringValues()
-        {
-            return new[]
-            {
-                "'" + SystemId + "'",
-                "'" + Name + "'",
-                BasePrice + "",
-                "'" + Description + "'"
-            };
-        }
         
         private static string GetProductID()
         {

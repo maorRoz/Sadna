@@ -59,7 +59,7 @@ namespace SadnaSrc.StoreCenter
         {
             return ((startDate > MarketYard.MarketDate) && (endDate > MarketYard.MarketDate) && (endDate > startDate));
         }
-        public LotteryTicket PurchaseALotteryTicket(double moneyPayed, int userID)
+        private void PurchaseALotteryTicket(double moneyPayed, int userID)
         {
             StoreDL handler = StoreDL.Instance;
             LotteryTicket lottery = new LotteryTicket(SystemID, (int)TotalMoneyPayed,
@@ -67,7 +67,6 @@ namespace SadnaSrc.StoreCenter
             handler.AddLotteryTicket(lottery);
             TotalMoneyPayed += moneyPayed;
             handler.EditLotteryInDatabase(this);
-            return lottery;
         }
         public LotteryTicket Dolottery()
         {
@@ -156,30 +155,6 @@ namespace SadnaSrc.StoreCenter
             }
             return InformAllWinner(winnerResult).UserID;
         }
-        public string[] GetLotteryManagmentStringValues()
-        {
-            string isActive = "";
-            if (IsActive)
-            {
-                isActive = "true";
-            }
-            else
-            {
-                isActive = "false";
-            }
-
-            return new[]
-            {
-                "'" + SystemID + "'",
-                "'" + Original.SystemId + "'",
-                "'" + ProductNormalPrice + "'",
-                "'" + TotalMoneyPayed + "'",
-                "'" + storeName + "'",
-                "'" + StartDate + "'",
-                "'" + EndDate + "'",
-                "'" + isActive + "'"
-            };
-        }
         public object[] GetLotteryManagmentValuesArray()
         {
             return new object[]
@@ -191,7 +166,7 @@ namespace SadnaSrc.StoreCenter
                 storeName,
                 StartDate,
                 EndDate,
-                IsActive
+                IsActive.ToString()
             };
         }
         private static string GetLottyerID()

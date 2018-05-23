@@ -11,7 +11,6 @@ namespace MarketFeedTests.UnitTests
 
         private Publisher publisher;
         private Mock<IFeedDL> feedDbMocker;
-        private Mock<IFeedQueue> feedQueueMocker;
         private int userId1 = 6001;
         private int userId2 = 6002;
         private int userId3 = 6003;

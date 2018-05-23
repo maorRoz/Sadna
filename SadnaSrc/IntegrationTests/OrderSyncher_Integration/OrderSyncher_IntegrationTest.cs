@@ -16,15 +16,9 @@ namespace IntegrationTests.OrderSyncher_Integration
     public class OrderSyncher_IntegrationTest
     {
         private IUserService userServiceSession;
-        private OrderService orderServiceSession;
-        private StockSyncher storeServiceSession;
         private OrderSyncherHarmony orderSyncherHarmony;
 
         private MarketYard marketSession;
-        private string store1 = "The Red Rock";
-        private string store2 = "24";
-        private string product1 = "Bamba";
-        private string product2 = "Coated Peanuts";
 
         [TestInitialize]
         public void MarketBuilder()
@@ -33,8 +27,6 @@ namespace IntegrationTests.OrderSyncher_Integration
             marketSession = MarketYard.Instance;
             userServiceSession = (UserService)marketSession.GetUserService();
             userServiceSession.EnterSystem();
-            orderServiceSession = (OrderService)marketSession.GetOrderService(ref userServiceSession);
-            storeServiceSession = StockSyncher.Instance;
             orderSyncherHarmony = new OrderSyncherHarmony();
         }
 
