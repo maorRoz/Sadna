@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.StoreCenter;
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTests

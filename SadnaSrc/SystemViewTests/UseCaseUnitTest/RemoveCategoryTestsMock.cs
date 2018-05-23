@@ -2,6 +2,7 @@
 using Moq;
 using SadnaSrc.AdminView;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SystemViewTests

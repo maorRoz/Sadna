@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.MarketFeed;
 using Moq;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.OrderPool;
 
 namespace MarketFeedTests.IntegrationTests

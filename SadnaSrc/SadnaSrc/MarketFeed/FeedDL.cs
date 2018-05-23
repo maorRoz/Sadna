@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.MarketFeed
@@ -14,10 +15,10 @@ namespace SadnaSrc.MarketFeed
 
         public static FeedDL Instance => _instance ?? (_instance = new FeedDL());
 
-        private MarketDB dbConnection;
+        private readonly IMarketDB dbConnection;
         private FeedDL()
         {
-            dbConnection = MarketDB.Instance;
+            dbConnection = new ProxyMarketDB();
         }
 
         public int[] GetUserIds()

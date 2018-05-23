@@ -82,7 +82,8 @@
     <Compile Include="AdminView\AdminDL.cs" />
     <Compile Include="AdminView\AdminException.cs" />
     <Compile Include="AdminView\ViewPoliciesSlave.cs" />
-    <Compile Include="Main\IMarketDB.cs" />
+    <Compile Include="MarketData\DataException.cs" />
+    <Compile Include="MarketData\IMarketDB.cs" />
     <Compile Include="Main\IOrderService.cs" />
     <Compile Include="Main\IPaymentService.cs" />
     <Compile Include="Main\IStoreManagementService.cs" />
@@ -94,7 +95,8 @@
     <Compile Include="Main\MarketMistakeService.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
-    <Compile Include="Main\MarketDB.cs" />
+    <Compile Include="MarketData\MarketDB.cs" />
+    <Compile Include="MarketData\ProxyMarketDB.cs" />
     <Compile Include="MarketFeed\FeedDL.cs" />
     <Compile Include="MarketFeed\FeedObserver.cs" />
     <Compile Include="MarketFeed\IFeedQueue.cs" />

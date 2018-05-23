@@ -6,6 +6,7 @@ using SadnaSrc.Main;
 using SadnaSrc.UserSpot;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.AdminView;
+using SadnaSrc.MarketData;
 
 namespace IntegrationTests.UserAdmin_Integration
 {

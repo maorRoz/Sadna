@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.UserSpot;
 namespace UserSpotTests.UserSpotApiTests
 {

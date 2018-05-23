@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Core.Common;
+using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Castle.Core.Internal;
+using SadnaSrc.Main;
 
-namespace SadnaSrc.Main
+
+namespace SadnaSrc.MarketData
 {
     public class MarketDB : IMarketDB
     {
@@ -191,9 +187,12 @@ namespace SadnaSrc.Main
                 {
                     insertCommand.ExecuteNonQuery();
                 }
-                catch (Exception)
+                catch (SqlException)
                 {
-                    //dont care
+                    if (_dbConnection.State != ConnectionState.Open)
+                    {
+                        throw;
+                    }
                 }
             }
 
@@ -229,9 +228,12 @@ namespace SadnaSrc.Main
                 {
                     insertCommand.ExecuteNonQuery();
                 }
-                catch (Exception)
+                catch (SqlException)
                 {
-                    //dont care
+                    if (_dbConnection.State != ConnectionState.Open)
+                    {
+                        throw;
+                    }
                 }
             }
         }
@@ -538,27 +540,24 @@ namespace SadnaSrc.Main
                 commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
             }
 
-            try
-            {
-                commandDb.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                throw new MarketException(MarketError.DbError,"Problem occured in the attempt to save system data in DB, returned error message :" +
-                                  e.Message);
-            }
+            commandDb.ExecuteNonQuery();
+
         }
 
         public SqlDataReader SelectFromTable(string table, string toSelect)
         {
             var selectRequest = "SELECT " + toSelect + " FROM " + table ;
+
             return new SqlCommand(selectRequest, _dbConnection).ExecuteReader();
+
         }
 
         public SqlDataReader SelectFromTableWithCondition(string table, string toSelect, string condition)
         {
             var selectRequest = "SELECT " + toSelect + " FROM " + table + " WHERE "+condition;
+
             return new SqlCommand(selectRequest, _dbConnection).ExecuteReader();
+
         }
 
         public void UpdateTable(string table,string updateCondition,string[] columnNames, string[] valuesNames, object[] values)
@@ -576,34 +575,27 @@ namespace SadnaSrc.Main
                 commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
             }
 
-            try
-            {
-                commandDb.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                throw new MarketException(MarketError.DbError,"Problem occured in the attempt to update system data in DB, returned error message :" + e.Message);
-            }
+            commandDb.ExecuteNonQuery();
+
         }
 
         public void DeleteFromTable(string table,string deleteCondition)
         {
             var deleteCommand = "DELETE FROM " + table + " WHERE " + deleteCondition;
             var commandDb = new SqlCommand(deleteCommand, _dbConnection);
-            try
-            {
-                commandDb.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                throw new MarketException(MarketError.DbError,"Problem occured in the attempt to delete system data in DB, returned error message :" + e.Message);
-            }
+
+            commandDb.ExecuteNonQuery();
 
         }
 
         public SqlDataReader freeStyleSelect(string cmd)
         {
             return new SqlCommand(cmd, _dbConnection).ExecuteReader();
+        }
+
+        public bool IsConnected()
+        {
+            return _dbConnection.State == ConnectionState.Open;
         }
     } 
 }

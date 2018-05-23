@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.StoreCenter;
 
@@ -16,7 +17,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
     {
 
         private Mock<IStoreDL> handler;
-        private Mock<IUserShopper> userService;
         private Mock<IMarketDB> marketDbMocker;
         private ViewStoreNamesSlave slave;
 
@@ -30,7 +30,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
-            userService = new Mock<IUserShopper>();
             handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
 
             slave = new ViewStoreNamesSlave(handler.Object);
