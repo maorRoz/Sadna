@@ -35,10 +35,10 @@ namespace SadnaSrc.StoreCenter
         }
         private bool Equals(StockListItem obj)
         {
+            var isDiscountsEqual = Discount?.Equals(obj.Discount) ?? obj.Discount == null;
             return systemId.Equals(obj.systemId) &&
                 Quantity == obj.Quantity &&
-                Product.SystemId == obj.Product.SystemId &&
-                Discount.discountCode == obj.Discount.discountCode &&
+                Product.SystemId == obj.Product.SystemId && isDiscountsEqual &&
                 EnumStringConverter.PrintEnum(PurchaseWay).Equals(EnumStringConverter.PrintEnum(obj.PurchaseWay));
         }
 

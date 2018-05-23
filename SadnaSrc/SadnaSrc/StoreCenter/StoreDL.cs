@@ -61,10 +61,10 @@ namespace SadnaSrc.StoreCenter
         }
         public void AddProductToCategory(string categoryid, string productid)
         {
-            string[] a = { "'" + categoryid + "'", "'" + productid + "'" };
-            object[] b = { categoryid, productid };
+            string[] paramsNames = {"@categoryParam", "@productParam"};
+            object[] values = { categoryid, productid };
             dbConnection.InsertTable("CategoryProductConnection", "CategoryID, ProductID",
-               a,b);
+                paramsNames, values);
         }
         public void RemoveProductFromCategory(string categoryid, string productid)
         {
@@ -224,8 +224,8 @@ namespace SadnaSrc.StoreCenter
                 {
                     discount = new Discount(discountCode,
                         EnumStringConverter.GetdiscountTypeEnumString(discountReader.GetString(1)),
-                        DateTime.Parse(discountReader.GetString(2))
-                        , DateTime.Parse(discountReader.GetString(3))
+                        discountReader.GetDateTime(2)
+                        , discountReader.GetDateTime(3)
                         , discountReader.GetInt32(4),
                         Boolean.Parse(discountReader.GetString(5)));
                 }
@@ -312,7 +312,8 @@ namespace SadnaSrc.StoreCenter
         public void AddDiscount(Discount discount)
         {
             dbConnection.InsertTable("Discount", "DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount,Percentages ",
-                discount.GetDiscountStringValues(), discount.GetDiscountValuesArray());
+                new []{"@codeParam","@typeParam","@startParam","@endParam","@amountParam","@percentParam"}
+                , discount.GetDiscountValuesArray());
         }
 
 
@@ -364,7 +365,8 @@ namespace SadnaSrc.StoreCenter
                 "Percentages"
             };
             dbConnection.UpdateTable("Discount", "DiscountCode = '" + discount.discountCode + "'", columnNames,
-                discount.GetDiscountStringValues(), discount.GetDiscountValuesArray());
+                new[] { "@codeParam", "@typeParam", "@startParam", "@endParam", "@amountParam", "@percentParam" }
+                , discount.GetDiscountValuesArray());
         }
 
         public void EditStore(Store store)

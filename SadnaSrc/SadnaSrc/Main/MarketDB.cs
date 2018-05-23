@@ -96,12 +96,12 @@ namespace SadnaSrc.Main
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P20', '#45 With Cheese', 18, 'its just a fucking cheesburger, ok?')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P21', 'Fraid Egg', 10, 'yami')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P22', 'OnePunchManPoster', 10, 'yami')",
-                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D1', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'true')",
-                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D2', 'HIDDEN', '01/01/2019', '31/12/2030', 50, 'true')",
-                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D3', 'HIDDEN', '01/01/2017', '1/03/2017', 50, 'true')",
-                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D4', 'HIDDEN', '01/01/2018', '1/03/2020', 50, 'true')",
-                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D5', 'HIDDEN', '01/01/2018', '1/03/2020', 50, 'false')",
-                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D6', 'VISIBLE', '01/01/2018', '1/03/2020', 50, 'false')",
+                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D1', 'HIDDEN', '2018-01-01', '2018-12-31', 50, 'True')",
+                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D2', 'HIDDEN', '2019-01-01', '2030-12-31', 50, 'True')",
+                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D3', 'HIDDEN', '2017-01-01', '2017-03-01', 50, 'True')",
+                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D4', 'HIDDEN', '2018-01-01', '2020-03-01', 50, 'True')",
+                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D5', 'HIDDEN', '2018-01-01', '2020-03-01', 50, 'False')",
+                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D6', 'VISIBLE', '2018-01-01', '2020-03-01', 50, 'False')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P1', 5, 'D1', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P2', 5, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S4', 'P19', 10, 'null', 'Immediate')",
@@ -187,6 +187,12 @@ namespace SadnaSrc.Main
 
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
+                if (thingsToInsertByForce[i] ==
+                    "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D1', 'HIDDEN', '01/01/2018', '31/12/2018', 50, 'True')"
+                )
+                {
+                    var me = 5;
+                }
                 var insertCommand = new SqlCommand(thingsToInsertByForce[i], _dbConnection);
                 try
                 {

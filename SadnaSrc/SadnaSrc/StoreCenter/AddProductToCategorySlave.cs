@@ -23,7 +23,6 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if category name exists in the store " + _storeName);
-                string storeid = GetStoreIDbyName();
                 CheckIfCategoryExists(categoryName);
                 MarketLog.Log("StoreCenter", "Check if Product exists in store");
                 Product P = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
