@@ -55,7 +55,7 @@ namespace IntegrationTests.FullCycle_Integration
                 orderServiceSession.GiveDetails("Someone", "Somewhere", "12345689");
                 orderServiceSession.BuyItemFromImmediate(product, store, 3, 11, null);
                 Assert.AreEqual(2, sysadminSession.ViewPurchaseHistoryByStore(store).ReportList.Length);
-                string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[1];
+                string actual = sysadminSession.ViewPurchaseHistoryByStore(store).ReportList[0];
                 Assert.AreEqual(PurchaseString("Someone"), actual);
 
             }

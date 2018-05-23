@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Common;
 using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -205,24 +204,23 @@ namespace SadnaSrc.Main
             string[] thingsToInsertByForce =
             {
                 "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S1','Avi`s Chocolate Kingdom','Here 4','Active')",
+                "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S2','Toy','StupidBoy','Active')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P1', 'Dark Chocolate', 5, 'Join the darkside, we have chocolate')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P2', 'White Chocolate', 7, 'All your bases are belong to us')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P3', 'euroticket', 5, 'Lets see the eurovision today')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P1', 30, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P2', 30, 'null', 'Immediate')",
-                "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Avi','Ben-Gurion University','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S2', 'P3', 30, 'null', 'Immediate')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Avi','Ben-Gurion University','202cb962ac59075b964b07152d234b70','12345678')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (2,'Arik2','Mishol Susia','202cb962ac59075b964b07152d234b70','88888888')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (3,'Arik3','Mishol','202cb962ac59075b964b07152d234b70','77777777')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (3,'RegisteredUser')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
-
-	            "INSERT INTO Store (SystemID,Name,Address,Status) VALUES ('S2','Toy','StupidBoy','Active')",
-	            "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (2,'Arik2','Mishol Susia','202cb962ac59075b964b07152d234b70','88888888')",
-	            "INSERT INTO User (SystemID,Name,Address,Password,CreditCard) VALUES (3,'Arik3','Mishol','202cb962ac59075b964b07152d234b70','77777777')",
-	            "INSERT INTO StatePolicy (SystemID,State) VALUES (3,'RegisteredUser')",
-				"INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
 	            "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','ManageProducts')",
-	            "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P3', 'euroticket', 5, 'Lets see the eurovision today')",
-				"INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S2', 'P3', 30, 'null', 'Immediate')",
-	            "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','StoreOwner')",
 			};
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
