@@ -49,6 +49,7 @@ namespace SadnaSrc.StoreCenter
                 answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
                 return null;
             }
+
         }
 
         private void CheckIfProductNameAvailable(string name)

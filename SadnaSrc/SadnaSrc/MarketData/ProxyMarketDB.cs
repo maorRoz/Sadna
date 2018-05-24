@@ -1,16 +1,28 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 
 
 namespace SadnaSrc.MarketData
 {
     class ProxyMarketDB : IMarketDB
     {
-        private IMarketDB realMarketDB;
+        private readonly IMarketDB realMarketDB;
 
         public ProxyMarketDB()
         {
-            realMarketDB = MarketDB.Instance;
+            try
+            {
+                realMarketDB = MarketDB.Instance;
+            }
+            catch (SqlException)
+            {
+                if (!realMarketDB.IsConnected())
+                {
+                    throw new DataException();
+                }
+
+                throw;
+            }
+
         }
         public void InsertTable(string table, string tableColumns, string[] valuesNames, object[] values)
         {

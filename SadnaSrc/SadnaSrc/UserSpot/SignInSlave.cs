@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.UserSpot
 {
@@ -52,6 +53,11 @@ namespace SadnaSrc.UserSpot
                     "User " + guestID + " has failed to sign in. Error message has been created!");
                 Answer = new UserAnswer((SignInStatus) e.Status, e.GetErrorMessage());
                 return _guest;
+            }
+            catch (DataException e)
+            {
+                Answer = new UserAnswer((SignInStatus)e.Status, e.GetErrorMessage());
+                return null;
             }
         }
 

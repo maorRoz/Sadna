@@ -1,5 +1,6 @@
 ﻿using System;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -30,6 +31,10 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("StoreCenter", "closing store failed");
                 answer = new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
+            }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
         }
     }

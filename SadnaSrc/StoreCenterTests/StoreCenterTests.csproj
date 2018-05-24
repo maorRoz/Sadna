@@ -107,7 +107,6 @@
     <Compile Include="StoreCenterDbIntegrationTests\OpenStoreTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\StoreDL TEST.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoreCenterUnitTests\ViewStoreNamesTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\ViewStoreStockTestsMock.cs" />
   </ItemGroup>
   <ItemGroup>
