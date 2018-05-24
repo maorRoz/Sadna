@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.PolicyComponent;
@@ -30,11 +31,11 @@ namespace SadnaSrc.OrderPool
                 UserAddress = _buyer.GetAddress();
             if (CreditCard == null)
                 CreditCard = _buyer.GetCreditCard();
-            MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " tickets for lottery sale of " + itemName +
-                                       " from store " + store + "...");
             int orderId = 0;
             try
             {
+                MarketLog.Log("OrderPool", "Attempting to buy " + quantity + " tickets for lottery sale of " + itemName +
+                                           " from store " + store + "...");
                 ValidateRegisteredUser();
                 _storesSync.ValidateTicket(itemName, store, unitPrice);
                 OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
@@ -52,7 +53,6 @@ namespace SadnaSrc.OrderPool
                 MarketLog.Log("OrderPool",
                     "Order " + orderId + " has failed to execute. Error message has been created!");
                 Answer = new OrderAnswer((OrderStatus) e.Status, e.GetErrorMessage());
-                return null;
             }
             catch (WalleterException e)
             {
@@ -60,7 +60,6 @@ namespace SadnaSrc.OrderPool
                                            " has failed to execute while communicating with payment system." +
                                            " Error message has been created!");
                 Answer = new OrderAnswer((WalleterStatus) e.Status, e.GetErrorMessage());
-                return null;
             }
             catch (SupplyException e)
             {
@@ -68,8 +67,13 @@ namespace SadnaSrc.OrderPool
                                            " has failed to execute while communicating with supply system." +
                                            " Error message has been created!");
                 Answer = new OrderAnswer((SupplyStatus) e.Status, e.GetErrorMessage());
-                return null;
             }
+            catch (DataException e)
+            {
+                Answer = new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
+            }
+
+            return null;
         }
 
         public Order InitOrder(string UserName, string UserAddress)
