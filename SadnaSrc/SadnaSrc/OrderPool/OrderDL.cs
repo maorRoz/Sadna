@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.OrderPool
 {
@@ -12,11 +13,11 @@ namespace SadnaSrc.OrderPool
 
         public static OrderDL Instance => _instance ?? (_instance = new OrderDL());
 
-        private MarketDB dbConnection;
+        private IMarketDB dbConnection;
 
         private OrderDL()
         {
-            dbConnection = MarketDB.Instance;
+            dbConnection = new ProxyMarketDB();
         }
 
         public int RandomOrderID()

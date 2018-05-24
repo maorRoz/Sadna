@@ -1,5 +1,6 @@
 ﻿using SadnaSrc.Main;
 using System.Collections.Generic;
+using SadnaSrc.MarketData;
 
 
 namespace SadnaSrc.PolicyComponent
@@ -10,11 +11,11 @@ namespace SadnaSrc.PolicyComponent
 
         public static PolicyDL Instance => _instance ?? (_instance = new PolicyDL());
 
-        private MarketDB dbConnection;
+        private readonly IMarketDB dbConnection;
 
         private PolicyDL()
         {
-            dbConnection = MarketDB.Instance;
+            dbConnection = new ProxyMarketDB();
         }
 
         public void SavePolicy(PurchasePolicy policy)

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -39,15 +40,18 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "error in opening store");
                 Answer = new StoreAnswer((OpenStoreStatus)e.Status, "Store " + storeName + " creation has been denied. " +
                                                  "something is wrong with adding a new store of that type. Error message has been created!");
-                return null;
             }
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
                 Answer = new StoreAnswer(OpenStoreStatus.InvalidUser,
                     "User validation as store owner has been failed. only registered users can open new stores. Error message has been created!");
-                return null;
             }
+            catch (DataException e)
+            {
+                Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
+            return null;
         }
 
         private void CheckIfNameAvailable(string name)

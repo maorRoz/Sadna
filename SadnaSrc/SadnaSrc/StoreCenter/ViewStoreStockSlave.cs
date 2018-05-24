@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -49,6 +50,10 @@ namespace SadnaSrc.StoreCenter
                 answer = new StoreAnswer(StoreEnum.NoPermission,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
             }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
         }
 
 	    public void ViewStoreStockAll(string storename)
@@ -83,7 +88,11 @@ namespace SadnaSrc.StoreCenter
 			    answer = new StoreAnswer(StoreEnum.NoPermission,
 				    "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
 		    }
-	    }
+		    catch (DataException e)
+		    {
+		        answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+		    }
+        }
 
 
 		private void CheckIfStoreExists(string storename)

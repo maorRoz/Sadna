@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
@@ -17,10 +18,10 @@ namespace SadnaSrc.AdminView
 
         public static AdminDL Instance => _instance ?? (_instance = new AdminDL());
 
-        private MarketDB dbConnection;
+        private readonly IMarketDB dbConnection;
         private AdminDL()
         {
-            dbConnection = MarketDB.Instance;
+            dbConnection = new ProxyMarketDB();
         }
         public string[] FindSolelyOwnedStores()
         {

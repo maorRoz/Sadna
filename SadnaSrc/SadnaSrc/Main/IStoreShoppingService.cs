@@ -27,14 +27,17 @@ namespace SadnaSrc.Main
     {
         Success,
         AlreadyExist,
-        InvalidUser
+        InvalidUser,
+        NoDB = 500
+
     }
 
     public enum ViewStoreStatus
     {
         Success,
         NoStore,
-        InvalidUser
+        InvalidUser,
+        NoDB = 500
     }
 
     public enum AddProductStatus
@@ -42,7 +45,8 @@ namespace SadnaSrc.Main
         Success,
         NoStore,
         InvalidUser,
-        NoProduct
+        NoProduct,
+        NoDB = 500
     }
 
     public enum AddLotteryTicketStatus
@@ -52,7 +56,8 @@ namespace SadnaSrc.Main
         InvalidUser,
         NoTicket,
         TooHighSuggestion,
-        TooLowSuggestion
+        TooLowSuggestion,
+        NoDB = 500
     }
    
 }

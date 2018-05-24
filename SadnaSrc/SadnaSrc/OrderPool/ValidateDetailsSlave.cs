@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.Walleter;
@@ -30,6 +31,10 @@ namespace SadnaSrc.OrderPool
             catch (OrderException e)
             {
                 Answer = new OrderAnswer(GiveDetailsStatus.InvalidNameOrAddress, e.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
+                Answer = new OrderAnswer((OrderStatus)e.Status, e.GetErrorMessage());
             }
 
         }

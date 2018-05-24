@@ -1,5 +1,6 @@
 ﻿using System;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -14,10 +15,10 @@ namespace SadnaSrc.StoreCenter
         public Discount AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate,
             int discountAmount, string discountType, bool presenteges)
         {
-            MarketLog.Log("StoreCenter", "trying to add discount to product in store");
-            MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
+                MarketLog.Log("StoreCenter", "trying to add discount to product in store");
+                MarketLog.Log("StoreCenter", "check if store exists");
                 CheckIfStoreExistsAndActiveDiscount();
                 MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
@@ -46,13 +47,17 @@ namespace SadnaSrc.StoreCenter
             catch (StoreException exe)
             {
                 answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
-                return null;
             }
             catch (MarketException)
             {
                 answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
-                return null;
             }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
+
+            return null;
         }
         private void CheckIfStoreExistsAndActiveDiscount()
         {

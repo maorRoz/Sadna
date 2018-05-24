@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.UserSpot
 {
@@ -12,11 +13,11 @@ namespace SadnaSrc.UserSpot
 
         private static List<int> userIDs = new List<int>();
 
-        private readonly MarketDB dbConnection;
+        private readonly IMarketDB dbConnection;
 
         private UserDL()
         {
-            dbConnection = MarketDB.Instance;
+            dbConnection = new ProxyMarketDB();
         }
 
         public int[] GetAllSystemIDs()

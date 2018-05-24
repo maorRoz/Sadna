@@ -13,6 +13,11 @@ namespace SadnaSrc.UserSpot
         {
 
         }
+
+        public UserAnswer(EnterSystemStatus status, string answer) : base((int) status, answer)
+        {
+
+        }
         public UserAnswer(SignUpStatus status, string answer) : base((int) status,answer)
         {
 

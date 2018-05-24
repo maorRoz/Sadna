@@ -1,4 +1,5 @@
 ﻿using System;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.Main
 {

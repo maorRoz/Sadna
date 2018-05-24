@@ -1,5 +1,6 @@
 ﻿using System;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -38,6 +39,10 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to promote " + someoneToPromoteName +
                                   "with manager options in Store" + _storeName + " and therefore has been denied. Error message has been created!");
                 Answer = new StoreAnswer((PromoteStoreStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
+                Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
 
         }

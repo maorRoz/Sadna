@@ -24,14 +24,16 @@ namespace SadnaSrc.Main
     public enum GiveDetailsStatus
     {
         Success,
-        InvalidNameOrAddress
+        InvalidNameOrAddress,
+        NoDB = 500
     }
     public enum OrderStatus
     {
         Success,
         InvalidUser,
         InvalidNameOrAddress,
-        InvalidCoupon
+        InvalidCoupon,
+        NoDB = 500
 
     }
 
@@ -41,13 +43,15 @@ namespace SadnaSrc.Main
         NoOrderItemInOrder,
         ItemAlreadyInOrder,
         InvalidDetails,
-        NotComplyWithPolicy
+        NotComplyWithPolicy,
+        NoDB = 500
     }
 
     public enum LotteryOrderStatus
     {
         Success,
         InvalidLotteryID,
-        InvalidLotteryTicket
+        InvalidLotteryTicket,
+        NoDB = 500
     }
 }

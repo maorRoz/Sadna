@@ -25,7 +25,8 @@ namespace SadnaSrc.Main
 
     public enum EnterSystemStatus
     {
-        Success
+        Success,
+        NoDB = 500
     }
 
     public enum SignUpStatus
@@ -35,6 +36,7 @@ namespace SadnaSrc.Main
         SignedUpAlready,
         TakenName,
         NullEmptyFewDataGiven,
+        NoDB = 500
 
     }
 
@@ -46,12 +48,14 @@ namespace SadnaSrc.Main
         SignedInAlready,
         NoUserFound,
         NullEmptyDataGiven,
+        NoDB = 500
     }
 
     public enum ViewCartStatus
     {
         Success,
         DidntEnterSystem,
+        NoDB = 500
     }
 
 	public enum EditCartItemStatus
@@ -59,54 +63,63 @@ namespace SadnaSrc.Main
         Success,
         DidntEnterSystem,
         NoItemFound,
-        ZeroNegativeQuantity
+        ZeroNegativeQuantity,
+        NoDB = 500
     }
 
     public enum RemoveFromCartStatus
     {
         Success,
         DidntEnterSystem,
-        NoItemFound
+        NoItemFound,
+        NoDB = 500
     }
 
     public enum ViewUsersStatus
     {
         Success,
-        DidntEnterSystem
+        DidntEnterSystem,
+        NoDB = 500
     }
 
     public enum GetControlledStoresStatus
     {
         Success,
-        DidntEnterSystem
+        DidntEnterSystem,
+        NoDB = 500
     }
 
 	public enum ViewStoresStatus
 	{
 		Success,
-		NoPermission
-	}
+		NoPermission,
+	    NoDB = 500
+    }
 
 	public enum GetStoreManagerPoliciesStatus
 	{
 		Success,
-		DidntEnterSystem
-	}
+		DidntEnterSystem,
+	    NoDB = 500
+    }
     public enum GetUserDetails
     {
         Success,
-        DidntEnterSystem
+        DidntEnterSystem,
+        NoDB = 500
     }
 
     public enum BrowseMarketStatus
     {
         DidntEnterSystem,
-        DidntLoggedSystem
+        DidntLoggedSystem,
+        NoDB = 500
     }
 
     public enum ManageMarketSystem
     {
-        NotSystemAdmin
+        NotSystemAdmin,
+        NoDB = 500
     }
 
 
