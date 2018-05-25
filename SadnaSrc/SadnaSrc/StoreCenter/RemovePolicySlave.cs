@@ -9,7 +9,7 @@ using SadnaSrc.PolicyComponent;
 
 namespace SadnaSrc.StoreCenter
 {
-    class RemovePolicySlave
+    public class RemovePolicySlave
     {
         public MarketAnswer Answer;
         private readonly IStorePolicyManager _manager;

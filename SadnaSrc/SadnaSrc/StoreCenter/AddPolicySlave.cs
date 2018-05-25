@@ -9,7 +9,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    class AddPolicySlave
+    public class AddPolicySlave
     {
         public MarketAnswer Answer;
         private readonly IUserSeller _storeManager;
