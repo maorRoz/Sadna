@@ -20,7 +20,7 @@ namespace SadnaSrc.Main
         private string errorMessage;
         public int  Status { get; }
 
-        private static IMarketDB _dbConnection = MarketDB.Instance;
+        private static IMarketDB _dbConnection = new ProxyMarketDB();
 
 
         public static void SetDB(IMarketDB dbConnection)
@@ -42,17 +42,28 @@ namespace SadnaSrc.Main
 
         private void InitiateException(string moduleName,string message)
         {
-            string errorID = GenerateErrorID();
-            InsertError(errorID, moduleName,message);
+            var errorID = GenerateErrorID();
+            while (!InsertError(errorID, moduleName, message))
+            {
+                errorID = GenerateErrorID();
+            }
             errorMessage = message;
             publishedErrorIDs.Add(errorID);
         }
 
-        private void InsertError(string errorID,string moduleName,string message)
+        private bool InsertError(string errorID,string moduleName,string message)
         {
-            _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description", 
-                new[] { "@idParam", "@moduleParam", "@descriptionParam" }, 
-                new object []{errorID , moduleName, message });
+            try
+            {
+                _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description",
+                    new[] {"@idParam", "@moduleParam", "@descriptionParam"},
+                    new object[] {errorID, moduleName, message});
+                return true;
+            }
+            catch (SqlException)
+            {
+                return false;
+            }
         }
 
         private static string GenerateErrorID()

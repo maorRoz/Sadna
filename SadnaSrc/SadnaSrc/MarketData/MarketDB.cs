@@ -20,7 +20,9 @@ namespace SadnaSrc.MarketData
         }
         private void InitiateDb()
         {
-            var dbPath = "Data Source=DESKTOP-NHU1RB6\\SQLEXPRESS;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
+            var dbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
+          //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
+          //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
             _dbConnection = new SqlConnection(dbPath);
              _dbConnection.Open();
         }
