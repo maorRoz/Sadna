@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -141,6 +142,29 @@ namespace SadnaSrc.StoreCenter
             RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave(_storeName, _storeManager, storeDL);
             slave.RemoveProductFromCategory(categoryName,productName);
             return slave.Answer;
+        }
+
+        public MarketAnswer CreatePolicy(string type, string subject, string op, string arg1, string optArg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer SavePolicy()
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public MarketAnswer ViewPolicies()
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public MarketAnswer RemovePolicy(string type, string subject)
+        {
+            throw new NotImplementedException();
+
         }
     }
 }
