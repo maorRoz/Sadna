@@ -31,7 +31,7 @@ namespace SadnaSrc.OrderPool
 
         protected override string WrapErrorMessageForDb(string message)
         {
-            return "OrderException: " + message;
+            return "Order Error: " + message;
         }
     }
 }
