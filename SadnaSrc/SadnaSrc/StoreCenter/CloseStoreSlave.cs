@@ -25,8 +25,8 @@ namespace SadnaSrc.StoreCenter
             catch (StoreException exe)
             {
                 MarketLog.Log("StoreCenter", "closing store failed");
-                answer = new StoreAnswer(exe);
-            }
+				answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
+			}
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "closing store failed");

@@ -49,5 +49,7 @@ namespace SadnaSrc.StoreCenter
         LinkedList<Product> GetAllCategoryProducts(string categoryid);
         void AddProductToCategory(string CategoryID, string ProductID);
         void RemoveProductFromCategory(string CategoryID, string ProductID);
-        }
+	    string[] GetProductsByName(string name);
+
+    }
     }

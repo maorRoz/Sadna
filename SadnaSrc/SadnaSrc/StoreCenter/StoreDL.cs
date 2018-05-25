@@ -109,9 +109,21 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-      
+		public string[] GetProductsByName(string name)
+		{
+			LinkedList<string> products = new LinkedList<string>();
+			using (var dbReader = dbConnection.SelectFromTableWithCondition("Products", "*", "Name = '" + name + "'"))
+			{
+				while (dbReader.Read())
+				{
+					products.AddLast(new Product(dbReader.GetString(1), dbReader.GetDouble(2), dbReader.GetString(3)).ToString());
+				}
 
-        public void EditLotteryTicketInDatabase(LotteryTicket ticket)
+				return products.ToArray();
+			}
+		}
+
+		public void EditLotteryTicketInDatabase(LotteryTicket ticket)
         {
 
             string[] columnNames =

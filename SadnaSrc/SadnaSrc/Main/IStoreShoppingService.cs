@@ -18,6 +18,7 @@ namespace SadnaSrc.Main
 
 	    MarketAnswer ViewStoreStockAll(string storename);
 
+	    MarketAnswer SearchProduct(string type, string value, int minPrice, int maxPrice, string category);
 
 		MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
@@ -59,5 +60,13 @@ namespace SadnaSrc.Main
         TooLowSuggestion,
         NoDB = 500
     }
+
+	public enum SearchProductStatus
+	{
+		Success,
+		NullValue,
+		DidntEnterSystem,
+		NoDB = 500
+	}
    
 }

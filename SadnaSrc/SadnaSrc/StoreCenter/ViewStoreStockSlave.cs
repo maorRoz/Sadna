@@ -42,7 +42,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException e)
             {
-                answer = new StoreAnswer(e);
+                answer = new StoreAnswer((StoreEnum)e.Status,e.GetErrorMessage());
             }
             catch (MarketException)
             {
@@ -80,8 +80,8 @@ namespace SadnaSrc.StoreCenter
 		    }
 		    catch (StoreException e)
 		    {
-			    answer = new StoreAnswer(e);
-		    }
+				answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+			}
 		    catch (MarketException)
 		    {
 			    MarketLog.Log("StoreCenter", "no premission");
