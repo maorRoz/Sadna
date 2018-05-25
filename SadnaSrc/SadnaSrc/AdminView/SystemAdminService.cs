@@ -68,5 +68,12 @@ namespace SadnaSrc.AdminView
             return slave.Answer;
         }
 
+        public MarketAnswer RemovePolicy(string type, string subject)
+        {
+            RemovePolicySlave slave = new RemovePolicySlave(_admin, MarketYard.Instance.GetGlobalPolicyManager());
+            slave.RemovePolicy(type,subject);
+            return slave.Answer;
+        }
+
     }
 }

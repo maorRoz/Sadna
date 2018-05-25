@@ -141,6 +141,22 @@ namespace SadnaSrc.Main
         NoDB = 500
     }
 
+    public enum EditStorePolicyStatus
+    {
+        Success,
+        InvalidPolicyData,
+        NoAuthority,
+        NoDB = 500
+
+    }
+
+    public enum ViewStorePolicyStatus
+    {
+        Success,
+        NoAuthority,
+        NoDB = 500
+    }
+
 
     public enum PurchaseEnum { Immediate, Lottery };
     public enum DiscountTypeEnum { Hidden, Visible };
