@@ -9,7 +9,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-	class GetAllCategoryNamesSlave
+	public class GetAllCategoryNamesSlave
 	{
 		public MarketAnswer Answer;
 		private readonly IUserShopper _shopper;

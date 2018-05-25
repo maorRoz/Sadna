@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="StoreCenterDbIntegrationTests\addDiscountTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\AddProductToCategoryTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\GetAllCategoriesTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\RemoveProductFromCategoryTests.cs" />
     <Compile Include="StoreCenterUnitTests\AddProductToCategoryTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\AddDiscountTestsMock.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="StoreCenterUnitTests\EditDiscountTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\EditProductTestsMock.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\LotteryTests.cs" />
+    <Compile Include="StoreCenterUnitTests\GetAllCategoriesTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\OpenStoreTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\PromoteToManagerTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\RemoveDiscountTestsMock.cs" />

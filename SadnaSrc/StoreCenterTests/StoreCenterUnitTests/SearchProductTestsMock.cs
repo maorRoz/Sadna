@@ -15,35 +15,27 @@ namespace StoreCenterTests.StoreCenterUnitTests
 	[TestClass]
 	public class SearchProductTestsMock
 	{
-		private Mock<IStoreDL> handler;
-		private Mock<IUserSeller> userService;
-		private Mock<IOrderSyncher> syncer;
-		private Mock<IMarketDB> marketDbMocker;
-		private Product prod;
-		private Discount discount;
-		private StockListItem stock;
-		private RemoveProductSlave slave;
+		private Mock<IStoreDL> _handler;
+		private Mock<IUserShopper> _userShopper;
+		private Mock<IMarketDB> _marketDbMocker;
+		private SearchProductSlave _slave;
 
 		[TestInitialize]
 		public void BuildStore()
 		{
-			marketDbMocker = new Mock<IMarketDB>();
-			MarketException.SetDB(marketDbMocker.Object);
-			MarketLog.SetDB(marketDbMocker.Object);
-			handler = new Mock<IStoreDL>();
-			userService = new Mock<IUserSeller>();
-			syncer = new Mock<IOrderSyncher>();
-			prod = new Product("NEWPROD", 150, "desc");
-			discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
-			stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
-			slave = new RemoveProductSlave(syncer.Object, "X", userService.Object, handler.Object);
-			handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
-			handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns(prod);
-			handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
-			handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);
+			_marketDbMocker = new Mock<IMarketDB>();
+			MarketException.SetDB(_marketDbMocker.Object);
+			MarketLog.SetDB(_marketDbMocker.Object);
+			_handler = new Mock<IStoreDL>();
+			_userShopper = new Mock<IUserShopper>();
+			_slave = new SearchProductSlave(_userShopper.Object, _handler.Object);
+			/*_handler.Setup(x => x.GetStorebyName("X")).Returns(new Store("X", ""));
+			_handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns(prod);
+			_handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(true);
+			_handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);*/
 		}
 
-		[TestMethod]
+		/*[TestMethod]
 		public void NoStore()
 		{
 			handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
@@ -81,7 +73,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
 		{
 			MarketDB.Instance.CleanByForce();
 			MarketYard.CleanSession();
-		}
+		}*/
 	}
 }
 

@@ -223,6 +223,8 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
 	            "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','StoreOwner')",
+	            "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
+	            "INSERT INTO Category (SystemID, name) VALUES ('C2', 'Books')",
 			};
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {

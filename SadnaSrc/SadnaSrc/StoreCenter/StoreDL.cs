@@ -609,7 +609,7 @@ namespace SadnaSrc.StoreCenter
 	    public string[] GetAllCategorysNames()
 	    {
 		    LinkedList<string> ids = new LinkedList<string>();
-		    using (var dbReader = dbConnection.SelectFromTable("Category", "Name"))
+		    using (var dbReader = dbConnection.SelectFromTable("Category", "name"))
 		    {
 			    while (dbReader.Read())
 			    {
