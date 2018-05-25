@@ -48,6 +48,13 @@ namespace SadnaSrc.StoreCenter
         public StoreException(ChangeToLotteryEnum status, string message) : base((int)status, message)
         {
         }
+
+        public StoreException(EditStorePolicyStatus status, string message) : base((int)status, message)
+        {
+        }
+        public StoreException(ViewStorePolicyStatus status, string message) : base((int)status, message)
+        {
+        }
         protected override string GetModuleName()
         {
             return "StoreCenter";

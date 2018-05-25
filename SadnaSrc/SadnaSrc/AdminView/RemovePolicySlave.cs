@@ -29,7 +29,7 @@ namespace SadnaSrc.AdminView
             {
                 MarketLog.Log("AdminView", "Checking admin status.");
                 _admin.ValidateSystemAdmin();
-                MarketLog.Log("AdminView", "Trying to add policy.");
+                MarketLog.Log("AdminView", "Trying to remove policy.");
                 CheckInput(type, subject);
                 _manager.RemovePolicy(GetPolicyType(type),subject);
                 MarketLog.Log("AdminView", "Policy removed successfully.");
@@ -67,7 +67,7 @@ namespace SadnaSrc.AdminView
                 case "Category":
                     return PolicyType.Category;
                 default:
-                    MarketLog.Log("AdminView", " Adding policy failed, invalid data.");
+                    MarketLog.Log("AdminView", " Removing policy failed, invalid data.");
                     throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
             }           
         }
