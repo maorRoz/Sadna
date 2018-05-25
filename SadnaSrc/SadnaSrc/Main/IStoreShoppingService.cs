@@ -18,7 +18,7 @@ namespace SadnaSrc.Main
 
 	    MarketAnswer ViewStoreStockAll(string storename);
 
-	    MarketAnswer SearchProduct(string type, string value, int minPrice, int maxPrice, string category);
+	    MarketAnswer SearchProduct(string type, string value, double minPrice, double maxPrice, string category);
 
 		MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
