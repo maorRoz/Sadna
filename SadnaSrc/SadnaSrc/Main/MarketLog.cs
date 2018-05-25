@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using SadnaSrc.MarketData;
 
 namespace SadnaSrc.Main
@@ -6,7 +7,7 @@ namespace SadnaSrc.Main
     public static class MarketLog
     {
         private static readonly Random random = new Random();
-        private static IMarketDB _dbConnection = MarketDB.Instance;
+        private static IMarketDB _dbConnection = new ProxyMarketDB();
 
 
         public static void SetDB(IMarketDB dbConnection)
@@ -35,7 +36,7 @@ namespace SadnaSrc.Main
                     new object[] {logID, DateTime.Now, moduleName, description});
                 return true;
             }
-            catch (MarketException)
+            catch (SqlException)
             {
                 return false;
             }
