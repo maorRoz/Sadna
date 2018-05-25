@@ -613,7 +613,7 @@ namespace SadnaSrc.StoreCenter
 		    {
 			    while (dbReader.Read())
 			    {
-				    ids.AddLast(dbReader.GetString(1));
+				    ids.AddLast(dbReader.GetString(0));
 			    }
 		    }
 		    return ids.ToArray();

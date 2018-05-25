@@ -389,15 +389,31 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 	    [TestMethod]
 	    public void GetProductsByNameTest()
 	    {
-			Product p1 = new Product("P21", "Neta", 1, "EuroWinner");
-			Product p2 = new Product("P22", "Netaaaa", 2, "EuroWinnerrrrr");
+			Product p1 = new Product("P25", "Neta", 1, "EuroWinner");
+			Product p2 = new Product("P26", "Netaaaa", 2, "EuroWinnerrrrr");
 			Product[] expected = {p1, p2};
 			handler.AddProductToDatabase(p1);
 		    handler.AddProductToDatabase(p2);
 			Product[] productsByName = {handler.GetProductsByName(p1.Name)[0], handler.GetProductsByName(p2.Name)[0]};
+			Assert.AreEqual(expected.Length, handler.GetProductsByName(p1.Name).Length+ handler.GetProductsByName(p2.Name).Length);
 		    for (int i = 0; i < expected.Length; i++)
 		    {
-			    Assert.Equals(expected[i], productsByName[i]);
+			    Assert.AreEqual(expected[i].ToString(), productsByName[i].ToString());
+		    }
+
+	    }
+
+	    [TestMethod]
+	    public void GetAllCategoryNamesTest()
+	    {
+		    Category cat1 = new Category("C1", "WanderlandItems"); // THIS exists in DB by SQL injection
+		    Category cat2 = new Category("C2", "Books"); // THIS exists in DB by SQL injection
+		    string[] expected = {cat1.Name, cat2.Name};
+		    string[] result = handler.GetAllCategorysNames();
+			Assert.AreEqual(expected.Length, result.Length);
+		    for (int i = 0; i < expected.Length; i++)
+		    {
+				Assert.AreEqual(expected[i],result[i]);
 		    }
 
 	    }
