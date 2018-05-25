@@ -144,7 +144,7 @@ namespace SadnaSrc.StoreCenter
             return slave.Answer;
         }
 
-        public MarketAnswer CreatePolicy(string type, string subject, string op, string arg1, string optArg)
+        public MarketAnswer CreatePolicy(string type, string subject,string optSubject, string op, string arg1, string optArg)
         {
             throw new NotImplementedException();
         }

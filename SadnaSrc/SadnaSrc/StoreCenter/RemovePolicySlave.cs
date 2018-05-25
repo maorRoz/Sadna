@@ -12,24 +12,28 @@ namespace SadnaSrc.StoreCenter
     class RemovePolicySlave
     {
         public MarketAnswer Answer;
-        private readonly IGlobalPolicyManager _manager;
+        private readonly IStorePolicyManager _manager;
         private readonly IUserSeller _storeManager;
 
-        public RemovePolicySlave(IUserSeller storeManager, IGlobalPolicyManager manager)
+        public RemovePolicySlave(IUserSeller storeManager, IStorePolicyManager manager)
         {
             _manager = manager;
             _storeManager = storeManager;
         }
 
-        public void RemovePolicy(string type, string subject)
+        public void RemovePolicy(string type, string subject,string optProd)
         {
             try
             {
                 MarketLog.Log("StoreCenter", "Checking store manager status.");
                 _storeManager.CanDeclarePurchasePolicy();
                 MarketLog.Log("StoreCenter", "Trying to remove policy.");
-                CheckInput(type, subject);
-                _manager.RemovePolicy(GetPolicyType(type), subject);
+                CheckInput(type, subject,optProd);
+                if(type == "Store")
+                    _manager.RemovePolicy(GetPolicyType(type), subject);
+                else
+                    _manager.RemovePolicy(GetPolicyType(type), subject + "." + optProd);
+
                 MarketLog.Log("StoreCenter", "Policy removed successfully.");
                 Answer = new StoreAnswer(EditStorePolicyStatus.Success, "Policy removed.");
 
@@ -46,9 +50,10 @@ namespace SadnaSrc.StoreCenter
 
 
 
-        private void CheckInput(string type, string subject)
+        private void CheckInput(string type, string subject,string optProd)
         {
-            if ((type == "Stock Item" || type == "Store") && !string.IsNullOrEmpty(subject)) return;
+            if (type == "Store" && !string.IsNullOrEmpty(subject) && string.IsNullOrEmpty(optProd)) return;
+            if (type == "Stock Item" && !string.IsNullOrEmpty(subject) && !string.IsNullOrEmpty(optProd)) return;
             MarketLog.Log("StoreCenter", " Removing policy failed, invalid data.");
             throw new StoreException(EditStorePolicyStatus.InvalidPolicyData, "Invalid Policy data");
 
