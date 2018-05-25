@@ -386,6 +386,23 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             }
         }
 
+	    [TestMethod]
+	    public void GetProductsByNameTest()
+	    {
+			Product p1 = new Product("P21", "Neta", 1, "EuroWinner");
+			Product p2 = new Product("P22", "Netaaaa", 2, "EuroWinnerrrrr");
+			Product[] expected = {p1, p2};
+			handler.AddProductToDatabase(p1);
+		    handler.AddProductToDatabase(p2);
+			Product[] productsByName = {handler.GetProductsByName(p1.Name)[0], handler.GetProductsByName(p2.Name)[0]};
+		    for (int i = 0; i < expected.Length; i++)
+		    {
+			    Assert.Equals(expected[i], productsByName[i]);
+		    }
+
+	    }
+
+
         [TestCleanup]
         public void CleanDb()
         {

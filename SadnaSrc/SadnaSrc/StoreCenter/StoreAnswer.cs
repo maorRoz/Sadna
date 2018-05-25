@@ -19,7 +19,10 @@ namespace SadnaSrc.StoreCenter
         public StoreAnswer(ViewStoreStatus status, string answer, string[] storeReport) : base((int)status, answer, storeReport) { }
         public StoreAnswer(ViewStoreStatus status, string answer) : base((int)status, answer) { }
 
-        public StoreAnswer(ViewStorePurchaseHistoryStatus status, string answer, string[] storeReport) : base((int)status, answer, storeReport) { }
+	    public StoreAnswer(GetCategoriesStatus status, string answer, string[] storeReport) : base((int)status, answer, storeReport) { }
+	    public StoreAnswer(GetCategoriesStatus status, string answer) : base((int)status, answer) { }
+
+		public StoreAnswer(ViewStorePurchaseHistoryStatus status, string answer, string[] storeReport) : base((int)status, answer, storeReport) { }
         public StoreAnswer(ViewStorePurchaseHistoryStatus status, string answer) : base((int)status, answer) { }
 
         public StoreAnswer(AddProductStatus status, string answer) : base((int)status, answer) { }

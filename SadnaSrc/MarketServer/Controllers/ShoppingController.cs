@@ -61,5 +61,13 @@ namespace MarketWeb.Controllers
             return RedirectToAction("BrowseMarket", new { systemId, state, answer.Answer });
         }
 
+	    public IActionResult SearchProduct(int systemId, string state)
+	    {
+		    var userService = MarketServer.Users[systemId];
+		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+		    string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+		    return View(new CategoryListModel(systemId, state, "", categories));
+	    }
+
     }
 }

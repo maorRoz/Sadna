@@ -109,14 +109,14 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-		public string[] GetProductsByName(string name)
+		public Product[] GetProductsByName(string name)
 		{
-			LinkedList<string> products = new LinkedList<string>();
+			LinkedList<Product> products = new LinkedList<Product>();
 			using (var dbReader = dbConnection.SelectFromTableWithCondition("Products", "*", "Name = '" + name + "'"))
 			{
 				while (dbReader.Read())
 				{
-					products.AddLast(new Product(dbReader.GetString(1), dbReader.GetDouble(2), dbReader.GetString(3)).ToString());
+					products.AddLast(new Product(dbReader.GetString(1), dbReader.GetDouble(2), dbReader.GetString(3)));
 				}
 
 				return products.ToArray();
@@ -605,5 +605,18 @@ namespace SadnaSrc.StoreCenter
             }
             return ids.ToArray();
         }
-    }
+
+	    public string[] GetAllCategorysNames()
+	    {
+		    LinkedList<string> ids = new LinkedList<string>();
+		    using (var dbReader = dbConnection.SelectFromTable("Category", "Name"))
+		    {
+			    while (dbReader.Read())
+			    {
+				    ids.AddLast(dbReader.GetString(1));
+			    }
+		    }
+		    return ids.ToArray();
+		}
+	}
 }
