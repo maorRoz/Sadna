@@ -47,7 +47,7 @@
 	                        <li><a asp-area="" asp-controller="Admin" asp-action="HandlingCategoryView" asp-route-systemId="@Model.SystemId" asp-route-state="@Model.State">Handle Category</a></li>
 
                         }
-                        var userService = MarketServer.Users[Model.SystemId];
+                        var userService = MarketServer.GetUserSession(Model.SystemId);
                         var answer = userService.GetUserDetails();
                         if (answer.Status == 0)
                         {

@@ -17,7 +17,7 @@ namespace MarketWeb.Controllers
         public IActionResult BuyImmediateForm(int systemId, string state,string message,string store,
             string product,double unitPrice,int quantity, double finalPrice)
         {
-            var userService = MarketServer.Users[systemId];
+            var userService = MarketServer.GetUserSession(systemId);
             answer = userService.GetUserDetails();
 
             if (answer.Status == Success)
@@ -32,7 +32,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult BuyAllForm(int systemId, string state, string message)
         {
-            var userService = MarketServer.Users[systemId];
+            var userService = MarketServer.GetUserSession(systemId);
             var answerOfViewCart = userService.ViewCart();
             var answerOfUsersDetails = userService.GetUserDetails();
             if (answerOfViewCart.Status == Success && answerOfUsersDetails.Status == Success)
@@ -50,7 +50,7 @@ namespace MarketWeb.Controllers
         public IActionResult BuyLotteryTicketForm(int systemId, string state, string message, string store,
             string product,double realPrice)
         {
-            var userService = MarketServer.Users[systemId];
+            var userService = MarketServer.GetUserSession(systemId);
             answer = userService.GetUserDetails();
             if (answer.Status == Success)
             {
@@ -113,7 +113,7 @@ namespace MarketWeb.Controllers
 
         private void InitiateOrder(int systemId, string userName, string userAddress, string userCreditCard)
         {
-            var userService = MarketServer.Users[systemId];
+            var userService = MarketServer.GetUserSession(systemId);
             orderService = MarketYard.Instance.GetOrderService(ref userService);
             answer = orderService.GiveDetails(userName, userAddress, userCreditCard);
         }

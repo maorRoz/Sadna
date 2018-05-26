@@ -68,19 +68,21 @@ namespace SadnaSrc.UserSpot
 
 	    public void ViewStores()
 	    {
-		    MarketLog.Log("UserSpot", "User " + userID + " attempting to view all store names...");
-			try
-		    {
-			    ApproveEnetered();
-				var storeNames = _userDB.GetAllActiveStoreNames();
-			    Answer = new UserAnswer(ViewStoresStatus.Success, "you've got all the store names!", storeNames);
-		    }
-		    catch (UserException)
-		    {
-			    MarketLog.Log("UserSpot", "User " + userID + " has failed to view all store names." +
-			                              " Error message has been created!");
-				Answer = new UserAnswer(ViewStoresStatus.NoPermission, "The operation didn't succeed!");
-		    }
+	        try
+	        {
+	            MarketLog.Log("UserSpot", "User " + userID + " attempting to view all store names...");
+	            ApproveEnetered();
+	            var storeNames = _userDB.GetAllActiveStoreNames();
+	            Answer = new UserAnswer(ViewStoresStatus.Success, "you've got all the store names!", storeNames);
+	        }
+	        catch (UserException)
+	        {
+	            Answer = new UserAnswer(ViewStoresStatus.NoPermission, "The operation didn't succeed!");
+	        }
+	        catch (DataException e)
+	        {
+	            Answer = new UserAnswer((GetControlledStoresStatus)e.Status, e.GetErrorMessage());
+            }
 		    
 		}
 

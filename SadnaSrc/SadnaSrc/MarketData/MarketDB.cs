@@ -254,6 +254,10 @@ namespace SadnaSrc.MarketData
                         throw;
                     }
                 }
+                catch (InvalidOperationException)
+                {
+                    //dont care
+                }
             }
         }
 

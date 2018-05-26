@@ -13,28 +13,56 @@ namespace MarketWeb
 {
     public class MarketServer : WebSocketHandler,IListener
     {
-        public static readonly Dictionary<int,IUserService> Users = new Dictionary<int, IUserService>();
-        private readonly MarketYard marketSession;
+        private static readonly Dictionary<int,IUserService> Users = new Dictionary<int, IUserService>();
+        private static readonly MarketYard marketSession = MarketYard.Instance;
         private const int Success = 0;
         public MarketServer(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
         {
-            marketSession = MarketYard.Instance;
-            MarketDB.Instance.InsertByForceClient();
+            try
+            {
+                MarketDB.Instance.InsertByForceClient();
+            }
+            catch (Exception)
+            {
+                //dont care
+            }
         }
 
-        public async Task EnterSystem(string socketId)
+        public IUserService GetUserSession(int userId)
+        {
+            MassSyncUsersWithNoId();
+            return userId == 0 ? marketSession.GetUserService() : Users[userId];
+        }
+
+        public static void ReplaceSystemIds(int newId, int oldId)
+        {
+            var userService = Users[oldId];
+            Users.Remove(oldId);
+            if (!Users.ContainsKey(newId))
+            {
+                Users.Add(Convert.ToInt32(newId), userService);
+            }
+        }
+
+        public async Task MassSyncUsersWithNoId()
+        {
+            await InvokeClientMethodToAllAsync("EnterSystemAgain", null);
+        }
+        private int EnterSystem()
         {
             var userService = marketSession.GetUserService();
             var answer = userService.EnterSystem();
 
-            var id = 0;
-            if (answer.Status == Success)
-            {
-                id = Convert.ToInt32(answer.ReportList[0]);
-                Users.Add(id, userService);
-            }
+            if (answer.Status != Success) return 0;
+            var id = Convert.ToInt32(answer.ReportList[0]);
+            Users.Add(id, userService);
 
-            await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
+            return id;
+        }
+        public async Task EnterSystem(string socketId)
+        {
+            var generatedId = EnterSystem();
+            await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{ generatedId});
         }
 
         public void UnSubscribeSocket(string socketId)
