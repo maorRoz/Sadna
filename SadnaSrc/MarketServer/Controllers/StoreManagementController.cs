@@ -18,8 +18,19 @@ namespace MarketWeb.Controllers
 		public IActionResult StoreControl(int systemId, string state)
 		{
 			var userService = MarketServer.Users[systemId];
-			string[] storesData = userService.GetControlledStoreNames().ReportList;
-			return View(new StoreListModel(systemId, state, storesData));
+		    string message = null;
+		    var storesData = new string[0];
+            var answer = userService.GetControlledStoreNames();
+		    if (answer.Status == Success)
+		    {
+		        storesData = answer.ReportList;
+		    }
+		    else
+		    {
+		        message = answer.Answer;
+		    }
+
+		    return View(new StoreListModel(systemId, state, storesData,message));
 		}
 
 		public IActionResult ManageStoreOptions(int systemId, string state, string message, string store)
@@ -55,17 +66,26 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.Users[systemId];
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			var answer = storeShoppingService.ViewStoreStockAll(store);
-			return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
-		}
+		    if (answer.Status == Success)
+		    {
+		        return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
+		    }
+
+		    return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+        }
 
 		public IActionResult RemoveProduct(int systemId, string state, string store, string product)
 		{
 			var userService = MarketServer.Users[systemId];
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.RemoveProduct(product);
-			return RedirectToAction("ManageProducts", new {systemId, state, message = "", store});
+		    if (answer.Status == Success)
+		    {
+		        return RedirectToAction("ManageProducts", new {systemId, state, store});
+		    }
 
-		}
+		    return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+        }
 
 		public IActionResult EditProductPage(int systemId, string state, string message, string store, string product)
 		{
@@ -86,14 +106,19 @@ namespace MarketWeb.Controllers
 			return RedirectToAction("EditProductPage", new {systemId, state, message = answer.Answer, store, product});
 		}
 
-		public IActionResult AddQuanitityToProduct(int systemId, string state, string store, string product, int quantity)
+		public IActionResult AddQuanitityToProduct(int systemId, string state, string store, string product)
 
 		{
 			var userService = MarketServer.Users[systemId];
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.AddQuanitityToProduct(product, 1);
-			return RedirectToAction("ManageProducts", new {systemId, state, message = answer.Answer, store});
-		}
+		    if (answer.Status == Success)
+		    {
+		        return RedirectToAction("ManageProducts", new {systemId, state, message = answer.Answer, store});
+		    }
+
+		    return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+        }
 
 		public IActionResult AddNewProductPage(int systemId, string state, string message, string store)
 		{
@@ -133,13 +158,18 @@ namespace MarketWeb.Controllers
 			return RedirectToAction("AddNewLotteryPage", new { systemId, state, message = answer.Answer, store });
 		}
 
-		public IActionResult ViewPurchaseHistory(int systemId, string state, string message, string store)
+		public IActionResult ViewPurchaseHistory(int systemId, string state, string store)
 		{
 			var userService = MarketServer.Users[systemId];
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.ViewStoreHistory();
-			return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
-		}
+		    if (answer.Status == Success)
+		    {
+		        return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
+            }
+
+		    return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+        }
 
 		public IActionResult DeclareDiscountPolicy(int systemId, string state, string message, string store, bool valid)
 		{
@@ -147,15 +177,20 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.Users[systemId];
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			var answer = storeShoppingService.ViewStoreStockAll(store);
-			return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
-		}
+		    if (answer.Status == Success)
+		    {
+		        return View(new StorePorductListModel(systemId, state, message, store, answer.ReportList));
+            }
+
+		    return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+        }
 
 		public IActionResult AddDiscountPage(int systemId, string state, string message, string store, string product)
 		{
 			return View(new ProductInStoreModel(systemId, state, message, store, product));
 		}
 
-		public IActionResult AddDiscount(int systemId, string state, string message, string store, string productName,
+		public IActionResult AddDiscount(int systemId, string state, string store, string productName,
 			DateTime startDate, DateTime endDate, int discountAmount, string discountType, string presenteges)
 		{
 			bool precent = presenteges == "Yes";
@@ -176,7 +211,7 @@ namespace MarketWeb.Controllers
 			return View(new ProductInStoreModel(systemId, state, message, store, product));
 		}
 
-		public IActionResult EditDiscount(int systemId, string state, string message, string store, string product,
+		public IActionResult EditDiscount(int systemId, string state, string store, string product,
 			string whatToEdit, string newValue)
 		{
 			var userService = MarketServer.Users[systemId];
@@ -190,7 +225,7 @@ namespace MarketWeb.Controllers
 			return RedirectToAction("EditDiscountPage", new {systemId, state, message = answer.Answer, store, product});
 		}
 
-		public IActionResult RemoveDiscount(int systemId, string state, string message, string store, string product)
+		public IActionResult RemoveDiscount(int systemId, string state, string store, string product)
 		{
 			var userService = MarketServer.Users[systemId];
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
@@ -218,7 +253,7 @@ namespace MarketWeb.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult HandleOptionsSelected(int systemId, string state, string message, string store, string[] permissions, string usernameEntry)
+		public IActionResult HandleOptionsSelected(int systemId, string state, string store, string[] permissions, string usernameEntry)
 		{
 			StringBuilder actions = new StringBuilder();
 			foreach (var permission in permissions)
@@ -231,7 +266,7 @@ namespace MarketWeb.Controllers
 			return RedirectToAction("PromoteStoreAdminCall", new { systemId, state, store , usernameEntry, actions});
 		}
 
-		public IActionResult PromoteStoreAdminCall(int systemId, string state,string message, string store, string usernameEntry,
+		public IActionResult PromoteStoreAdminCall(int systemId, string state,string store, string usernameEntry,
 			string actions)
 		{
 			var userService = MarketServer.Users[systemId];

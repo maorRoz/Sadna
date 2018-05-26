@@ -48,8 +48,12 @@
 
                         }
                         var userService = MarketServer.Users[Model.SystemId];
-                        var name = userService.GetUserDetails().ReportList[0];
-                        <li class="navbar-brand" style="margin-left:18em;" >Hello @name</li>
+                        var answer = userService.GetUserDetails();
+                        if (answer.Status == 0)
+                        {
+                            var name = userService.GetUserDetails().ReportList[0];
+                            <li class="navbar-brand" style="margin-left: 18em;">Hello @name</li>
+                        }
                     } 
                 </ul>
             </div>

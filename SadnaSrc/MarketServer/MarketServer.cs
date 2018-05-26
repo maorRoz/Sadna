@@ -15,6 +15,7 @@ namespace MarketWeb
     {
         public static readonly Dictionary<int,IUserService> Users = new Dictionary<int, IUserService>();
         private readonly MarketYard marketSession;
+        private const int Success = 0;
         public MarketServer(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
         {
             marketSession = MarketYard.Instance;
@@ -24,12 +25,18 @@ namespace MarketWeb
         public async Task EnterSystem(string socketId)
         {
             var userService = marketSession.GetUserService();
-            var id = Convert.ToInt32(userService.EnterSystem().ReportList[0]);
-            Users.Add(id, userService);
+            var answer = userService.EnterSystem();
+
+            var id = 0;
+            if (answer.Status == Success)
+            {
+                id = Convert.ToInt32(answer.ReportList[0]);
+                Users.Add(id, userService);
+            }
+
             await InvokeClientMethodAsync(socketId, "IdentifyClient", new object[]{id});
         }
 
-        //Todo: fix this, not working on disconnects
         public void UnSubscribeSocket(string socketId)
         {
             FeedSubscriber.UnSubscribeSocket(socketId);
@@ -37,7 +44,7 @@ namespace MarketWeb
 
         public void SubscribeSocket(string userId, string socketId)
         {
-               FeedSubscriber.SubscribeSocket(this,Convert.ToInt32(userId),socketId);
+            FeedSubscriber.SubscribeSocket(this,Convert.ToInt32(userId),socketId);
         }
 
         public async void GetMessage(string socketId, string message)

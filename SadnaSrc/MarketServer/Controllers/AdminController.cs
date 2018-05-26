@@ -18,8 +18,19 @@ namespace MarketWeb.Controllers
         public IActionResult RemoveUserView(int systemId, string state, string message, bool valid)
         {
             var userService = MarketServer.Users[systemId];
-            string[] usersData = userService.ViewUsers().ReportList;
-            ViewBag.valid = valid;
+            var usersData = new string[0];
+            var answer = userService.ViewUsers();
+            if (answer.Status == Success)
+            {
+                usersData = answer.ReportList;
+                ViewBag.valid = valid;
+            }
+            else
+            {
+                message = answer.Answer;
+                ViewBag.valid = false;
+            }
+ 
             return View(new UserListModel(systemId, state, message, usersData));
         }
 
@@ -32,7 +43,7 @@ namespace MarketWeb.Controllers
                 systemId,
                 state,
                 message = answer.Answer,
-                valid = (answer.Status == Success)
+                valid = answer.Status == Success
             });
         }
 
@@ -99,16 +110,26 @@ namespace MarketWeb.Controllers
 
 	    }
 
-		public IActionResult PurchasePolicy(int systemId, string state, string message, bool valid)
+		public IActionResult PurchasePolicy(int systemId, string state, string message)
 		{
 			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
-			var answer = adminService.ViewPolicies();
-			string[] operators = {"AND", "OR", "NOT"};
-			string[] conditions = answer.ReportList;
-			return View(new ConditionsOperatorsModel(systemId, state, message,operators,conditions));
+		    var operators = new string[0];
+            var conditions = new string[0];
+		    var answer = adminService.ViewPolicies();
+		    if (answer.Status == Success)
+		    {
+		        operators = new []{"AND", "OR", "NOT"};
+		        conditions = answer.ReportList;
+		    }
+		    else
+		    {
+		        message = answer.Answer;
+		    }
+
+		    return View(new ConditionsOperatorsModel(systemId, state, message,operators,conditions));
 		}
 
-	    public IActionResult CreatePolicy(int systemId, string state, string message, string type, string subject, string op, string arg1, string optArg)
+	    public IActionResult CreatePolicy(int systemId, string state, string type, string subject, string op, string arg1, string optArg)
 	    {
 		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
 		    var answer = adminService.CreatePolicy(type, subject, op, arg1, optArg);
@@ -123,7 +144,7 @@ namespace MarketWeb.Controllers
 	    {
 		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.Users[systemId]);
 		    var answer = adminService.SavePolicy();
-		    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = true });
+		    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
 		}
 
 	}

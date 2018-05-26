@@ -18,26 +18,48 @@ namespace MarketWeb.Controllers
             string product,double unitPrice,int quantity, double finalPrice)
         {
             var userService = MarketServer.Users[systemId];
-            var userDetails = userService.GetUserDetails().ReportList;
-            return View(new SingleBuyItemModel(systemId,state,message,store,product,unitPrice,quantity,finalPrice,
-            userDetails[0],userDetails[1],userDetails[2]));
+            answer = userService.GetUserDetails();
+
+            if (answer.Status == Success)
+            {
+                var userDetails = answer.ReportList;
+                return View(new SingleBuyItemModel(systemId, state, message, store, product, unitPrice, quantity,
+                    finalPrice,
+                    userDetails[0], userDetails[1], userDetails[2]));
+            }
+            return RedirectToAction("CartManagement","Cart", new { systemId, state, message = answer.Answer });
         }
 
         public IActionResult BuyAllForm(int systemId, string state, string message)
         {
             var userService = MarketServer.Users[systemId];
-            var cartData = userService.ViewCart().ReportList;
-            var userDetails = userService.GetUserDetails().ReportList;
-            return View(new BuyAllCartModel(systemId, state, message, cartData, userDetails[0], userDetails[1], userDetails[2]));
+            var answerOfViewCart = userService.ViewCart();
+            var answerOfUsersDetails = userService.GetUserDetails();
+            if (answerOfViewCart.Status == Success && answerOfUsersDetails.Status == Success)
+            {
+                var cartData = answerOfViewCart.ReportList;
+                var userDetails = answerOfUsersDetails.ReportList;
+                return View(new BuyAllCartModel(systemId, state, message, cartData, userDetails[0], userDetails[1], userDetails[2]));
+            }
+
+            return RedirectToAction("CartManagement", "Cart", answerOfUsersDetails.Status == Success ? 
+                new {systemId, state, message = answerOfViewCart.Answer} :
+                new { systemId, state, message = answerOfUsersDetails.Answer });
         }
 
         public IActionResult BuyLotteryTicketForm(int systemId, string state, string message, string store,
             string product,double realPrice)
         {
             var userService = MarketServer.Users[systemId];
-            var userDetails = userService.GetUserDetails().ReportList;
-            return View(new TicketBuyModel(systemId, state, message, store, product, realPrice, userDetails[0], userDetails[1],
-                userDetails[2]));
+            answer = userService.GetUserDetails();
+            if (answer.Status == Success)
+            {
+                var userDetails = answer.ReportList;
+                return View(new TicketBuyModel(systemId, state, message, store, product, realPrice, userDetails[0],
+                    userDetails[1],
+                    userDetails[2]));
+            }
+            return RedirectToAction("CartManagement", "Cart", new { systemId, state, message = answer.Answer });
         }
 
         public IActionResult MakeImmediateBuy(int systemId, string state,string store,string product,double unitPrice,int quantity,

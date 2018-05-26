@@ -9,7 +9,7 @@ namespace MarketWeb.Models
     public class StoreListModel : UserModel
 	{
 		public StoreItemModel[] Items { get; set; }
-		public StoreListModel(int systemId, string state, string[] itemData) : base(systemId, state,null)
+		public StoreListModel(int systemId, string state, string[] itemData,string message) : base(systemId, state,message)
 		{
 			Items = new StoreItemModel[itemData.Length];
 			for (int i = 0; i < Items.Length; i++)
