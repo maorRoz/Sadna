@@ -87,7 +87,6 @@ namespace PurchasePolicyTests
         {
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
-
         }
 
     }

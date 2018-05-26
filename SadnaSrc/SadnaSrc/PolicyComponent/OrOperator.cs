@@ -25,7 +25,7 @@ namespace SadnaSrc.PolicyComponent
 
         public override string GetMyType()
         {
-            return "OrOperator";
+            return "OR";
         }
         public override bool Equals(object obj)
         {

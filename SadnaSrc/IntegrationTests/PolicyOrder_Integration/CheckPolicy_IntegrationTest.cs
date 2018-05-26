@@ -246,8 +246,8 @@ namespace IntegrationTests.PolicyOrder_Integration
             policyHandler.AddPolicy(0);
             policyHandler.CreateStoreSimplePolicy(store1, ConditionType.PriceGreater, "10.00");
             policyHandler.AddPolicy(0);
-            policyHandler.CreateStockItemSimplePolicy(product2, store2, ConditionType.PriceLesser, "50.00");
-            policyHandler.CreateStockItemSimplePolicy(product2, store2, ConditionType.QuantityLesser, "5");
+            policyHandler.CreateStockItemSimplePolicy(store2, product2, ConditionType.PriceLesser, "50.00");
+            policyHandler.CreateStockItemSimplePolicy(store2, product2, ConditionType.QuantityLesser, "5");
             policyHandler.CreateStockItemPolicy(store2, product2, OperatorType.AND, 0, 1);
             policyHandler.AddPolicy(2);
         }

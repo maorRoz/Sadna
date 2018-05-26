@@ -14,12 +14,12 @@ namespace SadnaSrc.PolicyComponent
 
         public override bool Evaluate(string username, string address, int quantity, double price)
         {
-            return quantity >= Int32.Parse(_value);
+            return quantity >= Int32.Parse(Value);
         }
 
         public override string[] GetData()
         {
-            return new[] { "" + ID, "Quantity", ">=", _value};
+            return new[] { "" + ID, "Quantity", ">=", Value };
         }
         public override string GetMyType()
         {
@@ -36,12 +36,12 @@ namespace SadnaSrc.PolicyComponent
         private bool Equals(QuantityGreaterThan obj)
         {
             bool answer = true;
-            if (_value == null)
-                answer = answer && (obj._value == null);
+            if (Value == null)
+                answer = answer && (obj.Value == null);
             if (Subject == null)
                 answer = answer && (obj.Subject == null);
-            if (_value != null)
-                answer = answer && (_value.Equals(obj._value));
+            if (Value != null)
+                answer = answer && (Value.Equals(obj.Value));
             if (Subject != null)
                 answer = answer && (Subject.Equals(obj.Subject));
             answer = answer && obj.ID.Equals(ID) && obj.Type.Equals(Type);

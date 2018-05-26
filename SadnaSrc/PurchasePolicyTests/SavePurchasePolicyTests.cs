@@ -162,7 +162,7 @@ namespace PurchasePolicyTests
         {
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
-
+            PolicyHandler.Instance.CleanSession();
         }
 
         }

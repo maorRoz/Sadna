@@ -8,11 +8,11 @@ namespace SadnaSrc.PolicyComponent
 {
     public abstract class Condition : PurchasePolicy
     {
-        protected readonly string _value;
+        public readonly string Value;
 
         protected Condition(PolicyType type, string subject, string value, int id) : base(type, subject, id)
         {
-            _value = value;
+            Value = value;
         }
 
         public object[] GetPolicyValuesArray()
@@ -25,10 +25,10 @@ namespace SadnaSrc.PolicyComponent
                 subjectval = Subject;
 
             string valueVal;
-            if (_value == null)
+            if (Value == null)
                 valueVal = "NULL";
             else
-                valueVal = _value;
+                valueVal = Value;
             return new object[]
             {
                 ID,
