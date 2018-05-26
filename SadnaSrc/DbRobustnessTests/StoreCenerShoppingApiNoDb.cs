@@ -22,11 +22,11 @@ namespace DbRobustnessTests
             answer = userService.SignIn("Big Smoke", "123");
             Assert.AreEqual((int)SignInStatus.Success, answer.Status);
             shoppingService = marketSession.GetStoreShoppingService(ref userService);
+            MarketDB.ToDisable = true;
         }
         [TestMethod]
         public void OpenStoreNoDBTest()
         {
-            MarketDB.ToDisable = true;
             answer = shoppingService.OpenStore("We have no DB!", "who cares");
             Assert.AreEqual((int)OpenStoreStatus.NoDB, answer.Status);
         }
@@ -34,7 +34,6 @@ namespace DbRobustnessTests
         [TestMethod]
         public void ViewStoreInfoNoDBTest()
         {
-            MarketDB.ToDisable = true;
             answer = shoppingService.ViewStoreInfo("Cluckin Bell");
             Assert.AreEqual((int)ViewStoreStatus.NoDB, answer.Status);
         }
@@ -43,7 +42,6 @@ namespace DbRobustnessTests
         [TestMethod]
         public void ViewStorStockNoDBTest()
         {
-            MarketDB.ToDisable = true;
             answer = shoppingService.ViewStoreStock("Cluckin Bell");
             Assert.AreEqual((int)ViewStoreStatus.NoDB, answer.Status);
         }
@@ -51,7 +49,6 @@ namespace DbRobustnessTests
         [TestMethod]
         public void ViewStorStockAllNoDBTest()
         {
-            MarketDB.ToDisable = true;
             answer = shoppingService.ViewStoreStockAll("Cluckin Bell");
             Assert.AreEqual((int)ViewStoreStatus.NoDB, answer.Status);
         }
@@ -59,7 +56,6 @@ namespace DbRobustnessTests
         [TestMethod]
         public void AddProductToCartNoDBTest()
         {
-            MarketDB.ToDisable = true;
             answer = shoppingService.AddProductToCart("Cluckin Bell", "#9",1);
             Assert.AreEqual((int)AddProductStatus.NoDB, answer.Status);
         }

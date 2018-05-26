@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminViewApiNoDb.cs" />
     <Compile Include="OrderPoolApiNoDb.cs" />
     <Compile Include="StoreCenerShoppingApiNoDb.cs" />
     <Compile Include="StoreCenterManagementApiNoDb.cs" />
