@@ -1,5 +1,4 @@
 ﻿using SadnaSrc.Main;
-using SadnaSrc.MarketFeed;
 
 namespace SadnaSrc.UserSpot
 {
@@ -23,7 +22,7 @@ namespace SadnaSrc.UserSpot
 
         public MarketAnswer SignUp(string name, string address, string password,string creditCard)
         {
-            SignUpSlave slave = new SignUpSlave(MarketUser,userDB,Publisher.Instance);
+            SignUpSlave slave = new SignUpSlave(MarketUser,userDB, MarketYard.Instance.GetPublisher());
             MarketUser = slave.SignUp(name,address,password,creditCard);
             return slave.Answer;
         }

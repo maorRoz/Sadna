@@ -11,18 +11,31 @@ namespace SadnaSrc.MarketData
         private static MarketDB _instance;
 
         public static MarketDB Instance => _instance ?? (_instance = new MarketDB());
-
+        public static bool ToDisable;
+        
         private SqlConnection _dbConnection;
         private MarketDB()
         {
-            InitiateDb();
-            CreateTables();
+            if (ToDisable)
+            {
+                _dbConnection = new SqlConnection();
+                return;
+            }
+            try
+            {
+                InitiateDb();
+                CreateTables();
+            }
+            catch(SqlException)
+            {
+            }
         }
         private void InitiateDb()
         {
+
             var dbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
-          //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
-          //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
+            //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
+            //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
             _dbConnection = new SqlConnection(dbPath);
              _dbConnection.Open();
         }
@@ -181,17 +194,21 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik3','STR Potion','Y','Immediate',1,4.0,'2018-12-29')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Vadim Chernov','Goldstar','The Red Rock','Immediate',1,11.00,'2018-12-29')",
             };
-
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
-                var insertCommand = new SqlCommand(thingsToInsertByForce[i], _dbConnection);
+                var insertCommand = new SqlCommand(thingsToInsertByForce[i], dbConnection);
                 try
                 {
                     insertCommand.ExecuteNonQuery();
                 }
                 catch (SqlException)
                 {
-                    if (_dbConnection.State != ConnectionState.Open)
+                    if (dbConnection.State != ConnectionState.Open)
                     {
                         throw;
                     }
@@ -265,10 +282,14 @@ namespace SadnaSrc.MarketData
                 "conditions",
                 "Operator"
             };
-
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             for (int i = 0; i < tableNames.Length; i++)
             {
-                var deleateTableCommand = new SqlCommand("Delete FROM " +tableNames[i], _dbConnection);
+                var deleateTableCommand = new SqlCommand("Delete FROM " +tableNames[i], dbConnection);
                 deleateTableCommand.ExecuteNonQuery();
             }
         }
@@ -534,9 +555,14 @@ namespace SadnaSrc.MarketData
         }
         public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
         {
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var insertRequest = "INSERT INTO "+table+" ("+ tableColumns + ") VALUES ("+ string.Join(",", valuesNames)
                                 + ")";
-            var commandDb = new SqlCommand(insertRequest, _dbConnection);
+            var commandDb = new SqlCommand(insertRequest, dbConnection);
             for (int i = 0; i < values.Length;i++)
             {
                 commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
@@ -548,17 +574,27 @@ namespace SadnaSrc.MarketData
 
         public SqlDataReader SelectFromTable(string table, string toSelect)
         {
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var selectRequest = "SELECT " + toSelect + " FROM " + table ;
 
-            return new SqlCommand(selectRequest, _dbConnection).ExecuteReader();
+            return new SqlCommand(selectRequest, dbConnection).ExecuteReader();
 
         }
 
         public SqlDataReader SelectFromTableWithCondition(string table, string toSelect, string condition)
         {
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var selectRequest = "SELECT " + toSelect + " FROM " + table + " WHERE "+condition;
 
-            return new SqlCommand(selectRequest, _dbConnection).ExecuteReader();
+            return new SqlCommand(selectRequest, dbConnection).ExecuteReader();
 
         }
 
@@ -570,8 +606,13 @@ namespace SadnaSrc.MarketData
                 setString[i] = columnNames[i] + " = " + valuesNames[i];
             }
 
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var updateCommand = "UPDATE " + table + " SET " + string.Join(", ", setString) + " WHERE " + updateCondition;
-            var commandDb = new SqlCommand(updateCommand, _dbConnection);
+            var commandDb = new SqlCommand(updateCommand, dbConnection);
             for (int i = 0; i < values.Length; i++)
             {
                 commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
@@ -583,8 +624,13 @@ namespace SadnaSrc.MarketData
 
         public void DeleteFromTable(string table,string deleteCondition)
         {
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var deleteCommand = "DELETE FROM " + table + " WHERE " + deleteCondition;
-            var commandDb = new SqlCommand(deleteCommand, _dbConnection);
+            var commandDb = new SqlCommand(deleteCommand, dbConnection);
 
             commandDb.ExecuteNonQuery();
 
@@ -592,7 +638,12 @@ namespace SadnaSrc.MarketData
 
         public SqlDataReader freeStyleSelect(string cmd)
         {
-            return new SqlCommand(cmd, _dbConnection).ExecuteReader();
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
+            return new SqlCommand(cmd, dbConnection).ExecuteReader();
         }
 
         public bool IsConnected()

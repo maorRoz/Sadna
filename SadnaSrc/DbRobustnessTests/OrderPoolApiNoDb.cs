@@ -1,9 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DbRobustnessTests
 {
     [TestClass]
-    public class UnitTest1
+    public class OrderPoolApiNoDb
     {
         [TestMethod]
         public void TestMethod1()

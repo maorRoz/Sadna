@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.MarketFeed
 {
@@ -12,7 +13,7 @@ namespace SadnaSrc.MarketFeed
 
         public static void SubscribeSocket(IListener webSocketServer, int userId,string socket)
         {
-            var observer = new FeedObserver(Publisher.Instance,webSocketServer, userId, socket);
+            var observer = new FeedObserver(MarketYard.Instance.GetPublisher(), webSocketServer, userId, socket);
             observers.Add(observer);
         }
 
