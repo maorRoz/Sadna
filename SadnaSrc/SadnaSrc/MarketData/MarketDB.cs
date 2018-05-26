@@ -507,29 +507,29 @@ namespace SadnaSrc.MarketData
 
         private static string CreateConditionTable()
         {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='conditions' AND xtype='U') 
-                        CREATE TABLE [conditions] (
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SimplePolicies' AND xtype='U') 
+                        CREATE TABLE [SimplePolicies] (
                                     [SystemID]              INT,
-                                    [conditionsType]        VARCHAR(256),
+                                    [Condition]         VARCHAR(256),
                                     [PolicyType]            VARCHAR(256),
                                     [Subject]               VARCHAR(256),
-                                    [value]                 VARCHAR(256),
-                                    [isRoot]                VARCHAR(256),
-                                    PRIMARY KEY([SystemID])
+                                    [Value]                 VARCHAR(256),
+                                    [Root]                  VARCHAR(256),
+                                    PRIMARY KEY([SystemID],[PolicyType],[Subject])
                                     )";
         }
         private static string CreateOperatorTable()
         {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Operator' AND xtype='U') 
-                        CREATE TABLE [Operator] (
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='ComplexPolicies' AND xtype='U') 
+                        CREATE TABLE [ComplexPolicies] (
                                     [SystemID]               INT,
-                                    [OperatorType]           VARCHAR(256),
+                                    [Operator]           VARCHAR(256),
                                     [PolicyType]             VARCHAR(256),
                                     [Subject]                VARCHAR(256),
-                                    [COND1ID]                INT,
-                                    [COND2ID]                INT,
-                                    [isRoot]                 VARCHAR(256),
-                                    PRIMARY KEY([SystemID])
+                                    [Cond1]                  INT,
+                                    [Cond2]                  INT,
+                                    [Root]                   VARCHAR(256),
+                                    PRIMARY KEY([SystemID],[PolicyType],[Subject])
                                     )";
         }
         public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)

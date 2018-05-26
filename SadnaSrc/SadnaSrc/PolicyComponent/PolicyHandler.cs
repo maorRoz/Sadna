@@ -12,13 +12,8 @@ namespace SadnaSrc.PolicyComponent
         public List<PurchasePolicy> Policies;
         private List<PurchasePolicy> SessionPolicies;
 
-        private static readonly Random random = new Random();
-
         private static PolicyHandler _instance;
         private static IPolicyDL _dataLayer;
-
-        public PolicyType Type;
-        public string Subject;
 
         public static PolicyHandler Instance => _instance ?? (_instance = new PolicyHandler());
 
@@ -82,7 +77,7 @@ namespace SadnaSrc.PolicyComponent
         public void AddPolicy(int policyId)
         {
             PurchasePolicy toAdd = GetPolicy(policyId);
-            toAdd.ID = GeneratePolicyID();
+            toAdd.IsRoot = true;
             Policies.Add(toAdd);
             SessionPolicies.Clear();
             _dataLayer.SavePolicy(toAdd);
@@ -96,7 +91,6 @@ namespace SadnaSrc.PolicyComponent
                 if (policy.Type == type && policy.Subject == subject)
                 {
                     toRemove = policy;
-                   
                 }
                     
             }
@@ -194,17 +188,6 @@ namespace SadnaSrc.PolicyComponent
             PurchasePolicy policy = GetPolicy(type, subject);
             if (policy == null) return true;
             return policy.Evaluate(username, address, quantity, price);
-        }
-
-        private int GeneratePolicyID()
-        {
-            var newID = random.Next(1000, 10000);
-            while (GetPolicy(newID) != null)
-            {
-                newID = random.Next(1000, 10000);
-            }
-
-            return newID;
         }
 
         private PurchasePolicy CreatePolicy(PolicyType type, string subject, OperatorType op, int id1, int id2)
