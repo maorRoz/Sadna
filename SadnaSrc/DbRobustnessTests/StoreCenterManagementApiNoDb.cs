@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DbRobustnessTests
 {
     [TestClass]
-    public class StoreCenerApiNoDb
+    public class StoreCenterManagementApiNoDb
     {
         [TestMethod]
         public void TestMethod1()
