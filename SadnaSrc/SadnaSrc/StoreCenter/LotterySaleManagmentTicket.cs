@@ -153,7 +153,15 @@ namespace SadnaSrc.StoreCenter
             {
                 winnerResult = cheatCode;
             }
-            return InformAllWinner(winnerResult).UserID;
+
+            try
+            {
+                return InformAllWinner(winnerResult).UserID;
+            }
+            catch (NullReferenceException)
+            {
+                return 5;
+            }
         }
         public object[] GetLotteryManagmentValuesArray()
         {
