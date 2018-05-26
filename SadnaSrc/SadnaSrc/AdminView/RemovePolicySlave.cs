@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Castle.Core.Internal;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.PolicyComponent;
 
@@ -43,6 +44,10 @@ namespace SadnaSrc.AdminView
             catch (MarketException e)
             {
                 Answer = new AdminAnswer(EditPolicyStatus.NoAuthority, e.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
+                Answer = new AdminAnswer((EditPolicyStatus)e.Status, e.GetErrorMessage());
             }
         }
 
