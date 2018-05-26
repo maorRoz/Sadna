@@ -35,11 +35,6 @@ namespace SadnaSrc.UserSpot
 
         }
 
-        public UserException(GetUserDetails status, string message) : base((int)status, message)
-        {
-
-        }
-
         public UserException(SignUpStatus status, string message) : base((int)status, message)
         {
         }

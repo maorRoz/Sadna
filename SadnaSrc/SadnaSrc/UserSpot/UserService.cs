@@ -42,13 +42,6 @@ namespace SadnaSrc.UserSpot
 
         }
 
-		public MarketAnswer ViewUsers()
-		{
-			ViewUsersSlave slave = new ViewUsersSlave(MarketUser,userDB);
-			slave.ViewUsers();
-			return slave.Answer;
-		}
-
         public MarketAnswer EditCartItem(string store, string product, int quantity, double unitPrice)
         {
             EditCartItemSlave slave = new EditCartItemSlave(MarketUser);
@@ -64,13 +57,26 @@ namespace SadnaSrc.UserSpot
             return slave.Answer;
         }
 
+        public MarketAnswer ViewUsers()
+        {
+            ViewUsersSlave slave = new ViewUsersSlave(MarketUser, userDB);
+            slave.ViewUsers();
+            return slave.Answer;
+        }
+
         public MarketAnswer GetControlledStoreNames()
         {
             GetControlledStoreNamesSlave slave = new GetControlledStoreNamesSlave(MarketUser,userDB);
             slave.GetControlledStoreNames();
             return slave.Answer;
         }
-		
+
+        public MarketAnswer GetAllStores()
+        {
+            GetControlledStoreNamesSlave slave = new GetControlledStoreNamesSlave(MarketUser, userDB);
+            slave.ViewStores();
+            return slave.Answer;
+        }
 
         public MarketAnswer GetStoreManagerPolicies(string store)
         {
@@ -85,13 +91,6 @@ namespace SadnaSrc.UserSpot
             slave.GetUserDetails();
             return slave.Answer;
         }
-
-	    public MarketAnswer GetAllStores()
-	    {
-		    GetControlledStoreNamesSlave slave = new GetControlledStoreNamesSlave(MarketUser,userDB);
-			slave.ViewStores();
-			return slave.Answer;
-		}
 
 	    public void AddToCart(string product, string store, int quantity, double unitPrice)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.UserSpot
 {
@@ -24,20 +25,27 @@ namespace SadnaSrc.UserSpot
         }
         public void RemoveFromCart(string product, string store, double unitPrice)
         {
-            MarketLog.Log("UserSpot", "User " + userID + " attempting to remove his cart item: " + product + " from store: " + store + " ...");
             try
             {
+                MarketLog.Log("UserSpot",
+                    "User " + userID + " attempting to remove his cart item: " + product + " from store: " + store +
+                    " ...");
                 CartItem toRemove = ApproveModifyCart(store, product, unitPrice);
 
-                MarketLog.Log("UserSpot", "User " + userID + " found cart item: " + product + " from store: " + store + ". proceeding for the removal...");
+                MarketLog.Log("UserSpot",
+                    "User " + userID + " found cart item: " + product + " from store: " + store +
+                    ". proceeding for the removal...");
                 _user.Cart.RemoveFromCart(toRemove);
-                MarketLog.Log("UserSpot", "User " + userID + "successfully removed cart item: " + product + " from store: " + store + " ...");
-                Answer = new  UserAnswer(RemoveFromCartStatus.Success, "Remove Cart Item has been successful!");
+                MarketLog.Log("UserSpot",
+                    "User " + userID + "successfully removed cart item: " + product + " from store: " + store + " ...");
+                Answer = new UserAnswer(RemoveFromCartStatus.Success, "Remove Cart Item has been successful!");
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot",
-                    "User " + userID + " has failed to Edit Cart Item. Error message has been created!");
+                Answer = new UserAnswer((RemoveFromCartStatus) e.Status, e.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
                 Answer = new UserAnswer((RemoveFromCartStatus)e.Status, e.GetErrorMessage());
             }
         }

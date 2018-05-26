@@ -24,9 +24,9 @@ namespace SadnaSrc.UserSpot
         }
         public void ViewCart()
         {
-            MarketLog.Log("UserSpot", "User " + userID + " attempting to view his cart...");
             try
             {
+                MarketLog.Log("UserSpot", "User " + userID + " attempting to view his cart...");
                 ApproveEnetered();
                 MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved his cart info...");
                 Answer = new UserAnswer(ViewCartStatus.Success, "View of the user's cart has been granted successfully!",
@@ -34,7 +34,6 @@ namespace SadnaSrc.UserSpot
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + userID + " has failed to View Cart. Error message has been created!");
                 Answer = new UserAnswer((ViewCartStatus)e.Status, e.GetErrorMessage(), null);
             }
             catch (DataException e)
