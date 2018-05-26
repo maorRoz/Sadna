@@ -18,11 +18,10 @@ namespace SadnaSrc.StoreCenter
         public void EditProduct(string productName, string whatToEdit, string newValue)
         {
 
-            MarketLog.Log("StoreCenter", "trying to edit product in store");
-            MarketLog.Log("StoreCenter", "check if store exists");
             
             try
             {
+                MarketLog.Log("StoreCenter", "trying to edit product in store");
                 checkIfStoreExistsAndActive();
                 MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
