@@ -154,14 +154,7 @@ namespace SadnaSrc.StoreCenter
                 winnerResult = cheatCode;
             }
 
-            try
-            {
-                return InformAllWinner(winnerResult).UserID;
-            }
-            catch (NullReferenceException)
-            {
-                return 5;
-            }
+            return InformAllWinner(winnerResult).UserID;
         }
         public object[] GetLotteryManagmentValuesArray()
         {
