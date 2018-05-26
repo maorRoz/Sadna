@@ -37,6 +37,10 @@ namespace MarketWeb.Controllers
 		{
 			var userService = MarketServer.Users[systemId];
 			var answer = userService.GetStoreManagerPolicies(store);
+		    if (answer.Status != Success)
+		    {
+		        return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+            }
 			string[] options = {"ManageProducts", "PromoteStoreAdmin", "DeclareDiscountPolicy", "ViewPurchaseHistory"};
 			if (!answer.ReportList.Contains("StoreOwner"))
 			{
@@ -54,7 +58,7 @@ namespace MarketWeb.Controllers
 			string[] userPolicies = answer.ReportList;
 			if (userPolicies.Contains(option) || userPolicies.Contains("StoreOwner"))
 			{
-				return RedirectToAction(option, new {systemId, state, message = "", store});
+				return RedirectToAction(option, new {systemId, state, store});
 			}
 
 			return RedirectToAction("ManageStoreOptions",

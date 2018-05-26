@@ -39,6 +39,10 @@ namespace SadnaSrc.MarketData
 
                 throw;
             }
+            catch (SqlException e)
+            {
+                int i = 5;
+            }
         }
 
         public SqlDataReader SelectFromTable(string table, string toSelect)
