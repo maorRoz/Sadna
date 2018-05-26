@@ -146,25 +146,37 @@ namespace SadnaSrc.StoreCenter
 
         public MarketAnswer CreatePolicy(string type, string subject,string optSubject, string op, string arg1, string optArg)
         {
-            throw new NotImplementedException();
+            AddPolicySlave slave = new AddPolicySlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.CreatePolicy(type, subject, optSubject, op, arg1, optArg);
+            return slave.Answer;
         }
 
         public MarketAnswer SavePolicy()
         {
-            throw new NotImplementedException();
-
+            AddPolicySlave slave = new AddPolicySlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.SaveFullPolicy();
+            return slave.Answer;
         }
 
         public MarketAnswer ViewPolicies()
         {
-            throw new NotImplementedException();
+            ViewPoliciesSlave slave = new ViewPoliciesSlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.ViewPolicies();
+            return slave.Answer;
 
         }
 
-        public MarketAnswer RemovePolicy(string type, string subject)
+        public MarketAnswer RemovePolicy(string type, string subject, string optProd)
         {
-            throw new NotImplementedException();
+            RemovePolicySlave slave = new RemovePolicySlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.RemovePolicy(type, subject, optProd);
+            return slave.Answer;
+        }
 
+        public MarketAnswer ViewPromotionHistory()
+        {
+            ViewPromotionHistorySlave slave = new ViewPromotionHistorySlave(_storeName, _storeManager, storeDL);
+            return slave.Answer;
         }
     }
 }
