@@ -30,9 +30,9 @@ namespace SadnaSrc.UserSpot
 
         public User SignIn(string name, string password)
         {
-            MarketLog.Log("UserSpot", "User " + guestID + " attempting to sign in the system...");
             try
             {
+                MarketLog.Log("UserSpot", "User " + guestID + " attempting to sign in the system...");
                 ApproveSignIn(name, password);
                 string encryptedPassword = UserSecurityService.ToEncryptPassword(_guest.SystemID,password);
                 MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest "

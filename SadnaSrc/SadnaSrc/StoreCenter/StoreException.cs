@@ -21,30 +21,17 @@ namespace SadnaSrc.StoreCenter
         public StoreException(OpenStoreStatus status, string message) : base((int)status, message)
         {
         }
-        public StoreException(ViewPurchaseHistoryStatus status, string message) : base((int)status, message)
-        {
-        }
 
         public StoreException(ViewStoreStatus status, string message) : base((int)status, message)
         {
         }
-
-        public StoreException(AddProductStatus status, string message) : base((int)status, message)
-        {
-        }
         public StoreException(DiscountStatus status, string message) : base((int)status, message)
-        {
-        }
-        public StoreException(AddLotteryTicketStatus status, string message) : base((int)status, message)
         {
         }
         public StoreException(StoreEnum status, string message) : base((int)status, message)
         {
         }
 
-        public StoreException(ViewStorePurchaseHistoryStatus status, string message) : base((int)status, message)
-        {
-        }
         public StoreException(ChangeToLotteryEnum status, string message) : base((int)status, message)
         {
         }
@@ -62,7 +49,7 @@ namespace SadnaSrc.StoreCenter
 
         protected override string WrapErrorMessageForDb(string message)
         {
-            return " Error: " + message;
+            return "Store Error: " + message;
         }
     }
 }

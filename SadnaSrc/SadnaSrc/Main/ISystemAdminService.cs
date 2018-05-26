@@ -24,7 +24,8 @@ namespace SadnaSrc.Main
         Success,
         SelfTermination,
         NotSystemAdmin,
-        NoUserFound
+        NoUserFound,
+        NoDB = 500
     }
 
     public enum ViewPurchaseHistoryStatus
@@ -32,7 +33,8 @@ namespace SadnaSrc.Main
         Success,
         NotSystemAdmin,
         NoUserFound,
-        NoStoreFound
+        NoStoreFound,
+        NoDB = 500
     }
 
     public enum EditCategoryStatus
@@ -40,21 +42,23 @@ namespace SadnaSrc.Main
         Success,
         CategoryNotExistsInSystem,
         CategoryAlradyExist,
-		InvalidCategory
+		InvalidCategory,
+        NoDB = 500
     }
 
     public enum EditPolicyStatus
     {
         Success,
         InvalidPolicyData,
-        NoAuthority
-        
+        NoAuthority,
+        NoDB = 500
+
     }
 
     public enum ViewPolicyStatus
     {
         Success,
-        NoAuthority
-
+        NoAuthority,
+        NoDB = 500
     }
 }

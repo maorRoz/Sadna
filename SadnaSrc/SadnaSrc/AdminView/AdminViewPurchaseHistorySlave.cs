@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
@@ -31,48 +32,55 @@ namespace SadnaSrc.AdminView
             {
                 _admin.ValidateSystemAdmin();
                 var historyReport = _adminDB.GetPurchaseHistory(field, givenValue);
-                Answer = new AdminAnswer(ViewPurchaseHistoryStatus.Success, "View purchase history has been successful!", historyReport);
+                Answer = new AdminAnswer(ViewPurchaseHistoryStatus.Success,
+                    "View purchase history has been successful!", historyReport);
             }
             catch (MarketException e)
             {
-                MarketLog.Log("AdminView", "User " + adminSystemID + " has tried to view purchase history report of others not as a " +
-                                           "system admin and has been blocked. Error message has been created!");
                 Answer = new AdminAnswer(ViewPurchaseHistoryStatus.NotSystemAdmin, e.GetErrorMessage(), null);
+            }
+            catch (DataException e)
+            {
+                Answer = new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage(), null);
             }
 
 
         }
         public void ViewPurchaseHistoryByUser(string userName)
         {
-            MarketLog.Log("AdminView", "System Admin " + adminSystemID +
-                                       " attempting to view purchase history of User " + userName + " ...");
             try
             {
+                MarketLog.Log("AdminView", "System Admin " + adminSystemID +
+                                           " attempting to view purchase history of User " + userName + " ...");
                 ValidateUserNameExistInPurchaseHistory(userName);
                 ViewPurchaseHistory("UserName", userName);
             }
             catch (AdminException e)
             {
-                MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to view purchase history report " +
-                                           "of User " + userName + " . Error message has been created!");
+                Answer = new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage(), null);
+            }
+            catch (DataException e)
+            {
                 Answer = new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage(), null);
             }
         }
 
         public void ViewPurchaseHistoryByStore(string storeName)
         {
-            MarketLog.Log("AdminView", "System Admin " + adminSystemID +
-                                       " attempting to view purchase history of Store " + storeName + " ...");
             try
             {
+                MarketLog.Log("AdminView", "System Admin " + adminSystemID +
+                                           " attempting to view purchase history of Store " + storeName + " ...");
                 ValidateStoreNameExistInPurchaseHistory(storeName);
                 ViewPurchaseHistory("Store", storeName);
 
             }
             catch (AdminException e)
             {
-                MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to view purchase history report " +
-                                           "of Store " + storeName + " . Error message has been created!");
+                Answer = new AdminAnswer((ViewPurchaseHistoryStatus) e.Status, e.GetErrorMessage(), null);
+            }
+            catch (DataException e)
+            {
                 Answer = new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage(), null);
             }
         }

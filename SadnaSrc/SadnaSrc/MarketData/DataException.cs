@@ -13,7 +13,7 @@ namespace SadnaSrc.MarketData
 
         public DataException()
         {
-            errorMessage = "Connection with the system data centers has been lost, opertaion failed!";
+            errorMessage = "Data Error: Connection with the system data centers has been lost, opertaion failed!";
             Status = 500;
         }
 

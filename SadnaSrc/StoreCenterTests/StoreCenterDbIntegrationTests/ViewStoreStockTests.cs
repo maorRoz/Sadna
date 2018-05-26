@@ -1,14 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
-using SadnaSrc.MarketHarmony;
 using SadnaSrc.StoreCenter;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SadnaSrc.MarketData;
-using SadnaSrc.OrderPool;
+
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTestss
 {
@@ -25,6 +20,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTestss
             market = MarketYard.Instance;
             userService = market.GetUserService();
             userService2 = market.GetUserService();
+            MarketYard.SetDateTime(DateTime.Parse("14/04/2018"));
         }
         [TestMethod]
         public void ViewStoreStockWhenStoreNotExists()
@@ -137,7 +133,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTestss
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
-            MarketYard.SetDateTime(DateTime.Parse("14/04/2018"));
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }

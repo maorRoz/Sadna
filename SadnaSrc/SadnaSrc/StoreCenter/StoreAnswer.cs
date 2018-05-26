@@ -24,8 +24,6 @@ namespace SadnaSrc.StoreCenter
 
         public StoreAnswer(AddProductStatus status, string answer) : base((int)status, answer) { }
 
-        public StoreAnswer(AddLotteryTicketStatus status, string answer) : base((int)status, answer) { }
-
 	    public StoreAnswer(DiscountStatus status, string answer, string[] report) : base((int) status, answer, report) { }
 
 	    public StoreAnswer(ManageStoreStatus status, string answer) : base((int)status, answer) { }

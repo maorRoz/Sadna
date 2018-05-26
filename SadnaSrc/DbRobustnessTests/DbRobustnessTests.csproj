@@ -48,11 +48,21 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="AdminViewApiNoDb.cs" />
+    <Compile Include="OrderPoolApiNoDb.cs" />
+    <Compile Include="StoreCenerShoppingApiNoDb.cs" />
+    <Compile Include="StoreCenterManagementApiNoDb.cs" />
+    <Compile Include="UserSpotApiNoDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SadnaSrc\SadnaSrc.csproj">
+      <Project>{8ca28e0b-777e-47dd-89c7-b94ae5dacf9b}</Project>
+      <Name>SadnaSrc</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

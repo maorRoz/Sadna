@@ -21,8 +21,6 @@ namespace SadnaSrc.Main
         MarketAnswer RemoveProduct(string productName);
         MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
         MarketAnswer AddQuanitityToProduct(string productName, int quantity);
-        MarketAnswer ChangeProductPurchaseWayToImmediate(string productName);
-        MarketAnswer ChangeProductPurchaseWayToLottery(string productName, DateTime startDate, DateTime endDate);
 
         MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
             DateTime endDate);

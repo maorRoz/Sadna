@@ -1,5 +1,6 @@
 ﻿using Castle.Core.Internal;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
@@ -31,6 +32,10 @@ namespace SadnaSrc.AdminView
             catch (AdminException e)
             {
                 Answer = new AdminAnswer((EditCategoryStatus)e.Status,e.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
+                Answer = new AdminAnswer((EditCategoryStatus)e.Status, e.GetErrorMessage());
             }
         }
 

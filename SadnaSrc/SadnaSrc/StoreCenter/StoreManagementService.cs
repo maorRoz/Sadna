@@ -15,8 +15,7 @@ namespace SadnaSrc.StoreCenter
     public class StoreManagementService : IStoreManagementService
     {
 
-        public Store store;
-        StockSyncher global;
+
         private readonly IUserSeller _storeManager;
         public string _storeName;
         private IOrderSyncher syncher;
@@ -27,8 +26,6 @@ namespace SadnaSrc.StoreCenter
         {
             _storeManager = storeManager;
             _storeName = storeName;
-            global = StockSyncher.Instance;
-            store = global.DataLayer.GetStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();
             storeDL = StoreDL.Instance;

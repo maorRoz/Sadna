@@ -51,7 +51,7 @@ namespace SadnaSrc.OrderPool
                     refundedIds.Add(refundedId);
                 }
 
-                var publisher = Publisher.Instance;
+                var publisher = MarketYard.Instance.GetPublisher();
                 publisher.NotifyLotteryCanceled(refundedIds.ToArray());
                 _orderDL.CancelLottery(lottery);
 
