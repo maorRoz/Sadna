@@ -31,15 +31,15 @@ namespace SadnaSrc.PolicyComponent
 
         public void RemovePolicy(PurchasePolicy policy)
         {
-            dbConnection.DeleteFromTable("ComplexPolicies", "PolicyType = '" + policy.Type + "' AND Subject = '" + policy.Subject + "'");
-            dbConnection.DeleteFromTable("SimplePolicies", "PolicyType = '" + policy.Type + "' AND Subject = '" + policy.Subject + "'");
+            dbConnection.DeleteFromTable("ComplexPolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + policy.Subject + "'");
+            dbConnection.DeleteFromTable("SimplePolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + policy.Subject + "'");
         }
 
         public PurchasePolicy GetPolicy(PolicyType type, string subject)
         {
             PurchasePolicy policy = FindComplexPolicy(-1, type, subject, true);
             if (policy == null)
-                policy = FindSimplePolicy(0, type, subject, true);
+                policy = FindSimplePolicy(-1, type, subject, true);
             if (policy != null)
                 policy.IsRoot = true;
             return policy;
@@ -50,8 +50,7 @@ namespace SadnaSrc.PolicyComponent
         {
             List<int> listOfIDs = new List<int>();
             List<PurchasePolicy> result = new List<PurchasePolicy>();
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("ComplexPolicies", "SystemID", "Root = 'true'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("ComplexPolicies", "*", "Root = 'true'"))
             {
                 while (dbReader.Read())
                 {
@@ -64,8 +63,7 @@ namespace SadnaSrc.PolicyComponent
                     result.Add(policy);
                 }
             }
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("SimplePolicies", "SystemID", "Root = 'true'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("SimplePolicies", "*", "Root = 'true'"))
             {
                 while (dbReader.Read())
                 {

@@ -94,8 +94,11 @@ namespace SadnaSrc.PolicyComponent
                 }
                     
             }
-            _dataLayer.RemovePolicy(toRemove);
-            Policies.Remove(toRemove);
+            if(toRemove != null)
+            {
+                _dataLayer.RemovePolicy(toRemove);
+                Policies.Remove(toRemove);
+            }
         }
 
         public void RemoveSessionPolicy(int policyId)
@@ -239,6 +242,10 @@ namespace SadnaSrc.PolicyComponent
 
         public void CleanSession()
         {
+            foreach (PurchasePolicy policy in Policies)
+            {
+                _dataLayer.RemovePolicy(policy);
+            }
             Policies.Clear();
             SessionPolicies.Clear();
         }

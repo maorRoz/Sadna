@@ -262,8 +262,8 @@ namespace SadnaSrc.MarketData
                 "Notifications",
                 "Category",
                 "CategoryProductConnection",
-                "conditions",
-                "Operator"
+                "SimplePolicies",
+                "ComplexPolicies"
             };
 
             for (int i = 0; i < tableNames.Length; i++)
@@ -510,12 +510,12 @@ namespace SadnaSrc.MarketData
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SimplePolicies' AND xtype='U') 
                         CREATE TABLE [SimplePolicies] (
                                     [SystemID]              INT,
-                                    [Condition]         VARCHAR(256),
+                                    [Condition]             VARCHAR(256),
                                     [PolicyType]            VARCHAR(256),
                                     [Subject]               VARCHAR(256),
                                     [Value]                 VARCHAR(256),
                                     [Root]                  VARCHAR(256),
-                                    PRIMARY KEY([SystemID],[PolicyType],[Subject])
+                                    PRIMARY KEY([SystemID], [PolicyType], [Subject])
                                     )";
         }
         private static string CreateOperatorTable()
