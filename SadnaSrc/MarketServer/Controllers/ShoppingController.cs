@@ -77,7 +77,7 @@ namespace MarketWeb.Controllers
 
 	    public IActionResult SearchProductView(int systemId, string state, string message)
 	    {
-		    var userService = MarketServer.Users[systemId];
+		    var userService = MarketServer.GetUserSession(systemId);
 		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 		    string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
 		    return View(new CategoryListModel(systemId, state, message, categories));
@@ -85,10 +85,14 @@ namespace MarketWeb.Controllers
 
 	    public IActionResult SearchProduct(int systemId, string state, string type, string value, double minPrice, double maxPrice, string category)
 	    {
-		    var userService = MarketServer.Users[systemId];
+		    var userService = MarketServer.GetUserSession(systemId);
 		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 		    var answer = storeShoppingService.SearchProduct(type, value, minPrice, maxPrice, category);
-			return RedirectToAction("ProductsView", new { systemId, state, results=answer.ReportList});
+		    if (answer.Status == 0)
+		    {
+			    return RedirectToAction("ProductsView", new { systemId, state, results = answer.ReportList});
+			}
+			return RedirectToAction("SearchProductView", new { systemId, state,message = answer.Answer, results = answer.ReportList});
 		}
 
 		public IActionResult ProductsView(int systemId, string state,string message, string[] results)

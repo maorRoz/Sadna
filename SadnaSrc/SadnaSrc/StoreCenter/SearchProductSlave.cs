@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
@@ -29,13 +30,20 @@ namespace SadnaSrc.StoreCenter
 				MarketLog.Log("StoreCenter", "User enetred the system!");
 				validateData(value);
 				Product[] products = null;
+				validatePrices(minPrice, maxPrice);
 				switch (type)
 				{
 					case "Name":
 						products = _storeLogic.GetProductsByName(value);
 						break;
 					case "Category":
-						
+						Category cat = _storeLogic.GetCategoryByName(value);
+						if (cat == null)
+						{
+							Answer = new StoreAnswer(SearchProductStatus.CategoryNotFound, "Category wasn't found in the system!");
+							return;
+						}
+						products = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
 						break;
 					case "KeyWord":
 						
@@ -43,7 +51,11 @@ namespace SadnaSrc.StoreCenter
 				}
 
 				products = FilterResultsByPrice(products,minPrice, maxPrice);
-				products = FilterResultByCategory(products, category);
+				if (type != "Category")
+				{
+					products = FilterResultByCategory(products, category);
+				}
+				
 				string[] result = new string[products.Length];
 				string[] stores = GetProductsStores(products);
 				for (int i = 0; i < result.Length; i++)
@@ -89,40 +101,45 @@ namespace SadnaSrc.StoreCenter
 
 			foreach (var product in products)
 			{
-				productsAfterFilter.AddLast(product);
-			}
-
-			if (maxPrice!=0)
-			{
-				foreach (var product2 in productsAfterFilter)
+				double price = product.BasePrice;
+				if (minPrice != 0 && maxPrice == 0)
 				{
-					double product2Price = product2.BasePrice;
-					if (product2Price > maxPrice)
+					if (price >= minPrice)
 					{
-						productsAfterFilter.Remove(product2);
+						productsAfterFilter.AddLast(product);
 					}
 				}
 
-			}
-
-			if (minPrice!=0)
+				else if (minPrice == 0 && maxPrice != 0)
 				{
-					foreach (var product2 in productsAfterFilter)
+					if (price <= maxPrice)
 					{
-						double product2Price = product2.BasePrice;
-						if (product2Price < minPrice)
-						{
-							productsAfterFilter.Remove(product2);
-						}
+						productsAfterFilter.AddLast(product);
 					}
 
+				}
+
+				else if (minPrice != 0 && maxPrice != 0)
+				{
+					if (price >= minPrice && price <= maxPrice)
+					{
+						productsAfterFilter.AddLast(product);
+					}
+				}
+
+				else
+				{
+					productsAfterFilter.AddLast(product);
+				}
+
 			}
+			
 			return productsAfterFilter.ToArray();
 		}
 
 		private Product[] FilterResultByCategory(Product[] products, string category)
 		{
-			if (category != null)
+			if (category != "None")
 			{
 				LinkedList<Product> productsAfterFilter = new LinkedList<Product>();
 				Category cat = _storeLogic.GetCategoryByName(category);
@@ -156,19 +173,19 @@ namespace SadnaSrc.StoreCenter
 			return stores;
 		}
 
-		private string GetProductStockInformation(string productID, bool showAll)
+		private string GetProductStockInformation(string productId, bool showAll)
 		{
-			StockListItem stockListItem = _storeLogic.GetStockListItembyProductID(productID);
+			StockListItem stockListItem = _storeLogic.GetStockListItembyProductID(productId);
 			if (stockListItem == null)
 			{
 				MarketLog.Log("storeCenter", "product not exists");
-				throw new StoreException(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
+				throw new StoreException(StoreEnum.ProductNotFound, "product " + productId + " does not exist in Stock");
 			}
 			if (stockListItem.PurchaseWay == PurchaseEnum.Lottery && !showAll)
 			{
 				LotterySaleManagmentTicket managmentTicket =
-					_storeLogic.GetLotteryByProductID((productID));
-				StockListItem sli = _storeLogic.GetStockListItembyProductID(productID);
+					_storeLogic.GetLotteryByProductID((productId));
+				StockListItem sli = _storeLogic.GetStockListItembyProductID(productId);
 				if ((managmentTicket.EndDate < MarketYard.MarketDate) ||
 				    (managmentTicket.StartDate > MarketYard.MarketDate) ||
 				    ((managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice) && sli.Quantity == 0))
@@ -188,6 +205,16 @@ namespace SadnaSrc.StoreCenter
 			string result = product + discount + purchaseWay + quanitity;
 			return result;
 		}
+
+		private void validatePrices(double minPrice, double maxPrice)
+		{
+			if (minPrice<0 || maxPrice<0 || minPrice>maxPrice)
+			{
+				throw new StoreException(SearchProductStatus.PricesInvalid,
+					"The prices range is illegal!!");
+			}
+		}
+
 
 	}
 }
