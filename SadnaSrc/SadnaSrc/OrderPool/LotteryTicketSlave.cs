@@ -38,7 +38,7 @@ namespace SadnaSrc.OrderPool
                                            " from store " + store + "...");
                 ValidateRegisteredUser();
                 _storesSync.ValidateTicket(itemName, store, unitPrice);
-                OrderItem ticketToBuy = new OrderItem(store, itemName, unitPrice, quantity);
+                OrderItem ticketToBuy = new OrderItem(store, null, itemName, unitPrice, quantity);
                 Order order = CreateOrderOneItem(ticketToBuy, UserName, UserAddress);
                 orderId = order.GetOrderID();
                 ProcessOrder(order, CreditCard);

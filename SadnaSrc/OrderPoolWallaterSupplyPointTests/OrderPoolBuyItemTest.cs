@@ -42,7 +42,7 @@ namespace OrderPoolWallaterSupplyPointTests
             checkerMock.Setup(x => x.CheckRelevantPolicies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>())).Returns(true);
-            item = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
+            item = new OrderItem("Cluckin Bell", null, "#9 Large", 7.00, 1);
             SupplyService.Instance.FixExternal();
             PaymentService.Instance.FixExternal();
         }

@@ -43,8 +43,8 @@ namespace OrderPoolWallaterSupplyPointTests
             policyMock.Setup(x => x.CheckRelevantPolicies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>())).Returns(true);
-            item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
-            item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
+            item1 = new OrderItem("Cluckin Bell", null, "#9", 5.00, 2);
+            item2 = new OrderItem("Cluckin Bell", null, "#9 Large", 7.00, 1);
             PaymentService.Instance.FixExternal();
             SupplyService.Instance.FixExternal();
 

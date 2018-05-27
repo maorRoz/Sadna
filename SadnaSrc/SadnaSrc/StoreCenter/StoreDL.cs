@@ -143,11 +143,6 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-
-
-        
-
-
         public void AddProductToDatabase(Product product)
         {
             dbConnection.InsertTable("Products", "SystemID, name, BasePrice, description",
