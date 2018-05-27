@@ -77,6 +77,11 @@ namespace BlackBox
             return _storeManagementService.ViewStoreHistory();
         }
 
+        public MarketAnswer ViewPromotionHistory()
+        {
+            return _storeManagementService.ViewPromotionHistory();
+        }
+
         public MarketAnswer CloseStore()
         {
             return _storeManagementService.CloseStore();

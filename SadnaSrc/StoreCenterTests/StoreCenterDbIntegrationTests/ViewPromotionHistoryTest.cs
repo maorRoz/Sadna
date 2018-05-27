@@ -121,10 +121,5 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
                 Assert.AreEqual(expected[i], actual[i]);
             }
         }
-
-        private void PromotingBigSmoke()
-        {
-
-        }
     }
 }
