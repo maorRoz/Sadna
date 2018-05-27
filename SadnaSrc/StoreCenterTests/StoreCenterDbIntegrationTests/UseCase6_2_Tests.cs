@@ -26,7 +26,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceSession = marketSession.GetUserService();
-            marketSession.GetStorePolicyManager().Sync();
+            marketSession.GetStorePolicyManager().SyncWithDB();
         }
 
         [TestMethod]

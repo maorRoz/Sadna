@@ -26,7 +26,7 @@ namespace SystemViewTests.UseCaseUnitTest
             MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceSession = marketSession.GetUserService();
-            marketSession.GetGlobalPolicyManager().Sync();
+            marketSession.GetGlobalPolicyManager().SyncWithDB();
         }
 
         [TestMethod]
