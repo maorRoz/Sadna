@@ -629,6 +629,22 @@ namespace SadnaSrc.StoreCenter
             dbConnection.DeleteFromTable("CategoryDiscount", "SystemId = '" + categoryDiscount.SystemId + "'");
         }
 
+        public void EditCategoryDiscount(CategoryDiscount categoryDiscount)
+        {
+            string[] columnNames =
+            {
+                "SystemID",
+                "CategoryName",
+                "StoreName",
+                "StartDate",
+                "EndDate",
+                "DiscountAmount",
+            };
+            dbConnection.UpdateTable("CategoryDiscount", "SystemId = '" + categoryDiscount.SystemId + "'", columnNames,
+                new[] { "@idParam", "@categoryParam", "@storeParam", "@startParam", "@endParam", "@amountParam" }
+                , categoryDiscount.GetDiscountValuesArray());
+        }
+
         public string[] GetAllCategoryDiscountIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();

@@ -541,7 +541,6 @@ namespace SadnaSrc.MarketData
                                     [StartDate]         DATETIME,
                                     [EndDate]           DATETIME,
                                     [DiscountAmount]    INT,
-                                    [Percentages]       VARCHAR(256),
                                     PRIMARY KEY([SystemID])
                                     )";
         }

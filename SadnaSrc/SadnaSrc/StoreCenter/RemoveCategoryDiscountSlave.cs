@@ -7,7 +7,7 @@ namespace SadnaSrc.StoreCenter
     internal class RemoveCategoryDiscountSlave : AbstractStoreCenterSlave
     {
         public MarketAnswer Answer { get; set; }
-        public RemoveCategoryDiscountSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
+        public RemoveCategoryDiscountSlave(string storeName, IUserSeller storeManager, IStoreDL storeDl) : base(storeName, storeManager, storeDl)
         {
         }
 
