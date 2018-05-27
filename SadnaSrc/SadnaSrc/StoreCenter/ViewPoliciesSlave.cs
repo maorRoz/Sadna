@@ -29,7 +29,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "Checking store manager status.");
                 _storeManager.CanDeclarePurchasePolicy();
                 MarketLog.Log("StoreCenter", "Trying to view policies.");
-                string[] result = _manager.GetSessionPoliciesStrings();
+                string[] result = _manager.ViewStorePolicies();
                 MarketLog.Log("StoreCenter", "Successfully got policiy ids.");
                 Answer = new StoreAnswer(ViewStorePolicyStatus.Success, "Successfully got policiy ids.", result);
 

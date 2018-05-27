@@ -7,7 +7,7 @@ namespace SadnaSrc.MarketHarmony
     public class Category
     {
         public readonly string SystemId;
-        string Name { get; set; }
+        public string Name { get; set; }
         public LinkedList<Product> products { get;}
         private static int globalCategoryID = -1;
 

@@ -199,7 +199,7 @@ namespace SadnaSrc.UserSpot
             {
                 while (dbReader.Read())
                 {
-                    loadedItems.Add(new CartItem(dbReader.GetString(1),
+                    loadedItems.Add(new CartItem(dbReader.GetString(1), null,
                         dbReader.GetString(2),dbReader.GetInt32(3),dbReader.GetDouble(4)));
                 }
             }

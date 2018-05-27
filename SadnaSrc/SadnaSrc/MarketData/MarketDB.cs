@@ -206,6 +206,7 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik1','INT Potion','Y','Lottery',2,8.0,'2018-12-29')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik3','STR Potion','Y','Immediate',1,4.0,'2018-12-29')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Vadim Chernov','Goldstar','The Red Rock','Immediate',1,11.00,'2018-12-29')",
+                "INSERT INTO SimplePolicies (SystemID,Condition,PolicyType,Subject,Value,Root) VALUES (0,'AddressEquals','Product','#45 With Cheese','Los Santos','true')",
             };
             var dbConnection = _dbConnection;
             if (ToDisable)

@@ -163,11 +163,22 @@ namespace SystemViewTests.AdminViewApiTest
         }
 
         [TestMethod]
-        public void SavePolicySuccess()
+        public void SavePolicySuccess1()
         {
 
             AddPolicySlave slave = new AddPolicySlave(admin.Object, manager.Object);
             slave.CreatePolicy("Category", "Shitty Products", "Quantity <=", "5", "");
+            slave.SaveFullPolicy();
+            Assert.AreEqual((int)EditPolicyStatus.Success, slave.Answer.Status);
+
+        }
+
+        [TestMethod]
+        public void SavePolicySuccess2()
+        {
+
+            AddPolicySlave slave = new AddPolicySlave(admin.Object, manager.Object);
+            slave.CreatePolicy("Category", "Shitty Products", "Address =", "Sunnyvale", "");
             slave.SaveFullPolicy();
             Assert.AreEqual((int)EditPolicyStatus.Success, slave.Answer.Status);
 

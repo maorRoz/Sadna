@@ -168,15 +168,17 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-
-
-        
-
-
         public void AddProductToDatabase(Product product)
         {
             dbConnection.InsertTable("Products", "SystemID, name, BasePrice, description",
                 new []{"@idParam","@name","@price","@desc"}, product.GetProductValuesArray());
+            if (product.Categories == null)
+                return;
+            foreach (string category in product.Categories)
+            {
+                dbConnection.InsertTable("CategoryProductConnection", "CategoryID, ProductID",
+                    new [] { "@categoryParam", "@productParam" }, new []{category, product.SystemId});
+            }
         }
 
         public void EditProductInDatabase(Product product)
@@ -303,16 +305,18 @@ namespace SadnaSrc.StoreCenter
 
         public Product GetProductID(string iD)
         {
+            Product product = null;
             using (var productReader = dbConnection.SelectFromTableWithCondition("Products", "*", "SystemID = '" + iD + "'"))
             {
                 while (productReader.Read())
                 {
-                    return new Product(iD, productReader.GetString(1), productReader.GetDouble(2),
+                    product = new Product(iD, productReader.GetString(1), productReader.GetDouble(2),
                         productReader.GetString(3));
+                    product.Categories = GetAllCategoriesOfProduct(iD);
                 }
             }
 
-            return null;
+            return product;
 
         }
 
@@ -574,9 +578,22 @@ namespace SadnaSrc.StoreCenter
         }
         public Category GetCategoryByName(string categoryname)
         {
-            Category category = null;
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Category", "*", "name = '" + categoryname + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    return new Category(dbReader.GetString(0), dbReader.GetString(1));
+                }
+            }
+            return null;
+        }
+
+        public Category GetCategoryByID(string categoryid)
+        {
+            Category category = null;
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("Category", "*", "SystemID = '" + categoryid + "'"))
             {
                 while (dbReader.Read())
                 {
@@ -585,6 +602,21 @@ namespace SadnaSrc.StoreCenter
             }
             return category;
         }
+
+        public string GetCategoryName(string categoryid)
+        {
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("Category", "name", "SystemID = '" + categoryid + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    return dbReader.GetString(0);
+                }
+            }
+
+            return null;
+        }
+
         public LinkedList<Product> GetAllCategoryProducts(string categoryid)
         {
             LinkedList<Product> products = new LinkedList<Product>();
@@ -604,6 +636,21 @@ namespace SadnaSrc.StoreCenter
                 products.AddLast(product);
             }
             return products;
+        }
+
+        private List<string> GetAllCategoriesOfProduct(string productID)
+        {
+            List<string> categories = new List<string>();
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("CategoryProductConnection", "CategoryID", "ProductID = '" + productID + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    categories.Add(GetCategoryName(dbReader.GetString(0)));
+                }
+            }
+
+            return categories;
         }
 
         public string[] GetAllCategorysIDs()

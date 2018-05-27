@@ -31,7 +31,7 @@ namespace SadnaSrc.StoreCenter
                 StockListItem stockListItem = storeLogic.GetProductFromStore(store, productName);
                 CheckifQuantityIsOK(quantity, stockListItem);   
                 CheckIfDiscountExistsAndCalcValue(ref stockListItem);
-                _shopper.AddToCart(stockListItem.Product, store, quantity);
+                _shopper.AddToCart(stockListItem.Product, stockListItem.Product.Categories, store, quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
                 answer = new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
                                                                  " successfully added to the user's cart!");

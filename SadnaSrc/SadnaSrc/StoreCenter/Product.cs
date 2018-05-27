@@ -12,6 +12,7 @@ namespace SadnaSrc.StoreCenter
         public string Name { get; set; }
         public double BasePrice { get; set; }
         public string Description { get; set; }
+        public List<string> Categories { get; set; }
         private static int globalProductID = -1;
 
         public Product(string _name, double _price, string _description)
@@ -20,6 +21,7 @@ namespace SadnaSrc.StoreCenter
             Name = _name;
             BasePrice = _price;
             Description = _description;
+            Categories = new List<string>();
         }
 
         public Product(string _SystemId, string _name, double _price, string _description)
@@ -38,6 +40,7 @@ namespace SadnaSrc.StoreCenter
             }
             return obj.GetType() == GetType() && Equals((Product)obj);
         }
+
 
 
         private bool Equals(Product obj)
