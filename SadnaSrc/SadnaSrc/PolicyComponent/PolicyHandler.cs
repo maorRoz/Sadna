@@ -144,6 +144,31 @@ namespace SadnaSrc.PolicyComponent
             return idArr.Select(x => x.ToString()).ToArray();
         }
 
+        public string[] ViewPolicies()
+        {
+            PurchasePolicy[] policiesArr = Policies.ToArray();
+            List<string> policyStrings = new List<string>();
+            for (int i = 0; i < policiesArr.Length; i++)
+            {
+                if(policiesArr[i].Type == PolicyType.Global || policiesArr[i].Type == PolicyType.Category || policiesArr[i].Type == PolicyType.Product)
+                    policyStrings.Add(PurchasePolicy.PrintEnum(policiesArr[i].Type) + "." + policiesArr[i].Subject);
+            }
+            return policyStrings.ToArray();
+        }
+
+        public string[] ViewStorePolicies()
+        {
+            PurchasePolicy[] policiesArr = Policies.ToArray();
+            List<string> policyStrings = new List<string>();
+            for (int i = 0; i < policiesArr.Length; i++)
+            {
+                if (policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem)
+                    policyStrings.Add(PurchasePolicy.PrintEnum(policiesArr[i].Type) + "." + policiesArr[i].Subject);
+            }
+            return policyStrings.ToArray();
+        }
+
+
         public string[] GetPolicyData(PolicyType type, string subject)
         {
             foreach (PurchasePolicy policy in Policies)
@@ -254,6 +279,11 @@ namespace SadnaSrc.PolicyComponent
             }
             Policies.Clear();
             SessionPolicies.Clear();
+        }
+
+        public void SyncWithDB()
+        {
+            Policies = _dataLayer.GetAllPolicies();
         }
     }
 }

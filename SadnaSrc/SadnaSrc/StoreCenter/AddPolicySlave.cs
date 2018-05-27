@@ -50,7 +50,7 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("StoreCenter", "Checking store manager status.");
                 _storeManager.CanDeclarePurchasePolicy();
-                _manager.AddPolicy(_manager.GetSessionPolicies().Length);
+                _manager.AddPolicy(_manager.GetSessionPolicies().Length - 1);
                 MarketLog.Log("StoreCenter", "Policy saved.");
                 Answer = new StoreAnswer(EditStorePolicyStatus.Success, "Policy saved.");
 
@@ -73,7 +73,7 @@ namespace SadnaSrc.StoreCenter
                 case "Store":
                     BuildStorePolicy(subject, op, arg1, optArg);
                     break;
-                case "Stock Item":
+                case "StockItem":
                     BuildStockItemPolicy(subject,optSubject, op, arg1, optArg);
                     break;
             }
@@ -111,6 +111,8 @@ namespace SadnaSrc.StoreCenter
             if (CheckPolicySubject(type, subject, optProd) && IsNumericCondtion(op) && Int32.TryParse(arg1, out numericArg1)) return;
             if (CheckPolicySubject(type, subject, optProd) && IsOperator(op) && Int32.TryParse(arg1, out numericArg1) &&
                 Int32.TryParse(optArg, out numericArg2)) return;
+            if (CheckPolicySubject(type, subject, optProd) && IsStringCondtion(op) &&
+                !Int32.TryParse(arg1, out numericArg1)) return;
             MarketLog.Log("StoreCenter", " Adding policy failed, invalid data.");
             throw new StoreException(EditStorePolicyStatus.InvalidPolicyData, "Invalid Policy data");
         }
@@ -119,6 +121,11 @@ namespace SadnaSrc.StoreCenter
         {
             return cond.Contains("Price >=") || cond.Contains("Price <=") || cond.Contains("Quantity >=") ||
                    cond.Contains("Quantity <=");
+        }
+
+        private bool IsStringCondtion(string cond)
+        {
+            return cond.Contains("Address =") || cond.Contains("Username =");
         }
 
         private bool IsCondtion(string cond)
@@ -135,7 +142,7 @@ namespace SadnaSrc.StoreCenter
         private bool CheckPolicySubject(string type, string subject, string optProd)
         {
             return (type.Contains("Store") & !string.IsNullOrEmpty(subject) & string.IsNullOrEmpty(optProd)) ||
-                   (type.Contains("Stock Item") & !string.IsNullOrEmpty(subject) & !string.IsNullOrEmpty(optProd));
+                   (type.Contains("StockItem") & !string.IsNullOrEmpty(subject) & !string.IsNullOrEmpty(optProd));
         }
 
         private ConditionType GetConditionType(string cond)
