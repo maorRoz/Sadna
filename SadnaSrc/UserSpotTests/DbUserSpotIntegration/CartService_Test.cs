@@ -36,10 +36,10 @@ namespace UserSpotTests.DbUserSpotIntegration
             userServiceLoggedSession = null;
             userServiceLoggedSession2 = null;
             expected = new List<CartItem>();
-            item1 = new CartItem("Health Potion", "X", 1, 5.0);
-            item2 = new CartItem("Health Potion", "Y", 2, 0.5);
-            item3 = new CartItem("Health Potion", "Y", 2, 6.0);
-            item4 = new CartItem("Health Potion", "M", 5, 7.0);
+            item1 = new CartItem("Health Potion", null, "X", 1, 5.0);
+            item2 = new CartItem("Health Potion", null, "Y", 2, 0.5);
+            item3 = new CartItem("Health Potion", null, "Y", 2, 6.0);
+            item4 = new CartItem("Health Potion", null, "M", 5, 7.0);
         }
 
         [TestMethod]
@@ -331,25 +331,25 @@ namespace UserSpotTests.DbUserSpotIntegration
         private void AddItem1(UserService userService)
         {
             expected.Add(item1);
-            userService.AddToCart("Health Potion", "X", 1, 5.0);
+            userService.AddToCart("Health Potion", null, "X", 1, 5.0);
         }
 
         private void AddItem2(UserService userService)
         {
             expected.Add(item2);
-            userService.AddToCart("Health Potion", "Y", 2, 0.5);
+            userService.AddToCart("Health Potion", null, "Y", 2, 0.5);
         }
 
         private void AddItem3(UserService userService)
         {
             expected.Add(item3);
-            userService.AddToCart("Health Potion", "Y", 2, 6.0);
+            userService.AddToCart("Health Potion", null, "Y", 2, 6.0);
         }
 
         private void AddItem4(UserService userService)
         {
             expected.Add(item4);
-            userService.AddToCart("Health Potion", "M", 5, 7.0);
+            userService.AddToCart("Health Potion", null, "M", 5, 7.0);
         }
 
         private void AddAllItems(UserService userService)

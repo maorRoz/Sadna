@@ -61,16 +61,16 @@ namespace UserSpotTests.UserSpotApiTests
 
         private void AddItemsToCart()
         {
-            user.Cart.AddToCart("Health Potion", "X", 1, 5.0);
-            user.Cart.AddToCart("Health Potion", "Y", 2, 0.5);
-            user.Cart.AddToCart("Health Potion", "Y", 2, 6.0);
-            user.Cart.AddToCart("Health Potion", "M", 5, 7.0);
+            user.Cart.AddToCart("Health Potion", null, "X", 1, 5.0);
+            user.Cart.AddToCart("Health Potion", null, "Y", 2, 0.5);
+            user.Cart.AddToCart("Health Potion", null, "Y", 2, 6.0);
+            user.Cart.AddToCart("Health Potion", null, "M", 5, 7.0);
             expectedCartStrings = new []
             {
-                new CartItem("Health Potion", "X", 1, 5.0).ToString(),
-                new CartItem("Health Potion", "Y", 2, 0.5).ToString(),
-                new CartItem("Health Potion", "Y", 2, 6.0).ToString(),
-                new CartItem("Health Potion", "M", 5, 7.0).ToString()
+                new CartItem("Health Potion", null, "X", 1, 5.0).ToString(),
+                new CartItem("Health Potion", null, "Y", 2, 0.5).ToString(),
+                new CartItem("Health Potion", null, "Y", 2, 6.0).ToString(),
+                new CartItem("Health Potion", null, "M", 5, 7.0).ToString()
             };
 
         }
