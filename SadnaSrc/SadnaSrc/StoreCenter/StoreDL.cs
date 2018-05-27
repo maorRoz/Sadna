@@ -82,13 +82,13 @@ namespace SadnaSrc.StoreCenter
         public string[] GetPromotionHistory(string store)
         {
             var historyRecords = new LinkedList<string>();
-            using (var dbReader = dbConnection.SelectFromTableWithCondition("PromotionHistory", "*","Store = '"+store+"'"))
+            using(var dbReader = dbConnection.freeStyleSelect("SELECT * FROM PromotionHistory WHERE Store = '"+store+"' ORDER BY PromotionDate ASC"))
             {
                 while (dbReader.Read())
                 {
-                    historyRecords.AddLast("Store: "+dbReader.GetString(0)+ " Promoter: "+dbReader.GetString(1)+
-                                           " Promoted: "+dbReader.GetString(2)+ " Permissions: "+dbReader.GetString(3)+
-                                           " Date: "+dbReader.GetDateTime(4)+ " Description: "+dbReader.GetString(5));
+                    historyRecords.AddLast("Store: " + dbReader.GetString(0) + " Promoter: " + dbReader.GetString(1) +
+                                           " Promoted: " + dbReader.GetString(2) + " Permissions: " + dbReader.GetString(3) +
+                                           " Date: " + dbReader.GetDateTime(4).ToString("dd/MM/yyyy") + " Description: " + dbReader.GetString(5));
                 }
             }
             return historyRecords.ToArray();
