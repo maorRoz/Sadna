@@ -26,6 +26,7 @@ namespace SystemViewTests.UseCaseUnitTest
             MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
             userServiceSession = marketSession.GetUserService();
+            marketSession.GetGlobalPolicyManager().Sync();
         }
 
         [TestMethod]
@@ -75,7 +76,7 @@ namespace SystemViewTests.UseCaseUnitTest
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             MarketAnswer ans = adminServiceSession.ViewPolicies();
             Assert.AreEqual((int)ViewPolicyStatus.Success, ans.Status);
-            Assert.AreEqual(0, ans.ReportList.Length);
+            Assert.AreEqual(1, ans.ReportList.Length);
         }
 
         [TestMethod]
@@ -86,8 +87,8 @@ namespace SystemViewTests.UseCaseUnitTest
             AddGlobalPolicy();
             MarketAnswer ans = adminServiceSession.ViewPolicies();
             Assert.AreEqual((int)ViewPolicyStatus.Success, ans.Status);
-            Assert.AreEqual(1, ans.ReportList.Length);
-            Assert.AreEqual("Global.",ans.ReportList[0]);
+            Assert.AreEqual(2, ans.ReportList.Length);
+            Assert.AreEqual("Global.",ans.ReportList[1]);
         }
 
         [TestMethod]
@@ -99,8 +100,38 @@ namespace SystemViewTests.UseCaseUnitTest
             AddProductPolicy();
             MarketAnswer ans = adminServiceSession.ViewPolicies();
             Assert.AreEqual((int)ViewPolicyStatus.Success, ans.Status);
+            Assert.AreEqual(3, ans.ReportList.Length);
+        }
+
+        [TestMethod]
+        public void RemovePolicy1()
+        {
+            DoSignInToAdmin();
+            adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
+            AddGlobalPolicy();
+            AddProductPolicy();
+            MarketAnswer ans = adminServiceSession.RemovePolicy("Global", null);
+            Assert.AreEqual((int)EditPolicyStatus.Success, ans.Status);
+            ans = adminServiceSession.ViewPolicies();
             Assert.AreEqual(2, ans.ReportList.Length);
         }
+
+        [TestMethod]
+        public void RemovePolicy2()
+        {
+            DoSignInToAdmin();
+            adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
+            AddGlobalPolicy();
+            AddProductPolicy();
+            AddCategoryPolicy();
+            MarketAnswer ans = adminServiceSession.RemovePolicy("Global", null);
+            Assert.AreEqual((int)EditPolicyStatus.Success, ans.Status);
+            ans = adminServiceSession.RemovePolicy("Product", "#45 With Cheese");
+            Assert.AreEqual((int)EditPolicyStatus.Success, ans.Status);
+            ans = adminServiceSession.ViewPolicies();
+            Assert.AreEqual(2, ans.ReportList.Length);
+        }
+
         [TestCleanup]
         public void AdminTestCleanUp()
         {
@@ -128,6 +159,14 @@ namespace SystemViewTests.UseCaseUnitTest
             adminServiceSession.CreatePolicy("Product", "Hash", "Quantity <=", "10", "0");
             adminServiceSession.CreatePolicy("Product", "Hash", "Username =", "Ricky", "0");
             adminServiceSession.CreatePolicy("Product", "Hash", "AND", "0", "1");
+            adminServiceSession.SavePolicy();
+        }
+
+        private void AddCategoryPolicy()
+        {
+            adminServiceSession.CreatePolicy("Category", "Hash", "Quantity <=", "10", "0");
+            adminServiceSession.CreatePolicy("Category", "Hash", "Username =", "Ricky", "0");
+            adminServiceSession.CreatePolicy("Category", "Hash", "AND", "0", "1");
             adminServiceSession.SavePolicy();
         }
 

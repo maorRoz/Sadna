@@ -14,5 +14,6 @@ namespace SadnaSrc.PolicyComponent
         string[] CreateStockItemPolicy(string store, string product, OperatorType op, int id1, int id2);
         string[] ViewStorePolicies();
         void CleanSession();
+        void Sync();
     }
 }

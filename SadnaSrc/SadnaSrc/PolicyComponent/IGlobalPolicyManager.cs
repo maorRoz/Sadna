@@ -16,5 +16,6 @@ namespace SadnaSrc.PolicyComponent
         string[] CreateProductPolicy(string product, OperatorType op, int id1, int id2);
         string[] ViewPolicies();
         void CleanSession();
+        void Sync();
     }
 }
