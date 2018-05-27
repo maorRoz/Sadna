@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -14,8 +15,7 @@ namespace SadnaSrc.StoreCenter
     public class StoreManagementService : IStoreManagementService
     {
 
-        public Store store;
-        StockSyncher global;
+
         private readonly IUserSeller _storeManager;
         public string _storeName;
         private IOrderSyncher syncher;
@@ -26,8 +26,6 @@ namespace SadnaSrc.StoreCenter
         {
             _storeManager = storeManager;
             _storeName = storeName;
-            global = StockSyncher.Instance;
-            store = global.DataLayer.GetStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();
             storeDL = StoreDL.Instance;
@@ -140,6 +138,41 @@ namespace SadnaSrc.StoreCenter
         {
             RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave(_storeName, _storeManager, storeDL);
             slave.RemoveProductFromCategory(categoryName,productName);
+            return slave.Answer;
+        }
+
+        public MarketAnswer CreatePolicy(string type, string subject,string optSubject, string op, string arg1, string optArg)
+        {
+            AddPolicySlave slave = new AddPolicySlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.CreatePolicy(type, subject, optSubject, op, arg1, optArg);
+            return slave.Answer;
+        }
+
+        public MarketAnswer SavePolicy()
+        {
+            AddPolicySlave slave = new AddPolicySlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.SaveFullPolicy();
+            return slave.Answer;
+        }
+
+        public MarketAnswer ViewPolicies()
+        {
+            ViewPoliciesSlave slave = new ViewPoliciesSlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.ViewPolicies();
+            return slave.Answer;
+
+        }
+
+        public MarketAnswer RemovePolicy(string type, string subject, string optProd)
+        {
+            RemovePolicySlave slave = new RemovePolicySlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.RemovePolicy(type, subject, optProd);
+            return slave.Answer;
+        }
+
+        public MarketAnswer ViewPromotionHistory()
+        {
+            ViewPromotionHistorySlave slave = new ViewPromotionHistorySlave(_storeName, _storeManager, storeDL);
             return slave.Answer;
         }
     }

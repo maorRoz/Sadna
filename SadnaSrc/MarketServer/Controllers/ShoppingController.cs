@@ -10,16 +10,28 @@ namespace MarketWeb.Controllers
 {
     public class ShoppingController : Controller
     {
+        private const int Success = 0;
 		public IActionResult BrowseMarket(int systemId, string state)
 		{
-			var userService = MarketServer.Users[systemId];
-			string[] usersData = userService.GetAllStores().ReportList;
-			return View(new StoreListModel(systemId, state, usersData));
+			var userService = MarketServer.GetUserSession(systemId);
+		    var usersData = new string[0];
+		    string message = null;
+            var answer = userService.GetAllStores();
+		    if (answer.Status == Success)
+		    {
+		        usersData = answer.ReportList;
+		    }
+		    else
+		    {
+		        message = answer.Answer;
+		    }
+
+		    return View(new StoreListModel(systemId, state, usersData,message));
 		}
 
         public IActionResult ViewStoreStock(int systemId, string state, string store, bool valid, string message)
         {
-            var userService = MarketServer.Users[systemId];
+            var userService = MarketServer.GetUserSession(systemId);
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.ViewStoreStock(store);
             ViewBag.valid = valid;
@@ -32,7 +44,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult AddToCart(int systemId, string state, string store, string product, int quantity, int directViewStoreStock)
         {
-            var userService = MarketServer.Users[systemId];
+            var userService = MarketServer.GetUserSession(systemId);
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.AddProductToCart(store,product,quantity);
 	        if (directViewStoreStock==0)
@@ -49,25 +61,18 @@ namespace MarketWeb.Controllers
             
         }
 
-        public IActionResult AddTicket(int systemId, string state, string store, string product, double price)
-        {
-            //TODO: implement this
-            return null;
-        }
-
         public IActionResult ViewStoreInfo(int systemId, string state, string store)
         {
-            var userService = MarketServer.Users[systemId];
+            var userService = MarketServer.GetUserSession(systemId);
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.ViewStoreInfo(store);
-	        string storeInfo = "Name : " + answer.ReportList[0] + " Address : " + answer.ReportList[1];
 
-			if (answer.Status == 0)
+            if (answer.Status != 0)
             {
-
-                return View(new StoreDetailsModel(systemId,state, answer.Answer, storeInfo));
+                return RedirectToAction("BrowseMarket", new {systemId, state, answer.Answer});
             }
-            return RedirectToAction("BrowseMarket", new { systemId, state, answer.Answer });
+            var storeInfo = "Name : " + answer.ReportList[0] + " Address : " + answer.ReportList[1];
+            return View(new StoreDetailsModel(systemId,state, answer.Answer, storeInfo));
         }
 
 	    public IActionResult SearchProductView(int systemId, string state, string message)

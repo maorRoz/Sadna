@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.UserSpot
 {
@@ -24,19 +25,22 @@ namespace SadnaSrc.UserSpot
 		}
 		public void ViewUsers()
 		{
-			MarketLog.Log("UserSpot", "User " + userID + " attempting to view all users...");
-			try
-			{
-				ApproveEnetered();
-				MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved all users info...");
-				Answer = new UserAnswer(ViewUsersStatus.Success, "View of users has been granted successfully!",
-				_userDB.UserNamesInSystem());
-			}
-			catch (UserException e)
-			{
-				MarketLog.Log("UserSpot", "User " + userID + " has failed to View Other users. Error message has been created!");
-				Answer = new UserAnswer((ViewUsersStatus)e.Status, e.GetErrorMessage());
-			}
+		    try
+		    {
+		        MarketLog.Log("UserSpot", "User " + userID + " attempting to view all users...");
+		        ApproveEnetered();
+		        MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved all users info...");
+		        Answer = new UserAnswer(ViewUsersStatus.Success, "View of users has been granted successfully!",
+		            _userDB.UserNamesInSystem());
+		    }
+		    catch (UserException e)
+		    {
+		        Answer = new UserAnswer((ViewUsersStatus) e.Status, e.GetErrorMessage());
+		    }
+		    catch (DataException e)
+		    {
+		        Answer = new UserAnswer((ViewUsersStatus)e.Status, e.GetErrorMessage());
+            }
 
 		}
 

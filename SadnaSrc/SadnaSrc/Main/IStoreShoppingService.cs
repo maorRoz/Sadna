@@ -16,7 +16,7 @@ namespace SadnaSrc.Main
 
         MarketAnswer ViewStoreStock(string store);
 
-	    MarketAnswer ViewStoreStockAll(string storename);
+	    MarketAnswer ViewStoreStockAll(string store);
 
 	    MarketAnswer SearchProduct(string type, string value, double minPrice, double maxPrice, string category);
 
@@ -51,7 +51,6 @@ namespace SadnaSrc.Main
         NoProduct,
         NoDB = 500
     }
-
     public enum AddLotteryTicketStatus
     {
         Success,

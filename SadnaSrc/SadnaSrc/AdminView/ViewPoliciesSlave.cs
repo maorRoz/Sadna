@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.PolicyComponent;
 
@@ -36,11 +37,15 @@ namespace SadnaSrc.AdminView
             }
             catch (AdminException e)
             {
-                Answer = new AdminAnswer((EditPolicyStatus)e.Status, e.GetErrorMessage());
+                Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
                 Answer = new AdminAnswer(ViewPolicyStatus.NoAuthority, e.GetErrorMessage(),null);
+            }
+            catch (DataException e)
+            {
+                Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
             }
         }
         

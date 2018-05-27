@@ -28,13 +28,13 @@ $(document).ready(function() {
         socketId = socket.connectionId;
         console.log('your SocketId is : ' + socketId);
         var systemId = extractQuery('systemId','SystemId');
-        console.log('your systemId is : ' +systemId);
-        if (systemId === undefined || systemId === 0) {
+        console.log('your systemId is : ' + systemId);
+        if (systemId === undefined || systemId === 0 || systemId === '0') {
             socket.invoke('EnterSystem', socketId);
         } else {
             var state = extractQuery('state', 'State');
             console.log('your state is : ' + state);
-            if (state !== 'Guest') {
+            if (state !== 'Guest' && systemId !== 0) {
                 socket.invoke('SubscribeSocket', systemId, socketId);
             }
         }
@@ -44,7 +44,10 @@ $(document).ready(function() {
     }
 
     socket.clientMethods['IdentifyClient'] = (userId) => {
-        location.href = window.location.href + '?systemId=' + userId + '&state=Guest';
+        var systemId = extractQuery('systemId', 'SystemId');
+        if (systemId === undefined || (systemId === '0' && userId !== 0)) {
+            location.href = window.location.href.substring(0,window.location.href.indexOf('?')) + '?systemId=' + userId + '&state=Guest';
+        }
     }
 
     socket.clientMethods['NotifyFeed'] = (feedMessage) => {

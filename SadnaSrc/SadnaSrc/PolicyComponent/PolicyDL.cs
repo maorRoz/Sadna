@@ -17,264 +17,223 @@ namespace SadnaSrc.PolicyComponent
         {
             dbConnection = new ProxyMarketDB();
         }
-
+        //------------------
         public void SavePolicy(PurchasePolicy policy)
-        {
-            policy.IsRoot = true;
-            Save_NonRoot_Policy(policy);
-        }
-        public void RemovePolicy(PurchasePolicy policy)
         {
             if (policy != null)
             {
                 if (policy is Operator)
-                    RemovePolicy((Operator) policy);
+                    WritePolicyToDB((Operator)policy);
                 else
-                    RemovePolicy((Condition) policy);
+                    WritePolicyToDB((Condition)policy);
             }
         }
+
+        public void RemovePolicy(PurchasePolicy policy)
+        {
+            dbConnection.DeleteFromTable("ComplexPolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + policy.Subject + "'");
+            dbConnection.DeleteFromTable("SimplePolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + policy.Subject + "'");
+        }
+
         public PurchasePolicy GetPolicy(PolicyType type, string subject)
         {
-            PurchasePolicy policy = SelectPolicyFromOperatorTable(type, subject);
+            PurchasePolicy policy = FindComplexPolicy(-1, type, subject, true);
             if (policy == null)
-                policy = SelectPolicyFromConditionTable(type, subject);
+                policy = FindSimplePolicy(-1, type, subject, true);
             if (policy != null)
                 policy.IsRoot = true;
             return policy;
         }
+        //--------------------
+
         public List<PurchasePolicy> GetAllPolicies()
         {
             List<int> listOfIDs = new List<int>();
             List<PurchasePolicy> result = new List<PurchasePolicy>();
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("Operator", "SystemID", "isRoot = 'true'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("ComplexPolicies", "*", "Root = 'true'"))
             {
                 while (dbReader.Read())
                 {
                     listOfIDs.Add(dbReader.GetInt32(0));
+                    int id = dbReader.GetInt32(0);
+                    PolicyType type = PurchasePolicy.GetEnumFromStringValue(dbReader.GetString(2));
+                    string subject = dbReader.GetString(3);
+                    PurchasePolicy policy = FindComplexPolicy(id, type, subject, true);
+                    policy.IsRoot = true;
+                    result.Add(policy);
                 }
             }
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("conditions", "SystemID", "isRoot = 'true'"))
-            {
-                while (dbReader.Read())
-                {
-                    listOfIDs.Add(dbReader.GetInt32(0));
-                }
-            }
-
-            foreach (int idNumber in listOfIDs)
-            {
-                PurchasePolicy policy = GetPolicyById(idNumber);
-                policy.IsRoot = true;
-                result.Add(policy);
-            }
-            return result;
-        }
-        private void Save_NonRoot_Policy(PurchasePolicy policy)
-        {
-            if (policy != null)
-            {
-                if (policy is Operator)
-                    SavePolicy((Operator) policy);
-                else
-                    SavePolicy((Condition) policy);
-            }
-        }
-        private void SavePolicy(Operator policy)
-        {
-            string fields = "SystemID,OperatorType,PolicyType,Subject,COND1ID,COND2ID,isRoot";
-            dbConnection.InsertTable("Operator", fields,
-                new []{"@idParam","@typeParam","@policyParam","@subjectParam","@cond1Param","@cond2Param","@rootParam"},
-                policy.GetPolicyValuesArray());
-                Save_NonRoot_Policy(policy._cond1);
-                Save_NonRoot_Policy(policy._cond2);
-        }
-        private void SavePolicy(Condition policy)
-        {
-            string fields = "SystemID,conditionsType,PolicyType,Subject,value,isRoot";
-            dbConnection.InsertTable("conditions", fields,
-                new []{"@idParam","@conditionParam","@typeParam","@subjectParam","@valueParam","@rootParam"},
-                policy.GetPolicyValuesArray());
-        }
-
-        
-        private void RemovePolicy(Operator policy)
-        {
-            dbConnection.DeleteFromTable("Operator", "SystemID = '" + policy.ID + "'");
-            RemovePolicy(policy._cond1);
-            RemovePolicy(policy._cond2);
-        }
-        private void RemovePolicy(Condition policy)
-        {
-            dbConnection.DeleteFromTable("conditions", "SystemID = '" + policy.ID + "'");
-        }
-        
-        private PurchasePolicy SelectPolicyFromOperatorTable(PolicyType type, string subject)
-        {
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("Operator", "*", "PolicyType = '" + PurchasePolicy.PrintEnum(type) + "' AND " +
-                                                                                     " Subject = '" + subject + "' AND isRoot = 'true'"))
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("SimplePolicies", "*", "Root = 'true'"))
             {
                 while (dbReader.Read())
                 {
                     int id = dbReader.GetInt32(0);
-                    string operatorType = dbReader.GetString(1);
-                    string policyType = dbReader.GetString(2);
-                    string s = dbReader.GetString(3);
+                    PolicyType type = PurchasePolicy.GetEnumFromStringValue(dbReader.GetString(2));
+                    string subject = dbReader.GetString(3);
+                    PurchasePolicy policy = FindSimplePolicy(id, type, subject, true);
+                    policy.IsRoot = true;
+                    result.Add(policy);
+                }
+            }
+            return result;
+        }
+
+        private void WritePolicyToDB(Operator policy)
+        {
+            string fields = "SystemID,Operator,PolicyType,Subject,Cond1,Cond2,Root";
+            dbConnection.InsertTable("ComplexPolicies", fields,
+                new[]
+                {
+                    "@idParam", "@typeParam", "@policyParam", "@subjectParam", "@cond1Param", "@cond2Param",
+                    "@rootParam"
+                },
+                GetPolicyValues(policy));
+                SavePolicy(policy._cond1);
+                SavePolicy(policy._cond2);
+        }
+        private void WritePolicyToDB(Condition policy)
+        {
+            string fields = "SystemID,Condition,PolicyType,Subject,Value,Root";
+            dbConnection.InsertTable("SimplePolicies", fields,
+                new []{"@idParam","@conditionParam","@typeParam","@subjectParam","@valueParam","@rootParam"},
+                GetPolicyValues(policy));
+        }
+
+        
+        private PurchasePolicy FindComplexPolicy(int policyID, PolicyType type, string subject, bool isRoot)
+        {
+            string cond = "";
+            if (policyID != -1)
+                cond = "SystemID = '" + policyID + "' AND ";
+            cond += "PolicyType = '" + PurchasePolicy.PrintEnum(type);
+            if (subject != null)
+                cond += "' AND Subject = '" + subject + "'";
+            if (isRoot)
+                cond += " AND Root = 'true'";
+
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("ComplexPolicies", "*", cond))
+            {
+                while (dbReader.Read())
+                {
+                    int id = dbReader.GetInt32(0);
+                    string op = dbReader.GetString(1);
                     int cond1Id = dbReader.GetInt32(4);
                     int cond2Id = dbReader.GetInt32(5);
-                    PurchasePolicy cond1OptionalNull = null;
-                    PurchasePolicy cond2OptionalNull = null;
-                    string subjectOptionalNull = null;
+                    PurchasePolicy cond1 = null;
+                    PurchasePolicy cond2 = null;
                     if (cond1Id != -1)
-                        cond1OptionalNull = GetPolicyById(cond1Id);
+                        cond1 = GetPolicy(cond1Id, type, subject);
                     if (cond2Id != -1)
-                        cond2OptionalNull = GetPolicyById(cond2Id);
-                    if (s != "'NULL'")
-                        subjectOptionalNull = s;
-                    if (operatorType == "AndOperator")
-                        return new AndOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
-                    if (operatorType == "OrOperator")
-                        return new OrOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
-                    if (operatorType == "NotOperator")
-                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
+                        cond2 = GetPolicy(cond2Id, type, subject);
+                    switch (op)
+                    {
+                        case "AND":
+                            return new AndOperator(type, subject, cond1, cond2, id);
+                        case "OR":
+                            return new OrOperator(type, subject, cond1, cond2, id);
+                        case "NOT":
+                            return new NotOperator(type, subject, cond1, null, id);
+                    }
                 }
             }
 
             return null;
         }
 
-        private PurchasePolicy SelectPolicyFromConditionTable(PolicyType type, string subject)
+        private PurchasePolicy FindSimplePolicy(int policyID, PolicyType type, string subject, bool isRoot)
         {
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("conditions", "*",
-                    "PolicyType = '" + PurchasePolicy.PrintEnum(type) + "' AND " +
-                    " Subject = '" + subject + "' AND isRoot = 'true'"))
+            string cond = "";
+            if (policyID != -1)
+                cond = "SystemID = '" + policyID + "' AND ";
+            cond += "PolicyType = '" + PurchasePolicy.PrintEnum(type);
+            if (subject != null)
+                cond += "' AND Subject = '" + subject + "'";
+            if (isRoot)
+                cond += " AND Root = 'true'";
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("SimplePolicies", "*", cond))
             {
                 while (dbReader.Read())
                 {
 
                     int id = dbReader.GetInt32(0);
                     string conditionType = dbReader.GetString(1);
-                    string policyType = dbReader.GetString(2);
-                    string s = dbReader.GetString(3);
                     string value = dbReader.GetString(4);
-                    string subjectOptionalNull = null;
-                    if (s != "'NULL'")
-                        subjectOptionalNull = s;
-                    string valueOptionalNull = null;
-                    if (value!="'NULL'")
-                        valueOptionalNull = value;
                     switch (conditionType)
                     {
                         case "AddressEquals":
-                            return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                            return new AddressEquals(type, subject, value, id);
                         case "PriceGreaterThan":
-                            return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                            return new PriceGreaterThan(type, subject, value, id);
                         case "PriceLessThan":
-                            return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                            return new PriceLessThan(type, subject, value, id);
                         case "QuantityGreaterThan":
-                            return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                            return new QuantityGreaterThan(type, subject, value, id);
                         case "QuantityLessThan":
-                            return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                            return new QuantityLessThan(type, subject, value, id);
                         case "UsernameEquals":
-                            return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull, id);
+                            return new UsernameEquals(type, subject, value, id);
                     }
                 }
             }
 
             return null;
         }
-        private PurchasePolicy GetPolicyById(int systemid)
+
+        private PurchasePolicy GetPolicy(int systemid, PolicyType type, string subject)
         {
-            PurchasePolicy policy = SelectPolicyFromOperatorTable(systemid);
+            PurchasePolicy policy = FindComplexPolicy(systemid, type, subject, false);
             if (policy == null)
-            {
-                policy = SelectPolicyFromConditionTable(systemid);
-            }
+                policy = FindSimplePolicy(systemid, type, subject, false);
+
             return policy;
         }
 
-        private PurchasePolicy SelectPolicyFromConditionTable(int systemid)
+        private object[] GetPolicyValues(Operator policy)
         {
+            string subject;
+            if (policy.Subject == null)
+                subject = "NULL";
+            else
+                subject = policy.Subject;
+            int cond1 = policy._cond1.ID;
+            int cond2;
+            if (policy._cond2 == null)
+                cond2 = -1;
+            else
+                cond2 = policy._cond2.ID;
+            return new object[]
             {
-                using (var dbReader =
-                    dbConnection.SelectFromTableWithCondition("conditions", "*",
-                        "SystemID = '"+ systemid + "'"))
-                {
-                    while (dbReader.Read())
-                    {
-                        int id = dbReader.GetInt32(0);
-                        string conditionType = dbReader.GetString(1);
-                        string policyType = dbReader.GetString(2);
-                        string subject = dbReader.GetString(3);
-                        string value = dbReader.GetString(4);
-                        string subjectOptionalNull = null;
-                        if (subject != "'NULL'")
-                            subjectOptionalNull = subject;
-                        string valueOptionalNull = null;
-                        if (value != "'NULL'")
-                            valueOptionalNull = value;
-                        if (conditionType == "AddressEquals")
-                            return new AddressEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull,
-                                id);
-                        if (conditionType == "PriceGreaterThan")
-                            return new PriceGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull,
-                                valueOptionalNull, id);
-                        if (conditionType == "PriceLessThan")
-                            return new PriceLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull,
-                                id);
-                        if (conditionType == "QuantityGreaterThan")
-                            return new QuantityGreaterThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull,
-                                valueOptionalNull, id);
-                        if (conditionType == "QuantityLessThan")
-                            return new QuantityLessThan(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull,
-                                valueOptionalNull, id);
-                        if (conditionType == "UsernameEquals")
-                            return new UsernameEquals(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, valueOptionalNull,
-                                id);
-                    }
-                }
-
-                return null;
-            }
+                policy.ID,
+                policy.GetMyType(),
+                PurchasePolicy.PrintEnum(policy.Type),
+                subject,
+                cond1,
+                cond2,
+                PurchasePolicy.PrintBoolean(policy.IsRoot)
+            };
         }
 
-        private PurchasePolicy SelectPolicyFromOperatorTable(int systemid)
+        private object[] GetPolicyValues(Condition policy)
         {
 
-            using (var dbReader =
-                dbConnection.SelectFromTableWithCondition("Operator", "*", "SystemID = '" + systemid + "'"))
-            {
-                while (dbReader.Read())
-                {
-                    int id = dbReader.GetInt32(0);
-                    string operatorType = dbReader.GetString(1);
-                    string policyType = dbReader.GetString(2);
-                    string subject = dbReader.GetString(3);
-                    int cond1Id = dbReader.GetInt32(4);
-                    int cond2Id = dbReader.GetInt32(5);
-                    PurchasePolicy cond1OptionalNull = null;
-                    PurchasePolicy cond2OptionalNull = null;
-                    string subjectOptionalNull = null;
-                    if (cond1Id != -1)
-                        cond1OptionalNull = GetPolicyById(cond1Id);
-                    if (cond2Id != -1)
-                        cond2OptionalNull = GetPolicyById(cond2Id);
-                    if (subject != "'NULL'")
-                        subjectOptionalNull = subject;
-                    if (operatorType == "AndOperator")
-                        return new AndOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
-                    if (operatorType == "OrOperator")
-                        return new OrOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
-                    if (operatorType == "NotOperator")
-                        return new NotOperator(PurchasePolicy.GetEnumFromStringValue(policyType), subjectOptionalNull, cond1OptionalNull, cond2OptionalNull, id);
-                }
-            }
-            return null;
-        }
+            string subject;
+            if (policy.Subject == null)
+                subject = "NULL";
+            else
+                subject = policy.Subject;
 
+            string value = policy.Value;
+
+            return new object[]
+            {
+                policy.ID,
+                policy.GetMyType(),
+                PurchasePolicy.PrintEnum(policy.Type),
+                subject,
+                value,
+                PurchasePolicy.PrintBoolean(policy.IsRoot)
+            };
+        }
     }
 }
 

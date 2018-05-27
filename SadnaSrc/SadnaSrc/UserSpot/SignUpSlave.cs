@@ -33,9 +33,9 @@ namespace SadnaSrc.UserSpot
 
         public User SignUp(string name, string address, string password, string creditCard)
         {
-            MarketLog.Log("UserSpot", "User " + currentID + " attempting to sign up to the system...");
             try
             {
+                MarketLog.Log("UserSpot", "User " + currentID + " attempting to sign up to the system...");
                 ApproveSignUp(name, address, password, creditCard);
                 string encryptedPassword = UserSecurityService.ToEncryptPassword(_guest.SystemID,password);
                 MarketLog.Log("UserSpot", "Searching for existing user and storing newly Registered User "
@@ -50,7 +50,6 @@ namespace SadnaSrc.UserSpot
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + currentID + " has failed to sign up. Error message has been created!");
                 Answer = new UserAnswer((SignUpStatus)e.Status, e.GetErrorMessage());
                 return _guest;
             }

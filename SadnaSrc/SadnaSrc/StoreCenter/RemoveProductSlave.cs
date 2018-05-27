@@ -17,10 +17,9 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveProduct(string productName)
         {
-            MarketLog.Log("StoreCenter", "trying to remove product from store");
-            MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
+                MarketLog.Log("StoreCenter", "trying to remove product from store");
                 checkIfStoreExistsAndActive();
                 MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to remove products");

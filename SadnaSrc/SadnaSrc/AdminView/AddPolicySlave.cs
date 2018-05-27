@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Castle.Core.Internal;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.PolicyComponent;
 
@@ -43,6 +44,10 @@ namespace SadnaSrc.AdminView
             {
                 Answer = new AdminAnswer(EditPolicyStatus.NoAuthority, e.GetErrorMessage());
             }
+            catch (DataException e)
+            {
+                Answer = new AdminAnswer((EditPolicyStatus)e.Status, e.GetErrorMessage());
+            }
         }
 
         public void SaveFullPolicy()
@@ -64,6 +69,10 @@ namespace SadnaSrc.AdminView
             {
                 Answer = new AdminAnswer(EditPolicyStatus.NoAuthority, e.GetErrorMessage());
             }
+            catch (DataException e)
+            {
+                Answer = new AdminAnswer((EditPolicyStatus)e.Status, e.GetErrorMessage());
+            }
         }
 
         private void BuildPolicy(string type, string subject, string op, string arg1, string optArg)
@@ -72,18 +81,18 @@ namespace SadnaSrc.AdminView
             switch (type)
             {
                 case "Global":
-                    BuildGlobalPolicy(type, subject, op, arg1, optArg);
+                    BuildGlobalPolicy(op, arg1, optArg);
                     break;
                 case "Product":
-                    BuildProductPolicy(type, subject, op, arg1, optArg);
+                    BuildProductPolicy(subject, op, arg1, optArg);
                     break;
                 case "Category":
-                    BuildCategoryPolicy(type, subject, op, arg1, optArg);
+                    BuildCategoryPolicy(subject, op, arg1, optArg);
                     break;
             }                      
         }
 
-        private void BuildCategoryPolicy(string type, string subject, string op, string arg1, string optArg)
+        private void BuildCategoryPolicy(string subject, string op, string arg1, string optArg)
         {
             int numericArg1, numericArg2;
             if (IsCondtion(op))
@@ -96,7 +105,7 @@ namespace SadnaSrc.AdminView
             _manager.CreateCategoryPolicy(subject, GetOperand(op), numericArg1, numericArg2);           
         }
 
-        private void BuildProductPolicy(string type, string subject, string op, string arg1, string optArg)
+        private void BuildProductPolicy(string subject, string op, string arg1, string optArg)
         {
             int numericArg1, numericArg2;
             if (IsCondtion(op))
@@ -109,7 +118,7 @@ namespace SadnaSrc.AdminView
             _manager.CreateProductPolicy(subject, GetOperand(op), numericArg1, numericArg2);       
         }
 
-        private void BuildGlobalPolicy(string type, string subject, string op, string arg1, string optArg)
+        private void BuildGlobalPolicy(string op, string arg1, string optArg)
         {
             int numericArg1, numericArg2;
             if (IsCondtion(op))

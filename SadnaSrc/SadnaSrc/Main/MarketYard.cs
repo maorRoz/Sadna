@@ -1,5 +1,6 @@
 ﻿using System;
 using SadnaSrc.AdminView;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
@@ -67,6 +68,18 @@ namespace SadnaSrc.Main
         public ISupplyService GetSupplyService()
         {
             return SupplyService.Instance;
+        }
+
+        public IPublisher GetPublisher()
+        {
+            try
+            {
+                return Publisher.Instance;
+            }
+            catch (DataException)
+            {
+                return null;
+            }
         }
 
         public IGlobalPolicyManager GetGlobalPolicyManager()

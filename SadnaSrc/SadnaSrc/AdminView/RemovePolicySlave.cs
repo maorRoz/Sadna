@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Castle.Core.Internal;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.PolicyComponent;
 
@@ -29,7 +30,7 @@ namespace SadnaSrc.AdminView
             {
                 MarketLog.Log("AdminView", "Checking admin status.");
                 _admin.ValidateSystemAdmin();
-                MarketLog.Log("AdminView", "Trying to add policy.");
+                MarketLog.Log("AdminView", "Trying to remove policy.");
                 CheckInput(type, subject);
                 _manager.RemovePolicy(GetPolicyType(type),subject);
                 MarketLog.Log("AdminView", "Policy removed successfully.");
@@ -43,6 +44,10 @@ namespace SadnaSrc.AdminView
             catch (MarketException e)
             {
                 Answer = new AdminAnswer(EditPolicyStatus.NoAuthority, e.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
+                Answer = new AdminAnswer((EditPolicyStatus)e.Status, e.GetErrorMessage());
             }
         }
 
@@ -67,7 +72,7 @@ namespace SadnaSrc.AdminView
                 case "Category":
                     return PolicyType.Category;
                 default:
-                    MarketLog.Log("AdminView", " Adding policy failed, invalid data.");
+                    MarketLog.Log("AdminView", " Removing policy failed, invalid data.");
                     throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
             }           
         }

@@ -27,36 +27,17 @@ namespace SadnaSrc.UserSpot
 
         public void GetControlledStoreNames()
         {
-            MarketLog.Log("UserSpot", "User " + userID + " attempting to view which store he can manage...");
             try
             {
-				ApproveEnetered();
+                MarketLog.Log("UserSpot", "User " + userID + " attempting to view which store he can manage...");
+                ApproveEnetered();
                 MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved all store names...");
-	            _userDB.GetAllActiveStoreNames();
-				string[] storeNames = _userDB.GetAllActiveStoreNames();
-	            string[] storesUser = _user.GetControlledStores();
-	            List<string> res = new List<string>();
-	            foreach (string userStore in storesUser)
-	            {
-		            if (storeNames.Contains(userStore))
-		            {
-			            res.Add(userStore);
-					}
-	            }
 	            Answer = new UserAnswer(GetControlledStoresStatus.Success, "View of store names has been granted successfully!",
-		            res.ToArray());
-
-				if (_user.IsSystemAdmin())
-	            {
-		            Answer = new UserAnswer(GetControlledStoresStatus.Success, "View of store names has been granted successfully!",
-			            storeNames);
-				}
+	                FindControlledStoresOfUser());
 				
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + userID + " has failed to View his controlled stores." +
-                                          " Error message has been created!");
                 Answer = new UserAnswer((GetControlledStoresStatus)e.Status, e.GetErrorMessage());
             }
             catch (DataException e)
@@ -65,21 +46,43 @@ namespace SadnaSrc.UserSpot
             }
         }
 
+        private string[] FindControlledStoresOfUser()
+        {
+            var allStores = _userDB.GetAllActiveStoreNames();
+            if (_user.IsSystemAdmin())
+            {
+                return allStores;
+            }
+            var storesControlledByUser = _user.GetControlledStores();
+            var activeStores = new List<string>();
+            foreach (var userControlledStore in storesControlledByUser)
+            {
+                if (allStores.Contains(userControlledStore))
+                {
+                    activeStores.Add(userControlledStore);
+                }
+            }
+
+            return activeStores.ToArray();
+        }
+
 	    public void ViewStores()
 	    {
-		    MarketLog.Log("UserSpot", "User " + userID + " attempting to view all store names...");
-			try
-		    {
-			    ApproveEnetered();
-				var storeNames = _userDB.GetAllActiveStoreNames();
-			    Answer = new UserAnswer(ViewStoresStatus.Success, "you've got all the store names!", storeNames);
-		    }
-		    catch (UserException)
-		    {
-			    MarketLog.Log("UserSpot", "User " + userID + " has failed to view all store names." +
-			                              " Error message has been created!");
-				Answer = new UserAnswer(ViewStoresStatus.NoPermission, "The operation didn't succeed!");
-		    }
+	        try
+	        {
+	            MarketLog.Log("UserSpot", "User " + userID + " attempting to view all store names...");
+	            ApproveEnetered();
+	            var storeNames = _userDB.GetAllActiveStoreNames();
+	            Answer = new UserAnswer(ViewStoresStatus.Success, "you've got all the store names!", storeNames);
+	        }
+	        catch (UserException)
+	        {
+	            Answer = new UserAnswer(ViewStoresStatus.NoPermission, "The operation didn't succeed!");
+	        }
+	        catch (DataException e)
+	        {
+	            Answer = new UserAnswer((GetControlledStoresStatus)e.Status, e.GetErrorMessage());
+            }
 		    
 		}
 

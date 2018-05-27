@@ -156,6 +156,7 @@
     <Compile Include="StoreCenter\AddDiscountToProductSlave.cs" />
     <Compile Include="StoreCenter\AddNewLotterySlave.cs" />
     <Compile Include="StoreCenter\AddNewProductSlave.cs" />
+    <Compile Include="StoreCenter\AddPolicySlave.cs" />
     <Compile Include="StoreCenter\AddProductToCartSlave.cs" />
     <Compile Include="StoreCenter\AddProductToCategorySlave.cs" />
     <Compile Include="StoreCenter\AddQuanitityToProductSlave.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="StoreCenter\PurchesPolicy.cs" />
     <Compile Include="AdminView\RemoveCategorySlave.cs" />
     <Compile Include="StoreCenter\RemoveDiscountFromProductSlave.cs" />
+    <Compile Include="StoreCenter\RemovePolicySlave.cs" />
     <Compile Include="StoreCenter\RemoveProductFromCategorySlave.cs" />
     <Compile Include="StoreCenter\RemoveProductSlave.cs" />
     <Compile Include="StoreCenter\SearchProductSlave.cs" />
@@ -188,6 +190,8 @@
     <Compile Include="StoreCenter\StoreException.cs" />
     <Compile Include="StoreCenter\StoreManagementService.cs" />
     <Compile Include="StoreCenter\StoreShoppingService.cs" />
+    <Compile Include="StoreCenter\ViewPoliciesSlave.cs" />
+    <Compile Include="StoreCenter\ViewPromotionHistorySlave.cs" />
     <Compile Include="StoreCenter\ViewStoreHistorySlave.cs" />
     <Compile Include="StoreCenter\ViewStoreInfoSlave.cs" />
     <Compile Include="StoreCenter\ViewStoreStockSlave.cs" />

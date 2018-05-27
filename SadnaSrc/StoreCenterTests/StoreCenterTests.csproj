@@ -72,6 +72,7 @@
     <Compile Include="StoreCenterDbIntegrationTests\AddProductToCategoryTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\GetAllCategoriesTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\RemoveProductFromCategoryTests.cs" />
+    <Compile Include="StoreCenterUnitTests\AddPolicyTest.cs" />
     <Compile Include="StoreCenterUnitTests\AddProductToCategoryTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\AddDiscountTestsMock.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\AddNewLotteryTests.cs" />
@@ -95,9 +96,11 @@
     <Compile Include="StoreCenterUnitTests\OpenStoreTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\PromoteToManagerTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\RemoveDiscountTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\RemovePolicyTest.cs" />
     <Compile Include="StoreCenterUnitTests\RemoveProductFromCategoryTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\RemoveProductTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\SearchProductTestsMock.cs" />
+    <Compile Include="StoreCenterUnitTests\ViewPoliciesTest.cs" />
     <Compile Include="StoreCenterUnitTests\ViewStoreHistoryTestsMock.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\ViewStoreInfoTests.cs" />
     <Compile Include="StoreCenterUnitTests\ViewStoreInfoTestsMock.cs" />

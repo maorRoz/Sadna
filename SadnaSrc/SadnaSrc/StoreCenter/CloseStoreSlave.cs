@@ -8,28 +8,25 @@ namespace SadnaSrc.StoreCenter
     public class CloseStoreSlave : AbstractStoreCenterSlave
     {
         public MarketAnswer answer;
-        private Store store;
         public CloseStoreSlave(IUserSeller storeManager, string _storeName, IStoreDL storeDL) : base(_storeName, storeManager, storeDL)
         {
-            store = DataLayerInstance.GetStorebyName(_storeName);
         }
         
         public void CloseStore()
         {
             try
             {
+                Store store = DataLayerInstance.GetStorebyName(_storeName);
                 checkIfStoreExistsAndActive();
                 _storeManager.CanPromoteStoreOwner(); 
                 answer = store.CloseStore();
             }
-            catch (StoreException exe)
+            catch (StoreException e)
             {
-                MarketLog.Log("StoreCenter", "closing store failed");
-				answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
-			}
+				        answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+			      }
             catch (MarketException)
             {
-                MarketLog.Log("StoreCenter", "closing store failed");
                 answer = new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");
             }
             catch (DataException e)
