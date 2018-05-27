@@ -53,14 +53,14 @@ namespace IntegrationTests.PolicyOrder_Integration
         [TestMethod]
         public void PurchasePolicyOKTest()
         {
-            item1 = new OrderItem(store1, product1, 18.00, 3);
+            item1 = new OrderItem(store1, null, product1, 18.00, 3);
             slave.CheckPurchasePolicy(CreateOrder1());
         }
 
         [TestMethod]
         public void NoPurchasePolicyOKTest()
         {
-            item1 = new OrderItem("Some store", "Some product", 20.00, 5);
+            item1 = new OrderItem("Some store", null, "Some product", 20.00, 5);
             slave.CheckPurchasePolicy(CreateOrder1());
         }
 
@@ -69,7 +69,7 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item1 = new OrderItem(store1, product1, 18.00, 1);
+                item1 = new OrderItem(store1, null, product1, 18.00, 1);
                 slave.CheckPurchasePolicy(CreateOrder1());
                 Assert.Fail();
             }
@@ -84,7 +84,7 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item1 = new OrderItem(store1, product1, 9.00, 3);
+                item1 = new OrderItem(store1, null, product1, 9.00, 3);
                 slave.CheckPurchasePolicy(CreateOrder1());
                 Assert.Fail();
             }
@@ -99,7 +99,7 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item1 = new OrderItem(store1, product1, 9.00, 1);
+                item1 = new OrderItem(store1, null, product1, 9.00, 1);
                 slave.CheckPurchasePolicy(CreateOrder1());
                 Assert.Fail();
             }
@@ -114,7 +114,7 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item2 = new OrderItem(store2, product2, 48.00, 8);
+                item2 = new OrderItem(store2, null, product2, 48.00, 8);
                 slave.CheckPurchasePolicy(CreateOrder2());
                 Assert.Fail();
             }
@@ -129,7 +129,7 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item2 = new OrderItem(store2, product2, 52.00, 4);
+                item2 = new OrderItem(store2, null, product2, 52.00, 4);
                 slave.CheckPurchasePolicy(CreateOrder2());
                 Assert.Fail();
             }
@@ -144,7 +144,7 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item2 = new OrderItem(store2, product2, 52.00, 7);
+                item2 = new OrderItem(store2, null, product2, 52.00, 7);
                 slave.CheckPurchasePolicy(CreateOrder2());
                 Assert.Fail();
             }
@@ -159,7 +159,7 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item2 = new OrderItem(store2, product2, 48.00, 4);
+                item2 = new OrderItem(store2, null, product2, 48.00, 4);
                 slave.CheckPurchasePolicy(CreateOrder2());
             }
             catch (OrderException)
@@ -173,8 +173,8 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item1 = new OrderItem(store1, product1, 9.00, 1);
-                item2 = new OrderItem(store2, product2, 48.00, 4);
+                item1 = new OrderItem(store1, null, product1, 9.00, 1);
+                item2 = new OrderItem(store2, null, product2, 48.00, 4);
                 slave.CheckPurchasePolicy(CreateLargeOrder());
                 Assert.Fail();
             }
@@ -189,8 +189,8 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item1 = new OrderItem(store1, product1, 18.00, 3);
-                item2 = new OrderItem(store2, product2, 52.00, 8);
+                item1 = new OrderItem(store1, null, product1, 18.00, 3);
+                item2 = new OrderItem(store2, null, product2, 52.00, 8);
                 slave.CheckPurchasePolicy(CreateLargeOrder());
                 Assert.Fail();
             }
@@ -205,8 +205,8 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item1 = new OrderItem(store1, product1, 9.00, 1);
-                item2 = new OrderItem(store2, product2, 52.00, 8);
+                item1 = new OrderItem(store1, null, product1, 9.00, 1);
+                item2 = new OrderItem(store2, null, product2, 52.00, 8);
                 slave.CheckPurchasePolicy(CreateLargeOrder());
                 Assert.Fail();
             }
@@ -221,8 +221,8 @@ namespace IntegrationTests.PolicyOrder_Integration
         {
             try
             {
-                item1 = new OrderItem(store1, product1, 18.00, 3);
-                item2 = new OrderItem(store2, product2, 48.00, 4);
+                item1 = new OrderItem(store1, null, product1, 18.00, 3);
+                item2 = new OrderItem(store2, null, product2, 48.00, 4);
                 slave.CheckPurchasePolicy(CreateLargeOrder());
             }
             catch (OrderException)

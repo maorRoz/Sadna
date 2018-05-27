@@ -74,7 +74,7 @@ namespace SadnaSrc.MarketHarmony
             return managerID;
         }
 
-        public void Promote(string userName, string permissions)
+        public string[] Promote(string userName, string permissions)
         {
             ValidateCanManageStore();
             ValidateNotPromotingHimself(userName);
@@ -95,12 +95,12 @@ namespace SadnaSrc.MarketHarmony
                 }
                 actions.Add(action);
             }
-            PromoteStorePolicies(userName, actions.ToArray());
+           return PromoteStorePolicies(userName, actions.ToArray());
         }
 
-        private void PromoteStorePolicies(string userName, StoreManagerPolicy.StoreAction[] permissions)
+        private string[] PromoteStorePolicies(string userName, StoreManagerPolicy.StoreAction[] permissions)
         {
-            UserPolicyService.PromoteStorePolicies(userName, _store, permissions);
+            return UserPolicyService.PromoteStorePolicies(userName, _store, permissions);
         }
 
         private bool SearchPermission(StoreManagerPolicy.StoreAction permission)
@@ -158,6 +158,11 @@ namespace SadnaSrc.MarketHarmony
         public void CanViewPurchaseHistory()
         {
             CanDoAction(StoreManagerPolicy.StoreAction.ViewPurchaseHistory);
+        }
+
+        public string GetName()
+        {
+            return managerName;
         }
     }
 }

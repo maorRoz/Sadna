@@ -14,5 +14,8 @@ namespace SadnaSrc.PolicyComponent
         string[] CreateGlobalPolicy(OperatorType op, int id1, int id2);
         string[] CreateCategoryPolicy(string category, OperatorType op, int id1, int id2);
         string[] CreateProductPolicy(string product, OperatorType op, int id1, int id2);
+        string[] ViewPolicies();
+        void CleanSession();
+        void SyncWithDB();
     }
 }

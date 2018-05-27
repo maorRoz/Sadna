@@ -94,7 +94,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, slave.answer.Status);
 
         }
-        //TODO: Add check of null and empty strings in the slave implementation and test these cases
         [TestMethod]
         public void EditProductPriceSuccess()
         {

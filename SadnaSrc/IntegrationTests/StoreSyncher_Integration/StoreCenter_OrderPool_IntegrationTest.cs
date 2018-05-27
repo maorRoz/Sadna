@@ -44,7 +44,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                OrderItem[] purchased = new OrderItem[] {new OrderItem(store1, product1, 6, 10)};
+                OrderItem[] purchased = new OrderItem[] {new OrderItem(store1, null, product1, 6, 10)};
                 storeSyncherHarmony.RemoveProducts(purchased);
                 Assert.AreEqual(10, storeServiceSession.GetProductFromStore(store1, product1).Quantity);
             }
@@ -59,7 +59,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                OrderItem[] purchased = new OrderItem[] { new OrderItem(store1, "A" + product1, 6, 10) };
+                OrderItem[] purchased = new OrderItem[] { new OrderItem(store1, null, "A" + product1, 6, 10) };
                 storeSyncherHarmony.RemoveProducts(purchased);
                 Assert.Fail();
             }
@@ -74,7 +74,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                OrderItem[] purchased = new OrderItem[] { new OrderItem("A" + store1, product1, 6, 10) };
+                OrderItem[] purchased = new OrderItem[] { new OrderItem("A" + store1, null, product1, 6, 10) };
                 storeSyncherHarmony.RemoveProducts(purchased);
                 Assert.Fail();
             }
@@ -89,7 +89,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                OrderItem[] purchased = new OrderItem[] { new OrderItem("A" + store1, product1, 6, 100) };
+                OrderItem[] purchased = new OrderItem[] { new OrderItem("A" + store1, null, product1, 6, 100) };
                 storeSyncherHarmony.RemoveProducts(purchased);
                 Assert.Fail();
             }
@@ -104,7 +104,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                OrderItem[] purchased = new OrderItem[] { new OrderItem("A" + store1, product1, 6, -3) };
+                OrderItem[] purchased = new OrderItem[] { new OrderItem("A" + store1, null, product1, 6, -3) };
                 storeSyncherHarmony.RemoveProducts(purchased);
                 Assert.Fail();
             }
@@ -119,7 +119,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                Assert.IsTrue(storeSyncherHarmony.IsValid(new OrderItem(store1, product1, 6, 10)));
+                Assert.IsTrue(storeSyncherHarmony.IsValid(new OrderItem(store1, null, product1, 6, 10)));
             }
             catch (MarketException)
             {
@@ -132,7 +132,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                storeSyncherHarmony.IsValid(new OrderItem(store1, "A" + product1, 6, 10));
+                storeSyncherHarmony.IsValid(new OrderItem(store1, null, "A" + product1, 6, 10));
                 Assert.Fail();
             }
             catch (MarketException)
@@ -145,7 +145,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                Assert.IsFalse(storeSyncherHarmony.IsValid(new OrderItem("A" + store1, product1, 6, 10)));
+                Assert.IsFalse(storeSyncherHarmony.IsValid(new OrderItem("A" + store1, null, product1, 6, 10)));
                 Assert.Fail();
             }
             catch (MarketException)
@@ -158,7 +158,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                Assert.IsFalse(storeSyncherHarmony.IsValid(new OrderItem(store1, product1, 6, 1000)));
+                Assert.IsFalse(storeSyncherHarmony.IsValid(new OrderItem(store1, null, product1, 6, 1000)));
             }
             catch (MarketException)
             {
@@ -171,7 +171,7 @@ namespace IntegrationTests.StoreSyncher_Integration
         {
             try
             {
-                Assert.IsFalse(storeSyncherHarmony.IsValid(new OrderItem(store1, product1, 6, -30)));
+                Assert.IsFalse(storeSyncherHarmony.IsValid(new OrderItem(store1, null, product1, 6, -30)));
             }
             catch (MarketException)
             {

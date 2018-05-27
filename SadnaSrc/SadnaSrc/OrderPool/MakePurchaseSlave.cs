@@ -51,7 +51,7 @@ namespace SadnaSrc.OrderPool
             List<OrderItem> items = order.GetItems();
             foreach (OrderItem item in items)
             {
-                if (!_checker.CheckRelevantPolicies(item.Name, item.Store, null, username, address, item.Quantity,
+                if (!_checker.CheckRelevantPolicies(item.Name, item.Store, item.Categories, username, address, item.Quantity,
                     item.Price))
                     throw new OrderException(OrderItemStatus.NotComplyWithPolicy,
                         "Item " + item.Name + "from Store" + item.Store + "Doesn't comply with Policy conditions.");

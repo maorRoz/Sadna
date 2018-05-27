@@ -76,7 +76,7 @@ namespace SadnaSrc.OrderPool
                 {
                     if (dbReader.GetValue(0) != null)
                     {
-                        list.Add(new OrderItem(dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4)));
+                        list.Add(new OrderItem(dbReader.GetString(1), null, dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4)));
                     }
                 }
             }
@@ -92,7 +92,7 @@ namespace SadnaSrc.OrderPool
                 {
                     if (dbReader.GetValue(0) != null)
                     {
-                        return new OrderItem(dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4));
+                        return new OrderItem(dbReader.GetString(1), null, dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4));
 
                     }
                 }
@@ -109,7 +109,7 @@ namespace SadnaSrc.OrderPool
                 {
                     if (dbReader.GetValue(0) != null)
                     {
-                        res.Add(new OrderItem(dbReader.GetString(1), dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4)));
+                        res.Add(new OrderItem(dbReader.GetString(1), null, dbReader.GetString(2), dbReader.GetDouble(3), dbReader.GetInt32(4)));
 
                     }
                 }

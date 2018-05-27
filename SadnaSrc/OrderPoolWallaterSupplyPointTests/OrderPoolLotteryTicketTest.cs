@@ -40,8 +40,8 @@ namespace OrderPoolWallaterSupplyPointTests
             storeSyncherMock = new Mock<IStoresSyncher>();
             publisherMock = new Mock<IPublisher>();
             policyMock = new Mock<IPolicyChecker>();
-            item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
-            item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
+            item1 = new OrderItem("Cluckin Bell", null, "#9", 5.00, 2);
+            item2 = new OrderItem("Cluckin Bell", null, "#9 Large", 7.00, 1);
             SupplyService.Instance.FixExternal();
             PaymentService.Instance.FixExternal();
         }

@@ -102,7 +102,7 @@ namespace SadnaSrc.OrderPool
             int orderId = 0;
             try
             {
-                OrderItem toBuy = new OrderItem(store, "DELIVERY : " + itemName, 1, 1);
+                OrderItem toBuy = new OrderItem(store, null, "DELIVERY : " + itemName, 1, 1);
                 Order order = InitOrder(_orderDL.GetNameToRefund(userId), _orderDL.GetAddressToSendPackage(userId));
                 orderId = order.GetOrderID();
                 order.AddOrderItem(toBuy);
@@ -146,7 +146,7 @@ namespace SadnaSrc.OrderPool
             if(sum <= 0 || userName == null || ticket == null)
                 throw new OrderException(OrderItemStatus.InvalidDetails, "Cannot find cost or user name.");
             Order refund = new Order(_orderDL.RandomOrderID(), userName);
-            refund.AddOrderItem(new OrderItem("---", "REFUND: Lottery Ticket", -1 * sum, 1)); 
+            refund.AddOrderItem(new OrderItem("---", null,  "REFUND: Lottery Ticket", -1 * sum, 1)); 
             MarketLog.Log("OrderPool", " successfully initialized new order " + refund.GetOrderID() + "for user " + userName + ".");
 
             return refund;

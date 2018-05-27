@@ -28,8 +28,8 @@ namespace UserSpotTests.UserSpotApiTests
             MarketLog.SetDB(marketDbMocker.Object);
             userDbMocker = new Mock<IUserDL>();
             user = new User(userDbMocker.Object, userID);
-            item1 = new CartItem("Health Potion", "X", 1, 5.0);
-            item2 = new CartItem("Mana Potion", "Y", 2, 0.5);
+            item1 = new CartItem("Health Potion", null, "X", 1, 5.0);
+            item2 = new CartItem("Mana Potion", null, "Y", 2, 0.5);
         }
 
         [TestMethod]
@@ -73,8 +73,8 @@ namespace UserSpotTests.UserSpotApiTests
 
         private void AddItemsToCart()
         {
-            user.Cart.AddToCart("Health Potion", "X", 1, 5.0);
-            user.Cart.AddToCart("Mana Potion", "Y", 2, 0.5);
+            user.Cart.AddToCart("Health Potion", null, "X", 1, 5.0);
+            user.Cart.AddToCart("Mana Potion", null, "Y", 2, 0.5);
 
         }
 

@@ -189,6 +189,7 @@
     <Compile Include="StoreCenter\StoreManagementService.cs" />
     <Compile Include="StoreCenter\StoreShoppingService.cs" />
     <Compile Include="StoreCenter\ViewPoliciesSlave.cs" />
+    <Compile Include="StoreCenter\ViewPromotionHistorySlave.cs" />
     <Compile Include="StoreCenter\ViewStoreHistorySlave.cs" />
     <Compile Include="StoreCenter\ViewStoreInfoSlave.cs" />
     <Compile Include="StoreCenter\ViewStoreStockSlave.cs" />

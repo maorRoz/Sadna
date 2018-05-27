@@ -101,6 +101,16 @@ namespace BlackBox
             throw new NotImplementedException();
         }
 
+        public MarketAnswer ViewPromotionHistory()
+        {
+            if (real != null)
+            {
+                return real.ViewPromotionHistory();
+            }
+
+            throw new NotImplementedException();
+        }
+
         public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
         {
             if (real != null)

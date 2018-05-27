@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SadnaSrc.AdminView;
@@ -39,10 +40,10 @@ namespace OrderPoolWallaterSupplyPointTests
             userBuyerMocker = new Mock<IUserBuyer>();
             storeSyncherMock = new Mock<IStoresSyncher>();
             checkerMock = new Mock<IPolicyChecker>();
-            checkerMock.Setup(x => x.CheckRelevantPolicies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+            checkerMock.Setup(x => x.CheckRelevantPolicies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<string>>(),
                 It.IsAny<string>(),
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>())).Returns(true);
-            item = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
+            item = new OrderItem("Cluckin Bell", null, "#9 Large", 7.00, 1);
             SupplyService.Instance.FixExternal();
             PaymentService.Instance.FixExternal();
         }
@@ -169,7 +170,7 @@ namespace OrderPoolWallaterSupplyPointTests
             userBuyerMocker.Setup(x => x.CheckoutItem
                 (It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>())).Returns(item);
             checkerMock.Setup(x => x.CheckRelevantPolicies
-                    (It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>()))
+                    (It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<string>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>()))
                 .Throws(new OrderException(OrderItemStatus.NotComplyWithPolicy, "some message"));
             orderDbMocker.Setup(x => x.RandomOrderID()).Returns(100010);
             slave = new PurchaseItemSlave(userBuyerMocker.Object, storeSyncherMock.Object, orderDbMocker.Object, publisherMock.Object, checkerMock.Object);
