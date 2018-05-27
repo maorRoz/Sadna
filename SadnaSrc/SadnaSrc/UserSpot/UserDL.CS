@@ -75,14 +75,14 @@ namespace SadnaSrc.UserSpot
         {
             int idOfPromoted = GetIDFromUserName(userName);
             string[] valuesNames = { "@idParam", "@storeParam","@actionParam" };
-            object[] values = { idOfPromoted, policy.Store,policy.GetStoreActionString() };
+            object[] values = { idOfPromoted, policy.Store, StoreManagerPolicy.GetStoreActionString(policy.Action) };
             dbConnection.InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
         }
 
         public void SaveUserStorePolicy(int userID,StoreManagerPolicy policy)
         {
             string[] valuesNames = { "@idParam", "@storeParam", "@actionParam" };
-            object[] values = { userID, policy.Store, policy.GetStoreActionString() };
+            object[] values = { userID, policy.Store, StoreManagerPolicy.GetStoreActionString(policy.Action) };
             dbConnection.InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
         }
 

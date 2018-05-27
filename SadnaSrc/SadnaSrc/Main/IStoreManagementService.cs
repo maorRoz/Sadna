@@ -40,7 +40,7 @@ namespace SadnaSrc.Main
         /**
          * History View
          */
-
+        MarketAnswer ViewPromotionHistory();
         MarketAnswer ViewStoreHistory();
 	    MarketAnswer CloseStore();
 

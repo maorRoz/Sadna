@@ -21,9 +21,9 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanPromoteStoreOwner(); 
                 answer = store.CloseStore();
             }
-            catch (StoreException exe)
+            catch (StoreException e)
             {
-                answer = new StoreAnswer(exe);
+                answer = new StoreAnswer(e);
             }
             catch (MarketException)
             {
