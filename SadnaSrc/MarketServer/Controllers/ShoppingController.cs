@@ -30,14 +30,23 @@ namespace MarketWeb.Controllers
             return RedirectToAction("BrowseMarket", new { systemId, state, answer.Answer });
         }
 
-        public IActionResult AddToCart(int systemId, string state, string store, string product, int quantity)
+        public IActionResult AddToCart(int systemId, string state, string store, string product, int quantity, int directViewStoreStock)
         {
             var userService = MarketServer.Users[systemId];
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.AddProductToCart(store,product,quantity);
-            return RedirectToAction("ViewStoreStock", answer.Status == 0 ? 
-                new { systemId, state,store,valid = true, message = answer.Answer } :
-                new { systemId, state, store, valid = false, message = answer.Answer });
+	        if (directViewStoreStock==0)
+	        {
+		        return RedirectToAction("ViewStoreStock", answer.Status == 0 ?
+			        new { systemId, state, store, valid = true, message = answer.Answer } :
+			        new { systemId, state, store, valid = false, message = answer.Answer });
+			}
+
+	        else
+	        {
+		        return RedirectToAction("SearchProductView", new {systemId, state});
+	        }
+            
         }
 
         public IActionResult AddTicket(int systemId, string state, string store, string product, double price)
@@ -74,8 +83,13 @@ namespace MarketWeb.Controllers
 		    var userService = MarketServer.Users[systemId];
 		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 		    var answer = storeShoppingService.SearchProduct(type, value, minPrice, maxPrice, category);
-		    return RedirectToAction("SearchProduct", new { systemId, state, answer.Answer });
+			return RedirectToAction("ProductsView", new { systemId, state, results=answer.ReportList});
 		}
 
-    }
+		public IActionResult ProductsView(int systemId, string state,string message, string[] results)
+	    {
+		    return View(new ProductListModel(systemId,state, message, results));
+	    }
+
+	}
 }

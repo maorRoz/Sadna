@@ -4,6 +4,7 @@ using System.Linq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.StoreCenter;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -41,14 +42,16 @@ namespace SadnaSrc.StoreCenter
 						break;
 				}
 
-				products = filterResultsByPrice(products,minPrice, maxPrice);
-				products = filterResultByCategory(products, category);
+				products = FilterResultsByPrice(products,minPrice, maxPrice);
+				products = FilterResultByCategory(products, category);
 				string[] result = new string[products.Length];
+				string[] stores = GetProductsStores(products);
 				for (int i = 0; i < result.Length; i++)
 				{
-					result[i] = products[i].ToString();
+					string productId = products[i].SystemId;
+					result[i] = GetProductStockInformation(productId,false) + " Store: "+ stores[i];
 				}
-				
+
 				Answer = new StoreAnswer(SearchProductStatus.Success,"Data retrieved successfully!", result);
 			}
 
@@ -80,36 +83,110 @@ namespace SadnaSrc.StoreCenter
 			}
 		}
 
-		private Product[] filterResultsByPrice(Product[] products, double minPrice, double maxPrice)
+		private Product[] FilterResultsByPrice(Product[] products, double minPrice, double maxPrice)
 		{
 			LinkedList<Product> productsAfterFilter = new LinkedList<Product>();
+
 			foreach (var product in products)
 			{
-				double productPrice = product.BasePrice;
-				if (productPrice >= minPrice && productPrice <= maxPrice)
+				productsAfterFilter.AddLast(product);
+			}
+
+			if (maxPrice!=0)
+			{
+				foreach (var product2 in productsAfterFilter)
 				{
-					productsAfterFilter.AddLast(product);
+					double product2Price = product2.BasePrice;
+					if (product2Price > maxPrice)
+					{
+						productsAfterFilter.Remove(product2);
+					}
 				}
+
+			}
+
+			if (minPrice!=0)
+				{
+					foreach (var product2 in productsAfterFilter)
+					{
+						double product2Price = product2.BasePrice;
+						if (product2Price < minPrice)
+						{
+							productsAfterFilter.Remove(product2);
+						}
+					}
+
 			}
 			return productsAfterFilter.ToArray();
 		}
 
-		private Product[] filterResultByCategory(Product[] products, string category)
+		private Product[] FilterResultByCategory(Product[] products, string category)
 		{
-			LinkedList<Product> productsAfterFilter = new LinkedList<Product>();
-			Category cat = _storeLogic.GetCategoryByName(category);
-			LinkedList<Product> categoryProducts = _storeLogic.GetAllCategoryProducts(cat.SystemId);
-			foreach (var product in products)
+			if (category != null)
 			{
-				foreach (var categoryProduct in categoryProducts)
+				LinkedList<Product> productsAfterFilter = new LinkedList<Product>();
+				Category cat = _storeLogic.GetCategoryByName(category);
+				LinkedList<Product> categoryProducts = _storeLogic.GetAllCategoryProducts(cat.SystemId);
+				foreach (var product in products)
 				{
-					if (categoryProduct.Name == product.Name)
+					foreach (var categoryProduct in categoryProducts)
 					{
-						productsAfterFilter.AddLast(product);
+						if (categoryProduct.Name == product.Name)
+						{
+							productsAfterFilter.AddLast(product);
+						}
 					}
 				}
+				return productsAfterFilter.ToArray();
 			}
-			return productsAfterFilter.ToArray();
+
+			return products;
+
+		}
+
+		private string[] GetProductsStores(Product[] products)
+		{
+			string[] stores = new string[products.Length];
+			for (int i = 0; i < products.Length; i++)
+			{
+				string storeId = _storeLogic.GetStoreByProductId(products[i].SystemId);
+				stores[i] = _storeLogic.GetStorebyID(storeId).Name;
+			}
+
+			return stores;
+		}
+
+		private string GetProductStockInformation(string productID, bool showAll)
+		{
+			StockListItem stockListItem = _storeLogic.GetStockListItembyProductID(productID);
+			if (stockListItem == null)
+			{
+				MarketLog.Log("storeCenter", "product not exists");
+				throw new StoreException(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
+			}
+			if (stockListItem.PurchaseWay == PurchaseEnum.Lottery && !showAll)
+			{
+				LotterySaleManagmentTicket managmentTicket =
+					_storeLogic.GetLotteryByProductID((productID));
+				StockListItem sli = _storeLogic.GetStockListItembyProductID(productID);
+				if ((managmentTicket.EndDate < MarketYard.MarketDate) ||
+				    (managmentTicket.StartDate > MarketYard.MarketDate) ||
+				    ((managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice) && sli.Quantity == 0))
+					return "";
+			}
+			string discount = " Discount: {";
+			string product = stockListItem.Product.ToString();
+			if (stockListItem.Discount != null)
+				discount += stockListItem.Discount;
+			else
+			{
+				discount += "null";
+			}
+			discount += "}";
+			string purchaseWay = " Purchase Way: " + EnumStringConverter.PrintEnum(stockListItem.PurchaseWay);
+			string quanitity = " Quantity: " + stockListItem.Quantity;
+			string result = product + discount + purchaseWay + quanitity;
+			return result;
 		}
 
 	}

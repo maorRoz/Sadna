@@ -116,14 +116,28 @@ namespace SadnaSrc.StoreCenter
 			{
 				while (dbReader.Read())
 				{
-					products.AddLast(new Product(dbReader.GetString(1), dbReader.GetDouble(2), dbReader.GetString(3)));
+					products.AddLast(new Product(dbReader.GetString(0),dbReader.GetString(1), dbReader.GetDouble(2), dbReader.GetString(3)));
 				}
 
 				return products.ToArray();
 			}
 		}
 
-		public void EditLotteryTicketInDatabase(LotteryTicket ticket)
+	    public string GetStoreByProductId(string productId)
+	    {
+		    string store = null;
+			using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "StockID", "ProductSystemID = '" + productId + "'"))
+			{
+				while (dbReader.Read())
+				{
+					store = dbReader.GetString(0);
+				}
+
+				return store;
+			}
+		}
+
+	    public void EditLotteryTicketInDatabase(LotteryTicket ticket)
         {
 
             string[] columnNames =
