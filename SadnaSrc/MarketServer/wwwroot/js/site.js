@@ -46,8 +46,6 @@ $(document).ready(function() {
     socket.clientMethods['IdentifyClient'] = (userId) => {
         var systemId = extractQuery('systemId', 'SystemId');
         if (systemId === undefined || (systemId === '0' && userId !== 0)) {
-            console.log("systemId === undefined " + (systemId === undefined));
-            console.log("userId !== 0 " + (userId !== 0));
             location.href = window.location.href.substring(0,window.location.href.indexOf('?')) + '?systemId=' + userId + '&state=Guest';
         }
     }
