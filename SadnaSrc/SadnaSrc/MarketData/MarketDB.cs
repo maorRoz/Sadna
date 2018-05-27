@@ -37,7 +37,7 @@ namespace SadnaSrc.MarketData
             //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
             //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
             _dbConnection = new SqlConnection(dbPath);
-             _dbConnection.Open();
+            OpenIfClosed();
         }
 
         private void CreateTables()
@@ -578,6 +578,7 @@ namespace SadnaSrc.MarketData
 
         public SqlDataReader SelectFromTable(string table, string toSelect)
         {
+            OpenIfClosed();
             var dbConnection = _dbConnection;
             if (ToDisable)
             {
@@ -591,6 +592,7 @@ namespace SadnaSrc.MarketData
 
         public SqlDataReader SelectFromTableWithCondition(string table, string toSelect, string condition)
         {
+            OpenIfClosed();
             var dbConnection = _dbConnection;
             if (ToDisable)
             {
@@ -604,6 +606,7 @@ namespace SadnaSrc.MarketData
 
         public void UpdateTable(string table,string updateCondition,string[] columnNames, string[] valuesNames, object[] values)
         {
+            OpenIfClosed();
             string [] setString = new string[values.Length];
             for (int i = 0; i < setString.Length; i++)
             {
@@ -628,6 +631,7 @@ namespace SadnaSrc.MarketData
 
         public void DeleteFromTable(string table,string deleteCondition)
         {
+            OpenIfClosed();
             var dbConnection = _dbConnection;
             if (ToDisable)
             {
@@ -642,6 +646,7 @@ namespace SadnaSrc.MarketData
 
         public SqlDataReader freeStyleSelect(string cmd)
         {
+            OpenIfClosed();
             var dbConnection = _dbConnection;
             if (ToDisable)
             {
@@ -653,6 +658,14 @@ namespace SadnaSrc.MarketData
         public bool IsConnected()
         {
             return _dbConnection.State == ConnectionState.Open;
+        }
+
+        private void OpenIfClosed()
+        {
+            if (_dbConnection.State == ConnectionState.Closed)
+            {
+                _dbConnection.Open();
+            }
         }
     } 
 }

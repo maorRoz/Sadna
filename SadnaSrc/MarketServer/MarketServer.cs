@@ -28,9 +28,8 @@ namespace MarketWeb
             }
         }
 
-        public IUserService GetUserSession(int userId)
+        public static IUserService GetUserSession(int userId)
         {
-            MassSyncUsersWithNoId();
             return userId == 0 ? marketSession.GetUserService() : Users[userId];
         }
 
