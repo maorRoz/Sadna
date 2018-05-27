@@ -1,6 +1,7 @@
 ﻿using SadnaSrc.Main;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using SadnaSrc.MarketData;
@@ -69,6 +70,30 @@ namespace SadnaSrc.StoreCenter
         {
             dbConnection.DeleteFromTable("CategoryProductConnection", "ProductID = '" + productid + "' AND CategoryID = '"+ categoryid + "'");
         }
+
+        public void AddPromotionHistory(string store, string managerName, string promotedName, string[] permissions,string description)
+        {
+            dbConnection.InsertTable("PromotionHistory",
+                "Store,Promoter,Promoted,Permissions,PromotionDate,Description",
+                new []{"@storeParam","@promoterParam","@promotedParam","@permissionsParam","@dateParam","@descriptionParam"},
+                new object[]{store,managerName,promotedName, string.Join(",",permissions), DateTime.Now,description});
+        }
+
+        public string[] GetPromotionHistory(string store)
+        {
+            var historyRecords = new LinkedList<string>();
+            using (var dbReader = dbConnection.SelectFromTableWithCondition("PromotionHistory", "*","Store = '"+store+"'"))
+            {
+                while (dbReader.Read())
+                {
+                    historyRecords.AddLast("Store: "+dbReader.GetString(0)+ " Promoter: "+dbReader.GetString(1)+
+                                           " Promoted: "+dbReader.GetString(2)+ " Permissions: "+dbReader.GetString(3)+
+                                           " Date: "+dbReader.GetDateTime(4)+ " Description: "+dbReader.GetString(5));
+                }
+            }
+            return historyRecords.ToArray();
+        }
+
         public string[] GetAllLotteryTicketIDs()
         {
             LinkedList<string> ids = new LinkedList<string>();

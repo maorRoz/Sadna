@@ -13,16 +13,17 @@ namespace SadnaSrc.StoreCenter
         }
         public void PromoteToStoreManager(string someoneToPromoteName, string actions)
         {
-            MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to grant " + someoneToPromoteName +
-                                      " manager options in Store" + _storeName + ". Validating store activity and existence..");
             try
             {
+                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to grant " + someoneToPromoteName +
+                                             " manager options in Store" + _storeName + ". Validating store activity and existence..");
                 checkIfStoreExistsAndActive();   
                 ValidatePromotionEligible(actions);
                 _storeManager.ValidateNotPromotingHimself(someoneToPromoteName);
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has been authorized. granting " +
                                              someoneToPromoteName + " manager options in Store" + _storeName + "...");
-                _storeManager.Promote(someoneToPromoteName, actions);
+                var appliedPermissions = _storeManager.Promote(someoneToPromoteName, actions);
+                DataLayerInstance.AddPromotionHistory(_storeName,_storeManager.GetName(), someoneToPromoteName,appliedPermissions,"Regular promotion");
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " granted " +
                                              someoneToPromoteName + " manager options in Store" + _storeName + "successfully");
                 Answer = new StoreAnswer(PromoteStoreStatus.Success, "promote with manager options has been successful!");
@@ -30,14 +31,10 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException e)
             {
-                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " tried to promote others in unavailable Store " + _storeName +
-                                             "and has been denied. Error message has been created!");
                 Answer = new StoreAnswer(PromoteStoreStatus.InvalidStore, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
-                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to promote " + someoneToPromoteName +
-                                  "with manager options in Store" + _storeName + " and therefore has been denied. Error message has been created!");
                 Answer = new StoreAnswer((PromoteStoreStatus)e.Status, e.GetErrorMessage());
             }
             catch (DataException e)

@@ -55,6 +55,7 @@ namespace SadnaSrc.MarketData
                 CreateStoreTable(),
                 CreateUserStatePolicyTable(),
                 CreateUserStorePolicyTable(),
+                CreatePromotionHistoryTable(),
                 CreateCartItemTable(),
                 CreatePurchaseHistoryTable(),
                 CreateOrderTable(),
@@ -68,9 +69,11 @@ namespace SadnaSrc.MarketData
 
             for (var i = 0; i < createTableStrings.Length; i++)
             {
+
                 var createTableCommand = new SqlCommand(createTableStrings[i], _dbConnection);
                 createTableCommand.ExecuteNonQuery();
             }
+           
         }
 
         public void InsertByForce() { 
@@ -176,6 +179,8 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (7,'Goldstar','The Red Rock',3,11.00,33.00)",
                 "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (7,'OCB','24',2,10.00,20.00)",
                 "INSERT INTO CartItem (SystemID,Name,Store,Quantity,UnitPrice,FinalPrice) VALUES (8,'Coated Peanuts','24',8,10.00,80.00)",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'T','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (5,'T','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'X','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (5,'X','StoreOwner')",
@@ -186,8 +191,16 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (7,'The Red Rock','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (7,'The Red Rock','PromoteStoreAdmin')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (4,'The Red Rock','DeclareDiscountPolicy')",
-                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (5,'T','StoreOwner')",
-                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'T','StoreOwner')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('T','Arik1','Arik1','StoreOwner','2018-1-1','T has been opened')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('T','Arik1','CJ','StoreOwner','2018-1-1','Regular promotion')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('X','Arik2','Arik2','StoreOwner','2018-1-1','X has been opened')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('X','Arik2','Arik3','StoreOwner','2018-1-1','Regular promotion')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Y','Arik2','Arik2','StoreOwner','2018-1-1','Y has been opened')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('M','Arik3','Arik3','StoreOwner','2018-1-1','M has been opened')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Cluckin Bell','CJ','CJ','StoreOwner','2018-1-1','Cluckin Bell has been opened')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('The Red Rock','Vova','Vova','StoreOwner','2018-1-1','The Red Rock has been opened')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('The Red Rock','Vova','Vadim','ManageProducts,PromoteStoreAdmin','2018-1-1','Regular promotion')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('The Red Rock','Vova','Big Smoke','DeclareDiscountPolicy','2018-1-1','Regular promotion')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik1','Health Potion','X','Immediate',2,11.5,'2018-12-29')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik1','Mana Potion','Y','Lottery',3,12.0,'2018-12-29')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik1','INT Potion','Y','Lottery',2,8.0,'2018-12-29')",
@@ -276,6 +289,7 @@ namespace SadnaSrc.MarketData
                 "Store",
                 "StatePolicy",
                 "StoreManagerPolicy",
+                "PromotionHistory",
                 "CartItem",
                 "PurchaseHistory",
                 "Orders",
@@ -370,6 +384,20 @@ namespace SadnaSrc.MarketData
                                     )";
         }
 
+        private static string CreatePromotionHistoryTable()
+        {
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='PromotionHistory' AND xtype='U') 
+                        CREATE TABLE [PromotionHistory] (
+                                    [Store]             VARCHAR(256),
+                                    [Promoter]          VARCHAR(256),
+                                    [Promoted]          VARCHAR(256),
+                                    [Permissions]       VARCHAR(256),
+                                    [PromotionDate]     DATETIME,
+                                    [Description]       VARCHAR(256),
+                                    PRIMARY KEY([Store],[Promoter],[Promoted],[PromotionDate])
+                                    )";
+        }
+
         private static string CreateCartItemTable()
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CartItem' AND xtype='U') 
@@ -385,7 +413,6 @@ namespace SadnaSrc.MarketData
                                     )";
 
         }
-        //                                    FOREIGN KEY([Store])        REFERENCES [Store]([Name])    ON DELETE CASCADE,
         private static string CreatePurchaseHistoryTable()
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='PurchaseHistory' AND xtype='U') 
