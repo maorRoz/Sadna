@@ -112,12 +112,18 @@ namespace SadnaSrc.PolicyComponent
             SessionPolicies.Remove(toRemove);
         }
 
-        public bool CheckRelevantPolicies(string product, string store, string category, string username,
+        public bool CheckRelevantPolicies(string product, string store, List<string> categories, string username,
             string address, int quantity, double price)
         {
+            if (categories != null)
+            {
+                foreach(string category in categories)
+                    if (!CheckPolicy(PolicyType.Category, category, username, address, quantity, price))
+                        return false;
+            }
+
             return
             CheckPolicy(PolicyType.Global, null, username, address, quantity, price) &&
-            CheckPolicy(PolicyType.Category, category, username, address, quantity, price) &&
             CheckPolicy(PolicyType.Product, product, username, address, quantity, price) &&
             CheckPolicy(PolicyType.Store, store, username, address, quantity, price) &&
             CheckPolicy(PolicyType.StockItem, store + "." + product, username, address, quantity, price);

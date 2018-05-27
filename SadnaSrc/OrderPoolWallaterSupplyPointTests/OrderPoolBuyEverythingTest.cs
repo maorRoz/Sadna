@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SadnaSrc.AdminView;
@@ -40,7 +41,7 @@ namespace OrderPoolWallaterSupplyPointTests
             storeSyncherMock = new Mock<IStoresSyncher>();
             publisherMock = new Mock<IPublisher>();
             policyMock = new Mock<IPolicyChecker>();
-            policyMock.Setup(x => x.CheckRelevantPolicies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+            policyMock.Setup(x => x.CheckRelevantPolicies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<List<string>>(),
                 It.IsAny<string>(),
                 It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>())).Returns(true);
             item1 = new OrderItem("Cluckin Bell", null, "#9", 5.00, 2);
