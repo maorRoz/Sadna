@@ -275,7 +275,7 @@ namespace SadnaSrc.PolicyComponent
             SessionPolicies.Clear();
         }
 
-        public void Sync()
+        public void SyncWithDB()
         {
             Policies = _dataLayer.GetAllPolicies();
         }
