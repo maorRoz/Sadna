@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Castle.Core.Internal;
+using NUnit.Framework;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
@@ -56,7 +57,7 @@ namespace SadnaSrc.AdminView
             {
                 MarketLog.Log("AdminView", "Checking admin status.");
                 _admin.ValidateSystemAdmin();
-                _manager.AddPolicy(_manager.GetSessionPolicies().Length);
+                _manager.AddPolicy(_manager.GetSessionPolicies().Length - 1);
                 MarketLog.Log("AdminView", "Policy saved.");
                 Answer = new AdminAnswer(EditPolicyStatus.Success, "Policy saved.");
 
@@ -135,9 +136,11 @@ namespace SadnaSrc.AdminView
         private void CheckInput(string type, string subject, string op, string arg1, string optArg)
         {
             int numericArg1, numericArg2;
-            if (CheckPolicySubject(type, subject) && IsNumericCondtion(op) && Int32.TryParse(arg1, out numericArg1)) return;
+            if (CheckPolicySubject(type, subject) && IsNumericCondtion(op) && Int32.TryParse(arg1, out numericArg1)) return;          
             if (CheckPolicySubject(type, subject) && IsOperator(op) && Int32.TryParse(arg1, out numericArg1) &&
                 Int32.TryParse(optArg, out numericArg2)) return;
+            if (CheckPolicySubject(type, subject) && IsStringCondtion(op) &&
+                !Int32.TryParse(arg1, out numericArg1)) return;
             MarketLog.Log("AdminView", " Adding policy failed, invalid data.");
             throw new AdminException(EditPolicyStatus.InvalidPolicyData, "Invalid Policy data");
         }
@@ -146,6 +149,11 @@ namespace SadnaSrc.AdminView
         {
             return cond.Contains("Price >=") || cond.Contains("Price <=") || cond.Contains("Quantity >=") ||
                    cond.Contains("Quantity <=");
+        }
+
+        private bool IsStringCondtion(string cond)
+        {
+            return cond.Contains("Address =") || cond.Contains("Username =");
         }
 
         private bool IsCondtion(string cond)

@@ -12,5 +12,7 @@ namespace SadnaSrc.PolicyComponent
         string[] CreateStockItemSimplePolicy(string store, string product, ConditionType cond, string value);
         string[] CreateStorePolicy(string store, OperatorType op, int id1, int id2);
         string[] CreateStockItemPolicy(string store, string product, OperatorType op, int id1, int id2);
+        string[] ViewStorePolicies();
+        void CleanSession();
     }
 }
