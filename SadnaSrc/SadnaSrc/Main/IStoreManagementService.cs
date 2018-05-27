@@ -40,7 +40,10 @@ namespace SadnaSrc.Main
         /**
          * History View
          */
-
+        MarketAnswer AddCategoryDiscount(string categoryName, DateTime startDate, DateTime endDate,
+            int discountAmount);
+        MarketAnswer EditCategoryDiscount(string categoryName, string whatToEdit, string newValue);
+        MarketAnswer RemoveCategoryDiscount(string categoryName);
         MarketAnswer ViewStoreHistory();
 	    MarketAnswer CloseStore();
 
@@ -59,10 +62,11 @@ namespace SadnaSrc.Main
         QuantityIsTooBig,
         EnumValueNotExists,
         DatesAreWrong,
-        CategoryExistsInStore,
         CategoryNotExistsInStore,
         ProductAlreadyInCategory,
         ProductNotInCategory,
+        CategoryNotExistsInSystem,
+        CategoryDiscountAlreadyExistsInStore,
         NoDB = 500
     }
     public enum DiscountStatus

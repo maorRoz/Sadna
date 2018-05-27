@@ -33,7 +33,7 @@ namespace SadnaSrc.MarketData
         private void InitiateDb()
         {
 
-            var dbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
+            var dbPath = "Data Source=.\\SQLEXPRESS;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
             //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
             //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
             _dbConnection = new SqlConnection(dbPath);
@@ -63,7 +63,8 @@ namespace SadnaSrc.MarketData
                 CreateCategoryTable(),
                 CreateCategoryProductConnectionTable(),
                 CreateConditionTable(),
-                CreateOperatorTable()
+                CreateOperatorTable(),
+                CreateCategoryDiscountTable()
             };
 
             for (var i = 0; i < createTableStrings.Length; i++)
@@ -73,6 +74,7 @@ namespace SadnaSrc.MarketData
             }
         }
 
+        
         public void InsertByForce() { 
 
             string[] thingsToInsertByForce =
@@ -529,7 +531,20 @@ namespace SadnaSrc.MarketData
                                     PRIMARY KEY([CategoryID], [ProductID])
                                     )";
         }
-
+        private string CreateCategoryDiscountTable()
+        {
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CategoryDiscount' AND xtype='U') 
+                        CREATE TABLE [CategoryDiscount] (
+                                    [SystemID]          VARCHAR(256),
+                                    [CategoryName]      VARCHAR(256),
+                                    [StoreName]         VARCHAR(256),
+                                    [StartDate]         DATETIME,
+                                    [EndDate]           DATETIME,
+                                    [DiscountAmount]    INT,
+                                    [Percentages]       VARCHAR(256),
+                                    PRIMARY KEY([SystemID])
+                                    )";
+        }
         private static string CreateConditionTable()
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SimplePolicies' AND xtype='U') 

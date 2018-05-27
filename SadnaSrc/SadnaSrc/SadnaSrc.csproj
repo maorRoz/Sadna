@@ -153,6 +153,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreCenter\AbstractStoreCenterSlave.cs" />
     <Compile Include="AdminView\AddCategorySlave.cs" />
+    <Compile Include="StoreCenter\AddCategoryDiscountSlave.cs" />
     <Compile Include="StoreCenter\AddDiscountToProductSlave.cs" />
     <Compile Include="StoreCenter\AddNewLotterySlave.cs" />
     <Compile Include="StoreCenter\AddNewProductSlave.cs" />
@@ -161,9 +162,11 @@
     <Compile Include="StoreCenter\AddProductToCategorySlave.cs" />
     <Compile Include="StoreCenter\AddQuanitityToProductSlave.cs" />
     <Compile Include="MarketHarmony\Category.cs" />
+    <Compile Include="StoreCenter\CategoryDiscount.cs" />
     <Compile Include="StoreCenter\ChangeProductPurchaseWayToImmediateSlave.cs" />
     <Compile Include="StoreCenter\ChangeProductPurchaseWayToLotterySlave.cs" />
     <Compile Include="StoreCenter\CloseStoreSlave.cs" />
+    <Compile Include="StoreCenter\EditCategoryDiscountSlave.cs" />
     <Compile Include="StoreCenter\EditDiscountSlave.cs" />
     <Compile Include="StoreCenter\EditProductSlave.cs" />
     <Compile Include="StoreCenter\EnumStringConverter.cs" />
@@ -176,6 +179,7 @@
     <Compile Include="StoreCenter\PromoteToStoreManagerSlave.cs" />
     <Compile Include="StoreCenter\PurchesPolicy.cs" />
     <Compile Include="AdminView\RemoveCategorySlave.cs" />
+    <Compile Include="StoreCenter\RemoveCategoryDiscountSlave.cs" />
     <Compile Include="StoreCenter\RemoveDiscountFromProductSlave.cs" />
     <Compile Include="StoreCenter\RemovePolicySlave.cs" />
     <Compile Include="StoreCenter\RemoveProductFromCategorySlave.cs" />
