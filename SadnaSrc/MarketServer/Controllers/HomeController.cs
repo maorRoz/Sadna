@@ -29,7 +29,7 @@ namespace MarketWeb.Controllers
         public IActionResult SubmitSignUp(int systemId,string usernameEntry,string addressEntry,
             string passwordEntry,string creditCardEntry)
         {
-            var userService = MarketServer.Users[systemId];
+            var userService = MarketServer.GetUserSession(systemId);
             var answer = userService.SignUp(usernameEntry, addressEntry, passwordEntry, creditCardEntry);
             if (answer.Status == Success)
             {
@@ -41,22 +41,18 @@ namespace MarketWeb.Controllers
 
         public IActionResult SubmitSignIn(int systemId, string usernameEntry, string passwordEntry)
         {
-            var userService = MarketServer.Users[systemId];
+            var userService = MarketServer.GetUserSession(systemId);
             var answer = userService.SignIn(usernameEntry, passwordEntry);
-            if (answer.Status == Success)
-            {
-                MarketServer.Users.Remove(systemId);
-                systemId = Convert.ToInt32(answer.ReportList[0]);
-                if (!MarketServer.Users.ContainsKey(systemId))
-                {
-                    MarketServer.Users.Add(Convert.ToInt32(systemId), userService);
-                }
+            if (answer.Status != Success)
+                return RedirectToAction("SignIn", new {systemId, state = "Guest", message = answer.Answer});
 
-                var state = answer.ReportList[1];
-                return RedirectToAction("MainLobby", new { systemId, state, message = answer.Answer });
-            }
+            var oldSystemId = systemId;
+            systemId = Convert.ToInt32(answer.ReportList[0]);
+            MarketServer.ReplaceSystemIds(systemId, oldSystemId);
 
-            return RedirectToAction("SignIn", new { systemId, state = "Guest", message = answer.Answer });
+            var state = answer.ReportList[1];
+            return RedirectToAction("MainLobby", new { systemId, state, message = answer.Answer });
+
         }
 
 

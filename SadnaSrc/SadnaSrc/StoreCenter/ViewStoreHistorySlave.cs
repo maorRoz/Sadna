@@ -1,5 +1,6 @@
 ﻿using System;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -7,18 +8,17 @@ namespace SadnaSrc.StoreCenter
     public class ViewStoreHistorySlave : AbstractStoreCenterSlave
     {
         public MarketAnswer answer;
-        private Store store;
         
         public ViewStoreHistorySlave(string _store, IUserSeller storeManager, IStoreDL storeDL) : base(_store, storeManager, storeDL)
         {
-            store = DataLayerInstance.GetStorebyName(_store);
         }
 
         public void ViewStoreHistory()
         {
-            MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store purchase history...");
             try
             {
+                Store store = DataLayerInstance.GetStorebyName(_storeName);
+                MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " attempting to view the store purchase history...");
                 checkIfStoreExistsAndActive();
                 _storeManager.CanViewPurchaseHistory();
                 var historyReport = DataLayerInstance.GetHistory(store);
@@ -35,6 +35,10 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"
                                              + _storeName + " and therefore has been denied. Error message has been created!");
                 answer = new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
         }
     }

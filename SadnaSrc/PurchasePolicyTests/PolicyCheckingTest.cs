@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
@@ -239,6 +240,7 @@ namespace PurchasePolicyTests
         {
             handler.CleanSession();
             MarketDB.Instance.CleanByForce();
+            PolicyHandler.Instance.CleanSession();
         }
 
         private void CompareArrays(string[] arr1, string[] arr2)

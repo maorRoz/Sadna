@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
 using SadnaSrc.AdminView;
+using SadnaSrc.MarketData;
 
 namespace SystemViewTests.UseCaseUnitTest
 {

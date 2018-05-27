@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.AdminView;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace SystemViewTests
 {

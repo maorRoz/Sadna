@@ -1,5 +1,6 @@
 ﻿using System;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -37,15 +38,17 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException e)
             {
-                MarketLog.Log("StoreCenter", "adding to cart failed");
                 answer = new StoreAnswer((AddProductStatus)e.Status, "There is no product or store or quantity of that type in the market." +
                                                                   " request has been denied. Error message has been created!");
             }
             catch (MarketException)
             {
-                MarketLog.Log("StoreCenter", "no premission");
                 answer = new StoreAnswer(StoreEnum.NoPermission,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
+            }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
         }
 

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.OrderPool;
 using SadnaSrc.StoreCenter;

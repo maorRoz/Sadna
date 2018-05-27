@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.PolicyComponent;
 
 namespace PurchasePolicyTests
@@ -86,7 +87,6 @@ namespace PurchasePolicyTests
         {
             MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
-
         }
 
     }

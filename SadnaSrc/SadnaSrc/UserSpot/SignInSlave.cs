@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.UserSpot
 {
@@ -29,9 +30,9 @@ namespace SadnaSrc.UserSpot
 
         public User SignIn(string name, string password)
         {
-            MarketLog.Log("UserSpot", "User " + guestID + " attempting to sign in the system...");
             try
             {
+                MarketLog.Log("UserSpot", "User " + guestID + " attempting to sign in the system...");
                 ApproveSignIn(name, password);
                 string encryptedPassword = UserSecurityService.ToEncryptPassword(_guest.SystemID,password);
                 MarketLog.Log("UserSpot", "Searching for existing user and logging in Guest "
@@ -52,6 +53,11 @@ namespace SadnaSrc.UserSpot
                     "User " + guestID + " has failed to sign in. Error message has been created!");
                 Answer = new UserAnswer((SignInStatus) e.Status, e.GetErrorMessage());
                 return _guest;
+            }
+            catch (DataException e)
+            {
+                Answer = new UserAnswer((SignInStatus)e.Status, e.GetErrorMessage());
+                return null;
             }
         }
 

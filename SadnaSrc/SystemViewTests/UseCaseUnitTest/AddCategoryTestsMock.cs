@@ -2,6 +2,7 @@
 using Moq;
 using SadnaSrc.AdminView;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SystemViewTests
@@ -10,7 +11,6 @@ namespace SystemViewTests
     public class AddCategoryTestsMock
     {
         private Mock<IAdminDL> handler;
-        private Mock<IUserSeller> userService;
         private Mock<IMarketDB> marketDbMocker;
 
 
@@ -22,7 +22,6 @@ namespace SystemViewTests
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IAdminDL>();
-            userService = new Mock<IUserSeller>();
         }
         [TestMethod]
         public void AddCategoryWhenCategoryAlreadyExists()

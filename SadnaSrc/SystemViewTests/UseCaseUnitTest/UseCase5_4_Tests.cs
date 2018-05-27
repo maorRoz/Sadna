@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.AdminView;
 using SadnaSrc.MarketHarmony;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace SystemViewTests.UseCaseUnitTest
 {

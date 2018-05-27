@@ -4,6 +4,7 @@ using SadnaSrc.StoreCenter;
 using SadnaSrc.Main;
 using System.Collections.Generic;
 using System.Linq;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace StoreCenterTests.StoreCenterDbIntegrationTests

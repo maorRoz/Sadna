@@ -23,7 +23,7 @@ namespace SadnaSrc.PolicyComponent
         }
         public override string GetMyType()
         {
-            return "NotOperator";
+            return "NOT";
         }
         public override bool Equals(object obj)
         {

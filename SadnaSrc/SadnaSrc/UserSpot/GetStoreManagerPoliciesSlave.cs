@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.UserSpot
 {
@@ -20,10 +21,10 @@ namespace SadnaSrc.UserSpot
 
 		public void GetStoreManagerPolicies(string store){
 
-			MarketLog.Log("UserSpot", "User " + userID + " attempting to view this policies in the store "+store);
 			try
 			{
-				ApproveEnetered();
+			    MarketLog.Log("UserSpot", "User " + userID + " attempting to view this policies in the store " + store);
+                ApproveEnetered();
 				MarketLog.Log("UserSpot", "User " + userID + " has successfully viewing his policies in this store...");
 				StoreManagerPolicy[] policies = _user.GetStoreManagerPolicies(store);
 				string[] stringPolicies = { "ManageProducts", "DeclareDiscountPolicy", "PromoteStoreAdmin", "ViewPurchaseHistory"};
@@ -45,11 +46,14 @@ namespace SadnaSrc.UserSpot
 			}
 			catch (UserException e)
 			{
-				MarketLog.Log("UserSpot", "User " + userID + " has failed to View his policies in the given store. Error message has been created!");
 				Answer = new UserAnswer((GetStoreManagerPoliciesStatus)e.Status, e.GetErrorMessage());
 			}
+			catch (DataException e)
+			{
+			    Answer = new UserAnswer((GetStoreManagerPoliciesStatus)e.Status, e.GetErrorMessage());
+			}
 
-		}
+        }
 
 		public void ApproveEnetered()
 		{

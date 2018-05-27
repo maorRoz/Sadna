@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketData;
 
 namespace IntegrationTests.FullCycle_Integration
 {
@@ -64,22 +65,6 @@ namespace IntegrationTests.FullCycle_Integration
             Assert.AreEqual(1, tickets.Count);
             LotteryTicket ticket = tickets.First();
             Assert.AreEqual(LotteryTicketStatus.Winning, ticket.myStatus);
-        }
-        [TestMethod]
-        public void LotteryEndToEndCancelLotto()
-        {
-            
-            orderService = market.GetOrderService(ref otherUser);
-            ((OrderService)orderService).LoginBuyer("Arik3", "123");
-            orderService.BuyLotteryTicket("name", "T", 1, 50);
-            tickets = handler.GetAllTickets("L100");
-            Assert.AreEqual(1, tickets.Count);
-            LotteryTicket ticket = tickets.First();
-            Assert.AreEqual(LotteryTicketStatus.Waiting, ticket.myStatus);
-            managementService.ChangeProductPurchaseWayToImmediate("name");
-            LinkedList<LotteryTicket> noLotterys = handler.GetAllTickets("L100");
-            Assert.AreEqual(0, noLotterys.Count);
-            
         }
         [TestMethod]
         public void LotteryEndToEndPurchesIlligalValueZeroMouney()

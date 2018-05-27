@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -14,7 +15,7 @@ namespace SadnaSrc.StoreCenter
         public void AddProductToCategory(string categoryName, string productName)
         {
              try
-            {
+             {
                 MarketLog.Log("StoreCenter", "trying to add product to category to in the store");
                 MarketLog.Log("StoreCenter", "check if store exists");
                 checkIfStoreExistsAndActive();
@@ -34,15 +35,19 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "Product not alrady exists in category");
                 DataLayerInstance.AddProductToCategory(category.SystemId, P.SystemId);
                 Answer = new StoreAnswer(StoreEnum.Success, "product" + productName + " add successfully to category" + categoryName);
-            }
+             }
             catch (StoreException e)
-            {
+             {
                 Answer = new StoreAnswer((StoreEnum)e.Status,e.GetErrorMessage());
-            }
+             }
             catch (MarketException)
-            {
+             {
                 Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
-            }
+             }
+            catch (DataException e)
+             {
+                Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+             }
         }
 
         private void CheckifProductNotInCategory(Product P, string categoryID)

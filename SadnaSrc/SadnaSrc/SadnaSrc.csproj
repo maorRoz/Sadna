@@ -82,7 +82,8 @@
     <Compile Include="AdminView\AdminDL.cs" />
     <Compile Include="AdminView\AdminException.cs" />
     <Compile Include="AdminView\ViewPoliciesSlave.cs" />
-    <Compile Include="Main\IMarketDB.cs" />
+    <Compile Include="MarketData\DataException.cs" />
+    <Compile Include="MarketData\IMarketDB.cs" />
     <Compile Include="Main\IOrderService.cs" />
     <Compile Include="Main\IPaymentService.cs" />
     <Compile Include="Main\IStoreManagementService.cs" />
@@ -94,7 +95,8 @@
     <Compile Include="Main\MarketMistakeService.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Main\MarketAnswer.cs" />
-    <Compile Include="Main\MarketDB.cs" />
+    <Compile Include="MarketData\MarketDB.cs" />
+    <Compile Include="MarketData\ProxyMarketDB.cs" />
     <Compile Include="MarketFeed\FeedDL.cs" />
     <Compile Include="MarketFeed\FeedObserver.cs" />
     <Compile Include="MarketFeed\IFeedQueue.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="StoreCenter\AddDiscountToProductSlave.cs" />
     <Compile Include="StoreCenter\AddNewLotterySlave.cs" />
     <Compile Include="StoreCenter\AddNewProductSlave.cs" />
+    <Compile Include="StoreCenter\AddPolicySlave.cs" />
     <Compile Include="StoreCenter\AddProductToCartSlave.cs" />
     <Compile Include="StoreCenter\AddProductToCategorySlave.cs" />
     <Compile Include="StoreCenter\AddQuanitityToProductSlave.cs" />
@@ -174,6 +177,7 @@
     <Compile Include="StoreCenter\PurchesPolicy.cs" />
     <Compile Include="AdminView\RemoveCategorySlave.cs" />
     <Compile Include="StoreCenter\RemoveDiscountFromProductSlave.cs" />
+    <Compile Include="StoreCenter\RemovePolicySlave.cs" />
     <Compile Include="StoreCenter\RemoveProductFromCategorySlave.cs" />
     <Compile Include="StoreCenter\RemoveProductSlave.cs" />
     <Compile Include="StoreCenter\StockListItem.cs" />
@@ -184,9 +188,9 @@
     <Compile Include="StoreCenter\StoreException.cs" />
     <Compile Include="StoreCenter\StoreManagementService.cs" />
     <Compile Include="StoreCenter\StoreShoppingService.cs" />
+    <Compile Include="StoreCenter\ViewPoliciesSlave.cs" />
     <Compile Include="StoreCenter\ViewStoreHistorySlave.cs" />
     <Compile Include="StoreCenter\ViewStoreInfoSlave.cs" />
-    <Compile Include="UserSpot\ViewStoreNamesSlave.cs" />
     <Compile Include="StoreCenter\ViewStoreStockSlave.cs" />
     <Compile Include="SupplyPoint\SupplyAnswer.cs" />
     <Compile Include="SupplyPoint\SupplyException.cs" />

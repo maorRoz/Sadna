@@ -1,5 +1,6 @@
 ﻿using System;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -40,7 +41,11 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "no premission");
                 answer = new StoreAnswer(ViewStoreStatus.InvalidUser,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
-            } 
+            }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
         }
         private void CheckIfStoreInfoIsNotNull(object item)
         {

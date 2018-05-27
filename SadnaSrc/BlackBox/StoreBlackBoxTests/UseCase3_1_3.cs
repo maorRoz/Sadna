@@ -1,6 +1,7 @@
 using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace BlackBox.StoreBlackBoxTests
 

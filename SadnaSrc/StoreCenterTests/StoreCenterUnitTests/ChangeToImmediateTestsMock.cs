@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using Moq;
 using System.Threading.Tasks;
+using SadnaSrc.MarketData;
 
 namespace StoreCenterTests.StoreCenterUnitTests
 {

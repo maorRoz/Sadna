@@ -13,6 +13,11 @@ namespace SadnaSrc.UserSpot
         {
 
         }
+
+        public UserAnswer(EnterSystemStatus status, string answer) : base((int) status, answer)
+        {
+
+        }
         public UserAnswer(SignUpStatus status, string answer) : base((int) status,answer)
         {
 
@@ -74,12 +79,12 @@ namespace SadnaSrc.UserSpot
         {
 
         }
-        public UserAnswer(GetUserDetails status, string answer, string[] usersNames) : base((int)status, answer, usersNames)
+        public UserAnswer(GetUserDetailsStatus status, string answer, string[] usersNames) : base((int)status, answer, usersNames)
         {
 
         }
 
-        public UserAnswer(GetUserDetails status, string answer) : base((int)status, answer)
+        public UserAnswer(GetUserDetailsStatus status, string answer) : base((int)status, answer)
         {
 
         }

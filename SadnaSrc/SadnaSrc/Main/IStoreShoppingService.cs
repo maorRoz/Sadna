@@ -16,7 +16,7 @@ namespace SadnaSrc.Main
 
         MarketAnswer ViewStoreStock(string store);
 
-	    MarketAnswer ViewStoreStockAll(string storename);
+	    MarketAnswer ViewStoreStockAll(string store);
 
 
 		MarketAnswer AddProductToCart(string store, string productName, int quantity);
@@ -27,14 +27,17 @@ namespace SadnaSrc.Main
     {
         Success,
         AlreadyExist,
-        InvalidUser
+        InvalidUser,
+        NoDB = 500
+
     }
 
     public enum ViewStoreStatus
     {
         Success,
         NoStore,
-        InvalidUser
+        InvalidUser,
+        NoDB = 500
     }
 
     public enum AddProductStatus
@@ -42,17 +45,8 @@ namespace SadnaSrc.Main
         Success,
         NoStore,
         InvalidUser,
-        NoProduct
-    }
-
-    public enum AddLotteryTicketStatus
-    {
-        Success,
-        NoStore,
-        InvalidUser,
-        NoTicket,
-        TooHighSuggestion,
-        TooLowSuggestion
+        NoProduct,
+        NoDB = 500
     }
    
 }

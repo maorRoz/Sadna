@@ -1,5 +1,6 @@
-﻿using System;
+﻿
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -7,19 +8,17 @@ namespace SadnaSrc.StoreCenter
     public class AddNewProductSlave : AbstractStoreCenterSlave
     {
         public MarketAnswer answer;
-        private Store _store;
         public AddNewProductSlave(IUserSeller storeManager, string storeName, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
-            _store = DataLayerInstance.GetStorebyName(_storeName);
         }
 
         public StockListItem AddNewProduct(string _name, double _price, string _description, int quantity)
         {
 
-            MarketLog.Log("StoreCenter", "trying to add product to store");
-            MarketLog.Log("StoreCenter", "check if store exists");
             try
             {
+                Store store = DataLayerInstance.GetStorebyName(_storeName);
+                MarketLog.Log("StoreCenter", "trying to add product to store");
                 checkIfStoreExistsAndActive();
                 MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to add products");
@@ -32,23 +31,25 @@ namespace SadnaSrc.StoreCenter
                 CheckQuantityIsOK(quantity);
                 MarketLog.Log("StoreCenter", " quanitity is positive");
                 Product product = new Product(_name, _price, _description);
-                StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, _store.SystemId);
+                StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, store.SystemId);
                 DataLayerInstance.AddStockListItemToDataBase(stockListItem);
                 MarketLog.Log("StoreCenter", "product added");
                 answer = new StoreAnswer(StoreEnum.Success, "product added");
                 return stockListItem;
             }
-            catch (StoreException exe)
+            catch (StoreException e)
             {
-                answer = new StoreAnswer((StoreEnum)(exe.Status),"Product was not added!");
-                return null;
+                answer = new StoreAnswer((StoreEnum)e.Status,"Product was not added!");
             }
             catch (MarketException)
             {
-                MarketLog.Log("StoreCenter", "no premission");
                 answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
-                return null;
             }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
+            return null;
         }
 
         private void CheckIfProductNameAvailable(string name)

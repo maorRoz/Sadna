@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -49,6 +50,10 @@ namespace SadnaSrc.StoreCenter
             catch (MarketException)
             {
                 Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
+            }
+            catch (DataException e)
+            {
+                Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
         }
 

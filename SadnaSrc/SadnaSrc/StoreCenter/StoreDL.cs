@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -14,11 +15,11 @@ namespace SadnaSrc.StoreCenter
 
         public static StoreDL Instance => _instance ?? (_instance = new StoreDL());
 
-        private MarketDB dbConnection;
+        private IMarketDB dbConnection;
 
         private StoreDL()
         {
-            dbConnection = MarketDB.Instance;
+            dbConnection = new ProxyMarketDB();
         }
 
         public string[] GetAllStoresIDs()

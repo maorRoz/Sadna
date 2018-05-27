@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.Main
 {
     public static class MarketLog
     {
         private static readonly Random random = new Random();
-        private static IMarketDB _dbConnection = MarketDB.Instance;
+        private static IMarketDB _dbConnection = new ProxyMarketDB();
 
 
         public static void SetDB(IMarketDB dbConnection)
@@ -18,26 +22,40 @@ namespace SadnaSrc.Main
         }
         public static void Log(string moduleName, string description)
         {
-            string logId = GenerateLogID();
-            while (!InsertLog(logId, moduleName, description))
+            var allLogIds = GetAllLogsIds();
+            var logId = GenerateLogID();
+            while (allLogIds.Contains(logId))
             {
                 logId = GenerateLogID();
             }
+
+            InsertLog(logId,moduleName,description);
         }
 
-        private static bool InsertLog(string logID, string moduleName, string description)
+        private static void InsertLog(string logID, string moduleName, string description)
         {
-            try
-            {
-                _dbConnection.InsertTable("System_Log", "LogID,LogDate,ModuleName,Description",
-                    new[] {"@idValue", "@dateValue", "@moduleParam", "@descriptionParam"},
-                    new object[] {logID, DateTime.Now, moduleName, description});
-                return true;
-            }
-            catch (MarketException)
-            {
-                return false;
-            }
+            _dbConnection.InsertTable("System_Log", "LogID,LogDate,ModuleName,Description",
+                new[] {"@idValue", "@dateValue", "@moduleParam", "@descriptionParam"},
+                new object[] {logID, DateTime.Now, moduleName, description});
+
         }
+
+        private static string[] GetAllLogsIds()
+        {
+            var ids = new List<string>();
+            using (var dbReader = _dbConnection.SelectFromTable("System_Log", "LogID"))
+            {
+                while (dbReader != null && dbReader.Read())
+                {
+                    if (dbReader.GetValue(0) != null)
+                    {
+                        ids.Add(dbReader.GetString(0));
+                    }
+                }
+            }
+
+            return ids.ToArray();
+        }
+
     }
 }

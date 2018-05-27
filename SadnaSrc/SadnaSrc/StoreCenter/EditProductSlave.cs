@@ -1,6 +1,7 @@
 ﻿using System;
 using Castle.Core.Internal;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
@@ -17,11 +18,10 @@ namespace SadnaSrc.StoreCenter
         public void EditProduct(string productName, string whatToEdit, string newValue)
         {
 
-            MarketLog.Log("StoreCenter", "trying to edit product in store");
-            MarketLog.Log("StoreCenter", "check if store exists");
             
             try
             {
+                MarketLog.Log("StoreCenter", "trying to edit product in store");
                 checkIfStoreExistsAndActive();
                 MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
@@ -44,6 +44,10 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("StoreCenter", "no premission");
                 answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
+            }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
         }
 

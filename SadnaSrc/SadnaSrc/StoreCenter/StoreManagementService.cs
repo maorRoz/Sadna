@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -14,8 +15,7 @@ namespace SadnaSrc.StoreCenter
     public class StoreManagementService : IStoreManagementService
     {
 
-        public Store store;
-        StockSyncher global;
+
         private readonly IUserSeller _storeManager;
         public string _storeName;
         private IOrderSyncher syncher;
@@ -26,8 +26,6 @@ namespace SadnaSrc.StoreCenter
         {
             _storeManager = storeManager;
             _storeName = storeName;
-            global = StockSyncher.Instance;
-            store = global.DataLayer.GetStorebyName(storeName);
             stockListItemToRemove = new LinkedList<StockListItem>();
             discountsToRemvoe = new LinkedList<Discount>();
             storeDL = StoreDL.Instance;
@@ -141,6 +139,29 @@ namespace SadnaSrc.StoreCenter
             RemoveProductFromCategorySlave slave = new RemoveProductFromCategorySlave(_storeName, _storeManager, storeDL);
             slave.RemoveProductFromCategory(categoryName,productName);
             return slave.Answer;
+        }
+
+        public MarketAnswer CreatePolicy(string type, string subject,string optSubject, string op, string arg1, string optArg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MarketAnswer SavePolicy()
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public MarketAnswer ViewPolicies()
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public MarketAnswer RemovePolicy(string type, string subject)
+        {
+            throw new NotImplementedException();
+
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.UserSpot
 {
@@ -24,19 +25,25 @@ namespace SadnaSrc.UserSpot
         }
         public void EditCartItem(string store, string product, int quantity,double unitPrice)
         {
-            MarketLog.Log("UserSpot", "User " + userID + " attempting to edit his cart item: " + product + " from store: " + store + " ...");
             try
             {
+                MarketLog.Log("UserSpot", "User " + userID + " attempting to edit his cart item: " + product + " from store: " + store + " ...");
                 CartItem toEdit = ApproveModifyCart(store, product, unitPrice);
-                MarketLog.Log("UserSpot", "User " + userID + " found cart item: " + product + " from store: " + store + ". proceeding for the edit...");
+                MarketLog.Log("UserSpot",
+                    "User " + userID + " found cart item: " + product + " from store: " + store +
+                    ". proceeding for the edit...");
                 _user.Cart.EditCartItem(toEdit, quantity);
-                MarketLog.Log("UserSpot", "User " + userID + "successfully edited cart item: " + product + " from store: " + store + " ...");
+                MarketLog.Log("UserSpot",
+                    "User " + userID + "successfully edited cart item: " + product + " from store: " + store + " ...");
                 Answer = new UserAnswer(EditCartItemStatus.Success, "Edit Cart Item has been successful!");
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + userID + " has failed to Edit Cart Item. Error message has been created!");
-                Answer = new UserAnswer((EditCartItemStatus)e.Status, e.GetErrorMessage());
+                Answer = new UserAnswer((EditCartItemStatus) e.Status, e.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
+                Answer = new UserAnswer((EditCartItemStatus)e.Status,e.GetErrorMessage());
             }
 
         }

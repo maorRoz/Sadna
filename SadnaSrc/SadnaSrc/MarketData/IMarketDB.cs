@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 
-namespace SadnaSrc.Main
+namespace SadnaSrc.MarketData
 {
     public interface IMarketDB
     {
@@ -23,6 +18,8 @@ namespace SadnaSrc.Main
          void DeleteFromTable(string table, string deleteCondition);
 
         SqlDataReader freeStyleSelect(string cmd);
+
+        bool IsConnected();
 
     }
 }

@@ -2,6 +2,7 @@
 using BlackBox;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.SupplyPoint;
 using SadnaSrc.Walleter;
 

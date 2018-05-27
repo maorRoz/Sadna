@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.Main
 {
@@ -19,7 +20,7 @@ namespace SadnaSrc.Main
         private string errorMessage;
         public int  Status { get; }
 
-        private static IMarketDB _dbConnection = MarketDB.Instance;
+        private static IMarketDB _dbConnection = new ProxyMarketDB();
 
 
         public static void SetDB(IMarketDB dbConnection)
@@ -41,17 +42,40 @@ namespace SadnaSrc.Main
 
         private void InitiateException(string moduleName,string message)
         {
-            string errorID = GenerateErrorID();
-            InsertError(errorID, moduleName,message);
+            var allErrorIds = GetAllErrorsIds();
+            var errorId = GenerateErrorID();
+            while (allErrorIds.Contains(errorId))
+            {
+                errorId = GenerateErrorID();
+            }
+
+            InsertError(errorId, moduleName, message);
             errorMessage = message;
-            publishedErrorIDs.Add(errorID);
+            publishedErrorIDs.Add(errorId);
         }
 
         private void InsertError(string errorID,string moduleName,string message)
         {
-            _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description", 
-                new[] { "@idParam", "@moduleParam", "@descriptionParam" }, 
-                new object []{errorID , moduleName, message });
+                _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description",
+                    new[] {"@idParam", "@moduleParam", "@descriptionParam"},
+                    new object[] {errorID, moduleName, message});
+        }
+
+        private static string[] GetAllErrorsIds()
+        {
+            var ids = new List<string>();
+            using (var dbReader = _dbConnection.SelectFromTable("System_Errors", "ErrorID"))
+            {
+                while (dbReader != null && dbReader.Read() )
+                {
+                    if (dbReader.GetValue(0) != null)
+                    {
+                        ids.Add(dbReader.GetString(0));
+                    }
+                }
+            }
+
+            return ids.ToArray();
         }
 
         private static string GenerateErrorID()
