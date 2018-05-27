@@ -11,20 +11,33 @@ namespace SadnaSrc.MarketData
         private static MarketDB _instance;
 
         public static MarketDB Instance => _instance ?? (_instance = new MarketDB());
-
+        public static bool ToDisable;
+        
         private SqlConnection _dbConnection;
         private MarketDB()
         {
-            InitiateDb();
-            CreateTables();
+            if (ToDisable)
+            {
+                _dbConnection = new SqlConnection();
+                return;
+            }
+            try
+            {
+                InitiateDb();
+                CreateTables();
+            }
+            catch(SqlException)
+            {
+            }
         }
         private void InitiateDb()
         {
+
             var dbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
-          //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
-          //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
+            //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
+            //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
             _dbConnection = new SqlConnection(dbPath);
-             _dbConnection.Open();
+            OpenIfClosed();
         }
 
         private void CreateTables()
@@ -181,17 +194,21 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik3','STR Potion','Y','Immediate',1,4.0,'2018-12-29')",
                 "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Vadim Chernov','Goldstar','The Red Rock','Immediate',1,11.00,'2018-12-29')",
             };
-
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
-                var insertCommand = new SqlCommand(thingsToInsertByForce[i], _dbConnection);
+                var insertCommand = new SqlCommand(thingsToInsertByForce[i], dbConnection);
                 try
                 {
                     insertCommand.ExecuteNonQuery();
                 }
                 catch (SqlException)
                 {
-                    if (_dbConnection.State != ConnectionState.Open)
+                    if (dbConnection.State != ConnectionState.Open)
                     {
                         throw;
                     }
@@ -237,6 +254,10 @@ namespace SadnaSrc.MarketData
                         throw;
                     }
                 }
+                catch (InvalidOperationException)
+                {
+                    //dont care
+                }
             }
         }
 
@@ -262,13 +283,17 @@ namespace SadnaSrc.MarketData
                 "Notifications",
                 "Category",
                 "CategoryProductConnection",
-                "conditions",
-                "Operator"
+                "SimplePolicies",
+                "ComplexPolicies"
             };
-
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             for (int i = 0; i < tableNames.Length; i++)
             {
-                var deleateTableCommand = new SqlCommand("Delete FROM " +tableNames[i], _dbConnection);
+                var deleateTableCommand = new SqlCommand("Delete FROM " +tableNames[i], dbConnection);
                 deleateTableCommand.ExecuteNonQuery();
             }
         }
@@ -507,36 +532,41 @@ namespace SadnaSrc.MarketData
 
         private static string CreateConditionTable()
         {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='conditions' AND xtype='U') 
-                        CREATE TABLE [conditions] (
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SimplePolicies' AND xtype='U') 
+                        CREATE TABLE [SimplePolicies] (
                                     [SystemID]              INT,
-                                    [conditionsType]        VARCHAR(256),
+                                    [Condition]             VARCHAR(256),
                                     [PolicyType]            VARCHAR(256),
                                     [Subject]               VARCHAR(256),
-                                    [value]                 VARCHAR(256),
-                                    [isRoot]                VARCHAR(256),
-                                    PRIMARY KEY([SystemID])
+                                    [Value]                 VARCHAR(256),
+                                    [Root]                  VARCHAR(256),
+                                    PRIMARY KEY([SystemID], [PolicyType], [Subject])
                                     )";
         }
         private static string CreateOperatorTable()
         {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Operator' AND xtype='U') 
-                        CREATE TABLE [Operator] (
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='ComplexPolicies' AND xtype='U') 
+                        CREATE TABLE [ComplexPolicies] (
                                     [SystemID]               INT,
-                                    [OperatorType]           VARCHAR(256),
+                                    [Operator]           VARCHAR(256),
                                     [PolicyType]             VARCHAR(256),
                                     [Subject]                VARCHAR(256),
-                                    [COND1ID]                INT,
-                                    [COND2ID]                INT,
-                                    [isRoot]                 VARCHAR(256),
-                                    PRIMARY KEY([SystemID])
+                                    [Cond1]                  INT,
+                                    [Cond2]                  INT,
+                                    [Root]                   VARCHAR(256),
+                                    PRIMARY KEY([SystemID],[PolicyType],[Subject])
                                     )";
         }
         public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
         {
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var insertRequest = "INSERT INTO "+table+" ("+ tableColumns + ") VALUES ("+ string.Join(",", valuesNames)
                                 + ")";
-            var commandDb = new SqlCommand(insertRequest, _dbConnection);
+            var commandDb = new SqlCommand(insertRequest, dbConnection);
             for (int i = 0; i < values.Length;i++)
             {
                 commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
@@ -548,30 +578,48 @@ namespace SadnaSrc.MarketData
 
         public SqlDataReader SelectFromTable(string table, string toSelect)
         {
+            OpenIfClosed();
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var selectRequest = "SELECT " + toSelect + " FROM " + table ;
 
-            return new SqlCommand(selectRequest, _dbConnection).ExecuteReader();
+            return new SqlCommand(selectRequest, dbConnection).ExecuteReader();
 
         }
 
         public SqlDataReader SelectFromTableWithCondition(string table, string toSelect, string condition)
         {
+            OpenIfClosed();
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var selectRequest = "SELECT " + toSelect + " FROM " + table + " WHERE "+condition;
 
-            return new SqlCommand(selectRequest, _dbConnection).ExecuteReader();
+            return new SqlCommand(selectRequest, dbConnection).ExecuteReader();
 
         }
 
         public void UpdateTable(string table,string updateCondition,string[] columnNames, string[] valuesNames, object[] values)
         {
+            OpenIfClosed();
             string [] setString = new string[values.Length];
             for (int i = 0; i < setString.Length; i++)
             {
                 setString[i] = columnNames[i] + " = " + valuesNames[i];
             }
 
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var updateCommand = "UPDATE " + table + " SET " + string.Join(", ", setString) + " WHERE " + updateCondition;
-            var commandDb = new SqlCommand(updateCommand, _dbConnection);
+            var commandDb = new SqlCommand(updateCommand, dbConnection);
             for (int i = 0; i < values.Length; i++)
             {
                 commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
@@ -583,8 +631,14 @@ namespace SadnaSrc.MarketData
 
         public void DeleteFromTable(string table,string deleteCondition)
         {
+            OpenIfClosed();
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
             var deleteCommand = "DELETE FROM " + table + " WHERE " + deleteCondition;
-            var commandDb = new SqlCommand(deleteCommand, _dbConnection);
+            var commandDb = new SqlCommand(deleteCommand, dbConnection);
 
             commandDb.ExecuteNonQuery();
 
@@ -592,12 +646,26 @@ namespace SadnaSrc.MarketData
 
         public SqlDataReader freeStyleSelect(string cmd)
         {
-            return new SqlCommand(cmd, _dbConnection).ExecuteReader();
+            OpenIfClosed();
+            var dbConnection = _dbConnection;
+            if (ToDisable)
+            {
+                dbConnection = new SqlConnection();
+            }
+            return new SqlCommand(cmd, dbConnection).ExecuteReader();
         }
 
         public bool IsConnected()
         {
             return _dbConnection.State == ConnectionState.Open;
+        }
+
+        private void OpenIfClosed()
+        {
+            if (_dbConnection.State == ConnectionState.Closed)
+            {
+                _dbConnection.Open();
+            }
         }
     } 
 }

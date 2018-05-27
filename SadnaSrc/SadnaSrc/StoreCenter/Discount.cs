@@ -61,7 +61,6 @@ namespace SadnaSrc.StoreCenter
         }
         public override string ToString()
         {
-            StockSyncher handler = StockSyncher.Instance;
             if (EnumStringConverter.PrintEnum(discountType) == EnumStringConverter.PrintEnum(DiscountTypeEnum.Hidden))
                 return "type is: hidden";
             if (Percentages)
@@ -76,7 +75,7 @@ namespace SadnaSrc.StoreCenter
 
         internal bool CheckTime()
         {
-            return ((startDate.Date <= MarketYard.MarketDate) && (MarketYard.MarketDate <= EndDate.Date));
+            return startDate.Date <= MarketYard.MarketDate && MarketYard.MarketDate <= EndDate.Date;
         }
 
         public override int GetHashCode()

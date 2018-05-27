@@ -102,7 +102,7 @@ namespace SadnaSrc.Main
 		DidntEnterSystem,
 	    NoDB = 500
     }
-    public enum GetUserDetails
+    public enum GetUserDetailsStatus
     {
         Success,
         DidntEnterSystem,

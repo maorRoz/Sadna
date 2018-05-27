@@ -188,6 +188,7 @@ namespace PurchasePolicyTests
         {
             handler.CleanSession();
             MarketDB.Instance.CleanByForce();
+            PolicyHandler.Instance.CleanSession();
         }
 
         private void CompareArrays(string[] arr1, string[] arr2)

@@ -24,25 +24,23 @@ namespace SadnaSrc.UserSpot
 
         public void GetUserDetails()
         {
-            MarketLog.Log("UserSpot", "User " + userID + " attempting to view his own details...");
             try
             {
+                MarketLog.Log("UserSpot", "User " + userID + " attempting to view his own details...");
                 ApproveEnetered();
                 var userDetails = ExtractDetails();
                 MarketLog.Log("UserSpot", "User " + userID + " has successfully retrieved all his own user details...");
 
-                Answer = new UserAnswer(GetControlledStoresStatus.Success, "Data of user details has been granted successfully!",
+                Answer = new UserAnswer(GetUserDetailsStatus.Success, "Data of user details has been granted successfully!",
                     userDetails);
             }
             catch (UserException e)
             {
-                MarketLog.Log("UserSpot", "User " + userID + " has failed to retrieve his user details." +
-                                          " Error message has been created!");
-                Answer = new UserAnswer((GetControlledStoresStatus)e.Status, e.GetErrorMessage());
+                Answer = new UserAnswer((GetUserDetailsStatus)e.Status, e.GetErrorMessage());
             }
             catch (DataException e)
             {
-                Answer = new UserAnswer((GetControlledStoresStatus)e.Status, e.GetErrorMessage());
+                Answer = new UserAnswer((GetUserDetailsStatus)e.Status, e.GetErrorMessage());
             }
         }
 

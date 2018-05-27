@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.Main;
+using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
@@ -29,10 +30,10 @@ namespace SadnaSrc.AdminView
 
         public void RemoveUser(string userName)
         {
-            MarketLog.Log("AdminView", "System Admin " + adminSystemID +
-                                      " attempting to execute remove user operation on User " + userName + "...");
             try
             {
+                MarketLog.Log("AdminView", "System Admin " + adminSystemID +
+                                           " attempting to execute remove user operation on User " + userName + "...");
                 _admin.ValidateSystemAdmin();
                 ApproveNotSelfTermination(userName);
                 ValidateUserExist(userName);
@@ -53,23 +54,17 @@ namespace SadnaSrc.AdminView
             }
             catch (AdminException e)
             {
-                MarketLog.Log("AdminView", "System Admin " + adminSystemID + " has failed to remove User " +
-                                           adminSystemID +
-                                           ". Error message has been created!");
-                Answer = new AdminAnswer((RemoveUserStatus)e.Status, e.GetErrorMessage());
+                Answer = new AdminAnswer((RemoveUserStatus) e.Status, e.GetErrorMessage());
             }
             catch (MarketException e)
             {
-                MarketLog.Log("AdminView", "User " + adminSystemID + " tried to preform user removal not as system admin" +
-                                           " and has been blocked. Error message has been created!");
                 Answer = new AdminAnswer(RemoveUserStatus.NotSystemAdmin, e.GetErrorMessage());
             }
+            catch (DataException e)
+            {
+                Answer = new AdminAnswer((RemoveUserStatus)e.Status, e.GetErrorMessage());
+            }
         }
-
-		public void ViewUsers()
-		{
-
-		}
 
         private void ApproveNotSelfTermination(string userName)
         {

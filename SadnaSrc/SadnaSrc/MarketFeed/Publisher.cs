@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using SadnaSrc.Main;
+﻿using System.Collections.Generic;
 
 namespace SadnaSrc.MarketFeed
 {

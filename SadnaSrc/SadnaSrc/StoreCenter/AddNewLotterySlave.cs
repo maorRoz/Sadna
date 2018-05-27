@@ -9,17 +9,16 @@ namespace SadnaSrc.StoreCenter
     public class AddNewLotterySlave : AbstractStoreCenterSlave
     {
         public MarketAnswer answer;
-        private readonly Store store;
 
         public AddNewLotterySlave(string storeName, IUserSeller storeManager,IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
-            store = DataLayerInstance.GetStorebyName(storeName);
         }
 
         public StockListItem AddNewLottery(string name, double price, string description, DateTime startDate, DateTime endDate)
         {
             try
             {
+                Store store = DataLayerInstance.GetStorebyName(_storeName);
                 MarketLog.Log("StoreCenter", "trying to add product to store");
                 checkIfStoreExistsAndActive();
                 MarketLog.Log("StoreCenter", " check if has premmision to add products");

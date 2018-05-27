@@ -11,8 +11,6 @@ namespace SadnaSrc.UserSpot
 
         public static UserDL Instance => _instance ?? (_instance = new UserDL());
 
-        private static List<int> userIDs = new List<int>();
-
         private readonly IMarketDB dbConnection;
 
         private UserDL()
@@ -127,12 +125,8 @@ namespace SadnaSrc.UserSpot
         }
         public virtual void SaveUser(User user)
         {
-            //    dbConnection.InsertTable("Users", "SystemID,Name,Address,Password,CreditCard",
-            //        new [] { "@idParam", "@nameParam", "@addressParam", "@passParam","@creditParam" }, new object[]{user.SystemID});
             dbConnection.InsertTable("Users", "SystemID",
-                    new [] {"@idParam"}, new object[]{user.SystemID});
-                userIDs.Add(user.SystemID);
-           
+                    new [] {"@idParam"}, new object[]{user.SystemID});         
         }
 
         public string[] UserNamesInSystem()
@@ -173,7 +167,6 @@ namespace SadnaSrc.UserSpot
             var loadedPassword = (string)userData[3];
             var loadedCreditCard = (string)userData[4];
             SaveCartItem(loadedID, guestCart);
-            userIDs.Add(loadedID);
             return new RegisteredUser(this,loadedID, loadedName, loadedAddress, loadedPassword, loadedCreditCard, 
                 LoadCartItems(loadedID), LoadUserStatePolicy(loadedID), LoadUserStorePolicies(loadedID));
         }

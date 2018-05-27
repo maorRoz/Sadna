@@ -20,7 +20,7 @@
                 }
             </div>
             @using (Html.BeginForm("MakeImmediateBuy", "Purchase", new { Model.SystemId, Model.State,
-                Model.Product,Model.Store,Model.Quantity,Model.UnitPrice }))
+                Model.Product,Model.Store,Model.Quantity,Model.UnitPrice,Model.FinalPrice }))
             {
                 <label for="user-name-entry">Username:</label>
                 <input type="text" class="form-control" id="user-name-entry" name="usernameEntry" value="@Model.UserName" />
