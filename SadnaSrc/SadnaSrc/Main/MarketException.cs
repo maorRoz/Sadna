@@ -42,28 +42,40 @@ namespace SadnaSrc.Main
 
         private void InitiateException(string moduleName,string message)
         {
-            var errorID = GenerateErrorID();
-            while (!InsertError(errorID, moduleName, message))
+            var allErrorIds = GetAllErrorsIds();
+            var errorId = GenerateErrorID();
+            while (allErrorIds.Contains(errorId))
             {
-                errorID = GenerateErrorID();
+                errorId = GenerateErrorID();
             }
+
+            InsertError(errorId, moduleName, message);
             errorMessage = message;
-            publishedErrorIDs.Add(errorID);
+            publishedErrorIDs.Add(errorId);
         }
 
-        private bool InsertError(string errorID,string moduleName,string message)
+        private void InsertError(string errorID,string moduleName,string message)
         {
-            try
-            {
                 _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description",
                     new[] {"@idParam", "@moduleParam", "@descriptionParam"},
                     new object[] {errorID, moduleName, message});
-                return true;
-            }
-            catch (SqlException)
+        }
+
+        private static string[] GetAllErrorsIds()
+        {
+            var ids = new List<string>();
+            using (var dbReader = _dbConnection.SelectFromTable("System_Errors", "ErrorID"))
             {
-                return false;
+                while (dbReader != null && dbReader.Read() )
+                {
+                    if (dbReader.GetValue(0) != null)
+                    {
+                        ids.Add(dbReader.GetString(0));
+                    }
+                }
             }
+
+            return ids.ToArray();
         }
 
         private static string GenerateErrorID()

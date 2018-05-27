@@ -87,7 +87,7 @@ namespace DbRobustnessTests
         public void GetAllStoresNoDBTest()
         {
             LoginUser();
-            answer = userService.GetControlledStoreNames();
+            answer = userService.GetAllStores();
             Assert.AreEqual((int)ViewStoresStatus.NoDB, answer.Status);
         }
 

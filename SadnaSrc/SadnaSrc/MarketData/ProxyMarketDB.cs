@@ -14,9 +14,16 @@ namespace SadnaSrc.MarketData
             {
                 realMarketDB = MarketDB.Instance;
             }
-            catch (SqlException)
+            catch (InvalidOperationException e)
             {
-                if (realMarketDB.IsConnected() || !MarketDB.ToDisable)
+                if (!IsConnected(e.Message) || !MarketDB.ToDisable)
+                {
+                    throw;
+                }
+            }
+            catch (SqlException e)
+            {
+                if (IsConnected(e.Message) || !MarketDB.ToDisable)
                 {
                     throw;
                 }
@@ -30,9 +37,18 @@ namespace SadnaSrc.MarketData
             {
                 realMarketDB.InsertTable(table, tableColumns, valuesNames, values);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e )
             {
-                if (!realMarketDB.IsConnected() || MarketDB.ToDisable)
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
+                {
+                    throw new DataException();
+                }
+
+                throw;
+            }
+            catch (SqlException e)
+            {
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
                 {
                     throw new DataException();
                 }
@@ -47,9 +63,18 @@ namespace SadnaSrc.MarketData
             {
                 return realMarketDB.SelectFromTable(table, toSelect);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
-                if (!realMarketDB.IsConnected() || MarketDB.ToDisable)
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
+                {
+                    throw new DataException();
+                }
+
+                throw;
+            }
+            catch (SqlException e)
+            {
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
                 {
                     throw new DataException();
                 }
@@ -64,9 +89,18 @@ namespace SadnaSrc.MarketData
             {
                 return realMarketDB.SelectFromTableWithCondition(table, toSelect, condition);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
-                if (!realMarketDB.IsConnected() || MarketDB.ToDisable)
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
+                {
+                    throw new DataException();
+                }
+
+                throw;
+            }
+            catch (SqlException e)
+            {
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
                 {
                     throw new DataException();
                 }
@@ -90,6 +124,15 @@ namespace SadnaSrc.MarketData
 
                 throw;
             }
+            catch (SqlException e)
+            {
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
+                {
+                    throw new DataException();
+                }
+
+                throw;
+            }
         }
 
         public void DeleteFromTable(string table, string deleteCondition)
@@ -98,9 +141,18 @@ namespace SadnaSrc.MarketData
             {
                 realMarketDB.DeleteFromTable(table, deleteCondition);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
-                if (!realMarketDB.IsConnected() || MarketDB.ToDisable)
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
+                {
+                    throw new DataException();
+                }
+
+                throw;
+            }
+            catch (SqlException e)
+            {
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
                 {
                     throw new DataException();
                 }
@@ -115,9 +167,18 @@ namespace SadnaSrc.MarketData
             {
                 return realMarketDB.freeStyleSelect(cmd);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
-                if (!realMarketDB.IsConnected() || MarketDB.ToDisable)
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
+                {
+                    throw new DataException();
+                }
+
+                throw;
+            }
+            catch (SqlException e)
+            {
+                if (!IsConnected(e.Message) || MarketDB.ToDisable)
                 {
                     throw new DataException();
                 }
@@ -129,6 +190,12 @@ namespace SadnaSrc.MarketData
         public bool IsConnected()
         {
             return realMarketDB.IsConnected();
+        }
+
+        private bool IsConnected(string message)
+        {
+            return IsConnected() &&
+                   message != "The connection is broken and recovery is not possible.  The client driver attempted to recover the connection one or more times and all attempts failed.  Increase the value of ConnectRetryCount to increase the number of recovery attempts.";
         }
     }
 }
