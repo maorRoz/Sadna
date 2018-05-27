@@ -23,7 +23,7 @@ namespace SadnaSrc.StoreCenter
             StoreName = storeName;
             CategoryName = categoryName;
             StartDate = startDate;
-            EndDate = EndDate;
+            EndDate = endDate;
             DiscountAmount = discountAmount;
         }
         public CategoryDiscount(string discountCode, string categoryName, string storeName, DateTime startDate, DateTime endDate, int discountAmount)
@@ -32,7 +32,7 @@ namespace SadnaSrc.StoreCenter
             StoreName = storeName;
             CategoryName = categoryName;
             StartDate = startDate;
-            EndDate = EndDate;
+            EndDate = endDate;
             DiscountAmount = discountAmount;
 
         }

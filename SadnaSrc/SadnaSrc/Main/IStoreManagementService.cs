@@ -67,6 +67,7 @@ namespace SadnaSrc.Main
         ProductNotInCategory,
         CategoryNotExistsInSystem,
         CategoryDiscountAlreadyExistsInStore,
+        CategoryDiscountNotExistsInStore,
         NoDB = 500
     }
     public enum DiscountStatus

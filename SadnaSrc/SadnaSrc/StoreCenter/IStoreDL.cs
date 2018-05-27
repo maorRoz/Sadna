@@ -51,5 +51,6 @@ namespace SadnaSrc.StoreCenter
         void RemoveProductFromCategory(string CategoryID, string ProductID);
         CategoryDiscount GetCategoryDiscount(string categoryName, string storeName);
         void AddCategoryDiscount(CategoryDiscount discount);
+        void RemoveCategoryDiscount(CategoryDiscount categoryDiscount);
     }
     }
