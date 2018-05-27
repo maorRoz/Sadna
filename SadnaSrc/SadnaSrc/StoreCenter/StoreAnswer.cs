@@ -10,7 +10,9 @@ namespace SadnaSrc.StoreCenter
 {
     public class StoreAnswer : MarketAnswer
     {
-      public StoreAnswer(StoreEnum status, string answer) : base((int)status, answer) { }
+		private string v;
+
+		public StoreAnswer(StoreEnum status, string answer) : base((int)status, answer) { }
       public StoreAnswer(StoreEnum status, string answer, string[] report) : base((int)status, answer, report) { }
       public StoreAnswer(PromoteStoreStatus status, string answer) : base((int)status, answer) { }
       public StoreAnswer(DiscountStatus status, string answer) : base((int)status, answer) { }
@@ -19,7 +21,8 @@ namespace SadnaSrc.StoreCenter
       public StoreAnswer(ViewStoreStatus status, string answer) : base((int)status, answer) { }
 	    public StoreAnswer(GetCategoriesStatus status, string answer, string[] storeReport) : base((int)status, answer, storeReport) { }
 	    public StoreAnswer(GetCategoriesStatus status, string answer) : base((int)status, answer) { }
-		  public StoreAnswer(ViewStorePurchaseHistoryStatus status, string answer, string[] storeReport) : base((int)status, answer, storeReport) { }
+
+		public StoreAnswer(ViewStorePurchaseHistoryStatus status, string answer, string[] storeReport) : base((int)status, answer, storeReport) { }
       public StoreAnswer(ViewStorePurchaseHistoryStatus status, string answer) : base((int)status, answer) { }
       public StoreAnswer(AddProductStatus status, string answer) : base((int)status, answer) { }
 	    public StoreAnswer(DiscountStatus status, string answer, string[] report) : base((int) status, answer, report) { }
@@ -32,6 +35,6 @@ namespace SadnaSrc.StoreCenter
       public StoreAnswer(EditStorePolicyStatus status, string answer) : base((int)status, answer) { }
       public StoreAnswer(ViewStorePolicyStatus status, string answer, string[] policyIds) : base((int)status, answer, policyIds) { }
 
-
-    }
+		
+	}
 }

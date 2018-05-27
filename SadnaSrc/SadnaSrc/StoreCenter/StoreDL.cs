@@ -170,10 +170,6 @@ namespace SadnaSrc.StoreCenter
         }
 
 
-
-        
-
-
         public void AddProductToDatabase(Product product)
         {
             dbConnection.InsertTable("Products", "SystemID, name, BasePrice, description",
@@ -631,6 +627,20 @@ namespace SadnaSrc.StoreCenter
 			    }
 		    }
 		    return ids.ToArray();
+		}
+
+	    public Product[] GetAllProducts()
+	    {
+		    LinkedList<Product> products = new LinkedList<Product>();
+		    using (var dbReader = dbConnection.SelectFromTable("Products", "*"))
+		    {
+			    while (dbReader.Read())
+			    {
+				    products.AddLast(new Product(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetDouble(2),
+					    dbReader.GetString(3)));
+			    }
+		    }
+		    return products.ToArray();
 		}
 	}
 }

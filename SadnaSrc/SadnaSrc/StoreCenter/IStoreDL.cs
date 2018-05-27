@@ -52,6 +52,8 @@ namespace SadnaSrc.StoreCenter
         void RemoveProductFromCategory(string CategoryID, string ProductID);
 	    Product[] GetProductsByName(string name);
 	    string GetStoreByProductId(string productId);
+	    Product[] GetAllProducts();
+
 
     }
     }

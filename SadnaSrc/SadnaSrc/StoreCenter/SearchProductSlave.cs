@@ -46,7 +46,7 @@ namespace SadnaSrc.StoreCenter
 						products = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
 						break;
 					case "KeyWord":
-						
+						products = FindKeyWord(value);
 						break;
 				}
 
@@ -85,6 +85,21 @@ namespace SadnaSrc.StoreCenter
 			}	
 		}
 
+		private Product[] FindKeyWord(string value)
+		{
+			LinkedList<Product> result = new LinkedList<Product>();
+			Product[] products = _storeLogic.GetAllProducts();
+			foreach (var product in products)
+			{
+				if (product.Name.Contains(value) || product.Description.Contains(value) || Convert.ToString(product.BasePrice)==value)
+				{
+					result.AddLast(product);
+				}
+			}
+
+			return result.ToArray();
+
+		}
 
 		private void validateData(string value)
 		{

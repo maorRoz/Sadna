@@ -23,7 +23,6 @@ namespace SadnaSrc.Main
 		MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
 	    MarketAnswer GetAllCategoryNames();
-
     }
 
     public enum OpenStoreStatus
@@ -78,5 +77,5 @@ namespace SadnaSrc.Main
 		DidntEnterSystem,
 		NoDB=500
 	}
-   
+
 }

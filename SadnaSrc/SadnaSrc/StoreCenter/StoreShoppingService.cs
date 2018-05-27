@@ -79,6 +79,6 @@ namespace SadnaSrc.StoreCenter
 		    slave.GetAllCategoryNames();
 		    return slave.Answer;
 	    }
-    }
+	}
 }
  
