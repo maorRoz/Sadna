@@ -63,20 +63,20 @@ namespace MarketWeb.Controllers
         }
 
         public IActionResult MakeImmediateBuy(int systemId, string state,string store,string product,double unitPrice,int quantity,
-            string couponEntry,string usernameEntry, string addressEntry, string creditCardEntry)
+            double finalPrice, string couponEntry,string usernameEntry, string addressEntry, string creditCardEntry)
         {
             InitiateOrder(systemId, usernameEntry, addressEntry, creditCardEntry);
             if (answer.Status != Success)
             {
                 return RedirectToAction("BuyImmediateForm",
-                    new {systemId, state, message = answer.Answer, store, product, unitPrice, quantity});
+                    new {systemId, state, message = answer.Answer, store, product, unitPrice, quantity, finalPrice });
             }
 
             answer = orderService.BuyItemFromImmediate(product, store, quantity, unitPrice, couponEntry);
             return answer.Status == Success ? 
                 RedirectToAction("MainLobby", "Home", new {systemId, state, message = answer.Answer}) :
                 RedirectToAction("BuyImmediateForm", new { systemId, state, message = answer.Answer,store,product,
-                    unitPrice, quantity });
+                    unitPrice, quantity,finalPrice });
         }
 
         public IActionResult MakeBuyAll(int systemId, string state, string[] coupons,
