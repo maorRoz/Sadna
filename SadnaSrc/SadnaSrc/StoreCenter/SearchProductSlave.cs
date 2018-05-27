@@ -51,10 +51,8 @@ namespace SadnaSrc.StoreCenter
 				}
 
 				products = FilterResultsByPrice(products,minPrice, maxPrice);
-				if (type != "Category")
-				{
-					products = FilterResultByCategory(products, category);
-				}
+				products = FilterResultByCategory(products, category);
+				
 				
 				string[] result = new string[products.Length];
 				string[] stores = GetProductsStores(products);
@@ -223,7 +221,7 @@ namespace SadnaSrc.StoreCenter
 
 		private void validatePrices(double minPrice, double maxPrice)
 		{
-			if (minPrice<0 || maxPrice<0 || minPrice>maxPrice)
+			if (minPrice<0 || maxPrice<0 || (minPrice>maxPrice && maxPrice!=0))
 			{
 				throw new StoreException(SearchProductStatus.PricesInvalid,
 					"The prices range is illegal!!");

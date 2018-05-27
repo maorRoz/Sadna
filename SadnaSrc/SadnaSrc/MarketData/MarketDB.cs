@@ -242,6 +242,9 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','StoreOwner')",
 	            "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
 	            "INSERT INTO Category (SystemID, name) VALUES ('C2', 'Books')",
+				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P1')",
+				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P2')",
+				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C2','P3')",
 			};
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
