@@ -253,7 +253,11 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
 	            "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','StoreOwner')",
-			};
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Avi','Avi','StoreOwner','2018-1-1','Avi`s Chocolate Kingdom has been opened')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','Arik3','Arik3','StoreOwner','2018-1-1','Toy has been opened')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','Arik3','Arik2','ManageProducts','2018-1-1','Regular promotion')",
+
+            };
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
                 var insertCommand = new SqlCommand(thingsToInsertByForce[i], _dbConnection);

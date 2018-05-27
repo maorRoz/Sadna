@@ -41,7 +41,8 @@ namespace MarketWeb.Controllers
 		    {
 		        return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
             }
-			string[] options = {"ManageProducts", "PromoteStoreAdmin", "DeclareDiscountPolicy", "ViewPurchaseHistory"};
+			string[] options = {"ManageProducts", "PromoteStoreAdmin", "DeclareDiscountPolicy",
+			    "ViewPurchaseHistory", "ViewPromotionHistory" };
 			if (!answer.ReportList.Contains("StoreOwner"))
 			{
 				options = answer.ReportList;
@@ -175,7 +176,20 @@ namespace MarketWeb.Controllers
 		    return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
         }
 
-		public IActionResult DeclareDiscountPolicy(int systemId, string state, string message, string store, bool valid)
+	    public IActionResult ViewPromotionHistory(int systemId, string state, string store)
+	    {
+	        var userService = MarketServer.GetUserSession(systemId);
+	        var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+	        var answer = storeManagementService.ViewPromotionHistory();
+	        if (answer.Status == Success)
+	        {
+	            return View(new PromotionHistoryModel(systemId, state,store, answer.ReportList));
+	        }
+
+	        return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+	    }
+
+        public IActionResult DeclareDiscountPolicy(int systemId, string state, string message, string store, bool valid)
 		{
 			ViewBag.valid = valid;
 			var userService = MarketServer.GetUserSession(systemId);
