@@ -112,12 +112,18 @@ namespace SadnaSrc.PolicyComponent
             SessionPolicies.Remove(toRemove);
         }
 
-        public bool CheckRelevantPolicies(string product, string store, string category, string username,
+        public bool CheckRelevantPolicies(string product, string store, List<string> categories, string username,
             string address, int quantity, double price)
         {
+            if (categories != null)
+            {
+                foreach(string category in categories)
+                    if (!CheckPolicy(PolicyType.Category, category, username, address, quantity, price))
+                        return false;
+            }
+
             return
             CheckPolicy(PolicyType.Global, null, username, address, quantity, price) &&
-            CheckPolicy(PolicyType.Category, category, username, address, quantity, price) &&
             CheckPolicy(PolicyType.Product, product, username, address, quantity, price) &&
             CheckPolicy(PolicyType.Store, store, username, address, quantity, price) &&
             CheckPolicy(PolicyType.StockItem, store + "." + product, username, address, quantity, price);
@@ -137,6 +143,31 @@ namespace SadnaSrc.PolicyComponent
             int[] idArr = GetSessionPolicies();
             return idArr.Select(x => x.ToString()).ToArray();
         }
+
+        public string[] ViewPolicies()
+        {
+            PurchasePolicy[] policiesArr = Policies.ToArray();
+            List<string> policyStrings = new List<string>();
+            for (int i = 0; i < policiesArr.Length; i++)
+            {
+                if(policiesArr[i].Type == PolicyType.Global || policiesArr[i].Type == PolicyType.Category || policiesArr[i].Type == PolicyType.Product)
+                    policyStrings.Add(PurchasePolicy.PrintEnum(policiesArr[i].Type) + "." + policiesArr[i].Subject);
+            }
+            return policyStrings.ToArray();
+        }
+
+        public string[] ViewStorePolicies()
+        {
+            PurchasePolicy[] policiesArr = Policies.ToArray();
+            List<string> policyStrings = new List<string>();
+            for (int i = 0; i < policiesArr.Length; i++)
+            {
+                if (policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem)
+                    policyStrings.Add(PurchasePolicy.PrintEnum(policiesArr[i].Type) + "." + policiesArr[i].Subject);
+            }
+            return policyStrings.ToArray();
+        }
+
 
         public string[] GetPolicyData(PolicyType type, string subject)
         {
@@ -248,6 +279,11 @@ namespace SadnaSrc.PolicyComponent
             }
             Policies.Clear();
             SessionPolicies.Clear();
+        }
+
+        public void SyncWithDB()
+        {
+            Policies = _dataLayer.GetAllPolicies();
         }
     }
 }

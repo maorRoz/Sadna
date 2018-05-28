@@ -21,10 +21,8 @@ namespace SadnaSrc.StoreCenter
             {
                 MarketLog.Log("StoreCenter", "trying to remove product from store");
                 checkIfStoreExistsAndActive();
-                MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to remove products");
                 _storeManager.CanManageProducts();
-                MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
                 Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
                 checkifProductExists(product);
@@ -40,7 +38,6 @@ namespace SadnaSrc.StoreCenter
             }
             catch (MarketException)
             {
-                MarketLog.Log("StoreCenter", "no premission");
                 Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
             }
             catch (DataException e)

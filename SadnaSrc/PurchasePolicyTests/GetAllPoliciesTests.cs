@@ -24,7 +24,6 @@ namespace PurchasePolicyTests
         [TestInitialize]
         public void BuildSupplyPoint()
         {
-            MarketDB.Instance.InsertByForce();
             datalayer = PolicyDL.Instance;
             UsernameEqualsLeaf2 = new UsernameEquals(PolicyType.Global, "bla", "bla_bla", 1);
             UsernameEqualsLeaf = new UsernameEquals(PolicyType.Global, "bla", "bla_bla", 2);
@@ -85,8 +84,8 @@ namespace PurchasePolicyTests
         [TestCleanup]
         public void CleanDb()
         {
-            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
+            MarketDB.Instance.CleanByForce();
         }
 
     }

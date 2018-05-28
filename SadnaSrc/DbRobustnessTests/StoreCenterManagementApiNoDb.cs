@@ -24,6 +24,13 @@ namespace DbRobustnessTests
             storeManagingService = marketSession.GetStoreManagementService(userService,"T");
             MarketDB.ToDisable = true;
         }
+
+        [TestMethod]
+        public void PromoteToStoreManagerNoDBTest()
+        {
+            answer = storeManagingService.PromoteToStoreManager("Arik2","StoreOwner");
+            Assert.AreEqual((int)PromoteStoreStatus.NoDB, answer.Status);
+        }
         [TestMethod]
         public void AddNewProductNoDBTest()
         {

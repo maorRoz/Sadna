@@ -24,11 +24,11 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             market = MarketYard.Instance;
             handler = StoreDL.Instance;
             userService = market.GetUserService();
+            userService.EnterSystem();
         }
         [TestMethod]
         public void EditProductWhenStoreNotExists()
         {
-            userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
             MarketAnswer ans = liorSession.EditProduct("name0", "Name", "0");
@@ -37,7 +37,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void EditProductWhenHasNoPremmision()
         {
-            userService.EnterSystem();
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditProduct("name0", "Name", "0");
@@ -46,7 +45,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void EditProductWhenProductIsNotAvailableInStore()
         {
-            userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             MarketAnswer ans = liorSession.EditProduct("name0", "Name", "0");
@@ -56,7 +54,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void EditProductNameSuccessfully()
         {
-            userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
@@ -69,7 +66,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void EditProductBasePriceSuccessfully()
         {
-            userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
@@ -82,7 +78,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void EditProductDescriptionSuccessfully()
         {
-            userService.EnterSystem();
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);

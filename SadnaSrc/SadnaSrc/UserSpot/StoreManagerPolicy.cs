@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using SadnaSrc.Main;
-using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.UserSpot
 {
@@ -19,9 +14,9 @@ namespace SadnaSrc.UserSpot
             Action = storeAction;
         }
 
-        public string GetStoreActionString()
+        public static string GetStoreActionString(StoreAction action)
         {
-            switch (Action)
+            switch (action)
             {
                 case StoreAction.StoreOwner:
                     return "StoreOwner";
