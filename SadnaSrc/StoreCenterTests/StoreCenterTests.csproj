@@ -72,6 +72,7 @@
     <Compile Include="StoreCenterDbIntegrationTests\AddProductToCategoryTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\GetAllCategoriesTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\RemoveProductFromCategoryTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\SearchProductTests.cs" />
     <Compile Include="StoreCenterUnitTests\AddPolicyTest.cs" />
     <Compile Include="StoreCenterUnitTests\AddProductToCategoryTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\AddDiscountTestsMock.cs" />

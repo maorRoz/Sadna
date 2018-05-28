@@ -58,7 +58,7 @@ namespace SadnaSrc.StoreCenter
 				for (int i = 0; i < result.Length; i++)
 				{
 					string productId = products[i].SystemId;
-					result[i] = GetProductStockInformation(productId,false) + " Store: "+ stores[i];
+					result[i] = GetProductStockInformation(productId,false)/* + " Store: "+ stores[i]*/;
 				}
 
 				Answer = new StoreAnswer(SearchProductStatus.Success,"Data retrieved successfully!", result);
