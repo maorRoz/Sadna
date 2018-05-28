@@ -29,7 +29,7 @@ namespace SadnaSrc.UserSpot
 
         private static CartItem[] SortedCartStorage(CartItem[] storage)
         {
-            return storage.OrderBy(x => x.Quantity).ToArray();
+            return storage.OrderBy(x => x.Name).ToArray();
         }
 
         public string[] GetCartStorageToString()
