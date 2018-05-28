@@ -47,7 +47,7 @@ namespace SadnaSrc.StoreCenter
             {
                 return false;
             }
-            return obj.GetType() == GetType() && Equals((Discount)obj);
+            return obj.GetType() == GetType() && Equals((CategoryDiscount)obj);
         }
 
         public override int GetHashCode()
@@ -67,7 +67,7 @@ namespace SadnaSrc.StoreCenter
 
         private bool Equals(CategoryDiscount obj)
         {
-            return obj.SystemId == SystemId && obj.DiscountAmount == DiscountAmount;
+            return obj.SystemId == SystemId && obj.DiscountAmount == DiscountAmount && CategoryName==obj.CategoryName && StoreName == obj.StoreName;
         }
         public override string ToString()
         {
