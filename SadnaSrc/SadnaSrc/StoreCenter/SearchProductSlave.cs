@@ -53,7 +53,6 @@ namespace SadnaSrc.StoreCenter
 				products = FilterResultsByPrice(products,minPrice, maxPrice);
 				products = FilterResultByCategory(products, category);
 				
-				
 				string[] result = new string[products.Length];
 				string[] stores = GetProductsStores(products);
 				for (int i = 0; i < result.Length; i++)
