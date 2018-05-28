@@ -22,21 +22,29 @@ namespace SadnaSrc.MarketData
                 _dbConnection = new SqlConnection();
                 return;
             }
-           // try
-           // {
+            try
+            {
                 InitiateDb();
                 CreateTables();
-           // }
-          /*  catch(SqlException)
+            }
+            catch(SqlException)
             {
-            }*/
+                //dont care
+            }
         }
 
         private void InitiateDb()
         {
+            var localDbPath = new SqlConnectionStringBuilder
+            {
+                DataSource = ".\\MarketDB",
+                InitialCatalog = "MarketData",
+                IntegratedSecurity = true,
+                MultipleActiveResultSets = true
+            };
 
-            // var dbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
-            var dbPath = new SqlConnectionStringBuilder
+
+            var remoteDbPath = new SqlConnectionStringBuilder
             {
                 DataSource = "192.168.1.3\\MarketDB",
                 NetworkLibrary = "DBMSSOCN",
@@ -45,7 +53,8 @@ namespace SadnaSrc.MarketData
                 Password = "123",
                 MultipleActiveResultSets= true
             };
-            _dbConnection = new SqlConnection(dbPath.ConnectionString);
+            // _dbConnection = new SqlConnection(localDbPath.ConnectionString);
+            _dbConnection = new SqlConnection(remoteDbPath.ConnectionString);
             OpenIfClosed();
         }
 
