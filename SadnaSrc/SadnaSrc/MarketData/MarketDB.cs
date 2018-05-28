@@ -52,8 +52,8 @@ namespace SadnaSrc.MarketData
                 Password = "123",
                 MultipleActiveResultSets= true
             };
-            // _dbConnection = new SqlConnection(localDbPath.ConnectionString);
-            _dbConnection = new SqlConnection(remoteDbPath.ConnectionString);
+             _dbConnection = new SqlConnection(localDbPath.ConnectionString);
+            //_dbConnection = new SqlConnection(remoteDbPath.ConnectionString);
             OpenIfClosed();
         }
 
