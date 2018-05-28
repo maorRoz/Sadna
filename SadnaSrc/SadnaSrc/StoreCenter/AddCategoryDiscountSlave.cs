@@ -5,13 +5,13 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class AddCategoryDiscountSlave : AbstractStoreCenterSlave
+    public class AddCategoryDiscountSlave : AbstractStoreCenterSlave
     {
         public MarketAnswer Answer { get; set; }
         public AddCategoryDiscountSlave(string storeName, IUserSeller storeManager, IStoreDL storeDl) : base(storeName, storeManager, storeDl)
         {
         }
-        internal void AddCategoryDiscount(string categoryName, DateTime startDate, DateTime endDate, int discountAmount)
+        public void AddCategoryDiscount(string categoryName, DateTime startDate, DateTime endDate, int discountAmount)
         {
 
             try

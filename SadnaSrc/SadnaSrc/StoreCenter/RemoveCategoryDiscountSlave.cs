@@ -4,7 +4,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.StoreCenter
 {
-    internal class RemoveCategoryDiscountSlave : AbstractStoreCenterSlave
+    public class RemoveCategoryDiscountSlave : AbstractStoreCenterSlave
     {
         public MarketAnswer Answer { get; set; }
         public RemoveCategoryDiscountSlave(string storeName, IUserSeller storeManager, IStoreDL storeDl) : base(storeName, storeManager, storeDl)
