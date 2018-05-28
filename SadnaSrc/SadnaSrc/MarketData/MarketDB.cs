@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.InteropServices;
 using SadnaSrc.Main;
 
 
@@ -28,15 +29,31 @@ namespace SadnaSrc.MarketData
             }
             catch(SqlException)
             {
+                //dont care
             }
         }
-        private void InitiateDb()
-        {
 
-            var dbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
-            //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
-            //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
-            _dbConnection = new SqlConnection(dbPath);
+        private void InitiateDb()
+        { 
+            var localDbPath = new SqlConnectionStringBuilder
+            {
+                DataSource = ".\\MarketDB",
+                InitialCatalog = "MarketData",
+                IntegratedSecurity = true,
+                MultipleActiveResultSets = true
+            };
+
+
+            var remoteDbPath = new SqlConnectionStringBuilder
+            {
+                DataSource = "tcp:192.168.1.3\\MarketDB",
+                InitialCatalog = "MarketData",
+                UserID = "sa",
+                Password = "123",
+                MultipleActiveResultSets= true
+            };
+             _dbConnection = new SqlConnection(localDbPath.ConnectionString);
+            //_dbConnection = new SqlConnection(remoteDbPath.ConnectionString);
             OpenIfClosed();
         }
 
@@ -240,9 +257,10 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P1', 'Dark Chocolate', 5, 'Join the darkside, we have chocolate')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P2', 'White Chocolate', 7, 'All your bases are belong to us')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P3', 'euroticket', 5, 'Lets see the eurovision today')",
-                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P1', 30, 'null', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P1', 30, 'D1', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S1', 'P2', 30, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S2', 'P3', 30, 'null', 'Immediate')",
+                "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D1', 'VISIBLE', '2018-01-01', '2020-03-01', 50, 'True')",
                 "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Avi','Ben-Gurion University','202cb962ac59075b964b07152d234b70','12345678')",
                 "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (2,'Arik2','Mishol Susia','202cb962ac59075b964b07152d234b70','88888888')",
                 "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (3,'Arik3','Mishol','202cb962ac59075b964b07152d234b70','77777777')",
