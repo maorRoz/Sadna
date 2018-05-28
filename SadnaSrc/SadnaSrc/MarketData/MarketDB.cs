@@ -34,13 +34,26 @@ namespace SadnaSrc.MarketData
         }
 
         private void InitiateDb()
-        {
-            const string localDbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true"; 
+        { 
+            var localDbPath = new SqlConnectionStringBuilder
+            {
+                DataSource = ".\\MarketDB",
+                InitialCatalog = "MarketData",
+                IntegratedSecurity = true,
+                MultipleActiveResultSets = true
+            };
 
-            const string remoteDbPath = "Data Source=192.168.1.3\\MarketDB;Network Library=DBMSSOCN;Initial Catalog=MarketData;User ID=sa;Password=123;MultipleActiveResultSets=true";
 
-            // _dbConnection = new SqlConnection(localDbPath);
-            _dbConnection = new SqlConnection(remoteDbPath);
+            var remoteDbPath = new SqlConnectionStringBuilder
+            {
+                DataSource = "tcp:192.168.1.3\\MarketDB",
+                InitialCatalog = "MarketData",
+                UserID = "sa",
+                Password = "123",
+                MultipleActiveResultSets= true
+            };
+            // _dbConnection = new SqlConnection(localDbPath.ConnectionString);
+            _dbConnection = new SqlConnection(remoteDbPath.ConnectionString);
             OpenIfClosed();
         }
 
