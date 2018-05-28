@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.InteropServices;
 using SadnaSrc.Main;
 
 
@@ -28,15 +29,31 @@ namespace SadnaSrc.MarketData
             }
             catch(SqlException)
             {
+                //dont care
             }
         }
-        private void InitiateDb()
-        {
 
-            var dbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
-            //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
-            //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
-            _dbConnection = new SqlConnection(dbPath);
+        private void InitiateDb()
+        { 
+            var localDbPath = new SqlConnectionStringBuilder
+            {
+                DataSource = ".\\MarketDB",
+                InitialCatalog = "MarketData",
+                IntegratedSecurity = true,
+                MultipleActiveResultSets = true
+            };
+
+
+            var remoteDbPath = new SqlConnectionStringBuilder
+            {
+                DataSource = "tcp:192.168.1.3\\MarketDB",
+                InitialCatalog = "MarketData",
+                UserID = "sa",
+                Password = "123",
+                MultipleActiveResultSets= true
+            };
+             _dbConnection = new SqlConnection(localDbPath.ConnectionString);
+            //_dbConnection = new SqlConnection(remoteDbPath.ConnectionString);
             OpenIfClosed();
         }
 
