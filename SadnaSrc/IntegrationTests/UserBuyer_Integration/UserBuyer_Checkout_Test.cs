@@ -44,8 +44,8 @@ namespace IntegrationTests.UserBuyer_Integration
             try
             {
                 string result = getItemsFromCart(user, pass);
-                string expected = "20 OCB, 24. 18 Bamba, The Red Rock. 33 Goldstar, The Red Rock. ";
-                Assert.AreEqual(result,expected);
+                string expected = "18 Bamba, The Red Rock. 33 Goldstar, The Red Rock. 20 OCB, 24. ";
+                Assert.AreEqual(expected,result);
             }
             catch (MarketException)
             {

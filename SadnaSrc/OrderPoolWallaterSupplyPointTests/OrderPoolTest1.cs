@@ -37,9 +37,9 @@ namespace OrderPoolWallaterSupplyPointTests
             slave1 = new PurchaseItemSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance,Publisher.Instance, market.GetPolicyChecker());
             slave2 = new PurchaseEverythingSlave(buyer, new StoresSyncherHarmony(), OrderDL.Instance, Publisher.Instance, market.GetPolicyChecker());
             orderService.GiveDetails("Big Smoke", "Grove Street", "54238521");
-            item1 = new OrderItem("Cluckin Bell", "#9", 5.00, 2);
-            item2 = new OrderItem("Cluckin Bell", "#9 Large", 7.00, 1);
-            item3 = new OrderItem("Cluckin Bell", "#6 Extra Dip", 8.50, 1);
+            item1 = new OrderItem("Cluckin Bell", null, "#9", 5.00, 2);
+            item2 = new OrderItem("Cluckin Bell", null, "#9 Large", 7.00, 1);
+            item3 = new OrderItem("Cluckin Bell", null, "#6 Extra Dip", 8.50, 1);
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             try
             {
-                item2 = new OrderItem(null, "#9 Large", 5.0, 2);
+                item2 = new OrderItem(null, null, "#9 Large", 5.0, 2);
                 OrderItem[] wrap = {item2};
                 slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
                 Assert.Fail();
@@ -94,7 +94,7 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             try
             {
-                item2 = new OrderItem("Cluckin Bell", null, 5.0, 2);
+                item2 = new OrderItem("Cluckin Bell", null, null, 5.0, 2);
                 OrderItem[] wrap = { item2 };
                 slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
                 Assert.Fail();
@@ -110,7 +110,7 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             try
             {
-                item2 = new OrderItem("Cluckin Bell", "#9", 5.0, 0);
+                item2 = new OrderItem("Cluckin Bell", null, "#9", 5.0, 0);
                 OrderItem[] wrap = { item2 };
                 slave2.InitOrder(wrap, "Big Smoke", "Grove Street");
                 Assert.Fail();
@@ -183,13 +183,6 @@ namespace OrderPoolWallaterSupplyPointTests
         {
             MarketAnswer ans = orderService.GiveDetails("Big SMoke", null, "12345678");
             Assert.AreEqual((int) GiveDetailsStatus.InvalidNameOrAddress, ans.Status);
-        }
-
-        [TestMethod]
-        public void TestBadUserDetails3()
-        {
-            MarketAnswer ans = orderService.GiveDetails("Big SMoke", "Grove Street", "123478");
-            Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, ans.Status);
         }
 
         [TestMethod]

@@ -68,11 +68,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StoreCenterDbIntegrationTests\EditCategoryDiscountTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\RemoveCategoryDiscountTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\AddCategoryDiscountTests.cs" />
+    <Compile Include="StoreCenterUnitTests\AddCategoryDiscountMockTest.cs" />
+    <Compile Include="StoreCenterUnitTests\EditCategoryDiscoutMockTests.cs" />
+    <Compile Include="StoreCenterUnitTests\RemoveDiscountCategoryMockTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\addDiscountTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\AddProductToCategoryTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\GetAllCategoriesTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\RemoveProductFromCategoryTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\SearchProductTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\ViewPromotionHistoryTest.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\UseCase6_2_Tests.cs" />
     <Compile Include="StoreCenterUnitTests\AddPolicyTest.cs" />
     <Compile Include="StoreCenterUnitTests\AddProductToCategoryTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\AddDiscountTestsMock.cs" />
@@ -102,6 +110,7 @@
     <Compile Include="StoreCenterUnitTests\RemoveProductTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\SearchProductTestsMock.cs" />
     <Compile Include="StoreCenterUnitTests\ViewPoliciesTest.cs" />
+    <Compile Include="StoreCenterUnitTests\ViewPromotionHistoryMock.cs" />
     <Compile Include="StoreCenterUnitTests\ViewStoreHistoryTestsMock.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\ViewStoreInfoTests.cs" />
     <Compile Include="StoreCenterUnitTests\ViewStoreInfoTestsMock.cs" />

@@ -53,7 +53,7 @@ namespace SadnaSrc.StoreCenter
         private void CheckInput(string type, string subject,string optProd)
         {
             if (type == "Store" && !string.IsNullOrEmpty(subject) && string.IsNullOrEmpty(optProd)) return;
-            if (type == "Stock Item" && !string.IsNullOrEmpty(subject) && !string.IsNullOrEmpty(optProd)) return;
+            if (type == "StockItem" && !string.IsNullOrEmpty(subject) && !string.IsNullOrEmpty(optProd)) return;
             MarketLog.Log("StoreCenter", " Removing policy failed, invalid data.");
             throw new StoreException(EditStorePolicyStatus.InvalidPolicyData, "Invalid Policy data");
 
@@ -62,7 +62,7 @@ namespace SadnaSrc.StoreCenter
         {
             switch (type)
             {
-                case "Stock Item":
+                case "StockItem":
                     return PolicyType.Product;
                 case "Store":
                     return PolicyType.Category;

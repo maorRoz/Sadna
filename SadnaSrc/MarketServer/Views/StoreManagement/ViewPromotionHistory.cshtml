@@ -1,0 +1,43 @@
+﻿<br />
+<br />
+<br />
+@{
+    ViewData["Title"] = "View Promotion History";
+}
+
+<h2>@ViewData["Title"] of @Model.Store</h2>
+
+
+<div class="row top-space">
+    <div class="col-lg-12">
+        <div id="feedContainer" style="float: right;width:20%"></div>
+        <div style="float: left;width:70%">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Promoter</th>
+                    <th>Promoted</th>
+                    <th>Permissions</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Promoter</td>
+                        <td>@item.Promoted</td>
+                        <td>@item.Permissions</td>
+                        <td>@item.Date</td>
+                        <td>@item.Description</td>
+                    </tr>
+                }
+            </table>
+            <hr />
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+}

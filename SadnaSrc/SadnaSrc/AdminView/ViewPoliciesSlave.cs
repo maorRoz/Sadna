@@ -30,7 +30,7 @@ namespace SadnaSrc.AdminView
                 MarketLog.Log("AdminView", "Checking admin status.");
                 _admin.ValidateSystemAdmin();
                 MarketLog.Log("AdminView", "Trying to view policies.");
-                string[] result = _manager.GetSessionPoliciesStrings();
+                string[] result = _manager.ViewPolicies();
                 MarketLog.Log("AdminView", "Successfully got policiy ids.");
                 Answer = new AdminAnswer(ViewPolicyStatus.Success, "Successfully got policiy ids.", result);
 

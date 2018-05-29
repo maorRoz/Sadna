@@ -42,7 +42,7 @@ namespace SadnaSrc.OrderPool
         private void IsValidUserDetails(string userName, string address, string creditCard)
         {
             int x;
-            if (userName == null || address == null || creditCard == null || creditCard.Length != 8 ||
+            if (userName == null || address == null || creditCard == null ||
                 !Int32.TryParse(creditCard, out x))
             {
                 MarketLog.Log("OrderPool", "User entered name or address which is invalid by the system standards!");

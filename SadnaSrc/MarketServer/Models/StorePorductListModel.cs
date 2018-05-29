@@ -20,24 +20,37 @@ namespace MarketWeb.Models
 			}
 		}
 
-		public class ProductItem
-		{
-			public string Name { get; set; }
-            public string Price { get; set; }
-            public string Description { get; set; }
-            public string Discount { get; set; }
-            public string PurchaseWay { get; set; }
-            public string Quantity { get; set; }
-            public ProductItem(string data)
-			{
-			    var dataParam = data.Split(new[] { " name: ", " base price: ", " description: ", " Discount: {","}", " Purchase Way: ", " Quantity: " }, StringSplitOptions.RemoveEmptyEntries);
-			    Name = dataParam[0];
-			    Price = dataParam[1];
-			    Description = dataParam[2];
-			    Discount = dataParam[3];//fix 
-			    PurchaseWay = dataParam[4];
-			    Quantity = dataParam[5];
-			}
-		}
+	    public class ProductItem
+	    {
+	        public string Name { get; set; }
+	        public string Price { get; set; }
+	        public string Description { get; set; }
+	        public string Discount { get; set; }
+	        public string PurchaseWay { get; set; }
+	        public string Quantity { get; set; }
+
+	        public ProductItem(string data)
+	        {
+	            var dataParam =
+	            data.Split(new[]
+	            {
+	                " name: ", " base price: ", " description: ", " Discount: {", "}", " Purchase Way: ",
+	                " Quantity: "
+	            }, StringSplitOptions.RemoveEmptyEntries);
+	            Name = dataParam[0];
+	            Price = dataParam[1];
+	            Description = dataParam[2];
+	            Discount = GetDiscount(dataParam[3]);
+	            PurchaseWay = dataParam[4];
+	            Quantity = dataParam[5];
+	        }
+
+	        private static string GetDiscount(string discountRawData)
+	        {
+	            var discountDataValues = discountRawData.Split(new[]
+	                {"DiscountAmount: "," Start", "type is: "}, StringSplitOptions.RemoveEmptyEntries);
+	            return discountDataValues.Length <= 1 ? "None" : discountDataValues[0];
+	        }
+	    }
 	}
 }

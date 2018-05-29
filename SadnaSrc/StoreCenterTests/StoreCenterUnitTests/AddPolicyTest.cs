@@ -36,7 +36,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 seller.Setup(x => x.CanDeclarePurchasePolicy())
                     .Throws(new MarketException((int)PromoteStoreStatus.NoAuthority, ""));
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", null, null , "Quantity <=", "5", "");
+                slave.CreatePolicy("StockItem", null, null , "Quantity <=", "5", "");
                 Assert.AreEqual((int)EditStorePolicyStatus.NoAuthority, slave.Answer.Status);
             }
 
@@ -69,7 +69,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             public void BadStockPolicyType()
             {
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item","Cluckin Bell" , null, "Quantity <=", "5", "");
+                slave.CreatePolicy("StockItem","Cluckin Bell" , null, "Quantity <=", "5", "");
                 Assert.AreEqual((int)EditStorePolicyStatus.InvalidPolicyData, slave.Answer.Status);
             }
 
@@ -79,7 +79,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             {
 
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", "Cluckin Bell", "#9", "shit", "5", "");
+                slave.CreatePolicy("StockItem", "Cluckin Bell", "#9", "shit", "5", "");
                 Assert.AreEqual((int)EditStorePolicyStatus.InvalidPolicyData, slave.Answer.Status);
             }
 
@@ -88,7 +88,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             {
 
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", "Cluckin Bell", "#9", "Quantity <=", "shit", "");
+                slave.CreatePolicy("StockItem", "Cluckin Bell", "#9", "Quantity <=", "shit", "");
                 Assert.AreEqual((int)EditStorePolicyStatus.InvalidPolicyData, slave.Answer.Status);
             }
 
@@ -97,7 +97,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             {
 
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", "Cluckin Bell", "#9", "AND", "5", "");
+                slave.CreatePolicy("StockItem", "Cluckin Bell", "#9", "AND", "5", "");
                 Assert.AreEqual((int)EditStorePolicyStatus.InvalidPolicyData, slave.Answer.Status);
             }
 
@@ -106,7 +106,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             {
 
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", "Cluckin Bell", "#9", "AND", "5", null);
+                slave.CreatePolicy("StockItem", "Cluckin Bell", "#9", "AND", "5", null);
                 Assert.AreEqual((int)EditStorePolicyStatus.InvalidPolicyData, slave.Answer.Status);
             }
 
@@ -115,7 +115,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             {
 
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", "Cluckin Bell", "#9", "AND", "5", "Shit");
+                slave.CreatePolicy("StockItem", "Cluckin Bell", "#9", "AND", "5", "Shit");
                 Assert.AreEqual((int)EditStorePolicyStatus.InvalidPolicyData, slave.Answer.Status);
             }
 
@@ -130,39 +130,30 @@ namespace StoreCenterTests.StoreCenterUnitTests
 
 
             [TestMethod]
-            public void AddGlobalPolicySuccess()
+            public void AddStockItemPolicySuccess()
             {
 
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", "Cluckin Bell", "#9", "Quantity <=", "5", "");
+                slave.CreatePolicy("StockItem", "Cluckin Bell", "#9", "Quantity <=", "5", "");
                 Assert.AreEqual((int)EditStorePolicyStatus.Success, slave.Answer.Status);
             }
 
             [TestMethod]
-            public void AddProductPolicySuccess()
+            public void AddStorePolicySuccess()
             {
 
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", "Cluckin Bell", "#9", "Quantity <=", "5", "");
+                slave.CreatePolicy("Store", "Cluckin Bell", null, "Quantity <=", "5", "");
                 Assert.AreEqual((int)EditStorePolicyStatus.Success, slave.Answer.Status);
             }
-
-            [TestMethod]
-            public void AddCategoryPolicySuccess()
-            {
-
-                AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", "Cluckin Bell", "#9", "Quantity <=", "5", "");
-                Assert.AreEqual((int)EditStorePolicyStatus.Success, slave.Answer.Status);
-
-            }
+        
 
             [TestMethod]
             public void SavePolicySuccess()
             {
 
                 AddPolicySlave slave = new AddPolicySlave(seller.Object, manager.Object);
-                slave.CreatePolicy("Stock Item", "Cluckin Bell", "#9", "Quantity <=", "5", "");
+                slave.CreatePolicy("StockItem", "Cluckin Bell", "#9", "Quantity <=", "5", "");
                 slave.SaveFullPolicy();
                 Assert.AreEqual((int)EditStorePolicyStatus.Success, slave.Answer.Status);
 

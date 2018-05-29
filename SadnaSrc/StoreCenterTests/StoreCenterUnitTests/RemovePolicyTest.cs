@@ -36,7 +36,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             seller.Setup(x => x.CanDeclarePurchasePolicy())
                 .Throws(new MarketException((int)PromoteStoreStatus.NoAuthority, ""));
             RemovePolicySlave slave = new RemovePolicySlave(seller.Object, manager.Object);
-            slave.RemovePolicy("Stock Item", "Cluckin Bell","#9");
+            slave.RemovePolicy("StockItem", "Cluckin Bell","#9");
             Assert.AreEqual((int)EditStorePolicyStatus.NoAuthority, slave.Answer.Status);
         }
 
@@ -52,7 +52,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void BadStockPolicyType()
         {
             RemovePolicySlave slave = new RemovePolicySlave(seller.Object, manager.Object);
-            slave.RemovePolicy("Stock Item", "Cluckin Bell", "");
+            slave.RemovePolicy("StockItem", "Cluckin Bell", "");
             Assert.AreEqual((int)EditStorePolicyStatus.InvalidPolicyData, slave.Answer.Status);
         }
 
@@ -69,7 +69,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
 
             RemovePolicySlave slave = new RemovePolicySlave(seller.Object, manager.Object);
-            slave.RemovePolicy("Stock Item", "Cluckin Bell", "#9");
+            slave.RemovePolicy("StockItem", "Cluckin Bell", "#9");
             Assert.AreEqual((int)EditStorePolicyStatus.Success, slave.Answer.Status);
 
         }

@@ -28,8 +28,8 @@ namespace UserSpotTests.UseCaseUnitTest
             userServiceGuestSession.EnterSystem();
             userServiceRegisteredSession = null;
             expected = new List<CartItem>();
-            item1 = new CartItem("Health Potion", "X", 1, 5.0);
-            item2 = new CartItem("Health Potion", "Y", 2, 0.5);
+            item1 = new CartItem("Health Potion", null, "X", 1, 5.0);
+            item2 = new CartItem("Health Potion", null, "Y", 2, 0.5);
 
         }
 
@@ -198,13 +198,13 @@ namespace UserSpotTests.UseCaseUnitTest
         private void AddItem1(UserService userService)
         {
             expected.Add(item1);
-            userService.AddToCart("Health Potion", "X", 1, 5.0);
+            userService.AddToCart("Health Potion", null, "X", 1, 5.0);
         }
 
         private void AddItem2(UserService userService)
         {
             expected.Add(item2);
-            userService.AddToCart("Health Potion", "Y", 2, 0.5);
+            userService.AddToCart("Health Potion", null, "Y", 2, 0.5);
         }
 
         private void AddAllItems(UserService userService)

@@ -1,4 +1,5 @@
-﻿using SadnaSrc.Main;
+﻿using System.Collections.Generic;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
 {
@@ -92,9 +93,9 @@ namespace SadnaSrc.UserSpot
             return slave.Answer;
         }
 
-	    public void AddToCart(string product, string store, int quantity, double unitPrice)
+	    public void AddToCart(string product, List<string> categories, string store, int quantity, double unitPrice)
         {
-            MarketUser.Cart.AddToCart(product, store, quantity,unitPrice);
+            MarketUser.Cart.AddToCart(product, categories, store, quantity,unitPrice);
         }
 	}
 }
