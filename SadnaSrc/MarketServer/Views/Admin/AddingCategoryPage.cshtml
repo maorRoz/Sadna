@@ -1,12 +1,16 @@
-﻿
+﻿<br />
+<br />
+<br />
+<br />
+<br />
 
 @{
-    ViewData["Title"] = "Adding Category Page";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Adding Category Page";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewData["Title"]</h2>
-<hr/>
+<hr />
 <div class="row top-space">
 	<div class="col-lg-10">
 		<div id="feedContainer" style="float: right;width:20%">
@@ -21,7 +25,7 @@
 						@Model.Message
 					</div>
 				}
-				
+
 				@if (Model.Message != null && ViewBag.valid)
 				{
 					<div class='success'>
@@ -31,11 +35,11 @@
 				}
 
 			</div>
-			@using (Html.BeginForm("AddCategory", "Admin", new { Model.SystemId, Model.State}))
+			@using (Html.BeginForm("AddCategory", "Admin", new { Model.SystemId, Model.State }))
 			{
 				<label for="category-name">Category Name:</label>
-				<input type="text" class="form-control" id="category-name" name="category"/>
-				<br/>
+				<input type="text" class="form-control" id="category-name" name="category" />
+				<br />
 				<input type="submit" id="sign-in-button" class="btn btn-primary" value="Add">
 
 			}

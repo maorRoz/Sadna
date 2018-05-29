@@ -35,7 +35,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                answer = new StoreAnswer(exe);
+                answer = new StoreAnswer((StoreEnum)exe.Status,exe.GetErrorMessage());
             }
             catch (MarketException)
             {

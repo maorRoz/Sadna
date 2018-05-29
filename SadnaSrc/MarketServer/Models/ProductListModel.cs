@@ -21,15 +21,23 @@ namespace MarketWeb.Models
 		public class ProductItem
 		{
 			public string Name { get; set; }
-			public string BasePrice { get; set; }
+			public string Price { get; set; }
 			public string Description { get; set; }
 			public string PurchaseWay { get; set; }
 			public string Quantity { get; set; }
+			public string Discount { get; set; }
+			public string Store { get; set; }
 
 			public ProductItem(string data)
 			{
-				var dataParam = data.Split(new[] { "name : ", " base price : ", " description : ", " Unit Price : ", " Final Price : " }, StringSplitOptions.RemoveEmptyEntries);
-
+				var dataParam = data.Split(new[] { " name: ", " base price: ", " description: ", " Discount: {", "}", " Purchase Way: ", " Quantity: ", " Store: "}, StringSplitOptions.RemoveEmptyEntries);
+				Name = dataParam[0];
+				Price = dataParam[1];
+				Description = dataParam[2];
+				Discount = dataParam[3];
+				PurchaseWay = dataParam[4];
+				Quantity = dataParam[5];
+				Store = dataParam[6];
 			}
 		}
 	}

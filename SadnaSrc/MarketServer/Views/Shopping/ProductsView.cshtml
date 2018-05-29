@@ -1,7 +1,12 @@
-﻿
+﻿<br />
+<br />
+<br />
+<br />
+<br />
 
 @{
-	ViewData["Title"] = @Model.StoreName + " page";
+	ViewData["Title"] = "Products View";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row top-space">
@@ -9,7 +14,7 @@
 		<div id="feedContainer" style="float: right;width:20%"></div>
 		<div style="float: left;width:70%">
 			<div id="alertContainer">
-				@if (Model.Message != null && ViewBag.valid)
+				@if (Model.Message != null)
 				{
 					<div class='success'>
 						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
@@ -17,18 +22,9 @@
 					</div>
 				}
 
-				@if (Model.Message != null && !ViewBag.valid)
-				{
-					<div class='error'>
-						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-						@Model.Message
-					</div>
-				}
-
-
 
 			</div>
-			<h2>@Model.StoreName Stock List</h2>
+
 			<hr />
 			<table class="table">
 				<thead>
@@ -39,6 +35,7 @@
 						<th>Discount</th>
 						<th>Purchase Way</th>
 						<th>Quantity</th>
+						<th>Store</th>
 					</tr>
 				</thead>
 				@foreach (var item in Model.Items)
@@ -50,17 +47,18 @@
 						<td>@item.Discount</td>
 						<td>@item.PurchaseWay</td>
 						<td>@item.Quantity</td>
+						<td>@item.Store</td>
 						<td>
 							@if (item.PurchaseWay == "Immediate")
 							{
 								<a asp-controller="Shopping" asp-action="AddToCart" asp-route-systemId="@Model.SystemId"
-								   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name"
-								   asp-route-quantity="1" asp-route-directViewStoreStock=0><img src="\images\cartAdd.png" /></a>
+								   asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
+								   asp-route-quantity="1" asp-route-directViewStoreStock=1><img src="\images\cartAdd.png" /></a>
 							}
 							else
 							{
 								<a asp-controller="Purchase" asp-action="BuyLotteryTicketForm" asp-route-systemId="@Model.SystemId"
-								   asp-route-state="@Model.State" asp-route-store="@Model.StoreName" asp-route-product="@item.Name"
+								   asp-route-state="@Model.State" asp-route-store="@item.Store" asp-route-product="@item.Name"
 								   asp-route-realPrice=@item.Price><img src="\images\addTicket.png" /></a>
 							}
 

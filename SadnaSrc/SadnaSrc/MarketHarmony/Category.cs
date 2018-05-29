@@ -37,6 +37,7 @@ namespace SadnaSrc.MarketHarmony
         {
             products.AddLast(product);
         }
+
         private string getNextCategoryID()
         {
             if (globalCategoryID == -1)

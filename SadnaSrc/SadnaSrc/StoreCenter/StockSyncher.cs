@@ -78,6 +78,14 @@ namespace SadnaSrc.StoreCenter
             if (MarketYard.MarketDate > item.Discount.EndDate.Date)
                 throw new StoreException(CalculateEnum.DiscountExpired, "discount expired");
             double ans = item.Discount.CalcDiscount(item.Product.BasePrice);
+            CategoryDiscount categoryDiscount;
+            foreach (string categoryName in item.Product.Categories)
+            {
+                categoryDiscount = null;
+                categoryDiscount = DataLayer.GetCategoryDiscount(categoryName, storeName);
+                if (categoryDiscount != null)
+                    ans = categoryDiscount.CalcDiscount(ans);
+            }
             ans = ans * _quantity;
             return ans;
         }

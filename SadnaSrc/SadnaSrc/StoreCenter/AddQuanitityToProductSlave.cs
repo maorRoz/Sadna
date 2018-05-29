@@ -32,8 +32,9 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                answer = new StoreAnswer(exe);
-            }
+				answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
+			}
+
             catch (MarketException e)
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"

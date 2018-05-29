@@ -1,0 +1,102 @@
+﻿<br />
+<br />
+<br />
+<br />
+<br />
+
+@{
+	ViewData["Title"] = "Search a product";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+<div class="row top-space">
+	<div class="col-lg-10">
+
+		<div id="feedContainer" style="float: right;width:20%">
+			<br />
+		</div>
+
+		<div style="float: left;width:30%">
+			<div id="alertContainer">
+				@if (Model.Message != null)
+				{
+					<div class='error'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
+				}
+			</div>
+
+			@using (Html.BeginForm("SearchProduct", "Shopping", new { Model.SystemId, Model.State, Model.Message }))
+			{
+				<input class="form-control" id="user-name-entry" name="value" />
+				<fieldset>
+					<br />
+					Search Product by:
+					<select name="type">
+						<option value="Name">Name</option>
+						<option value="Category">Category</option>
+						<option value="KeyWord">KeyWord</option>
+					</select>
+				</fieldset>
+
+				<fieldset>
+					<br />
+					Filter by Category:
+					<select name="category">
+						<option value="None">None</option>
+						@foreach (var item in Model.Items)
+						{
+							<option value="@item.Name">@item.Name</option>
+						}
+					</select>
+				</fieldset>
+				<br />
+				<table>
+					<tr></tr>
+					<tr>
+						<td>
+							Filter By Price:
+						</td>
+					</tr>
+
+					<tr>
+
+						<td>
+							<label for="minPrice">Min Price:</label>
+						</td>
+
+						<td>
+							<label for="maxPrice">Max Price:</label>
+						</td>
+					</tr>
+
+					<tr>
+
+						<td>
+							<input class="form-control" id="minPrice" name="minPrice" />
+						</td>
+						<td>
+							<input class="form-control" id="maxPrice" name="maxPrice" />
+						</td>
+					</tr>
+					<tr></tr>
+
+				</table>
+				<br />
+				<div class="form-group text-center">
+					<input type="submit" class="btn btn-primary" value="search" />
+				</div>
+
+			}
+
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+}
+

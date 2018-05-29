@@ -134,9 +134,35 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-      
+		public Product[] GetProductsByName(string name)
+		{
+			LinkedList<Product> products = new LinkedList<Product>();
+			using (var dbReader = dbConnection.SelectFromTableWithCondition("Products", "*", "Name = '" + name + "'"))
+			{
+				while (dbReader.Read())
+				{
+					products.AddLast(new Product(dbReader.GetString(0),dbReader.GetString(1), dbReader.GetDouble(2), dbReader.GetString(3)));
+				}
 
-        public void EditLotteryTicketInDatabase(LotteryTicket ticket)
+				return products.ToArray();
+			}
+		}
+
+	    public string GetStoreByProductId(string productId)
+	    {
+		    string store = null;
+			using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "StockID", "ProductSystemID = '" + productId + "'"))
+			{
+				while (dbReader.Read())
+				{
+					store = dbReader.GetString(0);
+				}
+
+				return store;
+			}
+		}
+
+	    public void EditLotteryTicketInDatabase(LotteryTicket ticket)
         {
 
             string[] columnNames =
@@ -657,6 +683,96 @@ namespace SadnaSrc.StoreCenter
         {
             LinkedList<string> ids = new LinkedList<string>();
             using (var dbReader = dbConnection.SelectFromTable("Category", "SystemID"))
+            {
+                while (dbReader.Read())
+                {
+                    ids.AddLast(dbReader.GetString(0));
+                }
+            }
+            return ids.ToArray();
+        }
+
+
+	    public string[] GetAllCategorysNames()
+	    {
+		    LinkedList<string> ids = new LinkedList<string>();
+		    using (var dbReader = dbConnection.SelectFromTable("Category", "name"))
+		    {
+			    while (dbReader.Read())
+			    {
+				    ids.AddLast(dbReader.GetString(0));
+			    }
+		    }
+		    return ids.ToArray();
+		}
+
+	    public Product[] GetAllProducts()
+	    {
+		    LinkedList<Product> products = new LinkedList<Product>();
+		    using (var dbReader = dbConnection.SelectFromTable("Products", "*"))
+		    {
+			    while (dbReader.Read())
+			    {
+				    products.AddLast(new Product(dbReader.GetString(0), dbReader.GetString(1), dbReader.GetDouble(2),
+					    dbReader.GetString(3)));
+			    }
+		    }
+		    return products.ToArray();
+		}
+        public CategoryDiscount GetCategoryDiscount(string categoryName, string storeName)
+        {
+            CategoryDiscount categoryDiscount = null;
+            using (var dbReader =
+                dbConnection.SelectFromTableWithCondition("CategoryDiscount", "*",
+                    "CategoryName = '" + categoryName + "' AND StoreName = '" + storeName + "'"))
+            {
+                while (dbReader.Read())
+                {
+                    categoryDiscount = new CategoryDiscount(dbReader.GetString(0),
+                        dbReader.GetString(1),
+                        dbReader.GetString(2),
+                        dbReader.GetDateTime(3)
+                        , dbReader.GetDateTime(4)
+                        , dbReader.GetInt32(5)
+                        );
+                }
+            }
+
+            return categoryDiscount;
+        }
+
+        public void AddCategoryDiscount(CategoryDiscount categorydiscount)
+        {
+            dbConnection.InsertTable("CategoryDiscount", "SystemID, CategoryName, StoreName, StartDate, EndDate, DiscountAmount",
+                new[] { "@idParam", "@categoryParam", "@storeParam", "@startParam", "@endParam", "@amountParam"}
+                , categorydiscount.GetDiscountValuesArray());
+        }
+
+        public void RemoveCategoryDiscount(CategoryDiscount categoryDiscount)
+        {
+            dbConnection.DeleteFromTable("CategoryDiscount", "SystemId = '" + categoryDiscount.SystemId + "'");
+        }
+
+        public void EditCategoryDiscount(CategoryDiscount categoryDiscount)
+        {
+            string[] columnNames =
+            {
+                "SystemID",
+                "CategoryName",
+                "StoreName",
+                "StartDate",
+                "EndDate",
+                "DiscountAmount",
+            };
+            dbConnection.UpdateTable("CategoryDiscount", "SystemId = '" + categoryDiscount.SystemId + "'", columnNames,
+                new[] { "@idParam", "@categoryParam", "@storeParam", "@startParam", "@endParam", "@amountParam" }
+                , categoryDiscount.GetDiscountValuesArray());
+        }
+
+        public string[] GetAllCategoryDiscountIDs()
+        {
+            LinkedList<string> ids = new LinkedList<string>();
+            using (var dbReader = dbConnection.SelectFromTable("CategoryDiscount", "SystemID"))
             {
                 while (dbReader.Read())
                 {

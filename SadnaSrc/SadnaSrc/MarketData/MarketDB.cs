@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.InteropServices;
 using SadnaSrc.Main;
 
 
@@ -28,15 +29,31 @@ namespace SadnaSrc.MarketData
             }
             catch(SqlException)
             {
+                //dont care
             }
         }
-        private void InitiateDb()
-        {
 
-            var dbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
-            //var dbPath = "Data Source=tcp:192.168.56.1\\MarketDB;Initial Catalog=MarketData;User ID=sa;Password=123;MultipleActiveResultSets=true";
-            //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
-            _dbConnection = new SqlConnection(dbPath);
+        private void InitiateDb()
+        { 
+            var localDbPath = new SqlConnectionStringBuilder
+            {
+                DataSource = ".\\MarketDB",
+                InitialCatalog = "MarketData",
+                IntegratedSecurity = true,
+                MultipleActiveResultSets = true
+            };
+
+
+            var remoteDbPath = new SqlConnectionStringBuilder
+            {
+                DataSource = "tcp:192.168.1.3\\MarketDB",
+                InitialCatalog = "MarketData",
+                UserID = "sa",
+                Password = "123",
+                MultipleActiveResultSets= true
+            };
+             _dbConnection = new SqlConnection(localDbPath.ConnectionString);
+            //_dbConnection = new SqlConnection(remoteDbPath.ConnectionString);
             OpenIfClosed();
         }
 
@@ -64,7 +81,8 @@ namespace SadnaSrc.MarketData
                 CreateCategoryTable(),
                 CreateCategoryProductConnectionTable(),
                 CreateConditionTable(),
-                CreateOperatorTable()
+                CreateOperatorTable(),
+                CreateCategoryDiscountTable()
             };
 
             for (var i = 0; i < createTableStrings.Length; i++)
@@ -76,6 +94,7 @@ namespace SadnaSrc.MarketData
            
         }
 
+        
         public void InsertByForce() { 
 
             string[] thingsToInsertByForce =
@@ -109,6 +128,7 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P20', '#45 With Cheese', 18, 'its just a fucking cheesburger, ok?')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P21', 'Fraid Egg', 10, 'yami')",
                 "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P22', 'OnePunchManPoster', 10, 'yami')",
+                "INSERT INTO Products (SystemID, Name, BasePrice, Description) VALUES ('P23', 'BlackLotus', 10, 'best card ever')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D1', 'HIDDEN', '2018-01-01', '2018-12-31', 50, 'True')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D2', 'HIDDEN', '2019-01-01', '2030-12-31', 50, 'True')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D3', 'HIDDEN', '2017-01-01', '2017-03-01', 50, 'True')",
@@ -137,8 +157,14 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P17', 10, 'null', 'Lottery')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P21', 10, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P22', 10, 'null', 'Immediate')",
+                "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P23', 10, 'null', 'Immediate')",
                 "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
+	            "INSERT INTO Category (SystemID, name) VALUES ('C3', 'Books')",
+				"INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C1', 'P21')",
+                "INSERT INTO Category (SystemID, name) VALUES ('C2', 'MTG_Cards')",
                 "INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C1', 'P21')",
+                "INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C2', 'P23')",
+                "INSERT INTO CategoryDiscount (SystemID, CategoryName, StoreName, StartDate, EndDate, DiscountAmount) VALUES ('d1', 'MTG_Cards', 'T','2018-01-01', '2018-12-31', 50)",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L1', 'P1', 100, 0 , 'X' ,'2018-01-01', '2018-12-31', 'True')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L2', 'P15', 200, 0 , 'T' ,'2018-01-01', '2018-12-31', 'False')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L3', 'P16', 200, 0 , 'T' ,'2018-01-01', '2018-12-31', 'True')",
@@ -257,6 +283,12 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Avi`s Chocolate Kingdom','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','StoreOwner')",
+	            "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
+	            "INSERT INTO Category (SystemID, name) VALUES ('C2', 'Books')",
+				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P1')",
+				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P2')",
+				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C2','P3')",
+	            "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik2','White Chocolate','S1','Immediate',2,7,'2018-12-29')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Avi','Avi','StoreOwner','2018-1-1','Avi`s Chocolate Kingdom has been opened')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Avi','Arik2','StoreOwner','2018-1-1','Regular promotion')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Arik2','Arik3','ManageProducts','2018-1-1','Regular promotion')",
@@ -309,7 +341,8 @@ namespace SadnaSrc.MarketData
                 "Category",
                 "CategoryProductConnection",
                 "SimplePolicies",
-                "ComplexPolicies"
+                "ComplexPolicies",
+                "CategoryDiscount"
             };
             var dbConnection = _dbConnection;
             if (ToDisable)
@@ -567,7 +600,19 @@ namespace SadnaSrc.MarketData
                                     PRIMARY KEY([CategoryID], [ProductID])
                                     )";
         }
-
+        private string CreateCategoryDiscountTable()
+        {
+            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='CategoryDiscount' AND xtype='U') 
+                        CREATE TABLE [CategoryDiscount] (
+                                    [SystemID]          VARCHAR(256),
+                                    [CategoryName]      VARCHAR(256),
+                                    [StoreName]         VARCHAR(256),
+                                    [StartDate]         DATETIME,
+                                    [EndDate]           DATETIME,
+                                    [DiscountAmount]    INT,
+                                    PRIMARY KEY([SystemID])
+                                    )";
+        }
         private static string CreateConditionTable()
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SimplePolicies' AND xtype='U') 

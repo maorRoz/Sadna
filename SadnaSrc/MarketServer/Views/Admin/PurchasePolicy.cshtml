@@ -1,7 +1,12 @@
-﻿
+﻿<br />
+<br />
+<br />
+<br />
+<br />
+
 @{
-    ViewData["Title"] = "Purchase Policy";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Purchase Policy";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -19,10 +24,10 @@
 
 				@if (Model.Message != null && !ViewBag.valid)
 				{
-				<div class='error'>
-					<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-					@Model.Message
-				</div>
+					<div class='error'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
 				}
 				
 				@if (Model.Message != null && ViewBag.valid)
@@ -39,30 +44,31 @@
 					<br/>
 					<table>
 
-						<tr>
-							<td>
-								<label for="subject">Subject:</label>
-							</td>
-						</tr>
+					<tr>
+						<td>
+							<label for="subject">Subject:</label>
+						</td>
+					</tr>
 
 						<tr>
 							<td>
 								<input type="text" class="form-control" id="subject" name="subject"/>
 							</td>
 
-							<td>
-								<text>&nbsp;</text>
-								<select name="type">
+						<td>
+							<text>&nbsp;</text>
+							<select name="type">
 
 									<option value="Global">Global</option>
 
-									<option value="Product">Product</option>
 
-									<option value="Category">Category</option>
+								<option value="Product">Product</option>
 
-								</select>
-							</td>
-						</tr>
+								<option value="Category">Category</option>
+
+							</select>
+						</td>
+					</tr>
 
 						<tr>
 							<td>
@@ -75,7 +81,7 @@
 								<input type="text" class="form-control" id="data1" text-align:center value="UserName" disabled/>
 							</td>
 
-						</tr>
+					</tr>
 
 						<tr>
 							<td>
@@ -89,11 +95,12 @@
 							</td>
 						</tr>
 
-						<tr>
-							<td>
-								<input type="text" class="form-control" id="data3" name="quantityText"/>
-								<text>&nbsp;</text><text>&nbsp;</text><text>&nbsp;</text>
-							</td>
+
+					<tr>
+						<td>
+							<input type="text" class="form-control" id="data3" name="quantityText" />
+							<text>&nbsp;</text><text>&nbsp;</text><text>&nbsp;</text>
+						</td>
 
 							<td>
 								<text>&nbsp;</text>
@@ -101,9 +108,10 @@
 								<text>&nbsp;</text>
 								<select name="quantityOp">
 
-									<option value=">=">> =</option>
 
-									<option value="<=">< =</option>
+								<option value=">=">> =</option>
+
+								<option value="<=">< =</option>
 
 								</select>
 							</td>
@@ -111,14 +119,15 @@
 								<input type="text" class="form-control" id="data1" value="Quantity" disabled/>
 							</td>
 
-						</tr>
+
+					</tr>
 
 
 
-						<tr>
-							<td>
-								<input type="text" class="form-control" id="data4" name="priceText"/>
-							</td>
+					<tr>
+						<td>
+							<input type="text" class="form-control" id="data4" name="priceText" />
+						</td>
 
 							<td>
 								<text>&nbsp;</text>
@@ -126,35 +135,36 @@
 								<text>&nbsp;</text>
 								<select name="priceOp">
 
-									<option value=">=">> =</option>
 
-									<option value="<=">< =</option>
+								<option value=">=">> =</option>
 
-								</select>
-							</td>
-							<td>
-								<input type="text" class="form-control" id="data1" name="equal" value="Price" disabled/>
-							</td>
+								<option value="<=">< =</option>
 
-						</tr>
+							</select>
+						</td>
+						<td>
+							<input type="text" class="form-control" id="data1" name="equal" value="Price" disabled />
+						</td>
 
-					</table>
-					<br/>
-					<input type="submit" class="btn btn-primary" value="Create">
+					</tr>
 
-				}
-		@using (Html.BeginForm("CreatePolicy", "Admin", new {Model.SystemId, Model.State}))
-		{
+				</table>
+				<br />
+				<input type="submit" class="btn btn-primary" value="Create">
 
-					<hr/>
-					<br/>
-					<table>
+			}
+			@using (Html.BeginForm("CreatePolicy", "Admin", new { Model.SystemId, Model.State }))
+			{
 
-						<tr>
-							<td>
-								<label for="subject">Subject:</label>
-							</td>
-						</tr>
+				<hr />
+				<br />
+				<table>
+
+					<tr>
+						<td>
+							<label for="subject">Subject:</label>
+						</td>
+					</tr>
 
 						<tr>
 							<td>
@@ -168,24 +178,26 @@
 
 									<option value="Global">Global</option>
 
-									<option value="Product">Product</option>
 
-									<option value="Category">Category</option>
+								<option value="Product">Product</option>
 
-								</select>
-							</td>
-						</tr>
+								<option value="Category">Category</option>
+
+							</select>
+						</td>
+					</tr>
 					<tr>
 					<td>
 						<select name="arg1">
 							@foreach (var item in Model.Conditions)
 							{	
+
 									<option value="@item">@item</option>
 
-							}
-									</select>
-								<br/>
-							</td>
+								}
+							</select>
+							<br />
+						</td>
 
 						<td>
 							<select name="op">
@@ -195,9 +207,9 @@
 									<option value="@item">@item</option>
 
 								}
-								<br/>
+								<br />
 							</select>
-							
+
 						</td>
 						<td>
 							<select name="optArg">
@@ -230,6 +242,7 @@
 		}
 		<br/>
 		
+
 		</div>
 
 	</div>

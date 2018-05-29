@@ -43,6 +43,36 @@ namespace SadnaSrc.AdminView
 
         }
 
+	    public string[] GetAllUserInPurchaseHistory()
+	    {
+			LinkedList<string> users = new LinkedList<string>();
+			using (var dbReader = dbConnection.SelectFromTable("PurchaseHistory", "UserName"))
+			{
+				while (dbReader.Read())
+				{
+					users.AddLast(dbReader.GetString(0));
+				}
+				
+			}
+
+		    return users.ToArray();
+	    }
+
+	    public string[] GetAllStoresInPurchaseHistory()
+	    {
+		    LinkedList<string> stores = new LinkedList<string>();
+		    using (var dbReader = dbConnection.SelectFromTable("PurchaseHistory", "Store"))
+		    {
+			    while (dbReader.Read())
+			    {
+				    stores.AddLast(dbReader.GetString(0));
+				}
+					
+		    }
+
+		    return stores.ToArray();
+		}
+
         public void CloseStore(string store)
         {
             dbConnection.UpdateTable("Store", "Name = '"+store+"'",new[] {"Status"},new[] {"@stat"},new object[] {"Inactive"});
