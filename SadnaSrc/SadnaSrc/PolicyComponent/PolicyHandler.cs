@@ -144,7 +144,19 @@ namespace SadnaSrc.PolicyComponent
             return idArr.Select(x => x.ToString()).ToArray();
         }
 
-        public string[] ViewPolicies()
+	    public string[] ViewSessionPolicies()
+	    {
+		    PurchasePolicy[] policiesArr = SessionPolicies.ToArray();
+		    List<string> policyStrings = new List<string>();
+		    for (int i = 0; i < policiesArr.Length; i++)
+		    {
+			    if (policiesArr[i].Type == PolicyType.Global || policiesArr[i].Type == PolicyType.Category || policiesArr[i].Type == PolicyType.Product || policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem)
+				    policyStrings.Add(policiesArr[i].ToString());
+		    }
+		    return policyStrings.ToArray();
+	    }
+
+		public string[] ViewPolicies()
         {
             PurchasePolicy[] policiesArr = Policies.ToArray();
             List<string> policyStrings = new List<string>();

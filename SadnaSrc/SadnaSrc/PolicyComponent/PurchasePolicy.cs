@@ -26,6 +26,9 @@ namespace SadnaSrc.PolicyComponent
         public abstract bool Evaluate(string username, string address, int quantity, double price);
 
         public abstract string[] GetData();
+
+	    public abstract string ToString();
+
         public static string PrintEnum(PolicyType type)
         {
             switch (type)

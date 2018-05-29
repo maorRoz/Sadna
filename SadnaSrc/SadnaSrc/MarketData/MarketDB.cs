@@ -43,6 +43,7 @@ namespace SadnaSrc.MarketData
                 MultipleActiveResultSets = true
             };
 
+
             var remoteDbPath = new SqlConnectionStringBuilder
             {
                 DataSource = "tcp:192.168.1.3\\MarketDB",
@@ -277,7 +278,7 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (3,'RegisteredUser')",
-                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
+				"INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Avi`s Chocolate Kingdom','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Avi`s Chocolate Kingdom','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','ManageProducts')",

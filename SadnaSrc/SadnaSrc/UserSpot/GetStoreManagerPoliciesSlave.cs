@@ -27,7 +27,7 @@ namespace SadnaSrc.UserSpot
                 ApproveEnetered();
 				MarketLog.Log("UserSpot", "User " + userID + " has successfully viewing his policies in this store...");
 				StoreManagerPolicy[] policies = _user.GetStoreManagerPolicies(store);
-				string[] stringPolicies = { "ManageProducts", "DeclareDiscountPolicy", "PromoteStoreAdmin", "ViewPurchaseHistory","ViewPromotionHistory"};
+				string[] stringPolicies = { "ManageProducts", "DeclareDiscountPolicy", "PromoteStoreAdmin", "ViewPurchaseHistory","ViewPromotionHistory", "PurchasePolicy"};
 			
 				if (!_user.IsSystemAdmin())
 				{

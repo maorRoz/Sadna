@@ -169,8 +169,8 @@ namespace SadnaSrc.AdminView
 
         private bool CheckPolicySubject(string type, string subject)
         {
-            return (type.Contains("Global") & subject == null) ||
-                   (type.Contains("Product") & !subject.IsNullOrEmpty()) ||
+            return(type.Contains("Global") & subject == null) |
+                   (type.Contains("Product") & !subject.IsNullOrEmpty()) |
                    (type.Contains("Category") & !subject.IsNullOrEmpty());
         }
 
