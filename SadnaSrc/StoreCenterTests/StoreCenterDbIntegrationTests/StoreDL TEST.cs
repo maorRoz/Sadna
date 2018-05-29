@@ -426,7 +426,88 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 
         }
 
-        [TestCleanup]
+	    [TestMethod]
+	    public void GetProductsByNameTest()
+	    {
+			Product p1 = new Product("P25", "Neta", 1, "EuroWinner");
+			Product p2 = new Product("P26", "Netaaaa", 2, "EuroWinnerrrrr");
+			Product[] expected = {p1, p2};
+			handler.AddProductToDatabase(p1);
+		    handler.AddProductToDatabase(p2);
+			Product[] productsByName = {handler.GetProductsByName(p1.Name)[0], handler.GetProductsByName(p2.Name)[0]};
+			Assert.AreEqual(expected.Length, handler.GetProductsByName(p1.Name).Length+ handler.GetProductsByName(p2.Name).Length);
+		    for (int i = 0; i < expected.Length; i++)
+		    {
+			    Assert.AreEqual(expected[i].ToString(), productsByName[i].ToString());
+		    }
+
+	    }
+
+	    [TestMethod]
+	    public void GetAllCategoryNamesTest()
+	    {
+		    Category cat1 = new Category("C1", "WanderlandItems"); // THIS exists in DB by SQL injection
+	        Category cat2 = new Category("C2", "MTG_Cards");
+            Category cat3 = new Category("C3", "Books"); // THIS exists in DB by SQL injection
+		    string[] expected = {cat1.Name, cat2.Name, cat3.Name };
+		    string[] result = handler.GetAllCategorysNames();
+			Assert.AreEqual(expected.Length, result.Length);
+		    for (int i = 0; i < expected.Length; i++)
+		    {
+				Assert.AreEqual(expected[i],result[i]);
+		    }
+
+	    }
+
+	    [TestMethod]
+	    public void GetAllProductsTest()
+	    {
+		    Product[] expected =
+		    {
+			    new Product("P1", "BOX", 100, "this is a plastic box"),
+			    new Product("P10", "LittleCake", 100, "eat my"),
+			    new Product("P11", "LittleDrink", 200, "drink my"),
+			    new Product("P12", "CheshireCat", 200, "smile"),
+			    new Product("P13", "WhiteRabbit", 200, "you are late"),
+			    new Product("P14", "RedQueen", 200, "Cutoff his head"),
+			    new Product("P15", "Time", 200, "Dont kill my"),
+			    new Product("P16", "The March Hare", 200, "Tea?"),
+			    new Product("P17", "nonsense ", 200, "no sense!"),
+			    new Product("P18", "Pizza", 60, "food"),
+			    new Product("P19", "#9", 5, "its just a fucking burger, ok?"),
+				new Product("P2", "Golden BOX", 1000, "this is a golden box"),
+			    new Product("P20", "#45 With Cheese", 18, "its just a fucking cheesburger, ok?"),
+			    new Product("P21", "Fraid Egg", 10, "yami"),
+			    new Product("P22", "OnePunchManPoster", 10, "yami"),
+		        new Product("P23", "BlackLotus", 10, "best card ever"),
+                new Product("P3", "DeleteMy BOX", 10, "this is a trush"),
+			    new Product("P4", "Bamba", 6, "munch"),
+			    new Product("P5", "Goldstar", 11, "beer"),
+			    new Product("P6", "OCB", 10, "accessories"),
+			    new Product("P7", "Coated Peanuts", 10, "munch"),
+			    new Product("P8", "Alice", 10, "popo"),
+			    new Product("P9", "TheHatter", 10, "popo"),
+   
+		    };
+
+			Product[] actual = handler.GetAllProducts();
+		    actual = actual.OrderBy(x => x.SystemId).ToArray();
+			Assert.AreEqual(expected.Length, actual.Length);
+		    for (int i = 0; i < actual.Length; i++)
+		    {
+				Assert.AreEqual(expected[i],actual[i]);
+		    }
+		}
+
+	    [TestMethod]
+	    public void GetStoreByProductId()
+	    {
+		    string actual = handler.GetStoreByProductId("P1");
+			Assert.AreEqual("S1", actual);
+		}
+
+
+		[TestCleanup]
         public void CleanDb()
         {
             MarketDB.Instance.CleanByForce();

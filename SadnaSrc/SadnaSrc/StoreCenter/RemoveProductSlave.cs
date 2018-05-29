@@ -34,8 +34,8 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                Answer = new StoreAnswer(exe);
-            }
+				Answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
+			}
             catch (MarketException)
             {
                 Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");

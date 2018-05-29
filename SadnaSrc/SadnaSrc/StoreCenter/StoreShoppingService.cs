@@ -57,14 +57,28 @@ namespace SadnaSrc.StoreCenter
 		    slave.ViewStoreStockAll(storename);
 		    return slave.answer;
 	    }
-	
-		public MarketAnswer AddProductToCart(string store, string productName, int quantity)
+
+	    public MarketAnswer SearchProduct(string type, string value, double minPrice, double maxPrice, string category)
+	    {
+		    SearchProductSlave slave = new SearchProductSlave(_shopper, storeDL);
+		    slave.SearchProduct(type, value,minPrice, maxPrice, category);
+		    return slave.Answer;
+
+	    }
+
+	    public MarketAnswer AddProductToCart(string store, string productName, int quantity)
         {
             AddProductToCartSlave slave = new AddProductToCartSlave(_shopper, storeDL);
             slave.AddProductToCart(store, productName, quantity);
             return slave.answer;
         }
 
-    }
+	    public MarketAnswer GetAllCategoryNames()
+	    {
+		    GetAllCategoryNamesSlave slave = new GetAllCategoryNamesSlave(_shopper, storeDL);
+		    slave.GetAllCategoryNames();
+		    return slave.Answer;
+	    }
+	}
 }
  

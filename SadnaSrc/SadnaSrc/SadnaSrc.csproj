@@ -170,6 +170,7 @@
     <Compile Include="StoreCenter\EditDiscountSlave.cs" />
     <Compile Include="StoreCenter\EditProductSlave.cs" />
     <Compile Include="StoreCenter\EnumStringConverter.cs" />
+    <Compile Include="StoreCenter\GetAllCategoryNamesSlave.cs" />
     <Compile Include="StoreCenter\OpenStoreSlave.cs" />
     <Compile Include="StoreCenter\IStockSyncher.cs" />
     <Compile Include="StoreCenter\LotteryTicket.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="StoreCenter\RemovePolicySlave.cs" />
     <Compile Include="StoreCenter\RemoveProductFromCategorySlave.cs" />
     <Compile Include="StoreCenter\RemoveProductSlave.cs" />
+    <Compile Include="StoreCenter\SearchProductSlave.cs" />
     <Compile Include="StoreCenter\StockListItem.cs" />
     <Compile Include="StoreCenter\Store.cs" />
     <Compile Include="StoreCenter\StoreAnswer.cs" />

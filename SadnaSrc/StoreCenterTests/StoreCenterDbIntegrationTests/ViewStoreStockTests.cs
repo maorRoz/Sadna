@@ -5,7 +5,7 @@ using System;
 using SadnaSrc.MarketData;
 
 
-namespace StoreCenterTests.StoreCenterDbIntegrationTestss
+namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
     [TestClass]
     public class ViewStoreStockTests
