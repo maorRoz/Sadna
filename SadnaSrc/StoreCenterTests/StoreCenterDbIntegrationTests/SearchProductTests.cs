@@ -30,8 +30,8 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService = market.GetUserService();
             userService.EnterSystem();
             storeService = market.GetStoreShoppingService(ref userService);
-            p1 = " name: BOX base price: 100 description: this is a plastic box Discount: {type is: hidden} Purchase Way: Immediate Quantity: 5";
-            p2 = " name: Fraid Egg base price: 10 description: yami Discount: {null} Purchase Way: Immediate Quantity: 10";
+            p1 = " name: BOX base price: 100 description: this is a plastic box Discount: {type is: hidden} Purchase Way: Immediate Quantity: 5 Store: X";
+            p2 = " name: Fraid Egg base price: 10 description: yami Discount: {none} Purchase Way: Immediate Quantity: 10 Store: T";
         }
 
         [TestMethod]
@@ -41,15 +41,29 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         }
 
         [TestMethod]
+        public void SearchByNameSimilarResultTest()
+        {
+            Assert.AreEqual((int)SearchProductStatus.MistakeTipGiven, 
+                storeService.SearchProduct("Name", "BUX", 0, 0, "None").Status);
+        }
+
+        [TestMethod]
         public void SearchByNameNotExistTest()
         {
-            NoneFound(storeService.SearchProduct("Name", "ABOX", 0, 0, "None"));
+            NoneFound(storeService.SearchProduct("Name", "aerhaer", 0, 0, "None"));
         }
 
         [TestMethod]
         public void SearchByCategoryNoFilteringSuccessTest()
         {
             ProductFound(p2, storeService.SearchProduct("Category", "WanderlandItems", 0, 0, "None"));
+        }
+
+        [TestMethod]
+        public void SearchByCategorySimilarResultTest()
+        {
+            Assert.AreEqual((int)SearchProductStatus.MistakeTipGiven,
+                storeService.SearchProduct("Category", "WanderlondItems", 0, 0, "None").Status);
         }
 
         [TestMethod]
