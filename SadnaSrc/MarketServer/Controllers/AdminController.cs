@@ -117,7 +117,7 @@ namespace MarketWeb.Controllers
             var conditions = new string[0];
 			operators = new[] { "AND", "OR", "NOT" };
 			ViewBag.valid = valid;
-			var answer = adminService.ViewPolicies();
+			var answer = adminService.ViewPoliciesSessions();
 			if (answer.Status == Success)
 		    {
 		       
