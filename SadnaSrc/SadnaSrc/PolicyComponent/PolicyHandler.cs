@@ -151,7 +151,7 @@ namespace SadnaSrc.PolicyComponent
 		    for (int i = 0; i < policiesArr.Length; i++)
 		    {
 			    if (policiesArr[i].Type == PolicyType.Global || policiesArr[i].Type == PolicyType.Category || policiesArr[i].Type == PolicyType.Product)
-				    policyStrings.Add(PurchasePolicy.PrintEnum(policiesArr[i].Type) + "." + policiesArr[i].Subject);
+				    policyStrings.Add(policiesArr[i].ToString());
 		    }
 		    return policyStrings.ToArray();
 	    }

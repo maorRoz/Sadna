@@ -44,9 +44,16 @@ namespace SadnaSrc.Main
         MarketAnswer ViewStoreHistory();
 	    MarketAnswer CloseStore();
 
+		/**
+		 * Purchase Policy
+		 */
+	    MarketAnswer CreatePolicy(string type, string subject, string optSubject, string op, string arg1, string optArg);
+	    MarketAnswer SavePolicy();
+	    MarketAnswer ViewPolicies();
+	    MarketAnswer RemovePolicy(string type, string subject, string optProd);
 
     }
-    public enum StoreEnum
+	public enum StoreEnum
     {
         Success,
         ProductNotFound,

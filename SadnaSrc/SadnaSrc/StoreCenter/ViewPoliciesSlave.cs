@@ -44,5 +44,27 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-    }
+	    public void ViewSessionPolicies()
+	    {
+		    try
+		    {
+			    MarketLog.Log("StoreCenter", "Checking store manager status.");
+			    _storeManager.CanDeclarePurchasePolicy();
+			    MarketLog.Log("StoreCenter", "Trying to view policies.");
+			    string[] result = _manager.ViewSessionPolicies();
+			    MarketLog.Log("StoreCenter", "Successfully got policiy ids.");
+			    Answer = new StoreAnswer(ViewStorePolicyStatus.Success, "Successfully got policiy ids.", result);
+
+		    }
+		    catch (StoreException e)
+		    {
+			    Answer = new StoreAnswer((EditStorePolicyStatus)e.Status, e.GetErrorMessage());
+		    }
+		    catch (MarketException e)
+		    {
+			    Answer = new StoreAnswer(ViewStorePolicyStatus.NoAuthority, e.GetErrorMessage(), null);
+		    }
+	    }
+
+	}
 }

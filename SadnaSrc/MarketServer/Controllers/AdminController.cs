@@ -131,26 +131,20 @@ namespace MarketWeb.Controllers
 		    return View(new ConditionsOperatorsModel(systemId, state, message,operators, conditions));
 		}
 
-	    public IActionResult CreatePolicy(int systemId, string state, string type, string subject, string op, string arg1, string optArg, string usernameText, string addressText, string quantityOp,string quantityText, string priceOp, string priceText, string subject1, string type1, string[] options)
+	    public IActionResult CreatePolicy(int systemId, string state, string type, string subject, string op, string arg1, string optArg, string usernameText, string addressText, string quantityOp,string quantityText, string priceOp, string priceText, string subject1, string type1)
 	    {
 		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-			LinkedList<string> results = new LinkedList<string>();
-		    foreach (var option in options)
-		    {
-			    results.AddLast(option);
-		    }
 
 		    if (usernameText != null)
 		    {
-			    var answer = adminService.CreatePolicy(type, subject, "UserName =", usernameText, optArg);
+			    var answer = adminService.CreatePolicy(type, subject, "Username =", usernameText, optArg);
 			    if (answer.Status != Success)
 			    {
 				   
 					return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer});
 
 			    }
-
-			    results.AddLast(type + " " + subject + " UserName = " + usernameText);
+			
 		    }
 
 		    else if (addressText != null)
@@ -160,7 +154,6 @@ namespace MarketWeb.Controllers
 			    {
 				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
 			    }
-			    results.AddLast(type + " " + subject + " Address = " + addressText);
 			}
 
 		    else if (quantityText != null)
@@ -170,7 +163,6 @@ namespace MarketWeb.Controllers
 			    {
 				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
 			    }
-			    results.AddLast(type + " " + subject + " Quantity " + quantityOp+ " " + quantityText);
 			}
 
 		    else if (priceText != null)
@@ -180,17 +172,32 @@ namespace MarketWeb.Controllers
 			    {
 				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
 			    }
-			    results.AddLast(type + " " + subject + " Price " + priceOp + " " + priceText);
 			}
 
 		    else
 		    {
-			    var answer = adminService.CreatePolicy(type1, subject1, op, arg1, optArg);
-			    if (answer.Status != Success)
+			    string[] id1 = arg1.Split(' ');
+			    string[] id2 = null;
+				if (optArg != null)
 			    {
-				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
-			    }
-			    results.AddLast(type1 + " " + subject1 + " " + arg1 + " " + optArg);
+				    id2 = optArg.Split(' ');
+				    var answer = adminService.CreatePolicy(type1, subject1, op, id1[0], id2[0]);
+				    if (answer.Status != Success)
+				    {
+					    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+				    }
+				}
+
+				else
+				{
+					var answer = adminService.CreatePolicy(type1, subject1, op, id1[0], null);
+					if (answer.Status != Success)
+					{
+						return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+					}
+				}
+
+				
 			}
  
 		    return RedirectToAction("PurchasePolicy", new { systemId, state});

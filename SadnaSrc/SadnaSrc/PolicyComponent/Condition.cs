@@ -39,5 +39,11 @@ namespace SadnaSrc.PolicyComponent
                 PrintBoolean(IsRoot)
             };
         }
-    }
+
+	    public override string ToString()
+	    {
+		    return ID + " " + Subject + " " + Type + " " + GetMyType() + "  "+Value + " " ;
+
+		}
+	}
 }
