@@ -150,7 +150,7 @@ namespace SadnaSrc.PolicyComponent
 		    List<string> policyStrings = new List<string>();
 		    for (int i = 0; i < policiesArr.Length; i++)
 		    {
-			    if (policiesArr[i].Type == PolicyType.Global || policiesArr[i].Type == PolicyType.Category || policiesArr[i].Type == PolicyType.Product)
+			    if (policiesArr[i].Type == PolicyType.Global || policiesArr[i].Type == PolicyType.Category || policiesArr[i].Type == PolicyType.Product || policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem)
 				    policyStrings.Add(policiesArr[i].ToString());
 		    }
 		    return policyStrings.ToArray();

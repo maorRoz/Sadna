@@ -34,7 +34,7 @@ namespace SadnaSrc.MarketData
         {
 
             var dbPath = "Data Source=.\\MarketDB;Initial Catalog=MarketData;Integrated Security=True;MultipleActiveResultSets=true";
-            //  var dbPath1 = "Data Source=169.254.34.195,1433;Initial Catalog=MarketData;Integrated Security=False;MultipleActiveResultSets=true";
+            //var dbPath = "Data Source=tcp:192.168.56.1\\MarketDB;Initial Catalog=MarketData;User ID=sa;Password=123;MultipleActiveResultSets=true";
             //  var dbPath2 = "Data Source=169.254.34.195,1433;Network Library=DBMSSOCN;Initial Catalog =MarketData; User ID = DESKTOP-NHU1RB6\\Maor; Password = 123; ";
             _dbConnection = new SqlConnection(dbPath);
             OpenIfClosed();
@@ -252,7 +252,7 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (3,'RegisteredUser')",
-                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
+				"INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Avi`s Chocolate Kingdom','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Avi`s Chocolate Kingdom','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','ManageProducts')",
