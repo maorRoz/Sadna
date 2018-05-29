@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.MarketData;
 
 namespace SadnaSrc.StoreCenter
 {
@@ -64,7 +65,12 @@ namespace SadnaSrc.StoreCenter
 		    {
 			    Answer = new StoreAnswer(ViewStorePolicyStatus.NoAuthority, e.GetErrorMessage(), null);
 		    }
-	    }
+
+		    catch (DataException e)
+		    {
+			    Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+		    }
+		}
 
 	}
 }
