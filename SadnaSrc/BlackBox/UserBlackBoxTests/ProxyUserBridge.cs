@@ -78,10 +78,8 @@ namespace BlackBox
             {
                 return real.GetUserSession();
             }
-            else
-            {
-                throw new NotImplementedException();
-            }
+
+            throw new NotImplementedException();
         }
 
     }

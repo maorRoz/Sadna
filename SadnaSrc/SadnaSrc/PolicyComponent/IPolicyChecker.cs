@@ -8,6 +8,6 @@ namespace SadnaSrc.PolicyComponent
 {
     public interface IPolicyChecker
     {
-        bool CheckRelevantPolicies(string product, string store, string category, string username, string address, int quantity, double price);
+        bool CheckRelevantPolicies(string product, string store, List<string> categories, string username, string address, int quantity, double price);
     }
 }

@@ -11,6 +11,8 @@ namespace SadnaSrc.UserSpot
     {
         public string Name { get; }
 
+        public List<string> Categories { get; }
+
         public string Store { get; }
 
         public int Quantity { get; set; }
@@ -18,9 +20,10 @@ namespace SadnaSrc.UserSpot
 
         public double FinalPrice => UnitPrice * Quantity;
 
-        public CartItem( string name, string store, int quantity,double unitPrice)
+        public CartItem( string name, List<string> categories, string store, int quantity,double unitPrice)
         {
             Name = name;
+            Categories = categories;
             Store = store;
             Quantity = quantity;
             UnitPrice = unitPrice;

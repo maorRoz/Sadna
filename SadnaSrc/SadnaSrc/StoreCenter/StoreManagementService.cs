@@ -173,6 +173,7 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer ViewPromotionHistory()
         {
             ViewPromotionHistorySlave slave = new ViewPromotionHistorySlave(_storeName, _storeManager, storeDL);
+            slave.ViewPromotionHistory();
             return slave.Answer;
         }
         public MarketAnswer AddCategoryDiscount(string categoryName, DateTime startDate, DateTime endDate, int discountAmount)

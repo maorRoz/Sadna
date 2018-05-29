@@ -44,6 +44,9 @@ namespace SadnaSrc.Main
             int discountAmount);
         MarketAnswer EditCategoryDiscount(string categoryName, string whatToEdit, string newValue);
         MarketAnswer RemoveCategoryDiscount(string categoryName);
+
+        MarketAnswer ViewPromotionHistory();
+
         MarketAnswer ViewStoreHistory();
 	    MarketAnswer CloseStore();
 

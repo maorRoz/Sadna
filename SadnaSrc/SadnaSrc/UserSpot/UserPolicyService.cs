@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace SadnaSrc.UserSpot
             StorePolicies = new List<StoreManagerPolicy>();
         }
       
-        public static void PromoteStorePolicies(string userName,string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
+        public static string[] PromoteStorePolicies(string userName,string store,StoreManagerPolicy.StoreAction[] actionsToAdd)
         {
             var userDB = UserDL.Instance;
             if (!userDB.IsUserNameExist(userName))
@@ -41,11 +42,15 @@ namespace SadnaSrc.UserSpot
                 actionsToAdd = new []{ StoreManagerPolicy.StoreAction.StoreOwner };
             }
 
+            var actionsThatAddedSuccessfully = new List<string>();
             foreach (StoreManagerPolicy.StoreAction action in actionsToAdd)
             {
                 userDB.SaveUserStorePolicy(userName,new StoreManagerPolicy(store,action));
+                actionsThatAddedSuccessfully.Add(StoreManagerPolicy.GetStoreActionString(action));
             }
-            
+
+            return actionsThatAddedSuccessfully.ToArray();
+
         }
 
         public void AddStatePolicy(StatePolicy.State state)

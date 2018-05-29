@@ -95,6 +95,7 @@
     <Compile Include="StoreBlackBoxTests\UseCase3_4.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase3_3.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase1_5.cs" />
+    <Compile Include="StoreBlackBoxTests\UseCase3_8.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase4_1.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase8_1.cs" />
     <Compile Include="StoreBlackBoxTests\UseCase8_3.cs" />
