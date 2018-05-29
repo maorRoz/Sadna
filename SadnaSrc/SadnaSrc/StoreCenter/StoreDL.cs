@@ -719,7 +719,6 @@ namespace SadnaSrc.StoreCenter
 		    }
 		    return products.ToArray();
 		}
-	}
         public CategoryDiscount GetCategoryDiscount(string categoryName, string storeName)
         {
             CategoryDiscount categoryDiscount = null;

@@ -447,8 +447,9 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 	    public void GetAllCategoryNamesTest()
 	    {
 		    Category cat1 = new Category("C1", "WanderlandItems"); // THIS exists in DB by SQL injection
-		    Category cat2 = new Category("C2", "Books"); // THIS exists in DB by SQL injection
-		    string[] expected = {cat1.Name, cat2.Name};
+	        Category cat2 = new Category("C2", "MTG_Cards");
+            Category cat3 = new Category("C3", "Books"); // THIS exists in DB by SQL injection
+		    string[] expected = {cat1.Name, cat2.Name, cat3.Name };
 		    string[] result = handler.GetAllCategorysNames();
 			Assert.AreEqual(expected.Length, result.Length);
 		    for (int i = 0; i < expected.Length; i++)
@@ -478,7 +479,8 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 			    new Product("P20", "#45 With Cheese", 18, "its just a fucking cheesburger, ok?"),
 			    new Product("P21", "Fraid Egg", 10, "yami"),
 			    new Product("P22", "OnePunchManPoster", 10, "yami"),
-				new Product("P3", "DeleteMy BOX", 10, "this is a trush"),
+		        new Product("P23", "BlackLotus", 10, "best card ever"),
+                new Product("P3", "DeleteMy BOX", 10, "this is a trush"),
 			    new Product("P4", "Bamba", 6, "munch"),
 			    new Product("P5", "Goldstar", 11, "beer"),
 			    new Product("P6", "OCB", 10, "accessories"),

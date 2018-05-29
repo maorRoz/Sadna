@@ -40,7 +40,8 @@ namespace SadnaSrc.StoreCenter
         void RemoveProductFromCategory(string CategoryID, string ProductID);
 	      Product[] GetProductsByName(string name);
 	      string GetStoreByProductId(string productId);
-	      Product[] GetAllProducts()
+        Product[] GetAllProducts();
+        Store GetStorebyID(string storeid);
         CategoryDiscount GetCategoryDiscount(string categoryName, string storeName);
         void AddCategoryDiscount(CategoryDiscount discount);
         void RemoveCategoryDiscount(CategoryDiscount categoryDiscount);
