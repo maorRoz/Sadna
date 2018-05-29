@@ -64,7 +64,7 @@ namespace SadnaSrc.AdminView
         public MarketAnswer ViewPolicies()
         {
             ViewPoliciesSlave slave = new ViewPoliciesSlave(_admin, MarketYard.Instance.GetGlobalPolicyManager());
-            slave.ViewPolicies();
+            slave.ViewSessionPolicies();
             return slave.Answer;
         }
 

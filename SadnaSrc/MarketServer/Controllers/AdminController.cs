@@ -110,15 +110,17 @@ namespace MarketWeb.Controllers
 
 	    }
 
-		public IActionResult PurchasePolicy(int systemId, string state, string message)
+		public IActionResult PurchasePolicy(int systemId, string state, string message, bool valid)
 		{
 			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
 		    var operators = new string[0];
             var conditions = new string[0];
-		    var answer = adminService.ViewPolicies();
-		    if (answer.Status == Success)
+			operators = new[] { "AND", "OR", "NOT" };
+			ViewBag.valid = valid;
+			var answer = adminService.ViewPolicies();
+			if (answer.Status == Success)
 		    {
-		        operators = new []{"AND", "OR", "NOT"};
+		       
 		        conditions = answer.ReportList;
 		    }
 		    else
@@ -126,18 +128,72 @@ namespace MarketWeb.Controllers
 		        message = answer.Answer;
 		    }
 
-		    return View(new ConditionsOperatorsModel(systemId, state, message,operators,conditions));
+		    return View(new ConditionsOperatorsModel(systemId, state, message,operators, conditions));
 		}
 
-	    public IActionResult CreatePolicy(int systemId, string state, string type, string subject, string op, string arg1, string optArg)
+	    public IActionResult CreatePolicy(int systemId, string state, string type, string subject, string op, string arg1, string optArg, string usernameText, string addressText, string quantityOp,string quantityText, string priceOp, string priceText, string subject1, string type1, string[] options)
 	    {
 		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-		    var answer = adminService.CreatePolicy(type, subject, op, arg1, optArg);
-		    if (answer.Status == Success)
+			LinkedList<string> results = new LinkedList<string>();
+		    foreach (var option in options)
 		    {
-			    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = true });
+			    results.AddLast(option);
+		    }
+
+		    if (usernameText != null)
+		    {
+			    var answer = adminService.CreatePolicy(type, subject, "UserName =", usernameText, optArg);
+			    if (answer.Status != Success)
+			    {
+				   
+					return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer});
+
+			    }
+
+			    results.AddLast(type + " " + subject + " UserName = " + usernameText);
+		    }
+
+		    else if (addressText != null)
+		    {
+				var answer = adminService.CreatePolicy(type, subject, "Address =", addressText, optArg);
+			    if (answer.Status != Success)
+			    {
+				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+			    }
+			    results.AddLast(type + " " + subject + " Address = " + addressText);
 			}
-		    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = false });
+
+		    else if (quantityText != null)
+		    {
+			    var answer = adminService.CreatePolicy(type, subject, "Quantity "+quantityOp, quantityText, optArg);
+			    if (answer.Status != Success)
+			    {
+				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+			    }
+			    results.AddLast(type + " " + subject + " Quantity " + quantityOp+ " " + quantityText);
+			}
+
+		    else if (priceText != null)
+		    {
+			    var answer = adminService.CreatePolicy(type, subject, "Price " + priceOp, priceText, optArg);
+			    if (answer.Status != Success)
+			    {
+				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+			    }
+			    results.AddLast(type + " " + subject + " Price " + priceOp + " " + priceText);
+			}
+
+		    else
+		    {
+			    var answer = adminService.CreatePolicy(type1, subject1, op, arg1, optArg);
+			    if (answer.Status != Success)
+			    {
+				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+			    }
+			    results.AddLast(type1 + " " + subject1 + " " + arg1 + " " + optArg);
+			}
+ 
+		    return RedirectToAction("PurchasePolicy", new { systemId, state});
 		}
 
 	    public IActionResult SavePolicy(int systemId, string state)
