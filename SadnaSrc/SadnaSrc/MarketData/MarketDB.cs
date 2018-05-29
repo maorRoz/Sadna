@@ -142,7 +142,7 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO Category (SystemID, name) VALUES ('C2', 'MTG_Cards')",
                 "INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C1', 'P21')",
                 "INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C2', 'P23')",
-                "INSERT INTO CategoryDiscount (SystemID, CategoryName, StoreName, StartDate, EndDate, DiscountAmount) VALUES ('d1', 'MTG_Cards', 'wanderland','2018-01-01', '2018-12-31', 50)",
+                "INSERT INTO CategoryDiscount (SystemID, CategoryName, StoreName, StartDate, EndDate, DiscountAmount) VALUES ('d1', 'MTG_Cards', 'T','2018-01-01', '2018-12-31', 50)",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L1', 'P1', 100, 0 , 'X' ,'2018-01-01', '2018-12-31', 'True')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L2', 'P15', 200, 0 , 'T' ,'2018-01-01', '2018-12-31', 'False')",
                 "INSERT INTO LotteryTable (SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName, StartDate, EndDate, isActive) VALUES ('L3', 'P16', 200, 0 , 'T' ,'2018-01-01', '2018-12-31', 'True')",

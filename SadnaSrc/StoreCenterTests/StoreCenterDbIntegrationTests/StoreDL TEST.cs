@@ -388,40 +388,40 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void GetCategoryDiscount()
         {
-            CategoryDiscount expected = new CategoryDiscount("d1", "MTG_Cards", "wanderland", DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"),50);
-            var find = handler.GetCategoryDiscount("MTG_Cards", "wanderland");
+            CategoryDiscount expected = new CategoryDiscount("d1", "MTG_Cards", "T", DateTime.Parse("01/01/2018"), DateTime.Parse("31/12/2018"),50);
+            var find = handler.GetCategoryDiscount("MTG_Cards", "T");
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
         public void AddCategoryDiscount()
         {
-            CategoryDiscount expected = new CategoryDiscount("d2", "WanderlandItems", "wanderland", DateTime.Parse("1/1/2018"), DateTime.Parse("31/12/2018"), 50);
+            CategoryDiscount expected = new CategoryDiscount("d2", "WanderlandItems", "T", DateTime.Parse("1/1/2018"), DateTime.Parse("31/12/2018"), 50);
             handler.AddCategoryDiscount(expected);
-            var find = handler.GetCategoryDiscount("WanderlandItems", "wanderland");
+            var find = handler.GetCategoryDiscount("WanderlandItems", "T");
             Assert.AreEqual(expected, find);
         }
         [TestMethod]
         public void EditCategoryDiscount()
         {
-            CategoryDiscount expected = new CategoryDiscount("d2", "WanderlandItems", "wanderland", DateTime.Parse("1/1/2018"), DateTime.Parse("31/12/2018"), 50);
+            CategoryDiscount expected = new CategoryDiscount("d2", "WanderlandItems", "T", DateTime.Parse("1/1/2018"), DateTime.Parse("31/12/2018"), 50);
             handler.AddCategoryDiscount(expected);
-            var find = handler.GetCategoryDiscount("WanderlandItems", "wanderland");
+            var find = handler.GetCategoryDiscount("WanderlandItems", "T");
             Assert.AreEqual(expected, find);
             expected.StartDate = DateTime.Parse("15/07/2018");
             handler.EditCategoryDiscount(expected);
-            find = handler.GetCategoryDiscount("WanderlandItems", "wanderland");
+            find = handler.GetCategoryDiscount("WanderlandItems", "T");
             Assert.AreEqual(expected, find);
 
         }
         [TestMethod]
         public void RemoveCategoryDiscount()
         {
-            CategoryDiscount expected = new CategoryDiscount("d2", "WanderlandItems", "wanderland", DateTime.Parse("1/1/2018"), DateTime.Parse("31/12/2018"), 50);
+            CategoryDiscount expected = new CategoryDiscount("d2", "WanderlandItems", "T", DateTime.Parse("1/1/2018"), DateTime.Parse("31/12/2018"), 50);
             handler.AddCategoryDiscount(expected);
-            var find = handler.GetCategoryDiscount("WanderlandItems", "wanderland");
+            var find = handler.GetCategoryDiscount("WanderlandItems", "T");
             Assert.AreEqual(expected, find);
             handler.RemoveCategoryDiscount(expected);
-            find = handler.GetCategoryDiscount("WanderlandItems", "wanderland");
+            find = handler.GetCategoryDiscount("WanderlandItems", "T");
             Assert.IsNull(find);
 
         }
