@@ -186,13 +186,6 @@ namespace OrderPoolWallaterSupplyPointTests
         }
 
         [TestMethod]
-        public void TestBadUserDetails3()
-        {
-            MarketAnswer ans = orderService.GiveDetails("Big SMoke", "Grove Street", "123478");
-            Assert.AreEqual((int)GiveDetailsStatus.InvalidNameOrAddress, ans.Status);
-        }
-
-        [TestMethod]
         public void TestBadUserDetails4()
         {
             MarketAnswer ans = orderService.GiveDetails("Big SMoke", "Grove Street", "asdfghjk");
