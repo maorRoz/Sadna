@@ -245,6 +245,7 @@ namespace SadnaSrc.MarketData
 				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P1')",
 				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P2')",
 				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C2','P3')",
+	            "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik2','White Chocolate','S1','Immediate',2,7,'2018-12-29')",
 			};
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {

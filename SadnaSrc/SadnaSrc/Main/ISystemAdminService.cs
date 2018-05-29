@@ -34,7 +34,8 @@ namespace SadnaSrc.Main
         NotSystemAdmin,
         NoUserFound,
         NoStoreFound,
-        NoDB = 500
+	    MistakeTipGiven,
+		NoDB = 500
     }
 
     public enum EditCategoryStatus
