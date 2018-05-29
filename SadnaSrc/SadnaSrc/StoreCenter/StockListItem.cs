@@ -52,6 +52,20 @@ namespace SadnaSrc.StoreCenter
             hashCode = hashCode * -1521134295 + PurchaseWay.GetHashCode();
             return hashCode;
         }
+        public void CheckIfDiscountExistsAndCalcValue(ref StockListItem stockListItem, string storename)
+        {
+            if (stockListItem.Discount?.discountType != DiscountTypeEnum.Visible) return;
+            if (stockListItem.Discount.CheckTime())
+                stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
+            CategoryDiscount categoryDiscount;
+            foreach (string categoryName in stockListItem.Product.Categories)
+            {
+                categoryDiscount = null;
+                categoryDiscount = StoreDL.Instance.GetCategoryDiscount(categoryName, storename);
+                if (categoryDiscount != null)
+                    stockListItem.Product.BasePrice = categoryDiscount.CalcDiscount(stockListItem.Product.BasePrice);
+            }
+        }
 
         public object[] GetStockListItemArray()
         {
