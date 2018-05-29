@@ -37,7 +37,12 @@ namespace SadnaSrc.StoreCenter
         LinkedList<Product> GetAllCategoryProducts(string categoryid);
         void AddProductToCategory(string CategoryID, string ProductID);
         void RemoveProductFromCategory(string CategoryID, string ProductID);
+
+        CategoryDiscount GetCategoryDiscount(string categoryName, string storeName);
+        void AddCategoryDiscount(CategoryDiscount discount);
+        void RemoveCategoryDiscount(CategoryDiscount categoryDiscount);
+        void EditCategoryDiscount(CategoryDiscount categoryDiscount);
         void AddPromotionHistory(string store,string managerName,string promotedName,string[] permissions,string description);
         string[] GetPromotionHistory(string store);
     }
-    }
+}

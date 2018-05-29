@@ -68,6 +68,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StoreCenterDbIntegrationTests\EditCategoryDiscountTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\RemoveCategoryDiscountTests.cs" />
+    <Compile Include="StoreCenterDbIntegrationTests\AddCategoryDiscountTests.cs" />
+    <Compile Include="StoreCenterUnitTests\AddCategoryDiscountMockTest.cs" />
+    <Compile Include="StoreCenterUnitTests\EditCategoryDiscoutMockTests.cs" />
+    <Compile Include="StoreCenterUnitTests\RemoveDiscountCategoryMockTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\addDiscountTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\AddProductToCategoryTests.cs" />
     <Compile Include="StoreCenterDbIntegrationTests\RemoveProductFromCategoryTests.cs" />
