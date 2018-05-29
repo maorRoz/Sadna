@@ -27,25 +27,20 @@ namespace SadnaSrc.StoreCenter
 			{
 				MarketLog.Log("StoreCenter", "searching for a product!");
 				_shopper.ValidateCanBrowseMarket();
-				MarketLog.Log("StoreCenter", "Checking the entered value");
+				MarketLog.Log("StoreCenter", "User enetred the system!");
 				validateData(value);
 				Product[] products = null;
-			    MarketLog.Log("StoreCenter", "Value OK. Checking the entered prices");
-                validatePrices(minPrice, maxPrice);
-			    MarketLog.Log("StoreCenter", "Prices OK!");
-                switch (type)
+				validatePrices(minPrice, maxPrice);
+				switch (type)
 				{
 					case "Name":
-					    MarketLog.Log("StoreCenter", "Searching a product with name " + value);
-                        products = _storeLogic.GetProductsByName(value);
+						products = _storeLogic.GetProductsByName(value);
 						if (products.Length == 0)
 						{
-						    MarketLog.Log("StoreCenter", "Product " + value + " not found, searching a product with a similar name");
-                            string similarProduct = FindSimilarProductByName(value);
+							string similarProduct = FindSimilarProductByName(value);
 							if (similarProduct != "")
 							{
-							    MarketLog.Log("StoreCenter", "Alternate options found");
-                                Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
+								Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
 								return;
 							}
 							
@@ -53,66 +48,56 @@ namespace SadnaSrc.StoreCenter
 
 						break;
 					case "Category":
-					    MarketLog.Log("StoreCenter", "Searching products in category " + value);
-                        Category cat = _storeLogic.GetCategoryByName(value);
+						Category cat = _storeLogic.GetCategoryByName(value);
 						if (cat == null)
 						{
-						    MarketLog.Log("StoreCenter", "Category " + value + " not found, searching a category with a similar name");
-                            string similarProduct = FindSimilarCategoriesByName(value);
+							string similarProduct = FindSimilarCategoriesByName(value);
 							if (similarProduct != "")
 							{
-							    MarketLog.Log("StoreCenter", "Alternate options found");
-                                Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
+								Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
 								return;
 							}
 
 							Answer = new StoreAnswer(SearchProductStatus.CategoryNotFound, "Category wasn't found in the system!");
 							return;
 						}
-					    MarketLog.Log("StoreCenter", "Retrieving all products in category " + value);
-                        products = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
+						products = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
 						
 						break;
 					case "KeyWord":
-					    MarketLog.Log("StoreCenter", "Searching products with keyword " + value);
-                        products = FindKeyWord(value);
+						products = FindKeyWord(value);
 						break;
 				}
 
-			    MarketLog.Log("StoreCenter", "Filtering results according to given prices");
-                products = FilterResultsByPrice(products,minPrice, maxPrice);
-			    MarketLog.Log("StoreCenter", "Filtering results according to given category");
-                products = FilterResultByCategory(products, category);
+				products = FilterResultsByPrice(products,minPrice, maxPrice);
+				products = FilterResultByCategory(products, category);
 				
 				string[] result = new string[products.Length];
-			    MarketLog.Log("StoreCenter", "Searching stores that have the found products");
-                string[] stores = GetProductsStores(products);
+				string[] stores = GetProductsStores(products);
 				for (int i = 0; i < result.Length; i++)
 				{
 					string productId = products[i].SystemId;
 					result[i] = GetProductStockInformation(productId,false) + " Store: "+ stores[i];
 				}
-			    MarketLog.Log("StoreCenter", "Data retrieved successfully!");
-                Answer = new StoreAnswer(SearchProductStatus.Success,"Data retrieved successfully!", result);
+
+				Answer = new StoreAnswer(SearchProductStatus.Success,"Data retrieved successfully!", result);
 			}
 
 			catch (StoreException e)
 			{
-			    MarketLog.Log("StoreCenter", e.GetErrorMessage());
-                Answer = new StoreAnswer((SearchProductStatus)e.Status, e.GetErrorMessage());
+				Answer = new StoreAnswer((SearchProductStatus)e.Status, e.GetErrorMessage());
 			}
 
 			catch (MarketException)
 			{
-				MarketLog.Log("StoreCenter", "User Didn't enter the system!");
+				MarketLog.Log("StoreCenter", "no premission");
 				Answer = new StoreAnswer(SearchProductStatus.DidntEnterSystem,
 					"User Didn't enter the system!");
 			}
 
 			catch (DataException e)
 			{
-			    MarketLog.Log("StoreCenter", e.GetErrorMessage());
-                Answer = new StoreAnswer((SearchProductStatus) e.Status, e.GetErrorMessage());
+				Answer = new StoreAnswer((SearchProductStatus) e.Status, e.GetErrorMessage());
 			}	
 		}
 
