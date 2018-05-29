@@ -35,15 +35,34 @@ namespace SadnaSrc.StoreCenter
 				{
 					case "Name":
 						products = _storeLogic.GetProductsByName(value);
+						if (products.Length == 0)
+						{
+							string similarProduct = FindSimilarProductByName(value);
+							if (similarProduct != "")
+							{
+								Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
+								return;
+							}
+							
+						}
+
 						break;
 					case "Category":
 						Category cat = _storeLogic.GetCategoryByName(value);
 						if (cat == null)
 						{
+							string similarProduct = FindSimilarCategoriesByName(value);
+							if (similarProduct != "")
+							{
+								Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
+								return;
+							}
+
 							Answer = new StoreAnswer(SearchProductStatus.CategoryNotFound, "Category wasn't found in the system!");
 							return;
 						}
 						products = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
+						
 						break;
 					case "KeyWord":
 						products = FindKeyWord(value);
@@ -58,7 +77,7 @@ namespace SadnaSrc.StoreCenter
 				for (int i = 0; i < result.Length; i++)
 				{
 					string productId = products[i].SystemId;
-					result[i] = GetProductStockInformation(productId,false)/* + " Store: "+ stores[i]*/;
+					result[i] = GetProductStockInformation(productId,false) + " Store: "+ stores[i];
 				}
 
 				Answer = new StoreAnswer(SearchProductStatus.Success,"Data retrieved successfully!", result);
@@ -80,6 +99,36 @@ namespace SadnaSrc.StoreCenter
 			{
 				Answer = new StoreAnswer((SearchProductStatus) e.Status, e.GetErrorMessage());
 			}	
+		}
+
+		private string FindSimilarCategoriesByName(string value)
+		{
+			string similarProduct = "";
+			string[] caetgories = _storeLogic.GetAllCategorysNames();
+			foreach (var category in caetgories)
+			{
+				if (MarketMistakeService.IsSimilar(value, category))
+				{
+					similarProduct = category;
+				}
+			}
+
+			return similarProduct;
+		}
+
+		private string FindSimilarProductByName(string value)
+		{
+			string similarProduct = "";
+			Product[] products = _storeLogic.GetAllProducts();
+			foreach (var product in products)
+			{
+				if (MarketMistakeService.IsSimilar(value, product.Name))
+				{
+					similarProduct = product.Name;
+				}
+			}
+
+			return similarProduct;
 		}
 
 		private Product[] FindKeyWord(string value)
@@ -209,7 +258,7 @@ namespace SadnaSrc.StoreCenter
 				discount += stockListItem.Discount;
 			else
 			{
-				discount += "null";
+				discount += "none";
 			}
 			discount += "}";
 			string purchaseWay = " Purchase Way: " + EnumStringConverter.PrintEnum(stockListItem.PurchaseWay);
