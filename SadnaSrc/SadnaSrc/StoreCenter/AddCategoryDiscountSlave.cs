@@ -32,7 +32,7 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "check that the category don't have another discount");
                 CheckHasNoExistsDiscount(categoryName);
                 CategoryDiscount discount =
-                    new CategoryDiscount(categoryName, _storeName, startDate, endDate, discountAmount);
+                    new CategoryDiscount(_storeName, categoryName, startDate, endDate, discountAmount);
                 DataLayerInstance.AddCategoryDiscount(discount);
                 MarketLog.Log("StoreCenter", "categoryDiscountd added successfully");
                 string[] coupon = {discount.SystemId};

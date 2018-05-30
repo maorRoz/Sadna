@@ -2,9 +2,12 @@
 <br />
 <br />
 <br />
+<br />
+<br />
+<br />
 
 @{
-	ViewData["Title"] = "Add Category Discount Page";
+	ViewData["Title"] = "Remove Category Discount Page";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -19,16 +22,24 @@
 
 		<div style="float: left;width:30%">
 			<div id="alertContainer">
-				@if (Model.Message != null)
+				@if (Model.Message != null && !ViewBag.valid)
 				{
 					<div class='error'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
+
+				}
+					@if (Model.Message != null && ViewBag.valid)
+				{
+					<div class='sucess'>
 						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
 						@Model.Message
 					</div>
 				}
 			</div>
 
-			@using (Html.BeginForm("AddCategoryDiscount", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, store = Model.Name }))
+			@using (Html.BeginForm("RemoveCategoryDiscount", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, store = Model.Name }))
 			{
 				<fieldset>
 					<br />
@@ -39,15 +50,9 @@
 						}
 					</select>
 				</fieldset>
-				<label for="start-date">Start Date:</label>
-				<input type="text" class="form-control" id="start-date" name="startDate" />
-				<label for="end-date">End Date:</label>
-				<input type="text" class="form-control" id="end-date" name="endDate" />
-				<label for="discount-amount">Discount Amount:</label>
-				<input class="form-control" id="discount-amount" name="discountAmount" />
 
 				<br />
-				<input type="submit" class="btn btn-primary" value="Add">
+				<input type="submit" class="btn btn-primary" value="Remove">
 
 			}
 		</div>
@@ -58,3 +63,4 @@
 @section Scripts{
 	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
 }
+

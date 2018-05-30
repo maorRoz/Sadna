@@ -41,7 +41,14 @@
 				<input type="submit" class="btn btn-primary" value="Add Category Discount">
 			}
 			<br />
-			@using (Html.BeginForm("RemoveCategoryDiscount", "StoreManagement", new { Model.SystemId, Model.State, store = Model.Name }))
+			
+			@using (Html.BeginForm("EditCategoryDiscountPage", "StoreManagement", new { Model.SystemId, Model.State, store = Model.Name }))
+			{
+				<input type="submit" class="btn btn-primary" value="Edit Category Discount">
+			}
+			<br />
+
+			@using (Html.BeginForm("RemoveCategoryDiscountPage", "StoreManagement", new { Model.SystemId, Model.State, store = Model.Name }))
 			{
 				<input type="submit" class="btn btn-primary" value="Remove Category Discount">
 			}

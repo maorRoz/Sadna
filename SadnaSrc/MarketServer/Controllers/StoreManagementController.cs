@@ -460,41 +460,53 @@ namespace MarketWeb.Controllers
 			var answer = storeManagementService.AddCategoryDiscount(categoryName, startDate, endDate, discountAmount);
 			if (answer.Status == Success)
 			{
-				return RedirectToAction("DeclareDiscountPolicy", new { systemId, state, message = answer.Answer, store, valid = true });
+				return RedirectToAction("CategoryDiscountMenu", new { systemId, state, message = answer.Answer, store, valid = true });
 			}
 
-			return RedirectToAction("AddDiscountPage", new { systemId, state, message = answer.Answer, store, categoryName });
+			return RedirectToAction("AddCategoryDiscountPage", new { systemId, state, message = answer.Answer, store});
 		}
 
-		public IActionResult EditCategoryDiscountPage(int systemId, string state, string message, string store, string product)
+		public IActionResult EditCategoryDiscountPage(int systemId, string state, string message, string store)
 		{
-			return View(new ProductInStoreModel(systemId, state, message, store, product));
+			var userService = MarketServer.GetUserSession(systemId);
+			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
 		}
 
-		public IActionResult EditCategoryDiscount(int systemId, string state, string store, string product,
+		public IActionResult EditCategoryDiscount(int systemId, string state, string store, string categoryName,
 			string whatToEdit, string newValue)
 		{
 			var userService = MarketServer.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-			var answer = storeManagementService.EditDiscount(product, whatToEdit, newValue);
+			var answer = storeManagementService.EditCategoryDiscount(categoryName, whatToEdit, newValue);
 			if (answer.Status == Success)
 			{
-				return RedirectToAction("DeclareDiscountPolicy", new { systemId, state, message = answer.Answer, store, valid = true });
+				return RedirectToAction("CategoryDiscountMenu", new { systemId, state, message = answer.Answer, store, valid = true });
 			}
 
-			return RedirectToAction("EditDiscountPage", new { systemId, state, message = answer.Answer, store, product });
+			return RedirectToAction("EditCategoryDiscountPage", new { systemId, state, message = answer.Answer, store});
 		}
 
-		public IActionResult RemoveCategoryDiscount(int systemId, string state, string store, string product)
+		public IActionResult RemoveCategoryDiscountPage(int systemId, string state, string message, string store, bool valid)
+		{
+			ViewBag.valid = valid;
+			var userService = MarketServer.GetUserSession(systemId);
+			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
+		}
+
+		public IActionResult RemoveCategoryDiscount(int systemId, string state, string store, string categoryName)
 		{
 			var userService = MarketServer.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-			var answer = storeManagementService.RemoveDiscountFromProduct(product);
+			var answer = storeManagementService.RemoveCategoryDiscount(categoryName);
 			if (answer.Status != Success)
 			{
-				return RedirectToAction("DeclareDiscountPolicy", new { systemId, state, message = answer.Answer, store, product, valid = false });
+				return RedirectToAction("RemoveCategoryDiscountPage", new { systemId, state, message = answer.Answer, store, valid = false });
 			}
-			return RedirectToAction("DeclareDiscountPolicy", new { systemId, state, message = answer.Answer, store, product, valid = true });
+			return RedirectToAction("CategoryDiscountMenu", new { systemId, state, message = answer.Answer, store, valid = true });
 		}
 
 	}
