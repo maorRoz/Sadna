@@ -1,4 +1,4 @@
-﻿<br />
+﻿
 <br />
 <br />
 <br />
@@ -7,7 +7,7 @@
 <br />
 
 @{
-	ViewData["Title"] = "Adding Category Page";
+	ViewData["Title"] = "Remove Category Discount Page";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -15,9 +15,11 @@
 <hr />
 <div class="row top-space">
 	<div class="col-lg-10">
+
 		<div id="feedContainer" style="float: right;width:20%">
 			<br />
 		</div>
+
 		<div style="float: left;width:30%">
 			<div id="alertContainer">
 				@if (Model.Message != null && !ViewBag.valid)
@@ -26,26 +28,33 @@
 						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
 						@Model.Message
 					</div>
-				}
 
-				@if (Model.Message != null && ViewBag.valid)
+				}
+					@if (Model.Message != null && ViewBag.valid)
 				{
-					<div class='success'>
+					<div class='sucess'>
 						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
 						@Model.Message
 					</div>
 				}
-
 			</div>
-			@using (Html.BeginForm("AddCategory", "Admin", new { Model.SystemId, Model.State }))
+
+			@using (Html.BeginForm("RemoveCategoryDiscount", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, store = Model.Name }))
 			{
-				<label for="category-name">Category Name:</label>
-				<input type="text" class="form-control" id="category-name" name="category" />
+				<fieldset>
+					<br />
+					<select name="categoryName">
+						@foreach (var item in Model.Items)
+						{
+							<option value="@item.Name">@item.Name</option>
+						}
+					</select>
+				</fieldset>
+
 				<br />
-				<input type="submit" id="sign-in-button" class="btn btn-primary" value="Add">
+				<input type="submit" class="btn btn-primary" value="Remove">
 
 			}
-
 		</div>
 	</div>
 </div>
@@ -54,5 +63,4 @@
 @section Scripts{
 	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
 }
-
 
