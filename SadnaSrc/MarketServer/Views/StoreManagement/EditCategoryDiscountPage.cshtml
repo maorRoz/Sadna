@@ -1,8 +1,72 @@
 ﻿
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 @{
-    ViewData["Title"] = "EditCategoryDiscountPage";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Edit Category Discount Page";
+}
+<h2>@ViewData["Title"]</h2>
+<hr />
+<div class="row top-space">
+	<div class="col-lg-10">
+
+		<div id="feedContainer" style="float: right;width:20%">
+			<br />
+		</div>
+
+		<div style="float: left;width:30%">
+			<div id="alertContainer">
+				@if (Model.Message != null)
+				{
+				<div class='error'>
+					<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+					@Model.Message
+				</div>
+				}
+			</div>
+
+
+			@using (Html.BeginForm("EditCategoryDiscount", "StoreManagement", new { Model.SystemId,Model.State,Model.Message,store = Model.Name}))
+			{
+
+			<fieldset>
+				<br />
+				Category:
+				<select name="categoryName">
+					@foreach (var item in Model.Items)
+						{
+					<option value="@item.Name">@item.Name</option>
+						}
+				</select>
+				<br />
+				<br />
+				Choose:
+				<select name="whatToEdit">
+
+					<option value="StartDate">StartDate</option>
+
+					<option value="EndDate">EndDate</option>
+
+					<option value="DiscountAmount">DiscountAmount</option>
+
+				</select>
+				<br />
+				<br/>
+				<br/>
+				<input type="text" class="form-control" id="user-name-entry" name="newValue" />
+				<br />
+				<input type="submit" class="btn btn-primary" value="Edit">
+			</fieldset>
+			}
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
 }
 
-<h2>EditCategoryDiscountPage</h2>
 
