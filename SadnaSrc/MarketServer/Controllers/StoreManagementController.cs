@@ -349,7 +349,6 @@ namespace MarketWeb.Controllers
 			var answer = storeManagementService.ViewPoliciesSessions();
 			if (answer.Status == Success)
 			{
-
 				conditions = answer.ReportList;
 			}
 			else
