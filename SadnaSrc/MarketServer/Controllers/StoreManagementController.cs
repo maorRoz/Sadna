@@ -437,6 +437,62 @@ namespace MarketWeb.Controllers
 			return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
 		}
 
+		public IActionResult CategoryDiscountMenu(int systemId, string state, string message,string store, bool valid)
+		{
+			ViewBag.valid = valid;
+			return View(new StoreItemModel(systemId,state,message,store));
+		}
+
+		public IActionResult AddCategoryDiscountPage(int systemId, string state, string message, string store)
+		{
+			return View(new StoreItemModel(systemId, state, message, store));
+		}
+
+		public IActionResult AddCategoryDiscount(int systemId, string state, string store, string categoryName,
+			DateTime startDate, DateTime endDate, int discountAmount)
+		{
+			var userService = MarketServer.GetUserSession(systemId);
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.AddCategoryDiscount(categoryName, startDate, endDate, discountAmount);
+			if (answer.Status == Success)
+			{
+				return RedirectToAction("DeclareDiscountPolicy", new { systemId, state, message = answer.Answer, store, valid = true });
+			}
+
+			return RedirectToAction("AddDiscountPage", new { systemId, state, message = answer.Answer, store, categoryName });
+		}
+
+		public IActionResult EditCategoryDiscountPage(int systemId, string state, string message, string store, string product)
+		{
+			return View(new ProductInStoreModel(systemId, state, message, store, product));
+		}
+
+		public IActionResult EditCategoryDiscount(int systemId, string state, string store, string product,
+			string whatToEdit, string newValue)
+		{
+			var userService = MarketServer.GetUserSession(systemId);
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.EditDiscount(product, whatToEdit, newValue);
+			if (answer.Status == Success)
+			{
+				return RedirectToAction("DeclareDiscountPolicy", new { systemId, state, message = answer.Answer, store, valid = true });
+			}
+
+			return RedirectToAction("EditDiscountPage", new { systemId, state, message = answer.Answer, store, product });
+		}
+
+		public IActionResult RemoveCategoryDiscount(int systemId, string state, string store, string product)
+		{
+			var userService = MarketServer.GetUserSession(systemId);
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.RemoveDiscountFromProduct(product);
+			if (answer.Status != Success)
+			{
+				return RedirectToAction("DeclareDiscountPolicy", new { systemId, state, message = answer.Answer, store, product, valid = false });
+			}
+			return RedirectToAction("DeclareDiscountPolicy", new { systemId, state, message = answer.Answer, store, product, valid = true });
+		}
+
 	}
 }
 
