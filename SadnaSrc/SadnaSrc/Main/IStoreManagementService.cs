@@ -40,13 +40,27 @@ namespace SadnaSrc.Main
         /**
          * History View
          */
+        MarketAnswer AddCategoryDiscount(string categoryName, DateTime startDate, DateTime endDate,
+            int discountAmount);
+        MarketAnswer EditCategoryDiscount(string categoryName, string whatToEdit, string newValue);
+        MarketAnswer RemoveCategoryDiscount(string categoryName);
+
         MarketAnswer ViewPromotionHistory();
+
         MarketAnswer ViewStoreHistory();
 	    MarketAnswer CloseStore();
 
+		/**
+		 * Purchase Policy
+		 */
+	    MarketAnswer CreatePolicy(string type, string subject, string optSubject, string op, string arg1, string optArg);
+	    MarketAnswer SavePolicy();
+	    MarketAnswer ViewPolicies();
+	    MarketAnswer ViewPoliciesSessions();
+		MarketAnswer RemovePolicy(string type, string subject, string optProd);
 
     }
-    public enum StoreEnum
+	public enum StoreEnum
     {
         Success,
         ProductNotFound,
@@ -59,10 +73,12 @@ namespace SadnaSrc.Main
         QuantityIsTooBig,
         EnumValueNotExists,
         DatesAreWrong,
-        CategoryExistsInStore,
         CategoryNotExistsInStore,
         ProductAlreadyInCategory,
         ProductNotInCategory,
+        CategoryNotExistsInSystem,
+        CategoryDiscountAlreadyExistsInStore,
+        CategoryDiscountNotExistsInStore,
         NoDB = 500
     }
     public enum DiscountStatus

@@ -30,7 +30,7 @@ namespace SadnaSrc.StoreCenter
                 CheckIsProductNameAvailableInStore(store, productName);
                 StockListItem stockListItem = storeLogic.GetProductFromStore(store, productName);
                 CheckifQuantityIsOK(quantity, stockListItem);   
-                CheckIfDiscountExistsAndCalcValue(ref stockListItem);
+                stockListItem.CheckIfDiscountExistsAndCalcValue(store);
                 _shopper.AddToCart(stockListItem.Product, stockListItem.Product.Categories, store, quantity);
                 MarketLog.Log("StoreCenter", "add product successeded");
                 answer = new StoreAnswer(StoreEnum.Success, quantity + " " + productName + " from " + store + "has been" +
@@ -66,12 +66,6 @@ namespace SadnaSrc.StoreCenter
             throw new StoreException(StoreEnum.QuantityIsNegative, "required quantity is negative");
         }
 
-        private void CheckIfDiscountExistsAndCalcValue(ref StockListItem stockListItem)
-        {
-            if (stockListItem.Discount?.discountType != DiscountTypeEnum.Visible) return;
-            if (stockListItem.Discount.CheckTime())
-                stockListItem.Product.BasePrice = stockListItem.Discount.CalcDiscount(stockListItem.Product.BasePrice);
-        }
 
         private void CheckIsProductNameAvailableInStore(string store, string productName)
         {

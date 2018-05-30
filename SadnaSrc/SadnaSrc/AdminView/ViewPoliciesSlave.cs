@@ -48,7 +48,33 @@ namespace SadnaSrc.AdminView
                 Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
             }
         }
-        
-    }
+
+	    public void ViewSessionPolicies()
+	    {
+		    try
+		    {
+			    MarketLog.Log("AdminView", "Checking admin status.");
+			    _admin.ValidateSystemAdmin();
+			    MarketLog.Log("AdminView", "Trying to view policies.");
+			    string[] result = _manager.ViewSessionPolicies();
+			    MarketLog.Log("AdminView", "Successfully got policiy ids.");
+			    Answer = new AdminAnswer(ViewPolicyStatus.Success, "Successfully got policiy ids.", result);
+
+		    }
+		    catch (AdminException e)
+		    {
+			    Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
+		    }
+		    catch (MarketException e)
+		    {
+			    Answer = new AdminAnswer(ViewPolicyStatus.NoAuthority, e.GetErrorMessage(), null);
+		    }
+		    catch (DataException e)
+		    {
+			    Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
+		    }
+	    }
+
+	}
 
 }

@@ -23,8 +23,8 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException e)
             {
-                answer = new StoreAnswer(e);
-            }
+				        answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+			      }
             catch (MarketException)
             {
                 answer = new StoreAnswer(StoreEnum.CloseStoreFail, "you have no premmision to do that");

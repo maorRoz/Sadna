@@ -42,14 +42,23 @@ namespace MarketWeb.Controllers
             return RedirectToAction("BrowseMarket", new { systemId, state, answer.Answer });
         }
 
-        public IActionResult AddToCart(int systemId, string state, string store, string product, int quantity)
+        public IActionResult AddToCart(int systemId, string state, string store, string product, int quantity, int directViewStoreStock)
         {
             var userService = MarketServer.GetUserSession(systemId);
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.AddProductToCart(store,product,quantity);
-            return RedirectToAction("ViewStoreStock", answer.Status == 0 ? 
-                new { systemId, state,store,valid = true, message = answer.Answer } :
-                new { systemId, state, store, valid = false, message = answer.Answer });
+	        if (directViewStoreStock==0)
+	        {
+		        return RedirectToAction("ViewStoreStock", answer.Status == 0 ?
+			        new { systemId, state, store, valid = true, message = answer.Answer } :
+			        new { systemId, state, store, valid = false, message = answer.Answer });
+			}
+
+	        else
+	        {
+		        return RedirectToAction("SearchProductView", new {systemId, state});
+	        }
+            
         }
 
         public IActionResult ViewStoreInfo(int systemId, string state, string store)
@@ -66,5 +75,30 @@ namespace MarketWeb.Controllers
             return View(new StoreDetailsModel(systemId,state, answer.Answer, storeInfo));
         }
 
-    }
+	    public IActionResult SearchProductView(int systemId, string state, string message)
+	    {
+		    var userService = MarketServer.GetUserSession(systemId);
+		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+		    string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+		    return View(new CategoryListModel(systemId, state, message, categories));
+	    }
+
+	    public IActionResult SearchProduct(int systemId, string state, string type, string value, double minPrice, double maxPrice, string category)
+	    {
+		    var userService = MarketServer.GetUserSession(systemId);
+		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+		    var answer = storeShoppingService.SearchProduct(type, value, minPrice, maxPrice, category);
+		    if (answer.Status == 0)
+		    {
+			    return RedirectToAction("ProductsView", new { systemId, state, results = answer.ReportList});
+			}
+			return RedirectToAction("SearchProductView", new { systemId, state,message = answer.Answer, results = answer.ReportList});
+		}
+
+		public IActionResult ProductsView(int systemId, string state,string message, string[] results)
+	    {
+		    return View(new ProductListModel(systemId,state, message, results));
+	    }
+
+	}
 }

@@ -16,6 +16,7 @@ namespace SadnaSrc.Main
         MarketAnswer RemoveCategory(string categoryname);
 	    MarketAnswer CreatePolicy(string type, string subject, string op, string arg1, string optArg);
 	    MarketAnswer ViewPolicies();
+	    MarketAnswer ViewPoliciesSessions();
 		MarketAnswer SavePolicy();
     }
 
@@ -34,7 +35,8 @@ namespace SadnaSrc.Main
         NotSystemAdmin,
         NoUserFound,
         NoStoreFound,
-        NoDB = 500
+	    MistakeTipGiven,
+		NoDB = 500
     }
 
     public enum EditCategoryStatus

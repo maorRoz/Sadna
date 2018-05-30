@@ -163,7 +163,15 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-        public MarketAnswer RemovePolicy(string type, string subject, string optProd)
+	    public MarketAnswer ViewPoliciesSessions()
+	    {
+		    ViewPoliciesSlave slave = new ViewPoliciesSlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+		    slave.ViewSessionPolicies();
+		    return slave.Answer;
+
+	    }
+
+		public MarketAnswer RemovePolicy(string type, string subject, string optProd)
         {
             RemovePolicySlave slave = new RemovePolicySlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
             slave.RemovePolicy(type, subject, optProd);
@@ -174,6 +182,27 @@ namespace SadnaSrc.StoreCenter
         {
             ViewPromotionHistorySlave slave = new ViewPromotionHistorySlave(_storeName, _storeManager, storeDL);
             slave.ViewPromotionHistory();
+            return slave.Answer;
+        }
+        public MarketAnswer AddCategoryDiscount(string categoryName, DateTime startDate, DateTime endDate, int discountAmount)
+        {
+            AddCategoryDiscountSlave slave = new AddCategoryDiscountSlave(_storeName, _storeManager, storeDL);
+            slave.AddCategoryDiscount(categoryName, startDate, endDate, discountAmount);
+            return slave.Answer;
+        }
+
+        public MarketAnswer EditCategoryDiscount(string categoryName, string whatToEdit, string newValue)
+        {
+
+            EditCategoryDiscountSlave slave = new EditCategoryDiscountSlave(_storeName, _storeManager, storeDL);
+            slave.EditCategoryDiscount(categoryName, whatToEdit, newValue);
+            return slave.Answer;
+        }
+
+        public MarketAnswer RemoveCategoryDiscount(string categoryName)
+        {
+            RemoveCategoryDiscountSlave slave = new RemoveCategoryDiscountSlave(_storeName, _storeManager, storeDL);
+            slave.RemoveCategoryDiscount(categoryName);
             return slave.Answer;
         }
     }

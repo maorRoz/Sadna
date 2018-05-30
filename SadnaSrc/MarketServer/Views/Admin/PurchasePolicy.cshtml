@@ -1,14 +1,19 @@
-﻿
+﻿<br />
+<br />
+<br />
+<br />
+<br />
+
 @{
-    ViewData["Title"] = "Purchase Policy";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Purchase Policy";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewData["Title"]</h2>
 
 
 <style type="text/css">
-	input[type="text"] { width:100px; text-align: center;}     
+	input[type="text"] { width:150px; text-align: center;}     
 </style>
 
 <div class="row top-space">
@@ -17,191 +22,203 @@
 		<div style="float: left;width:70%">
 			<div id="alertContainer">
 
-				@if (Model.Message != null)
+				@if (Model.Message != null && !ViewBag.valid)
 				{
-				<div class='error'>
-					<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-					@Model.Message
-				</div>
+					<div class='error'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
+				}
+				
+				@if (Model.Message != null && ViewBag.valid)
+				{
+					<div class='success'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
 				}
 
-				</div>
+			</div>
 				@using (Html.BeginForm("CreatePolicy", "Admin", new {Model.SystemId, Model.State}))
 				{
 					<br/>
 					<table>
 
-						<tr>
-							<td>
-								<label for="subject">Subject:</label>
-							</td>
-						</tr>
+					<tr>
+						<td>
+							<label for="subject">Subject:</label>
+						</td>
+					</tr>
 
 						<tr>
 							<td>
-								<input type="text" class="form-control" id="subject" name="Subject"/>
+								<input type="text" class="form-control" id="subject" placeholder="Name of Product/Category..." name="subject"/>
 							</td>
 
-							<td>
-								<text>&nbsp;</text>
-								<select name="type">
+						<td>
+							<text>&nbsp;</text>
+							<select name="type">
 
-									<option value="Global">Store</option>
+									<option value="Global">Global</option>
 
-									<option value="Product">Product</option>
 
-									<option value="Category">Category</option>
+								<option value="Product">Product</option>
 
-								</select>
-							</td>
-						</tr>
+								<option value="Category">Category</option>
+
+							</select>
+						</td>
+					</tr>
 
 						<tr>
 							<td>
 								<input type="text" class="form-control" id="data1" text-align:center name="usernameText"/>
 							</td>
 							<td>
-								<input type="text" class="form-control" id="data1" text-align:center name="equal" value="=" disabled/>
+								<input type="text" class="form-control" id="data1" text-align:center value="=" disabled/>
 							</td>
 							<td>
-								<input type="text" class="form-control" id="data1" text-align:center name="equal" value="UserName" disabled/>
+								<input type="text" class="form-control" id="data1" text-align:center value="UserName" disabled/>
 							</td>
 
-						</tr>
+					</tr>
 
 						<tr>
 							<td>
 								<input type="text" class="form-control" id="data1" text-align:center name="addressText"/>
 							</td>
 							<td>
-								<input type="text" class="form-control" id="data1" name="equal" value="=" disabled/>
+								<input type="text" class="form-control" id="data1" value="=" disabled/>
 							</td>
 							<td>
-								<input type="text" class="form-control" id="data1" name="equal" value="Address" disabled/>
+								<input type="text" class="form-control" id="data1" value="Address" disabled/>
 							</td>
 						</tr>
 
-						<tr>
-							<td>
-								<input type="text" class="form-control" id="data3" name="quantityText"/>
-								<text>&nbsp;</text><text>&nbsp;</text><text>&nbsp;</text>
-							</td>
+
+					<tr>
+						<td>
+							<input type="text" class="form-control" id="data3" name="quantityText" />
+							<text>&nbsp;</text><text>&nbsp;</text><text>&nbsp;</text>
+						</td>
 
 							<td>
 								<text>&nbsp;</text>
 								<text>&nbsp;</text>
 								<text>&nbsp;</text>
-								<select name="type">
+								<select name="quantityOp">
 
-									<option value=">=">> =</option>
 
-									<option value="<=">< =</option>
+								<option value=">=">> =</option>
+
+								<option value="<=">< =</option>
 
 								</select>
 							</td>
 							<td>
-								<input type="text" class="form-control" id="data1" name="equal" value="Quantity" disabled/>
+								<input type="text" class="form-control" id="data1" value="Quantity" disabled/>
 							</td>
 
-						</tr>
+
+					</tr>
 
 
 
-						<tr>
-							<td>
-								<input type="text" class="form-control" id="data4" name="priceText"/>
-							</td>
+					<tr>
+						<td>
+							<input type="text" class="form-control" id="data4" name="priceText" />
+						</td>
 
 							<td>
 								<text>&nbsp;</text>
 								<text>&nbsp;</text>
 								<text>&nbsp;</text>
-								<select name="type">
+								<select name="priceOp">
 
-									<option value=">=">> =</option>
 
-									<option value="<=">< =</option>
+								<option value=">=">> =</option>
 
-								</select>
-							</td>
-							<td>
-								<input type="text" class="form-control" id="data1" name="equal" value="Price" disabled/>
-							</td>
+								<option value="<=">< =</option>
 
-						</tr>
+							</select>
+						</td>
+						<td>
+							<input type="text" class="form-control" id="data1" name="equal" value="Price" disabled />
+						</td>
 
-					</table>
-					<br/>
-					<input type="submit" class="btn btn-primary" value="Create">
+					</tr>
 
-				}
-		@using (Html.BeginForm("CreatePolicy", "Admin", new {Model.SystemId, Model.State}))
-		{
+				</table>
+				<br />
+				<input type="submit" class="btn btn-primary" value="Create">
 
-					<hr/>
-					<br/>
-					<table>
+			}
+			@using (Html.BeginForm("CreatePolicy", "Admin", new { Model.SystemId, Model.State }))
+			{
+
+				<hr />
+				<br />
+				<table>
+
+					<tr>
+						<td>
+							<label for="subject">Subject:</label>
+						</td>
+					</tr>
 
 						<tr>
 							<td>
-								<label for="subject">Subject:</label>
-							</td>
-						</tr>
-
-						<tr>
-							<td>
-								<input type="text" class="form-control" id="subject" name="Subject"/>
+								<input type="text" class="form-control" id="subject" placeholder="Name of Product/Category..." name="Subject1"/>
 							<br/>
 							</td>
 
 							<td>
 								<text>&nbsp;</text>
-								<select name="type">
+								<select name="type1">
 
-									<option value="Global">Store</option>
+									<option value="Global">Global</option>
 
-									<option value="Product">Product</option>
 
-									<option value="Category">Category</option>
+								<option value="Product">Product</option>
 
-								</select>
-							</td>
-						</tr>
+								<option value="Category">Category</option>
+
+							</select>
+						</td>
+					</tr>
 					<tr>
 					<td>
-						<select name="type">
+						<select name="arg1">
 							@foreach (var item in Model.Conditions)
 							{	
+
 									<option value="@item">@item</option>
 
-							}
-									</select>
-								<br/>
-							</td>
+								}
+							</select>
+							<br />
+						</td>
 
 						<td>
-							<select name="type">
+							<select name="op">
 								@foreach (var item in Model.Operators)
 								{
 
 									<option value="@item">@item</option>
 
 								}
-								<br/>
+								<br />
 							</select>
-							
+
 						</td>
 						<td>
-							<select name="type">
+							<select name="optArg">
 								@foreach (var item in Model.Conditions)
-								{
+	{
 
+							<option value="@item">@item</option>
 
-
-									<option value="@item">@item</option>
-
-
-								}
+}
 							</select>
 							<br />
 						</td>
@@ -212,20 +229,20 @@
 								<input type="submit" class="btn btn-primary" value="Create">
 								<br/>
 							</td>
-							<td>
-								<br />
-								@using (Html.BeginForm("SavePolicy", "Admin", new {Model.SystemId, Model.State}))
-								{
-									<input type="submit" class="btn btn-primary" value="Save">
-								}
-								<br/>
-							</td>
+							
 						</tr>
 
 					</table>
 					
 				}
+		<br />
+		@using (Html.BeginForm("SavePolicy", "Admin", new {Model.SystemId, Model.State}))
+		{
+			<input type="submit" class="btn btn-primary" value="Save">
+		}
+		<br/>
 		
+
 		</div>
 
 	</div>

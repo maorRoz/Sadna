@@ -61,10 +61,17 @@ namespace SadnaSrc.AdminView
             return slave.Answer;
         }
 
-        public MarketAnswer ViewPolicies()
+	    public MarketAnswer ViewPolicies()
+	    {
+		    ViewPoliciesSlave slave = new ViewPoliciesSlave(_admin, MarketYard.Instance.GetGlobalPolicyManager());
+		    slave.ViewPolicies();
+		    return slave.Answer;
+	    }
+
+		public MarketAnswer ViewPoliciesSessions()
         {
             ViewPoliciesSlave slave = new ViewPoliciesSlave(_admin, MarketYard.Instance.GetGlobalPolicyManager());
-            slave.ViewPolicies();
+            slave.ViewSessionPolicies();
             return slave.Answer;
         }
 

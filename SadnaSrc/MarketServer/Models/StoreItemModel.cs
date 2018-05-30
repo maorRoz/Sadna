@@ -14,5 +14,6 @@ namespace MarketWeb.Models
 		{
 			Name = store;
 		}
+
 	}
 }

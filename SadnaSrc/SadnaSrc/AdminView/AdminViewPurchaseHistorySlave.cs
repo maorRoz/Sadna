@@ -89,7 +89,13 @@ namespace SadnaSrc.AdminView
         {
             if (!_adminDB.IsUserNameExistInHistory(userName))
             {
-                throw new AdminException(ViewPurchaseHistoryStatus.NoUserFound, "Couldn't find any User with " +
+	            string similarUser = FindSimilarUserNames(userName);
+	            if (similarUser != "")
+	            {
+		            throw new AdminException(ViewPurchaseHistoryStatus.MistakeTipGiven, "Couldn't find any Store" + " with that name in history records, did you mean " + similarUser + "?");
+
+	            }
+				throw new AdminException(ViewPurchaseHistoryStatus.NoUserFound, "Couldn't find any User with " +
                                                                                 "that name in history records");
             }
 
@@ -97,11 +103,51 @@ namespace SadnaSrc.AdminView
 
         private void ValidateStoreNameExistInPurchaseHistory(string storeName)
         {
-            if (!_adminDB.IsStoreExistInHistory(storeName))
-            {
-                throw new AdminException(ViewPurchaseHistoryStatus.NoStoreFound, "Couldn't find any Store" +
-                                                                                 " with that name in history records");
+	        
+	        if (!_adminDB.IsStoreExistInHistory(storeName))
+	        {
+		        string similarStore = FindSimilarStoreName(storeName);
+		        if (similarStore != "")
+		        {
+			        throw new AdminException(ViewPurchaseHistoryStatus.MistakeTipGiven, "Couldn't find any Store" + " with that name in history records, did you mean "+ similarStore+"?");
+
+				}
+				throw new AdminException(ViewPurchaseHistoryStatus.NoStoreFound, "Couldn't find any Store" + " with that name in history records");
+			}
+
+	       
             }
-        }
-    }
+
+	    private string FindSimilarStoreName(string storeName)
+	    {
+		    string similarStore = "";
+		    string[] storeNames = _adminDB.GetAllStoresInPurchaseHistory();
+		    for (int i = 0; i < storeNames.Length; i++)
+		    {
+			    if (MarketMistakeService.IsSimilar(storeNames[i], storeName))
+			    {
+				    similarStore = storeNames[i];
+				    break;
+
+			    }
+		    }
+		    return similarStore;
+	    }
+
+	    private string FindSimilarUserNames(string userName)
+	    {
+		    string similarUser = "";
+		    string[] userNames = _adminDB.GetAllUserInPurchaseHistory();
+		    for (int i = 0; i < userNames.Length; i++)
+		    {
+			    if (MarketMistakeService.IsSimilar(userNames[i], userName))
+			    {
+				    similarUser = userNames[i];
+				    break;
+
+			    }
+		    }
+		    return similarUser;
+	    }
+	}
 }

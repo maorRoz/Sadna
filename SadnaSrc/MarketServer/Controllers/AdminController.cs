@@ -110,15 +110,17 @@ namespace MarketWeb.Controllers
 
 	    }
 
-		public IActionResult PurchasePolicy(int systemId, string state, string message)
+		public IActionResult PurchasePolicy(int systemId, string state, string message, bool valid)
 		{
 			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
 		    var operators = new string[0];
             var conditions = new string[0];
-		    var answer = adminService.ViewPolicies();
-		    if (answer.Status == Success)
+			operators = new[] { "AND", "OR", "NOT" };
+			ViewBag.valid = valid;
+			var answer = adminService.ViewPoliciesSessions();
+			if (answer.Status == Success)
 		    {
-		        operators = new []{"AND", "OR", "NOT"};
+		       
 		        conditions = answer.ReportList;
 		    }
 		    else
@@ -126,18 +128,79 @@ namespace MarketWeb.Controllers
 		        message = answer.Answer;
 		    }
 
-		    return View(new ConditionsOperatorsModel(systemId, state, message,operators,conditions));
+		    return View(new ConditionsOperatorsModel(systemId, state, message,operators, conditions));
 		}
 
-	    public IActionResult CreatePolicy(int systemId, string state, string type, string subject, string op, string arg1, string optArg)
+	    public IActionResult CreatePolicy(int systemId, string state, string type, string subject, string op, string arg1, string optArg, string usernameText, string addressText, string quantityOp,string quantityText, string priceOp, string priceText, string subject1, string type1)
 	    {
 		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-		    var answer = adminService.CreatePolicy(type, subject, op, arg1, optArg);
-		    if (answer.Status == Success)
+
+		    if (usernameText != null)
 		    {
-			    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = true });
+			    var answer = adminService.CreatePolicy(type, subject, "Username =", usernameText, optArg);
+			    if (answer.Status != Success)
+			    {
+				   
+					return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer});
+
+			    }
+			
+		    }
+
+		    else if (addressText != null)
+		    {
+				var answer = adminService.CreatePolicy(type, subject, "Address =", addressText, optArg);
+			    if (answer.Status != Success)
+			    {
+				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+			    }
 			}
-		    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = false });
+
+		    else if (quantityText != null)
+		    {
+			    var answer = adminService.CreatePolicy(type, subject, "Quantity "+quantityOp, quantityText, optArg);
+			    if (answer.Status != Success)
+			    {
+				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+			    }
+			}
+
+		    else if (priceText != null)
+		    {
+			    var answer = adminService.CreatePolicy(type, subject, "Price " + priceOp, priceText, optArg);
+			    if (answer.Status != Success)
+			    {
+				    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+			    }
+			}
+
+		    else
+		    {
+			    string[] id1 = arg1.Split(' ');
+			    string[] id2 = null;
+				if (optArg != null)
+			    {
+				    id2 = optArg.Split(' ');
+				    var answer = adminService.CreatePolicy(type1, subject1, op, id1[0], id2[0]);
+				    if (answer.Status != Success)
+				    {
+					    return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+				    }
+				}
+
+				else
+				{
+					var answer = adminService.CreatePolicy(type1, subject1, op, id1[0], null);
+					if (answer.Status != Success)
+					{
+						return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer });
+					}
+				}
+
+				
+			}
+ 
+		    return RedirectToAction("PurchasePolicy", new { systemId, state});
 		}
 
 	    public IActionResult SavePolicy(int systemId, string state)
