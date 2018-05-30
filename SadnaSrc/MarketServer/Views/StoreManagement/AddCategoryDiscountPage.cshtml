@@ -28,38 +28,24 @@
 				}
 			</div>
 
-			@using (Html.BeginForm("AddCategoryDiscount", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, Model.Store, productName = Model.Product }))
+			@using (Html.BeginForm("AddCategoryDiscount", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, store = Model.Name }))
 			{
+			<fieldset>
+				<br />
+				<select name="categoryName">
+					@foreach (var item in Model.Items)
+					{
+						<option value="@item.Name">@item.Name</option>
+					}
+				</select>
+			</fieldset>
 				<label for="start-date">Start Date:</label>
 				<input type="text" class="form-control" id="start-date" name="startDate" />
 				<label for="end-date">End Date:</label>
 				<input type="text" class="form-control" id="end-date" name="endDate" />
 				<label for="discount-amount">Discount Amount:</label>
 				<input class="form-control" id="discount-amount" name="discountAmount" />
-				<br />
-				<fieldset>
-					Discount Type: <select name="discountType">
-
-						<option value="Hidden">Hidden</option>
-
-						<option value="Visible">Visible</option>
-
-					</select>
-				</fieldset>
-				<br />
-
-				<br />
-				<fieldset>
-					Percenteges: <select name="presenteges">
-
-						<option value="Yes">Yes</option>
-
-						<option value="No">No</option>
-
-					</select>
-				</fieldset>
-				<br />
-
+			
 				<br />
 				<input type="submit" class="btn btn-primary" value="Add">
 

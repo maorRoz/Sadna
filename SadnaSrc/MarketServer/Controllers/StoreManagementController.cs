@@ -430,10 +430,11 @@ namespace MarketWeb.Controllers
 			return RedirectToAction("PurchasePolicy", new { systemId, state, store });
 		}
 
-		public IActionResult SavePolicy(int systemId, string state)
+		public IActionResult SavePolicy(int systemId, string state, string store)
 		{
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-			var answer = adminService.SavePolicy();
+			var userService = MarketServer.GetUserSession(systemId);
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.SavePolicy();
 			return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
 		}
 
@@ -445,7 +446,10 @@ namespace MarketWeb.Controllers
 
 		public IActionResult AddCategoryDiscountPage(int systemId, string state, string message, string store)
 		{
-			return View(new StoreItemModel(systemId, state, message, store));
+			var userService = MarketServer.GetUserSession(systemId);
+			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
 		}
 
 		public IActionResult AddCategoryDiscount(int systemId, string state, string store, string categoryName,
