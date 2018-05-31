@@ -37,7 +37,7 @@ namespace SadnaSrc.MarketData
         { 
             var localDbPath = new SqlConnectionStringBuilder
             {
-                DataSource = ".\\MarketDB",
+                DataSource = ".\\SQLEXPRESS",
                 InitialCatalog = "MarketData",
                 IntegratedSecurity = true,
                 MultipleActiveResultSets = true
@@ -282,7 +282,7 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (4,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (5,'RegisteredUser')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
-                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Avi`s Chocolate Kingdom','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Avi`s Chocolate Kingdom','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Avi`s Chocolate Kingdom','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','StoreOwner')",
