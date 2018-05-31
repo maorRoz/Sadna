@@ -271,19 +271,23 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S2', 'P3', 30, 'null', 'Immediate')",
                 "INSERT INTO Discount (DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount, Percentages) VALUES ('D1', 'VISIBLE', '2018-01-01', '2020-03-01', 50, 'True')",
                 "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (1,'Avi','Ben-Gurion University','202cb962ac59075b964b07152d234b70','12345678')",
-                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (2,'Arik2','Mishol Susia','202cb962ac59075b964b07152d234b70','88888888')",
-                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (3,'Arik3','Mishol','202cb962ac59075b964b07152d234b70','77777777')",
-                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (4,'Arik4','Mishol','202cb962ac59075b964b07152d234b70','77777777')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (2,'u1','Mishol Susia','202cb962ac59075b964b07152d234b70','88888888')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (3,'u2','Mishol','202cb962ac59075b964b07152d234b70','77777777')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (4,'u3','Mishol','202cb962ac59075b964b07152d234b70','77777777')",
+                "INSERT INTO Users (SystemID,Name,Address,Password,CreditCard) VALUES (5,'u4','Mishol','202cb962ac59075b964b07152d234b70','77777777')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (3,'RegisteredUser')",
-				"INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
-                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Avi`s Chocolate Kingdom','StoreOwner')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (4,'RegisteredUser')",
+                "INSERT INTO StatePolicy (SystemID,State) VALUES (5,'RegisteredUser')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Avi`s Chocolate Kingdom','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Avi`s Chocolate Kingdom','ManageProducts')",
-                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','ManageProducts')",
-                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','StoreOwner')",
-	            "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','ManageProducts')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Toy','StoreOwner')",
+                "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
 	            "INSERT INTO Category (SystemID, name) VALUES ('C2', 'Books')",
 				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P1')",
 				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P2')",
@@ -292,9 +296,8 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Avi','Avi','StoreOwner','2018-1-1','Avi`s Chocolate Kingdom has been opened')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Avi','Arik2','StoreOwner','2018-1-1','Regular promotion')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Arik2','Arik3','ManageProducts','2018-1-1','Regular promotion')",
-                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','Arik3','Arik3','StoreOwner','2018-1-1','Toy has been opened')",
-                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','Arik3','Arik2','ManageProducts','2018-1-1','Regular promotion')",
-
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','u1','u3','StoreOwner','2018-1-1','Toy has been opened')",
+                "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','u1','u2','ManageProducts','2018-1-1','Regular promotion')",
             };
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
@@ -303,7 +306,7 @@ namespace SadnaSrc.MarketData
                 {
                     insertCommand.ExecuteNonQuery();
                 }
-                catch (SqlException)
+                catch (SqlException e)
                 {
                     if (_dbConnection.State != ConnectionState.Open)
                     {
