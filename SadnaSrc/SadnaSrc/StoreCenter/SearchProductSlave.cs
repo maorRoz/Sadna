@@ -21,7 +21,7 @@ namespace SadnaSrc.StoreCenter
 			_storeLogic = storeDl;
 		}
 
-		public void SearchProduct(string type, string value, double minPrice, double maxPrice, string category)
+		public void SearchProduct(string value, double minPrice, double maxPrice, string category)
 		{
 			try
 			{
@@ -29,52 +29,53 @@ namespace SadnaSrc.StoreCenter
 				_shopper.ValidateCanBrowseMarket();
 				MarketLog.Log("StoreCenter", "User enetred the system!");
 				validateData(value);
-				Product[] products = null;
 				validatePrices(minPrice, maxPrice);
-				switch (type)
-				{
-					case "Name":
-						products = _storeLogic.GetProductsByName(value);
-						if (products.Length == 0)
-						{
-							string similarProduct = FindSimilarProductByName(value);
-							if (similarProduct != "")
-							{
-								Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
-								return;
-							}
-							
-						}
-
-						break;
-					case "Category":
-						Category cat = _storeLogic.GetCategoryByName(value);
-						if (cat == null)
-						{
-							string similarProduct = FindSimilarCategoriesByName(value);
-							if (similarProduct != "")
-							{
-								Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
-								return;
-							}
-
-							Answer = new StoreAnswer(SearchProductStatus.CategoryNotFound, "Category wasn't found in the system!");
-							return;
-						}
-						products = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
-						
-						break;
-					case "KeyWord":
-						products = FindKeyWord(value);
-						break;
+				Product[] productsKeyWord = FindKeyWord(value);
+				Category cat = _storeLogic.GetCategoryByName(value);
+				Product[] productsCategory = new Product[0];
+				if (cat != null) {
+					productsCategory = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
 				}
 
+				Product[] products = new Product[productsKeyWord.Length + productsCategory.Length];
+				int i;
+				for (i = 0; i < productsKeyWord.Length; i++) {
+					products[i] = productsKeyWord[i];
+				}
+
+				for (int j = i; j < products.Length; j++) {
+					products[j] = productsCategory[j - i];
+				}
+
+				Product[] productsName = _storeLogic.GetProductsByName(value);
+
+				if (productsName.Length == 0 && products.Length == 0)
+				{
+					string similarProduct = FindSimilarProductByName(value);
+					if (similarProduct != "")
+					{
+						Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
+						return;
+					}		
+				}
+
+				if (cat == null && products.Length == 0)
+				{
+					string similarProduct = FindSimilarCategoriesByName(value);
+					if (similarProduct != "")
+					{
+						Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
+						return;
+					}
+
+				}
+					
 				products = FilterResultsByPrice(products,minPrice, maxPrice);
 				products = FilterResultByCategory(products, category);
 				
 				string[] result = new string[products.Length];
 				string[] stores = GetProductsStores(products);
-				for (int i = 0; i < result.Length; i++)
+				for (i = 0; i < result.Length; i++)
 				{
 					string productId = products[i].SystemId;
 					result[i] = GetProductStockInformation(productId,false) + " Store: "+ stores[i];
@@ -137,7 +138,7 @@ namespace SadnaSrc.StoreCenter
 			Product[] products = _storeLogic.GetAllProducts();
 			foreach (var product in products)
 			{
-				if (product.Name.Contains(value) || product.Description.Contains(value) || Convert.ToString(product.BasePrice)==value)
+				if (product.Name.Equals(value) || product.Description.Contains(value) || Convert.ToString(product.BasePrice)==value)
 				{
 					result.AddLast(product);
 				}
