@@ -44,15 +44,15 @@ namespace SadnaSrc.StoreCenter
             {
                 answer = new StoreAnswer((StoreEnum)e.Status,e.GetErrorMessage());
             }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
             catch (MarketException)
             {
                 MarketLog.Log("StoreCenter", "no premission");
                 answer = new StoreAnswer(StoreEnum.NoPermission,
                     "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
-            }
-            catch (DataException e)
-            {
-                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
         }
 
@@ -82,15 +82,15 @@ namespace SadnaSrc.StoreCenter
 		    {
 				answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
 			}
-		    catch (MarketException)
+		    catch (DataException e)
+		    {
+		        answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+		    }
+            catch (MarketException)
 		    {
 			    MarketLog.Log("StoreCenter", "no premission");
 			    answer = new StoreAnswer(StoreEnum.NoPermission,
 				    "User validation as valid customer has been failed . only valid users can browse market. Error message has been created!");
-		    }
-		    catch (DataException e)
-		    {
-		        answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
 		    }
         }
 

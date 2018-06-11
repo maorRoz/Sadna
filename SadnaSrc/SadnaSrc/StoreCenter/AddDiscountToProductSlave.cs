@@ -48,13 +48,13 @@ namespace SadnaSrc.StoreCenter
             {
                 answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
             }
-            catch (MarketException)
-            {
-                answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
-            }
             catch (DataException e)
             {
                 answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException)
+            {
+                answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
             }
 
             return null;

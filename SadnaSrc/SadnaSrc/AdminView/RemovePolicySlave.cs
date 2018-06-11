@@ -41,13 +41,13 @@ namespace SadnaSrc.AdminView
             {
                 Answer = new AdminAnswer((EditPolicyStatus)e.Status, e.GetErrorMessage());
             }
-            catch (MarketException e)
-            {
-                Answer = new AdminAnswer(EditPolicyStatus.NoAuthority, e.GetErrorMessage());
-            }
             catch (DataException e)
             {
                 Answer = new AdminAnswer((EditPolicyStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException e)
+            {
+                Answer = new AdminAnswer(EditPolicyStatus.NoAuthority, e.GetErrorMessage());
             }
         }
 
