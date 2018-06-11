@@ -29,7 +29,6 @@ namespace SadnaSrc.MarketData
             }
             catch(SqlException)
             {
-                //dont care
             }
         }
 
@@ -82,7 +81,8 @@ namespace SadnaSrc.MarketData
                 CreateCategoryProductConnectionTable(),
                 CreateConditionTable(),
                 CreateOperatorTable(),
-                CreateCategoryDiscountTable()
+                CreateCategoryDiscountTable(),
+				CreateSignInReportsTable()
             };
 
             for (var i = 0; i < createTableStrings.Length; i++)
@@ -294,8 +294,7 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Arik2','Arik3','ManageProducts','2018-1-1','Regular promotion')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','Arik3','Arik3','StoreOwner','2018-1-1','Toy has been opened')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','Arik3','Arik2','ManageProducts','2018-1-1','Regular promotion')",
-
-            };
+			};
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
                 var insertCommand = new SqlCommand(thingsToInsertByForce[i], _dbConnection);
@@ -640,7 +639,18 @@ namespace SadnaSrc.MarketData
                                     PRIMARY KEY([SystemID],[PolicyType],[Subject])
                                     )";
         }
-        public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
+
+		private static string CreateSignInReportsTable()
+		{
+			return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='SignInReportsTable' AND xtype='U') 
+                        CREATE TABLE [SignInReports] (
+                                    [SystemID]               INT,
+                                    [Time]				DATETIME,
+                                    PRIMARY KEY([SystemID],[Time])
+                                    )";
+		}
+
+		public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
         {
             var dbConnection = _dbConnection;
             if (ToDisable)
