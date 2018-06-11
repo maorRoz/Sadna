@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 
 namespace SadnaSrc.Main
 {
     public static class MarketLog
     {
         private static readonly Random random = new Random();
-        private static IMarketDB _dbConnection = new ProxyMarketDB();
+        private static IMarketBackUpDB _dbConnection = MarketBackUpDB.Instance;
 
 
-        public static void SetDB(IMarketDB dbConnection)
+        public static void SetDB(IMarketBackUpDB dbConnection)
         {
             _dbConnection = dbConnection;
         }
