@@ -79,12 +79,21 @@ namespace SadnaSrc.MarketRecovery
 
         public void InsertTable(string table, string tableColumns, string[] valuesNames, object[] values)
         {
-            throw new NotImplementedException();
+            var insertRequest = "INSERT INTO " + table + " (" + tableColumns + ") VALUES (" + string.Join(",", valuesNames)
+                                + ")";
+            var commandDb = new SQLiteCommand(insertRequest, _dbConnection);
+            for (int i = 0; i < values.Length; i++)
+            {
+                commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
+            }
+
+            commandDb.ExecuteNonQuery();
         }
 
         public SQLiteDataReader SelectFromTable(string table, string toSelect)
         {
-            throw new NotImplementedException();
+            var selectRequest = "SELECT " + toSelect + " FROM " + table;
+            return new SQLiteCommand(selectRequest, _dbConnection).ExecuteReader();
         }
     }
 }

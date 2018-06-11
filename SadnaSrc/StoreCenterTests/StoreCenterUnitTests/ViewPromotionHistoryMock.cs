@@ -4,6 +4,7 @@ using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.StoreCenter;
 
 namespace StoreCenterTests.StoreCenterUnitTests
@@ -13,13 +14,13 @@ namespace StoreCenterTests.StoreCenterUnitTests
     {
         private Mock<IStoreDL> storeDbMocker;
         private Mock<IUserSeller> userServiceMocker;
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private ViewPromotionHistorySlave slave;
         private string store = "HistoryStore";
         [TestInitialize]
         public void BuildStore()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             storeDbMocker = new Mock<IStoreDL>();
