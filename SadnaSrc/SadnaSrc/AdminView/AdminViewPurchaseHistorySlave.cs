@@ -35,13 +35,13 @@ namespace SadnaSrc.AdminView
                 Answer = new AdminAnswer(ViewPurchaseHistoryStatus.Success,
                     "View purchase history has been successful!", historyReport);
             }
-            catch (MarketException e)
-            {
-                Answer = new AdminAnswer(ViewPurchaseHistoryStatus.NotSystemAdmin, e.GetErrorMessage(), null);
-            }
             catch (DataException e)
             {
                 Answer = new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage(), null);
+            }
+            catch (MarketException e)
+            {
+                Answer = new AdminAnswer(ViewPurchaseHistoryStatus.NotSystemAdmin, e.GetErrorMessage(), null);
             }
 
 

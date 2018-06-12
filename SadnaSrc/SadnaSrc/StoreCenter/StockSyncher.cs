@@ -2,6 +2,7 @@ using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using SadnaSrc.MarketFeed;
 
 namespace SadnaSrc.StoreCenter
@@ -98,7 +99,7 @@ namespace SadnaSrc.StoreCenter
             {
                 item = DataLayer.GetProductFromStore(storeName, productName);
             }
-            catch (Exception)
+            catch (SqlException)
             { return false; }
 
             if (item?.PurchaseWay != PurchaseEnum.Lottery)

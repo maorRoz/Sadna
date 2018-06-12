@@ -30,15 +30,15 @@ namespace SadnaSrc.StoreCenter
                                              "and has been denied. Error message has been created!");
                 answer = new StoreAnswer(ManageStoreStatus.InvalidStore, e.GetErrorMessage());
             }
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
             catch (MarketException e)
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"
                                              + _storeName + " and therefore has been denied. Error message has been created!");
                 answer = new StoreAnswer(ManageStoreStatus.InvalidManager, e.GetErrorMessage());
-            }
-            catch (DataException e)
-            {
-                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
         }
     }

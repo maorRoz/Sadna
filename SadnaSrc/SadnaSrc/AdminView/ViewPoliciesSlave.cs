@@ -39,13 +39,13 @@ namespace SadnaSrc.AdminView
             {
                 Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
             }
-            catch (MarketException e)
-            {
-                Answer = new AdminAnswer(ViewPolicyStatus.NoAuthority, e.GetErrorMessage(),null);
-            }
             catch (DataException e)
             {
                 Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException e)
+            {
+                Answer = new AdminAnswer(ViewPolicyStatus.NoAuthority, e.GetErrorMessage(),null);
             }
         }
 
@@ -65,13 +65,13 @@ namespace SadnaSrc.AdminView
 		    {
 			    Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
 		    }
-		    catch (MarketException e)
-		    {
-			    Answer = new AdminAnswer(ViewPolicyStatus.NoAuthority, e.GetErrorMessage(), null);
-		    }
 		    catch (DataException e)
 		    {
-			    Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
+		        Answer = new AdminAnswer((ViewPolicyStatus)e.Status, e.GetErrorMessage());
+		    }
+            catch (MarketException e)
+		    {
+			    Answer = new AdminAnswer(ViewPolicyStatus.NoAuthority, e.GetErrorMessage(), null);
 		    }
 	    }
 

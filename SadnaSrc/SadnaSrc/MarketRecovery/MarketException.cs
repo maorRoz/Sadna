@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 
 namespace SadnaSrc.Main
 {
@@ -20,10 +21,10 @@ namespace SadnaSrc.Main
         private string errorMessage;
         public int  Status { get; }
 
-        private static IMarketDB _dbConnection = new ProxyMarketDB();
+        private static IMarketBackUpDB _dbConnection = MarketBackUpDB.Instance;
 
 
-        public static void SetDB(IMarketDB dbConnection)
+        public static void SetDB(IMarketBackUpDB dbConnection)
         {
             _dbConnection = dbConnection;
         }
@@ -56,9 +57,9 @@ namespace SadnaSrc.Main
 
         private void InsertError(string errorID,string moduleName,string message)
         {
-                _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description",
-                    new[] {"@idParam", "@moduleParam", "@descriptionParam"},
-                    new object[] {errorID, moduleName, message});
+                _dbConnection.InsertTable("System_Errors", "ErrorID, ErrorDate, ModuleName, Description",
+                    new[] {"@idParam", "@dateParam","@moduleParam", "@descriptionParam"},
+                    new object[] {errorID, DateTime.Now, moduleName, message});
         }
 
         private static string[] GetAllErrorsIds()

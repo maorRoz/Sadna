@@ -4,6 +4,7 @@ using SadnaSrc.AdminView;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.MarketRecovery;
 
 namespace SystemViewTests
 {
@@ -11,14 +12,14 @@ namespace SystemViewTests
     public class AddCategoryTestsMock
     {
         private Mock<IAdminDL> handler;
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
 
 
 
         [TestInitialize]
         public void BuildStore()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IAdminDL>();

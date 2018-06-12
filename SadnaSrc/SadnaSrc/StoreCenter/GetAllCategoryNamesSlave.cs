@@ -36,15 +36,16 @@ namespace SadnaSrc.StoreCenter
 				Answer = new StoreAnswer((GetCategoriesStatus)e.Status, e.GetErrorMessage());
 			}
 
-			catch (MarketException)
+			catch (DataException e)
+			{
+			    Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+			}
+
+            catch (MarketException)
 			{
 				MarketLog.Log("StoreCenter", "no premission");
 				Answer = new StoreAnswer(GetCategoriesStatus.DidntEnterSystem,
 					"User didn't enter the system!");
-			}
-			catch (DataException e)
-			{
-				Answer = new StoreAnswer((GetCategoriesStatus)e.Status, e.GetErrorMessage());
 			}
 		}
 	}

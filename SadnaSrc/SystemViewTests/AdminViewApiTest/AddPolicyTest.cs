@@ -7,6 +7,7 @@ using SadnaSrc.Main;
 using SadnaSrc.AdminView;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.PolicyComponent;
 
 namespace SystemViewTests.AdminViewApiTest
@@ -14,14 +15,14 @@ namespace SystemViewTests.AdminViewApiTest
     [TestClass]
     public class AddPolicyTest
     {
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private Mock<IUserAdmin> admin;
         private Mock<IGlobalPolicyManager> manager;
 
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             admin = new Mock<IUserAdmin>();

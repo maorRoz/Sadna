@@ -61,8 +61,6 @@ namespace SadnaSrc.MarketData
         {
             string[] createTableStrings =
             {
-                CreateSystemLogTable(),
-                CreateSystemErrorsTable(),
                 CreateUserTable(),
                 CreateProductTable(),
                 CreateDiscountTable(),
@@ -321,8 +319,6 @@ namespace SadnaSrc.MarketData
         {
             var tableNames = new[]
             {
-                "System_Log",
-                "System_Errors",
                 "Users",
                 "Products",
                 "Discount",
@@ -354,30 +350,6 @@ namespace SadnaSrc.MarketData
                 var deleateTableCommand = new SqlCommand("Delete FROM " +tableNames[i], dbConnection);
                 deleateTableCommand.ExecuteNonQuery();
             }
-        }
-
-
-        private static string CreateSystemLogTable()
-        {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='System_Log' AND xtype='U')
-                        CREATE TABLE [System_Log] (
-                                    [LogID]         VARCHAR(256),
-                                    [LogDate]       DATETIME,
-                                    [ModuleName]    VARCHAR(256),
-                                    [Description]   VARCHAR(256),
-                                    PRIMARY KEY([LogID])
-                                    )";
-        }
-
-        private static string CreateSystemErrorsTable()
-        {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='System_Errors' AND xtype='U') 
-                        CREATE TABLE [System_Errors] (
-                                    [ErrorID]       VARCHAR(256),
-                                    [ModuleName]    VARCHAR(256),
-                                    [Description]   VARCHAR(256),
-                                    PRIMARY KEY([ErrorID])
-                                    )";
         }
 
         private static string CreateUserTable()

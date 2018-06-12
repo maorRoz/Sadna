@@ -31,19 +31,19 @@ namespace SadnaSrc.StoreCenter
             DataLayerInstance.RemoveCategoryDiscount(categoryDiscount);
             MarketLog.Log("StoreCenter", "categoryDiscountd added successfully");
             Answer = new StoreAnswer(StoreEnum.Success, "categoryDiscountd removed successfully");
-        }
-        catch (StoreException exe)
-        {
-            Answer = new StoreAnswer((StoreEnum) exe.Status, exe.GetErrorMessage());
-        }
-        catch (MarketException)
-        {
-            Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
-        }
-        catch (DataException e)
-        {
-            Answer = new StoreAnswer((StoreEnum) e.Status, e.GetErrorMessage());
-        }
+            }
+            catch (StoreException exe)
+            {
+                Answer = new StoreAnswer((StoreEnum) exe.Status, exe.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
+                Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException)
+            {
+                Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
+            }
         }
         private void CheckIfCategoryExists(string categoryName)
         {

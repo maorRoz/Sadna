@@ -40,13 +40,13 @@ namespace SadnaSrc.StoreCenter
              {
                 Answer = new StoreAnswer((StoreEnum)e.Status,e.GetErrorMessage());
              }
+             catch (DataException e)
+             {
+                 Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+             }
             catch (MarketException)
              {
                 Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
-             }
-            catch (DataException e)
-             {
-                Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
              }
         }
 

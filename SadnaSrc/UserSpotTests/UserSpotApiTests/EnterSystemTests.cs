@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.UserSpot;
 
 namespace UserSpotTests.UserSpotApiTests
@@ -17,7 +18,7 @@ namespace UserSpotTests.UserSpotApiTests
         [TestInitialize]
         public void MarketBuilder()
         {
-            var marketDbMocker = new Mock<IMarketDB>();
+            var marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             var userDbMocker = new Mock<IUserDL>();

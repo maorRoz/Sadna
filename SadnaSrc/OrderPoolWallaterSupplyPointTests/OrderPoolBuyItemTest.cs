@@ -7,6 +7,7 @@ using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.OrderPool;
 using SadnaSrc.PolicyComponent;
 using SadnaSrc.StoreCenter;
@@ -19,7 +20,7 @@ namespace OrderPoolWallaterSupplyPointTests
     [TestClass]
     public class OrderPoolBuyItemTest
     {
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private Mock<IOrderDL> orderDbMocker;
         private Mock<IUserBuyer> userBuyerMocker;
         private Mock<IStoresSyncher> storeSyncherMock;
@@ -33,7 +34,7 @@ namespace OrderPoolWallaterSupplyPointTests
         public void MarketBuilder()
         {
             publisherMock = new Mock<IPublisher>();
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             orderDbMocker = new Mock<IOrderDL>();
