@@ -20,6 +20,7 @@ namespace SystemViewTests.UseCaseUnitTest
         [TestInitialize]
         public void MarketBuilder()
         {
+            MarketLog.SetDB(MarketBackUpDB.Instance);
             MarketBackUpDB.Instance.CleanByForce();
             MarketDB.Instance.InsertByForce();
             marketSession = MarketYard.Instance;
