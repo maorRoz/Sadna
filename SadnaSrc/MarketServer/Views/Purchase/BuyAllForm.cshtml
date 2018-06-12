@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Order Form";
+    ViewData["Title"] = "Payment Page";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -21,7 +21,7 @@
             </div>
         @using (Html.BeginForm("MakeBuyAll", "Purchase", new { Model.SystemId, Model.State}))
         {
-            <label for="user-name-entry">Username:</label>
+			<label for="user-name-entry">credit card owner name\ User name:</label>
             <input type="text" class="form-control" id="user-name-entry" name="usernameEntry" value="@Model.UserName" />
             <label for="user-address-entry">Address:</label>
             <input type="text" class="form-control" id="user-address-entry" name="addressEntry" value="@Model.UserAddress" />

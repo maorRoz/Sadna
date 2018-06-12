@@ -7,18 +7,33 @@
         <h3>MarketYard Application</h3>
         <hr/>
         <div id="feedContainer" style="float: right;width:20%"></div>
-        <div style="float: left; width: 70%">
-            <div id="alertContainer">
-                @if (Model.Message != null)
-                {
-                    <div class='success'><span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span> 
-                    @Model.Message 
-                    </div>
-                }
-            </div>
-            hello there..
-        </div>
-    </div>
+		<div style="float: left; width: 70%">
+			<div id="alertContainer">
+				@if (Model.Message != null)
+		{
+			<div class='success'>
+				<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+				@Model.Message
+			</div>
+}
+			</div>
+			about us:
+			
+			<div>
+				We are five third year students in Software Engineering, and we have been required to develop the next E-Bay
+				(or something like that, we need to ask our T.A about that).
+			</div>
+			<div>
+				we hope you will enjoy our website!
+			</div>
+			
+			Maor,
+			Pnina,
+			Zohar,
+			Igor,
+			and Lior
+		</div>
+		</div>
 </div>
 
 
