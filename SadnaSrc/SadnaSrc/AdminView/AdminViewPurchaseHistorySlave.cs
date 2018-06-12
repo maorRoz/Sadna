@@ -13,7 +13,7 @@ namespace SadnaSrc.AdminView
     {
         private readonly IAdminDL _adminDB;
         private int adminSystemID;
-        private IUserAdmin _admin;
+        private readonly IUserAdmin _admin;
 
         public AdminAnswer Answer { get; private set; }
 
@@ -21,7 +21,6 @@ namespace SadnaSrc.AdminView
         public AdminViewPurchaseHistorySlave(IAdminDL adminDB, IUserAdmin admin)
         {
             _adminDB = adminDB;
-            Answer = null;
             _admin = admin;
             adminSystemID = _admin.GetAdminSystemID();
         }

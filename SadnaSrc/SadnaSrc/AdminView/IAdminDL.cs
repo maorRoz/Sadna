@@ -22,6 +22,10 @@ namespace SadnaSrc.AdminView
 	    string[] GetAllStoresInPurchaseHistory();
 	    string[] GetAllUserInPurchaseHistory();
 
+        string[] GetEventLogReport();
+
+        string[] GetEventErrorLogReport();
+
 
     }
 }

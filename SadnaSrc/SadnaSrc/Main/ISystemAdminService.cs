@@ -39,6 +39,20 @@ namespace SadnaSrc.Main
 		NoDB = 500
     }
 
+    public enum ViewSystemLogStatus
+    {
+        Success,
+        NotSystemAdmin,
+        NoDB = 500
+    }
+
+    public enum ViewSystemErrorStatus
+    {
+        Success,
+        NotSystemAdmin,
+        NoDB = 500
+    }
+
     public enum EditCategoryStatus
     {
         Success,
