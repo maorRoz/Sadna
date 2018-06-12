@@ -83,11 +83,11 @@ namespace MarketWeb.Controllers
 		    return View(new CategoryListModel(systemId, state, message, categories));
 	    }
 
-	    public IActionResult SearchProduct(int systemId, string state, string type, string value, double minPrice, double maxPrice, string category)
+	    public IActionResult SearchProduct(int systemId, string state, string value, double minPrice, double maxPrice, string category)
 	    {
 		    var userService = MarketServer.GetUserSession(systemId);
 		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-		    var answer = storeShoppingService.SearchProduct(type, value, minPrice, maxPrice, category);
+		    var answer = storeShoppingService.SearchProduct(value, minPrice, maxPrice, category);
 		    if (answer.Status == 0)
 		    {
 			    return RedirectToAction("ProductsView", new { systemId, state, results = answer.ReportList});
