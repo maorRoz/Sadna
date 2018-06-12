@@ -31,43 +31,16 @@ namespace SadnaSrc.StoreCenter
 				validateData(value);
 				validatePrices(minPrice, maxPrice);
 				Product[] productsKeyWord = FindKeyWord(value);
-				Category cat = _storeLogic.GetCategoryByName(value);
-				Product[] productsCategory = new Product[0];
-				if (cat != null) {
-					productsCategory = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
-				}
-
+				Product[] productsCategory = findProductsCategory(findSimilarCategories(value));
 				Product[] products = new Product[productsKeyWord.Length + productsCategory.Length];
 				int i;
 				for (i = 0; i < productsKeyWord.Length; i++) {
 					products[i] = productsKeyWord[i];
 				}
 
-				for (int j = i; j < products.Length; j++) {
+				for (int j = i; j < products.Length; j++)
+				{
 					products[j] = productsCategory[j - i];
-				}
-
-				Product[] productsName = _storeLogic.GetProductsByName(value);
-
-				if (productsName.Length == 0 && products.Length == 0)
-				{
-					string similarProduct = FindSimilarProductByName(value);
-					if (similarProduct != "")
-					{
-						Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
-						return;
-					}		
-				}
-
-				if (cat == null && products.Length == 0)
-				{
-					string similarProduct = FindSimilarCategoriesByName(value);
-					if (similarProduct != "")
-					{
-						Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
-						return;
-					}
-
 				}
 					
 				products = FilterResultsByPrice(products,minPrice, maxPrice);
@@ -138,7 +111,7 @@ namespace SadnaSrc.StoreCenter
 			Product[] products = _storeLogic.GetAllProducts();
 			foreach (var product in products)
 			{
-				if (product.Name.Equals(value) || product.Description.Contains(value) || Convert.ToString(product.BasePrice)==value)
+				if (product.Name.Contains(value) || product.Description.Contains(value) || Convert.ToString(product.BasePrice)==value)
 				{
 					result.AddLast(product);
 				}
@@ -275,6 +248,38 @@ namespace SadnaSrc.StoreCenter
 				throw new StoreException(SearchProductStatus.PricesInvalid,
 					"The prices range is illegal!!");
 			}
+		}
+
+		private Category[] findSimilarCategories(string category)
+		{
+			LinkedList<Category> categories = new LinkedList<Category>();
+			String[] allCategories = _storeLogic.GetAllCategorysNames();
+			for (int i = 0; i < allCategories.Length; i++)
+			{
+				if (allCategories[i].Contains(category))
+				{
+					categories.AddLast(_storeLogic.GetCategoryByName(allCategories[i]));
+				}
+			}
+
+			return categories.ToArray();
+		}
+
+		private Product[] findProductsCategory(Category[] categories)
+		{
+			LinkedList<Product> products = new LinkedList<Product>();
+			foreach (Category cat in categories)
+			{
+				Product[] tempProducts = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
+				foreach (Product prod in tempProducts)
+				{
+					products.AddLast(prod);
+				}
+			}
+
+			return products.ToArray();
+
+
 		}
 
 
