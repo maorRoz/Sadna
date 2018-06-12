@@ -32,29 +32,18 @@ namespace SadnaSrc.StoreCenter
 				validatePrices(minPrice, maxPrice);
 				Product[] productsKeyWord = FindKeyWord(value);
 				Product[] productsCategory = findProductsCategory(findSimilarCategories(value));
-				Product[] products = new Product[productsKeyWord.Length + productsCategory.Length];
-				int i;
-				for (i = 0; i < productsKeyWord.Length; i++) {
-					products[i] = productsKeyWord[i];
+				List<Product> product = new List<Product>(productsKeyWord);
+				foreach (Product prod in productsCategory)
+				{
+					product.Add(prod);
 				}
 
-				for (int j = i; j < products.Length; j++)
-				{
-					products[j] = productsCategory[j - i];
-				}
+				Product[] products = product.ToArray();
 					
 				products = FilterResultsByPrice(products,minPrice, maxPrice);
 				products = FilterResultByCategory(products, category);
 				
-				string[] result = new string[products.Length];
-				string[] stores = GetProductsStores(products);
-				for (i = 0; i < result.Length; i++)
-				{
-					string productId = products[i].SystemId;
-					result[i] = GetProductStockInformation(productId,false) + " Store: "+ stores[i];
-				}
-
-				Answer = new StoreAnswer(SearchProductStatus.Success,"Data retrieved successfully!", result);
+				Answer = new StoreAnswer(SearchProductStatus.Success,"Data retrieved successfully!", AddStoreToProducts(products));
 			}
 
 			catch (StoreException e)
@@ -133,7 +122,7 @@ namespace SadnaSrc.StoreCenter
 
 		private Product[] FilterResultsByPrice(Product[] products, double minPrice, double maxPrice)
 		{
-			LinkedList<Product> productsAfterFilter = new LinkedList<Product>();
+			List<Product> productsAfterFilter = new List<Product>();
 
 			foreach (var product in products)
 			{
@@ -142,7 +131,7 @@ namespace SadnaSrc.StoreCenter
 				{
 					if (price >= minPrice)
 					{
-						productsAfterFilter.AddLast(product);
+						productsAfterFilter.Add(product);
 					}
 				}
 
@@ -150,7 +139,7 @@ namespace SadnaSrc.StoreCenter
 				{
 					if (price <= maxPrice)
 					{
-						productsAfterFilter.AddLast(product);
+						productsAfterFilter.Add(product);
 					}
 
 				}
@@ -159,13 +148,13 @@ namespace SadnaSrc.StoreCenter
 				{
 					if (price >= minPrice && price <= maxPrice)
 					{
-						productsAfterFilter.AddLast(product);
+						productsAfterFilter.Add(product);
 					}
 				}
 
 				else
 				{
-					productsAfterFilter.AddLast(product);
+					productsAfterFilter.Add(product);
 				}
 
 			}
@@ -254,7 +243,7 @@ namespace SadnaSrc.StoreCenter
 		private Category[] findSimilarCategories(string category)
 		{
 			LinkedList<Category> categories = new LinkedList<Category>();
-			String[] allCategories = _storeLogic.GetAllCategorysNames();
+			string[] allCategories = _storeLogic.GetAllCategorysNames();
 			for (int i = 0; i < allCategories.Length; i++)
 			{
 				if (allCategories[i].Contains(category))
@@ -268,19 +257,31 @@ namespace SadnaSrc.StoreCenter
 
 		private Product[] findProductsCategory(Category[] categories)
 		{
-			LinkedList<Product> products = new LinkedList<Product>();
+			List<Product> products = new List<Product>();
 			foreach (Category cat in categories)
 			{
 				Product[] tempProducts = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
 				foreach (Product prod in tempProducts)
 				{
-					products.AddLast(prod);
+					products.Add(prod);
 				}
 			}
 
 			return products.ToArray();
 
 
+		}
+
+		private string[] AddStoreToProducts(Product[] products)
+		{
+			string[] result = new string[products.Length];
+			string[] stores = GetProductsStores(products);
+			for (int i = 0; i < result.Length; i++)
+			{
+				string productId = products[i].SystemId;
+				result[i] = GetProductStockInformation(productId, false) + " Store: " + stores[i];
+			}
+			return result;
 		}
 
 

@@ -29,6 +29,7 @@ namespace SadnaSrc.MarketData
             }
             catch (SqlException)
             {
+				//dont care
             }
         }
 
