@@ -1,8 +1,5 @@
 ﻿<br />
 <br />
-<br />
-<br />
-<br />
 @{
 	ViewData["Title"] = "Your Store List";
 }
@@ -13,9 +10,17 @@
 		<div id="feedContainer" style="float: right;width:20%"></div>
 		<div style="float: left;width:70%">
 			<div id="alertContainer">
-				@if (Model.Message != null)
+				@if (Model.Message != null && !ViewBag.valid)
 				{
 					<div class='error'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
+				}
+
+				@if (Model.Message != null && ViewBag.valid)
+				{
+					<div class='success'>
 						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
 						@Model.Message
 					</div>
@@ -41,6 +46,11 @@
 					</tr>
 				}
 			</table>
+
+			@using (Html.BeginForm("OpenStoreView", "StoreManagement", new { Model.SystemId, Model.State}))
+			{
+				<input type="submit" class="btn btn-primary" value="Open new store">
+			}
 		</div>
 	</div>
 </div>

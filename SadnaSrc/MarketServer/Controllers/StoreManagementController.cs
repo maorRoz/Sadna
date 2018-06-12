@@ -15,19 +15,21 @@ namespace MarketWeb.Controllers
 	{
 		private const int Success = 0;
 
-		public IActionResult StoreControl(int systemId, string state)
+		public IActionResult StoreControl(int systemId, string state, string message, bool valid)
 		{
+			ViewBag.valid = valid;
 			var userService = MarketServer.GetUserSession(systemId);
-		    string message = null;
 		    var storesData = new string[0];
             var answer = userService.GetControlledStoreNames();
 		    if (answer.Status == Success)
 		    {
 		        storesData = answer.ReportList;
+				valid = true;
 		    }
 		    else
 		    {
 		        message = answer.Answer;
+				valid = false;
 		    }
 
 		    return View(new StoreListModel(systemId, state, storesData,message));
@@ -50,6 +52,25 @@ namespace MarketWeb.Controllers
 			}
 
 			return View(new PermissionOptionsModel(systemId, state, message, store, options));
+		}
+
+		public IActionResult OpenStoreView(int systemId, string state, string message)
+		{
+			return View(new UserModel(systemId, state, message));
+		}
+
+		public IActionResult OpenStore(int systemId, string state, string storeName, string storeAddress)
+		{
+			var userService = MarketServer.GetUserSession(systemId);
+			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+			var answer = storeShoppingService.OpenStore(storeName, storeAddress);
+			if (answer.Status == Success)
+			{
+				return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer, valid = true });
+			}
+
+			return RedirectToAction("OpenStoreView", new { systemId, state , message = answer.Answer});
+
 		}
 
 		public IActionResult ManageStore(int systemId, string state, string store, string option)

@@ -32,15 +32,6 @@
 			@using (Html.BeginForm("SearchProduct", "Shopping", new { Model.SystemId, Model.State, Model.Message }))
 			{
 				<input class="form-control" name="value" placeholder="search something here..." />
-				<fieldset>
-					<br />
-					Search Product by:
-					<select name="type">
-						<option value="Name">Name</option>
-						<option value="Category">Category</option>
-						<option value="KeyWord">KeyWord</option>
-					</select>
-				</fieldset>
 
 				<fieldset>
 					<br />
