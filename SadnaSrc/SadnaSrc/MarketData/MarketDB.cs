@@ -37,7 +37,7 @@ namespace SadnaSrc.MarketData
         { 
             var localDbPath = new SqlConnectionStringBuilder
             {
-                DataSource = ".\\SQLEXPRESS",
+                DataSource = ".\\MarketDB",
                 InitialCatalog = "MarketData",
                 IntegratedSecurity = true,
                 MultipleActiveResultSets = true
