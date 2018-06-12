@@ -81,6 +81,20 @@ namespace DbRobustnessTests
             Assert.AreEqual((int)EditPolicyStatus.NoDB, answer.Status);
         }
 
+        [TestMethod]
+        public void ViewLogNODBTest()
+        {
+            answer = adminService.ViewLog();
+            Assert.AreEqual((int)ViewSystemLogStatus.Success, answer.Status);
+        }
+
+        [TestMethod]
+        public void ViewErrorNODBTest()
+        {
+            answer = adminService.ViewLog();
+            Assert.AreEqual((int)ViewSystemErrorStatus.Success, answer.Status);
+        }
+
 
         [TestCleanup]
         public void CleanUpNoDataTest()

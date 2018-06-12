@@ -20,10 +20,5 @@ namespace SadnaSrc.MarketData
         {
             return "Db Connection Lost";
         }
-
-        protected override string WrapErrorMessageForDb(string message)
-        {
-            return "Data Error: " + message;
-        }
     }
 }

@@ -13,6 +13,7 @@ namespace SystemViewTests
     {
         private Mock<IAdminDL> handler;
         private Mock<IMarketBackUpDB> marketDbMocker;
+        private Mock<IUserAdmin> adminValidatorMocker;
 
 
 
@@ -23,11 +24,12 @@ namespace SystemViewTests
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IAdminDL>();
+            adminValidatorMocker = new Mock<IUserAdmin>();
         }
         [TestMethod]
         public void AddCategoryWhenCategoryAlreadyExists()
         {
-            AddCategorySlave slave = new AddCategorySlave(handler.Object);
+            AddCategorySlave slave = new AddCategorySlave(handler.Object, adminValidatorMocker.Object);
             handler.Setup(x => x.GetCategoryByName("items")).Returns(new Category("items"));
             slave.AddCategory("items");
             Assert.AreEqual((int)EditCategoryStatus.CategoryAlradyExist, slave.Answer.Status);
@@ -35,7 +37,7 @@ namespace SystemViewTests
         [TestMethod]
         public void AddCategorySuccess()
         {
-            AddCategorySlave slave = new AddCategorySlave(handler.Object);
+            AddCategorySlave slave = new AddCategorySlave(handler.Object, adminValidatorMocker.Object);
             slave.AddCategory("items");
             Assert.AreEqual((int)StoreEnum.Success, slave.Answer.Status);
         }

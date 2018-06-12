@@ -13,6 +13,27 @@ namespace SadnaSrc.AdminView
         {
 
         }
+
+        public AdminAnswer(ViewSystemLogStatus status, string answer,string[] report) : base((int)status, answer,report)
+        {
+
+        }
+
+        public AdminAnswer(ViewSystemErrorStatus status, string answer, string[] report) : base((int)status, answer, report)
+        {
+
+        }
+
+        public AdminAnswer(ViewSystemLogStatus status, string answer) : base((int)status, answer)
+        {
+
+        }
+
+        public AdminAnswer(ViewSystemErrorStatus status, string answer) : base((int)status, answer)
+        {
+
+        }
+
         public AdminAnswer(ViewPurchaseHistoryStatus status, string answer, string[] historyReport) : base((int)status, answer,historyReport)
         {
         }

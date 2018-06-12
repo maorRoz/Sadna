@@ -36,7 +36,7 @@ namespace SystemViewTests.AdminViewApiTest
             adminDbMocker.Setup(x => x.IsUserExist(It.IsAny<string>())).Returns(true);
             slave = new RemoveUserSlave(adminDbMocker.Object, userAdminMocker.Object);
             slave.RemoveUser("who?");
-            Assert.AreEqual(slave.Answer.Status, (int)RemoveUserStatus.Success);
+            Assert.AreEqual((int)RemoveUserStatus.Success, slave.Answer.Status);
         }
 
         [TestMethod]

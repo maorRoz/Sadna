@@ -18,6 +18,10 @@ namespace SadnaSrc.Main
 	    MarketAnswer ViewPolicies();
 	    MarketAnswer ViewPoliciesSessions();
 		MarketAnswer SavePolicy();
+
+        MarketAnswer ViewLog();
+
+        MarketAnswer ViewError();
     }
 
     public enum RemoveUserStatus
@@ -37,6 +41,20 @@ namespace SadnaSrc.Main
         NoStoreFound,
 	    MistakeTipGiven,
 		NoDB = 500
+    }
+
+    public enum ViewSystemLogStatus
+    {
+        Success,
+        NotSystemAdmin,
+        NoDB = 500
+    }
+
+    public enum ViewSystemErrorStatus
+    {
+        Success,
+        NotSystemAdmin,
+        NoDB = 500
     }
 
     public enum EditCategoryStatus

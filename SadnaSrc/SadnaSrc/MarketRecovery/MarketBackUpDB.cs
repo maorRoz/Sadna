@@ -5,7 +5,7 @@ using System.IO;
 
 namespace SadnaSrc.MarketRecovery
 {
-    class MarketBackUpDB : IMarketBackUpDB
+    public class MarketBackUpDB : IMarketBackUpDB
     {
         private static MarketBackUpDB _instance;
 
