@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace SadnaSrc.MarketRecovery
 {
@@ -20,8 +18,17 @@ namespace SadnaSrc.MarketRecovery
         }
         private void InitiateDb()
         {
-
-            _dbConnection = new SQLiteConnection();
+            var pathsDirectories = Directory.GetCurrentDirectory().Split(new[]{"\\"},StringSplitOptions.RemoveEmptyEntries);
+            var newPathItems = new List<string>();
+            int i = 0;
+            while (pathsDirectories[i] != "SadnaSrc")
+            {
+                newPathItems.Add(pathsDirectories[i]);
+                i++;
+            }
+            newPathItems.Add(pathsDirectories[i]);
+            var newPath = string.Join("\\", newPathItems.ToArray()) +"\\MarketBackup.db";
+            _dbConnection = new SQLiteConnection("FullUri=file:"+newPath);
             _dbConnection.Open();
         }
         private void CreateTables()
@@ -59,10 +66,10 @@ namespace SadnaSrc.MarketRecovery
         private static string CreateSystemLogTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [System_Log] (
-                                    [LogID]         VARCHAR(256),
-                                    [LogDate]       DATETIME,
-                                    [ModuleName]    VARCHAR(256),
-                                    [Description]   VARCHAR(256),
+                                    [LogID]         TEXT,
+                                    [LogDate]       DATE,
+                                    [ModuleName]    TEXT,
+                                    [Description]   TEXT,
                                     PRIMARY KEY([LogID])
                                     )";
         }
@@ -70,9 +77,9 @@ namespace SadnaSrc.MarketRecovery
         private static string CreateSystemErrorsTable()
         {
             return @"CREATE TABLE IF NOT EXISTS [System_Errors] ( 
-                                    [ErrorID]       VARCHAR(256),
-                                    [ModuleName]    VARCHAR(256),
-                                    [Description]   VARCHAR(256),
+                                    [ErrorID]       TEXT,
+                                    [ModuleName]    TEXT,
+                                    [Description]   TEXT,
                                     PRIMARY KEY([ErrorID])
                                     )";
         }

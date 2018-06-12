@@ -28,28 +28,28 @@ namespace DbRobustnessTests
         public void BuyItemFromImmediateNoDBTest()
         {
             answer = orderService.BuyItemFromImmediate("#9", "Cluckin Bell", 1, 5.0, null);
-            Assert.AreEqual((int)OrderItemStatus.NoDB, answer.Status);
+            Assert.AreEqual((int)OrderStatus.NoDB, answer.Status);
         }
 
         [TestMethod]
         public void BuyLotteryTicketNoDBTest()
         {
-            answer = orderService.BuyLotteryTicket("#45 With Cheese", "Cluckin Bell", 1,6.0);
-            Assert.AreEqual((int)OrderItemStatus.NoDB, answer.Status);
+            answer = orderService.BuyLotteryTicket("The March Hare", "T", 1,6.0);
+            Assert.AreEqual((int)OrderStatus.NoDB, answer.Status);
         }
 
         [TestMethod]
         public void BuyEverythingFromCartNoDBTest()
         {
             answer = orderService.BuyEverythingFromCart(null);
-            Assert.AreEqual((int)OrderItemStatus.NoDB, answer.Status);
+            Assert.AreEqual((int)OrderStatus.NoDB, answer.Status);
         }
 
         [TestMethod]
         public void GiveDetailsNoDBTest()
         {
             answer = orderService.GiveDetails("Moshe", "123", "12345678");
-            Assert.AreEqual((int)GiveDetailsStatus.NoDB, answer.Status);
+            Assert.AreEqual((int)GiveDetailsStatus.Success, answer.Status);
         }
 
         [TestCleanup]
