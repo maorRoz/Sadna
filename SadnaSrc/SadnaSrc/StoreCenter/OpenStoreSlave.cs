@@ -38,12 +38,12 @@ namespace SadnaSrc.StoreCenter
             catch (StoreException e)
             {
                 Answer = new StoreAnswer((OpenStoreStatus)e.Status, "Store " + storeName + " creation has been denied. " +
-                                                 "something is wrong with adding a new store of that type. Error message has been created!");
+                                                 "something is wrong with adding a new store of that type.");
             }
             catch (MarketException)
             {
                 Answer = new StoreAnswer(OpenStoreStatus.InvalidUser,
-                    "User validation as store owner has been failed. only registered users can open new stores. Error message has been created!");
+                    "User validation as store owner has been failed. only registered users can open new stores.");
             }
             catch (DataException e)
             {
