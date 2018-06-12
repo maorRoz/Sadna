@@ -80,6 +80,8 @@
     <Compile Include="AdminViewApiTest\AddCategoryTests.cs" />
     <Compile Include="AdminViewApiTest\AddPolicyTest.cs" />
     <Compile Include="AdminViewApiTest\RemovePolicyTest.cs" />
+    <Compile Include="AdminViewApiTest\ViewErrorTests.cs" />
+    <Compile Include="AdminViewApiTest\ViewLogTests.cs" />
     <Compile Include="AdminViewApiTest\ViewPoliciesTest.cs" />
     <Compile Include="UseCaseUnitTest\AddCategoryTestsMock.cs" />
     <Compile Include="AdminViewApiTest\RemoveUserTests.cs" />

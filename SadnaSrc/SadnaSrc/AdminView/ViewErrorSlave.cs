@@ -9,7 +9,7 @@ using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
 {
-    class ViewErrorSlave
+    public class ViewErrorSlave
     {
         public MarketAnswer Answer;
         private readonly IUserAdmin _admin;
@@ -20,7 +20,7 @@ namespace SadnaSrc.AdminView
             _adminDlInstacne = adminDl;
         }
 
-        public void ViewLog()
+        public void ViewError()
         {
             try
             {
@@ -31,11 +31,15 @@ namespace SadnaSrc.AdminView
             }
             catch (AdminException e)
             {
-                Answer = new AdminAnswer(ViewSystemErrorStatus.NotSystemAdmin, e.GetErrorMessage());
+                Answer = new AdminAnswer((ViewSystemErrorStatus)e.Status, e.GetErrorMessage());
             }
             catch (DataException e)
             {
                 Answer = new AdminAnswer(ViewSystemErrorStatus.NoDB, e.GetErrorMessage());
+            }
+            catch (MarketException e)
+            {
+                Answer = new AdminAnswer(ViewSystemErrorStatus.NotSystemAdmin, e.GetErrorMessage());
             }
         }
     }

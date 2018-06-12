@@ -92,7 +92,7 @@ namespace SadnaSrc.AdminView
         public MarketAnswer ViewError()
         {
             ViewErrorSlave slave = new ViewErrorSlave(adminDB, _admin);
-            slave.ViewLog();
+            slave.ViewError();
             return slave.Answer;
         }
 
