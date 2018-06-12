@@ -73,7 +73,7 @@ namespace SadnaSrc.UserSpot
 
         protected override string WrapErrorMessageForDb(string message)
         {
-            return "User Error: " + message;
+            return message;
         }
     }
 }

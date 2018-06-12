@@ -27,7 +27,9 @@ namespace SadnaSrc.StoreCenter
                 _shopper.ValidateRegistered();
                 MarketLog.Log("StoreCenter", "premission gained");
                 CheckIfNameAvailable(storeName);
-                Store newStore = new Store(storeName, address);
+				CheckIfDataValid(address);
+				MarketLog.Log("StoreCenter", "data is valid");
+				Store newStore = new Store(storeName, address);
                 storeDB.AddStore(newStore);
                 MarketLog.Log("StoreCenter", "store was opened");
                 _shopper.AddOwnership(storeName);
@@ -37,8 +39,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException e)
             {
-                Answer = new StoreAnswer((OpenStoreStatus)e.Status, "Store " + storeName + " creation has been denied. " +
-                                                 "something is wrong with adding a new store of that type.");
+                Answer = new StoreAnswer((OpenStoreStatus)e.Status, e.GetErrorMessage());
             }
             catch (MarketException)
             {
@@ -58,5 +59,13 @@ namespace SadnaSrc.StoreCenter
             if (store != null)
                 throw new StoreException(OpenStoreStatus.AlreadyExist, "store name must be uniqe");
         }
-    }
+
+		private void CheckIfDataValid(string address)
+		{
+			if (string.IsNullOrEmpty(address))
+			{
+				throw new StoreException(OpenStoreStatus.InvalidData, "store address is invalid");
+			}
+		}
+	}
 }

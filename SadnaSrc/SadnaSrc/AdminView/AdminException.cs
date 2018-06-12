@@ -33,7 +33,7 @@ namespace SadnaSrc.AdminView
 
         protected override string WrapErrorMessageForDb(string message)
         {
-            return "System Admin Error: " + message;
+            return message;
         }
     }
 }

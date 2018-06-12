@@ -30,6 +30,7 @@ namespace SadnaSrc.Main
         Success,
         AlreadyExist,
         InvalidUser,
+		InvalidData,
         NoDB = 500
 
     }
