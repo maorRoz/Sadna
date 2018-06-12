@@ -18,6 +18,10 @@ namespace SadnaSrc.Main
 	    MarketAnswer ViewPolicies();
 	    MarketAnswer ViewPoliciesSessions();
 		MarketAnswer SavePolicy();
+
+        MarketAnswer ViewLog();
+
+        MarketAnswer ViewError();
     }
 
     public enum RemoveUserStatus
