@@ -78,6 +78,7 @@ namespace SadnaSrc.MarketRecovery
         {
             return @"CREATE TABLE IF NOT EXISTS [System_Errors] ( 
                                     [ErrorID]       TEXT,
+                                    [ErrorDate]     DATE,
                                     [ModuleName]    TEXT,
                                     [Description]   TEXT,
                                     PRIMARY KEY([ErrorID])

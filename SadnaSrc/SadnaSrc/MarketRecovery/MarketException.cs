@@ -57,9 +57,9 @@ namespace SadnaSrc.Main
 
         private void InsertError(string errorID,string moduleName,string message)
         {
-                _dbConnection.InsertTable("System_Errors", "ErrorID, ModuleName, Description",
-                    new[] {"@idParam", "@moduleParam", "@descriptionParam"},
-                    new object[] {errorID, moduleName, message});
+                _dbConnection.InsertTable("System_Errors", "ErrorID, ErrorDate, ModuleName, Description",
+                    new[] {"@idParam", "@dateParam","@moduleParam", "@descriptionParam"},
+                    new object[] {errorID, DateTime.Now, moduleName, message});
         }
 
         private static string[] GetAllErrorsIds()
