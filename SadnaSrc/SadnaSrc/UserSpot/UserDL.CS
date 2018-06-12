@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 
@@ -228,6 +229,13 @@ namespace SadnaSrc.UserSpot
 
 		    return result.ToArray();
 	    }
+
+		public void InsertSignedInUser(int systemId)
+		{
+			string[] valuesNames = { "@systemidParam", "@timeParam" };
+			object[] values = { systemId, DateTime.Now };
+			dbConnection.InsertTable("SignInReports", "SystemID,Time", valuesNames, values);
+		}
 
     }
 }

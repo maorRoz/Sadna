@@ -21,5 +21,6 @@ namespace SadnaSrc.MarketData
 
         bool IsConnected();
 
-    }
+		
+	}
 }
