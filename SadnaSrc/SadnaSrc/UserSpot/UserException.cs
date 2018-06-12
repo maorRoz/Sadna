@@ -70,10 +70,5 @@ namespace SadnaSrc.UserSpot
         {
             return "UserSpot";
         }
-
-        protected override string WrapErrorMessageForDb(string message)
-        {
-            return "User Error: " + message;
-        }
     }
 }

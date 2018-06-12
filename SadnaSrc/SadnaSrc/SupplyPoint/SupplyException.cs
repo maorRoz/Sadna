@@ -18,10 +18,5 @@ namespace SadnaSrc.SupplyPoint
         {
             return "SupplyPoint";
         }
-
-        protected override string WrapErrorMessageForDb(string message)
-        {
-            return " " + message;
-        }
     }
 }

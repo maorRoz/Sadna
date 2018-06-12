@@ -30,14 +30,14 @@ namespace SadnaSrc.Main
         }
         public MarketException(int status,string message)
         {
-            InitiateException(GetModuleName(),WrapErrorMessageForDb(message));
+            InitiateException(GetModuleName(),message);
             Status = status;
 
         }
 
         public MarketException(MarketError error,string message)
         {
-            InitiateException(GetModuleName(), WrapErrorMessageForDb(message));
+            InitiateException(GetModuleName(), message);
             Status = (int)error;
         }
 
@@ -92,11 +92,6 @@ namespace SadnaSrc.Main
         protected virtual string GetModuleName()
         {
             return "MarketYard";
-        }
-
-        protected virtual string WrapErrorMessageForDb(string message)
-        {
-            return "General Error: " + message;
         }
 
         public static bool HasErrorRaised()
