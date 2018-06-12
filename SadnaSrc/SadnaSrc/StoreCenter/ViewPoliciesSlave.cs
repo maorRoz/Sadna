@@ -61,15 +61,15 @@ namespace SadnaSrc.StoreCenter
 		    {
 			    Answer = new StoreAnswer((EditStorePolicyStatus)e.Status, e.GetErrorMessage());
 		    }
-		    catch (MarketException e)
+		    catch (DataException e)
+		    {
+		        Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+		    }
+            catch (MarketException e)
 		    {
 			    Answer = new StoreAnswer(ViewStorePolicyStatus.NoAuthority, e.GetErrorMessage(), null);
 		    }
 
-		    catch (DataException e)
-		    {
-			    Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
-		    }
 		}
 
 	}

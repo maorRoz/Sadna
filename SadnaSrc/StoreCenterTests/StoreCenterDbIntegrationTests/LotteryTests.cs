@@ -27,13 +27,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService = market.GetUserService();
         }
         [TestMethod]
-        public void HasActiveLotteryNoItem()
-        {
-            bool ans = handler.HasActiveLottery("MONO", "MOMO", 5);
-            Assert.IsFalse(ans);
-
-        }
-        [TestMethod]
         public void HasActiveLotteryPurchesWayNotLottery()
         {
             bool ans = handler.HasActiveLottery("T", "WhiteRabbit", 5);

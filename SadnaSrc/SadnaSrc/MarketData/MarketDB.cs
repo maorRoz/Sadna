@@ -13,7 +13,7 @@ namespace SadnaSrc.MarketData
 
         public static MarketDB Instance => _instance ?? (_instance = new MarketDB());
         public static bool ToDisable;
-        
+
         private SqlConnection _dbConnection;
         private MarketDB()
         {
@@ -27,13 +27,13 @@ namespace SadnaSrc.MarketData
                 InitiateDb();
                 CreateTables();
             }
-            catch(SqlException)
+            catch (SqlException)
             {
             }
         }
 
         private void InitiateDb()
-        { 
+        {
             var localDbPath = new SqlConnectionStringBuilder
             {
                 DataSource = ".\\MarketDB",
@@ -49,9 +49,9 @@ namespace SadnaSrc.MarketData
                 InitialCatalog = "MarketData",
                 UserID = "sa",
                 Password = "123",
-                MultipleActiveResultSets= true
+                MultipleActiveResultSets = true
             };
-             _dbConnection = new SqlConnection(localDbPath.ConnectionString);
+            _dbConnection = new SqlConnection(localDbPath.ConnectionString);
             //_dbConnection = new SqlConnection(remoteDbPath.ConnectionString);
             OpenIfClosed();
         }
@@ -60,8 +60,6 @@ namespace SadnaSrc.MarketData
         {
             string[] createTableStrings =
             {
-                CreateSystemLogTable(),
-                CreateSystemErrorsTable(),
                 CreateUserTable(),
                 CreateProductTable(),
                 CreateDiscountTable(),
@@ -91,11 +89,12 @@ namespace SadnaSrc.MarketData
                 var createTableCommand = new SqlCommand(createTableStrings[i], _dbConnection);
                 createTableCommand.ExecuteNonQuery();
             }
-           
+
         }
 
-        
-        public void InsertByForce() { 
+
+        public void InsertByForce()
+        {
 
             string[] thingsToInsertByForce =
             {
@@ -159,8 +158,8 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P22', 10, 'null', 'Immediate')",
                 "INSERT INTO Stock (StockID, ProductSystemID, Quantity, Discount, PurchaseWay) VALUES ('S7', 'P23', 10, 'null', 'Immediate')",
                 "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
-	            "INSERT INTO Category (SystemID, name) VALUES ('C3', 'Books')",
-				"INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C1', 'P21')",
+                "INSERT INTO Category (SystemID, name) VALUES ('C3', 'Books')",
+                "INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C1', 'P21')",
                 "INSERT INTO Category (SystemID, name) VALUES ('C2', 'MTG_Cards')",
                 "INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C1', 'P21')",
                 "INSERT INTO CategoryProductConnection (CategoryID, ProductID) VALUES ('C2', 'P23')",
@@ -278,17 +277,17 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (1,'SystemAdmin')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (2,'RegisteredUser')",
                 "INSERT INTO StatePolicy (SystemID,State) VALUES (3,'RegisteredUser')",
-				"INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
+                "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (1,'Avi`s Chocolate Kingdom','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Avi`s Chocolate Kingdom','StoreOwner')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Avi`s Chocolate Kingdom','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (2,'Toy','ManageProducts')",
                 "INSERT INTO StoreManagerPolicy (SystemID,Store,Action) VALUES (3,'Toy','StoreOwner')",
-	            "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
-	            "INSERT INTO Category (SystemID, name) VALUES ('C2', 'Books')",
-				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P1')",
-				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P2')",
-				"INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C2','P3')",
-	            "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik2','White Chocolate','S1','Immediate',2,7,'2018-12-29')",
+                "INSERT INTO Category (SystemID, name) VALUES ('C1', 'WanderlandItems')",
+                "INSERT INTO Category (SystemID, name) VALUES ('C2', 'Books')",
+                "INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P1')",
+                "INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C1','P2')",
+                "INSERT INTO CategoryProductConnection(CategoryID, ProductID) VALUES ('C2','P3')",
+                "INSERT INTO PurchaseHistory (UserName,Product,Store,SaleType,Quantity,Price,Date) VALUES ('Arik2','White Chocolate','S1','Immediate',2,7,'2018-12-29')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Avi','Avi','StoreOwner','2018-1-1','Avi`s Chocolate Kingdom has been opened')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Avi','Arik2','StoreOwner','2018-1-1','Regular promotion')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Arik2','Arik3','ManageProducts','2018-1-1','Regular promotion')",
@@ -320,8 +319,6 @@ namespace SadnaSrc.MarketData
         {
             var tableNames = new[]
             {
-                "System_Log",
-                "System_Errors",
                 "Users",
                 "Products",
                 "Discount",
@@ -350,33 +347,9 @@ namespace SadnaSrc.MarketData
             }
             for (int i = 0; i < tableNames.Length; i++)
             {
-                var deleateTableCommand = new SqlCommand("Delete FROM " +tableNames[i], dbConnection);
+                var deleateTableCommand = new SqlCommand("Delete FROM " + tableNames[i], dbConnection);
                 deleateTableCommand.ExecuteNonQuery();
             }
-        }
-
-
-        private static string CreateSystemLogTable()
-        {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='System_Log' AND xtype='U')
-                        CREATE TABLE [System_Log] (
-                                    [LogID]         VARCHAR(256),
-                                    [LogDate]       DATETIME,
-                                    [ModuleName]    VARCHAR(256),
-                                    [Description]   VARCHAR(256),
-                                    PRIMARY KEY([LogID])
-                                    )";
-        }
-
-        private static string CreateSystemErrorsTable()
-        {
-            return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='System_Errors' AND xtype='U') 
-                        CREATE TABLE [System_Errors] (
-                                    [ErrorID]       VARCHAR(256),
-                                    [ModuleName]    VARCHAR(256),
-                                    [Description]   VARCHAR(256),
-                                    PRIMARY KEY([ErrorID])
-                                    )";
         }
 
         private static string CreateUserTable()
@@ -508,7 +481,7 @@ namespace SadnaSrc.MarketData
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
                                     )";
         }
-        
+
         private static string CreateLotteryTicketsTable()
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='LotteryTicket' AND xtype='U') 
@@ -541,7 +514,7 @@ namespace SadnaSrc.MarketData
                                     FOREIGN KEY([ProductSystemID]) REFERENCES [Products]([SystemID]) ON DELETE CASCADE
                                     )";
         }
-        
+
         private static string CreateOrderTable()
         {
             return @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Orders' AND xtype='U') 
@@ -650,17 +623,17 @@ namespace SadnaSrc.MarketData
                                     )";
 		}
 
-		public void InsertTable(string table,string tableColumns,string[] valuesNames,object[] values)
+        public void InsertTable(string table, string tableColumns, string[] valuesNames, object[] values)
         {
             var dbConnection = _dbConnection;
             if (ToDisable)
             {
                 dbConnection = new SqlConnection();
             }
-            var insertRequest = "INSERT INTO "+table+" ("+ tableColumns + ") VALUES ("+ string.Join(",", valuesNames)
+            var insertRequest = "INSERT INTO " + table + " (" + tableColumns + ") VALUES (" + string.Join(",", valuesNames)
                                 + ")";
             var commandDb = new SqlCommand(insertRequest, dbConnection);
-            for (int i = 0; i < values.Length;i++)
+            for (int i = 0; i < values.Length; i++)
             {
                 commandDb.Parameters.AddWithValue(valuesNames[i], values[i]);
             }
@@ -677,7 +650,7 @@ namespace SadnaSrc.MarketData
             {
                 dbConnection = new SqlConnection();
             }
-            var selectRequest = "SELECT " + toSelect + " FROM " + table ;
+            var selectRequest = "SELECT " + toSelect + " FROM " + table;
 
             return new SqlCommand(selectRequest, dbConnection).ExecuteReader();
 
@@ -691,16 +664,16 @@ namespace SadnaSrc.MarketData
             {
                 dbConnection = new SqlConnection();
             }
-            var selectRequest = "SELECT " + toSelect + " FROM " + table + " WHERE "+condition;
+            var selectRequest = "SELECT " + toSelect + " FROM " + table + " WHERE " + condition;
 
             return new SqlCommand(selectRequest, dbConnection).ExecuteReader();
 
         }
 
-        public void UpdateTable(string table,string updateCondition,string[] columnNames, string[] valuesNames, object[] values)
+        public void UpdateTable(string table, string updateCondition, string[] columnNames, string[] valuesNames, object[] values)
         {
             OpenIfClosed();
-            string [] setString = new string[values.Length];
+            string[] setString = new string[values.Length];
             for (int i = 0; i < setString.Length; i++)
             {
                 setString[i] = columnNames[i] + " = " + valuesNames[i];
@@ -722,7 +695,7 @@ namespace SadnaSrc.MarketData
 
         }
 
-        public void DeleteFromTable(string table,string deleteCondition)
+        public void DeleteFromTable(string table, string deleteCondition)
         {
             OpenIfClosed();
             var dbConnection = _dbConnection;
@@ -760,5 +733,5 @@ namespace SadnaSrc.MarketData
                 _dbConnection.Open();
             }
         }
-    } 
+    }
 }

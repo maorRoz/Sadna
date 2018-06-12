@@ -4,6 +4,7 @@ using SadnaSrc.MarketFeed;
 using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 
 namespace MarketFeedTests.IntegrationTests
 {
@@ -21,7 +22,7 @@ namespace MarketFeedTests.IntegrationTests
         [TestInitialize]
         public void IntegrationFeedTestsBuilder()
         {
-            var marketDbMocker = new Mock<IMarketDB>();
+            var marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             countMessagesToServer = 0;

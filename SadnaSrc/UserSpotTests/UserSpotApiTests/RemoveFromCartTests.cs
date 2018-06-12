@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.UserSpot;
 
 namespace UserSpotTests.UserSpotApiTests
@@ -14,7 +15,7 @@ namespace UserSpotTests.UserSpotApiTests
     {
         private RemoveFromCartSlave slave;
         private User user;
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private Mock<IUserDL> userDbMocker;
         private readonly int userID = 5000;
         private CartItem item1;
@@ -23,7 +24,7 @@ namespace UserSpotTests.UserSpotApiTests
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             userDbMocker = new Mock<IUserDL>();

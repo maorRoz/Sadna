@@ -41,14 +41,14 @@ namespace SadnaSrc.StoreCenter
             {
                 Answer = new StoreAnswer((OpenStoreStatus)e.Status, e.GetErrorMessage());
             }
+            catch (DataException e)
+            {
+                Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
             catch (MarketException)
             {
                 Answer = new StoreAnswer(OpenStoreStatus.InvalidUser,
                     "User validation as store owner has been failed. only registered users can open new stores.");
-            }
-            catch (DataException e)
-            {
-                Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
             return null;
         }

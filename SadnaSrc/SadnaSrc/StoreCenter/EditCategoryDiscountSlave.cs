@@ -55,24 +55,24 @@ namespace SadnaSrc.StoreCenter
                     case "DISCOUNT AMOUNT":
                         categoryDiscount = EditDiscountDiscountAmountPrivateMehtod(categoryDiscount, newValue);
                         break;
-                    }
+                }
 
                     if (Answer == null) { throw new StoreException(DiscountStatus.NoLegalAttrebute, "no legal attribute found"); }
                     DataLayerInstance.EditCategoryDiscount(categoryDiscount);
-                }
-                catch (StoreException exe)
-                {
-                    Answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
-                }
-                catch (MarketException)
-                {
-                    Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
-                }
-                catch (DataException e)
-                {
-                    Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
-                }
             }
+            catch (StoreException exe)
+            {
+                Answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
+            }
+            catch (DataException e)
+            {
+                Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException)
+            {
+                    Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
+            }
+        }
             private CategoryDiscount EditDiscountStartDatePrivateMethod(CategoryDiscount categoryDiscount, string newValue)
             {
                 MarketLog.Log("StoreCenter", " edit start date");

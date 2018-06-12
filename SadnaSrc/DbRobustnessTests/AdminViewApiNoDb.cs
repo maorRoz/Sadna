@@ -64,14 +64,14 @@ namespace DbRobustnessTests
         public void CreatePolicyNoDBTest()
         {
             answer = adminService.CreatePolicy("Global", null, "Quantity <=", "5", "");
-            Assert.AreEqual((int)EditPolicyStatus.NoDB, answer.Status);
+            Assert.AreEqual((int)EditPolicyStatus.Success, answer.Status);
         }
 
         [TestMethod]
         public void ViewPoliciesNoDBTest()
         {
             answer = adminService.ViewPolicies();
-            Assert.AreEqual((int)ViewPolicyStatus.NoDB, answer.Status);
+            Assert.AreEqual((int)ViewPolicyStatus.Success, answer.Status);
         }
 
         [TestMethod]

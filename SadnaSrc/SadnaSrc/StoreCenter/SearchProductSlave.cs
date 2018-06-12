@@ -62,17 +62,18 @@ namespace SadnaSrc.StoreCenter
 				Answer = new StoreAnswer((SearchProductStatus)e.Status, e.GetErrorMessage());
 			}
 
-			catch (MarketException)
+			catch (DataException e)
+			{
+			    Answer = new StoreAnswer((SearchProductStatus)e.Status, e.GetErrorMessage());
+			}
+
+            catch (MarketException)
 			{
 				MarketLog.Log("StoreCenter", "no premission");
 				Answer = new StoreAnswer(SearchProductStatus.DidntEnterSystem,
 					"User Didn't enter the system!");
 			}
-
-			catch (DataException e)
-			{
-				Answer = new StoreAnswer((SearchProductStatus) e.Status, e.GetErrorMessage());
-			}	
+	
 		}
 
 		private string FindSimilarCategoriesByName(string value)

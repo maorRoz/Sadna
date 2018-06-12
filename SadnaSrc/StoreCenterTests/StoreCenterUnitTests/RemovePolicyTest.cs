@@ -8,6 +8,7 @@ using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.PolicyComponent;
 using SadnaSrc.StoreCenter;
 
@@ -16,14 +17,14 @@ namespace StoreCenterTests.StoreCenterUnitTests
     [TestClass]
     public class RemovePolicyTest
     {
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private Mock<IUserSeller> seller;
         private Mock<IStorePolicyManager> manager;
 
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             seller = new Mock<IUserSeller>();
