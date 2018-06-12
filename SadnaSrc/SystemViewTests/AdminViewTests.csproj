@@ -80,8 +80,8 @@
     <Compile Include="AdminViewApiTest\AddCategoryTests.cs" />
     <Compile Include="AdminViewApiTest\AddPolicyTest.cs" />
     <Compile Include="AdminViewApiTest\RemovePolicyTest.cs" />
-    <Compile Include="AdminViewApiTest\ViewErrorTests.cs" />
-    <Compile Include="AdminViewApiTest\ViewLogTests.cs" />
+    <Compile Include="AdminViewApiTest\ViewErrorMockUnitTests.cs" />
+    <Compile Include="AdminViewApiTest\ViewLogMockUnitTests.cs" />
     <Compile Include="AdminViewApiTest\ViewPoliciesTest.cs" />
     <Compile Include="UseCaseUnitTest\AddCategoryTestsMock.cs" />
     <Compile Include="AdminViewApiTest\RemoveUserTests.cs" />
@@ -93,6 +93,8 @@
     <Compile Include="UseCaseUnitTest\UseCase5_2_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UseCaseUnitTest\UseCase6_1_Tests.cs" />
+    <Compile Include="UseCaseUnitTest\ViewErrorIntegrationTests.cs" />
+    <Compile Include="UseCaseUnitTest\ViewLogIntegrationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

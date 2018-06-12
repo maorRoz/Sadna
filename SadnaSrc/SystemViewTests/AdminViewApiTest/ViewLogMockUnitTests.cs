@@ -9,7 +9,7 @@ using SadnaSrc.MarketRecovery;
 namespace SystemViewTests.AdminViewApiTest
 {
     [TestClass]
-    public class ViewLogTests
+    public class ViewLogMockUnitTests
     {
         private Mock<IMarketBackUpDB> marketDbMocker;
         private Mock<IAdminDL> adminDbMocker;
