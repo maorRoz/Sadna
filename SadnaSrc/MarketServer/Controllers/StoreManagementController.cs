@@ -339,7 +339,7 @@ namespace MarketWeb.Controllers
 		}
 
 
-		public IActionResult PurchasePolicy(int systemId, string state,string message,string store, bool valid)
+		public IActionResult AddPurchasePolicy(int systemId, string state,string message,string store, bool valid)
 		{
 			var userService = MarketServer.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
@@ -369,7 +369,7 @@ namespace MarketWeb.Controllers
 				var answer = storeManagementService.CreatePolicy(type, store, subject, "Username =", usernameText, optArg);
 				if (answer.Status != Success)
 				{
-					return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer,store });
+					return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer,store });
 				}
 
 			}
@@ -379,7 +379,7 @@ namespace MarketWeb.Controllers
 				var answer = storeManagementService.CreatePolicy(type, store, subject, "Address =", addressText, optArg);
 				if (answer.Status != Success)
 				{
-					return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer,store });
+					return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer,store });
 				}
 			}
 
@@ -388,7 +388,7 @@ namespace MarketWeb.Controllers
 				var answer = storeManagementService.CreatePolicy(type, store, subject, "Quantity " + quantityOp, quantityText, optArg);
 				if (answer.Status != Success)
 				{
-					return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer ,store});
+					return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer ,store});
 				}
 			}
 
@@ -397,7 +397,7 @@ namespace MarketWeb.Controllers
 				var answer = storeManagementService.CreatePolicy(type, store, subject, "Price " + priceOp, priceText, optArg);
 				if (answer.Status != Success)
 				{
-					return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer,store });
+					return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer,store });
 				}
 			}
 
@@ -411,7 +411,7 @@ namespace MarketWeb.Controllers
 					var answer = storeManagementService.CreatePolicy(type1,store, subject1, op, id1[0], id2[0]);
 					if (answer.Status != Success)
 					{
-						return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer ,store});
+						return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer ,store});
 					}
 				}
 
@@ -420,13 +420,13 @@ namespace MarketWeb.Controllers
 					var answer = storeManagementService.CreatePolicy(type1, store, subject1, op, id1[0], null);
 					if (answer.Status != Success)
 					{
-						return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer ,store});
+						return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer ,store});
 					}
 				}
 
 			}
 
-			return RedirectToAction("PurchasePolicy", new { systemId, state, store });
+			return RedirectToAction("AddPurchasePolicy", new { systemId, state, store });
 		}
 
 		public IActionResult SavePolicy(int systemId, string state, string store)
@@ -434,7 +434,7 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.SavePolicy();
-			return RedirectToAction("PurchasePolicy", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
+			return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
 		}
 
 		public IActionResult CategoryDiscountMenu(int systemId, string state, string message,string store, bool valid)
