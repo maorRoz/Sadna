@@ -86,7 +86,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
             ProductFound(p2, _slave.Answer);
         }
 
-
         [TestMethod]
         public void SearchByCategoryEmptyTest()
         {

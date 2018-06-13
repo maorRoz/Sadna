@@ -38,14 +38,16 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void SearchByNameNoFilteringSuccessTest()
         {
-			string[] expected =
-			{
-				p1,
-				" name: Golden BOX base price: 1000 description: this is a golden box Discount: {none} Purchase Way: Immediate Quantity: 5 Store: X",
-				" name: DeleteMy BOX base price: 10 description: this is a trush Discount: {none} Purchase Way: Immediate Quantity: 10 Store: T"
 
-			};
-			ProductFound(expected, storeService.SearchProduct("BOX", 0, 0, "None"));
+        string[] expected =
+        {
+          p1,
+          " name: Golden BOX base price: 1000 description: this is a golden box Discount: {none} Purchase Way: Immediate Quantity: 5 Store: X",
+          " name: DeleteMy BOX base price: 10 description: this is a trush Discount: {none} Purchase Way: Immediate Quantity: 10 Store: T"
+
+        };
+        ProductFound(expected, storeService.SearchProduct("BOX", 0, 0, "None"));
+
         }
 
         [TestMethod]
@@ -62,6 +64,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         }
 
 
+
         [TestMethod]
         public void SearchByCategoryEmptyTest()
         {
@@ -73,6 +76,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
 	        string[] expected = { p1 };
 			ProductFound(expected, storeService.SearchProduct("plastic", 0, 0, "None"));
+
         }
 
         [TestMethod]
@@ -103,6 +107,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 
 	        };
 			ProductFound(expected,storeService.SearchProduct("BOX", 1000, 0, "None"));
+
         }
 
         [TestMethod]
@@ -116,6 +121,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 
 			};
 			ProductFound(expected, storeService.SearchProduct("BOX", 0, 1000, "None"));
+
         }
 
         [TestMethod]
@@ -127,6 +133,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 
 	        };
 			ProductFound(expected,storeService.SearchProduct("BOX", 0, 10, "None"));
+
         }
 
         [TestMethod]
@@ -140,6 +147,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 
 			};
 			ProductFound(expected, storeService.SearchProduct("BOX", 10, 1000, "None"));
+
         }
 
         [TestMethod]
@@ -150,6 +158,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 		        " name: Golden BOX base price: 1000 description: this is a golden box Discount: {none} Purchase Way: Immediate Quantity: 5 Store: X",
 	        };
 			ProductFound(expected,storeService.SearchProduct("BOX", 1000, 50000, "None"));
+
         }
 
         [TestMethod]
@@ -178,6 +187,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
 	        string[] expected = {p2};
             ProductFound(expected, storeService.SearchProduct("Fraid Egg", 0, 0, "WanderlandItems"));
+
         }
 
         [TestMethod]
@@ -197,6 +207,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
 	        string[] expected = {p2 };
             ProductFound(expected, storeService.SearchProduct("Fraid Egg", 10, 0, "WanderlandItems"));
+
         }
 
         [TestMethod]
@@ -204,6 +215,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
 	        string[] expected = { p2 };
 			ProductFound(expected, storeService.SearchProduct("Fraid Egg", 0, 1000, "WanderlandItems"));
+
         }
 
         [TestMethod]
@@ -211,6 +223,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
 	        string[] expected = { p2 };
 			ProductFound(expected, storeService.SearchProduct("Fraid Egg", 5, 1000, "WanderlandItems"));
+
         }
 
         [TestMethod]

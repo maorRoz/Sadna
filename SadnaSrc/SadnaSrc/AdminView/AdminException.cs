@@ -30,10 +30,5 @@ namespace SadnaSrc.AdminView
         {
             return "AdminView";
         }
-
-        protected override string WrapErrorMessageForDb(string message)
-        {
-            return message;
-        }
     }
 }

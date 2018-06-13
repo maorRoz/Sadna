@@ -1,6 +1,9 @@
 ﻿<br />
 <br />
 <br />
+<br />
+<br />
+<br />
 @{
     ViewData["Title"] = "Error Log";
 }
@@ -14,19 +17,19 @@
         <div style="float: left;width:70%">
             <table class="table">
                 <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Section</th>
-                    <th>Description</th>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
                 </thead>
                 @foreach (var item in Model.Items)
                 {
                     <tr>
                         <td>@item.Id</td>
                         <td>@item.Date</td>
-                        <td>@item.Section</td>
+                        <td>@item.Type</td>
                         <td>@item.Description</td>
                     </tr>
                 }

@@ -53,6 +53,32 @@ namespace MarketWeb.Controllers
 
         }
 
+        public IActionResult ViewLogs(int systemId, string state)
+        {
+            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+            var answer = adminService.ViewLog();
+            if (answer.Status == Success)
+            {
+                return View(new ErrorLogModel(systemId, state, answer.ReportList));
+            }
+
+            return RedirectToAction("MainLobby", "Home",
+                new { systemId, state, message = answer.Answer });
+        }
+
+        public IActionResult ViewErrors(int systemId, string state)
+        {
+            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+            var answer = adminService.ViewError();
+            if (answer.Status == Success)
+            {
+                return View(new ErrorLogModel(systemId, state, answer.ReportList));
+            }
+
+            return RedirectToAction("MainLobby", "Home",
+                new {systemId, state,message = answer.Answer});
+        }
+
         public IActionResult AdminViewPurchaseHistory(int systemId, string state, string viewSubject, string viewKind)
         {
             var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));

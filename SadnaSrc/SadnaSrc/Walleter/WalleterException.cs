@@ -18,11 +18,5 @@ namespace SadnaSrc.Walleter
         {
             return "Walleter";
         }
-
-        protected override string WrapErrorMessageForDb(string message)
-        {
-
-            return " " + message;
-        }
     }
 }
