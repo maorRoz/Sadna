@@ -21,7 +21,7 @@
 				}
 			</div>
 
-			@using (Html.BeginForm("OpenStore", "StoreManagement", new { Model.SystemId }))
+			@using (Html.BeginForm("OpenStore", "StoreManagement", new { Model.SystemId, Model.State }))
 			{
 				<label for="store-name-entry">Store Name:</label>
 				<input type="text" class="form-control" id="store-name-entry" name="storeName" />
