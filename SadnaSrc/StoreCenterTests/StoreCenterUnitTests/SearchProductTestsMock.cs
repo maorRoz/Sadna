@@ -68,182 +68,162 @@ namespace StoreCenterTests.StoreCenterUnitTests
 		[TestMethod]
 		public void SearchByNameNoFilteringSuccessTest()
 		{
-			_slave.SearchProduct("Name", "BOX", 0,0,"None");
+			_slave.SearchProduct("BOX", 0,0,"None");
             ProductFound(p1, _slave.Answer);
 		}
 
         [TestMethod]
-        public void SearchByNameSimilarResultTest()
-        {
-            _slave.SearchProduct("Name", "BUX", 0, 0, "None");
-            Assert.AreEqual((int)SearchProductStatus.MistakeTipGiven, _slave.Answer.Status);
-        }
-
-        [TestMethod]
         public void SearchByNameNotExistTest()
         {
-            _slave.SearchProduct("Name", "aerhaer", 0, 0, "None");
+            _slave.SearchProduct("aerhaer", 0, 0, "None");
             NoneFound(_slave.Answer);
         }
 
         [TestMethod]
         public void SearchByCategoryNoFilteringSuccessTest()
         {
-            _slave.SearchProduct("Category", "WanderlandItems", 0, 0, "None");
+            _slave.SearchProduct("WanderlandItems", 0, 0, "None");
             ProductFound(p2, _slave.Answer);
         }
 
-        [TestMethod]
-        public void SearchByCategorySimilarResultTest()
-        {
-            _slave.SearchProduct("Category", "WanderlondItems", 0, 0, "None");
-            Assert.AreEqual((int)SearchProductStatus.MistakeTipGiven, _slave.Answer.Status);
-        }
-
-        [TestMethod]
-        public void SearchByCategoryNotExistTest()
-        {
-            _slave.SearchProduct("Category", "ABOX", 0, 0, "None");
-            Assert.AreEqual((int)SearchProductStatus.CategoryNotFound, _slave.Answer.Status);
-        }
 
         [TestMethod]
         public void SearchByCategoryEmptyTest()
         {
-            _slave.SearchProduct("Category", "Books", 0, 0, "None");
+            _slave.SearchProduct("Books", 0, 0, "None");
             NoneFound(_slave.Answer);
         }
 
         [TestMethod]
         public void SearchByKeywordNoFilteringSuccessTest()
         {
-            _slave.SearchProduct("KeyWord", "plastic", 0, 0, "None");
+            _slave.SearchProduct("plastic", 0, 0, "None");
             ProductFound(p1, _slave.Answer);
         }
 
         [TestMethod]
         public void SearchByKeywordNotExistTest()
         {
-            _slave.SearchProduct("KeyWord", "dfdfbzdb", 0, 0, "None");
+            _slave.SearchProduct("dfdfbzdb", 0, 0, "None");
             NoneFound(_slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameMinPriceFoundTest()
         {
-            _slave.SearchProduct("Name", "BOX", 10, 0, "None");
+            _slave.SearchProduct("BOX", 10, 0, "None");
             ProductFound(p1, _slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameMinPriceNotFoundTest()
         {
-            _slave.SearchProduct("Name", "BOX", 1000, 0, "None");
+            _slave.SearchProduct("BOX", 1000, 0, "None");
             NoneFound(_slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameMaxPriceFoundTest()
         {
-            _slave.SearchProduct("Name", "BOX", 0, 1000, "None");
+            _slave.SearchProduct("BOX", 0, 1000, "None");
             ProductFound(p1, _slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameMaxPriceNotFoundTest()
         {
-            _slave.SearchProduct("Name", "BOX", 0, 10, "None");
+            _slave.SearchProduct("BOX", 0, 10, "None");
             NoneFound(_slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNamePriceRangeFoundTest()
         {
-            _slave.SearchProduct("Name", "BOX", 10, 1000, "None");
+            _slave.SearchProduct("BOX", 10, 1000, "None");
             ProductFound(p1, _slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNamePriceRangeNotFoundTest()
         {
-            _slave.SearchProduct("Name", "BOX", 1000, 50000, "None");
+            _slave.SearchProduct("BOX", 1000, 50000, "None");
             NoneFound(_slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameMinPriceWrongTest()
         {
-            _slave.SearchProduct("Name", "BOX", -1, 0, "None");
+            _slave.SearchProduct("BOX", -1, 0, "None");
             Assert.AreEqual((int)SearchProductStatus.PricesInvalid, _slave.Answer.Status);
         }
 
         [TestMethod]
         public void SearchByNameMaxPriceWrongTest()
         {
-            _slave.SearchProduct("Name", "BOX", 0, -1, "None");
+            _slave.SearchProduct("BOX", 0, -1, "None");
             Assert.AreEqual((int)SearchProductStatus.PricesInvalid, _slave.Answer.Status);
         }
 
         [TestMethod]
         public void SearchByNamePriceRangeWrongTest()
         {
-            _slave.SearchProduct("Name", "BOX", 1000, 500, "None");
+            _slave.SearchProduct("BOX", 1000, 500, "None");
             Assert.AreEqual((int)SearchProductStatus.PricesInvalid, _slave.Answer.Status);
         }
 
         [TestMethod]
         public void SearchByNameCategoryFoundTest()
         {
-            _slave.SearchProduct("Name", "Fraid Egg", 0, 0, "WanderlandItems");
+            _slave.SearchProduct("Fraid Egg", 0, 0, "WanderlandItems");
             ProductFound(p2, _slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameCategoryNotFoundTest()
         {
-            _slave.SearchProduct("Name", "Fraid Egg", 0, 0, "Books");
+            _slave.SearchProduct("Fraid Egg", 0, 0, "Books");
             NoneFound(_slave.Answer);
         }
 
         [TestMethod]
         public void SearchByCategoryConflictTest()
         {
-            _slave.SearchProduct("Category", "WanderlandItems", 0, 0, "Books");
+            _slave.SearchProduct("WanderlandItems", 0, 0, "Books");
             NoneFound(_slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameMultipleConstraintsTest1()
         {
-            _slave.SearchProduct("Name", "Fraid Egg", 10, 0, "WanderlandItems");
+            _slave.SearchProduct("Fraid Egg", 10, 0, "WanderlandItems");
             ProductFound(p2, _slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameMultipleConstraintsTest2()
         {
-            _slave.SearchProduct("Name", "Fraid Egg", 0, 1000, "WanderlandItems");
+            _slave.SearchProduct("Fraid Egg", 0, 1000, "WanderlandItems");
             ProductFound(p2, _slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameMultipleConstraintsTest3()
         {
-            _slave.SearchProduct("Name", "Fraid Egg", 5, 1000, "WanderlandItems");
+            _slave.SearchProduct("Fraid Egg", 5, 1000, "WanderlandItems");
             ProductFound(p2, _slave.Answer);
         }
 
         [TestMethod]
         public void SearchByNameMultipleConstraintsTest4()
         {
-            _slave.SearchProduct("Name", "Fraid Egg", 100, 1000, "WanderlandItems");
+            _slave.SearchProduct("Fraid Egg", 100, 1000, "WanderlandItems");
             NoneFound(_slave.Answer);
         }
 
 	    [TestMethod]
 	    public void NullDataGiven()
 	    {
-	        _slave.SearchProduct("Name", "", 0, 0, "None");
+	        _slave.SearchProduct("", 0, 0, "None");
 	        Assert.AreEqual((int)SearchProductStatus.NullValue, _slave.Answer.Status);
 	    }
 

@@ -67,9 +67,7 @@ namespace SadnaSrc.Main
 		Success,
 		NullValue,
 		DidntEnterSystem,
-		CategoryNotFound,
 		PricesInvalid,
-		MistakeTipGiven,
 		NoDB = 500
 	}
 
