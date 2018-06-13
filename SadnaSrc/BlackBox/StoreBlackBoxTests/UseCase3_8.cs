@@ -23,7 +23,7 @@ namespace BlackBox.StoreBlackBoxTests
             _userBridge.SignUp("Pnina", "misholSusia", "852852", "77777777");
             _storeShopping = StoreShoppingDriver.getBridge();
             _storeShopping.GetStoreShoppingService(_userBridge.GetUserSession());
-            _storeShopping.OpenStore("HistoryShop", "");
+            _storeShopping.OpenStore("HistoryShop", "blah");
             _ownerStoreBridge.GetStoreManagementService(_userBridge.GetUserSession(),"HistoryShop");
         }
 

@@ -73,13 +73,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
 		}
 
         [TestMethod]
-        public void SearchByNameSimilarResultTest()
-        {
-            _slave.SearchProduct("BUX", 0, 0, "None");
-            Assert.AreEqual((int)SearchProductStatus.MistakeTipGiven, _slave.Answer.Status);
-        }
-
-        [TestMethod]
         public void SearchByNameNotExistTest()
         {
             _slave.SearchProduct("aerhaer", 0, 0, "None");
@@ -91,20 +84,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
             _slave.SearchProduct("WanderlandItems", 0, 0, "None");
             ProductFound(p2, _slave.Answer);
-        }
-
-        [TestMethod]
-        public void SearchByCategorySimilarResultTest()
-        {
-            _slave.SearchProduct("WanderlondItems", 0, 0, "None");
-            Assert.AreEqual((int)SearchProductStatus.MistakeTipGiven, _slave.Answer.Status);
-        }
-
-        [TestMethod]
-        public void SearchByCategoryNotExistTest()
-        {
-            _slave.SearchProduct("ABOX", 0, 0, "None");
-            Assert.AreEqual((int)SearchProductStatus.CategoryNotFound, _slave.Answer.Status);
         }
 
         [TestMethod]

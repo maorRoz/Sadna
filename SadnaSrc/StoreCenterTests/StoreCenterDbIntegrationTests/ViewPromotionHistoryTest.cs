@@ -85,7 +85,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
             userService.SignIn("Arik1", "123");
             var shoppingSession = marketSession.GetStoreShoppingService(ref userService);
-            var answer =shoppingSession.OpenStore("HistoryShop","");
+            var answer =shoppingSession.OpenStore("HistoryShop","blah");
             Assert.AreEqual((int)StoreEnum.Success, answer.Status);
             var storeManagementSession = marketSession.GetStoreManagementService(userService, "HistoryShop");
             Assert.AreEqual((int)StoreEnum.Success, answer.Status);

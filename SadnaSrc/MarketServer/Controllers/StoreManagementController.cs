@@ -70,7 +70,6 @@ namespace MarketWeb.Controllers
 			}
 
 			return RedirectToAction("OpenStoreView", new { systemId, state , message = answer.Answer});
-
 		}
 
 		public IActionResult ManageStore(int systemId, string state, string store, string option)
