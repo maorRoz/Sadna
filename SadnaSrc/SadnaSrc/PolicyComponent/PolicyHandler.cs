@@ -81,19 +81,15 @@ namespace SadnaSrc.PolicyComponent
 
         public void AddPolicy(int policyId)
         {
-            try
-            {
-                PurchasePolicy toAdd = GetPolicy(policyId);
-                toAdd.IsRoot = true;
-                toAdd.ID = RandomPolicyID();
-                Policies.Add(toAdd);
-                SessionPolicies.Clear();
-                _dataLayer.SavePolicy(toAdd);
-            }
-            catch (Exception)
-            {
-                throw new MarketException(4,"No policies to save, try again.");
-            }
+            PurchasePolicy toAdd = GetPolicy(policyId);
+            if(toAdd == null)
+                throw new MarketException(4, "No policies to save, try again.");
+            toAdd.IsRoot = true;
+            toAdd.ID = RandomPolicyID();
+            Policies.Add(toAdd);
+            SessionPolicies.Clear();
+            _dataLayer.SavePolicy(toAdd);
+
         }
 
         public void RemovePolicy(PolicyType type, string subject)

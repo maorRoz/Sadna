@@ -208,7 +208,9 @@ namespace MarketWeb.Controllers
 
 		    else
 		    {
-			    string[] id1 = arg1.Split(' ');
+                if(arg1 == null)
+                    return RedirectToAction("AddPurchasePolicy", new { systemId, state});
+                string[] id1 = arg1.Split(' ');
 			    string[] id2 = null;
 				if (optArg != null)
 			    {
