@@ -1,6 +1,7 @@
 ﻿
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.AdminView
 {
@@ -96,5 +97,13 @@ namespace SadnaSrc.AdminView
             return slave.Answer;
         }
 
-    }
+	    public MarketAnswer GetEntranceDetails()
+	    {
+		    GetEntranceDetailsSlave slave = new GetEntranceDetailsSlave(adminDB, _admin);
+		    slave.GetEntranceDetails();
+		    return slave.Answer;
+
+	    }
+
+	}
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Castle.Core;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 
@@ -233,7 +235,7 @@ namespace SadnaSrc.UserSpot
 		public void InsertSignedInUser(int systemId)
 		{
 			string[] valuesNames = { "@systemidParam", "@timeParam" };
-			object[] values = { systemId, DateTime.Now };
+			object[] values = { systemId, DateTime.Now.Date };
 			dbConnection.InsertTable("SignInReports", "SystemID,Time", valuesNames, values);
 		}
 

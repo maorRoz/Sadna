@@ -22,7 +22,9 @@ namespace SadnaSrc.Main
         MarketAnswer ViewLog();
 
         MarketAnswer ViewError();
-    }
+
+	    MarketAnswer GetEntranceDetails();
+	}
 
     public enum RemoveUserStatus
     {
@@ -81,4 +83,11 @@ namespace SadnaSrc.Main
         NoAuthority,
         NoDB = 500
     }
+
+	public enum GetEntranceDetailsEnum
+	{
+		Success,
+		DidntEnterSystem,
+		NoDB = 500
+	}
 }

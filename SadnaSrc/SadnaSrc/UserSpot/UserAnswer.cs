@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core;
 using SadnaSrc.Main;
 
 namespace SadnaSrc.UserSpot
@@ -98,5 +99,15 @@ namespace SadnaSrc.UserSpot
         {
 
         }
-    }
+
+	    public UserAnswer(GetEntranceDetailsEnum status, string answer) : base((int)status, answer)
+	    {
+
+	    }
+
+	    public UserAnswer(GetEntranceDetailsEnum status, string answer, string[] report) : base((int)status, answer, report)
+	    {
+
+	    }
+	}
 }

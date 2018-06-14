@@ -1,0 +1,63 @@
+﻿<br/>
+<br />
+<br />
+<br />
+@{
+	ViewData["Title"] = "Charts View";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+	<script>
+		window.onload = function () {
+ 
+// Initial Values
+			var xValue = 0;
+			var yValue = 10;
+			var newDataCount = 6;
+			dataPoints = [];
+ 
+			var chart = new CanvasJS.Chart("chartContainer", {
+				theme: "light2",
+				title: {
+					text: "User's Entrance Report"
+				},
+				axisY: {
+					suffix: " # users",
+				},
+				data: [{
+					type: "spline",
+					yValueFormatString: "#,##0.## µg/m3",
+					dataPoints: dataPoints
+				}]
+			});
+ 
+			updateData();
+ 
+			function addData(data) {
+				//if (newDataCount !== 1) {
+					$.each(data, function (key, value) {
+						dataPoints.push({ x: value.x, y: value.y });
+					});
+					//newDataCount = 1;
+				//}
+				/*else {
+					//dataPoints.shift();
+					dataPoints.push({ x: data[0].x, y: parseFloat(data[0].y) });
+					xValue++;
+					yValue = parseFloat(data[0].y);
+				}*/
+				chart.render();
+				setTimeout(updateData, 3000);
+			}
+ 
+			function updateData() {
+				$.getJSON("/admin/json?systemId=" + @Model.SystemId, addData);
+			}
+ 
+		}
+	</script>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+@section Scripts{
+	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+}

@@ -54,7 +54,15 @@ namespace SadnaSrc.AdminView
         {
         }
 
-        public AdminAnswer(AdminException e) : base(e.Status, e.Message)
+	    public AdminAnswer(GetEntranceDetailsEnum status, string answer, string[] policyIds) : base((int)status, answer, policyIds)
+	    {
+	    }
+
+	    public AdminAnswer(GetEntranceDetailsEnum status, string answer) : base((int)status, answer)
+	    {
+	    }
+
+		public AdminAnswer(AdminException e) : base(e.Status, e.Message)
         {
         }
 
