@@ -86,7 +86,7 @@ namespace SadnaSrc.UserSpot
 				}
 			}
 
-			return uniqueDates.ToArray();
+			return uniqueDates.OrderBy(x => x.Date).ToArray();
 		}
 
 		private string[] GetDataAsString(Pair<int, DateTime>[] data)

@@ -259,6 +259,7 @@ namespace MarketWeb.Controllers
 				int num = Int32.Parse(number);
 				string date = dataParam[1];
 				DateTime time = DateTime.Parse(date);
+				//dataPoints.Add(new DataPoint(time.ToString("dd/MM/yyyy"), num));
 				dataPoints.Add(new DataPoint(time.ToString("dd/MM/yyyy"), num));
 				//dataPoints.Add(new DataPoint(time, num));
 			}

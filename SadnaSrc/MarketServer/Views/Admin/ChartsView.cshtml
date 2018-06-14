@@ -14,16 +14,21 @@
 		window.onload = function () {
 
 			dataPoints = [];
+			var newDataCount = 0;
  
 			var chart = new CanvasJS.Chart("chartContainer", {
 				theme: "light2",
 				title: {
 					text: "System Entrance Report"
 				},
+				axisX:{
+					interval: 1,
+					intervalType: "day",
+				},
 				axisY: {
 				},
 				data: [{
-					type: "pie",
+					type: "column",
 					dataPoints: dataPoints
 				}]
 			});
@@ -31,10 +36,20 @@
 			updateData();
  
 			function addData(data) {
+				var size = dataPoints.length;
 				$.each(data, function (key, value) {
 					dataPoints.push({ label: value.x, y: value.y});
 				});
 
+				if (newDataCount !== 0) {
+					var counter = 0;
+					while (counter < size) {
+						dataPoints.shift();
+						counter++;
+					}
+				}
+				
+				newDataCount ++;
 				chart.render();
 				setTimeout(updateData, 3000);
 			}
@@ -42,8 +57,9 @@
 			function updateData() {
 				$.getJSON("/admin/json?systemId=" + @Model.SystemId, addData);
 			}
- 
+
 		}
+
 	</script>
 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 
