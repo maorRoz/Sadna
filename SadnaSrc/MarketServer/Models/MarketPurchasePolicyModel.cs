@@ -6,11 +6,11 @@ using MarketServer.Models;
 
 namespace MarketWeb.Models
 {
-    public class ConditionsOperatorsModel:UserModel
+    public class MarketPurchasePolicyModel:UserModel
     {
 	    public string[] Operators;
 	    public string[] Conditions;
-	    public ConditionsOperatorsModel(int systemId, string state, string message, string[] operators, string[] conditions) : base(systemId, state, message)
+	    public MarketPurchasePolicyModel(int systemId, string state, string message, string[] operators, string[] conditions) : base(systemId, state, message)
 	    {
 		    Operators = operators;
 		    Conditions = conditions;

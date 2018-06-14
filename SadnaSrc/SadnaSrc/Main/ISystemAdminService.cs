@@ -18,6 +18,7 @@ namespace SadnaSrc.Main
 	    MarketAnswer ViewPolicies();
 	    MarketAnswer ViewPoliciesSessions();
 		MarketAnswer SavePolicy();
+        MarketAnswer RemovePolicy(string type, string subject);
     }
 
     public enum RemoveUserStatus

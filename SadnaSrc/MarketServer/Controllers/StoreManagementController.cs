@@ -42,7 +42,7 @@ namespace MarketWeb.Controllers
 		        return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
             }
 			string[] options = {"ManageProducts", "PromoteStoreAdmin", "DeclareDiscountPolicy",
-			    "ViewPurchaseHistory", "ViewPromotionHistory", "PurchasePolicy"};
+			    "ViewPurchaseHistory", "ViewPromotionHistory", "AddPurchasePolicy"};
 			if (!answer.ReportList.Contains("StoreOwner"))
 			{
 				options = answer.ReportList;

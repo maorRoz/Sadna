@@ -42,8 +42,10 @@ namespace SadnaSrc.PolicyComponent
 
 	    public override string ToString()
 	    {
-		    return ID + " " + Subject + " " + Type + " " + GetMyType() + "  "+Value + " " ;
+		    return ID + " " + Subject + " " + Type + " " + getMyTypeVisual() + "  "+Value + " " ;
 
 		}
-	}
+
+        public abstract string getMyTypeVisual();
+    }
 }

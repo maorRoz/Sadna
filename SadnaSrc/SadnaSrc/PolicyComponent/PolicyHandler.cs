@@ -17,6 +17,9 @@ namespace SadnaSrc.PolicyComponent
 
         public static PolicyHandler Instance => _instance ?? (_instance = new PolicyHandler());
 
+        private static Random randy = new Random();
+
+
         private PolicyHandler()
         {
             Policies = new List<PurchasePolicy>();
@@ -78,6 +81,7 @@ namespace SadnaSrc.PolicyComponent
         {
             PurchasePolicy toAdd = GetPolicy(policyId);
             toAdd.IsRoot = true;
+            toAdd.ID = RandomPolicyID();
             Policies.Add(toAdd);
             SessionPolicies.Clear();
             _dataLayer.SavePolicy(toAdd);
@@ -163,7 +167,7 @@ namespace SadnaSrc.PolicyComponent
             for (int i = 0; i < policiesArr.Length; i++)
             {
                 if(policiesArr[i].Type == PolicyType.Global || policiesArr[i].Type == PolicyType.Category || policiesArr[i].Type == PolicyType.Product)
-                    policyStrings.Add(PurchasePolicy.PrintEnum(policiesArr[i].Type) + "." + policiesArr[i].Subject);
+                    policyStrings.Add(policiesArr[i].ToString());
             }
             return policyStrings.ToArray();
         }
@@ -296,6 +300,24 @@ namespace SadnaSrc.PolicyComponent
         public void SyncWithDB()
         {
             Policies = _dataLayer.GetAllPolicies();
+        }
+
+        private int RandomPolicyID()
+        {
+            var ret = randy.Next(100000, 999999);
+            while (CheckID(ret))
+            {
+                ret = randy.Next(100000, 999999);
+            }
+
+            return ret;
+        }
+
+        private bool CheckID(int id)
+        {
+            foreach (PurchasePolicy pol in Policies)
+                if (pol.ID == id) return true;
+            return false;
         }
     }
 }
