@@ -239,8 +239,15 @@ namespace MarketWeb.Controllers
 	    {
 		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
 		    var answer = adminService.SavePolicy();
-		    return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
+		    return RedirectToAction("PurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
 		}
+
+        public IActionResult RemovePolicy(int systemId, string state, string type, string subject)
+        {
+            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+            var answer = adminService.RemovePolicy(type, subject);
+            return RedirectToAction("PurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
+        }
 
 	}
 }

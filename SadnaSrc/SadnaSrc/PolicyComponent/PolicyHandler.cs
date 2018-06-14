@@ -4,6 +4,8 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.AdminView;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.PolicyComponent
 {
@@ -79,12 +81,19 @@ namespace SadnaSrc.PolicyComponent
 
         public void AddPolicy(int policyId)
         {
-            PurchasePolicy toAdd = GetPolicy(policyId);
-            toAdd.IsRoot = true;
-            toAdd.ID = RandomPolicyID();
-            Policies.Add(toAdd);
-            SessionPolicies.Clear();
-            _dataLayer.SavePolicy(toAdd);
+            try
+            {
+                PurchasePolicy toAdd = GetPolicy(policyId);
+                toAdd.IsRoot = true;
+                toAdd.ID = RandomPolicyID();
+                Policies.Add(toAdd);
+                SessionPolicies.Clear();
+                _dataLayer.SavePolicy(toAdd);
+            }
+            catch (Exception)
+            {
+                throw new MarketException(4,"No policies to save, try again.");
+            }
         }
 
         public void RemovePolicy(PolicyType type, string subject)
