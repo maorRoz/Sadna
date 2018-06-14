@@ -108,19 +108,7 @@ namespace MarketWeb.Controllers
 		    }
 		    return RedirectToAction("RemovingCategoryPage", new { systemId, state, message = answer.Answer, valid = false });
 
-	    }
-
-        public IActionResult RemovePurchasePolicy(int systemId, string state, string type, string subject)
-        {
-            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-            var answer = adminService.RemovePolicy(type,subject);
-            if (answer.Status == Success)
-            {
-                return RedirectToAction("RemovingCategoryPage", new { systemId, state, message = answer.Answer, valid = true });
-            }
-            return RedirectToAction("RemovingCategoryPage", new { systemId, state, message = answer.Answer, valid = false });
-
-        }
+	    }      
 
         public IActionResult AddPurchasePolicy(int systemId, string state, string message, bool valid)
 		{
