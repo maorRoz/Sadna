@@ -9,7 +9,7 @@ namespace MarketWeb.Models
     [DataContract]
     public class DataPoint
     {
-	    public DataPoint(int x, DateTime y)
+	    public DataPoint(string x, int y)
 	    {
 		    this.X = x;
 		    this.Y = y;
@@ -17,11 +17,11 @@ namespace MarketWeb.Models
 
 	    //Explicitly setting the name to be used while serializing to JSON.
 	    [DataMember(Name = "x")]
-	    public int? X = null;
+	    public string X = null;
 
 	    //Explicitly setting the name to be used while serializing to JSON.
 	    [DataMember(Name = "y")]
-	    public DateTime? Y = null;
+	    public int? Y = null;
     }
 }
 

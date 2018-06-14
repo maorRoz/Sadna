@@ -2,6 +2,9 @@
 <br />
 <br />
 <br />
+<br />
+<br />
+<br />
 @{
 	ViewData["Title"] = "Charts View";
 	Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,24 +12,18 @@
 
 	<script>
 		window.onload = function () {
- 
-// Initial Values
-			var xValue = 0;
-			var yValue = 10;
-			var newDataCount = 6;
+
 			dataPoints = [];
  
 			var chart = new CanvasJS.Chart("chartContainer", {
 				theme: "light2",
 				title: {
-					text: "User's Entrance Report"
+					text: "System Entrance Report"
 				},
 				axisY: {
-					suffix: " # users",
 				},
 				data: [{
-					type: "spline",
-					yValueFormatString: "#,##0.## µg/m3",
+					type: "pie",
 					dataPoints: dataPoints
 				}]
 			});
@@ -34,18 +31,10 @@
 			updateData();
  
 			function addData(data) {
-				//if (newDataCount !== 1) {
-					$.each(data, function (key, value) {
-						dataPoints.push({ x: value.x, y: value.y });
-					});
-					//newDataCount = 1;
-				//}
-				/*else {
-					//dataPoints.shift();
-					dataPoints.push({ x: data[0].x, y: parseFloat(data[0].y) });
-					xValue++;
-					yValue = parseFloat(data[0].y);
-				}*/
+				$.each(data, function (key, value) {
+					dataPoints.push({ label: value.x, y: value.y});
+				});
+
 				chart.render();
 				setTimeout(updateData, 3000);
 			}
