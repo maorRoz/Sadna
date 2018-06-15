@@ -743,5 +743,11 @@ namespace SadnaSrc.MarketData
                 _dbConnection.Open();
             }
         }
+
+        public void CheckInput(string input)
+        {
+            if (input.IndexOf("'") != -1)
+                throw new DataException("Input value can't contain char ' ");
+        }
     }
 }
