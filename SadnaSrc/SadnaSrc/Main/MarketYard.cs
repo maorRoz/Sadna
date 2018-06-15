@@ -103,6 +103,12 @@ namespace SadnaSrc.Main
             MarketException.RemoveErrors();
             MarketBackUpDB.Instance.CleanByForce();
             Publisher.CleanPublisher();
+            Category.RestartCategoryID();
+            Product.RestartProductID();
+            Store.RestartStoreID();
+            LotteryTicket.RestartLotteryTicketID();
+            LotterySaleManagmentTicket.RestartLotteryID();
+            Discount.RestartDiscountID();
         }
     }
 }

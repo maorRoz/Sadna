@@ -92,7 +92,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndAddDiscount(owner, existingProduct);
-                Assert.AreEqual("D8",
+                Assert.AreEqual("D7",
                     StoreDL.Instance.GetProductFromStore(store, existingProduct).Discount.discountCode);
             }
             catch (MarketException)
