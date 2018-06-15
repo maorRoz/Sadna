@@ -126,19 +126,19 @@ namespace SadnaSrc.StoreCenter
                     ((managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice)&& sli.Quantity==0))
                     return "";
             }
-	        Discount  d = stockListItem.CalcTotalDiscount(_storeName);
-			string discount = " Discount: {";
+	        Discount  totalDiscount = stockListItem.CalcTotalDiscount(_storeName);
+			string discountString = " Discount: {";
             string product = stockListItem.Product.ToString();
-            if (d != null)
-                discount += d;
+            if (totalDiscount != null)
+	            discountString += totalDiscount;
             else
             {
-                discount += "null";
+	            discountString += "null";
             }
-            discount += "}";
+	        discountString += "}";
             string purchaseWay = " Purchase Way: " + EnumStringConverter.PrintEnum(stockListItem.PurchaseWay);
             string quanitity = " Quantity: "+stockListItem.Quantity ;
-            string result = product + discount + purchaseWay + quanitity;
+            string result = product + discountString + purchaseWay + quanitity;
             return result;
         }
     }
