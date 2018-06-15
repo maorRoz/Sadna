@@ -111,5 +111,9 @@ namespace SadnaSrc.StoreCenter
             globalDiscountCode++;
             return "D" + globalDiscountCode;
         }
+        public static void RestartDiscountID()
+        {
+            globalDiscountCode = -1;
+        }
     }
 }

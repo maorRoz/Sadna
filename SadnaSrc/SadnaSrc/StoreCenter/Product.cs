@@ -83,5 +83,10 @@ namespace SadnaSrc.StoreCenter
             return "P" + globalProductID;
         }
 
+        public static void RestartProductID()
+        {
+            globalProductID = -1;
+        }
+
     }
 }

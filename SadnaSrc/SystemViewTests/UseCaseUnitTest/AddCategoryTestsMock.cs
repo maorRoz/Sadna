@@ -44,7 +44,6 @@ namespace SystemViewTests
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {
-            MarketDB.Instance.CleanByForce();
             MarketYard.CleanSession();
         }
     }

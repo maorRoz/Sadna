@@ -191,7 +191,6 @@
     <Compile Include="StoreCenter\Discount.cs" />
     <Compile Include="StoreCenter\Product.cs" />
     <Compile Include="StoreCenter\PromoteToStoreManagerSlave.cs" />
-    <Compile Include="StoreCenter\PurchesPolicy.cs" />
     <Compile Include="AdminView\RemoveCategorySlave.cs" />
     <Compile Include="StoreCenter\RemoveCategoryDiscountSlave.cs" />
     <Compile Include="StoreCenter\RemoveDiscountFromProductSlave.cs" />
