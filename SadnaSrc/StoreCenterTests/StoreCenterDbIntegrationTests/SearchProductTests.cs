@@ -235,8 +235,9 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         [TestMethod]
         public void NullDataGiven()
         {
-            Assert.AreEqual((int)SearchProductStatus.NullValue, storeService.SearchProduct("", 0, 0, "None").Status);
-        }
+			Assert.AreEqual((int)SearchProductStatus.Success, storeService.SearchProduct("", 0, 0, "None").Status);
+
+		}
 
         [TestCleanup]
         public void CleanUpOpenStoreTest()

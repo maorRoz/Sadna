@@ -28,17 +28,25 @@ namespace SadnaSrc.StoreCenter
 				MarketLog.Log("StoreCenter", "searching for a product!");
 				_shopper.ValidateCanBrowseMarket();
 				MarketLog.Log("StoreCenter", "User enetred the system!");
-				validateData(value);
 				validatePrices(minPrice, maxPrice);
-				Product[] productsKeyWord = FindKeyWord(value);
-				Product[] productsCategory = findProductsCategory(findSimilarCategories(value));
-				List<Product> product = new List<Product>(productsKeyWord);
-				foreach (Product prod in productsCategory)
+				Product[] products = null;
+				if (value.IsNullOrEmpty())
 				{
-					product.Add(prod);
+					products = _storeLogic.GetAllProducts();
 				}
 
-				Product[] products = product.ToArray();
+				else
+				{
+					Product[] productsKeyWord = FindKeyWord(value);
+					Product[] productsCategory = findProductsCategory(findSimilarCategories(value));
+					List<Product> product = new List<Product>(productsKeyWord);
+					foreach (Product prod in productsCategory)
+					{
+						product.Add(prod);
+					}
+
+					products = product.ToArray();
+				}
 					
 				products = FilterResultsByPrice(products,minPrice, maxPrice);
 				products = FilterResultByCategory(products, category);
@@ -109,15 +117,6 @@ namespace SadnaSrc.StoreCenter
 
 			return result.ToArray();
 
-		}
-
-		private void validateData(string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				throw new StoreException(SearchProductStatus.NullValue,
-					"The data given is null or empty!");
-			}
 		}
 
 		private Product[] FilterResultsByPrice(Product[] products, double minPrice, double maxPrice)
