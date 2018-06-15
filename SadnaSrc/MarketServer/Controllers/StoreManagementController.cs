@@ -339,14 +339,14 @@ namespace MarketWeb.Controllers
 		}
 
 
-		public IActionResult AddPurchasePolicy(int systemId, string state,string message,string store, bool valid)
+		public IActionResult StorePurchasePolicyPage(int systemId, string state,string message,string store, bool valid)
 		{
 			var userService = MarketServer.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var conditions = new string[0];
 			var operators = new[] { "AND", "OR", "NOT" };
 			ViewBag.valid = valid;
-			var answer = storeManagementService.ViewPoliciesSessions();
+			var answer = storeManagementService.ViewPolicies();
 			if (answer.Status == Success)
 			{
 				conditions = answer.ReportList;
@@ -356,10 +356,30 @@ namespace MarketWeb.Controllers
 				message = answer.Answer;
 			}
 
-			return View(new StorePurchasePolicyModel(systemId, state, message,store, operators, conditions));
+			return View(new StorePurchasePolicyModel(systemId, state, message, store, operators, conditions));
 		}
 
-		public IActionResult CreatePolicy(int systemId, string state,string store, string type, string subject, string op, string arg1, string optArg, string usernameText, string addressText, string quantityOp, string quantityText, string priceOp, string priceText, string subject1, string type1)
+	    public IActionResult AddPurchasePolicy(int systemId, string state, string message, string store, bool valid)
+	    {
+	        var userService = MarketServer.GetUserSession(systemId);
+	        var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+	        var conditions = new string[0];
+	        var operators = new[] { "AND", "OR", "NOT" };
+	        ViewBag.valid = valid;
+	        var answer = storeManagementService.ViewPoliciesSessions();
+	        if (answer.Status == Success)
+	        {
+	            conditions = answer.ReportList;
+	        }
+	        else
+	        {
+	            message = answer.Answer;
+	        }
+
+	        return View(new StorePurchasePolicyModel(systemId, state, message, store, operators, conditions));
+	    }
+
+        public IActionResult CreatePolicy(int systemId, string state,string store, string type, string subject, string op, string arg1, string optArg, string usernameText, string addressText, string quantityOp, string quantityText, string priceOp, string priceText, string subject1, string type1)
 		{
 			var userService = MarketServer.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
@@ -403,7 +423,9 @@ namespace MarketWeb.Controllers
 
 			else
 			{
-				string[] id1 = arg1.Split(' ');
+			    if (arg1 == null)
+			        return RedirectToAction("AddPurchasePolicy", new { systemId, state, store });
+                string[] id1 = arg1.Split(' ');
 				string[] id2 = null;
 				if (optArg != null)
 				{
@@ -442,8 +464,11 @@ namespace MarketWeb.Controllers
 	        var userService = MarketServer.GetUserSession(systemId);
 	        var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 	        var answer = storeManagementService.RemovePolicy(type, subject, optProd);
-	        return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
+	        return RedirectToAction("StorePurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
 	    }
+
+
+
 
         public IActionResult CategoryDiscountMenu(int systemId, string state, string message,string store, bool valid)
 		{

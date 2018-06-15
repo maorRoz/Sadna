@@ -17,7 +17,6 @@ namespace MarketWeb.Models
             Conditions = new StorePurchasePolicyItemModel[conditionStrings.Length];
             for (int i = 0; i < conditionStrings.Length; i++)
                 Conditions[i] = new StorePurchasePolicyItemModel(conditionStrings[i]);
-
         }
 
         public class StorePurchasePolicyItemModel
@@ -25,7 +24,7 @@ namespace MarketWeb.Models
             public string data;
             public string subject;
             public string type;
-
+            public string optProd;
             public StorePurchasePolicyItemModel(string newData)
             {
                 data = newData;
