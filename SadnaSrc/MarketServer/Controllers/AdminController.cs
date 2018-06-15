@@ -198,11 +198,11 @@ namespace MarketWeb.Controllers
 		    {
                 if(arg1 == null)
                     return RedirectToAction("AddPurchasePolicy", new { systemId, state});
-                string[] id1 = arg1.Split(' ');
+                string[] id1 = arg1.Split('|');
 			    string[] id2 = null;
 				if (optArg != null)
 			    {
-				    id2 = optArg.Split(' ');
+				    id2 = optArg.Split('|');
 				    var answer = adminService.CreatePolicy(type1, subject1, op, id1[0], id2[0]);
 				    if (answer.Status != Success)
 				    {

@@ -31,7 +31,7 @@ namespace MarketWeb.Models
             public MarketPurchasePolicyItemModel(string newData)
             {
                 data = newData;
-                string[] sp = newData.Split(' ');
+                string[] sp = newData.Split('|');
                 subject = sp[1];
                 type = sp[2];
             }

@@ -184,11 +184,23 @@ namespace SadnaSrc.PolicyComponent
             for (int i = 0; i < policiesArr.Length; i++)
             {
                 if (policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem)
-                    policyStrings.Add(PurchasePolicy.PrintEnum(policiesArr[i].Type) + "." + policiesArr[i].Subject);
+                    policyStrings.Add(policiesArr[i].ToString());
             }
             return policyStrings.ToArray();
         }
 
+
+        public string[] ViewStorePolicies(string store)
+        {
+            PurchasePolicy[] policiesArr = Policies.ToArray();
+            List<string> policyStrings = new List<string>();
+            for (int i = 0; i < policiesArr.Length; i++)
+            {
+                if ((policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem) && policiesArr[i].Subject == store)
+                    policyStrings.Add(policiesArr[i].ToString());
+            }
+            return policyStrings.ToArray();
+        }
 
         public string[] GetPolicyData(PolicyType type, string subject)
         {

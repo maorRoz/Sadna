@@ -45,7 +45,7 @@
                         <td>@item.data</td>
                         <td>
                             <a asp-controller="StoreManagement" asp-action="RemovePolicy" asp-route-systemId="@Model.SystemId"
-                               asp-route-state="@Model.State" asp-route-type="@item.type" asp-route-subject="@item.subject"><img src="\images\cancelation.png"></a>
+                               asp-route-state="@Model.State"  asp-route-store="@Model.Name" asp-route-type="@item.type" asp-route-subject="@item.subject"><img src="\images\cancelation.png"></a>
 
                         </td>
                     </tr>

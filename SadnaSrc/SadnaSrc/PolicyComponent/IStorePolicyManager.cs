@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 
 namespace SadnaSrc.PolicyComponent
 {
@@ -13,6 +14,7 @@ namespace SadnaSrc.PolicyComponent
         string[] CreateStorePolicy(string store, OperatorType op, int id1, int id2);
         string[] CreateStockItemPolicy(string store, string product, OperatorType op, int id1, int id2);
         string[] ViewStorePolicies();
+        string[] ViewStorePolicies(string store);
         void CleanSession();
 	    string[] ViewSessionPolicies();
 		void SyncWithDB();

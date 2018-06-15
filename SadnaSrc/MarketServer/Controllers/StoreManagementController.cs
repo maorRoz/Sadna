@@ -425,12 +425,12 @@ namespace MarketWeb.Controllers
 			{
 			    if (arg1 == null)
 			        return RedirectToAction("AddPurchasePolicy", new { systemId, state, store });
-                string[] id1 = arg1.Split(' ');
+                string[] id1 = arg1.Split('|');
 				string[] id2 = null;
 				if (optArg != null)
 				{
-					id2 = optArg.Split(' ');
-					var answer = storeManagementService.CreatePolicy(type1,store, subject1, op, id1[0], id2[0]);
+					id2 = optArg.Split('|');
+					var answer = storeManagementService.CreatePolicy(type, store, subject, op, id1[0], id2[0]);
 					if (answer.Status != Success)
 					{
 						return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer ,store});
@@ -439,7 +439,7 @@ namespace MarketWeb.Controllers
 
 				else
 				{
-					var answer = storeManagementService.CreatePolicy(type1, store, subject1, op, id1[0], null);
+					var answer = storeManagementService.CreatePolicy(type, store, subject, op, id1[0], null);
 					if (answer.Status != Success)
 					{
 						return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer ,store});
@@ -456,7 +456,7 @@ namespace MarketWeb.Controllers
 			var userService = MarketServer.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.SavePolicy();
-			return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
+			return RedirectToAction("StorePurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success, store});
 		}
 
 	    public IActionResult RemovePolicy(int systemId, string state, string store, string type, string subject, string optProd)
@@ -464,7 +464,7 @@ namespace MarketWeb.Controllers
 	        var userService = MarketServer.GetUserSession(systemId);
 	        var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 	        var answer = storeManagementService.RemovePolicy(type, subject, optProd);
-	        return RedirectToAction("StorePurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
+	        return RedirectToAction("StorePurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success, store});
 	    }
 
 
