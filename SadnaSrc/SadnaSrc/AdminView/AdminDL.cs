@@ -112,11 +112,13 @@ namespace SadnaSrc.AdminView
 
         public void CloseStore(string store)
         {
+            CheckInput(store);
             dbConnection.UpdateTable("Store", "Name = '"+store+"'",new[] {"Status"},new[] {"@stat"},new object[] {"Inactive"});
         }
 
         public bool IsUserExist(string userName)
         {
+            CheckInput(userName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "*", "Name = '" + userName +"'"))
             {
                 return dbReader.Read();
@@ -125,6 +127,7 @@ namespace SadnaSrc.AdminView
 
         public bool IsUserNameExistInHistory(string userName)
         {
+            CheckInput(userName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", "UserName = '" + userName +"'"))
             {
                 return dbReader.Read();
@@ -133,6 +136,7 @@ namespace SadnaSrc.AdminView
 
         public bool IsStoreExistInHistory(string storeName)
         {
+            CheckInput(storeName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + storeName +"'"))
             {
                 return dbReader.Read();
@@ -159,6 +163,7 @@ namespace SadnaSrc.AdminView
         }
         public string[] GetPurchaseHistory(string field, string givenValue)
         {
+            CheckInput(field); CheckInput(givenValue);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", field + " = '"
                                                                                                           + givenValue + "'"))
             {
@@ -167,15 +172,20 @@ namespace SadnaSrc.AdminView
         }
         public void AddCategory(Category category)
         {
+            foreach (object val in category.GetCategoryValuesArray())
+                CheckInput(val.ToString());
+
             dbConnection.InsertTable("Category", "SystemID, name",
                 new[]{"@idParam","@nameParam"}, category.GetCategoryValuesArray());
         }
         public void RemoveCategory(Category category)
         {
+            CheckInput(category.SystemId);
             dbConnection.DeleteFromTable("Category", "SystemID = '" + category.SystemId + "'");
         }
         public Category GetCategoryByName(string categoryname)
         {
+            CheckInput(categoryname);
             Category category = null;
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Category", "*", "name = '" + categoryname + "'"))
@@ -186,6 +196,12 @@ namespace SadnaSrc.AdminView
                 }
             }
             return category;
+        }
+
+        private void CheckInput(string input)
+        {
+            if (input.IndexOf("'") != -1)
+                throw new DataException("Input value can't contain char ' ");
         }
 
     }

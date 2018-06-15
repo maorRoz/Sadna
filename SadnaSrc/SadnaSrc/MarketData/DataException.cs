@@ -16,6 +16,10 @@ namespace SadnaSrc.MarketData
         {
         }
 
+        public DataException(string message) : base(600,message)
+        {
+        }
+
         protected override string GetModuleName()
         {
             return "Db Connection Lost";
