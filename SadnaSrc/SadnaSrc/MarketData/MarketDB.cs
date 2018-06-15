@@ -295,6 +295,13 @@ namespace SadnaSrc.MarketData
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Avi`s Chocolate Kingdom','Arik2','Arik3','ManageProducts','2018-1-1','Regular promotion')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','Arik3','Arik3','StoreOwner','2018-1-1','Toy has been opened')",
                 "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','Arik3','Arik2','ManageProducts','2018-1-1','Regular promotion')",
+	            "INSERT INTO PromotionHistory (Store,Promoter,Promoted,Permissions,PromotionDate,Description) VALUES ('Toy','Arik3','Arik2','ManageProducts','2018-1-1','Regular promotion')",
+	            "INSERT INTO SignInReports (SystemId, Time) VALUES ('5555', '2018-06-12 00:00:00.000')",
+				"INSERT INTO SignInReports (SystemId, Time) VALUES ('1111', '2018-06-13 00:00:00.000')",
+	            "INSERT INTO SignInReports (SystemId, Time) VALUES ('1122', '2018-06-13 00:00:00.000')",
+	            "INSERT INTO SignInReports (SystemId, Time) VALUES ('1212', '2018-06-13 00:00:00.000')",
+	            "INSERT INTO SignInReports (SystemId, Time) VALUES ('1222', '2018-06-14 00:00:00.000')",
+	            "INSERT INTO SignInReports (SystemId, Time) VALUES ('1322', '2018-06-14 00:00:00.000')",
 			};
             for (int i = 0; i < thingsToInsertByForce.Length; i++)
             {
@@ -340,7 +347,8 @@ namespace SadnaSrc.MarketData
                 "CategoryProductConnection",
                 "SimplePolicies",
                 "ComplexPolicies",
-                "CategoryDiscount"
+                "CategoryDiscount",
+				"SignInReports"
             };
             var dbConnection = _dbConnection;
             if (ToDisable)
