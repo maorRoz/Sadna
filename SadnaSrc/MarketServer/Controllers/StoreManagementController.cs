@@ -346,7 +346,7 @@ namespace MarketWeb.Controllers
 			var conditions = new string[0];
 			var operators = new[] { "AND", "OR", "NOT" };
 			ViewBag.valid = valid;
-			var answer = storeManagementService.ViewPolicies();
+			var answer = storeManagementService.ViewPolicies(store);
 			if (answer.Status == Success)
 			{
 				conditions = answer.ReportList;

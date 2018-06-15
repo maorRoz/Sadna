@@ -37,7 +37,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             seller.Setup(x => x.CanDeclarePurchasePolicy())
                 .Throws(new MarketException((int)PromoteStoreStatus.NoAuthority, ""));
             ViewPoliciesSlave slave = new ViewPoliciesSlave(seller.Object, manager.Object);
-            slave.ViewPolicies();
+            slave.ViewPolicies("X");
             Assert.AreEqual((int)ViewStorePolicyStatus.NoAuthority, slave.Answer.Status);
         }
 
@@ -47,7 +47,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
 
             ViewPoliciesSlave slave = new ViewPoliciesSlave(seller.Object, manager.Object);
-            slave.ViewPolicies();
+            slave.ViewSessionPolicies();
             Assert.AreEqual((int)ViewStorePolicyStatus.Success, slave.Answer.Status);
 
         }
