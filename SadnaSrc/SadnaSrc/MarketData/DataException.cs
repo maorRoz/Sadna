@@ -7,7 +7,7 @@ using SadnaSrc.Main;
 
 namespace SadnaSrc.MarketData
 {
-    class DataException : MarketException
+    public class DataException : MarketException
     {
 
         public DataException() : base(500,
