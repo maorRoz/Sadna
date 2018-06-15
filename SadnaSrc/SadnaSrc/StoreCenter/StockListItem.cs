@@ -67,7 +67,7 @@ namespace SadnaSrc.StoreCenter
 	        
 		}
 
-	    public Discount calcTotalDiscount(string storeName)
+	    public Discount CalcTotalDiscount(string storeName)
 	    {
 		    double beginPrice = Product.BasePrice;
 		    if (Discount?.discountType == DiscountTypeEnum.Visible && Discount.CheckTime())
@@ -80,14 +80,9 @@ namespace SadnaSrc.StoreCenter
 				    beginPrice = categoryDiscount.CalcDiscount(beginPrice);
 		    }
 
-		    if (Discount == null && categoryDiscount != null)
+		    if (categoryDiscount != null)
 		    {
-			    Discount = new Discount(DiscountTypeEnum.Visible, categoryDiscount.StartDate, categoryDiscount.EndDate, (1 - beginPrice/Product.BasePrice)* 100, true);
-		    }
-
-		    else if (Discount != null)
-		    {
-			    Discount = new Discount(Discount.discountType, Discount.startDate, Discount.EndDate, (1 - beginPrice / Product.BasePrice)* 100, true);
+			    return new Discount(DiscountTypeEnum.Visible, categoryDiscount.StartDate, categoryDiscount.EndDate, (1 - beginPrice/Product.BasePrice)* 100, true);
 		    }
 
 		    return Discount;

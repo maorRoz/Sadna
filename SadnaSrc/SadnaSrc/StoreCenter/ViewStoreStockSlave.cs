@@ -126,11 +126,11 @@ namespace SadnaSrc.StoreCenter
                     ((managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice)&& sli.Quantity==0))
                     return "";
             }
-	        stockListItem.calcTotalDiscount(_storeName);
+	        Discount  d = stockListItem.CalcTotalDiscount(_storeName);
 			string discount = " Discount: {";
             string product = stockListItem.Product.ToString();
-            if (stockListItem.Discount != null)
-                discount += stockListItem.Discount;
+            if (d != null)
+                discount += d;
             else
             {
                 discount += "null";
