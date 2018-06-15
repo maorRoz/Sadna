@@ -20,6 +20,7 @@ namespace MarketWeb
         {
             try
             {
+
                 MarketDB.Instance.InsertByForceClient();
             }
             catch (Exception)

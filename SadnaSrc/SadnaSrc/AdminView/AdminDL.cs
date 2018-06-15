@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core;
 using NUnit.Framework;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
@@ -204,5 +205,19 @@ namespace SadnaSrc.AdminView
                 throw new DataException("Input value can't contain char ' ");
         }
 
-    }
+	    public Pair<int, DateTime>[] GetEntranceReport()
+	    {
+		    List<Pair<int, DateTime>> report = new List<Pair<int, DateTime>>();
+		    using (var dbReader = dbConnection.SelectFromTable("SignInReports", "*"))
+		    {
+			    while (dbReader.Read())
+			    {
+				    report.Add(new Pair<int, DateTime>(dbReader.GetInt32(0), dbReader.GetDateTime(1)));
+			    }
+		    }
+
+		    return report.ToArray();
+	    }
+
+	}
 }

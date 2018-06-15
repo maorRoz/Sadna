@@ -20,7 +20,7 @@ namespace SadnaSrc.Main
 	    MarketAnswer GetStoreManagerPolicies(string store);
         MarketAnswer GetUserDetails();
 	    MarketAnswer GetAllStores();
-
+	   
     }
 
     public enum EnterSystemStatus
@@ -121,9 +121,4 @@ namespace SadnaSrc.Main
         NotSystemAdmin,
         NoDB = 500
     }
-
-
-
-	
-    
 }

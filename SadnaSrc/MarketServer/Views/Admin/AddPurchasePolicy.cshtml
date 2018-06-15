@@ -5,7 +5,7 @@
 <br />
 
 @{
-	ViewData["Title"] = "Purchase Policy";
+	ViewData["Title"] = "New Purchase Policy";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -41,9 +41,10 @@
 			</div>
 				@using (Html.BeginForm("CreatePolicy", "Admin", new {Model.SystemId, Model.State}))
 				{
-					<br/>
+					
 					<table>
-
+					<label>Simple Policy Creator:</label>
+					<br/>
 					<tr>
 						<td>
 							<label for="subject">Subject:</label>
@@ -157,7 +158,8 @@
 			{
 
 				<hr />
-				<br />
+                <label>Complex Policy Creator:</label>
+			    <br/>
 				<table>
 
 					<tr>
@@ -190,9 +192,9 @@
 					<td>
 						<select name="arg1">
 							@foreach (var item in Model.Conditions)
-							{	
+							    {	
 
-									<option value="@item">@item</option>
+									<option value="@item.data">@item.data</option>
 
 								}
 							</select>
@@ -214,11 +216,11 @@
 						<td>
 							<select name="optArg">
 								@foreach (var item in Model.Conditions)
-	{
+	                             {
 
-							<option value="@item">@item</option>
+							        <option value="@item.data">@item.data</option>
 
-}
+                                }
 							</select>
 							<br />
 						</td>

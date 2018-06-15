@@ -1,6 +1,7 @@
 ﻿<br />
 <br />
 @{
+
 	ViewData["Title"] = "Your Store List";
 }
 
@@ -40,7 +41,7 @@
 						<td>@item.Name</td>
 						<td>
 							<a asp-controller="StoreManagement" asp-action="ManageStoreOptions" asp-route-systemId="@Model.SystemId"
-							   asp-route-state="@Model.State" asp-route-store="@item.Name"><img src="\images\cashier.png"></a>
+							   asp-route-state="@Model.State" asp-route-store="@item.Name"><input type="submit" class="btn btn-primary" value="Edit"></a>
 						</td>
 
 					</tr>

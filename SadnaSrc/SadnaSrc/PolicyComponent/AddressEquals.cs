@@ -58,5 +58,10 @@ namespace SadnaSrc.PolicyComponent
         {
             return base.GetHashCode();
         }
+
+        public override string getMyTypeVisual()
+        {
+            return "Address =";
+        }
     }
 }

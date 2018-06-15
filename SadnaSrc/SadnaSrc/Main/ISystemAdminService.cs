@@ -18,11 +18,14 @@ namespace SadnaSrc.Main
 	    MarketAnswer ViewPolicies();
 	    MarketAnswer ViewPoliciesSessions();
 		MarketAnswer SavePolicy();
-
+        MarketAnswer RemovePolicy(string type, string subject);
+  
         MarketAnswer ViewLog();
 
         MarketAnswer ViewError();
-    }
+
+	    MarketAnswer GetEntranceDetails();
+	}
 
     public enum RemoveUserStatus
     {
@@ -81,4 +84,11 @@ namespace SadnaSrc.Main
         NoAuthority,
         NoDB = 500
     }
+
+	public enum GetEntranceDetailsEnum
+	{
+		Success,
+		NoAuthority,
+		NoDB = 500
+	}
 }

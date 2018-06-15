@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="AdminViewApiTest\AddCategoryTests.cs" />
     <Compile Include="AdminViewApiTest\AddPolicyTest.cs" />
+    <Compile Include="AdminViewApiTest\GetEntranceDetailsMockTest.cs" />
     <Compile Include="AdminViewApiTest\RemovePolicyTest.cs" />
     <Compile Include="AdminViewApiTest\ViewErrorMockUnitTests.cs" />
     <Compile Include="AdminViewApiTest\ViewLogMockUnitTests.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="AdminViewApiTest\RemoveUserTests.cs" />
     <Compile Include="AdminViewApiTest\AdminViewPurchaseHistoryTests.cs" />
     <Compile Include="AdminViewApiTest\RemoveCategoryTests.cs" />
+    <Compile Include="UseCaseUnitTest\GetEntranceDetailsIntegrationTests.cs" />
     <Compile Include="UseCaseUnitTest\RemoveCategoryTestsMock.cs" />
     <Compile Include="UseCaseUnitTest\AdminViewCategoryTestsDL.cs" />
     <Compile Include="UseCaseUnitTest\UseCase5_4_Tests.cs" />

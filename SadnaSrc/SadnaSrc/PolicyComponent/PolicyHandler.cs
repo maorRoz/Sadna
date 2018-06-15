@@ -4,6 +4,8 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.AdminView;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.PolicyComponent
 {
@@ -16,6 +18,9 @@ namespace SadnaSrc.PolicyComponent
         private static IPolicyDL _dataLayer;
 
         public static PolicyHandler Instance => _instance ?? (_instance = new PolicyHandler());
+
+        private static Random randy = new Random();
+
 
         private PolicyHandler()
         {
@@ -77,10 +82,14 @@ namespace SadnaSrc.PolicyComponent
         public void AddPolicy(int policyId)
         {
             PurchasePolicy toAdd = GetPolicy(policyId);
+            if(toAdd == null)
+                throw new MarketException(4, "No policies to save, try again.");
             toAdd.IsRoot = true;
+            toAdd.ID = RandomPolicyID();
             Policies.Add(toAdd);
             SessionPolicies.Clear();
             _dataLayer.SavePolicy(toAdd);
+
         }
 
         public void RemovePolicy(PolicyType type, string subject)
@@ -163,7 +172,7 @@ namespace SadnaSrc.PolicyComponent
             for (int i = 0; i < policiesArr.Length; i++)
             {
                 if(policiesArr[i].Type == PolicyType.Global || policiesArr[i].Type == PolicyType.Category || policiesArr[i].Type == PolicyType.Product)
-                    policyStrings.Add(PurchasePolicy.PrintEnum(policiesArr[i].Type) + "." + policiesArr[i].Subject);
+                    policyStrings.Add(policiesArr[i].ToString());
             }
             return policyStrings.ToArray();
         }
@@ -175,11 +184,23 @@ namespace SadnaSrc.PolicyComponent
             for (int i = 0; i < policiesArr.Length; i++)
             {
                 if (policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem)
-                    policyStrings.Add(PurchasePolicy.PrintEnum(policiesArr[i].Type) + "." + policiesArr[i].Subject);
+                    policyStrings.Add(policiesArr[i].ToString());
             }
             return policyStrings.ToArray();
         }
 
+
+        public string[] ViewStorePolicies(string store)
+        {
+            PurchasePolicy[] policiesArr = Policies.ToArray();
+            List<string> policyStrings = new List<string>();
+            for (int i = 0; i < policiesArr.Length; i++)
+            {
+                if ((policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem) && policiesArr[i].Subject == store)
+                    policyStrings.Add(policiesArr[i].ToString());
+            }
+            return policyStrings.ToArray();
+        }
 
         public string[] GetPolicyData(PolicyType type, string subject)
         {
@@ -296,6 +317,24 @@ namespace SadnaSrc.PolicyComponent
         public void SyncWithDB()
         {
             Policies = _dataLayer.GetAllPolicies();
+        }
+
+        private int RandomPolicyID()
+        {
+            var ret = randy.Next(100000, 999999);
+            while (CheckID(ret))
+            {
+                ret = randy.Next(100000, 999999);
+            }
+
+            return ret;
+        }
+
+        private bool CheckID(int id)
+        {
+            foreach (PurchasePolicy pol in Policies)
+                if (pol.ID == id) return true;
+            return false;
         }
     }
 }
