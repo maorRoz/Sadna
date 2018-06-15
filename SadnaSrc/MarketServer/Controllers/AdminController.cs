@@ -253,7 +253,7 @@ namespace MarketWeb.Controllers
 
 			}
 
-			return RedirectToAction("PurchasePolicy", new {systemId, state});
+			return RedirectToAction("AddPurchasePolicy", new {systemId, state});
 		}
 
 	    public IActionResult SavePolicy(int systemId, string state)
