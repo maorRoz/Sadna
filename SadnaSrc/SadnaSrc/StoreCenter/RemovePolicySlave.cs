@@ -63,9 +63,9 @@ namespace SadnaSrc.StoreCenter
             switch (type)
             {
                 case "StockItem":
-                    return PolicyType.Product;
+                    return PolicyType.StockItem;
                 case "Store":
-                    return PolicyType.Category;
+                    return PolicyType.Store;
                 default:
                     MarketLog.Log("StoreCenter", " Removing policy failed, invalid data.");
                     throw new StoreException(EditStorePolicyStatus.InvalidPolicyData, "Invalid Policy data");

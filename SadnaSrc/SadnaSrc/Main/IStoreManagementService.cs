@@ -56,7 +56,9 @@ namespace SadnaSrc.Main
 	    MarketAnswer CreatePolicy(string type, string subject, string optSubject, string op, string arg1, string optArg);
 	    MarketAnswer SavePolicy();
 	    MarketAnswer ViewPolicies();
-	    MarketAnswer ViewPoliciesSessions();
+        MarketAnswer ViewPolicies(string store);
+
+        MarketAnswer ViewPoliciesSessions();
 		MarketAnswer RemovePolicy(string type, string subject, string optProd);
 
     }

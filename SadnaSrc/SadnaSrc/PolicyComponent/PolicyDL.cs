@@ -1,5 +1,6 @@
 ﻿using SadnaSrc.Main;
 using System.Collections.Generic;
+using Castle.Core.Internal;
 using SadnaSrc.MarketData;
 
 
@@ -31,8 +32,11 @@ namespace SadnaSrc.PolicyComponent
 
         public void RemovePolicy(PurchasePolicy policy)
         {
-            dbConnection.DeleteFromTable("ComplexPolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + policy.Subject + "'");
-            dbConnection.DeleteFromTable("SimplePolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + policy.Subject + "'");
+            string subjectString = "NULL";
+            if (!policy.Subject.IsNullOrEmpty())
+                subjectString = policy.Subject;
+            dbConnection.DeleteFromTable("ComplexPolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + subjectString + "'");
+            dbConnection.DeleteFromTable("SimplePolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + subjectString + "'");
         }
 
         public PurchasePolicy GetPolicy(PolicyType type, string subject)

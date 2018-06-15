@@ -88,7 +88,6 @@ namespace SystemViewTests.UseCaseUnitTest
             MarketAnswer ans = adminServiceSession.ViewPolicies();
             Assert.AreEqual((int)ViewPolicyStatus.Success, ans.Status);
             Assert.AreEqual(2, ans.ReportList.Length);
-            Assert.AreEqual("Global.",ans.ReportList[1]);
         }
 
         [TestMethod]

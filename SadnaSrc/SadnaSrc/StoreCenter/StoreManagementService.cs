@@ -163,7 +163,15 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-	    public MarketAnswer ViewPoliciesSessions()
+        public MarketAnswer ViewPolicies(string store)
+        {
+            ViewPoliciesSlave slave = new ViewPoliciesSlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.ViewPolicies(store);
+            return slave.Answer;
+
+        }
+
+        public MarketAnswer ViewPoliciesSessions()
 	    {
 		    ViewPoliciesSlave slave = new ViewPoliciesSlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
 		    slave.ViewSessionPolicies();
