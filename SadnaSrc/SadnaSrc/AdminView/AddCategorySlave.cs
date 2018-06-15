@@ -8,30 +8,31 @@ namespace SadnaSrc.AdminView
     public class AddCategorySlave
     {
         public MarketAnswer Answer;
+        private readonly IUserAdmin _admin;
         private readonly IAdminDL _adminDlInstacne;
-        public AddCategorySlave( IAdminDL adminDl)
+        public AddCategorySlave( IAdminDL adminDl, IUserAdmin admin)
         {
+            _admin = admin;
             _adminDlInstacne = adminDl;
         }
 
-        public Category AddCategory(string categoryName)
+        public void AddCategory(string categoryName)
         {
             try
             {
                 MarketLog.Log("StoreCenter", "trying to add category to the store");
+                _admin.ValidateSystemAdmin();
                 MarketLog.Log("StoreCenter", " check if category name exists");
                 CheckIfCategoryExists(categoryName);
                 MarketLog.Log("StoreCenter", " adding category");
                 if (categoryName.IsNullOrEmpty())
                 {
                     Answer = new AdminAnswer(EditCategoryStatus.InvalidCategory, "The category name is empty!");
-                    return null;
                 }
 
                 Category category = new Category(categoryName);
                 _adminDlInstacne.AddCategory(category);
                 Answer = new AdminAnswer(EditCategoryStatus.Success, "category" + categoryName + " added successfully");
-                return category;
             }
             catch (AdminException e)
             {
@@ -41,7 +42,6 @@ namespace SadnaSrc.AdminView
             {
                 Answer = new AdminAnswer((EditCategoryStatus)e.Status, e.GetErrorMessage());
             }
-            return null;
         }
 
         private void CheckIfCategoryExists(string categoryName)

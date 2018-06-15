@@ -1,6 +1,7 @@
 ﻿
 using SadnaSrc.Main;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.UserSpot;
 
 namespace SadnaSrc.AdminView
 {
@@ -36,8 +37,8 @@ namespace SadnaSrc.AdminView
 
         public MarketAnswer AddCategory(string categoryName)
         {
-            AddCategorySlave slave = new AddCategorySlave(adminDB);
-            Category category = slave.AddCategory(categoryName);
+            AddCategorySlave slave = new AddCategorySlave(adminDB, _admin);
+            slave.AddCategory(categoryName);
             return slave.Answer;
         }
         public MarketAnswer RemoveCategory(string categoryName)
@@ -82,5 +83,27 @@ namespace SadnaSrc.AdminView
             return slave.Answer;
         }
 
-    }
+        public MarketAnswer ViewLog()
+        {
+            ViewLogSlave slave = new ViewLogSlave(adminDB, _admin);
+            slave.ViewLog();
+            return slave.Answer;
+        }
+
+        public MarketAnswer ViewError()
+        {
+            ViewErrorSlave slave = new ViewErrorSlave(adminDB, _admin);
+            slave.ViewError();
+            return slave.Answer;
+        }
+
+	    public MarketAnswer GetEntranceDetails()
+	    {
+		    GetEntranceDetailsSlave slave = new GetEntranceDetailsSlave(adminDB, _admin);
+		    slave.GetEntranceDetails();
+		    return slave.Answer;
+
+	    }
+
+	}
 }

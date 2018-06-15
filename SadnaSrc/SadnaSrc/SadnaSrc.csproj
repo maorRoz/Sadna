@@ -90,6 +90,8 @@
     <Compile Include="AdminView\RemoveUserSlave.cs" />
     <Compile Include="AdminView\AdminDL.cs" />
     <Compile Include="AdminView\AdminException.cs" />
+    <Compile Include="AdminView\ViewErrorSlave.cs" />
+    <Compile Include="AdminView\ViewLogSlave.cs" />
     <Compile Include="AdminView\ViewPoliciesSlave.cs" />
     <Compile Include="MarketData\DataException.cs" />
     <Compile Include="MarketData\IMarketDB.cs" />
@@ -189,7 +191,6 @@
     <Compile Include="StoreCenter\Discount.cs" />
     <Compile Include="StoreCenter\Product.cs" />
     <Compile Include="StoreCenter\PromoteToStoreManagerSlave.cs" />
-    <Compile Include="StoreCenter\PurchesPolicy.cs" />
     <Compile Include="AdminView\RemoveCategorySlave.cs" />
     <Compile Include="StoreCenter\RemoveCategoryDiscountSlave.cs" />
     <Compile Include="StoreCenter\RemoveDiscountFromProductSlave.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="MarketHarmony\IUserAdmin.cs" />
     <Compile Include="MarketHarmony\IUserBuyer.cs" />
     <Compile Include="MarketHarmony\IUserShopper.cs" />
+    <Compile Include="AdminView\GetEntranceDetailsSlave.cs" />
     <Compile Include="UserSpot\GetUserDetailsSlave.cs" />
     <Compile Include="UserSpot\EditCartItemSlave.cs" />
     <Compile Include="UserSpot\EnterSystemSlave.cs" />

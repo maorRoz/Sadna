@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core;
 using SadnaSrc.MarketHarmony;
 
 namespace SadnaSrc.AdminView
@@ -22,6 +23,12 @@ namespace SadnaSrc.AdminView
 	    string[] GetAllStoresInPurchaseHistory();
 	    string[] GetAllUserInPurchaseHistory();
 
+        string[] GetEventLogReport();
 
-    }
+        string[] GetEventErrorLogReport();
+
+	    Pair<int, DateTime>[] GetEntranceReport();
+
+
+	}
 }

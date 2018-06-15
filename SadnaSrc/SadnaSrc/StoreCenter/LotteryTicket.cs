@@ -110,5 +110,9 @@ namespace SadnaSrc.StoreCenter
             globalLotteryTicketID++;
             return "T" + globalLotteryTicketID;
         }
+        public static void RestartLotteryTicketID()
+        {
+            globalLotteryTicketID = -1;
+        }
     }
 }

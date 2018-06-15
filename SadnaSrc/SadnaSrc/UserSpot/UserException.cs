@@ -66,14 +66,13 @@ namespace SadnaSrc.UserSpot
         {
         }
 
-        protected override string GetModuleName()
+	    public UserException(GetEntranceDetailsEnum status, string message) : base((int)status, message)
+	    {
+	    }
+
+		protected override string GetModuleName()
         {
             return "UserSpot";
-        }
-
-        protected override string WrapErrorMessageForDb(string message)
-        {
-            return "User Error: " + message;
         }
     }
 }

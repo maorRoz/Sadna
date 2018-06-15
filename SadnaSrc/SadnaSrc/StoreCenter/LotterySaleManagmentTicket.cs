@@ -179,5 +179,10 @@ namespace SadnaSrc.StoreCenter
             globalLotteryID++;
             return "L" + globalLotteryID;
         }
+
+        public static void RestartLotteryID()
+        {
+            globalLotteryID = -1;
+        }
     }
 }

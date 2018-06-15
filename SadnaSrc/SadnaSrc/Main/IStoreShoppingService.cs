@@ -18,7 +18,7 @@ namespace SadnaSrc.Main
 
 	    MarketAnswer ViewStoreStockAll(string store);
 
-	    MarketAnswer SearchProduct(string type, string value, double minPrice, double maxPrice, string category);
+	    MarketAnswer SearchProduct(string value, double minPrice, double maxPrice, string category);
 
 		MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
@@ -30,6 +30,7 @@ namespace SadnaSrc.Main
         Success,
         AlreadyExist,
         InvalidUser,
+		InvalidData,
         NoDB = 500
 
     }
@@ -66,9 +67,7 @@ namespace SadnaSrc.Main
 		Success,
 		NullValue,
 		DidntEnterSystem,
-		CategoryNotFound,
 		PricesInvalid,
-		MistakeTipGiven,
 		NoDB = 500
 	}
 

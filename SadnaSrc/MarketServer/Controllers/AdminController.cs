@@ -8,114 +8,144 @@ using MarketServer.Models;
 using MarketWeb.Models;
 using SadnaSrc.Main;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace MarketWeb.Controllers
 {
-    public class AdminController : Controller
-    {
-        private const int Success = 0;
 
-        public IActionResult RemoveUserView(int systemId, string state, string message, bool valid)
-        {
-            var userService = MarketServer.GetUserSession(systemId);
-            var usersData = new string[0];
-            var answer = userService.ViewUsers();
-            if (answer.Status == Success)
-            {
-                usersData = answer.ReportList;
-                ViewBag.valid = valid;
-            }
-            else
-            {
-                message = answer.Answer;
-                ViewBag.valid = false;
-            }
- 
-            return View(new UserListModel(systemId, state, message, usersData));
-        }
+	public class AdminController : Controller
+	{
+		private const int Success = 0;
 
-        public IActionResult ToRemoveUser(int systemId, string state, string toDeleteName)
-        {
-            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-            var answer = adminService.RemoveUser(toDeleteName);
-            return RedirectToAction("RemoveUserView", new
-            {
-                systemId,
-                state,
-                message = answer.Answer,
-                valid = answer.Status == Success
-            });
-        }
+		public IActionResult RemoveUserView(int systemId, string state, string message, bool valid)
+		{
+			var userService = MarketServer.GetUserSession(systemId);
+			var usersData = new string[0];
+			var answer = userService.ViewUsers();
+			if (answer.Status == Success)
+			{
+				usersData = answer.ReportList;
+				ViewBag.valid = valid;
+			}
+			else
+			{
+				message = answer.Answer;
+				ViewBag.valid = false;
+			}
 
-        public IActionResult AdminSelectView(int systemId, string state, string message)
-        {
-            return View(new UserModel(systemId, state, message));
+			return View(new UserListModel(systemId, state, message, usersData));
+		}
 
-        }
+		public IActionResult ToRemoveUser(int systemId, string state, string toDeleteName)
+		{
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var answer = adminService.RemoveUser(toDeleteName);
+			return RedirectToAction("RemoveUserView", new
+			{
+				systemId,
+				state,
+				message = answer.Answer,
+				valid = answer.Status == Success
+			});
+		}
 
-        public IActionResult AdminViewPurchaseHistory(int systemId, string state, string viewSubject, string viewKind)
-        {
-            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-            var answer = viewKind == "Store"
-                ? adminService.ViewPurchaseHistoryByStore(viewSubject)
-                : adminService.ViewPurchaseHistoryByUser(viewSubject);
-
-
-            if (answer.Status != Success)
-            {
-                return RedirectToAction("AdminSelectView", new {systemId, state, message = answer.Answer});
-            }
-
-            return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
-        }
-
-	    public IActionResult HandlingCategoryView(int systemId, string state)
-	    {
-		    return View(new UserModel(systemId, state, null));
-	    }
-
-	    public IActionResult AddingCategoryPage(int systemId, string state, string message, bool valid)
-	    {
-		    ViewBag.valid = valid;
-		    return View(new UserModel(systemId, state, message));
-	    }
-
-	    public IActionResult AddCategory(int systemId,string state, string category)
-	    {
-		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-		    var answer = adminService.AddCategory(category);
-		    if (answer.Status == Success)
-		    {
-			    return RedirectToAction("AddingCategoryPage", new {systemId, state, message = answer.Answer, valid = true});
-		    }
-		    return RedirectToAction("AddingCategoryPage", new { systemId, state, message = answer.Answer, valid = false });
+		public IActionResult AdminSelectView(int systemId, string state, string message)
+		{
+			return View(new UserModel(systemId, state, message));
 
 		}
 
-	    public IActionResult RemovingCategoryPage(int systemId, string state, string message, bool valid)
-	    {
-		    ViewBag.valid = valid;
-		    return View(new UserModel(systemId, state, message));
-	    }
+		public IActionResult ViewLogs(int systemId, string state)
+		{
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var answer = adminService.ViewLog();
+			if (answer.Status == Success)
+			{
+				return View(new ErrorLogModel(systemId, state, answer.ReportList));
+			}
 
-	    public IActionResult RemoveCategory(int systemId, string state, string category)
-	    {
-		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-		    var answer = adminService.RemoveCategory(category);
-		    if (answer.Status == Success)
-		    {
-			    return RedirectToAction("RemovingCategoryPage", new { systemId, state, message = answer.Answer, valid = true });
-		    }
-		    return RedirectToAction("RemovingCategoryPage", new { systemId, state, message = answer.Answer, valid = false });
+			return RedirectToAction("MainLobby", "Home",
+				new {systemId, state, message = answer.Answer});
+		}
 
-	    }      
+		public IActionResult ViewErrors(int systemId, string state)
+		{
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var answer = adminService.ViewError();
+			if (answer.Status == Success)
+			{
+				return View(new ErrorLogModel(systemId, state, answer.ReportList));
+			}
+
+			return RedirectToAction("MainLobby", "Home",
+				new {systemId, state, message = answer.Answer});
+		}
+
+		public IActionResult AdminViewPurchaseHistory(int systemId, string state, string viewSubject, string viewKind)
+		{
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var answer = viewKind == "Store"
+				? adminService.ViewPurchaseHistoryByStore(viewSubject)
+				: adminService.ViewPurchaseHistoryByUser(viewSubject);
+
+
+			if (answer.Status != Success)
+			{
+				return RedirectToAction("AdminSelectView", new {systemId, state, message = answer.Answer});
+			}
+
+			return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
+		}
+
+		public IActionResult HandlingCategoryView(int systemId, string state)
+		{
+			return View(new UserModel(systemId, state, null));
+		}
+
+		public IActionResult AddingCategoryPage(int systemId, string state, string message, bool valid)
+		{
+			ViewBag.valid = valid;
+			return View(new UserModel(systemId, state, message));
+		}
+
+		public IActionResult AddCategory(int systemId, string state, string category)
+		{
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var answer = adminService.AddCategory(category);
+			if (answer.Status == Success)
+			{
+				return RedirectToAction("AddingCategoryPage", new {systemId, state, message = answer.Answer, valid = true});
+			}
+
+			return RedirectToAction("AddingCategoryPage", new {systemId, state, message = answer.Answer, valid = false});
+
+		}
+
+		public IActionResult RemovingCategoryPage(int systemId, string state, string message, bool valid)
+		{
+			ViewBag.valid = valid;
+			return View(new UserModel(systemId, state, message));
+		}
+
+		public IActionResult RemoveCategory(int systemId, string state, string category)
+		{
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var answer = adminService.RemoveCategory(category);
+			if (answer.Status == Success)
+			{
+				return RedirectToAction("RemovingCategoryPage", new {systemId, state, message = answer.Answer, valid = true});
+			}
+
+			return RedirectToAction("RemovingCategoryPage", new {systemId, state, message = answer.Answer, valid = false});
+
+		}
 
         public IActionResult AddPurchasePolicy(int systemId, string state, string message, bool valid)
 		{
 			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-		    var operators = new string[0];
-            var conditions = new string[0];
-			operators = new[] { "AND", "OR", "NOT" };
+			var operators = new string[0];
+			var conditions = new string[0];
+			operators = new[] {"AND", "OR", "NOT"};
 			ViewBag.valid = valid;
 			var answer = adminService.ViewPoliciesSessions();
 			if (answer.Status == Success)
@@ -216,13 +246,14 @@ namespace MarketWeb.Controllers
 					if (answer.Status != Success)
 					{
 						return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer });
+
 					}
 				}
 
-				
+
 			}
- 
-		    return RedirectToAction("AddPurchasePolicy", new { systemId, state});
+
+			return RedirectToAction("PurchasePolicy", new {systemId, state});
 		}
 
 	    public IActionResult SavePolicy(int systemId, string state)
@@ -238,6 +269,45 @@ namespace MarketWeb.Controllers
             var answer = adminService.RemovePolicy(type, subject);
             return RedirectToAction("PurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
         }
+
+		public IActionResult ChartsView(int systemId, string state)
+		{
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var answer = adminService.GetEntranceDetails();
+			string message = null;
+			if (answer.Status != Success)
+			{
+				message = answer.Answer;
+			}
+
+
+			return View(new UserModel(systemId, state, message));
+		}
+
+		public ContentResult JSON(int systemId)
+		{
+			List<DataPoint> dataPoints = new List<DataPoint>();
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var answer = adminService.GetEntranceDetails();
+			if (answer.Status != Success)
+			{
+				return null;
+			}
+
+			for (int i = 0; i < answer.ReportList.Length; i++)
+			{
+				var dataParam = answer.ReportList[i].Split(new[] {"Number: ", " Date: "}, StringSplitOptions.RemoveEmptyEntries);
+				string number = dataParam[0];
+				int num = Int32.Parse(number);
+				string date = dataParam[1];
+				DateTime time = DateTime.Parse(date);
+				dataPoints.Add(new DataPoint(time.ToString("dd/MM/yyyy"), num));
+			}
+
+			return Content(JsonConvert.SerializeObject(dataPoints, _jsonSetting), "application/json");
+		}
+
+		JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
 
 	}
 }
