@@ -244,7 +244,14 @@ namespace MarketWeb.Controllers
 
 		public IActionResult ChartsView(int systemId, string state)
 		{
-			return View(new UserModel(systemId, state, null));
+			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var answer = adminService.GetEntranceDetails();
+			string message = null;
+			if (answer.Status != Success)
+			{
+				message = answer.Answer;
+			}
+			return View(new UserModel(systemId, state, message));
 		}
 
 		public ContentResult JSON(int systemId)
@@ -252,6 +259,11 @@ namespace MarketWeb.Controllers
 			List<DataPoint> dataPoints = new List<DataPoint>();
 			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
 			var answer = adminService.GetEntranceDetails();
+			if (answer.Status != Success)
+			{
+				return null;
+			}
+
 			for (int i = 0; i < answer.ReportList.Length; i++)
 			{
 				var dataParam = answer.ReportList[i].Split(new[] {"Number: ", " Date: "}, StringSplitOptions.RemoveEmptyEntries);
