@@ -18,6 +18,7 @@ namespace SystemViewTests.UseCaseUnitTest
         private string toRemoveUserNameNotSoleOwner = "Arik3";
         private string adminName = "Arik1";
         private string noUserName = "sdasdfsgdhgfdhfdfdgdfgdf";
+        private string badUserName = "Ar'ik1";
         private string adminPass = "123";
         [TestInitialize]
         public void MarketBuilder()
@@ -83,6 +84,15 @@ namespace SystemViewTests.UseCaseUnitTest
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)RemoveUserStatus.NoUserFound, adminServiceSession.RemoveUser(noUserName).Status);
+            Assert.IsTrue(MarketException.HasErrorRaised());
+        }
+
+        [TestMethod]
+        public void RemoveUserInputFailTest()
+        {
+            DoSignInToAdmin();
+            adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
+            Assert.AreEqual((int)RemoveUserStatus.BadInput, adminServiceSession.RemoveUser(badUserName).Status);
             Assert.IsTrue(MarketException.HasErrorRaised());
         }
 

@@ -146,6 +146,7 @@ namespace SadnaSrc.AdminView
 
         public void DeleteUser(string userName)
         {
+            dbConnection.CheckInput(userName);
             dbConnection.DeleteFromTable("Users", "Name = '" + userName +"'");
         }
 
