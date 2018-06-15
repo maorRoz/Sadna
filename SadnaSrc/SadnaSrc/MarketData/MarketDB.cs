@@ -347,7 +347,8 @@ namespace SadnaSrc.MarketData
                 "CategoryProductConnection",
                 "SimplePolicies",
                 "ComplexPolicies",
-                "CategoryDiscount"
+                "CategoryDiscount",
+				"SignInReports"
             };
             var dbConnection = _dbConnection;
             if (ToDisable)

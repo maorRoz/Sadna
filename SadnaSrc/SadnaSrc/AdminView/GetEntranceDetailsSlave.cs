@@ -37,13 +37,17 @@ namespace SadnaSrc.UserSpot
 					GetDataAsString(GetDetails()));
 
 			}
-			catch (UserException e)
+			catch (AdminException e)
 			{
 				Answer = new AdminAnswer((GetEntranceDetailsEnum)e.Status, e.GetErrorMessage());
 			}
 			catch (DataException e)
 			{
 				Answer = new AdminAnswer((GetEntranceDetailsEnum)e.Status, e.GetErrorMessage());
+			}
+			catch (MarketException e)
+			{
+				Answer = new AdminAnswer(GetEntranceDetailsEnum.NoAuthority, e.GetErrorMessage(), null);
 			}
 		}
 

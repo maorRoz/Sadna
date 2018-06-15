@@ -87,7 +87,7 @@ namespace SadnaSrc.Main
 	public enum GetEntranceDetailsEnum
 	{
 		Success,
-		DidntEnterSystem,
+		NoAuthority,
 		NoDB = 500
 	}
 }

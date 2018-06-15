@@ -259,20 +259,9 @@ namespace MarketWeb.Controllers
 				int num = Int32.Parse(number);
 				string date = dataParam[1];
 				DateTime time = DateTime.Parse(date);
-				//dataPoints.Add(new DataPoint(time.ToString("dd/MM/yyyy"), num));
 				dataPoints.Add(new DataPoint(time.ToString("dd/MM/yyyy"), num));
-				//dataPoints.Add(new DataPoint(time, num));
 			}
 
-			/*Random random = new Random();
-			double y = yStart;
-
-			for (int i = 0; i < length; i++)
-			{
-				y = y + random.Next(-1, 2);
-				dataPoints.Add(new DataPoint(xStart + i, y));
-			}*/
-			//ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints, _jsonSetting), "application/json");
 			return Content(JsonConvert.SerializeObject(dataPoints, _jsonSetting), "application/json");
 		}
 
