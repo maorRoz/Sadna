@@ -58,16 +58,8 @@ namespace SadnaSrc.UserSpot
 			List<Pair<int, DateTime>> numEntranceDate = new List<Pair<int, DateTime>>();
 			foreach (var date in uniqueDates)
 			{
-				int count = 0;
-				foreach (var userDate in userDateReport)
-				{
-					if (userDate.Second.Equals(date))
-					{
-						count++;
-					}
-
-				}
-				Pair<int, DateTime> p = new Pair<int, DateTime>(count, date);
+				int countAppearances = CountDateAppearances(userDateReport, date);
+				Pair<int, DateTime> p = new Pair<int, DateTime>(countAppearances, date);
 				numEntranceDate.Add(p);
 			}
 
@@ -77,12 +69,7 @@ namespace SadnaSrc.UserSpot
 		private DateTime[] getUniqueDates(Pair<int, DateTime>[] userDateReport)
 		{
 			List<DateTime> uniqueDates = new List<DateTime>();
-			if (userDateReport.Length != 0)
-			{
-				uniqueDates.Add(userDateReport[0].Second);
-			}
-
-			for (int i = 1; i < userDateReport.Length; i++)
+			for (int i = 0; i < userDateReport.Length; i++)
 			{
 				if (!uniqueDates.Contains(userDateReport[i].Second))
 				{
@@ -102,6 +89,21 @@ namespace SadnaSrc.UserSpot
 			}
 
 			return res;
+		}
+
+		private int CountDateAppearances(Pair<int, DateTime>[] userDateReport, DateTime date)
+		{
+			int count = 0;
+			foreach (var userDate in userDateReport)
+			{
+				if (userDate.Second.Equals(date))
+				{
+					count++;
+				}
+
+			}
+
+			return count;
 		}
 	}
 }

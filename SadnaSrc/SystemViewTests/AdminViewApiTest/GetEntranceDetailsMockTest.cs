@@ -60,5 +60,11 @@ namespace SystemViewTests.AdminViewApiTest
 			Assert.AreEqual("Number: 1 Date: 13/06/2018 00:00:00", slave.Answer.ReportList[1]);
 			
 		}
+
+		[TestCleanup]
+		public void UserTestCleanUp()
+		{
+			MarketYard.CleanSession();
+		}
 	}
 }
