@@ -18,7 +18,7 @@ namespace SadnaSrc.PolicyComponent
         {
             dbConnection = new ProxyMarketDB();
         }
-        //------------------
+
         public void SavePolicy(PurchasePolicy policy)
         {
             if (policy != null)
@@ -35,6 +35,7 @@ namespace SadnaSrc.PolicyComponent
             string subjectString = "NULL";
             if (!policy.Subject.IsNullOrEmpty())
                 subjectString = policy.Subject;
+            dbConnection.CheckInput(subjectString); dbConnection.CheckInput(PurchasePolicy.PrintEnum(policy.Type));
             dbConnection.DeleteFromTable("ComplexPolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + subjectString + "'");
             dbConnection.DeleteFromTable("SimplePolicies", "PolicyType = '" + PurchasePolicy.PrintEnum(policy.Type) + "' AND Subject = '" + subjectString + "'");
         }
@@ -48,7 +49,7 @@ namespace SadnaSrc.PolicyComponent
                 policy.IsRoot = true;
             return policy;
         }
-        //--------------------
+
 
         public List<PurchasePolicy> GetAllPolicies()
         {
@@ -85,27 +86,36 @@ namespace SadnaSrc.PolicyComponent
         private void WritePolicyToDB(Operator policy)
         {
             string fields = "SystemID,Operator,PolicyType,Subject,Cond1,Cond2,Root";
+            object[] policyVals = GetPolicyValues(policy);
+            foreach (object val in policyVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("ComplexPolicies", fields,
                 new[]
                 {
                     "@idParam", "@typeParam", "@policyParam", "@subjectParam", "@cond1Param", "@cond2Param",
                     "@rootParam"
                 },
-                GetPolicyValues(policy));
+                policyVals);
                 SavePolicy(policy._cond1);
                 SavePolicy(policy._cond2);
         }
         private void WritePolicyToDB(Condition policy)
         {
             string fields = "SystemID,Condition,PolicyType,Subject,Value,Root";
+            object[] policyVals = GetPolicyValues(policy);
+            foreach (object val in policyVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("SimplePolicies", fields,
                 new []{"@idParam","@conditionParam","@typeParam","@subjectParam","@valueParam","@rootParam"},
-                GetPolicyValues(policy));
+                policyVals);
         }
 
         
         private PurchasePolicy FindComplexPolicy(int policyID, PolicyType type, string subject, bool isRoot)
         {
+            dbConnection.CheckInput(subject); dbConnection.CheckInput(PurchasePolicy.PrintEnum(type));
             string cond = "";
             if (policyID != -1)
                 cond = "SystemID = '" + policyID + "' AND ";
@@ -146,6 +156,7 @@ namespace SadnaSrc.PolicyComponent
 
         private PurchasePolicy FindSimplePolicy(int policyID, PolicyType type, string subject, bool isRoot)
         {
+            dbConnection.CheckInput(subject); dbConnection.CheckInput(PurchasePolicy.PrintEnum(type));
             string cond = "";
             if (policyID != -1)
                 cond = "SystemID = '" + policyID + "' AND ";
