@@ -184,46 +184,30 @@ namespace MarketWeb.Controllers
         public IActionResult CreatePolicy(int systemId, string state, string type, string subject, string op, string arg1, string optArg, string usernameText, string addressText, string quantityOp,string quantityText, string priceOp, string priceText, string subject1, string type1)
 	    {
 		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
-
 		    if (usernameText != null)
 		    {
 			    var answer = adminService.CreatePolicy(type, subject, "Username =", usernameText, optArg);
-			    if (answer.Status != Success)
-			    {
-				   
-					return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer});
-
-			    }
-			
+			    if (answer.Status != Success)				   
+					return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer});			
 		    }
-
 		    else if (addressText != null)
 		    {
 				var answer = adminService.CreatePolicy(type, subject, "Address =", addressText, optArg);
 			    if (answer.Status != Success)
-			    {
 				    return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer });
-			    }
 			}
-
 		    else if (quantityText != null)
 		    {
 			    var answer = adminService.CreatePolicy(type, subject, "Quantity "+quantityOp, quantityText, optArg);
-			    if (answer.Status != Success)
-			    {
-				    return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer });
-			    }
-			}
-
+		        if (answer.Status != Success)
+		            return RedirectToAction("AddPurchasePolicy", new {systemId, state, message = answer.Answer});
+		    }
 		    else if (priceText != null)
 		    {
 			    var answer = adminService.CreatePolicy(type, subject, "Price " + priceOp, priceText, optArg);
 			    if (answer.Status != Success)
-			    {
 				    return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer });
-			    }
 			}
-
 		    else
 		    {
                 if(arg1 == null)
@@ -235,24 +219,15 @@ namespace MarketWeb.Controllers
 				    id2 = optArg.Split('|');
 				    var answer = adminService.CreatePolicy(type1, subject1, op, id1[0], id2[0]);
 				    if (answer.Status != Success)
-				    {
 					    return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer });
-				    }
 				}
-
 				else
 				{
 					var answer = adminService.CreatePolicy(type1, subject1, op, id1[0], null);
 					if (answer.Status != Success)
-					{
 						return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer });
-
-					}
 				}
-
-
 			}
-
 			return RedirectToAction("AddPurchasePolicy", new {systemId, state});
 		}
 
@@ -308,6 +283,7 @@ namespace MarketWeb.Controllers
 		}
 
 		JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
+
 
 	}
 }

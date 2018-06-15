@@ -11,16 +11,20 @@ namespace MarketWeb.Models
     {
 	    public string[] Operators;
 	    public MarketPurchasePolicyItemModel[] Conditions;
-
+        public string toBeSavedPolicy;
 
 	    public MarketPurchasePolicyModel(int systemId, string state, string message, string[] operators, string[] conditionStrings) : base(systemId, state, message)
 	    {
 		    Operators = operators;
 		    Conditions = new MarketPurchasePolicyItemModel[conditionStrings.Length];
-	        for (int i = 0; i < conditionStrings.Length; i++) 	        
-                Conditions[i] = new MarketPurchasePolicyItemModel(conditionStrings[i]);
+	        for (int i = 0; i < conditionStrings.Length; i++)
+	        {
+	            Conditions[i] = new MarketPurchasePolicyItemModel(conditionStrings[i]);
+	            if (i == conditionStrings.Length - 1)
+	                toBeSavedPolicy = Conditions[i].data;
+	        }
 
-	    }
+        }
 
         public class MarketPurchasePolicyItemModel
         {
