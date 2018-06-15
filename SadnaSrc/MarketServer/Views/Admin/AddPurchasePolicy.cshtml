@@ -237,6 +237,9 @@
 					</table>
 					
 				}
+		<label>The policy that will be saved : </label>
+		<br />
+		<label>@Model.toBeSavedPolicy</label>
 		<br />
 		@using (Html.BeginForm("SavePolicy", "Admin", new {Model.SystemId, Model.State}))
 		{
