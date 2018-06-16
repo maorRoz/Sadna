@@ -29,7 +29,7 @@ namespace SadnaSrc.StoreCenter
 				_shopper.ValidateCanBrowseMarket();
 				MarketLog.Log("StoreCenter", "User enetred the system!");
 				validatePrices(minPrice, maxPrice);
-				Product[] products = null;
+			    Product[] products;
 				if (value.IsNullOrEmpty())
 				{
 					products = _storeLogic.GetAllProducts();
