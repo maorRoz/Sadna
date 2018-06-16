@@ -34,7 +34,7 @@ namespace SadnaSrc.StoreCenter
                 CheckifProductNotInCategory(P, category.SystemId);
                 MarketLog.Log("StoreCenter", "Product not alrady exists in category");
                 DataLayerInstance.AddProductToCategory(category.SystemId, P.SystemId);
-                Answer = new StoreAnswer(StoreEnum.Success, "product" + productName + " add successfully to category" + categoryName);
+                Answer = new StoreAnswer(StoreEnum.Success, "product " + productName + " add successfully to category " + categoryName);
              }
             catch (StoreException e)
              {
