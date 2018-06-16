@@ -281,7 +281,7 @@ namespace UserSpotTests.DbUserSpotIntegration
         {
             try
             {
-                DoSignUpSignIn("MaorCart14", "no-where", "123", "12345678");
+                DoSignUpSignIn("MaorCart15", "no-where", "123", "12345678");
                 userServiceLoggedSession.AddToCart("D'EX Potion", null, "X", 5, 7.0);
                 Assert.Fail();
             }
@@ -340,7 +340,6 @@ namespace UserSpotTests.DbUserSpotIntegration
         private void DoSignUpSignIn(string name, string address, string password,string creditCard)
         {
             DoSignUp(name, address, password, creditCard);
-            Assert.IsFalse(MarketException.HasErrorRaised());
             DoSignIn(name, password);
         }
         private void AddItem1(UserService userService)
