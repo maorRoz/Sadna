@@ -41,10 +41,10 @@ namespace MarketWeb.Controllers
 			var answer = userService.GetStoreManagerPolicies(store);
 		    if (answer.Status != Success)
 		    {
-		        return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+                return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
             }
-			string[] options = {"ManageProducts", "PromoteStoreAdmin", "DeclareDiscountPolicy",
-			    "ViewPurchaseHistory", "ViewPromotionHistory", "StorePurchasePolicyPage"};
+			string[] options = {"Manage Products", "Promote Store Admins", "Manage Store Discounts",
+			    "View Purchase History", "View Promotion History", "Manage Store Purchase-Policy"};
 			if (!answer.ReportList.Contains("StoreOwner"))
 			{
 				options = answer.ReportList;
@@ -79,12 +79,26 @@ namespace MarketWeb.Controllers
 			string[] userPolicies = answer.ReportList;
 			if (userPolicies.Contains(option) || userPolicies.Contains("StoreOwner"))
 			{
-				return RedirectToAction(option, new {systemId, state, store});
+				return RedirectToAction(SetPermissionNameToActionName(option), new {systemId, state, store});
 			}
 
 			return RedirectToAction("ManageStoreOptions",
 				new {systemId, state, message = "The user doesn't have the permission to operate this action!", store});
 		}
+
+	    private string SetPermissionNameToActionName(string optionName)
+	    {
+	        switch (optionName)
+	        {
+                case "Manage Products": return "ManageProducts";
+                case "Promote Store Admins": return "PromoteStoreAdmin";
+                case "Manage Store Discounts": return "DeclareDiscountPolicy";
+                case "View Purchase History": return "ViewPurchaseHistory";
+                case "View Promotion History": return "ViewPromotionHistory";
+                default: return "StorePurchasePolicyPage";
+
+            }
+	    }
 
 		public IActionResult ManageProducts(int systemId, string state, string message, string store)
 		{
@@ -277,38 +291,53 @@ namespace MarketWeb.Controllers
 
 		public IActionResult PromoteStoreAdmin(int systemId, string state, string message, string store, bool valid)
 		{
-		    List<CheckBoxModel> lst = new List<CheckBoxModel>
+		    var options = new List<CheckBoxModel>
 		    {
-		        new CheckBoxModel {Name = "StoreOwner"},
-		        new CheckBoxModel {Name = "ManageProducts"},
-		        new CheckBoxModel {Name = "PromoteStoreAdmin"},
-		        new CheckBoxModel {Name = "DeclareDiscountPolicy"},
-		        new CheckBoxModel {Name = "ViewPurchaseHistory"}
+		        new CheckBoxModel {Name = "Store Owner"},
+		        new CheckBoxModel {Name = "Can Manage Products"},
+		        new CheckBoxModel {Name = "Can Promote Store Admin"},
+		        new CheckBoxModel {Name = "Can Manage Discounts"},
+		        new CheckBoxModel {Name = "Can View Purchase History"}
 		    };
 			ViewBag.valid = valid;
-		    CheckBoxListModel optionList = new CheckBoxListModel(systemId, state, message, store) {Items = lst};
-		    return View(optionList);
+		    CheckBoxListModel optionsModel = new CheckBoxListModel(systemId, state, message, store) {Items = options };
+		    return View(optionsModel);
 		}
 
-		[HttpPost]
 		public IActionResult HandleOptionsSelected(int systemId, string state, string store, string[] permissions, string usernameEntry)
 		{
-			StringBuilder actions = new StringBuilder();
+		    var actions = "";
 			foreach (var permission in permissions)
 			{
 				if (permission != null)
 				{
-					actions.Append(permission + ",");
+				    actions += SetPermissionNameToPermissionValue(permission) + ",";
 				}
 			}
 			return RedirectToAction("PromoteStoreAdminCall", new { systemId, state, store , usernameEntry, actions});
 		}
+
+	    private string SetPermissionNameToPermissionValue(string permission)
+	    {
+	        switch (permission)
+	        {
+                case "Store Owner": return "StoreOwner";
+                case "Can Manage Products": return "ManageProducts";
+                case "Can Promote Store Admin": return "PromoteStoreAdmin";
+                case "Can Manage Discounts": return "DeclareDiscountPolicy";
+                default: return "ViewPurchaseHistory";
+            }
+	    }
 
 		public IActionResult PromoteStoreAdminCall(int systemId, string state,string store, string usernameEntry,
 			string actions)
 		{
 			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    if (actions == null)
+		    {
+		        actions = "";
+		    }
 			var answer = storeManagementService.PromoteToStoreManager(usernameEntry, actions);
 			if (answer.Status == Success)
 			{

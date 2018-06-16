@@ -32,7 +32,7 @@ namespace SadnaSrc.AdminView
 
                 Category category = new Category(categoryName);
                 _adminDlInstacne.AddCategory(category);
-                Answer = new AdminAnswer(EditCategoryStatus.Success, "category" + categoryName + " added successfully");
+                Answer = new AdminAnswer(EditCategoryStatus.Success, "category " + categoryName + " added successfully");
             }
             catch (AdminException e)
             {
