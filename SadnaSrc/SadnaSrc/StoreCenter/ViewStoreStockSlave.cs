@@ -11,18 +11,21 @@ namespace SadnaSrc.StoreCenter
         public MarketAnswer answer;
         private IUserShopper _shopper;
         IStoreDL storeLogic;
+	    private string _storeName;
 
         public ViewStoreStockSlave(IUserShopper shopper, IStoreDL storeDL)
         {
             _shopper = shopper;
             storeLogic = storeDL;
+			
         }
 
         public void ViewStoreStock(string storename)
         {
             try
             {
-            MarketLog.Log("StoreCenter", "checking store stack");
+	         _storeName = storename;
+			MarketLog.Log("StoreCenter", "checking store stack");
             _shopper.ValidateCanBrowseMarket();
             MarketLog.Log("StoreCenter", "check if store exists");
             CheckIfStoreExists(storename);
@@ -107,9 +110,10 @@ namespace SadnaSrc.StoreCenter
         private string GetProductStockInformation(string productID, bool showAll)
         {
             StockListItem stockListItem = storeLogic.GetStockListItembyProductID(productID);
-            if (stockListItem == null)
-            {
-                MarketLog.Log("storeCenter", "product not exists");
+	        
+			if (stockListItem == null)
+            {  
+				MarketLog.Log("storeCenter", "product not exists");
                 throw new StoreException(StoreEnum.ProductNotFound, "product " + productID + " does not exist in Stock");
             }
             if (stockListItem.PurchaseWay == PurchaseEnum.Lottery && !showAll)
@@ -122,18 +126,19 @@ namespace SadnaSrc.StoreCenter
                     ((managmentTicket.TotalMoneyPayed == managmentTicket.ProductNormalPrice)&& sli.Quantity==0))
                     return "";
             }
-            string discount = " Discount: {";
+	        Discount  totalDiscount = stockListItem.CalcTotalDiscount(_storeName);
+			string discountString = " Discount: {";
             string product = stockListItem.Product.ToString();
-            if (stockListItem.Discount != null)
-                discount += stockListItem.Discount;
+            if (totalDiscount != null)
+	            discountString += totalDiscount;
             else
             {
-                discount += "null";
+	            discountString += "null";
             }
-            discount += "}";
+	        discountString += "}";
             string purchaseWay = " Purchase Way: " + EnumStringConverter.PrintEnum(stockListItem.PurchaseWay);
             string quanitity = " Quantity: "+stockListItem.Quantity ;
-            string result = product + discount + purchaseWay + quanitity;
+            string result = product + discountString + purchaseWay + quanitity;
             return result;
         }
     }

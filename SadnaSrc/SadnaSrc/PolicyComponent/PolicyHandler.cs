@@ -196,7 +196,7 @@ namespace SadnaSrc.PolicyComponent
             List<string> policyStrings = new List<string>();
             for (int i = 0; i < policiesArr.Length; i++)
             {
-                if ((policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem) && policiesArr[i].Subject == store)
+                if ((policiesArr[i].Type == PolicyType.Store || policiesArr[i].Type == PolicyType.StockItem) && policiesArr[i].Subject.Contains(store))
                     policyStrings.Add(policiesArr[i].ToString());
             }
             return policyStrings.ToArray();

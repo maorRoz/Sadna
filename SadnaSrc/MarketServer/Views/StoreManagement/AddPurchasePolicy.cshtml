@@ -225,7 +225,10 @@
 				</table>
 
 			}
-			<br />
+		    <label>The policy that will be saved : </label>
+		    <br />
+		    <label>@Model.toBeSavedPolicy</label>
+		    <br />
 			@using (Html.BeginForm("SavePolicy", "StoreManagement", new { Model.SystemId, Model.State, store = Model.Name }))
 			{
 				<input type="submit" class="btn btn-primary" value="Save">
