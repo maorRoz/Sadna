@@ -71,7 +71,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 
-
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {

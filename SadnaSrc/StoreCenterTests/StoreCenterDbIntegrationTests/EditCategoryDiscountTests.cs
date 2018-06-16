@@ -119,8 +119,18 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 Assert.AreEqual((int)DiscountStatus.Success, ans.Status);
         }
 
+            [TestMethod]
+            public void AddCategoryDiscountBadInputFail()
+            {
+                userService.EnterSystem();
+                userService.SignIn("Arik1", "123");
+                StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "T");
+                MarketAnswer ans = liorSession.EditCategoryDiscount("MTG_Cards", "Disc'ountAmount", "20");
+                Assert.AreEqual((int)DiscountStatus.BadInput, ans.Status);
+            }
 
-            [TestCleanup]
+
+        [TestCleanup]
             public void CleanUpOpenStoreTest()
             {
                 MarketDB.Instance.CleanByForce();

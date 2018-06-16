@@ -137,8 +137,18 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 Assert.AreEqual((int)StoreEnum.Success, ans.Status);
             }
 
+        [TestMethod]
+        public void AddBadInputFail()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "T");
+            MarketAnswer ans = liorSession.AddCategoryDiscount("Wanderland'Items", DateTime.Parse("01/01/2019"),
+                DateTime.Parse("31/01/2019"), 20);
+            Assert.AreEqual((int)StoreEnum.BadInput, ans.Status);
+        }
 
-            [TestCleanup]
+        [TestCleanup]
             public void CleanUpOpenStoreTest()
             {
                 MarketDB.Instance.CleanByForce();

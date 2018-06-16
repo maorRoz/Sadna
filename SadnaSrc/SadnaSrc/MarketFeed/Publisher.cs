@@ -45,8 +45,8 @@ namespace SadnaSrc.MarketFeed
         {
             var winner = FeedDl.GetLotteryWinner(lottery);
             var losers = FeedDl.GetLotteryLosers(lottery);
-            var winnerMessage = "You've won the lottery on " + product + " in " + store + "!";
-            var loserMessage = "You've lost the lottery on " + product + " in " + store + "...";
+            var winnerMessage = "You have won the lottery on " + product + " in " + store + "!";
+            var loserMessage = "You have lost the lottery on " + product + " in " + store + "...";
 
             Publish(winner, winnerMessage);
 
