@@ -105,5 +105,12 @@ namespace SadnaSrc.AdminView
 
 	    }
 
+        public MarketAnswer ViewAllCategories()
+        {
+            ViewCategoriesSlave slave = new ViewCategoriesSlave(_admin,adminDB);
+            slave.ViewPolicies();
+            return slave.Answer;
+        }
+
 	}
 }

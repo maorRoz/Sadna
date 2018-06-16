@@ -90,6 +90,7 @@
     <Compile Include="AdminView\RemoveUserSlave.cs" />
     <Compile Include="AdminView\AdminDL.cs" />
     <Compile Include="AdminView\AdminException.cs" />
+    <Compile Include="AdminView\ViewCategoriesSlave.cs" />
     <Compile Include="AdminView\ViewErrorSlave.cs" />
     <Compile Include="AdminView\ViewLogSlave.cs" />
     <Compile Include="AdminView\ViewPoliciesSlave.cs" />

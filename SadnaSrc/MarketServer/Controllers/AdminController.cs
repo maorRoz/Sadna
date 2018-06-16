@@ -99,7 +99,9 @@ namespace MarketWeb.Controllers
 
 		public IActionResult HandlingCategoryView(int systemId, string state)
 		{
-			return View(new UserModel(systemId, state, null));
+		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+		    MarketAnswer answer= adminService.ViewAllCategories();
+            return View(new CategoryListModel(systemId, state, null, answer.ReportList));
 		}
 
 		public IActionResult AddingCategoryPage(int systemId, string state, string message, bool valid)
