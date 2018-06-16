@@ -35,6 +35,15 @@ namespace UserSpotTests.UseCaseUnitTest
         }
 
         [TestMethod]
+        public void BadLoginTest()
+        {
+            userServiceSignInSession.EnterSystem();
+            Assert.AreEqual((int)SignInStatus.BadInput, userServiceSignInSession.SignIn("MaorLo'gin1", "123").Status);
+            Assert.IsTrue(MarketException.HasErrorRaised());
+
+        }
+
+        [TestMethod]
         public void GoodLoginDataTest()
         {
             DoSignUpSignIn("MaorLogin2", "Here 4", "123", "12345678");
