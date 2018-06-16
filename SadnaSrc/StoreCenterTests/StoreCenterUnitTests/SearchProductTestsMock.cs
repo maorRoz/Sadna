@@ -223,7 +223,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
 	    public void NullDataGiven()
 	    {
 	        _slave.SearchProduct("", 0, 0, "None");
-	        Assert.AreEqual((int)SearchProductStatus.NullValue, _slave.Answer.Status);
+	        Assert.AreEqual((int)SearchProductStatus.Success, _slave.Answer.Status);
 	    }
 
         [TestCleanup]

@@ -11,6 +11,7 @@ namespace MarketWeb.Controllers
     public class HomeController : Controller
     {
         private const int Success = 0;
+        
         public IActionResult MainLobby(int systemId, string state, string message)
         {
             return View(new UserModel(systemId, state, message));
@@ -29,7 +30,7 @@ namespace MarketWeb.Controllers
         public IActionResult SubmitSignUp(int systemId,string usernameEntry,string addressEntry,
             string passwordEntry,string creditCardEntry)
         {
-            var userService = MarketServer.GetUserSession(systemId);
+            var userService = EnterController.GetUserSession(systemId);
             var answer = userService.SignUp(usernameEntry, addressEntry, passwordEntry, creditCardEntry);
             if (answer.Status == Success)
             {
@@ -41,14 +42,14 @@ namespace MarketWeb.Controllers
 
         public IActionResult SubmitSignIn(int systemId, string usernameEntry, string passwordEntry)
         {
-            var userService = MarketServer.GetUserSession(systemId);
+            var userService = EnterController.GetUserSession(systemId);
             var answer = userService.SignIn(usernameEntry, passwordEntry);
             if (answer.Status != Success)
                 return RedirectToAction("SignIn", new {systemId, state = "Guest", message = answer.Answer});
 
             var oldSystemId = systemId;
             systemId = Convert.ToInt32(answer.ReportList[0]);
-            MarketServer.ReplaceSystemIds(systemId, oldSystemId);
+            EnterController.ReplaceSystemIds(systemId, oldSystemId);
 
             var state = answer.ReportList[1];
             return RedirectToAction("MainLobby", new { systemId, state, message = answer.Answer });

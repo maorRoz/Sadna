@@ -18,7 +18,7 @@ namespace MarketWeb.Controllers
 		public IActionResult StoreControl(int systemId, string state, string message, bool valid)
 		{
 			ViewBag.valid = valid;
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 		    var storesData = new string[0];
             var answer = userService.GetControlledStoreNames();
 		    if (answer.Status == Success)
@@ -37,14 +37,14 @@ namespace MarketWeb.Controllers
 
 		public IActionResult ManageStoreOptions(int systemId, string state, string message, string store)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var answer = userService.GetStoreManagerPolicies(store);
 		    if (answer.Status != Success)
 		    {
-		        return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+                return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
             }
-			string[] options = {"ManageProducts", "PromoteStoreAdmin", "DeclareDiscountPolicy",
-			    "ViewPurchaseHistory", "ViewPromotionHistory", "StorePurchasePolicyPage"};
+			string[] options = {"Manage Products", "Promote Store Admins", "Manage Store Discounts",
+			    "View Purchase History", "View Promotion History", "Manage Store Purchase-Policy"};
 			if (!answer.ReportList.Contains("StoreOwner"))
 			{
 				options = answer.ReportList;
@@ -61,7 +61,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult OpenStore(int systemId, string state, string storeName, string storeAddress)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			var answer = storeShoppingService.OpenStore(storeName, storeAddress);
 			if (answer.Status == Success)
@@ -74,21 +74,35 @@ namespace MarketWeb.Controllers
 
 		public IActionResult ManageStore(int systemId, string state, string store, string option)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var answer = userService.GetStoreManagerPolicies(store);
 			string[] userPolicies = answer.ReportList;
 			if (userPolicies.Contains(option) || userPolicies.Contains("StoreOwner"))
 			{
-				return RedirectToAction(option, new {systemId, state, store});
+				return RedirectToAction(SetPermissionNameToActionName(option), new {systemId, state, store});
 			}
 
 			return RedirectToAction("ManageStoreOptions",
 				new {systemId, state, message = "The user doesn't have the permission to operate this action!", store});
 		}
 
+	    private string SetPermissionNameToActionName(string optionName)
+	    {
+	        switch (optionName)
+	        {
+                case "Manage Products": return "ManageProducts";
+                case "Promote Store Admins": return "PromoteStoreAdmin";
+                case "Manage Store Discounts": return "DeclareDiscountPolicy";
+                case "View Purchase History": return "ViewPurchaseHistory";
+                case "View Promotion History": return "ViewPromotionHistory";
+                default: return "StorePurchasePolicyPage";
+
+            }
+	    }
+
 		public IActionResult ManageProducts(int systemId, string state, string message, string store)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			var answer = storeShoppingService.ViewStoreStockAll(store);
 		    if (answer.Status == Success)
@@ -101,7 +115,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult RemoveProduct(int systemId, string state, string store, string product)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.RemoveProduct(product);
 		    if (answer.Status == Success)
@@ -120,7 +134,7 @@ namespace MarketWeb.Controllers
 		public IActionResult EditProduct(int systemId, string state, string store, string product, string whatToEdit,
 			string newValue)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.EditProduct(product, whatToEdit, newValue);
 			if (answer.Status == 0)
@@ -134,7 +148,7 @@ namespace MarketWeb.Controllers
 		public IActionResult AddQuanitityToProduct(int systemId, string state, string store, string product)
 
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.AddQuanitityToProduct(product, 1);
 		    if (answer.Status == Success)
@@ -153,7 +167,7 @@ namespace MarketWeb.Controllers
 		public IActionResult AddNewProduct(int systemId, string state, string store, string product, double price,
 			string description, int quantity)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.AddNewProduct(product, price, description, quantity);
 			if (answer.Status == 0)
@@ -172,7 +186,7 @@ namespace MarketWeb.Controllers
 		public IActionResult AddNewLottery(int systemId, string state, string store, string product, double price,
 			string description, DateTime startDate, DateTime endDate)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.AddNewLottery(product, price, description, startDate,endDate);
 			if (answer.Status == 0)
@@ -185,7 +199,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult ViewPurchaseHistory(int systemId, string state, string store)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.ViewStoreHistory();
 		    if (answer.Status == Success)
@@ -198,7 +212,7 @@ namespace MarketWeb.Controllers
 
 	    public IActionResult ViewPromotionHistory(int systemId, string state, string store)
 	    {
-	        var userService = MarketServer.GetUserSession(systemId);
+	        var userService = EnterController.GetUserSession(systemId);
 	        var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 	        var answer = storeManagementService.ViewPromotionHistory();
 	        if (answer.Status == Success)
@@ -212,7 +226,7 @@ namespace MarketWeb.Controllers
         public IActionResult DeclareDiscountPolicy(int systemId, string state, string message, string store, bool valid)
 		{
 			ViewBag.valid = valid;
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			var answer = storeShoppingService.ViewStoreStockAll(store);
 		    if (answer.Status == Success)
@@ -232,7 +246,7 @@ namespace MarketWeb.Controllers
 			DateTime startDate, DateTime endDate, int discountAmount, string discountType, string presenteges)
 		{
 			bool precent = presenteges == "Yes";
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.AddDiscountToProduct(productName, startDate, endDate, discountAmount,
 				discountType, precent);
@@ -252,7 +266,7 @@ namespace MarketWeb.Controllers
 		public IActionResult EditDiscount(int systemId, string state, string store, string product,
 			string whatToEdit, string newValue)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.EditDiscount(product, whatToEdit, newValue);
 			if (answer.Status == Success)
@@ -265,7 +279,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult RemoveDiscount(int systemId, string state, string store, string product)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.RemoveDiscountFromProduct(product);
 			if (answer.Status != Success)
@@ -277,38 +291,53 @@ namespace MarketWeb.Controllers
 
 		public IActionResult PromoteStoreAdmin(int systemId, string state, string message, string store, bool valid)
 		{
-		    List<CheckBoxModel> lst = new List<CheckBoxModel>
+		    var options = new List<CheckBoxModel>
 		    {
-		        new CheckBoxModel {Name = "StoreOwner"},
-		        new CheckBoxModel {Name = "ManageProducts"},
-		        new CheckBoxModel {Name = "PromoteStoreAdmin"},
-		        new CheckBoxModel {Name = "DeclareDiscountPolicy"},
-		        new CheckBoxModel {Name = "ViewPurchaseHistory"}
+		        new CheckBoxModel {Name = "Store Owner"},
+		        new CheckBoxModel {Name = "Can Manage Products"},
+		        new CheckBoxModel {Name = "Can Promote Store Admin"},
+		        new CheckBoxModel {Name = "Can Manage Discounts"},
+		        new CheckBoxModel {Name = "Can View Purchase History"}
 		    };
 			ViewBag.valid = valid;
-		    CheckBoxListModel optionList = new CheckBoxListModel(systemId, state, message, store) {Items = lst};
-		    return View(optionList);
+		    CheckBoxListModel optionsModel = new CheckBoxListModel(systemId, state, message, store) {Items = options };
+		    return View(optionsModel);
 		}
 
-		[HttpPost]
 		public IActionResult HandleOptionsSelected(int systemId, string state, string store, string[] permissions, string usernameEntry)
 		{
-			StringBuilder actions = new StringBuilder();
+		    var actions = "";
 			foreach (var permission in permissions)
 			{
 				if (permission != null)
 				{
-					actions.Append(permission + ",");
+				    actions += SetPermissionNameToPermissionValue(permission) + ",";
 				}
 			}
 			return RedirectToAction("PromoteStoreAdminCall", new { systemId, state, store , usernameEntry, actions});
 		}
 
+	    private string SetPermissionNameToPermissionValue(string permission)
+	    {
+	        switch (permission)
+	        {
+                case "Store Owner": return "StoreOwner";
+                case "Can Manage Products": return "ManageProducts";
+                case "Can Promote Store Admin": return "PromoteStoreAdmin";
+                case "Can Manage Discounts": return "DeclareDiscountPolicy";
+                default: return "ViewPurchaseHistory";
+            }
+	    }
+
 		public IActionResult PromoteStoreAdminCall(int systemId, string state,string store, string usernameEntry,
 			string actions)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    if (actions == null)
+		    {
+		        actions = "";
+		    }
 			var answer = storeManagementService.PromoteToStoreManager(usernameEntry, actions);
 			if (answer.Status == Success)
 			{
@@ -325,12 +354,15 @@ namespace MarketWeb.Controllers
 		public IActionResult AddingProductCategoryPage(int systemId, string state,string message, string store, string product, bool valid)
 		{
 			ViewBag.valid = valid;
-			return View(new ProductInStoreModel(systemId, state, message,store,product));
+			var userService = EnterController.GetUserSession(systemId);
+			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+			return View(new ProductInStoreCategoriesModel(systemId, state, message,store,product, categories));
 		}
 
 		public IActionResult AddCategoryProduct(int systemId, string state,string store, string product, string category)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.AddProductToCategory(category, product);
 			if (answer.Status == Success)
@@ -343,12 +375,15 @@ namespace MarketWeb.Controllers
 		public IActionResult RemovingProductCategoryPage(int systemId, string state, string message,string store, string product, bool valid)
 		{
 			ViewBag.valid = valid;
-			return View(new ProductInStoreModel(systemId, state, message, store, product));
+			var userService = EnterController.GetUserSession(systemId);
+			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
+			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+			return View(new ProductInStoreCategoriesModel(systemId, state, message, store, product, categories));
 		}
 
 		public IActionResult RemoveCategoryProduct(int systemId, string state, string store, string product, string category)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.RemoveProductFromCategory(category,product);
 			if (answer.Status == Success)
@@ -361,7 +396,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult StorePurchasePolicyPage(int systemId, string state,string message,string store, bool valid)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var conditions = new string[0];
 			var operators = new[] { "AND", "OR", "NOT" };
@@ -381,7 +416,7 @@ namespace MarketWeb.Controllers
 
 	    public IActionResult AddPurchasePolicy(int systemId, string state, string message, string store, bool valid)
 	    {
-	        var userService = MarketServer.GetUserSession(systemId);
+	        var userService = EnterController.GetUserSession(systemId);
 	        var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 	        var conditions = new string[0];
 	        var operators = new[] { "AND", "OR", "NOT" };
@@ -401,7 +436,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult CreatePolicy(int systemId, string state,string store, string type, string subject, string op, string arg1, string optArg, string usernameText, string addressText, string quantityOp, string quantityText, string priceOp, string priceText, string subject1, string type1)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			if (usernameText != null)
 			{
@@ -453,7 +488,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult SavePolicy(int systemId, string state, string store)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.SavePolicy();
 			return RedirectToAction("StorePurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success, store});
@@ -461,7 +496,7 @@ namespace MarketWeb.Controllers
 
 	    public IActionResult RemovePolicy(int systemId, string state, string store, string type, string subject, string optProd)
 	    {
-	        var userService = MarketServer.GetUserSession(systemId);
+	        var userService = EnterController.GetUserSession(systemId);
 	        var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 	        var answer = storeManagementService.RemovePolicy(type, subject, optProd);
 	        return RedirectToAction("StorePurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success, store});
@@ -476,7 +511,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult AddCategoryDiscountPage(int systemId, string state, string message, string store)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
 			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
@@ -485,7 +520,7 @@ namespace MarketWeb.Controllers
 		public IActionResult AddCategoryDiscount(int systemId, string state, string store, string categoryName,
 			DateTime startDate, DateTime endDate, int discountAmount)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.AddCategoryDiscount(categoryName, startDate, endDate, discountAmount);
 			if (answer.Status == Success)
@@ -498,7 +533,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult EditCategoryDiscountPage(int systemId, string state, string message, string store)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
 			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
@@ -507,7 +542,7 @@ namespace MarketWeb.Controllers
 		public IActionResult EditCategoryDiscount(int systemId, string state, string store, string categoryName,
 			string whatToEdit, string newValue)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.EditCategoryDiscount(categoryName, whatToEdit, newValue);
 			if (answer.Status == Success)
@@ -521,7 +556,7 @@ namespace MarketWeb.Controllers
 		public IActionResult RemoveCategoryDiscountPage(int systemId, string state, string message, string store, bool valid)
 		{
 			ViewBag.valid = valid;
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
 			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
@@ -529,7 +564,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult RemoveCategoryDiscount(int systemId, string state, string store, string categoryName)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.RemoveCategoryDiscount(categoryName);
 			if (answer.Status != Success)

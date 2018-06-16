@@ -23,6 +23,16 @@ $(document).ready(function() {
         return queryValue;
     }
 
+    function identifyClient(userId) {
+        const systemId = extractQuery('systemId', 'SystemId');
+        if (systemId === undefined || (systemId === '0' && userId !== 0)) {
+            location.href = window.location.href.substring(0, window.location.href.indexOf('?')) +
+                '?systemId=' +
+                userId +
+                '&state=Guest';
+        }
+    }
+
     socket.connectionMethods.onConnected = () => {
         console.log('client has been connected!');
         socketId = socket.connectionId;
@@ -30,7 +40,10 @@ $(document).ready(function() {
         var systemId = extractQuery('systemId','SystemId');
         console.log('your systemId is : ' + systemId);
         if (systemId === undefined || systemId === 0 || systemId === '0') {
-            socket.invoke('EnterSystem', socketId);
+            $.get("http://"+window.location.host + "/api/enter",
+                function(data) {
+                    identifyClient(data);
+                });
         } else {
             var state = extractQuery('state', 'State');
             console.log('your state is : ' + state);
@@ -41,13 +54,6 @@ $(document).ready(function() {
     }
 
     socket.connectionMethods.onDisconnected = () => {
-    }
-
-    socket.clientMethods['IdentifyClient'] = (userId) => {
-        var systemId = extractQuery('systemId', 'SystemId');
-        if (systemId === undefined || (systemId === '0' && userId !== 0)) {
-            location.href = window.location.href.substring(0,window.location.href.indexOf('?')) + '?systemId=' + userId + '&state=Guest';
-        }
     }
 
     socket.clientMethods['NotifyFeed'] = (feedMessage) => {

@@ -96,7 +96,7 @@ namespace DbRobustnessTests
         {
             LoginUser();
             answer = userService.GetStoreManagerPolicies("The Red Rock");
-            Assert.AreEqual((int)ViewStoresStatus.Success, answer.Status);
+            Assert.AreEqual((int)ViewStoresStatus.NoDB, answer.Status);
         }
 
         [TestMethod]

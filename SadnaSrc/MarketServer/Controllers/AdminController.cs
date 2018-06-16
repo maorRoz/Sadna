@@ -20,7 +20,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult RemoveUserView(int systemId, string state, string message, bool valid)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var usersData = new string[0];
 			var answer = userService.ViewUsers();
 			if (answer.Status == Success)
@@ -39,7 +39,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult ToRemoveUser(int systemId, string state, string toDeleteName)
 		{
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var answer = adminService.RemoveUser(toDeleteName);
 			return RedirectToAction("RemoveUserView", new
 			{
@@ -58,7 +58,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult ViewLogs(int systemId, string state)
 		{
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var answer = adminService.ViewLog();
 			if (answer.Status == Success)
 			{
@@ -71,7 +71,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult ViewErrors(int systemId, string state)
 		{
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var answer = adminService.ViewError();
 			if (answer.Status == Success)
 			{
@@ -84,7 +84,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult AdminViewPurchaseHistory(int systemId, string state, string viewSubject, string viewKind)
 		{
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var answer = viewKind == "Store"
 				? adminService.ViewPurchaseHistoryByStore(viewSubject)
 				: adminService.ViewPurchaseHistoryByUser(viewSubject);
@@ -108,7 +108,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult AddCategory(int systemId, string state, string category)
 		{
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var answer = adminService.AddCategory(category);
 			if (answer.Status == Success)
 			{
@@ -120,7 +120,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult RemoveCategory(int systemId, string state, string category)
 		{
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var answer = adminService.RemoveCategory(category);
 			if (answer.Status == Success)
 			{
@@ -132,7 +132,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult AddPurchasePolicy(int systemId, string state, string message)
 		{
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var operators = new string[0];
 			var conditions = new string[0];
 			operators = new[] {"AND", "OR", "NOT"};
@@ -152,7 +152,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult PurchasePolicyPage(int systemId, string state, string message, bool valid)
         {
-            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+            var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 
             ViewBag.valid = valid;
             var answer = adminService.ViewPolicies();
@@ -172,7 +172,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult CreatePolicy(int systemId, string state, string type, string subject, string op, string arg1, string optArg, string usernameText, string addressText, string quantityOp,string quantityText, string priceOp, string priceText, string subject1, string type1)
 	    {
-		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+		    var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 		    if (usernameText != null)
 		    {
 			    var answer = adminService.CreatePolicy(type, subject, "Username =", usernameText, optArg);
@@ -222,21 +222,21 @@ namespace MarketWeb.Controllers
 
 	    public IActionResult SavePolicy(int systemId, string state)
 	    {
-		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+		    var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 		    var answer = adminService.SavePolicy();
 		    return RedirectToAction("PurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
 		}
 
         public IActionResult RemovePolicy(int systemId, string state, string type, string subject)
         {
-            var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+            var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
             var answer = adminService.RemovePolicy(type, subject);
             return RedirectToAction("PurchasePolicyPage", new { systemId, state, message = answer.Answer, valid = answer.Status == Success });
         }
 
 		public IActionResult ChartsView(int systemId, string state)
 		{
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var answer = adminService.GetEntranceDetails();
 			string message = null;
 			if (answer.Status != Success)
@@ -251,7 +251,7 @@ namespace MarketWeb.Controllers
 		public ContentResult JSON(int systemId)
 		{
 			List<DataPoint> dataPoints = new List<DataPoint>();
-			var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var answer = adminService.GetEntranceDetails();
 			if (answer.Status != Success)
 			{
