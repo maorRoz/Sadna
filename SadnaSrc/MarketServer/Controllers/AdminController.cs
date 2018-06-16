@@ -100,7 +100,7 @@ namespace MarketWeb.Controllers
 
 		public IActionResult HandlingCategoryView(int systemId, string state, string message, bool valid)
 		{
-		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+		    var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 		    MarketAnswer answer= adminService.ViewAllCategories();
 		    categoryList = answer.ReportList;
             return View(new CategoryListModel(systemId, state, message, answer.ReportList, valid));
