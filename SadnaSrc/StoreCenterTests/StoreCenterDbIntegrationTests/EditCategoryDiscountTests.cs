@@ -125,7 +125,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
                 userService.EnterSystem();
                 userService.SignIn("Arik1", "123");
                 StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "T");
-                MarketAnswer ans = liorSession.EditCategoryDiscount("MTG_Cards", "Disc'ountAmount", "20");
+                MarketAnswer ans = liorSession.EditCategoryDiscount("MTG_Ca'rds", "DiscountAmount", "20");
                 Assert.AreEqual((int)DiscountStatus.BadInput, ans.Status);
             }
 

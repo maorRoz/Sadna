@@ -59,7 +59,7 @@ namespace SadnaSrc.MarketFeed
 
         public void NotifyLotteryCanceled(int[] refundedIds)
         {
-            var message = "You've been fully refunded on a lottery you were participating on";
+            var message = "You have been fully refunded on a lottery you were participating on";
             foreach (var refundedId in refundedIds)
             {
                 Publish(refundedId,message);
@@ -69,7 +69,7 @@ namespace SadnaSrc.MarketFeed
 
         public void NotifyMessageReceived(int receiver)
         {
-            var message = "You've got new message pending in your mailbox!";
+            var message = "You have got new message pending in your mailbox!";
             Publish(receiver,message);
         }
 

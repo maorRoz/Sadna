@@ -206,7 +206,7 @@ namespace SadnaSrc.UserSpot
 
         public void RemoveCartItem(int userID,CartItem item)
         {
-            dbConnection.CheckInput(item.GetDbIdentifier());
+            dbConnection.CheckInput(item.Name); dbConnection.CheckInput(item.Store);
             dbConnection.DeleteFromTable("CartItem", "SystemID = "+ userID + " AND "+ item.GetDbIdentifier());
         }
         private CartItem[] LoadCartItems(int userID)
@@ -228,7 +228,7 @@ namespace SadnaSrc.UserSpot
             string[] columnNames = { "Quantity", "FinalPrice"};
             string[] valuesNames = { "@quantity", "@price"};
             object[] values = { item.Quantity,item.FinalPrice};
-            dbConnection.CheckInput(item.GetDbIdentifier());
+            dbConnection.CheckInput(item.Name); dbConnection.CheckInput(item.Store);
             dbConnection.UpdateTable("CartItem", item.GetDbIdentifier(), columnNames, valuesNames, values);
         }
 
