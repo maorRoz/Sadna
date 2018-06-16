@@ -25,7 +25,10 @@ namespace SadnaSrc.Main
         MarketAnswer ViewError();
 
 	    MarketAnswer GetEntranceDetails();
-	}
+
+        MarketAnswer ViewAllCategories();
+
+    }
 
     public enum RemoveUserStatus
     {

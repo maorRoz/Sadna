@@ -203,5 +203,19 @@ namespace SadnaSrc.AdminView
 		    return report.ToArray();
 	    }
 
-	}
+
+        public Category[] GetAllCategories()
+        {
+            List<Category> catList = new List<Category>();
+            using (var dbReader =
+                dbConnection.SelectFromTable("Category","*"))
+            {
+                while (dbReader.Read())
+                {
+                    catList.Add(new Category(dbReader.GetString(0), dbReader.GetString(1))); 
+                }
+            }
+            return catList.ToArray();
+        }
+    }
 }

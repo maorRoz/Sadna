@@ -29,6 +29,6 @@ namespace SadnaSrc.AdminView
 
 	    Pair<int, DateTime>[] GetEntranceReport();
 
-
-	}
+        Category[] GetAllCategories();
+    }
 }

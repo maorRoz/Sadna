@@ -16,6 +16,7 @@ namespace MarketWeb.Controllers
 	public class AdminController : Controller
 	{
 		private const int Success = 0;
+        private string[] categoryList = new string[0];
 
 		public IActionResult RemoveUserView(int systemId, string state, string message, bool valid)
 		{
@@ -97,15 +98,12 @@ namespace MarketWeb.Controllers
 			return View(new PurchaseHistoryModel(systemId, state, answer.ReportList));
 		}
 
-		public IActionResult HandlingCategoryView(int systemId, string state)
+		public IActionResult HandlingCategoryView(int systemId, string state, string message, bool valid)
 		{
-			return View(new UserModel(systemId, state, null));
-		}
-
-		public IActionResult AddingCategoryPage(int systemId, string state, string message, bool valid)
-		{
-			ViewBag.valid = valid;
-			return View(new UserModel(systemId, state, message));
+		    var adminService = MarketYard.Instance.GetSystemAdminService(MarketServer.GetUserSession(systemId));
+		    MarketAnswer answer= adminService.ViewAllCategories();
+		    categoryList = answer.ReportList;
+            return View(new CategoryListModel(systemId, state, message, answer.ReportList, valid));
 		}
 
 		public IActionResult AddCategory(int systemId, string state, string category)
@@ -114,17 +112,10 @@ namespace MarketWeb.Controllers
 			var answer = adminService.AddCategory(category);
 			if (answer.Status == Success)
 			{
-				return RedirectToAction("AddingCategoryPage", new {systemId, state, message = answer.Answer, valid = true});
+                return RedirectToAction("HandlingCategoryView", new {systemId, state, message = answer.Answer, valid = true });
 			}
+            return RedirectToAction("HandlingCategoryView", new{systemId, state, message = answer.Answer, valid = false });
 
-			return RedirectToAction("AddingCategoryPage", new {systemId, state, message = answer.Answer, valid = false});
-
-		}
-
-		public IActionResult RemovingCategoryPage(int systemId, string state, string message, bool valid)
-		{
-			ViewBag.valid = valid;
-			return View(new UserModel(systemId, state, message));
 		}
 
 		public IActionResult RemoveCategory(int systemId, string state, string category)
@@ -133,20 +124,18 @@ namespace MarketWeb.Controllers
 			var answer = adminService.RemoveCategory(category);
 			if (answer.Status == Success)
 			{
-				return RedirectToAction("RemovingCategoryPage", new {systemId, state, message = answer.Answer, valid = true});
+				return RedirectToAction("HandlingCategoryView", new { systemId, state, message = answer.Answer, valid = true });
 			}
-
-			return RedirectToAction("RemovingCategoryPage", new {systemId, state, message = answer.Answer, valid = false});
+            return RedirectToAction("HandlingCategoryView", new { systemId, state, message = answer.Answer, valid = false });
 
 		}
 
-        public IActionResult AddPurchasePolicy(int systemId, string state, string message, bool valid)
+        public IActionResult AddPurchasePolicy(int systemId, string state, string message)
 		{
 			var adminService = MarketYard.Instance.GetSystemAdminService(EnterController.GetUserSession(systemId));
 			var operators = new string[0];
 			var conditions = new string[0];
 			operators = new[] {"AND", "OR", "NOT"};
-			ViewBag.valid = valid;
 			var answer = adminService.ViewPoliciesSessions();
 			if (answer.Status == Success)
 		    {

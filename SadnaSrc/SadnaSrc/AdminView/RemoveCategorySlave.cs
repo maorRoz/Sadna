@@ -27,7 +27,7 @@ namespace SadnaSrc.AdminView
 	            }
 				Category category = _adminDlInstacne.GetCategoryByName(categoryName);
                 _adminDlInstacne.RemoveCategory(category);
-                Answer = new AdminAnswer(EditCategoryStatus.Success, "category" + categoryName + " removed successfully");
+                Answer = new AdminAnswer(EditCategoryStatus.Success, "Category " + categoryName + " removed.");
             }
             catch (AdminException e)
             {
