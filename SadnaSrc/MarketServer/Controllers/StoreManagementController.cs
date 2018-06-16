@@ -535,7 +535,7 @@ namespace MarketWeb.Controllers
 		{
 			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+			string[] categories = storeShoppingService.GetAllDiscountCategoriesInStore(store).ReportList;
 			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
 		}
 
@@ -558,7 +558,7 @@ namespace MarketWeb.Controllers
 			ViewBag.valid = valid;
 			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+			string[] categories = storeShoppingService.GetAllDiscountCategoriesInStore(store).ReportList;
 			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
 		}
 

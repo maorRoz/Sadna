@@ -23,6 +23,9 @@ namespace SadnaSrc.Main
 		MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
 	    MarketAnswer GetAllCategoryNames();
+
+	    MarketAnswer GetAllDiscountCategoriesInStore(string storeName);
+
     }
 
     public enum OpenStoreStatus

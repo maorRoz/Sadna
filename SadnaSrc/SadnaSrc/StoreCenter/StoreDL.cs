@@ -781,5 +781,20 @@ namespace SadnaSrc.StoreCenter
             }
             return ids.ToArray();
         }
+
+	    public string[] GetCategoriesWhichHaveDiscounts(string storeName)
+	    {
+		    LinkedList<string> categories = new LinkedList<string>();
+			using (var dbReader =
+				dbConnection.SelectFromTableWithCondition("CategoryDiscount", "CategoryName", "StoreName = '" + storeName + "'"))
+			{
+			    while (dbReader.Read())
+			    {
+				    categories.AddLast(dbReader.GetString(0));
+			    }
+		    }
+
+		    return categories.ToArray();
+	    }
     }
 }

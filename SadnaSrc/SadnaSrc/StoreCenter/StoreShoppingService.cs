@@ -79,6 +79,13 @@ namespace SadnaSrc.StoreCenter
 		    slave.GetAllCategoryNames();
 		    return slave.Answer;
 	    }
+
+	    public MarketAnswer GetAllDiscountCategoriesInStore(string storeName)
+	    {
+		    GetAllDiscountCategoriesInStoreSlave slave = new GetAllDiscountCategoriesInStoreSlave(_shopper, storeDL);
+		    slave.GetAllDiscountCategoriesNameInStore(storeName);
+		    return slave.Answer;
+		}
 	}
 }
  
