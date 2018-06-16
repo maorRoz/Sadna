@@ -137,27 +137,21 @@ namespace MarketWeb.Controllers
 			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
 			var answer = storeManagementService.EditProduct(product, whatToEdit, newValue);
-			if (answer.Status == 0)
-			{
-				return RedirectToAction("ManageProducts", new {systemId, state, message = answer.Answer, store});
-			}
-
-			return RedirectToAction("EditProductPage", new {systemId, state, message = answer.Answer, store, product});
+			return answer.Status == Success ? 
+			    RedirectToAction("ManageProducts", new {systemId, state, message = answer.Answer, store}) :
+			    RedirectToAction("EditProductPage", new {systemId, state, message = answer.Answer, store, product});
 		}
 
-		public IActionResult AddQuanitityToProduct(int systemId, string state, string store, string product)
+		public IActionResult AddQuanitityToProduct(int systemId, string state, string store, string product,int quantity)
 
 		{
 			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-			var answer = storeManagementService.AddQuanitityToProduct(product, 1);
-		    if (answer.Status == Success)
-		    {
-		        return RedirectToAction("ManageProducts", new {systemId, state, message = answer.Answer, store});
-		    }
-
-		    return RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
-        }
+			var answer = storeManagementService.AddQuanitityToProduct(product, quantity);
+		    return answer.Status == Success ? 
+		        RedirectToAction("ManageProducts", new {systemId, state, message = answer.Answer, store}) :
+		        RedirectToAction("StoreControl", new { systemId, state, message = answer.Answer });
+		}
 
 		public IActionResult AddNewProductPage(int systemId, string state, string message, string store)
 		{
