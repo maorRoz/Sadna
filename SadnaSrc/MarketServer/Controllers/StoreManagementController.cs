@@ -293,12 +293,12 @@ namespace MarketWeb.Controllers
 		[HttpPost]
 		public IActionResult HandleOptionsSelected(int systemId, string state, string store, string[] permissions, string usernameEntry)
 		{
-			StringBuilder actions = new StringBuilder();
+		    var actions = "";
 			foreach (var permission in permissions)
 			{
 				if (permission != null)
 				{
-					actions.Append(permission + ",");
+				    actions += permission + ",";
 				}
 			}
 			return RedirectToAction("PromoteStoreAdminCall", new { systemId, state, store , usernameEntry, actions});
@@ -309,6 +309,10 @@ namespace MarketWeb.Controllers
 		{
 			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+		    if (actions == null)
+		    {
+		        actions = "";
+		    }
 			var answer = storeManagementService.PromoteToStoreManager(usernameEntry, actions);
 			if (answer.Status == Success)
 			{
