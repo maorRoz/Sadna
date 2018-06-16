@@ -186,6 +186,7 @@
     <Compile Include="StoreCenter\EnumStringConverter.cs" />
     <Compile Include="StoreCenter\GetAllCategoryNamesSlave.cs" />
     <Compile Include="StoreCenter\GetAllDiscountCategoriesInStoreSlave.cs" />
+    <Compile Include="StoreCenter\GetProductInfoSlave.cs" />
     <Compile Include="StoreCenter\OpenStoreSlave.cs" />
     <Compile Include="StoreCenter\IStockSyncher.cs" />
     <Compile Include="StoreCenter\LotteryTicket.cs" />

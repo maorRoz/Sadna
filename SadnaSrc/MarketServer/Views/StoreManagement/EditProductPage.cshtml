@@ -32,22 +32,16 @@
 
 			@using (Html.BeginForm("EditProduct", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, Model.Store, Model.Product }))
 			{
-				<fieldset>
-					Choose: <select name="whatToEdit">
-
-						<option value="Description">Description</option>
-
-						<option value="Name">Name</option>
-
-						<option value="BasePrice">BasePrice</option>
-
-					</select>
-					<br />
-					<input type="text" class="form-control" id="user-name-entry" name="newValue" />
-					<br />
-					<input type="submit" class="btn btn-primary" value="Edit">
-				</fieldset>
+				<label for="product-name-entry">Product Name:</label>
+				<input type="text" class="form-control" id="product-name-entry" name="productNewName"/>
+				<label for="base-price-entry">Base Price:</label>
+				<input type="text" class="form-control" id="base-price-entry" name="basePrice"/>
+				<label for="description-entry">Description:</label>
+				<input type="text" class="form-control" id="description-entry" name="description"/>
+				<br />
+				<input type="submit" class="btn btn-primary" value="Edit" />
 			}
+
 		</div>
 	</div>
 </div>

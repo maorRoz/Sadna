@@ -34,7 +34,7 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void SuccessUpdatingProductName()
 		{
-			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "Name", "bamba-osem");
+			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "bamba-osem", "90", "nice snack");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
@@ -51,7 +51,7 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void SuccessUpdatingBasePrice()
 		{
-			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "BasePrice", "102020");
+			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "bamba", "102020", "nice snack");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
@@ -67,7 +67,7 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void SuccessUpdatingDescription()
 		{
-			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "Description", "nice snack ++");
+			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "bamba", "102020","nice snack ++");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
@@ -83,7 +83,7 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void FailUpdatingPriceNegativeNumbers()
 		{
-			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "BasePrice", "-20");
+			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "bamba", "-20", "nice snack");
 			Assert.AreEqual((int)StoreEnum.UpdateProductFail, result2.Status);
 			
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
@@ -99,7 +99,7 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void FailUpdatingInvalidPriceNotAllDigits()
 		{
-			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "BasePrice", "20abc");
+			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "bamba", "20abc", "nice snack");
 			Assert.AreEqual((int)StoreEnum.UpdateProductFail, result2.Status);
 			
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
@@ -117,7 +117,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			MarketAnswer result2 = _storeManage1.AddNewProduct("bamba200", 100, "bad snack", 10);
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
-			MarketAnswer result3 = _storeManage1.EditProduct("bamba", "Name", "bamba200");
+			MarketAnswer result3 = _storeManage1.EditProduct("bamba", "bamba200", "102020", "nice snack");
 			Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, result3.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
@@ -138,7 +138,7 @@ namespace BlackBox.StoreBlackBoxTests
 		{
 			_storeManage2 = StoreManagementDriver.getBridge();
 			_storeManage2.GetStoreManagementService(_userBridge.GetUserSession(), "hahaha");
-			MarketAnswer res2 = _storeManage2.EditProduct("bamba", "Name", "bamba500");
+			MarketAnswer res2 = _storeManage2.EditProduct("bamba", "bamba500", "102020", "nice snack");
 			Assert.AreEqual((int)StoreEnum.StoreNotExists, res2.Status);
 
 		}
@@ -149,7 +149,7 @@ namespace BlackBox.StoreBlackBoxTests
 			SignUp(ref _userBridge2, "BASH", "lo kef2", "777777", "88888888");
 			_storeManage2 = StoreManagementDriver.getBridge();
 			_storeManage2.GetStoreManagementService(_userBridge2.GetUserSession(), "lokef");
-			MarketAnswer res2 = _storeManage2.EditProduct("bambush", "BasePrice", "100");
+			MarketAnswer res2 = _storeManage2.EditProduct("bambush", "bambush", "100","");
 			Assert.AreEqual((int)StoreEnum.NoPermission,res2.Status);
 
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
@@ -165,7 +165,7 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void ProductToEditWasntFound()
 		{
-			MarketAnswer res2 = _storeManage1.EditProduct("bambuuu", "Name", "bambee");
+			MarketAnswer res2 = _storeManage1.EditProduct("bambuuu", "bambee", "100","");
 			Assert.AreEqual((int)StoreEnum.ProductNotFound, res2.Status);
 		}
 

@@ -72,10 +72,10 @@ namespace SadnaSrc.StoreCenter
             return slave.Answer;
         }
 
-        public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
+        public MarketAnswer EditProduct(string productName, string productNewName, string basePrice, string description)
         {
             EditProductSlave slave = new EditProductSlave(_storeName, _storeManager, storeDL);
-            slave.EditProduct(productName, whatToEdit, newValue);
+            slave.EditProduct(productName, productNewName, basePrice, description);
             return slave.answer;
         }
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productName)
@@ -213,5 +213,13 @@ namespace SadnaSrc.StoreCenter
             slave.RemoveCategoryDiscount(categoryName);
             return slave.Answer;
         }
+
+	    public MarketAnswer GetProductInfo(string productName)
+	    {
+		    GetProductInfoSlave slave = new GetProductInfoSlave(_storeName, _storeManager, storeDL);
+		    slave.GetProductInfo(productName);
+		    return slave.Answer;
+
+	    }
     }
 }

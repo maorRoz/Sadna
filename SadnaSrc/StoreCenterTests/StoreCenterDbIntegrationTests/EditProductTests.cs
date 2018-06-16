@@ -31,7 +31,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "storeNotExists");
-            MarketAnswer ans = liorSession.EditProduct("name0", "Name", "0");
+            MarketAnswer ans = liorSession.EditProduct("name0", "0", "0","HAHA");
             Assert.AreEqual((int)StoreEnum.StoreNotExists, ans.Status);
         }
         [TestMethod]
@@ -39,7 +39,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
             userService.SignIn("Big Smoke", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditProduct("name0", "Name", "0");
+            MarketAnswer ans = liorSession.EditProduct("name0", "0", "0", "HAHA");
             Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
         [TestMethod]
@@ -47,7 +47,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         {
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
-            MarketAnswer ans = liorSession.EditProduct("name0", "Name", "0");
+            MarketAnswer ans = liorSession.EditProduct("name0", "0", "0", "HAHA");
             Assert.AreEqual((int)StoreEnum.ProductNotFound, ans.Status);
         }
         
@@ -57,7 +57,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            MarketAnswer ans = liorSession.EditProduct("GOLD", "Name", "MOMO");
+            MarketAnswer ans = liorSession.EditProduct("GOLD", "MOMO", "5", "NONO");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "MOMO");
             Assert.IsNotNull(find);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
@@ -69,7 +69,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            MarketAnswer ans = liorSession.EditProduct("GOLD", "BasePrice", "10");
+            MarketAnswer ans = liorSession.EditProduct("GOLD", "GOLD", "10","NONO");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual(10, find.BasePrice);
@@ -81,7 +81,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            MarketAnswer ans = liorSession.EditProduct("GOLD", "Description", "MOMO");
+            MarketAnswer ans = liorSession.EditProduct("GOLD", "GOLD","10", "MOMO");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual("MOMO", find.Description);

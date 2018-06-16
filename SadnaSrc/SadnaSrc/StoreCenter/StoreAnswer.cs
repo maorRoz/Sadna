@@ -36,7 +36,8 @@ namespace SadnaSrc.StoreCenter
       public StoreAnswer(ViewStorePolicyStatus status, string answer, string[] policyIds) : base((int)status, answer, policyIds) { }
 		public StoreAnswer(GetCategoriesDiscountStatus status, string answer) : base((int)status, answer) { }
 	    public StoreAnswer(GetCategoriesDiscountStatus status, string answer, string[] policyIds) : base((int)status, answer, policyIds) { }
-
+	    public StoreAnswer(ViewProductInfoStatus status, string answer, string[] report) : base((int)status, answer, report) { }
+	    public StoreAnswer(ViewProductInfoStatus status, string answer) : base((int)status, answer) { }
 
 	}
 }

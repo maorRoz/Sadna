@@ -47,7 +47,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void NoStore()
         {
             handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
-            slave.EditProduct("BOX", "price", "10");
+            slave.EditProduct("BOX","blah", "price", "10");
             Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
         }
 
@@ -55,7 +55,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void NoPermission()
         {
             userService.Setup(x => x.CanManageProducts()).Throws(new MarketException(0, ""));
-            slave.EditProduct("BOX", "price", "10");
+            slave.EditProduct("BOX", "blah", "10", "HAHAHA");
             Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
         }
 
@@ -63,49 +63,49 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void NoProduct()
         {
             handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns((Product)null);
-            slave.EditProduct("NEWPROD", "price", "10");
+            slave.EditProduct("NEWPROD", "NEWPROD", "10", "desc");
             Assert.AreEqual((int)StoreEnum.ProductNotFound, slave.answer.Status);
         }
 
         [TestMethod]
         public void ProductNameExists()
         {
-            slave.EditProduct("NEWPROD", "Name", "NEWPROD");
+            slave.EditProduct("NEWPROD", "NEWPROD", "10", "desc");
             Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, slave.answer.Status);            
         }
 
         [TestMethod]
         public void BadPrice1()
         {
-            slave.EditProduct("NEWPROD", "BasePrice", "0");
+            slave.EditProduct("NEWPROD", "NEWPROD","0", "desc");
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, slave.answer.Status);
         }
 
         [TestMethod]
         public void BadPrice2()
         {
-            slave.EditProduct("NEWPROD", "BasePrice", "-50");
+            slave.EditProduct("NEWPROD", "NEWPROD", "-50", "desc");
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, slave.answer.Status);
         }
 
         [TestMethod]
         public void BadPrice3()
         {
-            slave.EditProduct("NEWPROD", "BasePrice", "asd");
+            slave.EditProduct("NEWPROD", "NEWPROD", "asd", "desc");
             Assert.AreEqual((int)StoreEnum.UpdateProductFail, slave.answer.Status);
 
         }
         [TestMethod]
         public void EditProductPriceSuccess()
         {
-            slave.EditProduct("NEWPROD", "BasePrice", "10");
+            slave.EditProduct("NEWPROD", "NEWPROD", "10", "desc");
             Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
         }
 
         [TestMethod]
         public void EditProductNameSuccess()
         {
-            slave.EditProduct("NEWPROD", "Name", "OLDPROD");
+            slave.EditProduct("NEWPROD", "OLDPROD", "10", "desc");
             Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
         }
 
@@ -113,7 +113,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         [TestMethod]
         public void EditProductDescSuccess()
         {
-            slave.EditProduct("NEWPROD", "Description", "good shit");
+            slave.EditProduct("NEWPROD", "NEWPROD", "150", "GOOD");
             Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
         }
 
