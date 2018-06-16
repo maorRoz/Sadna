@@ -110,7 +110,7 @@ namespace SadnaSrc.UserSpot
             return loadedStatesPolicies.ToArray();
         }
 
-        private StoreManagerPolicy[] LoadUserStorePolicies(int userID)
+        public StoreManagerPolicy[] LoadUserStorePolicies(int userID)
         {
             List<StoreManagerPolicy> loadedStorePolicies = new List<StoreManagerPolicy>();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("StoreManagerPolicy", "*", "SystemID = " + userID))
