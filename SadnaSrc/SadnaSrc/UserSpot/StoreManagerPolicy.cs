@@ -32,6 +32,25 @@ namespace SadnaSrc.UserSpot
                     return "ViewPurchaseHistory";
             }
         }
+
+        public static string GetStoreActionName(StoreAction action)
+        {
+            switch (action)
+            {
+                case StoreAction.StoreOwner:
+                    return "StoreOwner";
+                case StoreAction.PromoteStoreAdmin:
+                    return "Promote Store Admins";
+                case StoreAction.ManageProducts:
+                    return "ManageProducts";
+                case StoreAction.DeclarePurchasePolicy:
+                    return "Manage Store Purchase-Policy";
+                case StoreAction.DeclareDiscountPolicy:
+                    return "Manage Store Discounts";
+                default:
+                    return "View Purchase History";
+            }
+        }
         public static StoreAction GetActionFromString(string actionString)
         {
             switch (actionString)
