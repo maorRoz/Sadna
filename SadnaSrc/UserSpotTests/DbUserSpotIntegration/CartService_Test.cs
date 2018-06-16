@@ -276,6 +276,22 @@ namespace UserSpotTests.DbUserSpotIntegration
             Assert.IsTrue(expected.ToArray().SequenceEqual(userServiceLoggedSession2.MarketUser.Cart.GetCartStorage()));
         }
 
+        [TestMethod]
+        public void BadInputAddItemTest()
+        {
+            try
+            {
+                DoSignUpSignIn("MaorCart15", "no-where", "123", "12345678");
+                userServiceLoggedSession.AddToCart("D'EX Potion", null, "X", 5, 7.0);
+                Assert.Fail();
+            }
+            catch (DataException e)
+            {
+                Assert.AreEqual(600, e.Status);
+            }
+            
+        }
+
 
 
         [TestCleanup]
@@ -324,7 +340,6 @@ namespace UserSpotTests.DbUserSpotIntegration
         private void DoSignUpSignIn(string name, string address, string password,string creditCard)
         {
             DoSignUp(name, address, password, creditCard);
-            Assert.IsFalse(MarketException.HasErrorRaised());
             DoSignIn(name, password);
         }
         private void AddItem1(UserService userService)

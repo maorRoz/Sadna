@@ -31,7 +31,8 @@ namespace SadnaSrc.Main
         AlreadyExist,
         InvalidUser,
 		InvalidData,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
 
     }
 
@@ -40,7 +41,8 @@ namespace SadnaSrc.Main
         Success,
         NoStore,
         InvalidUser,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum AddProductStatus
@@ -49,7 +51,8 @@ namespace SadnaSrc.Main
         NoStore,
         InvalidUser,
         NoProduct,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
     public enum AddLotteryTicketStatus
     {
@@ -59,7 +62,8 @@ namespace SadnaSrc.Main
         NoTicket,
         TooHighSuggestion,
         TooLowSuggestion,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
 	public enum SearchProductStatus
@@ -67,14 +71,16 @@ namespace SadnaSrc.Main
 		Success,
 		DidntEnterSystem,
 		PricesInvalid,
-		NoDB = 500
-	}
+		NoDB = 500,
+	    BadInput = 600
+    }
 
 	public enum GetCategoriesStatus
 	{
 		Success,
 		DidntEnterSystem,
-		NoDB=500
-	}
+		NoDB=500,
+	    BadInput = 600
+    }
 
 }

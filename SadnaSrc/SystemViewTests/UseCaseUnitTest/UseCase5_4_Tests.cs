@@ -25,6 +25,8 @@ namespace SystemViewTests.UseCaseUnitTest
         private string storeNameToView1 = "X";
         private string storeNameToView2 = "Y";
         private string noStoreName = "adasdadasdadadasdasdasd";
+        private string badUserName = "Ar'ik1";
+        private string badStoreName = "X'";
         [TestInitialize]
         public void MarketBuilder()
         {
@@ -108,6 +110,24 @@ namespace SystemViewTests.UseCaseUnitTest
             DoSignInToAdmin();
             adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
             Assert.AreEqual((int)ViewPurchaseHistoryStatus.NoStoreFound, adminServiceSession.ViewPurchaseHistoryByStore(noStoreName).Status);
+            Assert.IsTrue(MarketException.HasErrorRaised());
+        }
+
+        [TestMethod]
+        public void BadUserNameTest()
+        {
+            DoSignInToAdmin();
+            adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
+            Assert.AreEqual((int)ViewPurchaseHistoryStatus.BadInput, adminServiceSession.ViewPurchaseHistoryByUser(badUserName).Status);
+            Assert.IsTrue(MarketException.HasErrorRaised());
+        }
+
+        [TestMethod]
+        public void BadStoreNameTest()
+        {
+            DoSignInToAdmin();
+            adminServiceSession = (SystemAdminService)marketSession.GetSystemAdminService(userServiceSession);
+            Assert.AreEqual((int)ViewPurchaseHistoryStatus.BadInput, adminServiceSession.ViewPurchaseHistoryByUser(badStoreName).Status);
             Assert.IsTrue(MarketException.HasErrorRaised());
         }
 

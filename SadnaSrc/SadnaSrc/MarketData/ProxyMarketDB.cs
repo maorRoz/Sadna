@@ -187,6 +187,11 @@ namespace SadnaSrc.MarketData
             }
         }
 
+        public void CheckInput(string input)
+        {
+            realMarketDB.CheckInput(input);
+        }
+
         public bool IsConnected()
         {
             return realMarketDB.IsConnected();

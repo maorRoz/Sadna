@@ -56,7 +56,7 @@ namespace SadnaSrc.UserSpot
             catch (DataException e)
             {
                 Answer = new UserAnswer((SignUpStatus)e.Status, e.GetErrorMessage());
-                return null;
+                return _guest;
             }
         }
 

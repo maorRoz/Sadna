@@ -73,6 +73,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.IsNotNull(LotteryToDelete);
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
+
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {

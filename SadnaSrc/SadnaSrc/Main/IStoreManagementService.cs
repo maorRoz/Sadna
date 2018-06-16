@@ -81,7 +81,8 @@ namespace SadnaSrc.Main
         CategoryNotExistsInSystem,
         CategoryDiscountAlreadyExistsInStore,
         CategoryDiscountNotExistsInStore,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
     public enum DiscountStatus
     {
@@ -97,14 +98,16 @@ namespace SadnaSrc.Main
         DiscountAmountIsNotNumber,
         PrecentegesIsNotBoolean,
         NoLegalAttrebute,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
     public enum ManageStoreStatus
     {
         Success,
         InvalidStore,
         InvalidManager,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
 
     }
 
@@ -113,13 +116,15 @@ namespace SadnaSrc.Main
         Success,
         InvalidStore,
         InvalidManager,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
     public enum StoreSyncStatus
     {
         NoStore,
         NoProduct,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
 	public enum PromoteStoreStatus
@@ -131,7 +136,8 @@ namespace SadnaSrc.Main
 		NoAuthority,
 		NoUserFound,
 		InvalidPromotion,
-	    NoDB = 500
+	    NoDB = 500,
+	    BadInput = 600
     }
     public enum CalculateEnum
     {
@@ -145,7 +151,8 @@ namespace SadnaSrc.Main
         DiscountNotStarted,
         QuanitityIsNonPositive,
         DiscountIsNotHidden,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
     public enum ChangeToLotteryEnum
     {
@@ -154,7 +161,8 @@ namespace SadnaSrc.Main
         ProductNotFound,
         LotteryExists,
         DatesAreWrong,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum EditStorePolicyStatus
@@ -162,7 +170,8 @@ namespace SadnaSrc.Main
         Success,
         InvalidPolicyData,
         NoAuthority,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
 
     }
 
@@ -170,7 +179,8 @@ namespace SadnaSrc.Main
     {
         Success,
         NoAuthority,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
 

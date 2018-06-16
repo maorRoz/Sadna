@@ -217,6 +217,7 @@ namespace MarketWeb.Controllers
 						return RedirectToAction("AddPurchasePolicy", new { systemId, state, message = answer.Answer });
 				}
 			}
+
 			return RedirectToAction("AddPurchasePolicy", new {systemId, state});
 		}
 

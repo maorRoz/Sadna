@@ -80,6 +80,15 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         }
 
         [TestMethod]
+        public void PromotionFailedBadInputTest()
+        {
+            userService.SignIn("Arik1", "123");
+            var storeManagementSession = marketSession.GetStoreManagementService(userService, "T");
+            var answer = storeManagementSession.PromoteToStoreManager("Big Smoke'", "ManageProducts,DeclareDiscountPolicy,StoreOwner");
+            Assert.AreEqual((int)StoreEnum.BadInput, answer.Status);
+        }
+
+        [TestMethod]
 
         public void GetHistoryAfterOpeningStoreTest()
         {

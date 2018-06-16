@@ -137,6 +137,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual(product.Discount.DiscountAmount, find.Discount.DiscountAmount);
             Assert.AreEqual((int)DiscountStatus.Success, ans.Status);
         }
+
         [TestMethod]
         public void EditDiscountPercentagesSuccessfully()
         {
