@@ -12,7 +12,7 @@ namespace SadnaSrc.UserSpot
     public class UserPolicyService
     {
         private readonly IUserDL _userDB;
-        public List<StoreManagerPolicy> StorePolicies { get; }
+        public List<StoreManagerPolicy> StorePolicies { get; private set; }
         public List<StatePolicy> StatesPolicies { get; }
 
         private int _userID;
@@ -60,7 +60,8 @@ namespace SadnaSrc.UserSpot
         }
 
         public StoreManagerPolicy[] FilteredStorePolicies(string store)
-        { 
+        {
+            StorePolicies = _userDB.LoadUserStorePolicies(_userID).ToList();
             List<StoreManagerPolicy> storePolicies = new List<StoreManagerPolicy>();
             foreach (StoreManagerPolicy policy in StorePolicies)
             {

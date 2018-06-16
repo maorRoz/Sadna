@@ -24,6 +24,9 @@ namespace SadnaSrc.UserSpot
         void SaveUserStorePolicy(int userId, StoreManagerPolicy storeOwnershipPermission);
 	    string[] GetAllActiveStoreNames();
 		void InsertSignedInUser(int systemId);
-	    
+
+        StoreManagerPolicy[] LoadUserStorePolicies(int userID);
+
+
     }
 }
