@@ -325,7 +325,7 @@ namespace MarketWeb.Controllers
 		public IActionResult AddingProductCategoryPage(int systemId, string state,string message, string store, string product, bool valid)
 		{
 			ViewBag.valid = valid;
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
 			return View(new ProductInStoreCategoriesModel(systemId, state, message,store,product, categories));
@@ -346,7 +346,7 @@ namespace MarketWeb.Controllers
 		public IActionResult RemovingProductCategoryPage(int systemId, string state, string message,string store, string product, bool valid)
 		{
 			ViewBag.valid = valid;
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
 			return View(new ProductInStoreCategoriesModel(systemId, state, message, store, product, categories));
