@@ -13,7 +13,6 @@ namespace MarketWeb
         private static readonly Dictionary<int, IUserService> users = new Dictionary<int, IUserService>();
         private static readonly MarketYard marketSession = MarketYard.Instance;
         private const int Success = 0;
-        // GET api/<controller>
         [HttpGet]
         public int Get()
         {
@@ -43,8 +42,9 @@ namespace MarketWeb
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]string data)
         {
+            int i = 5;
         }
     }
 }
