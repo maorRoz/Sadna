@@ -28,11 +28,11 @@ namespace SadnaSrc.AdminView
                 if (categoryName.IsNullOrEmpty())
                 {
                     Answer = new AdminAnswer(EditCategoryStatus.InvalidCategory, "The category name is empty!");
+                    return;
                 }
-
                 Category category = new Category(categoryName);
                 _adminDlInstacne.AddCategory(category);
-                Answer = new AdminAnswer(EditCategoryStatus.Success, "category" + categoryName + " added successfully");
+                Answer = new AdminAnswer(EditCategoryStatus.Success, "Category " + categoryName + " added.");
             }
             catch (AdminException e)
             {
