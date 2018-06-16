@@ -54,18 +54,40 @@ namespace SadnaSrc.StoreCenter
         }
         public void CheckIfDiscountExistsAndCalcValue(string storename)
         {
-            if (Discount?.discountType != DiscountTypeEnum.Visible) return;
-            if (Discount.CheckTime())
+	        double beginPrice = Product.BasePrice;
+			if (Discount?.discountType == DiscountTypeEnum.Visible && Discount.CheckTime())
                 Product.BasePrice = Discount.CalcDiscount(Product.BasePrice);
-            CategoryDiscount categoryDiscount;
-            foreach (string categoryName in Product.Categories)
+	        CategoryDiscount categoryDiscount = null;
+			foreach (string categoryName in Product.Categories)
             {
-                categoryDiscount = null;
-                categoryDiscount = StoreDL.Instance.GetCategoryDiscount(categoryName, storename);
+	            categoryDiscount = StoreDL.Instance.GetCategoryDiscount(categoryName, storename);
                 if (categoryDiscount != null)
                     Product.BasePrice = categoryDiscount.CalcDiscount(Product.BasePrice);
             }
-        }
+	        
+		}
+
+	    public Discount CalcTotalDiscount(string storeName)
+	    {
+		    double beginPrice = Product.BasePrice;
+		    if (Discount?.discountType == DiscountTypeEnum.Visible && Discount.CheckTime())
+			    beginPrice = Discount.CalcDiscount(beginPrice);
+		    CategoryDiscount categoryDiscount = null;
+		    foreach (string categoryName in Product.Categories)
+		    {
+			    categoryDiscount = StoreDL.Instance.GetCategoryDiscount(categoryName, storeName);
+			    if (categoryDiscount != null)
+				    beginPrice = categoryDiscount.CalcDiscount(beginPrice);
+		    }
+
+		    if (categoryDiscount != null)
+		    {
+			    return new Discount(DiscountTypeEnum.Visible, categoryDiscount.StartDate, categoryDiscount.EndDate, (1 - beginPrice/Product.BasePrice)* 100, true);
+		    }
+
+		    return Discount;
+
+	    }
 
         public object[] GetStockListItemArray()
         {

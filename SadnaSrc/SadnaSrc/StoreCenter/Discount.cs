@@ -13,11 +13,11 @@ namespace SadnaSrc.StoreCenter
         public DiscountTypeEnum discountType { get; set; }
         public DateTime startDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int DiscountAmount { get; set; }
+        public double DiscountAmount { get; set; }
         public bool Percentages { get; set; }
         private static int globalDiscountCode = -1;
 
-        public Discount(DiscountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, int _discountAmount, bool _presenteges)
+        public Discount(DiscountTypeEnum _discountType, DateTime _startDate, DateTime _EndDate, double _discountAmount, bool _presenteges)
         {
             discountCode = GetDiscountCode();
             discountType = _discountType;

@@ -69,7 +69,6 @@ namespace SadnaSrc.Main
 	public enum SearchProductStatus
 	{
 		Success,
-		NullValue,
 		DidntEnterSystem,
 		PricesInvalid,
 		NoDB = 500,
