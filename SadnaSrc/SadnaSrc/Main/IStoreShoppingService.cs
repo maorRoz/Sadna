@@ -80,4 +80,12 @@ namespace SadnaSrc.Main
 		NoDB=500
 	}
 
+	public enum GetCategoriesDiscountStatus
+	{
+		Success,
+		DidntEnterSystem,
+		NoStore,
+		NoDB = 500
+	}
+
 }

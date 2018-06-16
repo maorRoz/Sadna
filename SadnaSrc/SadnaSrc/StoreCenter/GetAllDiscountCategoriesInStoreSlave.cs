@@ -20,15 +20,16 @@ namespace SadnaSrc.StoreCenter
 		{
 			try
 			{
+				CheckIfStoreExistsAndActive(storeName);
 				_shopper.ValidateCanBrowseMarket();
 				MarketLog.Log("StoreCenter", "User has enetered the system!");
 				string[] categories = _storeLogic.GetCategoriesWhichHaveDiscounts(storeName);
-				Answer = new StoreAnswer(GetCategoriesStatus.Success, "All categories names have been granted!", categories);
+				Answer = new StoreAnswer(GetCategoriesDiscountStatus.Success, "All categories names have been granted!", categories);
 			}
 			catch (StoreException e)
 			{
 				MarketLog.Log("StoreCenter", "");
-				Answer = new StoreAnswer((GetCategoriesStatus) e.Status, e.GetErrorMessage());
+				Answer = new StoreAnswer((GetCategoriesDiscountStatus) e.Status, e.GetErrorMessage());
 			}
 
 			catch (DataException e)
@@ -39,9 +40,15 @@ namespace SadnaSrc.StoreCenter
 			catch (MarketException)
 			{
 				MarketLog.Log("StoreCenter", "no premission");
-				Answer = new StoreAnswer(GetCategoriesStatus.DidntEnterSystem,
+				Answer = new StoreAnswer(GetCategoriesDiscountStatus.DidntEnterSystem,
 					"User didn't enter the system!");
 			}
+		}
+
+		private void CheckIfStoreExistsAndActive(string _storename)
+		{
+			if (!_storeLogic.IsStoreExistAndActive(_storename))
+			{ throw new StoreException(GetCategoriesDiscountStatus.NoStore, "store not exists or active"); }
 		}
 	}
 }
