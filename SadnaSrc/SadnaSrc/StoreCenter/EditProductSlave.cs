@@ -50,17 +50,23 @@ namespace SadnaSrc.StoreCenter
 
 	    private void EditAllProductFields(string productNewName, string basePrice, string description, ref Product product)
 	    {
-		    if (product.Name != productNewName)
+		    if (productNewName!=null && product.Name != productNewName)
 		    {
 			    CheckIfProductNameAvailable(productNewName);
 			    product.Name = productNewName;
 			}
 
-			CheckIfProductPriceLegal(basePrice);
-		    product.BasePrice = double.Parse(basePrice);
+		    if (basePrice != null)
+		    {
+			    CheckIfProductPriceLegal(basePrice);
+			    product.BasePrice = double.Parse(basePrice);
+			}
 
-		    CheckIfDescriptionLegal(description);
-			product.Description = description;
+		    if (description != null)
+		    {
+			    CheckIfDescriptionLegal(description);
+			    product.Description = description;
+			}
 			
 		}
 

@@ -33,11 +33,11 @@
 			@using (Html.BeginForm("EditProduct", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, Model.Store, Model.Product }))
 			{
 				<label for="product-name-entry">Product Name:</label>
-				<input type="text" class="form-control" id="product-name-entry" name="productNewName"/>
+				<input type="text" class="form-control" id="product-name-entry" name="productNewName" placeholder="@Model.Item.Name"/>
 				<label for="base-price-entry">Base Price:</label>
-				<input type="text" class="form-control" id="base-price-entry" name="basePrice"/>
+				<input type="text" class="form-control" id="base-price-entry" name="basePrice" placeholder="@Model.Item.Price"/>
 				<label for="description-entry">Description:</label>
-				<input type="text" class="form-control" id="description-entry" name="description"/>
+				<input type="text" class="form-control" id="description-entry" name="description" placeholder="@Model.Item.Description"/>
 				<br />
 				<input type="submit" class="btn btn-primary" value="Edit" />
 			}

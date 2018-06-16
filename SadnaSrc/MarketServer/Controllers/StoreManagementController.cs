@@ -128,7 +128,10 @@ namespace MarketWeb.Controllers
 
 		public IActionResult EditProductPage(int systemId, string state, string message, string store, string product)
 		{
-			return View(new ProductInStoreModel(systemId, state, message, store, product));
+			var userService = EnterController.GetUserSession(systemId);
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.GetProductInfo(product);
+			return View(new ProductInfoModel(systemId, state, message, store, product, answer.ReportList[0]));
 		}
 
 		public IActionResult EditProduct(int systemId, string state, string store, string product, string productNewName,
