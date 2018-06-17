@@ -265,7 +265,7 @@ namespace MarketWeb.Controllers
 		{
 			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-		    var answer = storeManagementService.EditDiscount(product, discountCode, isHidden, startDate, endDate, discountAmount, isPercentage);
+		    var answer = storeManagementService.EditDiscount(product, null, isHidden, startDate, endDate, discountAmount, isPercentage);
 			if (answer.Status == Success)
 			{
 				return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, valid = true});

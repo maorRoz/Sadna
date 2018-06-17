@@ -27,11 +27,6 @@
 			@using (Html.BeginForm("EditDiscount", "StoreManagement", new { Model.SystemId,Model.State,Model.Message,Model.Store,Model.Product}))
 			{
 			    <fieldset>
-			        <label>Disount Type:</label>
-			        <input type="text" class="form-control" id="disc-code-entry" name="discountCode"/>
-			        <td>Hiddent:</td>
-			        @Html.CheckBox("isHidden")
-			        <br/>
 			        <label>Start Date:</label>
 			        <input type="text" class="form-control" id="start-date-entry" name="startDate"/>
 			        <br/>
