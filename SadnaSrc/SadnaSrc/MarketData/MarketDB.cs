@@ -749,7 +749,7 @@ namespace SadnaSrc.MarketData
 
         public void CheckInput(string input)
         {
-            if (input.IndexOf("'") != -1)
+            if (input != null && input.IndexOf("'", StringComparison.Ordinal) != -1)
                 throw new DataException("Input value can't contain char ' ");
         }
     }
