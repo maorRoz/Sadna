@@ -323,7 +323,7 @@ namespace IntegrationTests.UserSeller_Integration
         private void SignInAndEditDiscount(string user, string product)
         {
             SignIn(user);
-            storeServiceSession.EditDiscount(product, "DiscountAmount", "2");
+            storeServiceSession.EditDiscount(product, null, false, null, null, "2", false);
         }
 
         private void SignInAndRemoveDiscount(string user, string product)

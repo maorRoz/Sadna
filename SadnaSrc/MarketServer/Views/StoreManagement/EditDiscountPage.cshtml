@@ -22,29 +22,36 @@
 					</div>
 				}
 			</div>
-			
+		    @using (Html.BeginForm("EditProduct", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, Model.Store, Model.Product }))
+		    {
+		        <label for="product-name-entry">Product Name:</label>
+		        <input type="text" class="form-control" id="product-name-entry" name="productNewName" placeholder="@Model.Item.Name"/>
+		        <label for="base-price-entry">Base Price:</label>
+		        <input type="text" class="form-control" id="base-price-entry" name="basePrice" placeholder="@Model.Item.Price"/>
+		        <label for="description-entry">Description:</label>
+		        <input type="text" class="form-control" id="description-entry" name="description" placeholder="@Model.Item.Description"/>
+		        <br />
+		        <input type="submit" class="btn btn-primary" value="Edit" />
+		    }
 
 			@using (Html.BeginForm("EditDiscount", "StoreManagement", new { Model.SystemId,Model.State,Model.Message,Model.Store,Model.Product}))
 			{
-				<fieldset>
-				Choose: <select name="whatToEdit">
+			    <fieldset>
+			        <label for="discount-type-entry">Disount type:</label>
+			        Choose:
+			        <select name="DiscountType">
 
-				<option value="DiscountType">DiscountType</option>
+			            <option value="Hidden">Hidden</option>
 
-				<option value="StartDate">StartDate</option>
+			            <option value="Visible">Visible</option>
 
-				<option value="EndDate">EndDate</option>
+			        </select>
+			        <br/>
 
-				<option value="DiscountAmount">DiscountAmount</option>
-
-				<option value="Percentages">Percentages</option>
-
-				</select>
-			    <br />
-				<input type="text" class="form-control" id="user-name-entry" name="newValue"/>
-				<br />
-			   <input type="submit" class="btn btn-primary" value="Edit">
-			</fieldset>
+			        <input type="text" class="form-control" id="user-name-entry" name="newValue"/>
+			        <br/>
+			        <input type="submit" class="btn btn-primary" value="Edit">
+			    </fieldset>
 			}
 		</div>
 	</div>

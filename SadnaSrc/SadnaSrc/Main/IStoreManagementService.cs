@@ -35,7 +35,7 @@ namespace SadnaSrc.Main
 
         MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, 
         int discountAmount,string discountType, bool presenteges);
-        MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue);
+        MarketAnswer EditDiscount(string product, string discountCode, bool isHidden, string startDate, string EndDate, string discountAmount, bool isPercentage);
         MarketAnswer RemoveDiscountFromProduct(string productName);
         /**
          * History View
@@ -98,6 +98,8 @@ namespace SadnaSrc.Main
         DiscountAmountIsNotNumber,
         PrecentegesIsNotBoolean,
         NoLegalAttrebute,
+        InvalidDiscountAmount,
+        InvalidDiscountType,
         NoDB = 500,
         BadInput = 600
     }

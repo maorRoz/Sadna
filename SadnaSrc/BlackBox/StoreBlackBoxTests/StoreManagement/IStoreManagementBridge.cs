@@ -22,8 +22,11 @@ namespace BlackBox
 		MarketAnswer CloseStore();
 		MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate,
 			int discountAmount, string discountType, bool presenteges);
-		MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue);
-		MarketAnswer RemoveDiscountFromProduct(string productName);
+
+	    MarketAnswer EditDiscount(string product, string discountCode, bool isHidden, string startDate, string EndDate,
+	        string discountAmount, bool isPercentage);
+
+        MarketAnswer RemoveDiscountFromProduct(string productName);
         MarketAnswer ViewStoreHistory();
 
 	    MarketAnswer ViewPromotionHistory();

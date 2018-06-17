@@ -111,11 +111,11 @@ namespace BlackBox
             throw new NotImplementedException();
         }
 
-        public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
+        public MarketAnswer EditDiscount(string product, string discountCode, bool isHidden, string startDate, string EndDate, string discountAmount, bool isPercentage)
         {
             if (real != null)
             {
-                return real.EditDiscount(productName, whatToEdit, newValue);
+                return real.EditDiscount(product, discountCode, isHidden, startDate, EndDate, discountAmount, isPercentage);
             }
 
             throw new NotImplementedException();

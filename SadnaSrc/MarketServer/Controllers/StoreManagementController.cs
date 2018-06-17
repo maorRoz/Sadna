@@ -265,13 +265,13 @@ namespace MarketWeb.Controllers
 		{
 			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-			var answer = storeManagementService.EditDiscount(product, whatToEdit, newValue);
+			/*var answer = storeManagementService.EditDiscount(product, whatToEdit, newValue);
 			if (answer.Status == Success)
 			{
 				return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, valid = true});
 			}
-
-			return RedirectToAction("EditDiscountPage", new {systemId, state, message = answer.Answer, store, product});
+            */
+			return RedirectToAction("EditDiscountPage", new {systemId, state, /*message = answer.Answer*/ message = "sd", store, product});
 		}
 
 		public IActionResult RemoveDiscount(int systemId, string state, string store, string product)
