@@ -94,7 +94,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             userService.SignIn("Arik1", "123");
             StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
             liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
-            MarketAnswer ans = liorSession.EditProduct("GOLD", "Description", "M'OMO");
+            MarketAnswer ans = liorSession.EditProduct("GOLD", "GOLD", "Description", "M'OMO");
             Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
             Assert.IsNotNull(find);
             Assert.AreEqual("NONO", find.Description);
