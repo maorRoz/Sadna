@@ -61,6 +61,7 @@ namespace SadnaSrc.StoreCenter
         }
         public void AddProductToCategory(string categoryid, string productid)
         {
+            dbConnection.CheckInput(categoryid); dbConnection.CheckInput(productid);
             string[] paramsNames = {"@categoryParam", "@productParam"};
             object[] values = { categoryid, productid };
             dbConnection.InsertTable("CategoryProductConnection", "CategoryID, ProductID",
@@ -68,11 +69,17 @@ namespace SadnaSrc.StoreCenter
         }
         public void RemoveProductFromCategory(string categoryid, string productid)
         {
+            dbConnection.CheckInput(categoryid); dbConnection.CheckInput(productid);
             dbConnection.DeleteFromTable("CategoryProductConnection", "ProductID = '" + productid + "' AND CategoryID = '"+ categoryid + "'");
         }
 
         public void AddPromotionHistory(string store, string managerName, string promotedName, string[] permissions,string description)
         {
+            dbConnection.CheckInput(store); dbConnection.CheckInput(managerName);
+            dbConnection.CheckInput(promotedName); dbConnection.CheckInput(description);
+            foreach (string val in permissions)
+                dbConnection.CheckInput(val);
+
             dbConnection.InsertTable("PromotionHistory",
                 "Store,Promoter,Promoted,Permissions,PromotionDate,Description",
                 new []{"@storeParam","@promoterParam","@promotedParam","@permissionsParam","@dateParam","@descriptionParam"},
@@ -81,6 +88,7 @@ namespace SadnaSrc.StoreCenter
 
         public string[] GetPromotionHistory(string store)
         {
+            dbConnection.CheckInput(store);
             var historyRecords = new LinkedList<string>();
             using(var dbReader = dbConnection.freeStyleSelect("SELECT * FROM PromotionHistory WHERE Store = '"+store+"' ORDER BY PromotionDate ASC"))
             {
@@ -121,7 +129,7 @@ namespace SadnaSrc.StoreCenter
       
         public Store GetStorebyName(string storeName)
         {
-
+            dbConnection.CheckInput(storeName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "*", "Name = '" + storeName + "'"))
             {
                 while (dbReader.Read())
@@ -136,7 +144,8 @@ namespace SadnaSrc.StoreCenter
 
 		public Product[] GetProductsByName(string name)
 		{
-			LinkedList<Product> products = new LinkedList<Product>();
+		    dbConnection.CheckInput(name);
+            LinkedList<Product> products = new LinkedList<Product>();
 			using (var dbReader = dbConnection.SelectFromTableWithCondition("Products", "*", "Name = '" + name + "'"))
 			{
 				while (dbReader.Read())
@@ -150,7 +159,8 @@ namespace SadnaSrc.StoreCenter
 
 	    public string GetStoreByProductId(string productId)
 	    {
-		    string store = null;
+	        dbConnection.CheckInput(productId);
+            string store = null;
 			using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "StockID", "ProductSystemID = '" + productId + "'"))
 			{
 				while (dbReader.Read())
@@ -175,13 +185,18 @@ namespace SadnaSrc.StoreCenter
                 "Status",
                 "UserID"
             };
+            dbConnection.CheckInput(ticket.myID);
+            object[] ticketVals = ticket.GetTicketValuesArray();
+            foreach (object val in ticketVals)
+                dbConnection.CheckInput(val.ToString());
             dbConnection.UpdateTable("LotteryTicket", "myID = '" + ticket.myID + "'", columnNames,
-                new []{"@idParam","@lotteryParam","@interStart","@interEnd","@cost","@stat","@user"}, ticket.GetTicketValuesArray());
+                new []{"@idParam","@lotteryParam","@interStart","@interEnd","@cost","@stat","@user"}, ticketVals);
         }
 
 
         public Store GetStorebyID(string storeid)
         {
+            dbConnection.CheckInput(storeid);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "*", "SystemID = '" + storeid + "'"))
             {
                 while (dbReader.Read())
@@ -196,12 +211,16 @@ namespace SadnaSrc.StoreCenter
 
         public void AddProductToDatabase(Product product)
         {
+            object[] productVals = product.GetProductValuesArray();
+            foreach (object val in productVals)
+                dbConnection.CheckInput(val.ToString());
             dbConnection.InsertTable("Products", "SystemID, name, BasePrice, description",
-                new []{"@idParam","@name","@price","@desc"}, product.GetProductValuesArray());
+                new []{"@idParam","@name","@price","@desc"}, productVals);
             if (product.Categories == null)
                 return;
             foreach (string category in product.Categories)
             {
+                dbConnection.CheckInput(category); dbConnection.CheckInput(product.SystemId);
                 dbConnection.InsertTable("CategoryProductConnection", "CategoryID, ProductID",
                     new [] { "@categoryParam", "@productParam" }, new []{category, product.SystemId});
             }
@@ -216,12 +235,16 @@ namespace SadnaSrc.StoreCenter
                 "BasePrice",
                 "description"
             };
+            object[] productVals = product.GetProductValuesArray();
+            foreach (object val in productVals)
+                dbConnection.CheckInput(val.ToString());
             dbConnection.UpdateTable("Products", "SystemID = '" + product.SystemId + "'", columnNames,
-                new[] { "@idParam", "@name", "@price", "@desc" }, product.GetProductValuesArray());
+                new[] { "@idParam", "@name", "@price", "@desc" }, productVals);
         }
 
         public LinkedList<LotteryTicket> GetAllTickets(string systemid)
         {
+            dbConnection.CheckInput(systemid);
             LinkedList<LotteryTicket> result = new LinkedList<LotteryTicket>();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "*", "LotteryID = '" + systemid + "'"))
             {
@@ -250,6 +273,7 @@ namespace SadnaSrc.StoreCenter
 
         public StockListItem GetStockListItembyProductID(string productid)
         {
+            dbConnection.CheckInput(productid);
             Product product = GetProductID(productid);
             StockListItem stockListItem = null;
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "*", "ProductSystemID = '" + productid + "'"))
@@ -268,6 +292,7 @@ namespace SadnaSrc.StoreCenter
 
         public Discount GetDiscount(string discountCode)
         {
+            dbConnection.CheckInput(discountCode);
             Discount discount = null;
             using (var discountReader =
                 dbConnection.SelectFromTableWithCondition("Discount", "*", "DiscountCode = '" + discountCode + "'"))
@@ -288,6 +313,7 @@ namespace SadnaSrc.StoreCenter
         
         public bool IsStoreExistAndActive(string store)
         {
+            dbConnection.CheckInput(store);
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Store", "*", " Name = '" + store + "' AND Status = 'Active'"))
             {
@@ -297,12 +323,17 @@ namespace SadnaSrc.StoreCenter
        
         public void AddStore(Store store)
         {
+            object[] storeVals = store.GetStoreArray();
+            foreach (object val in storeVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("Store", "SystemID, Name, Address, Status",
-                new []{"@idParam","@nameParam","@addressParam","@statParam"}, store.GetStoreArray());
+                new []{"@idParam","@nameParam","@addressParam","@statParam"}, storeVals);
         }
 
         public LotteryTicket GetLotteryTicket(string ticketid)
         {
+            dbConnection.CheckInput(ticketid);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "*", "myID = '" + ticketid + "'"))
             {
                 while (dbReader.Read())
@@ -319,18 +350,24 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveLotteryTicket(LotteryTicket lottery)
         {
+            dbConnection.CheckInput(lottery.myID);
             dbConnection.DeleteFromTable("LotteryTicket", "myID = '" + lottery.myID + "'");
         }
 
         public void AddLotteryTicket(LotteryTicket ticket)
         {
+            object[] ticketVals = ticket.GetTicketValuesArray();
+            foreach (object val in ticketVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("LotteryTicket", "myID, LotteryID, IntervalStart, IntervalEnd,Cost, Status, UserID",
                 new[] { "@idParam", "@lotteryParam", "@interStart", "@interEnd", "@cost", "@stat", "@user" },
-                ticket.GetTicketValuesArray());
+                ticketVals);
         }
 
         public Product GetProductID(string iD)
         {
+            dbConnection.CheckInput(iD);
             Product product = null;
             using (var productReader = dbConnection.SelectFromTableWithCondition("Products", "*", "SystemID = '" + iD + "'"))
             {
@@ -348,6 +385,7 @@ namespace SadnaSrc.StoreCenter
 
         public string[] GetHistory(Store store)
         {
+            dbConnection.CheckInput(store.Name);
             string[] result;
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + store.Name + "'"))
             {
@@ -365,14 +403,22 @@ namespace SadnaSrc.StoreCenter
 
         public void AddDiscount(Discount discount)
         {
+            object[] discountVals = discount.GetDiscountValuesArray();
+            foreach (object val in discountVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("Discount", "DiscountCode, DiscountType, StartDate, EndDate, DiscountAmount,Percentages ",
                 new []{"@codeParam","@typeParam","@startParam","@endParam","@amountParam","@percentParam"}
-                , discount.GetDiscountValuesArray());
+                , discountVals);
         }
 
 
         public void AddStockListItemToDataBase(StockListItem stockListItem)
         {
+            object[] itemVals = stockListItem.GetStockListItemArray();
+            foreach (object val in itemVals)
+                dbConnection.CheckInput(val.ToString());
+
             if (stockListItem.Discount != null)
             {
                 AddDiscount(stockListItem.Discount);
@@ -380,13 +426,14 @@ namespace SadnaSrc.StoreCenter
 
             AddProductToDatabase(stockListItem.Product);
             dbConnection.InsertTable("Stock", "StockID, ProductSystemID, quantity, discount, PurchaseWay",
-                new []{"@idParam","@productIdParam","@quantParam","@discountParam","@purchParam"}, stockListItem.GetStockListItemArray());
+                new []{"@idParam","@productIdParam","@quantParam","@discountParam","@purchParam"}, itemVals);
         }
 
 
 
         public void RemoveLottery(LotterySaleManagmentTicket lotteryManagment)
         {
+            dbConnection.CheckInput(lotteryManagment.SystemID);
             dbConnection.DeleteFromTable("LotteryTable", "SystemID = '" + lotteryManagment.SystemID + "'");
         }
 
@@ -418,9 +465,13 @@ namespace SadnaSrc.StoreCenter
                 "DiscountAmount",
                 "Percentages"
             };
+            object[] discountVals = discount.GetDiscountValuesArray();
+            foreach (object val in discountVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.UpdateTable("Discount", "DiscountCode = '" + discount.discountCode + "'", columnNames,
                 new[] { "@codeParam", "@typeParam", "@startParam", "@endParam", "@amountParam", "@percentParam" }
-                , discount.GetDiscountValuesArray());
+                , discountVals);
         }
 
         public void EditStore(Store store)
@@ -433,8 +484,12 @@ namespace SadnaSrc.StoreCenter
                 "Address",
                 "Status",
             };
+            object[] storeVals = store.GetStoreArray();
+            foreach (object val in storeVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.UpdateTable("Store", "SystemID = '" + store.SystemId + "'", columnNames,
-                new[] { "@idParam", "@nameParam", "@addressParam", "@statParam" }, store.GetStoreArray());
+                new[] { "@idParam", "@nameParam", "@addressParam", "@statParam" }, storeVals);
         }
 
 
@@ -442,6 +497,7 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveProduct(Product product)
         {
+            dbConnection.CheckInput(product.SystemId);
             dbConnection.DeleteFromTable("Products", "SystemID = '" + product.SystemId + "'");
         }
 
@@ -455,18 +511,24 @@ namespace SadnaSrc.StoreCenter
                 "discount",
                 "PurchaseWay"
             };
+            object[] itemVals = stockListItem.GetStockListItemArray();
+            foreach (object val in itemVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.UpdateTable("Stock", "ProductSystemID = '" + stockListItem.Product.SystemId + "'",
                 columnNames, new[] { "@idParam", "@productIdParam", "@quantParam", "@discountParam", "@purchParam" },
-                stockListItem.GetStockListItemArray());
+                itemVals);
         }
 
         public void RemoveStore(Store store)
         {
+            dbConnection.CheckInput(store.SystemId);
             dbConnection.DeleteFromTable("Store", "SystemID = '" + store.SystemId + "'");
         }
 
         public string[] GetStoreInfo(string store)
         {
+            dbConnection.CheckInput(store);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Store", "Name,Address",
                 " Name = '" + store + "' AND Status = 'Active'"))
             {
@@ -495,6 +557,7 @@ namespace SadnaSrc.StoreCenter
         }
         public string[] GetStoreStockInfo(string store)
         {
+            dbConnection.CheckInput(store);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Stock", "Name,Address",
                 " Store = '" + store + " AND Status = 'Active'"))
             {
@@ -516,6 +579,7 @@ namespace SadnaSrc.StoreCenter
 
         public void RemoveDiscount(Discount discount)
         {
+            dbConnection.CheckInput(discount.discountCode);
             dbConnection.DeleteFromTable("Discount", "DiscountCode = '" + discount.discountCode + "'");
         }
 
@@ -523,16 +587,21 @@ namespace SadnaSrc.StoreCenter
 
         public void AddLottery(LotterySaleManagmentTicket lotteryManagment)
         {
+            object[] lotteryVals = lotteryManagment.GetLotteryManagmentValuesArray();
+            foreach (object val in lotteryVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("LotteryTable",
                 "SystemID, ProductSystemID, ProductNormalPrice, TotalMoneyPayed, storeName ,StartDate,EndDate,IsActive ",
                 new []{"@idParam","@prodIdParam","@prodPriceParam","@totalPriceParam","@storeParam","@startDateParam","@endDataParam","@activeParam"}
-                , lotteryManagment.GetLotteryManagmentValuesArray());
+                , lotteryVals);
 
         }
 
 
         public string[] GetAllStoreProductsID(string systemid)
         {
+            dbConnection.CheckInput(systemid);
             List<string> result = new List<string>();
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Stock", "ProductSystemID", "StockID = '" + systemid + "'"))
@@ -554,6 +623,7 @@ namespace SadnaSrc.StoreCenter
 
         public int GetUserIDFromUserName(string userName)
         {
+            dbConnection.CheckInput(userName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "SystemID", "Name = '" + userName + "'"))
             {
                 while (dbReader.Read())
@@ -568,6 +638,7 @@ namespace SadnaSrc.StoreCenter
 
         public LotterySaleManagmentTicket GetLotteryByProductID(string productid)
         {
+            dbConnection.CheckInput(productid);
             Product product = GetProductID(productid);
             LotterySaleManagmentTicket lotteryManagement = null;
             using (var dbReader =
@@ -598,12 +669,17 @@ namespace SadnaSrc.StoreCenter
                 "EndDate",
                 "IsActive"
             };
+            object[] lotteryVals = lotteryManagment.GetLotteryManagmentValuesArray();
+            foreach (object val in lotteryVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.UpdateTable("LotteryTable", "SystemID = '" + lotteryManagment.SystemID + "'", columnNames,
                 new[] { "@idParam", "@prodIdParam", "@prodPriceParam", "@totalPriceParam", "@storeParam", "@startDateParam", "@endDataParam", "@activeParam" }
-                , lotteryManagment.GetLotteryManagmentValuesArray());
+                , lotteryVals);
         }
         public Category GetCategoryByName(string categoryname)
         {
+            dbConnection.CheckInput(categoryname);
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Category", "*", "name = '" + categoryname + "'"))
             {
@@ -617,6 +693,7 @@ namespace SadnaSrc.StoreCenter
 
         public Category GetCategoryByID(string categoryid)
         {
+            dbConnection.CheckInput(categoryid);
             Category category = null;
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Category", "*", "SystemID = '" + categoryid + "'"))
@@ -631,6 +708,7 @@ namespace SadnaSrc.StoreCenter
 
         public string GetCategoryName(string categoryid)
         {
+            dbConnection.CheckInput(categoryid);
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Category", "name", "SystemID = '" + categoryid + "'"))
             {
@@ -645,6 +723,7 @@ namespace SadnaSrc.StoreCenter
 
         public LinkedList<Product> GetAllCategoryProducts(string categoryid)
         {
+            dbConnection.CheckInput(categoryid);
             LinkedList<Product> products = new LinkedList<Product>();
             LinkedList<string> productids = new LinkedList<string>();
             Product product;
@@ -666,6 +745,7 @@ namespace SadnaSrc.StoreCenter
 
         private List<string> GetAllCategoriesOfProduct(string productID)
         {
+            dbConnection.CheckInput(productID);
             List<string> categories = new List<string>();
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("CategoryProductConnection", "CategoryID", "ProductID = '" + productID + "'"))
@@ -721,6 +801,7 @@ namespace SadnaSrc.StoreCenter
 		}
         public CategoryDiscount GetCategoryDiscount(string categoryName, string storeName)
         {
+            dbConnection.CheckInput(categoryName); dbConnection.CheckInput(storeName);
             CategoryDiscount categoryDiscount = null;
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("CategoryDiscount", "*",
@@ -743,13 +824,18 @@ namespace SadnaSrc.StoreCenter
 
         public void AddCategoryDiscount(CategoryDiscount categorydiscount)
         {
+            object[] discountVals = categorydiscount.GetDiscountValuesArray();
+            foreach (object val in discountVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("CategoryDiscount", "SystemID, CategoryName, StoreName, StartDate, EndDate, DiscountAmount",
                 new[] { "@idParam", "@categoryParam", "@storeParam", "@startParam", "@endParam", "@amountParam"}
-                , categorydiscount.GetDiscountValuesArray());
+                , discountVals);
         }
 
         public void RemoveCategoryDiscount(CategoryDiscount categoryDiscount)
         {
+            dbConnection.CheckInput(categoryDiscount.SystemId);
             dbConnection.DeleteFromTable("CategoryDiscount", "SystemId = '" + categoryDiscount.SystemId + "'");
         }
 
@@ -764,9 +850,13 @@ namespace SadnaSrc.StoreCenter
                 "EndDate",
                 "DiscountAmount",
             };
+            object[] discountVals = categoryDiscount.GetDiscountValuesArray();
+            foreach (object val in discountVals)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.UpdateTable("CategoryDiscount", "SystemId = '" + categoryDiscount.SystemId + "'", columnNames,
                 new[] { "@idParam", "@categoryParam", "@storeParam", "@startParam", "@endParam", "@amountParam" }
-                , categoryDiscount.GetDiscountValuesArray());
+                , discountVals);
         }
 
         public string[] GetAllCategoryDiscountIDs()
@@ -781,5 +871,20 @@ namespace SadnaSrc.StoreCenter
             }
             return ids.ToArray();
         }
+
+	    public string[] GetCategoriesWhichHaveDiscounts(string storeName)
+	    {
+		    LinkedList<string> categories = new LinkedList<string>();
+			using (var dbReader =
+				dbConnection.SelectFromTableWithCondition("CategoryDiscount", "CategoryName", "StoreName = '" + storeName + "'"))
+			{
+			    while (dbReader.Read())
+			    {
+				    categories.AddLast(dbReader.GetString(0));
+			    }
+		    }
+
+		    return categories.ToArray();
+	    }
     }
 }

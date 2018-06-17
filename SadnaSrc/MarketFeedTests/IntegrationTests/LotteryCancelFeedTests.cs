@@ -4,6 +4,7 @@ using SadnaSrc.MarketFeed;
 using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.OrderPool;
 
 namespace MarketFeedTests.IntegrationTests
@@ -23,14 +24,14 @@ namespace MarketFeedTests.IntegrationTests
         [TestInitialize]
         public void IntegrationFeedTestsBuilder()
         {
-            var marketDbMocker = new Mock<IMarketDB>();
+            var marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             countMessagesToServer = 0;
             serverMocker = new Mock<IListener>();
-            serverMocker.Setup(x => x.GetMessage(buyerId1.ToString(), "You've been fully refunded on a lottery you " +
+            serverMocker.Setup(x => x.GetMessage(buyerId1.ToString(), "You have been fully refunded on a lottery you " +
                                                                       "were participating on")).Callback(SendMessageToServer);
-            serverMocker.Setup(x => x.GetMessage(buyerId2.ToString(), "You've been fully refunded on a lottery you " +
+            serverMocker.Setup(x => x.GetMessage(buyerId2.ToString(), "You have been fully refunded on a lottery you " +
                                                                       "were participating on")).Callback(SendMessageToServer);
             MarketDB.Instance.InsertByForce();
             var marketSession = MarketYard.Instance;
@@ -79,7 +80,7 @@ namespace MarketFeedTests.IntegrationTests
         public void SignUpThenGetRefundOnTicketTest()
         {
             var newUserid = RegisterEvent();
-            serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You've been fully refunded on a lottery you " +
+            serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You have been fully refunded on a lottery you " +
                                                                        "were participating on")).Callback(SendMessageToServer);
             FeedSubscriber.SubscribeSocket(serverMocker.Object, buyerId2, buyerId2.ToString());
             try

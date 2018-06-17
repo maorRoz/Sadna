@@ -13,7 +13,7 @@ namespace SadnaSrc.AdminView
     {
         private readonly IAdminDL _adminDB;
         private int adminSystemID;
-        private IUserAdmin _admin;
+        private readonly IUserAdmin _admin;
 
         public AdminAnswer Answer { get; private set; }
 
@@ -21,7 +21,6 @@ namespace SadnaSrc.AdminView
         public AdminViewPurchaseHistorySlave(IAdminDL adminDB, IUserAdmin admin)
         {
             _adminDB = adminDB;
-            Answer = null;
             _admin = admin;
             adminSystemID = _admin.GetAdminSystemID();
         }
@@ -35,13 +34,13 @@ namespace SadnaSrc.AdminView
                 Answer = new AdminAnswer(ViewPurchaseHistoryStatus.Success,
                     "View purchase history has been successful!", historyReport);
             }
-            catch (MarketException e)
-            {
-                Answer = new AdminAnswer(ViewPurchaseHistoryStatus.NotSystemAdmin, e.GetErrorMessage(), null);
-            }
             catch (DataException e)
             {
                 Answer = new AdminAnswer((ViewPurchaseHistoryStatus)e.Status, e.GetErrorMessage(), null);
+            }
+            catch (MarketException e)
+            {
+                Answer = new AdminAnswer(ViewPurchaseHistoryStatus.NotSystemAdmin, e.GetErrorMessage(), null);
             }
 
 

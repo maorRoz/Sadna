@@ -36,7 +36,8 @@ namespace SadnaSrc.UserSpot
                                           "guest entry in the system!");
                 Answer = new UserAnswer(EnterSystemStatus.Success, "You've been entered the system successfully!",
                     newGuest.SystemID);
-                return newGuest;
+	            _userDB.InsertSignedInUser(newGuest.SystemID);
+				return newGuest;
             }
             catch (DataException e)
             {

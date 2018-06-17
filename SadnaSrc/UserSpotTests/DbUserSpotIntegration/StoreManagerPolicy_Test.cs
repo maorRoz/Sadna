@@ -397,6 +397,21 @@ namespace UserSpotTests.DbUserSpotIntegration
         }
 
         [TestMethod]
+        public void AddPromotionForBadInputTest()
+        {
+            try
+            {
+                UserPolicyService.PromoteStorePolicies("asdasdasdasdssa'fggfdsg", store1,
+                    new[] { StoreManagerPolicy.StoreAction.StoreOwner });
+                Assert.Fail();
+            }
+            catch (DataException e)
+            {
+                Assert.AreEqual((int)PromoteStoreStatus.BadInput, e.Status);
+            }
+        }
+
+        [TestMethod]
         public void AddPromotionForNonExistUserTest2()
         {
             try

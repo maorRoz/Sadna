@@ -31,7 +31,11 @@
 			{
 				<input type="submit" class="btn btn-primary" value="Remove Category">
 			}
-			<br />
+		    <br />
+		    @using (Html.BeginForm("ManageProducts", "StoreManagement", new { Model.SystemId, Model.State, Model.Store }))
+		    {
+		        <input type="submit" class="btn btn-primary" value="Back">
+		    }
 		</div>
 	</div>
 </div>

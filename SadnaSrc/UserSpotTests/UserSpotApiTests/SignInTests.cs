@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.UserSpot;
 namespace UserSpotTests.UserSpotApiTests
 {
@@ -19,12 +20,12 @@ namespace UserSpotTests.UserSpotApiTests
         private readonly string registeredUserPassword = "123";
         private readonly string encryptedUserPassword = UserSecurityService.GetSecuredPassword("123");
         private readonly string registeredUserCreditCard = "12345678";
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private Mock<IUserDL> userDbMocker;
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             userDbMocker = new Mock<IUserDL>();

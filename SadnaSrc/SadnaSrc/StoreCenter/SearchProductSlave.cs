@@ -21,66 +21,37 @@ namespace SadnaSrc.StoreCenter
 			_storeLogic = storeDl;
 		}
 
-		public void SearchProduct(string type, string value, double minPrice, double maxPrice, string category)
+		public void SearchProduct(string value, double minPrice, double maxPrice, string category)
 		{
 			try
 			{
 				MarketLog.Log("StoreCenter", "searching for a product!");
 				_shopper.ValidateCanBrowseMarket();
 				MarketLog.Log("StoreCenter", "User enetred the system!");
-				validateData(value);
-				Product[] products = null;
 				validatePrices(minPrice, maxPrice);
-				switch (type)
+			    Product[] products;
+				if (value.IsNullOrEmpty())
 				{
-					case "Name":
-						products = _storeLogic.GetProductsByName(value);
-						if (products.Length == 0)
-						{
-							string similarProduct = FindSimilarProductByName(value);
-							if (similarProduct != "")
-							{
-								Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
-								return;
-							}
-							
-						}
-
-						break;
-					case "Category":
-						Category cat = _storeLogic.GetCategoryByName(value);
-						if (cat == null)
-						{
-							string similarProduct = FindSimilarCategoriesByName(value);
-							if (similarProduct != "")
-							{
-								Answer = new StoreAnswer(SearchProductStatus.MistakeTipGiven, "Did you mean: " + similarProduct + "?");
-								return;
-							}
-
-							Answer = new StoreAnswer(SearchProductStatus.CategoryNotFound, "Category wasn't found in the system!");
-							return;
-						}
-						products = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
-						
-						break;
-					case "KeyWord":
-						products = FindKeyWord(value);
-						break;
+					products = _storeLogic.GetAllProducts();
 				}
 
+				else
+				{
+					Product[] productsKeyWord = FindKeyWord(value);
+					Product[] productsCategory = findProductsCategory(findSimilarCategories(value));
+					List<Product> product = new List<Product>(productsKeyWord);
+					foreach (Product prod in productsCategory)
+					{
+						product.Add(prod);
+					}
+
+					products = product.ToArray();
+				}
+					
 				products = FilterResultsByPrice(products,minPrice, maxPrice);
 				products = FilterResultByCategory(products, category);
 				
-				string[] result = new string[products.Length];
-				string[] stores = GetProductsStores(products);
-				for (int i = 0; i < result.Length; i++)
-				{
-					string productId = products[i].SystemId;
-					result[i] = GetProductStockInformation(productId,false) + " Store: "+ stores[i];
-				}
-
-				Answer = new StoreAnswer(SearchProductStatus.Success,"Data retrieved successfully!", result);
+				Answer = new StoreAnswer(SearchProductStatus.Success,"Data retrieved successfully!", AddStoreToProducts(products));
 			}
 
 			catch (StoreException e)
@@ -88,17 +59,18 @@ namespace SadnaSrc.StoreCenter
 				Answer = new StoreAnswer((SearchProductStatus)e.Status, e.GetErrorMessage());
 			}
 
-			catch (MarketException)
+			catch (DataException e)
+			{
+			    Answer = new StoreAnswer((SearchProductStatus)e.Status, e.GetErrorMessage());
+			}
+
+            catch (MarketException)
 			{
 				MarketLog.Log("StoreCenter", "no premission");
 				Answer = new StoreAnswer(SearchProductStatus.DidntEnterSystem,
 					"User Didn't enter the system!");
 			}
-
-			catch (DataException e)
-			{
-				Answer = new StoreAnswer((SearchProductStatus) e.Status, e.GetErrorMessage());
-			}	
+	
 		}
 
 		private string FindSimilarCategoriesByName(string value)
@@ -147,18 +119,9 @@ namespace SadnaSrc.StoreCenter
 
 		}
 
-		private void validateData(string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				throw new StoreException(SearchProductStatus.NullValue,
-					"The data given is null or empty!");
-			}
-		}
-
 		private Product[] FilterResultsByPrice(Product[] products, double minPrice, double maxPrice)
 		{
-			LinkedList<Product> productsAfterFilter = new LinkedList<Product>();
+			List<Product> productsAfterFilter = new List<Product>();
 
 			foreach (var product in products)
 			{
@@ -167,7 +130,7 @@ namespace SadnaSrc.StoreCenter
 				{
 					if (price >= minPrice)
 					{
-						productsAfterFilter.AddLast(product);
+						productsAfterFilter.Add(product);
 					}
 				}
 
@@ -175,7 +138,7 @@ namespace SadnaSrc.StoreCenter
 				{
 					if (price <= maxPrice)
 					{
-						productsAfterFilter.AddLast(product);
+						productsAfterFilter.Add(product);
 					}
 
 				}
@@ -184,13 +147,13 @@ namespace SadnaSrc.StoreCenter
 				{
 					if (price >= minPrice && price <= maxPrice)
 					{
-						productsAfterFilter.AddLast(product);
+						productsAfterFilter.Add(product);
 					}
 				}
 
 				else
 				{
-					productsAfterFilter.AddLast(product);
+					productsAfterFilter.Add(product);
 				}
 
 			}
@@ -274,6 +237,50 @@ namespace SadnaSrc.StoreCenter
 				throw new StoreException(SearchProductStatus.PricesInvalid,
 					"The prices range is illegal!!");
 			}
+		}
+
+		private Category[] findSimilarCategories(string category)
+		{
+			LinkedList<Category> categories = new LinkedList<Category>();
+			string[] allCategories = _storeLogic.GetAllCategorysNames();
+			for (int i = 0; i < allCategories.Length; i++)
+			{
+				if (allCategories[i].Contains(category))
+				{
+					categories.AddLast(_storeLogic.GetCategoryByName(allCategories[i]));
+				}
+			}
+
+			return categories.ToArray();
+		}
+
+		private Product[] findProductsCategory(Category[] categories)
+		{
+			List<Product> products = new List<Product>();
+			foreach (Category cat in categories)
+			{
+				Product[] tempProducts = _storeLogic.GetAllCategoryProducts(cat.SystemId).ToArray();
+				foreach (Product prod in tempProducts)
+				{
+					products.Add(prod);
+				}
+			}
+
+			return products.ToArray();
+
+
+		}
+
+		private string[] AddStoreToProducts(Product[] products)
+		{
+			string[] result = new string[products.Length];
+			string[] stores = GetProductsStores(products);
+			for (int i = 0; i < result.Length; i++)
+			{
+				string productId = products[i].SystemId;
+				result[i] = GetProductStockInformation(productId, false) + " Store: " + stores[i];
+			}
+			return result;
 		}
 
 

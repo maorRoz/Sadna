@@ -48,7 +48,7 @@ namespace DbRobustnessTests
         [TestMethod]
         public void EditProductNoDBTest()
         {
-            answer = storeManagingService.EditProduct("DeleteMy BOX", "Name", "NoDB DeleteMy BOX");
+            answer = storeManagingService.EditProduct("DeleteMy BOX", "Name", "blah","NoDB DeleteMy BOX");
             Assert.AreEqual((int)StoreEnum.NoDB, answer.Status);
         }
 
@@ -90,7 +90,7 @@ namespace DbRobustnessTests
         [TestMethod]
         public void EditDiscountNoDBTest()
         {
-            answer = storeManagingService.EditDiscount("DeleteMy BOX","Start Date",new DateTime(2018,1,2).ToString("yyyy-MM-dd"));
+            answer = storeManagingService.EditDiscount("DeleteMy BOX",null,false,null,new DateTime(2018,1,2).ToString("yyyy-MM-dd"),null, false);
             Assert.AreEqual((int)StoreEnum.NoDB, answer.Status);
         }
 

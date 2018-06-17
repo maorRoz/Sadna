@@ -48,14 +48,14 @@ namespace DbRobustnessTests
         {
             LoginUser();
             answer = userService.ViewCart();
-            Assert.AreEqual((int)ViewCartStatus.NoDB, answer.Status);
+            Assert.AreEqual((int)ViewCartStatus.Success, answer.Status);
         }
 
         [TestMethod]
         public void EditCartNoDBTest()
         {
             LoginUser();
-            answer = userService.EditCartItem("Clunkin Bell", "#9", 5, 5.0);
+            answer = userService.EditCartItem("Cluckin Bell", "#9", 5, 5.0);
             Assert.AreEqual((int)EditCartItemStatus.NoDB, answer.Status);
         }
 
@@ -63,7 +63,7 @@ namespace DbRobustnessTests
         public void RemoveFromCartNoDBTest()
         {
             LoginUser();
-            answer = userService.RemoveFromCart("Clunkin Bell", "#9", 5.0);
+            answer = userService.RemoveFromCart("Cluckin Bell", "#9", 5.0);
             Assert.AreEqual((int)EditCartItemStatus.NoDB, answer.Status);
         }
 
@@ -104,7 +104,7 @@ namespace DbRobustnessTests
         {
             LoginUser();
             answer = userService.GetUserDetails();
-            Assert.AreEqual((int)GetUserDetailsStatus.NoDB, answer.Status);
+            Assert.AreEqual((int)GetUserDetailsStatus.Success, answer.Status);
         }
 
         [TestCleanup]

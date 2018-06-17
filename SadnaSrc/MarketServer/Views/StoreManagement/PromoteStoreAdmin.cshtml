@@ -1,69 +1,72 @@
 ﻿<br />
 <br />
 <br />
+<br />
+<br />
+<br />
 
 @model MarketWeb.Models.CheckBoxListModel
 @{
-	ViewData["Title"] = "Promote Store Admin Page";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Promote Store Admin Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewData["Title"]</h2>
 <hr />
 <div class="row top-space">
-	<div class="col-lg-10">
+    <div class="col-lg-10">
 
-		<div id="feedContainer" style="float: right;width:20%">
-			<br />
-		</div>
+        <div id="feedContainer" style="float: right;width:20%">
+            <br />
+        </div>
 
-		<div style="float: left;width:30%">
-			<div id="alertContainer">
-				@if (Model.Message != null && !ViewBag.valid)
-				{
-					<div class='error'>
-						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-						@Model.Message
-					</div>
-				}
+        <div style="float: left;width:30%">
+            <div id="alertContainer">
+                @if (Model.Message != null && !ViewBag.valid)
+                {
+                    <div class='error'>
+                        <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+                        @Model.Message
+                    </div>
+                }
 
-				@if (Model.Message != null && ViewBag.valid)
-				{
-					<div class='success'>
-						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-						@Model.Message
-					</div>
-				}
-			</div>
+                @if (Model.Message != null && ViewBag.valid)
+                {
+                    <div class='success'>
+                        <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+                        @Model.Message
+                    </div>
+                }
+            </div>
 
-			@using (Html.BeginForm("HandleOptionsSelected", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, store = Model.Name }))
-			{
-				<label for="user-name-entry">Username To Promote:</label>
-				<input class="form-control" id="user-name-entry" name="usernameEntry" />
-				<table>
-					@for (var i = 0; i < Model.Items.Count; i++)
-					{
-						<tr>
-							<td>
+            @using (Html.BeginForm("HandleOptionsSelected", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, store = Model.Name }))
+            {
+                <label for="user-name-entry">Username To Promote:</label>
+                <input class="form-control" id="user-name-entry" name="usernameEntry" />
+                <table>
+                    @for (var i = 0; i < Model.Items.Count; i++)
+                    {
+                        <tr>
+                            <td>
 
-								<label for="checkbox[@i]">@Model.Items[i].Name</label>
-								<input type="checkbox" id="checkbox[@i]" name="permissions[@i]" value="@Model.Items[i].Name" />
-								<input type="hidden" name="permissions[@i]" value="" />
-							</td>
+                                <label for="checkbox[@i]">@Model.Items[i].Name</label>
+                                <input type="checkbox" id="checkbox[@i]" name="permissions[@i]" value="@Model.Items[i].Name" />
+                                <input type="hidden" name="permissions[@i]" value="" />
+                            </td>
 
-						</tr>
-					}
-				</table>
-				<div class="form-group text-center">
-					<input type="submit" class="btn btn-primary" value="Submit" />
-				</div>
-			}
+                        </tr>
+                    }
+                </table>
+                <div class="form-group text-center">
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                </div>
+            }
 
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
 
 @section Scripts{
-	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+    <script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
 }
 

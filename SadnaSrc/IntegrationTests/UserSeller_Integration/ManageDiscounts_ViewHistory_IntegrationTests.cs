@@ -92,7 +92,7 @@ namespace IntegrationTests.UserSeller_Integration
             try
             {
                 SignInAndAddDiscount(owner, existingProduct);
-                Assert.AreEqual("D8",
+                Assert.AreEqual("D7",
                     StoreDL.Instance.GetProductFromStore(store, existingProduct).Discount.discountCode);
             }
             catch (MarketException)
@@ -323,7 +323,7 @@ namespace IntegrationTests.UserSeller_Integration
         private void SignInAndEditDiscount(string user, string product)
         {
             SignIn(user);
-            storeServiceSession.EditDiscount(product, "DiscountAmount", "2");
+            storeServiceSession.EditDiscount(product, null, false, null, null, "2", false);
         }
 
         private void SignInAndRemoveDiscount(string user, string product)
@@ -332,12 +332,6 @@ namespace IntegrationTests.UserSeller_Integration
             storeServiceSession.RemoveDiscountFromProduct(product);
         }
 
-        private void SignInAndEditProduct(string user, string product)
-        {
-            SignIn(user);
-            storeServiceSession.EditProduct(product, "Name", "Bambaa");
-            StoreDL.Instance.GetProductFromStore(store, "Bambaa");
-        }
 
         private void SignIn(string user)
         {

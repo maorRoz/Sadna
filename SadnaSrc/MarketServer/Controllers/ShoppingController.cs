@@ -13,7 +13,7 @@ namespace MarketWeb.Controllers
         private const int Success = 0;
 		public IActionResult BrowseMarket(int systemId, string state)
 		{
-			var userService = MarketServer.GetUserSession(systemId);
+			var userService = EnterController.GetUserSession(systemId);
 		    var usersData = new string[0];
 		    string message = null;
             var answer = userService.GetAllStores();
@@ -31,7 +31,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult ViewStoreStock(int systemId, string state, string store, bool valid, string message)
         {
-            var userService = MarketServer.GetUserSession(systemId);
+            var userService = EnterController.GetUserSession(systemId);
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.ViewStoreStock(store);
             ViewBag.valid = valid;
@@ -44,7 +44,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult AddToCart(int systemId, string state, string store, string product, int quantity, int directViewStoreStock)
         {
-            var userService = MarketServer.GetUserSession(systemId);
+            var userService = EnterController.GetUserSession(systemId);
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.AddProductToCart(store,product,quantity);
 	        if (directViewStoreStock==0)
@@ -63,7 +63,7 @@ namespace MarketWeb.Controllers
 
         public IActionResult ViewStoreInfo(int systemId, string state, string store)
         {
-            var userService = MarketServer.GetUserSession(systemId);
+            var userService = EnterController.GetUserSession(systemId);
             var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
             var answer = storeShoppingService.ViewStoreInfo(store);
 
@@ -77,17 +77,17 @@ namespace MarketWeb.Controllers
 
 	    public IActionResult SearchProductView(int systemId, string state, string message)
 	    {
-		    var userService = MarketServer.GetUserSession(systemId);
+		    var userService = EnterController.GetUserSession(systemId);
 		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
 		    string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
 		    return View(new CategoryListModel(systemId, state, message, categories));
 	    }
 
-	    public IActionResult SearchProduct(int systemId, string state, string type, string value, double minPrice, double maxPrice, string category)
+	    public IActionResult SearchProduct(int systemId, string state, string value, double minPrice, double maxPrice, string category)
 	    {
-		    var userService = MarketServer.GetUserSession(systemId);
+		    var userService = EnterController.GetUserSession(systemId);
 		    var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-		    var answer = storeShoppingService.SearchProduct(type, value, minPrice, maxPrice, category);
+		    var answer = storeShoppingService.SearchProduct(value, minPrice, maxPrice, category);
 		    if (answer.Status == 0)
 		    {
 			    return RedirectToAction("ProductsView", new { systemId, state, results = answer.ReportList});

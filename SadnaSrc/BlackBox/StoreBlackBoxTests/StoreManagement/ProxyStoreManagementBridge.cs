@@ -51,11 +51,11 @@ namespace BlackBox
             throw new NotImplementedException();
         }
 
-        public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
-        {
+        public MarketAnswer EditProduct(string productName, string productNewName, string basePrice, string description)
+		{
             if (real != null)
             {
-                return real.EditProduct(productName, whatToEdit, newValue);
+                return real.EditProduct(productName, productNewName, basePrice, description);
             }
             throw new NotImplementedException();
         }
@@ -111,11 +111,11 @@ namespace BlackBox
             throw new NotImplementedException();
         }
 
-        public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
+        public MarketAnswer EditDiscount(string product, string discountCode, bool isHidden, string startDate, string EndDate, string discountAmount, bool isPercentage)
         {
             if (real != null)
             {
-                return real.EditDiscount(productName, whatToEdit, newValue);
+                return real.EditDiscount(product, discountCode, isHidden, startDate, EndDate, discountAmount, isPercentage);
             }
 
             throw new NotImplementedException();

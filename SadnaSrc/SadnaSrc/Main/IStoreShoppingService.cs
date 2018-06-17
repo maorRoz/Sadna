@@ -18,11 +18,14 @@ namespace SadnaSrc.Main
 
 	    MarketAnswer ViewStoreStockAll(string store);
 
-	    MarketAnswer SearchProduct(string type, string value, double minPrice, double maxPrice, string category);
+	    MarketAnswer SearchProduct(string value, double minPrice, double maxPrice, string category);
 
 		MarketAnswer AddProductToCart(string store, string productName, int quantity);
 
 	    MarketAnswer GetAllCategoryNames();
+
+	    MarketAnswer GetAllDiscountCategoriesInStore(string storeName);
+
     }
 
     public enum OpenStoreStatus
@@ -30,7 +33,9 @@ namespace SadnaSrc.Main
         Success,
         AlreadyExist,
         InvalidUser,
-        NoDB = 500
+		InvalidData,
+        NoDB = 500,
+        BadInput = 600
 
     }
 
@@ -39,7 +44,8 @@ namespace SadnaSrc.Main
         Success,
         NoStore,
         InvalidUser,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum AddProductStatus
@@ -48,7 +54,8 @@ namespace SadnaSrc.Main
         NoStore,
         InvalidUser,
         NoProduct,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
     public enum AddLotteryTicketStatus
     {
@@ -58,25 +65,33 @@ namespace SadnaSrc.Main
         NoTicket,
         TooHighSuggestion,
         TooLowSuggestion,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
 	public enum SearchProductStatus
 	{
 		Success,
-		NullValue,
 		DidntEnterSystem,
-		CategoryNotFound,
 		PricesInvalid,
-		MistakeTipGiven,
-		NoDB = 500
-	}
+		NoDB = 500,
+	    BadInput = 600
+    }
 
 	public enum GetCategoriesStatus
 	{
 		Success,
 		DidntEnterSystem,
-		NoDB=500
+		NoDB=500,
+	    BadInput = 600
+    }
+
+	public enum GetCategoriesDiscountStatus
+	{
+		Success,
+		DidntEnterSystem,
+		NoStore,
+		NoDB = 500
 	}
 
 }

@@ -33,8 +33,16 @@
 			</div>
 			@using (Html.BeginForm("RemoveCategoryProduct", "StoreManagement", new { Model.SystemId, Model.State , Model.Store, Model.Product}))
 			{
-				<label for="category-name">Category Name:</label>
-				<input type="text" class="form-control" id="category-name" name="category" />
+				<fieldset>
+					<br />
+					Category:
+					<select name="category">
+						@foreach (var item in Model.Items)
+						{
+							<option value="@item.Name">@item.Name</option>
+						}
+					</select>
+				</fieldset>
 				<br />
 				<input type="submit" id="sign-in-button" class="btn btn-primary" value="remove">
 

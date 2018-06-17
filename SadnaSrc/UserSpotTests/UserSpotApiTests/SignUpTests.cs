@@ -6,6 +6,7 @@ using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketFeed;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.UserSpot;
 
 namespace UserSpotTests.UserSpotApiTests
@@ -21,7 +22,7 @@ namespace UserSpotTests.UserSpotApiTests
         private readonly string registeredUserPassword = "123";
         private readonly string encryptedUserPassword = UserSecurityService.GetSecuredPassword("123");
         private readonly string registeredUserCreditCard = "12345678";
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private Mock<IUserDL> userDbMocker;
         private Mock<IPublisher> publisherMocker;
         private int counterQueueAdded;
@@ -29,7 +30,7 @@ namespace UserSpotTests.UserSpotApiTests
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             publisherMocker = new Mock<IPublisher>();
             counterQueueAdded = 0;
             publisherMocker.Setup(x => x.AddFeedQueue(It.IsAny<int>())).Callback(addQueueCheck);

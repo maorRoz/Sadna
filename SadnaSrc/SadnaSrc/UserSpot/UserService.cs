@@ -97,5 +97,7 @@ namespace SadnaSrc.UserSpot
         {
             MarketUser.Cart.AddToCart(product, categories, store, quantity,unitPrice);
         }
+
+	    
 	}
 }

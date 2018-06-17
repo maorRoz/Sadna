@@ -154,7 +154,12 @@ namespace SadnaSrc.StoreCenter
                 winnerResult = cheatCode;
             }
 
-            return InformAllWinner(winnerResult).UserID;
+	        if (InformAllWinner(winnerResult) != null)
+	        {
+		        return InformAllWinner(winnerResult).UserID;
+			}
+
+	        return -1;
         }
         public object[] GetLotteryManagmentValuesArray()
         {
@@ -178,6 +183,11 @@ namespace SadnaSrc.StoreCenter
             }
             globalLotteryID++;
             return "L" + globalLotteryID;
+        }
+
+        public static void RestartLotteryID()
+        {
+            globalLotteryID = -1;
         }
     }
 }

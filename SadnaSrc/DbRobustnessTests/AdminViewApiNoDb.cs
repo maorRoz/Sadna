@@ -56,7 +56,7 @@ namespace DbRobustnessTests
         [TestMethod]
         public void RemoveCategoryNoDBTest()
         {
-            answer = adminService.RemoveCategory("'WanderlandItems");
+            answer = adminService.RemoveCategory("WanderlandItems");
             Assert.AreEqual((int)EditCategoryStatus.NoDB, answer.Status);
         }
 
@@ -64,14 +64,14 @@ namespace DbRobustnessTests
         public void CreatePolicyNoDBTest()
         {
             answer = adminService.CreatePolicy("Global", null, "Quantity <=", "5", "");
-            Assert.AreEqual((int)EditPolicyStatus.NoDB, answer.Status);
+            Assert.AreEqual((int)EditPolicyStatus.Success, answer.Status);
         }
 
         [TestMethod]
         public void ViewPoliciesNoDBTest()
         {
             answer = adminService.ViewPolicies();
-            Assert.AreEqual((int)ViewPolicyStatus.NoDB, answer.Status);
+            Assert.AreEqual((int)ViewPolicyStatus.Success, answer.Status);
         }
 
         [TestMethod]
@@ -79,6 +79,20 @@ namespace DbRobustnessTests
         {
             answer = adminService.SavePolicy();
             Assert.AreEqual((int)EditPolicyStatus.NoDB, answer.Status);
+        }
+
+        [TestMethod]
+        public void ViewLogNODBTest()
+        {
+            answer = adminService.ViewLog();
+            Assert.AreEqual((int)ViewSystemLogStatus.Success, answer.Status);
+        }
+
+        [TestMethod]
+        public void ViewErrorNODBTest()
+        {
+            answer = adminService.ViewLog();
+            Assert.AreEqual((int)ViewSystemErrorStatus.Success, answer.Status);
         }
 
 

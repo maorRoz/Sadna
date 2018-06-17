@@ -8,6 +8,7 @@ using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.PolicyComponent;
 using SadnaSrc.StoreCenter;
 
@@ -16,14 +17,14 @@ namespace StoreCenterTests.StoreCenterUnitTests
     [TestClass]
     public class ViewPoliciesTest
     {
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private Mock<IUserSeller> seller;
         private Mock<IStorePolicyManager> manager;
 
         [TestInitialize]
         public void MarketBuilder()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             seller = new Mock<IUserSeller>();
@@ -36,7 +37,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
             seller.Setup(x => x.CanDeclarePurchasePolicy())
                 .Throws(new MarketException((int)PromoteStoreStatus.NoAuthority, ""));
             ViewPoliciesSlave slave = new ViewPoliciesSlave(seller.Object, manager.Object);
-            slave.ViewPolicies();
+            slave.ViewPolicies("X");
             Assert.AreEqual((int)ViewStorePolicyStatus.NoAuthority, slave.Answer.Status);
         }
 
@@ -46,7 +47,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         {
 
             ViewPoliciesSlave slave = new ViewPoliciesSlave(seller.Object, manager.Object);
-            slave.ViewPolicies();
+            slave.ViewSessionPolicies();
             Assert.AreEqual((int)ViewStorePolicyStatus.Success, slave.Answer.Status);
 
         }

@@ -44,7 +44,7 @@ namespace SadnaSrc.UserSpot
                                           + loggedUser.SystemID);
                 string returnedState = loggedUser.IsSystemAdmin() ? "Admin" : "Registered";
                 Answer = new UserAnswer(SignInStatus.Success, "Sign in has been successful!",loggedUser.SystemID,returnedState);
-                return loggedUser;
+				return loggedUser;
 
             }
             catch (UserException e)
@@ -57,7 +57,7 @@ namespace SadnaSrc.UserSpot
             catch (DataException e)
             {
                 Answer = new UserAnswer((SignInStatus)e.Status, e.GetErrorMessage());
-                return null;
+                return _guest;
             }
         }
 

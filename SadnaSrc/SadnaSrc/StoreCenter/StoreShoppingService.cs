@@ -58,10 +58,10 @@ namespace SadnaSrc.StoreCenter
 		    return slave.answer;
 	    }
 
-	    public MarketAnswer SearchProduct(string type, string value, double minPrice, double maxPrice, string category)
+	    public MarketAnswer SearchProduct(string value, double minPrice, double maxPrice, string category)
 	    {
 		    SearchProductSlave slave = new SearchProductSlave(_shopper, storeDL);
-		    slave.SearchProduct(type, value,minPrice, maxPrice, category);
+		    slave.SearchProduct(value,minPrice, maxPrice, category);
 		    return slave.Answer;
 
 	    }
@@ -79,6 +79,13 @@ namespace SadnaSrc.StoreCenter
 		    slave.GetAllCategoryNames();
 		    return slave.Answer;
 	    }
+
+	    public MarketAnswer GetAllDiscountCategoriesInStore(string storeName)
+	    {
+		    GetAllDiscountCategoriesInStoreSlave slave = new GetAllDiscountCategoriesInStoreSlave(_shopper, storeDL);
+		    slave.GetAllDiscountCategoriesNameInStore(storeName);
+		    return slave.Answer;
+		}
 	}
 }
  

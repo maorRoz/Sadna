@@ -72,10 +72,10 @@ namespace SadnaSrc.StoreCenter
             return slave.Answer;
         }
 
-        public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
+        public MarketAnswer EditProduct(string productName, string productNewName, string basePrice, string description)
         {
             EditProductSlave slave = new EditProductSlave(_storeName, _storeManager, storeDL);
-            slave.EditProduct(productName, whatToEdit, newValue);
+            slave.EditProduct(productName, productNewName, basePrice, description);
             return slave.answer;
         }
         public MarketAnswer ChangeProductPurchaseWayToImmediate(string productName)
@@ -100,10 +100,10 @@ namespace SadnaSrc.StoreCenter
                 discountsToRemvoe.AddLast(discount);
             return slave.answer;
         }
-        public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
+        public MarketAnswer EditDiscount(string product, string discountCode, bool isHidden, string startDate, string EndDate, string discountAmount, bool isPercentage)
         {
             EditDiscountSlave slave = new EditDiscountSlave(_storeName, _storeManager, storeDL);
-            slave.EditDiscount(productName, whatToEdit, newValue);
+            slave.EditDiscount(product, discountCode, isHidden, startDate, EndDate, discountAmount, isPercentage);
             return slave.answer;
         }
 
@@ -163,7 +163,15 @@ namespace SadnaSrc.StoreCenter
 
         }
 
-	    public MarketAnswer ViewPoliciesSessions()
+        public MarketAnswer ViewPolicies(string store)
+        {
+            ViewPoliciesSlave slave = new ViewPoliciesSlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
+            slave.ViewPolicies(store);
+            return slave.Answer;
+
+        }
+
+        public MarketAnswer ViewPoliciesSessions()
 	    {
 		    ViewPoliciesSlave slave = new ViewPoliciesSlave(_storeManager, MarketYard.Instance.GetStorePolicyManager());
 		    slave.ViewSessionPolicies();
@@ -205,5 +213,13 @@ namespace SadnaSrc.StoreCenter
             slave.RemoveCategoryDiscount(categoryName);
             return slave.Answer;
         }
+
+	    public MarketAnswer GetProductInfo(string productName)
+	    {
+		    GetProductInfoSlave slave = new GetProductInfoSlave(_storeName, _storeManager, storeDL);
+		    slave.GetProductInfo(productName);
+		    return slave.Answer;
+
+	    }
     }
 }

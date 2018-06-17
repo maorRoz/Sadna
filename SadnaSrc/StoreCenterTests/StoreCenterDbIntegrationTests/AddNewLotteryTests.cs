@@ -75,6 +75,16 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 
+        [TestMethod]
+        public void AddLotteryBadInputFail()
+        {
+            userService.EnterSystem();
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            MarketAnswer ans = liorSession.AddNewLottery("nam'e0", 1, "des", DateTime.Parse("30/10/2019"), DateTime.Parse("30/12/2019"));
+            Assert.AreEqual((int)StoreEnum.BadInput, ans.Status);
+        }
+
 
         [TestCleanup]
         public void CleanUpTest()

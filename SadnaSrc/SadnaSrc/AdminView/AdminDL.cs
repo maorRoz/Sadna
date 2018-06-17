@@ -4,10 +4,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core;
 using NUnit.Framework;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.MarketRecovery;
 
 namespace SadnaSrc.AdminView
 {
@@ -19,9 +21,11 @@ namespace SadnaSrc.AdminView
         public static AdminDL Instance => _instance ?? (_instance = new AdminDL());
 
         private readonly IMarketDB dbConnection;
+        private readonly IMarketBackUpDB dbBackupConnection;
         private AdminDL()
         {
             dbConnection = new ProxyMarketDB();
+            dbBackupConnection = MarketBackUpDB.Instance;
         }
         public string[] FindSolelyOwnedStores()
         {
@@ -58,7 +62,41 @@ namespace SadnaSrc.AdminView
 		    return users.ToArray();
 	    }
 
-	    public string[] GetAllStoresInPurchaseHistory()
+        public string[] GetEventLogReport()
+        {
+            var logEntries = new List<string>();
+            using (var dbReader = dbBackupConnection.SelectFromTable("System_Log", "*"))
+            {
+                while (dbReader.Read())
+                {
+                    var entry = "ID: " + dbReader.GetString(0) + " Date: "
+                                + dbReader.GetDateTime(1) + " Type: " +
+                                dbReader.GetString(2) + " Description: " + dbReader.GetString(3);
+                    logEntries.Add(entry);
+                }
+            }
+
+            return logEntries.ToArray();
+        }
+
+        public string[] GetEventErrorLogReport()
+        {
+            var errorEntries = new List<string>();
+            using (var dbReader = dbBackupConnection.SelectFromTable("System_Errors", "*"))
+            {
+                while (dbReader.Read())
+                {
+                    var entry = "ID: " + dbReader.GetString(0) + " Date: " 
+                                + dbReader.GetDateTime(1) + " Type: " +
+                          dbReader.GetString(2) + " Description: " + dbReader.GetString(3);
+                    errorEntries.Add(entry);
+                }
+            }
+
+            return errorEntries.ToArray();
+        }
+
+        public string[] GetAllStoresInPurchaseHistory()
 	    {
 		    LinkedList<string> stores = new LinkedList<string>();
 		    using (var dbReader = dbConnection.SelectFromTable("PurchaseHistory", "Store"))
@@ -75,11 +113,13 @@ namespace SadnaSrc.AdminView
 
         public void CloseStore(string store)
         {
+            dbConnection.CheckInput(store);
             dbConnection.UpdateTable("Store", "Name = '"+store+"'",new[] {"Status"},new[] {"@stat"},new object[] {"Inactive"});
         }
 
         public bool IsUserExist(string userName)
         {
+            dbConnection.CheckInput(userName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "*", "Name = '" + userName +"'"))
             {
                 return dbReader.Read();
@@ -88,6 +128,7 @@ namespace SadnaSrc.AdminView
 
         public bool IsUserNameExistInHistory(string userName)
         {
+            dbConnection.CheckInput(userName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", "UserName = '" + userName +"'"))
             {
                 return dbReader.Read();
@@ -96,6 +137,7 @@ namespace SadnaSrc.AdminView
 
         public bool IsStoreExistInHistory(string storeName)
         {
+            dbConnection.CheckInput(storeName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + storeName +"'"))
             {
                 return dbReader.Read();
@@ -104,6 +146,7 @@ namespace SadnaSrc.AdminView
 
         public void DeleteUser(string userName)
         {
+            dbConnection.CheckInput(userName);
             dbConnection.DeleteFromTable("Users", "Name = '" + userName +"'");
         }
 
@@ -122,6 +165,7 @@ namespace SadnaSrc.AdminView
         }
         public string[] GetPurchaseHistory(string field, string givenValue)
         {
+            dbConnection.CheckInput(field); dbConnection.CheckInput(givenValue);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", field + " = '"
                                                                                                           + givenValue + "'"))
             {
@@ -130,15 +174,20 @@ namespace SadnaSrc.AdminView
         }
         public void AddCategory(Category category)
         {
+            foreach (object val in category.GetCategoryValuesArray())
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("Category", "SystemID, name",
                 new[]{"@idParam","@nameParam"}, category.GetCategoryValuesArray());
         }
         public void RemoveCategory(Category category)
         {
+            dbConnection.CheckInput(category.SystemId);
             dbConnection.DeleteFromTable("Category", "SystemID = '" + category.SystemId + "'");
         }
         public Category GetCategoryByName(string categoryname)
         {
+            dbConnection.CheckInput(categoryname);
             Category category = null;
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Category", "*", "name = '" + categoryname + "'"))
@@ -151,5 +200,33 @@ namespace SadnaSrc.AdminView
             return category;
         }
 
+	    public Pair<int, DateTime>[] GetEntranceReport()
+	    {
+		    List<Pair<int, DateTime>> report = new List<Pair<int, DateTime>>();
+		    using (var dbReader = dbConnection.SelectFromTable("SignInReports", "*"))
+		    {
+			    while (dbReader.Read())
+			    {
+				    report.Add(new Pair<int, DateTime>(dbReader.GetInt32(0), dbReader.GetDateTime(1)));
+			    }
+		    }
+
+		    return report.ToArray();
+	    }
+
+
+        public Category[] GetAllCategories()
+        {
+            List<Category> catList = new List<Category>();
+            using (var dbReader =
+                dbConnection.SelectFromTable("Category","*"))
+            {
+                while (dbReader.Read())
+                {
+                    catList.Add(new Category(dbReader.GetString(0), dbReader.GetString(1))); 
+                }
+            }
+            return catList.ToArray();
+        }
     }
 }

@@ -1,10 +1,8 @@
 ﻿<br />
 <br />
-<br />
-<br />
-<br />
 @{
-	ViewData["Title"] = "Store Control page";
+
+	ViewData["Title"] = "Your Store List";
 }
 
 
@@ -13,9 +11,17 @@
 		<div id="feedContainer" style="float: right;width:20%"></div>
 		<div style="float: left;width:70%">
 			<div id="alertContainer">
-				@if (Model.Message != null)
+				@if (Model.Message != null && !ViewBag.valid)
 				{
 					<div class='error'>
+						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+						@Model.Message
+					</div>
+				}
+
+				@if (Model.Message != null && ViewBag.valid)
+				{
+					<div class='success'>
 						<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
 						@Model.Message
 					</div>
@@ -35,12 +41,17 @@
 						<td>@item.Name</td>
 						<td>
 							<a asp-controller="StoreManagement" asp-action="ManageStoreOptions" asp-route-systemId="@Model.SystemId"
-							   asp-route-state="@Model.State" asp-route-store="@item.Name"><img src="\images\cashier.png"></a>
+							   asp-route-state="@Model.State" asp-route-store="@item.Name"><input type="submit" class="btn btn-primary" value="Manage Store"></a>
 						</td>
 
 					</tr>
 				}
 			</table>
+
+			@using (Html.BeginForm("OpenStoreView", "StoreManagement", new { Model.SystemId, Model.State}))
+			{
+				<input type="submit" class="btn btn-primary" value="Open new store">
+			}
 		</div>
 	</div>
 </div>

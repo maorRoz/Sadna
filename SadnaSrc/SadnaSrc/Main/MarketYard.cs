@@ -3,6 +3,7 @@ using SadnaSrc.AdminView;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.OrderPool;
 using SadnaSrc.PolicyComponent;
 using SadnaSrc.StoreCenter;
@@ -100,7 +101,14 @@ namespace SadnaSrc.Main
         public static void CleanSession()
         {
             MarketException.RemoveErrors();
+            MarketBackUpDB.Instance.CleanByForce();
             Publisher.CleanPublisher();
+            Category.RestartCategoryID();
+            Product.RestartProductID();
+            Store.RestartStoreID();
+            LotteryTicket.RestartLotteryTicketID();
+            LotterySaleManagmentTicket.RestartLotteryID();
+            Discount.RestartDiscountID();
         }
     }
 }

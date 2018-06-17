@@ -1,4 +1,5 @@
 ﻿
+using Castle.Core.Internal;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
@@ -12,7 +13,7 @@ namespace SadnaSrc.StoreCenter
         {
         }
 
-        public StockListItem AddNewProduct(string _name, double _price, string _description, int quantity)
+        public StockListItem AddNewProduct(string name, double price, string description, int quantity)
         {
 
             try
@@ -25,12 +26,9 @@ namespace SadnaSrc.StoreCenter
                 _storeManager.CanManageProducts();
                 MarketLog.Log("StoreCenter", " has premmission");
                 MarketLog.Log("StoreCenter", " check if product name avlaiable in the store" + _storeName);
-                CheckIfProductNameAvailable(_name); 
-                MarketLog.Log("StoreCenter", " name is avlaiable");
-                MarketLog.Log("StoreCenter", " checking that quanitity is positive");
-                CheckQuantityIsOK(quantity);
-                MarketLog.Log("StoreCenter", " quanitity is positive");
-                Product product = new Product(_name, _price, _description);
+                CheckInput(name, price, description, quantity);
+                MarketLog.Log("StoreCenter", " Input is valid.");
+                Product product = new Product(name, price, description);
                 StockListItem stockListItem = new StockListItem(quantity, product, null, PurchaseEnum.Immediate, store.SystemId);
                 DataLayerInstance.AddStockListItemToDataBase(stockListItem);
                 MarketLog.Log("StoreCenter", "product added");
@@ -39,30 +37,31 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException e)
             {
-                answer = new StoreAnswer((StoreEnum)e.Status,"Product was not added!");
-            }
-            catch (MarketException)
-            {
-                answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
             catch (DataException e)
             {
                 answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
+            catch (MarketException)
+            {
+                answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
+            }
             return null;
         }
 
-        private void CheckIfProductNameAvailable(string name)
+        private void CheckInput(string name, double price, string description, int quantity)
         {
+            if(name.IsNullOrEmpty() | description.IsNullOrEmpty())
+                throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Invalid Name or Description");
             Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
             if (product != null)
-                throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
-        }
-
-        private void CheckQuantityIsOK(int quantity)
-        {
+                throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product name must be uniqe per shop");
             if (quantity <= 0)
-            { throw new StoreException(StoreEnum.QuantityIsNegative, "negative quantity"); }
+                throw new StoreException(StoreEnum.QuantityIsNegative, "Invalid quantity"); 
+            if (price <= 0)
+                throw new StoreException(StoreEnum.QuantityIsNegative, "Invalid price"); 
+
         }
 
     }

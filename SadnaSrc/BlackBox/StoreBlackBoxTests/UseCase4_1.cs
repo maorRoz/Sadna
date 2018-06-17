@@ -264,7 +264,7 @@ namespace BlackBox.StoreBlackBoxTests
 				Assert.AreEqual((int)StoreEnum.Success, _storeManager2.AddNewProduct(product, 50, "tool", 5).Status);
 				CheckProductAddedToStock();
 
-				Assert.AreEqual((int)StoreEnum.Success, _storeManager2.EditProduct(product, "BasePrice", "3").Status);
+				Assert.AreEqual((int)StoreEnum.Success, _storeManager2.EditProduct(product, null, "3", null).Status);
 				CheckProductEditedInStock();
 
 				Assert.AreEqual((int)StoreEnum.Success, _storeManager2.RemoveProduct(product).Status);
@@ -275,7 +275,7 @@ namespace BlackBox.StoreBlackBoxTests
 			else
 			{
 				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.AddNewProduct(product, 50, "tool", 5).Status);
-				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.EditProduct(product, "Price", "3").Status);
+				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.EditProduct(product, "NewProduct1", "3", "HAHAH").Status);
 				Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.RemoveProduct(product).Status);
 			}
 

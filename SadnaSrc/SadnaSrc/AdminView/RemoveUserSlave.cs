@@ -56,13 +56,13 @@ namespace SadnaSrc.AdminView
             {
                 Answer = new AdminAnswer((RemoveUserStatus) e.Status, e.GetErrorMessage());
             }
-            catch (MarketException e)
-            {
-                Answer = new AdminAnswer(RemoveUserStatus.NotSystemAdmin, e.GetErrorMessage());
-            }
             catch (DataException e)
             {
                 Answer = new AdminAnswer((RemoveUserStatus)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException e)
+            {
+                Answer = new AdminAnswer(RemoveUserStatus.NotSystemAdmin, e.GetErrorMessage());
             }
         }
 

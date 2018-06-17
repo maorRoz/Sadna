@@ -80,12 +80,21 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
         }
 
         [TestMethod]
+        public void PromotionFailedBadInputTest()
+        {
+            userService.SignIn("Arik1", "123");
+            var storeManagementSession = marketSession.GetStoreManagementService(userService, "T");
+            var answer = storeManagementSession.PromoteToStoreManager("Big Smoke'", "ManageProducts,DeclareDiscountPolicy,StoreOwner");
+            Assert.AreEqual((int)StoreEnum.BadInput, answer.Status);
+        }
+
+        [TestMethod]
 
         public void GetHistoryAfterOpeningStoreTest()
         {
             userService.SignIn("Arik1", "123");
             var shoppingSession = marketSession.GetStoreShoppingService(ref userService);
-            var answer =shoppingSession.OpenStore("HistoryShop","");
+            var answer =shoppingSession.OpenStore("HistoryShop","blah");
             Assert.AreEqual((int)StoreEnum.Success, answer.Status);
             var storeManagementSession = marketSession.GetStoreManagementService(userService, "HistoryShop");
             Assert.AreEqual((int)StoreEnum.Success, answer.Status);

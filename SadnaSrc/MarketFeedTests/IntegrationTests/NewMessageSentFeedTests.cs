@@ -4,6 +4,7 @@ using SadnaSrc.MarketFeed;
 using Moq;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 
 namespace MarketFeedTests.IntegrationTests
 {
@@ -21,7 +22,7 @@ namespace MarketFeedTests.IntegrationTests
         [TestInitialize]
         public void IntegrationFeedTestsBuilder()
         {
-            var marketDbMocker = new Mock<IMarketDB>();
+            var marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             countMessagesToServer = 0;
@@ -29,9 +30,9 @@ namespace MarketFeedTests.IntegrationTests
             messengerMocker = new Mock<IMarketMessenger>();
             messengerMocker.Setup(x => x.SendMessage(receiverId1, It.IsAny<string>())).Callback(SendMessageToReceiver1);
             messengerMocker.Setup(x => x.SendMessage(receiverId2, It.IsAny<string>())).Callback(SendMessageToReceiver2);
-            serverMocker.Setup(x => x.GetMessage(receiverId1.ToString(), "You've got new message pending in your mailbox!"))
+            serverMocker.Setup(x => x.GetMessage(receiverId1.ToString(), "You have got new message pending in your mailbox!"))
                 .Callback(SendMessageToServer);
-            serverMocker.Setup(x => x.GetMessage(receiverId2.ToString(), "You've got new message pending in your mailbox!"))
+            serverMocker.Setup(x => x.GetMessage(receiverId2.ToString(), "You have got new message pending in your mailbox!"))
                 .Callback(SendMessageToServer);
             MarketDB.Instance.InsertByForce();
         }
@@ -101,7 +102,7 @@ namespace MarketFeedTests.IntegrationTests
         public void SignUpThenGetMessageNotificationForMessageSentTest()
         {
             var newUserid = RegisterEvent();
-            serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You've got new message pending in your mailbox!"))
+            serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You have got new message pending in your mailbox!"))
                 .Callback(SendMessageToServer);
             messengerMocker.Setup(x => x.SendMessage(newUserid, It.IsAny<string>())).Callback(() => {Publisher.Instance.NotifyMessageReceived(newUserid);});
             messenger = messengerMocker.Object;

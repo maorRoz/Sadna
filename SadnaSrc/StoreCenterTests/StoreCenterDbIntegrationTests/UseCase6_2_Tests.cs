@@ -82,7 +82,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = storeManagerServiceSession.ViewPolicies();
             Assert.AreEqual((int)ViewStorePolicyStatus.Success, ans.Status);
             Assert.AreEqual(1, ans.ReportList.Length);
-            Assert.AreEqual("StockItem.Cluckin Bell.#9 Large", ans.ReportList[0]);
         }
 
         [TestMethod]
@@ -107,7 +106,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = storeManagerServiceSession.RemovePolicy("StockItem", "Cluckin Bell","#9 Large");
             Assert.AreEqual((int)EditPolicyStatus.Success, ans.Status);
             ans = storeManagerServiceSession.ViewPolicies();
-            Assert.AreEqual(2, ans.ReportList.Length);
+            Assert.AreEqual(1, ans.ReportList.Length);
         }
        
         [TestCleanup]

@@ -85,6 +85,7 @@ namespace SadnaSrc.OrderPool
 
         public OrderItem FindOrderItemInOrder(int orderId, string store,string name)
         {
+            dbConnection.CheckInput(store); dbConnection.CheckInput(name);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("OrderItem", "*", "OrderID = " + orderId + " AND " +
                                                                           "Store = '" + store + "' AND " +
                                                                           "Name = '" + name + "'"))
@@ -102,6 +103,7 @@ namespace SadnaSrc.OrderPool
 
         public List<OrderItem> FindOrderItemsFromStore(string store)
         {
+            dbConnection.CheckInput(store);
             List<OrderItem> res = new List<OrderItem>();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("OrderItem", "*", "Store = '" + store + "'"))
             {
@@ -122,36 +124,50 @@ namespace SadnaSrc.OrderPool
         {
             string[] valuesNames = { "@orderidParam", "@nameParam", "@addressParam", "@priceParam" , "@dateParam" };
             object[] values = order.ToData();
+            foreach (object val in values)
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("Orders", "OrderID,UserName,ShippingAddress,TotalPrice,Date", valuesNames, values);
 
             foreach (OrderItem item in order.GetItems())
             {
                 string[] valuesNames2 = { "@orderidParam", "@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
                 object[] values2 = { order.GetOrderID(), item.Store, item.Name, item.Price,item.Quantity };
+                foreach (object val in values2)
+                    dbConnection.CheckInput(val.ToString());
                 dbConnection.InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
 
 
                 string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@quantityParam", "@priceParam", "@dateParam" };
                 object[] values3 = { order.GetUserName(), item.Name, item.Store, "Immediate", item.Quantity, item.Price, order.GetDate() };
+                foreach (object val in values3)
+                    dbConnection.CheckInput(val.ToString());
                 dbConnection.InsertTable("PurchaseHistory", "UserName,Product,Store,SaleType,Quantity,Price,Date", valuesNames3, values3);
             }
         }
 
         public void AddOrder(Order order, string saleType)
         {
+            dbConnection.CheckInput(saleType);
             string[] valuesNames = { "@orderidParam", "@nameParam", "@addressParam", "@priceParam", "@dateParam" };
             object[] values = order.ToData();
+            foreach (object val in values)
+                dbConnection.CheckInput(val.ToString());
             dbConnection.InsertTable("Orders", "OrderID,UserName,ShippingAddress,TotalPrice,Date", valuesNames, values);
 
             foreach (OrderItem item in order.GetItems())
             {
                 string[] valuesNames2 = { "@orderidParam", "@storeParam", "@nameParam", "@priceParam", "@quantityParam" };
                 object[] values2 = { order.GetOrderID(), item.Store, item.Name, item.Price, item.Quantity };
+                foreach (object val in values2)
+                    dbConnection.CheckInput(val.ToString());
                 dbConnection.InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
 
                 
                 string[] valuesNames3 = { "@usernameParam", "@productParam", "@storeParam", "@saleParam", "@quantityParam", "@priceParam", "@dateParam" };
                 object[] values3 = { order.GetUserName(), item.Name, item.Store, saleType,item.Quantity,item.Price, order.GetDate() };
+                foreach (object val in values3)
+                    dbConnection.CheckInput(val.ToString());
                 dbConnection.InsertTable("PurchaseHistory", "UserName,Product,Store,SaleType,Quantity,Price,Date", valuesNames3, values3);
             }
 
@@ -162,6 +178,7 @@ namespace SadnaSrc.OrderPool
             List<OrderItem> items = GetAllItems(orderId);
             foreach (OrderItem item in items)
             {
+                dbConnection.CheckInput(item.Name); dbConnection.CheckInput(item.Store);
                 dbConnection.DeleteFromTable("PurchaseHistory", "Product = '" + item.Name +"' AND Store = '"+ item.Store +"'");
             }
             dbConnection.DeleteFromTable("OrderItem", "OrderID = " + orderId);
@@ -171,6 +188,7 @@ namespace SadnaSrc.OrderPool
 
         public void AddItemToOrder(int orderId, OrderItem item)
         {
+            dbConnection.CheckInput(item.Name); dbConnection.CheckInput(item.Store);
             string[] valuesNames2 = { "@OrderIdParam", "@StoreParam", "@NameParam", "@PriceParam", "@quantityParam" };
             object[] values2 = { orderId, item.Store, item.Name, item.Price, item.Quantity };
             dbConnection.InsertTable("OrderItem", "OrderID,Store,Name,Price,Quantity", valuesNames2, values2);
@@ -178,6 +196,7 @@ namespace SadnaSrc.OrderPool
 
         public void RemoveItemFromOrder(int orderId, string name, string store)
         {
+            dbConnection.CheckInput(name); dbConnection.CheckInput(store);
             dbConnection.DeleteFromTable("OrderItem", "OrderID = " + orderId + " AND Name = '" + name + "' AND Store = '" + store + "'");
         }
 
@@ -211,6 +230,7 @@ namespace SadnaSrc.OrderPool
 
         public void CancelLottery(string lottery)
         {
+            dbConnection.CheckInput(lottery);
             dbConnection.UpdateTable("LotteryTable", "SystemID = '" + lottery + "'",
                 new[] {"IsActive"},new []{"@status"},new object []{"false"});
 
@@ -220,6 +240,7 @@ namespace SadnaSrc.OrderPool
 
         public string[] GetAllTickets(string lottery)
         {
+            dbConnection.CheckInput(lottery);
             List<string> tickets = new List<string>();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "myID","LotteryID = '"+lottery +"'"))
             {
@@ -233,6 +254,7 @@ namespace SadnaSrc.OrderPool
         
         public int GetTicketParticipantID(string ticket)
         {
+            dbConnection.CheckInput(ticket);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "UserID", "myID ='" + ticket + "'" ))
             {
                 if (dbReader.Read())
@@ -283,6 +305,7 @@ namespace SadnaSrc.OrderPool
 
         public double GetSumToRefund(string ticket)
         {
+            dbConnection.CheckInput(ticket);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "Cost", "myID ='" + ticket + "'"))
             {
                 if (dbReader.Read())
@@ -296,6 +319,7 @@ namespace SadnaSrc.OrderPool
 
         public void RemoveTicket(string ticket)
         {
+            dbConnection.CheckInput(ticket);
             dbConnection.DeleteFromTable("LotteryTicket", "myID ='" + ticket + "'");
         }
 

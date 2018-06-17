@@ -38,88 +38,6 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.ViewStoreStock("X");
             Assert.AreEqual((int)StoreEnum.NoPermission, ans.Status);
         }
-
-        [TestMethod]
-        public void ViewStoreStockSuccessAfterItemPurched()
-        {
-            userService2.EnterSystem();
-            userService2.SignIn("Arik1", "123");
-            StoreManagementService anotherSession =
-                (StoreManagementService) market.GetStoreManagementService(userService2, "X");
-            MarketAnswer ans = anotherSession.AddNewLottery("blabla", 8, "da", DateTime.Parse("11/01/2020"), DateTime.Parse("12/01/2021"));
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            MarketYard.SetDateTime(DateTime.Parse("13/01/2020"));
-            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
-            liorSession.LoginShoper("Arik3", "123");
-            ans = liorSession.ViewStoreStock("X");
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            string[] result1 = ans.ReportList;
-            IOrderService order = market.GetOrderService(ref userService);
-            ans = order.BuyLotteryTicket("blabla", "X", 1, 8);
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            ans = liorSession.ViewStoreStock("X");
-            string[] result2 = ans.ReportList;
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            Assert.AreNotEqual(result1.Length, result2.Length);
-        }
-        [TestMethod]
-        public void ViewStoreStockSuccessAfterDateExpiredOrNotBegan()
-        {
-            userService2.EnterSystem();
-            userService2.SignIn("Arik1", "123");
-            StoreManagementService anotherSession =
-                (StoreManagementService)market.GetStoreManagementService(userService2, "X");
-            MarketAnswer ans = anotherSession.AddNewLottery("blabla", 8, "da", DateTime.Parse("11/01/2020"), DateTime.Parse("12/01/2021"));
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            MarketYard.SetDateTime(DateTime.Parse("13/01/2020"));
-            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
-            liorSession.LoginShoper("Arik3", "123");
-            ans = liorSession.ViewStoreStock("X");
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            string[] result1 = ans.ReportList;
-            MarketYard.SetDateTime(DateTime.Parse("25/01/2022"));
-            ans = liorSession.ViewStoreStock("X");
-            string[] result2 = ans.ReportList;
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            Assert.AreNotEqual(result1.Length, result2.Length);
-            MarketYard.SetDateTime(DateTime.Parse("15/01/2013"));
-            ans = liorSession.ViewStoreStock("X");
-            string[] result3 = ans.ReportList;
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            Assert.AreNotEqual(result1.Length, result3.Length);
-            Assert.AreEqual(result3.Length, result2.Length);
-
-
-        }
-
-        [TestMethod]
-        public void ViewStoreStockSuccessCheckQuantityUpdated()
-        {
-            IStoreDL datalayer = StoreDL.Instance;
-            userService2.EnterSystem();
-            userService2.SignIn("Arik1", "123");
-            StoreManagementService anotherSession =
-                (StoreManagementService)market.GetStoreManagementService(userService2, "X");
-            MarketAnswer ans = anotherSession.AddNewLottery("blabla", 8, "da", DateTime.Parse("11/01/2020"), DateTime.Parse("12/01/2021"));
-
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            anotherSession.AddQuanitityToProduct("blabla", 3);
-            StockListItem sli = datalayer.GetProductFromStore("X","blabla");
-            MarketYard.SetDateTime(DateTime.Parse("13/01/2020"));
-            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
-            liorSession.LoginShoper("Arik3", "123");
-            ans = liorSession.ViewStoreStock("X");
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            string[] result1 = ans.ReportList;
-            IOrderService order = market.GetOrderService(ref userService);
-            ans = order.BuyLotteryTicket("blabla", "X", 1, 8);
-            Assert.AreEqual((int)StoreEnum.Success, ans.Status);
-            ans = liorSession.ViewStoreStock("X");
-            string[] result2 = ans.ReportList;
-            Assert.AreNotEqual(result2[result2.Length-1],result1[result1.Length-1]);            
-            StockListItem sli2 = datalayer.GetProductFromStore("X","blabla");
-            Assert.AreEqual(sli2.Quantity+1, sli.Quantity);
-        }
         [TestMethod]
         public void ViewStoreStockSuccess()
         {
@@ -128,6 +46,16 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.ViewStoreStock("X");
 
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
+        }
+
+        [TestMethod]
+        public void ViewStoreStockBadInputFail()
+        {
+            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
+            liorSession.LoginShoper("Arik3", "123");
+            MarketAnswer ans = liorSession.ViewStoreStock("X'");
+
+            Assert.AreEqual((int)StoreEnum.BadInput, ans.Status);
         }
 
         [TestCleanup]

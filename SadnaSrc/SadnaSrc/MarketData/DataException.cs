@@ -3,23 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SadnaSrc.Main;
 
 namespace SadnaSrc.MarketData
 {
-    class DataException : Exception
+    public class DataException : MarketException
     {
-        private string errorMessage;
-        public int Status { get;}
 
-        public DataException()
+        public DataException() : base(500,
+            "Connection with the system data centers has been lost," +
+            " opertaion failed!")
         {
-            errorMessage = "Data Error: Connection with the system data centers has been lost, opertaion failed!";
-            Status = 500;
         }
 
-        public string GetErrorMessage()
+        public DataException(string message) : base(600,message)
         {
-            return errorMessage;
+        }
+
+        protected override string GetModuleName()
+        {
+            return "Db Connection Lost";
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Castle.Core;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 
@@ -37,6 +40,7 @@ namespace SadnaSrc.UserSpot
 
         public bool IsUserNameExist(string name)
          {
+             dbConnection.CheckInput(name);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "*", "Name = '" + name + "'"))
             {
                 return dbReader.Read();
@@ -45,6 +49,8 @@ namespace SadnaSrc.UserSpot
         }
         public RegisteredUser RegisterUser(int userID,string name, string address, string password, string creditCard, CartItem[] guestCart)
         {
+            dbConnection.CheckInput(name); dbConnection.CheckInput(address);
+            dbConnection.CheckInput(password); dbConnection.CheckInput(creditCard);
             string[] columnNames = { "Name" , "Address" , "Password","CreditCard" };
             string[] valuesNames = {"@name", "@address", "@password","@card"};
             object[] values = {name, address, password,creditCard};
@@ -54,6 +60,7 @@ namespace SadnaSrc.UserSpot
         }
         public void SaveUserStatePolicy(int userID,StatePolicy policy)
         {
+            dbConnection.CheckInput(policy.GetStateString());
             string [] valuesNames = {"@idParam","@stateParam"};
             object[] values = { userID, policy.GetStateString()};
             dbConnection.InsertTable("StatePolicy", "SystemID,State",valuesNames,values);
@@ -61,6 +68,7 @@ namespace SadnaSrc.UserSpot
 
         private int GetIDFromUserName(string userName)
         {
+            dbConnection.CheckInput(userName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "SystemID", "Name = '" + userName + "'"))
             {
                 if (dbReader.Read())
@@ -73,6 +81,7 @@ namespace SadnaSrc.UserSpot
 
         public void SaveUserStorePolicy(string userName,StoreManagerPolicy policy)
         {
+            dbConnection.CheckInput(policy.Store); dbConnection.CheckInput(StoreManagerPolicy.GetStoreActionString(policy.Action));
             int idOfPromoted = GetIDFromUserName(userName);
             string[] valuesNames = { "@idParam", "@storeParam","@actionParam" };
             object[] values = { idOfPromoted, policy.Store, StoreManagerPolicy.GetStoreActionString(policy.Action) };
@@ -81,6 +90,7 @@ namespace SadnaSrc.UserSpot
 
         public void SaveUserStorePolicy(int userID,StoreManagerPolicy policy)
         {
+            dbConnection.CheckInput(policy.Store); dbConnection.CheckInput(StoreManagerPolicy.GetStoreActionString(policy.Action));
             string[] valuesNames = { "@idParam", "@storeParam", "@actionParam" };
             object[] values = { userID, policy.Store, StoreManagerPolicy.GetStoreActionString(policy.Action) };
             dbConnection.InsertTable("StoreManagerPolicy", "SystemID,Store,Action", valuesNames, values);
@@ -88,6 +98,7 @@ namespace SadnaSrc.UserSpot
 
         public void DeleteUserStorePolicy(string userName, StoreManagerPolicy policy)
         {
+            dbConnection.CheckInput(policy.Store); dbConnection.CheckInput(policy.Action.ToString());
             int idOfDemoted = GetIDFromUserName(userName);
             dbConnection.DeleteFromTable("StoreManagerPolicy","SystemID = "+ idOfDemoted + " AND Store = '"+policy.Store
                                                  + "' AND Action = '" + policy.Action +"'");
@@ -107,7 +118,7 @@ namespace SadnaSrc.UserSpot
             return loadedStatesPolicies.ToArray();
         }
 
-        private StoreManagerPolicy[] LoadUserStorePolicies(int userID)
+        public StoreManagerPolicy[] LoadUserStorePolicies(int userID)
         {
             List<StoreManagerPolicy> loadedStorePolicies = new List<StoreManagerPolicy>();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("StoreManagerPolicy", "*", "SystemID = " + userID))
@@ -148,6 +159,7 @@ namespace SadnaSrc.UserSpot
 
         public object[] FindRegisteredUserData(string name, string password)
         {
+            dbConnection.CheckInput(name); dbConnection.CheckInput(password);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "*", "name = '" + name + "' AND password = '"+ password +"'"))
             {
                 if(dbReader.Read())
@@ -183,13 +195,18 @@ namespace SadnaSrc.UserSpot
                 var userItem = new List<object>();
                 userItem.Add(userID);
                 userItem.AddRange(item.ToData());
+                object[] itemVals = userItem.ToArray();
+                foreach (object val in itemVals)
+                    dbConnection.CheckInput(val.ToString());
+
                 dbConnection.InsertTable("CartItem", "SystemID,Name,Store,Quantity,UnitPrice,FinalPrice",
-                    new [] { "@idParam", "@nameParam", "@storeParam","@quantityParam","@unitpriceParam","@finalpriceParam"}, userItem.ToArray());
+                    new [] { "@idParam", "@nameParam", "@storeParam","@quantityParam","@unitpriceParam","@finalpriceParam"}, itemVals);
             }
         }
 
         public void RemoveCartItem(int userID,CartItem item)
         {
+            dbConnection.CheckInput(item.Name); dbConnection.CheckInput(item.Store);
             dbConnection.DeleteFromTable("CartItem", "SystemID = "+ userID + " AND "+ item.GetDbIdentifier());
         }
         private CartItem[] LoadCartItems(int userID)
@@ -211,6 +228,7 @@ namespace SadnaSrc.UserSpot
             string[] columnNames = { "Quantity", "FinalPrice"};
             string[] valuesNames = { "@quantity", "@price"};
             object[] values = { item.Quantity,item.FinalPrice};
+            dbConnection.CheckInput(item.Name); dbConnection.CheckInput(item.Store);
             dbConnection.UpdateTable("CartItem", item.GetDbIdentifier(), columnNames, valuesNames, values);
         }
 
@@ -228,6 +246,13 @@ namespace SadnaSrc.UserSpot
 
 		    return result.ToArray();
 	    }
+
+		public void InsertSignedInUser(int systemId)
+		{
+			string[] valuesNames = { "@systemidParam", "@timeParam" };
+			object[] values = { systemId, DateTime.Now.Date };
+			dbConnection.InsertTable("SignInReports", "SystemID,Time", valuesNames, values);
+		}
 
     }
 }

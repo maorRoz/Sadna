@@ -20,7 +20,7 @@ namespace SadnaSrc.Main
 	    MarketAnswer GetStoreManagerPolicies(string store);
         MarketAnswer GetUserDetails();
 	    MarketAnswer GetAllStores();
-
+	   
     }
 
     public enum EnterSystemStatus
@@ -36,7 +36,8 @@ namespace SadnaSrc.Main
         SignedUpAlready,
         TakenName,
         NullEmptyFewDataGiven,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
 
     }
 
@@ -48,14 +49,16 @@ namespace SadnaSrc.Main
         SignedInAlready,
         NoUserFound,
         NullEmptyDataGiven,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum ViewCartStatus
     {
         Success,
         DidntEnterSystem,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
 	public enum EditCartItemStatus
@@ -64,7 +67,8 @@ namespace SadnaSrc.Main
         DidntEnterSystem,
         NoItemFound,
         ZeroNegativeQuantity,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum RemoveFromCartStatus
@@ -72,58 +76,61 @@ namespace SadnaSrc.Main
         Success,
         DidntEnterSystem,
         NoItemFound,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum ViewUsersStatus
     {
         Success,
         DidntEnterSystem,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum GetControlledStoresStatus
     {
         Success,
         DidntEnterSystem,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
 	public enum ViewStoresStatus
 	{
 		Success,
 		NoPermission,
-	    NoDB = 500
+	    NoDB = 500,
+	    BadInput = 600
     }
 
 	public enum GetStoreManagerPoliciesStatus
 	{
 		Success,
 		DidntEnterSystem,
-	    NoDB = 500
+	    NoDB = 500,
+	    BadInput = 600
     }
     public enum GetUserDetailsStatus
     {
         Success,
         DidntEnterSystem,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum BrowseMarketStatus
     {
         DidntEnterSystem,
         DidntLoggedSystem,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum ManageMarketSystem
     {
         NotSystemAdmin,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
-
-
-
-	
-    
 }

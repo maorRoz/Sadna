@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 
 namespace StoreCenterTests.StoreCenterUnitTests
 {
@@ -18,7 +19,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
     {
         private Mock<IStoreDL> handler;
         private Mock<IUserSeller> userService;
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private EditDiscountSlave slave;
         private Product prod;
         private Discount discount;
@@ -27,7 +28,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         [TestInitialize]
         public void BuildStore()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();
@@ -46,7 +47,7 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void NoStore()
         {
             handler.Setup(x => x.IsStoreExistAndActive("X")).Returns(false);
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "10");
+            slave.EditDiscount("NEWPROD", null, false, null, null, "25", true);
             Assert.AreEqual((int)StoreEnum.StoreNotExists, slave.answer.Status);
         }
 
@@ -54,24 +55,16 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void NoPermission()
         {
             userService.Setup(x => x.CanDeclareDiscountPolicy()).Throws(new MarketException(0, ""));
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "10");
+            slave.EditDiscount("NEWPROD", null, false, null, null, "25", true);
             Assert.AreEqual((int)StoreEnum.NoPermission, slave.answer.Status);
         }
-
-        [TestMethod]
-        public void NoProduct()
-        {
-            handler.Setup(x => x.GetProductByNameFromStore("X", "NEWPROD")).Returns((Product)null);
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "10");
-            Assert.AreEqual((int)StoreEnum.ProductNotFound, slave.answer.Status);
-        }
-
+     
         [TestMethod]
         public void NoDiscount()
         {
             stock = new StockListItem(10, prod, null, PurchaseEnum.Immediate, "BLA");
             handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "10");
+            slave.EditDiscount("NEWPROD", null, false, null, null, "25", true);
             Assert.AreEqual((int)DiscountStatus.DiscountNotFound, slave.answer.Status);
         }
 
@@ -79,60 +72,60 @@ namespace StoreCenterTests.StoreCenterUnitTests
         public void InvalidDiscountType()
         {
 
-            slave.EditDiscount("NEWPROD", "asd", "agado");
-            Assert.AreEqual((int)DiscountStatus.NoLegalAttrebute, slave.answer.Status);
+            slave.EditDiscount("NEWPROD", "sdsd", false, null, null, "25", true);
+            Assert.AreEqual((int)DiscountStatus.InvalidDiscountType, slave.answer.Status);
         }
 
         [TestMethod]
         public void StartDateInvalid1()
         {
-            slave.EditDiscount("NEWPROD", "startdate", "agado");
+            slave.EditDiscount("NEWPROD", null, false, "shit", null, null, true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, slave.answer.Status);
         }
 
         [TestMethod]
         public void StartDateInvalid2()
         {
-            slave.EditDiscount("NEWPROD", "startdate", "30/08/2020");
+            slave.EditDiscount("NEWPROD", null, false, "30/08/2020", null, null, true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, slave.answer.Status);
         }
 
         [TestMethod]
         public void EndDateInvalid1()
         {
-            slave.EditDiscount("NEWPROD", "EndDate", "agado");
+            slave.EditDiscount("NEWPROD", null, false, null, "shit", null, true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, slave.answer.Status);
         }
 
         [TestMethod]
         public void EndDateInvalid2()
         {
-            slave.EditDiscount("NEWPROD", "EndDate", "03/04/2020");
+            slave.EditDiscount("NEWPROD", null, false, null, "03/02/2020", null, true);
             Assert.AreEqual((int)DiscountStatus.DatesAreWrong, slave.answer.Status);
         }
 
 
         [TestMethod]
-        public void DiscountAmountInvalid()
-        {
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "satan");
-            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNotNumber, slave.answer.Status);
-          
-        }
-
-        [TestMethod]
         public void DiscountBadPercentage1()
         {
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "500");
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, slave.answer.Status);
+            slave.EditDiscount("NEWPROD", null, false, null, null, "-2", true);
+            Assert.AreEqual((int)DiscountStatus.InvalidDiscountAmount, slave.answer.Status);
 
         }
 
         [TestMethod]
         public void DiscountBadPercentage2()
         {
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "100");
-            Assert.AreEqual((int)DiscountStatus.AmountIsHundredAndpresenteges, slave.answer.Status);
+            slave.EditDiscount("NEWPROD", null, false, null, null, "500", true);
+            Assert.AreEqual((int)DiscountStatus.InvalidDiscountAmount, slave.answer.Status);
+
+        }
+
+        [TestMethod]
+        public void DiscountBadPercentage3S()
+        {
+            slave.EditDiscount("NEWPROD", null, false, null, null, "SHit", true);
+            Assert.AreEqual((int)DiscountStatus.InvalidDiscountAmount, slave.answer.Status);
 
         }
 
@@ -142,8 +135,8 @@ namespace StoreCenterTests.StoreCenterUnitTests
             discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
             stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
             handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "500");
-            Assert.AreEqual((int)DiscountStatus.DiscountGreaterThenProductPrice, slave.answer.Status);
+            slave.EditDiscount("NEWPROD", null, false, null, null, "500", false);
+            Assert.AreEqual((int)DiscountStatus.InvalidDiscountAmount, slave.answer.Status);
         }
 
         [TestMethod]
@@ -152,8 +145,8 @@ namespace StoreCenterTests.StoreCenterUnitTests
             discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
             stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
             handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "-2");
-            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, slave.answer.Status);
+            slave.EditDiscount("NEWPROD", null, false, null, null, "-2", false);
+            Assert.AreEqual((int)DiscountStatus.InvalidDiscountAmount, slave.answer.Status);
         }
 
         [TestMethod]
@@ -162,14 +155,35 @@ namespace StoreCenterTests.StoreCenterUnitTests
             discount = new Discount(DiscountTypeEnum.Visible, DateTime.Parse("03/05/2020"), DateTime.Parse("30/06/2020"), 50, false);
             stock = new StockListItem(10, prod, discount, PurchaseEnum.Immediate, "BLA");
             handler.Setup(x => x.GetProductFromStore("X", "NEWPROD")).Returns(stock);
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "0");
-            Assert.AreEqual((int)DiscountStatus.DiscountAmountIsNegativeOrZero, slave.answer.Status);
+            slave.EditDiscount("NEWPROD", null, false, null, null, "shit", false);
+            Assert.AreEqual((int)DiscountStatus.InvalidDiscountAmount, slave.answer.Status);
         }
        
         [TestMethod]
-        public void EditDiscountSuccess()
+        public void EditDiscountSuccess1()
         {
-            slave.EditDiscount("NEWPROD", "DiscountAmount", "10");
+            slave.EditDiscount("NEWPROD", null, false, null, null, "25", true);
+            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void EditDiscountSuccess2()
+        {
+            slave.EditDiscount("NEWPROD", null, false, null, "03/9/2020", "25", true);
+            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void EditDiscountSuccess3()
+        {
+            slave.EditDiscount("NEWPROD", "SHIT", true, null, null, "25", true);
+            Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
+        }
+
+        [TestMethod]
+        public void EditDiscountSuccess4()
+        {
+            slave.EditDiscount("NEWPROD", null, false, "03/2/2020", null, "25", true);
             Assert.AreEqual((int)StoreEnum.Success, slave.answer.Status);
         }
 

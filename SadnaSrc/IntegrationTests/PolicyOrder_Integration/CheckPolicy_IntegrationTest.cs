@@ -5,6 +5,7 @@ using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketFeed;
 using SadnaSrc.MarketHarmony;
+using SadnaSrc.MarketRecovery;
 using SadnaSrc.OrderPool;
 using SadnaSrc.PolicyComponent;
 using SadnaSrc.StoreCenter;
@@ -17,7 +18,7 @@ namespace IntegrationTests.PolicyOrder_Integration
     [TestClass]
     public class CheckPolicy_IntegrationTest
     {
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private Mock<IUserBuyer> userBuyerMocker;
         private Mock<IPublisher> publisherMock;
 
@@ -37,7 +38,7 @@ namespace IntegrationTests.PolicyOrder_Integration
         public void MarketBuilder()
         {
             publisherMock = new Mock<IPublisher>();
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             userBuyerMocker = new Mock<IUserBuyer>();

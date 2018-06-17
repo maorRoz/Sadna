@@ -19,10 +19,10 @@ namespace SadnaSrc.Main
          **/
         MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity);
         MarketAnswer RemoveProduct(string productName);
-        MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
-        MarketAnswer AddQuanitityToProduct(string productName, int quantity);
-
-        MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
+	    MarketAnswer EditProduct(string productName, string productNewName, string basePrice, string description);
+		MarketAnswer AddQuanitityToProduct(string productName, int quantity);
+	    MarketAnswer GetProductInfo(string productName);
+		MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
             DateTime endDate);
         /**
          * Category Managment
@@ -35,7 +35,7 @@ namespace SadnaSrc.Main
 
         MarketAnswer AddDiscountToProduct(string productName, DateTime startDate, DateTime endDate, 
         int discountAmount,string discountType, bool presenteges);
-        MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue);
+        MarketAnswer EditDiscount(string product, string discountCode, bool isHidden, string startDate, string EndDate, string discountAmount, bool isPercentage);
         MarketAnswer RemoveDiscountFromProduct(string productName);
         /**
          * History View
@@ -56,7 +56,9 @@ namespace SadnaSrc.Main
 	    MarketAnswer CreatePolicy(string type, string subject, string optSubject, string op, string arg1, string optArg);
 	    MarketAnswer SavePolicy();
 	    MarketAnswer ViewPolicies();
-	    MarketAnswer ViewPoliciesSessions();
+        MarketAnswer ViewPolicies(string store);
+
+        MarketAnswer ViewPoliciesSessions();
 		MarketAnswer RemovePolicy(string type, string subject, string optProd);
 
     }
@@ -79,7 +81,8 @@ namespace SadnaSrc.Main
         CategoryNotExistsInSystem,
         CategoryDiscountAlreadyExistsInStore,
         CategoryDiscountNotExistsInStore,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
     public enum DiscountStatus
     {
@@ -95,14 +98,18 @@ namespace SadnaSrc.Main
         DiscountAmountIsNotNumber,
         PrecentegesIsNotBoolean,
         NoLegalAttrebute,
-        NoDB = 500
+        InvalidDiscountAmount,
+        InvalidDiscountType,
+        NoDB = 500,
+        BadInput = 600
     }
     public enum ManageStoreStatus
     {
         Success,
         InvalidStore,
         InvalidManager,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
 
     }
 
@@ -111,13 +118,15 @@ namespace SadnaSrc.Main
         Success,
         InvalidStore,
         InvalidManager,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
     public enum StoreSyncStatus
     {
         NoStore,
         NoProduct,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
 	public enum PromoteStoreStatus
@@ -129,7 +138,8 @@ namespace SadnaSrc.Main
 		NoAuthority,
 		NoUserFound,
 		InvalidPromotion,
-	    NoDB = 500
+	    NoDB = 500,
+	    BadInput = 600
     }
     public enum CalculateEnum
     {
@@ -143,7 +153,8 @@ namespace SadnaSrc.Main
         DiscountNotStarted,
         QuanitityIsNonPositive,
         DiscountIsNotHidden,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
     public enum ChangeToLotteryEnum
     {
@@ -152,7 +163,8 @@ namespace SadnaSrc.Main
         ProductNotFound,
         LotteryExists,
         DatesAreWrong,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum EditStorePolicyStatus
@@ -160,7 +172,8 @@ namespace SadnaSrc.Main
         Success,
         InvalidPolicyData,
         NoAuthority,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
 
     }
 
@@ -168,8 +181,16 @@ namespace SadnaSrc.Main
     {
         Success,
         NoAuthority,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
+
+	public enum ViewProductInfoStatus
+	{
+		Success,
+		NoAuthority,
+		NoDB = 500
+	}
 
 
     public enum PurchaseEnum { Immediate, Lottery };

@@ -450,7 +450,7 @@ namespace IntegrationTests.UserSeller_Integration
         private void SignInAndEditProduct(string user, string product)
         {
             SignIn(user);
-            storeServiceSession.EditProduct(product, "Name", "Bambaa");
+            storeServiceSession.EditProduct(product, "Bambaa", "10","hahaha");
             StockSyncher.Instance.GetProductFromStore(store, "Bambaa");
         }
 

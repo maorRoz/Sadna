@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -29,6 +30,7 @@ namespace PurchasePolicyTests
         private QuantityLessThan QuantityLessThanLeaf;
         private UsernameEquals UsernameEqualsLeaf;
         private UsernameEquals UsernameEqualsLeaf2;
+        private UsernameEquals BadInputLeaf;
         [TestInitialize]
         public void BuildSupplyPoint()
         {
@@ -49,6 +51,7 @@ namespace PurchasePolicyTests
             NotHasopSun = new NotOperator(PolicyType.Global, "bla", NotHasCondSun, null, 13);
             OrHas2opSuns =new OrOperator(PolicyType.Global, "bla", AndHas1opSun, OrHas1opSun, 14);
             ROOT_AndHas2opSuns = new AndOperator(PolicyType.Global, "bla", OrHas2opSuns, NotHasopSun, 15);
+            BadInputLeaf = new UsernameEquals(PolicyType.Global, "bla", "bla'bla", 1);
         }
         [TestMethod]
         public void SaveUsernameEqualsLeaf2()
@@ -64,6 +67,23 @@ namespace PurchasePolicyTests
             datalayer.SavePolicy(UsernameEqualsLeaf);
             Assert.AreEqual(UsernameEqualsLeaf, datalayer.GetPolicy(PolicyType.Global, "bla"));
         }
+
+        [TestMethod]
+        public void SaveBadLeafFail()
+        {
+            try
+            {
+                BadInputLeaf.IsRoot = true;
+                datalayer.SavePolicy(BadInputLeaf);
+                Assert.Fail();
+            }
+
+            catch (DataException e)
+            {
+                Assert.AreEqual(600,e.Status);
+            }
+        }
+
         [TestMethod]
         public void SaveQuantityLessThanLeaf()
         {

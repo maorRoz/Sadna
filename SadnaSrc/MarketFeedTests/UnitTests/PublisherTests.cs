@@ -28,10 +28,10 @@ namespace MarketFeedTests.UnitTests
         public void PublisherTestBuilder()
         {
             soldMessageExpected = productTest + " has been sold in " + storeTest + "!";
-            winnerMessageExpected = "You've won the lottery on " + productTest + " in " + storeTest + "!";
-            loserMessageExpected = "You've lost the lottery on " + productTest + " in " + storeTest + "...";
-            refundMessageExpected = "You've been fully refunded on a lottery you were participating on";
-            newMessageExpected = "You've got new message pending in your mailbox!";
+            winnerMessageExpected = "You have won the lottery on " + productTest + " in " + storeTest + "!";
+            loserMessageExpected = "You have lost the lottery on " + productTest + " in " + storeTest + "...";
+            refundMessageExpected = "You have been fully refunded on a lottery you were participating on";
+            newMessageExpected = "You have got new message pending in your mailbox!";
             feedDbMocker = new Mock<IFeedDL>();
             feedDbMocker.Setup(x => x.GetUserIds()).Returns(new[] { userId1, userId2, userId3,userId4 });
             feedDbMocker.Setup(x => x.GetStoreOwnersIds(storeTest)).Returns(new[] { userId1, userId2, userId3 });

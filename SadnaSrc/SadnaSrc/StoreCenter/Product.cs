@@ -30,6 +30,8 @@ namespace SadnaSrc.StoreCenter
             Name = _name;
             BasePrice = _price;
             Description = _description;
+	        Categories = new List<string>();
+
         }
 
         public override bool Equals(object obj)
@@ -81,6 +83,11 @@ namespace SadnaSrc.StoreCenter
             }
             globalProductID++;
             return "P" + globalProductID;
+        }
+
+        public static void RestartProductID()
+        {
+            globalProductID = -1;
         }
 
     }

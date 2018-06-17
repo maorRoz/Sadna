@@ -9,6 +9,7 @@ using System.Text;
 using Moq;
 using System.Threading.Tasks;
 using SadnaSrc.MarketData;
+using SadnaSrc.MarketRecovery;
 
 namespace StoreCenterTests.StoreCenterUnitTests
 {
@@ -17,14 +18,14 @@ namespace StoreCenterTests.StoreCenterUnitTests
     {
         private Mock<IStoreDL> handler;
         private Mock<IUserSeller> userService;
-        private Mock<IMarketDB> marketDbMocker;
+        private Mock<IMarketBackUpDB> marketDbMocker;
         private Product prod;
         private AddDiscountToProductSlave slave;
 
         [TestInitialize]
         public void BuildStore()
         {
-            marketDbMocker = new Mock<IMarketDB>();
+            marketDbMocker = new Mock<IMarketBackUpDB>();
             MarketException.SetDB(marketDbMocker.Object);
             MarketLog.SetDB(marketDbMocker.Object);
             handler = new Mock<IStoreDL>();

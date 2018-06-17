@@ -41,19 +41,19 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "Product is in category");
                 DataLayerInstance.RemoveProductFromCategory(category.SystemId, product.SystemId);
                 Answer = new StoreAnswer(StoreEnum.Success,
-                    "product" + productName + " removed successfully from category" + categoryName);
+                    "product " + productName + " removed successfully from category " + categoryName);
             }
             catch (StoreException e)
             {
                 Answer = new StoreAnswer((StoreEnum)e.Status,e.GetErrorMessage());
             }
-            catch (MarketException)
-            {
-                Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
-            }
             catch (DataException e)
             {
                 Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException)
+            {
+                Answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
             }
         }
 

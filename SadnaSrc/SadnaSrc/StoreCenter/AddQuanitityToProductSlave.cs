@@ -35,15 +35,16 @@ namespace SadnaSrc.StoreCenter
 				answer = new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
 			}
 
+            catch (DataException e)
+            {
+                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
+
             catch (MarketException e)
             {
                 MarketLog.Log("StoreCenter", "Manager " + _storeManager.GetID() + " has no permission to view purchase history in Store"
                                              + _storeName + " and therefore has been denied. Error message has been created!");
                 answer = new StoreAnswer(StoreEnum.NoPermission, e.GetErrorMessage());
-            }
-            catch (DataException e)
-            {
-                answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
             }
         }
 

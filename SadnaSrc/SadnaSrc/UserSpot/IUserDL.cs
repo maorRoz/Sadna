@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Castle.Core;
 
 namespace SadnaSrc.UserSpot
 {
@@ -22,6 +23,10 @@ namespace SadnaSrc.UserSpot
         void SaveUserStatePolicy(int userId, StatePolicy statePolicy);
         void SaveUserStorePolicy(int userId, StoreManagerPolicy storeOwnershipPermission);
 	    string[] GetAllActiveStoreNames();
+		void InsertSignedInUser(int systemId);
+
+        StoreManagerPolicy[] LoadUserStorePolicies(int userID);
+
 
     }
 }

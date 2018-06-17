@@ -13,7 +13,7 @@ namespace SadnaSrc.MarketHarmony
 
         public Category (string categoryname)
         {
-            SystemId = getNextCategoryID();
+            SystemId = GetNextCategoryID();
             Name = categoryname;
             products = new LinkedList<Product>();
         }
@@ -33,12 +33,8 @@ namespace SadnaSrc.MarketHarmony
                 Name,
             };
         }
-        public void addProductToCategory(Product product)
-        {
-            products.AddLast(product);
-        }
 
-        private string getNextCategoryID()
+        private string GetNextCategoryID()
         {
             if (globalCategoryID == -1)
             {
@@ -46,6 +42,11 @@ namespace SadnaSrc.MarketHarmony
             }
             globalCategoryID++;
             return "C" + globalCategoryID;
+        }
+
+        public static void RestartCategoryID()
+        {
+            globalCategoryID = -1;
         }
         public override bool Equals(object obj)
         {

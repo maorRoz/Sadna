@@ -27,7 +27,9 @@ namespace SadnaSrc.StoreCenter
                 _shopper.ValidateRegistered();
                 MarketLog.Log("StoreCenter", "premission gained");
                 CheckIfNameAvailable(storeName);
-                Store newStore = new Store(storeName, address);
+				CheckIfDataValid(address);
+				MarketLog.Log("StoreCenter", "data is valid");
+				Store newStore = new Store(storeName, address);
                 storeDB.AddStore(newStore);
                 MarketLog.Log("StoreCenter", "store was opened");
                 _shopper.AddOwnership(storeName);
@@ -37,17 +39,16 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException e)
             {
-                Answer = new StoreAnswer((OpenStoreStatus)e.Status, "Store " + storeName + " creation has been denied. " +
-                                                 "something is wrong with adding a new store of that type. Error message has been created!");
-            }
-            catch (MarketException)
-            {
-                Answer = new StoreAnswer(OpenStoreStatus.InvalidUser,
-                    "User validation as store owner has been failed. only registered users can open new stores. Error message has been created!");
+                Answer = new StoreAnswer((OpenStoreStatus)e.Status, e.GetErrorMessage());
             }
             catch (DataException e)
             {
                 Answer = new StoreAnswer((StoreEnum)e.Status, e.GetErrorMessage());
+            }
+            catch (MarketException)
+            {
+                Answer = new StoreAnswer(OpenStoreStatus.InvalidUser,
+                    "User validation as store owner has been failed. only registered users can open new stores.");
             }
             return null;
         }
@@ -58,5 +59,13 @@ namespace SadnaSrc.StoreCenter
             if (store != null)
                 throw new StoreException(OpenStoreStatus.AlreadyExist, "store name must be uniqe");
         }
-    }
+
+		private void CheckIfDataValid(string address)
+		{
+			if (string.IsNullOrEmpty(address))
+			{
+				throw new StoreException(OpenStoreStatus.InvalidData, "store address is invalid");
+			}
+		}
+	}
 }
