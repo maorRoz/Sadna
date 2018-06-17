@@ -1,6 +1,9 @@
 ﻿<br />
 <br />
 <br />
+<br />
+<br />
+<br />
 @{
     ViewData["Title"] = "View Promotion History";
 }
@@ -14,13 +17,13 @@
         <div style="float: left;width:70%">
             <table class="table">
                 <thead>
-                <tr>
-                    <th>Promoter</th>
-                    <th>Promoted</th>
-                    <th>Permissions</th>
-                    <th>Date</th>
-                    <th>Description</th>
-                </tr>
+                    <tr>
+                        <th>Promoter</th>
+                        <th>Promoted</th>
+                        <th>Permissions</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                    </tr>
                 </thead>
                 @foreach (var item in Model.Items)
                 {

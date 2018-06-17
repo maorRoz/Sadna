@@ -8,15 +8,15 @@
         <hr/>
         <div id="feedContainer" style="float: right;width:20%"></div>
 		<div style="float: left; width: 70%">
-			<div id="alertContainer">
-				@if (Model.Message != null)
-		{
-			<div class='success'>
-				<span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
-				@Model.Message
-			</div>
-}
-			</div>
+		    <div id="alertContainer">
+		        @if (Model.Message != null)
+		        {
+		            <div class='success'>
+		                <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+		                @Model.Message
+		            </div>
+		        }
+		    </div>
 			about us:
 			
 			<div>
@@ -31,7 +31,8 @@
 			Pnina,
 			Zohar,
 			Igor,
-			and Lior
+		    and Lior
+		    <img src="\images\market.jpg"/>
 		</div>
 		</div>
 </div>
