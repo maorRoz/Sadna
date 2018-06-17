@@ -76,6 +76,16 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 
+        [TestMethod]
+        public void RemoveProductFromCategoryBadInputFail()
+        {
+            _userService.EnterSystem();
+            _userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)_market.GetStoreManagementService(_userService, "T");
+            MarketAnswer ans = liorSession.RemoveProductFromCategory("Wanderla'ndItems", "Fraid Egg");
+            Assert.AreEqual((int)StoreEnum.BadInput, ans.Status);
+        }
+
 
         [TestCleanup]
         public void CleanUpTest()

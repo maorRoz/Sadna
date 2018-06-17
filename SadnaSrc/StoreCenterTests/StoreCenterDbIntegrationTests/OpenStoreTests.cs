@@ -72,6 +72,14 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)OpenStoreStatus.InvalidUser, ans.Status);
         }
 
+        [TestMethod]
+        public void OpenStoreBadInputFail()
+        {
+            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
+            liorSession.LoginShoper("Arik3", "123");
+            MarketAnswer ans = liorSession.OpenStore("newSto'reName", "adress");
+            Assert.AreEqual((int)OpenStoreStatus.BadInput, ans.Status);
+        }
 
         [TestCleanup]
         public void CleanUpOpenStoreTest()

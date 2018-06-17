@@ -31,11 +31,11 @@ namespace MarketFeedTests.IntegrationTests
             MarketLog.SetDB(marketDbMocker.Object);
             countMessagesToServer = 0;
             serverMocker = new Mock<IListener>();
-            serverMocker.Setup(x => x.GetMessage(buyerId2.ToString(), "You've won the lottery on " + productLottery + " in " 
+            serverMocker.Setup(x => x.GetMessage(buyerId2.ToString(), "You have won the lottery on " + productLottery + " in " 
                                                                       + storeLottery + "!")).Callback(SendMessageToServer);
-            serverMocker.Setup(x => x.GetMessage(buyerId1.ToString(), "You've lost the lottery on " + productLottery + " in "
+            serverMocker.Setup(x => x.GetMessage(buyerId1.ToString(), "You have lost the lottery on " + productLottery + " in "
                                                                       + storeLottery + "...")).Callback(SendMessageToServer);
-            serverMocker.Setup(x => x.GetMessage(buyerId3.ToString(), "You've lost the lottery on " + productLottery + " in "
+            serverMocker.Setup(x => x.GetMessage(buyerId3.ToString(), "You have lost the lottery on " + productLottery + " in "
                                                                       + storeLottery + "...")).Callback(SendMessageToServer);
             MarketDB.Instance.InsertByForce();
             var marketSession = MarketYard.Instance;
@@ -104,7 +104,7 @@ namespace MarketFeedTests.IntegrationTests
         public void SignUpThenLoseLotteryTest()
         {
             var newUserid = RegisterEvent();
-            serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You've lost the lottery on " + productLottery + " in "
+            serverMocker.Setup(x => x.GetMessage(newUserid.ToString(), "You have lost the lottery on " + productLottery + " in "
                                                                        + storeLottery + "...")).Callback(SendMessageToServer);
             FeedSubscriber.SubscribeSocket(serverMocker.Object, buyerId2, buyerId2.ToString());
             FeedSubscriber.SubscribeSocket(serverMocker.Object, buyerId3, buyerId3.ToString());

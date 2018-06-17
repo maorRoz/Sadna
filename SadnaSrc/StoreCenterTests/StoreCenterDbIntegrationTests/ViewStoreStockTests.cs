@@ -48,6 +48,16 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 
+        [TestMethod]
+        public void ViewStoreStockBadInputFail()
+        {
+            StoreShoppingService liorSession = (StoreShoppingService)market.GetStoreShoppingService(ref userService);
+            liorSession.LoginShoper("Arik3", "123");
+            MarketAnswer ans = liorSession.ViewStoreStock("X'");
+
+            Assert.AreEqual((int)StoreEnum.BadInput, ans.Status);
+        }
+
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {

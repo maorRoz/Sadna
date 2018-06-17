@@ -81,6 +81,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             MarketAnswer ans = liorSession.ChangeProductPurchaseWayToImmediate("BOX");
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
+
         [TestCleanup]
         public void CleanUpOpenStoreTest()
         {

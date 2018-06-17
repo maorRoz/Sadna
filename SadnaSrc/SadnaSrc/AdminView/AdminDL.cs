@@ -113,11 +113,13 @@ namespace SadnaSrc.AdminView
 
         public void CloseStore(string store)
         {
+            dbConnection.CheckInput(store);
             dbConnection.UpdateTable("Store", "Name = '"+store+"'",new[] {"Status"},new[] {"@stat"},new object[] {"Inactive"});
         }
 
         public bool IsUserExist(string userName)
         {
+            dbConnection.CheckInput(userName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("Users", "*", "Name = '" + userName +"'"))
             {
                 return dbReader.Read();
@@ -126,6 +128,7 @@ namespace SadnaSrc.AdminView
 
         public bool IsUserNameExistInHistory(string userName)
         {
+            dbConnection.CheckInput(userName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", "UserName = '" + userName +"'"))
             {
                 return dbReader.Read();
@@ -134,6 +137,7 @@ namespace SadnaSrc.AdminView
 
         public bool IsStoreExistInHistory(string storeName)
         {
+            dbConnection.CheckInput(storeName);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", "Store = '" + storeName +"'"))
             {
                 return dbReader.Read();
@@ -142,6 +146,7 @@ namespace SadnaSrc.AdminView
 
         public void DeleteUser(string userName)
         {
+            dbConnection.CheckInput(userName);
             dbConnection.DeleteFromTable("Users", "Name = '" + userName +"'");
         }
 
@@ -160,6 +165,7 @@ namespace SadnaSrc.AdminView
         }
         public string[] GetPurchaseHistory(string field, string givenValue)
         {
+            dbConnection.CheckInput(field); dbConnection.CheckInput(givenValue);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("PurchaseHistory", "*", field + " = '"
                                                                                                           + givenValue + "'"))
             {
@@ -168,15 +174,20 @@ namespace SadnaSrc.AdminView
         }
         public void AddCategory(Category category)
         {
+            foreach (object val in category.GetCategoryValuesArray())
+                dbConnection.CheckInput(val.ToString());
+
             dbConnection.InsertTable("Category", "SystemID, name",
                 new[]{"@idParam","@nameParam"}, category.GetCategoryValuesArray());
         }
         public void RemoveCategory(Category category)
         {
+            dbConnection.CheckInput(category.SystemId);
             dbConnection.DeleteFromTable("Category", "SystemID = '" + category.SystemId + "'");
         }
         public Category GetCategoryByName(string categoryname)
         {
+            dbConnection.CheckInput(categoryname);
             Category category = null;
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("Category", "*", "name = '" + categoryname + "'"))

@@ -36,7 +36,8 @@ namespace SadnaSrc.Main
         SelfTermination,
         NotSystemAdmin,
         NoUserFound,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum ViewPurchaseHistoryStatus
@@ -46,21 +47,24 @@ namespace SadnaSrc.Main
         NoUserFound,
         NoStoreFound,
 	    MistakeTipGiven,
-		NoDB = 500
+		NoDB = 500,
+        BadInput = 600
     }
 
     public enum ViewSystemLogStatus
     {
         Success,
         NotSystemAdmin,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum ViewSystemErrorStatus
     {
         Success,
         NotSystemAdmin,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum EditCategoryStatus
@@ -69,7 +73,8 @@ namespace SadnaSrc.Main
         CategoryNotExistsInSystem,
         CategoryAlradyExist,
 		InvalidCategory,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
     public enum EditPolicyStatus
@@ -77,7 +82,8 @@ namespace SadnaSrc.Main
         Success,
         InvalidPolicyData,
         NoAuthority,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
 
     }
 
@@ -85,13 +91,15 @@ namespace SadnaSrc.Main
     {
         Success,
         NoAuthority,
-        NoDB = 500
+        NoDB = 500,
+        BadInput = 600
     }
 
 	public enum GetEntranceDetailsEnum
 	{
 		Success,
 		NoAuthority,
-		NoDB = 500
-	}
+		NoDB = 500,
+	    BadInput = 600
+    }
 }

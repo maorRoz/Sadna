@@ -88,6 +88,19 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
             Assert.AreEqual((int)StoreEnum.Success, ans.Status);
         }
 
+        [TestMethod]
+        public void EditProductBadInputFail()
+        {
+            userService.SignIn("Arik1", "123");
+            StoreManagementService liorSession = (StoreManagementService)market.GetStoreManagementService(userService, "X");
+            liorSession.AddNewProduct("GOLD", 5, "NONO", 8);
+            MarketAnswer ans = liorSession.EditProduct("GOLD", "Description", "M'OMO");
+            Product find = handler.GetProductByNameFromStore(liorSession._storeName, "GOLD");
+            Assert.IsNotNull(find);
+            Assert.AreEqual("NONO", find.Description);
+            Assert.AreEqual((int)StoreEnum.BadInput, ans.Status);
+        }
+
 
         [TestCleanup]
         public void CleanUpOpenStoreTest()

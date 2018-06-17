@@ -34,6 +34,14 @@ namespace UserSpotTests.UseCaseUnitTest
         }
 
         [TestMethod]
+        public void BadRegisterTest()
+        {
+            userServiceSession.EnterSystem();
+            Assert.AreEqual((int)SignUpStatus.BadInput, userServiceSession.SignUp("Ma'orRegister1", "Here 3", "123", "12345678").Status);
+            Assert.IsTrue(MarketException.HasErrorRaised());
+        }
+
+        [TestMethod]
         public void RegisteredUserDataTest1()
         {
             RegisteredUserDataTest("MaorRegister2", "Here 3", "123", "12345678");

@@ -37,6 +37,8 @@ namespace SadnaSrc.MarketFeed
 
         public void SaveUnreadNotification(Notification notification)
         {
+            foreach(object val in notification.ToData())
+                dbConnection.CheckInput(val.ToString());
             dbConnection.InsertTable("Notifications", "NotificationID,Receiver,Message,Status", 
                 new[]{"@id","@receiver","@msg","@status"},notification.ToData());
         }
@@ -59,6 +61,7 @@ namespace SadnaSrc.MarketFeed
 
         public int[] GetStoreOwnersIds(string store)
         {
+            dbConnection.CheckInput(store);
             var ownersIds = new List<int>();
             using (var dbReader =
                 dbConnection.SelectFromTableWithCondition("StoreManagerPolicy", "SystemID", "Store = '"+ store +"' AND " +
@@ -76,6 +79,7 @@ namespace SadnaSrc.MarketFeed
 
         public int GetLotteryWinner(string lottery)
         {
+            dbConnection.CheckInput(lottery);
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "UserID","LotteryID =" +
                                                                                  " '"+lottery +"' AND Status ='WINNING'"))
             {
@@ -90,6 +94,7 @@ namespace SadnaSrc.MarketFeed
 
         public int[] GetLotteryLosers(string lottery)
         {
+            dbConnection.CheckInput(lottery);
             var loserIds = new List<int>();
             using (var dbReader = dbConnection.SelectFromTableWithCondition("LotteryTicket", "UserID", "LotteryID =" +
                                                                                " '" + lottery + "' AND Status ='LOSING'"))
@@ -106,6 +111,7 @@ namespace SadnaSrc.MarketFeed
 
         public void HasBeenRead(string notificationId)
         {
+            dbConnection.CheckInput(notificationId);
             dbConnection.UpdateTable("Notifications","NotificationID = '"+notificationId +"'",new[]{"Status"},
                 new[]{"@status"},new object[]{"Read"});
         }

@@ -29,6 +29,8 @@ namespace PurchasePolicyTests
         private QuantityLessThan QuantityLessThanLeaf;
         private UsernameEquals UsernameEqualsLeaf;
         private UsernameEquals UsernameEqualsLeaf2;
+        private UsernameEquals BadInputLeaf;
+
         [TestInitialize]
         public void BuildSupplyPoint()
         {
@@ -49,6 +51,7 @@ namespace PurchasePolicyTests
             NotHasopSun = new NotOperator(PolicyType.Global, "bla", NotHasCondSun, null, 13);
             OrHas2opSuns = new OrOperator(PolicyType.Global, "bla", AndHas1opSun, OrHas1opSun, 14);
             ROOT_AndHas2opSuns = new AndOperator(PolicyType.Global, "bla", OrHas2opSuns, NotHasopSun, 15);
+            BadInputLeaf = new UsernameEquals(PolicyType.Global, "b'la", "bla_bla", 1);
         }
         [TestMethod]
         public void RemoveUsernameEqualsLeaf2()
@@ -170,6 +173,22 @@ namespace PurchasePolicyTests
             datalayer.SavePolicy(ROOT_AndHas2opSuns);
             datalayer.RemovePolicy(ROOT_AndHas2opSuns);
             Assert.IsNull(datalayer.GetPolicy(PolicyType.Global, "bla"));
+        }
+
+        [TestMethod]
+        public void SaveBadLeafFail()
+        {
+            try
+            {
+                BadInputLeaf.IsRoot = true;
+                datalayer.RemovePolicy(BadInputLeaf);
+                Assert.Fail();
+            }
+
+            catch (DataException e)
+            {
+                Assert.AreEqual(600, e.Status);
+            }
         }
 
         [TestCleanup]

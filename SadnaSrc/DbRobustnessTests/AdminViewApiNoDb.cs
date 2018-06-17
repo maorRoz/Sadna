@@ -56,7 +56,7 @@ namespace DbRobustnessTests
         [TestMethod]
         public void RemoveCategoryNoDBTest()
         {
-            answer = adminService.RemoveCategory("'WanderlandItems");
+            answer = adminService.RemoveCategory("WanderlandItems");
             Assert.AreEqual((int)EditCategoryStatus.NoDB, answer.Status);
         }
 
