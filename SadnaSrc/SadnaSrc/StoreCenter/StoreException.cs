@@ -48,7 +48,11 @@ namespace SadnaSrc.StoreCenter
         public StoreException(ViewStorePolicyStatus status, string message) : base((int)status, message)
         {
         }
-        protected override string GetModuleName()
+
+	    public StoreException(GetCategoriesDiscountStatus status, string message) : base((int)status, message)
+	    {
+	    }
+		protected override string GetModuleName()
         {
             return "StoreCenter";
         }

@@ -48,6 +48,8 @@ namespace SadnaSrc.StoreCenter
         void EditCategoryDiscount(CategoryDiscount categoryDiscount);
         void AddPromotionHistory(string store,string managerName,string promotedName,string[] permissions,string description);
         string[] GetPromotionHistory(string store);
+	    string[] GetCategoriesWhichHaveDiscounts(string storeName);
+
 
     }
 }

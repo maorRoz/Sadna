@@ -14,9 +14,9 @@ namespace BlackBox
 		MarketAnswer AddNewProduct(string name, int price, string description, int quantity);
 
 		MarketAnswer RemoveProduct(string productName);
-		MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
+		MarketAnswer EditProduct(string productName, string productNewName, string basePrice, string description);
 
-	    MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
+		MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
 	        DateTime endDate);
         MarketAnswer AddQuanitityToProduct(string productName, int quantity);
 		MarketAnswer CloseStore();

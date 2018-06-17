@@ -11,7 +11,7 @@ using SadnaSrc.StoreCenter;
 namespace StoreCenterTests.StoreCenterDbIntegrationTests
 {
 	[TestClass]
-	class GetAllCategoriesTests
+	public class GetAllCategoriesTests
 	{
 		private MarketYard market;
 	    private IStoreShoppingService storeService;
@@ -30,7 +30,7 @@ namespace StoreCenterTests.StoreCenterDbIntegrationTests
 	    [TestMethod]
 	    public void GetCategoriesTest()
 	    {
-	        string[] expected = { "WanderlandItems", "Books" };
+	        string[] expected = { "WanderlandItems", "MTG_Cards", "Books" };
 	        userService.EnterSystem();
 	        MarketAnswer ans = storeService.GetAllCategoryNames();
             Assert.AreEqual((int)GetCategoriesStatus.Success, ans.Status);

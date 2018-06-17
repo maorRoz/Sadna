@@ -15,10 +15,8 @@ namespace SadnaSrc.StoreCenter
         {
         }
 
-        public void EditProduct(string productName, string whatToEdit, string newValue)
+        public void EditProduct(string productName,string productNewName, string basePrice, string description)
         {
-
-            
             try
             {
                 MarketLog.Log("StoreCenter", "trying to edit product in store");
@@ -30,15 +28,14 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
                 Product product = DataLayerInstance.GetProductByNameFromStore(_storeName, productName);
                 checkifProductExists(product);
-                CheckIfEditName(whatToEdit, newValue, ref product);
-                CheckIfEditPrice(whatToEdit, newValue, ref product);
-                CheckIfEditDescription(whatToEdit, newValue, ref product);
-                CheckIfNoLegalFound();
+	            EditAllProductFields(productNewName, basePrice, description, ref product);
+	            answer = new StoreAnswer(StoreEnum.Success, "Product has been updated!");
+				CheckIfNoLegalFound();
                 DataLayerInstance.EditProductInDatabase(product);
             }
             catch (StoreException exe)
             {
-                answer =  new StoreAnswer((StoreEnum)exe.Status, "Product couldn't have been updated!");
+                answer =  new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
             }
             catch (DataException e)
             {
@@ -51,68 +48,59 @@ namespace SadnaSrc.StoreCenter
             }
         }
 
-        private void CheckIfNoLegalFound()
-        {
-            if (answer != null) return;
-            MarketLog.Log("StoreCenter", "no leagal attrebute or founed non-leagal value");
-            throw new StoreException(StoreEnum.UpdateProductFail, "no leagal attrebute found");
-        }
-
-        private void CheckIfEditDescription(string whatToEdit, string newValue, ref Product product)
-        {
-            if (whatToEdit != "Description" && whatToEdit != "desccription") return;
-            MarketLog.Log("StoreCenter", "edit description");
-	        if (newValue.IsNullOrEmpty())
-	        {
-		        MarketLog.Log("StoreCenter",
-			        "The product was not edited with the new description because it is either null or empty");
-				throw new StoreException(StoreEnum.UpdateProductFail, "Illegal description given");
-	        }
-            answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " Description has been updated to " + newValue);
-            product.Description = newValue;
-        }
-
-        private void CheckIfEditPrice(string whatToEdit, string newValue, ref Product product)
-        {
-            if (whatToEdit != "BasePrice" && whatToEdit != "basePrice" && whatToEdit != "Baseprice" &&
-                whatToEdit != "baseprice") return;
-            MarketLog.Log("StoreCenter", "edit price");
-            if (!double.TryParse(newValue, out var newBasePrice))
-            { throw new StoreException(StoreEnum.UpdateProductFail, "value is not leagal"); }
-            if (newBasePrice <= 0) { throw new StoreException(StoreEnum.UpdateProductFail, "price can not be negative"); }
-            answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " price has been updated to " + newValue);
-            product.BasePrice = newBasePrice;
-        }
-
-        private void CheckIfEditName(string whatToEdit, string newValue, ref Product product)
-        {
-            if (whatToEdit != "Name" && whatToEdit != "name") return;
-            MarketLog.Log("StoreCenter", "edit name");
-            MarketLog.Log("StoreCenter", "checking if new new is avaliabe");
-            Product prod = DataLayerInstance.GetProductByNameFromStore(_storeName, product.Name);
-            if (prod == null)
-            {
-                MarketLog.Log("StoreCenter", "name exists in shop");
-                throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "Product Name is already Exists In Shop");
-            }
-
-	        if (newValue.IsNullOrEmpty())
-	        {
-		        MarketLog.Log("StoreCenter",
-			        "The product was not edited with the new name because it is either null or empty");
-		        throw new StoreException(StoreEnum.UpdateProductFail, "Illegal name given");
+	    private void EditAllProductFields(string productNewName, string basePrice, string description, ref Product product)
+	    {
+		    if (productNewName!=null && product.Name != productNewName)
+		    {
+			    CheckIfProductNameAvailable(productNewName);
+			    product.Name = productNewName;
 			}
 
-            CheckIfProductNameAvailable(newValue);
-            answer = new StoreAnswer(StoreEnum.Success, "product " + product.SystemId + " name has been updated to " + newValue);
-            product.Name = newValue;
-        }
+		    if (basePrice != null)
+		    {
+			    CheckIfProductPriceLegal(basePrice);
+			    product.BasePrice = double.Parse(basePrice);
+			}
+
+		    if (description != null)
+		    {
+			    CheckIfDescriptionLegal(description);
+			    product.Description = description;
+			}
+			
+		}
+
+       
         private void CheckIfProductNameAvailable(string name)
         {
             Product prod = DataLayerInstance.GetProductByNameFromStore(_storeName, name);
-            if (prod != null)
-                throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
-        }
+	        if (prod != null || name.IsNullOrEmpty())
+	        {
+		        throw new StoreException(StoreEnum.ProductNameNotAvlaiableInShop, "product name must be uniqe per shop");
+			}
+		}
 
-    }
+	    private void CheckIfProductPriceLegal(string basePrice)
+	    {
+		    if (basePrice.IsNullOrEmpty() || !double.TryParse(basePrice, out var newBasePrice) || newBasePrice <= 0)
+		    {
+			    throw new StoreException(StoreEnum.UpdateProductFail, "value is not leagal");
+		    }
+		}
+
+	    private void CheckIfDescriptionLegal(string description)
+	    {
+		    if (description.IsNullOrEmpty())
+		    {
+			    throw new StoreException(StoreEnum.UpdateProductFail, "Illegal description given");
+			}
+	    }
+
+	    private void CheckIfNoLegalFound()
+	    {
+		    if (answer != null) return;
+		    MarketLog.Log("StoreCenter", "no leagal attrebute or founed non-leagal value");
+		    throw new StoreException(StoreEnum.UpdateProductFail, "no leagal attrebute found");
+	    }
+	}
 }

@@ -19,10 +19,10 @@ namespace SadnaSrc.Main
          **/
         MarketAnswer AddNewProduct(string _name, double _price, string _description, int quantity);
         MarketAnswer RemoveProduct(string productName);
-        MarketAnswer EditProduct(string productName, string whatToEdit, string newValue);
-        MarketAnswer AddQuanitityToProduct(string productName, int quantity);
-
-        MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
+	    MarketAnswer EditProduct(string productName, string productNewName, string basePrice, string description);
+		MarketAnswer AddQuanitityToProduct(string productName, int quantity);
+	    MarketAnswer GetProductInfo(string productName);
+		MarketAnswer AddNewLottery(string _name, double _price, string _description, DateTime startDate,
             DateTime endDate);
         /**
          * Category Managment
@@ -182,6 +182,13 @@ namespace SadnaSrc.Main
         NoDB = 500,
         BadInput = 600
     }
+
+	public enum ViewProductInfoStatus
+	{
+		Success,
+		NoAuthority,
+		NoDB = 500
+	}
 
 
     public enum PurchaseEnum { Immediate, Lottery };

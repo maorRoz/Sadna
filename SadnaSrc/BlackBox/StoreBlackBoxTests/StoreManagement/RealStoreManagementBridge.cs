@@ -38,9 +38,9 @@ namespace BlackBox
             return _storeManagementService.RemoveProduct(productName);
         }
 
-        public MarketAnswer EditProduct(string productName, string whatToEdit, string newValue)
-        {
-            return _storeManagementService.EditProduct(productName, whatToEdit, newValue);
+        public MarketAnswer EditProduct(string productName, string productNewName, string basePrice, string description)
+		{
+            return _storeManagementService.EditProduct(productName, productNewName, basePrice, description);
         }
 
 

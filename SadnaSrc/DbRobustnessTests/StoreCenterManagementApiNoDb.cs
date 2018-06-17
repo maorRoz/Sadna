@@ -48,7 +48,7 @@ namespace DbRobustnessTests
         [TestMethod]
         public void EditProductNoDBTest()
         {
-            answer = storeManagingService.EditProduct("DeleteMy BOX", "Name", "NoDB DeleteMy BOX");
+            answer = storeManagingService.EditProduct("DeleteMy BOX", "Name", "blah","NoDB DeleteMy BOX");
             Assert.AreEqual((int)StoreEnum.NoDB, answer.Status);
         }
 

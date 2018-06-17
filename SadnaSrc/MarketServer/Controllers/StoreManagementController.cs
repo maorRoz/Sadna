@@ -128,15 +128,18 @@ namespace MarketWeb.Controllers
 
 		public IActionResult EditProductPage(int systemId, string state, string message, string store, string product)
 		{
-			return View(new ProductInStoreModel(systemId, state, message, store, product));
+			var userService = EnterController.GetUserSession(systemId);
+			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
+			var answer = storeManagementService.GetProductInfo(product);
+			return View(new ProductInfoModel(systemId, state, message, store, product, answer.ReportList[0]));
 		}
 
-		public IActionResult EditProduct(int systemId, string state, string store, string product, string whatToEdit,
-			string newValue)
+		public IActionResult EditProduct(int systemId, string state, string store, string product, string productNewName,
+			string basePrice, string description)
 		{
 			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-			var answer = storeManagementService.EditProduct(product, whatToEdit, newValue);
+			var answer = storeManagementService.EditProduct(product, productNewName, basePrice, description);
 			return answer.Status == Success ? 
 			    RedirectToAction("ManageProducts", new {systemId, state, message = answer.Answer, store}) :
 			    RedirectToAction("EditProductPage", new {systemId, state, message = answer.Answer, store, product});
@@ -529,7 +532,7 @@ namespace MarketWeb.Controllers
 		{
 			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+			string[] categories = storeShoppingService.GetAllDiscountCategoriesInStore(store).ReportList;
 			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
 		}
 
@@ -552,7 +555,7 @@ namespace MarketWeb.Controllers
 			ViewBag.valid = valid;
 			var userService = EnterController.GetUserSession(systemId);
 			var storeShoppingService = MarketYard.Instance.GetStoreShoppingService(ref userService);
-			string[] categories = storeShoppingService.GetAllCategoryNames().ReportList;
+			string[] categories = storeShoppingService.GetAllDiscountCategoriesInStore(store).ReportList;
 			return View(new CategoryStorelistModel(systemId, state, message, store, categories));
 		}
 
