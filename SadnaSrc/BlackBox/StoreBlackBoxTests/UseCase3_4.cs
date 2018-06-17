@@ -383,7 +383,6 @@ namespace BlackBox.StoreBlackBoxTests
 	            Assert.AreEqual((int)DiscountStatus.ProductNotFound,
 	                _storeManager2.AddDiscountToProduct("Product", DateTime.Today, DateTime.Today.AddDays(3), 50,
 	                    "VISIBLE", true).Status);
-	            Assert.AreEqual((int)StoreEnum.ProductNotFound, _storeManager2.EditDiscount(product, "DiscountAmount", "20").Status);
 	            Assert.AreEqual((int)StoreEnum.ProductNotFound, _storeManager2.RemoveDiscountFromProduct(product).Status);
             }
 	        else
@@ -391,7 +390,7 @@ namespace BlackBox.StoreBlackBoxTests
 	            Assert.AreEqual((int)StoreEnum.NoPermission,
 	                _storeManager2.AddDiscountToProduct("Product", DateTime.Today, DateTime.Today.AddDays(3), 50,
 	                    "VISIBLE", true).Status);
-	            Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.EditDiscount(product, "DiscountAmount", "20").Status);
+	            Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.EditDiscount(product, null, false, null, null, "25", true).Status);
 	            Assert.AreEqual((int)StoreEnum.NoPermission, _storeManager2.RemoveDiscountFromProduct(product).Status);
             }
 

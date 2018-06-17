@@ -62,9 +62,9 @@ namespace BlackBox
                 discountType, presenteges);
         }
 
-        public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
+        public MarketAnswer EditDiscount(string product, string discountCode, bool isHidden, string startDate, string EndDate, string discountAmount, bool isPercentage)
         {
-            return _storeManagementService.EditDiscount(productName, whatToEdit, newValue);
+            return _storeManagementService.EditDiscount(product, discountCode, isHidden, startDate, EndDate, discountAmount, isPercentage);
         }
 
         public MarketAnswer RemoveDiscountFromProduct(string productName)

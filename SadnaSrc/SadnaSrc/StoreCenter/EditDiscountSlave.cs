@@ -1,4 +1,5 @@
 ﻿using System;
+using NUnit.Framework;
 using SadnaSrc.Main;
 using SadnaSrc.MarketData;
 using SadnaSrc.MarketHarmony;
@@ -8,65 +9,28 @@ namespace SadnaSrc.StoreCenter
     public class EditDiscountSlave : AbstractStoreCenterSlave
     {
         public MarketAnswer answer;
+        private Discount discount;
+        private string productName;
 
         public EditDiscountSlave(string storeName, IUserSeller storeManager, IStoreDL storeDL) : base(storeName, storeManager, storeDL)
         {
         }
 
-        public void EditDiscount(string productName, string whatToEdit, string newValue)
+        public void EditDiscount(string product,string discountCode, bool isHidden, string startDate, string EndDate, string discountAmount, bool isPercentage)
         {
             try
             {
-                MarketLog.Log("StoreCenter", "trying to edit discount from product in store");
+                MarketLog.Log("StoreCenter", "trying to edit product in store");
                 checkIfStoreExistsAndActive();
+                MarketLog.Log("StoreCenter", " store exists");
                 MarketLog.Log("StoreCenter", " check if has premmision to edit products");
                 _storeManager.CanDeclareDiscountPolicy();
                 MarketLog.Log("StoreCenter", " has premmission");
-                IsProductNameAvailableInStore(productName);
-                Discount discount = CheckIfDiscountExistsPrivateMethod(productName);
-                switch (whatToEdit)
-                {
-                    case "discountType":
-                    case "DiscountType":
-                    case "discounttype":
-                    case "DISCOUNTTYPE":
-                        discount = EditDiscountdiscyoutTypePrivateMethod(discount, newValue, productName);
-                        break;
-                    case "startDate":
-                    case "start Date":
-                    case "StartDate":
-                    case "Start Date":
-                    case "startdate":
-                    case "start date":
-                    case "STARTDATE":
-                    case "START DATE":
-                        discount = EditDiscountStartDatePrivateMethod(discount, newValue, productName);
-                        break;
-                    case "EndDate":
-                    case "end Date":
-                    case "enddate":
-                    case "End Date":
-                    case "end date":
-                    case "ENDDATE":
-                    case "END DATE":
-                        discount = EditDiscountEndDatePrivateMethod(discount, newValue, productName);
-                        break;
-                    case "DiscountAmount":
-                    case "Discount Amount":
-                    case "discount amount":
-                    case "discountamount":
-                    case "DISCOUNTAMOUNT":
-                    case "DISCOUNT AMOUNT":
-                        discount = EditDiscountDiscountAmountPrivateMehtod(discount, newValue, productName);
-                        break;
-                    case "Percentages":
-                    case "percentages":
-                    case "PERCENTAGES":
-                        discount = EditDiscountPercentagesPrivateMehtod(discount, newValue, productName);
-                        break;
-                }
-
-                if (answer == null) { throw new StoreException(DiscountStatus.NoLegalAttrebute, "no legal attribute found"); }
+                MarketLog.Log("StoreCenter", " check if product name exists in the store " + _storeName);
+                discount = CheckDiscountExists(product);
+                productName = product;
+                EditAllDiscountFields(discountCode, isHidden, startDate, EndDate, discountAmount, isPercentage);
+                answer = new StoreAnswer(StoreEnum.Success, "Product has been updated!");
                 DataLayerInstance.EditDiscountInDatabase(discount);
             }
             catch (StoreException exe)
@@ -79,38 +43,64 @@ namespace SadnaSrc.StoreCenter
             }
             catch (MarketException)
             {
-                answer = new StoreAnswer(StoreEnum.NoPermission, "you have no premmision to do that");
+                MarketLog.Log("StoreCenter", "No permission");
+                answer = new StoreAnswer(StoreEnum.NoPermission, "You have no permission to do that");
             }
         }
-        private Discount CheckIfDiscountExistsPrivateMethod(string productName)
-        {
-            StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
-            MarketLog.Log("StoreCenter", " Product exists");
-            MarketLog.Log("StoreCenter", "checking that the product has a discount");
-            Discount discount = stockListItem.Discount;
-            if (discount == null)
-            {
-                MarketLog.Log("StoreCenter", "product does not exists");
-                throw new StoreException(DiscountStatus.DiscountNotFound, "there is no discount at this product");
-            }
-            MarketLog.Log("StoreCenter", " check what you want to edit");
-            return discount;
-        }
-        private Discount EditDiscountdiscyoutTypePrivateMethod(Discount discount, string newValue, string productName)
-        {
-            MarketLog.Log("StoreCenter", " edit discount type");
-            discount.discountType = EnumStringConverter.GetdiscountTypeEnumString(newValue);
-            MarketLog.Log("StoreCenter", " discount type changed successfully");
-            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount type become " + newValue);
-            return discount;
-        }
-        private Discount EditDiscountStartDatePrivateMethod(Discount discount, string newValue, string productName)
+
+        private void EditAllDiscountFields(string discountCode, bool isHidden, string startDate, string EndDate, string discountAmount, bool isPercentage)
         {
 
-            MarketLog.Log("StoreCenter", " edit start date");
-            MarketLog.Log("StoreCenter", " checking that the start date is legal");
+            if (discountCode != null)
+            {
+                CheckDiscountTypeDetails(discountCode, isHidden);
+                if (isHidden)
+                {
+                    discount.discountCode = discountCode;
+                    discount.discountType = DiscountTypeEnum.Hidden;
+                }
+                else
+                {
+                    discount.discountCode = "";
+                    discount.discountType = DiscountTypeEnum.Visible;
+                }
+                
+            }
+            if (startDate != null)
+            {
+                CheckStartDate(startDate);
+                discount.startDate = DateTime.Parse(startDate);
+
+            }
+
+            if (EndDate != null)
+            {
+                CheckEndDate(EndDate);
+                discount.EndDate = DateTime.Parse(EndDate);
+            }
+            if (discountAmount != null)
+            {
+                CheckDiscountAmountDetails(discountAmount, isPercentage);
+                int discAmountNum = Int32.Parse(discountAmount);
+                discount.DiscountAmount = discAmountNum;
+                discount.Percentages = isPercentage;
+            }
+           
+
+        }
+
+        private void CheckDiscountTypeDetails(string discountCode, bool isHidden)
+        {
+            if (isHidden && discountCode != null) return;
+            if (!isHidden && discountCode == null) return;
+            throw new StoreException(DiscountStatus.InvalidDiscountType, "Invalid Discount type and coupon code combination.");
+        }
+
+
+        private void CheckStartDate(string startDate)
+        {
             DateTime startTime = DateTime.MaxValue;
-            if (!DateTime.TryParse(newValue, out startTime))
+            if (!DateTime.TryParse(startDate, out startTime))
             {
                 MarketLog.Log("StoreCenter", "date format is not legal");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal");
@@ -126,91 +116,59 @@ namespace SadnaSrc.StoreCenter
                 MarketLog.Log("StoreCenter", "can't set start time that is later then the discount end time");
                 throw new StoreException(DiscountStatus.DatesAreWrong, "can't set start time that is later then the discount end time");
             }
-            discount.startDate = startTime;
-            MarketLog.Log("StoreCenter", " start date changed successfully");
-            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount Start Date become " + startTime);
-            return discount;
         }
-        private Discount EditDiscountPercentagesPrivateMehtod(Discount discount, string newValue, string productName)
-        {
-            MarketLog.Log("StoreCenter", "try to edit precenteges");
-            if (!bool.TryParse(newValue, out bool newboolValue))
-            {
-                MarketLog.Log("StoreCenter", "value is not legal");
-                throw new StoreException(DiscountStatus.PrecentegesIsNotBoolean, "value is not legal");
-            }
-            MarketLog.Log("StoreCenter", "checking that the discount amount is fit to precenteges");
-            if ((newboolValue) && (discount.DiscountAmount >= 100))
-            {
-                MarketLog.Log("StoreCenter", "DiscountAmount is >= 100, cant make it presenteges");
-                throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100, cant make it presenteges");
-            }
-            discount.Percentages = newboolValue;
-	        if (newboolValue)
-	        {
-		        answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become true");
-			}
-                
-            else
-            {
-				answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount preseneges become false");
-			}
-	        
-            return discount;
-        }
-        private Discount EditDiscountDiscountAmountPrivateMehtod(Discount discount, string newValue, string productName)
-        {
 
-            MarketLog.Log("StoreCenter", " edit discount amount");
-            int newintValue = 0;
-            if (!Int32.TryParse(newValue, out newintValue))
-            {
-                MarketLog.Log("StoreCenter", "value is not legal");
-                throw new StoreException(DiscountStatus.DiscountAmountIsNotNumber, "value is not legal");
-            }
-            if ((discount.Percentages) && (newintValue >= 100))
-            {
-                MarketLog.Log("StoreCenter", "DiscountAmount is >= 100, cant make it presenteges");
-                throw new StoreException(DiscountStatus.AmountIsHundredAndpresenteges, "DiscountAmount is >= 100, cant make it presenteges");
-            }
-            if ((!discount.Percentages) && (newintValue > DataLayerInstance.GetProductByNameFromStore(_storeName, productName).BasePrice))
-            {
-                MarketLog.Log("StoreCenter", "discount amount is >= product price");
-                throw new StoreException(DiscountStatus.DiscountGreaterThenProductPrice, "DiscountAmount is > then product price");
-            }
-            if (newintValue <= 0)
-            {
-                MarketLog.Log("StoreCenter", "discount amount <=0");
-                throw new StoreException(DiscountStatus.DiscountAmountIsNegativeOrZero, "DiscountAmount is >= 100%");
-            }
-            discount.DiscountAmount = newintValue;
-            MarketLog.Log("StoreCenter", "discount amount set to " + newintValue);
-            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount amount become " + newValue);
-            return discount;
-        }
-        private Discount EditDiscountEndDatePrivateMethod(Discount discount, string newValue, string productName)
+        private void CheckEndDate(string EndDate)
         {
+            DateTime EndTime = DateTime.MaxValue;
+            if (!DateTime.TryParse(EndDate, out EndTime))
+            {
+                MarketLog.Log("StoreCenter", "Date format is not legal.");
+                throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal.");
+            }
+            if (EndTime.Date < MarketYard.MarketDate)
+            {
+                MarketLog.Log("StoreCenter", "Can't set end time in the past");
+                throw new StoreException(DiscountStatus.DatesAreWrong, "can't set start time in the past.");
+            }
 
-            MarketLog.Log("StoreCenter", " edit start date");
-            MarketLog.Log("StoreCenter", " checking that the start date is legal");
-            if (!DateTime.TryParse(newValue, out var endDate))
+            if (EndTime.Date < discount.startDate.Date)
             {
-                MarketLog.Log("StoreCenter", "date format is not legal");
-                throw new StoreException(DiscountStatus.DatesAreWrong, "date format is not legal");
+                MarketLog.Log("StoreCenter", "Can't set end time that is sooner then the discount start time.");
+                throw new StoreException(DiscountStatus.DatesAreWrong, "Can't set start time that is later then the discount end time.");
             }
-            if (endDate.Date < MarketYard.MarketDate)
+        }
+
+        private void CheckDiscountAmountDetails(string discountAmount, bool isPercentage)
+        {
+            int discAmountNum;
+            if (Int32.TryParse(discountAmount, out discAmountNum))
             {
-                MarketLog.Log("StoreCenter", "can't set end time in the past");
-                throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time in the past");
+                if (isPercentage && 0 < discAmountNum && discAmountNum < 100) return;
+                if (!isPercentage && 0 < discAmountNum && 
+                    discAmountNum < DataLayerInstance.GetProductByNameFromStore(_storeName, productName).BasePrice) return;
             }
-            if (endDate.Date < discount.startDate.Date)
+            throw new StoreException(DiscountStatus.InvalidDiscountAmount, "Invalid Discount Amount.");
+
+        }
+
+
+        private Discount CheckDiscountExists(string productName)
+        {
+            StockListItem stockListItem = DataLayerInstance.GetProductFromStore(_storeName, productName);
+            if (stockListItem == null)
             {
-                MarketLog.Log("StoreCenter", "can't set end time that is sooner then the discount start time");
-                throw new StoreException(DiscountStatus.DatesAreWrong, "can't set end time that is sooner then the discount start time");
+                MarketLog.Log("StoreCenter", "product does not exists");
+                throw new StoreException(DiscountStatus.ProductNotFound, "there is no product");
             }
-            discount.EndDate = endDate;
-            MarketLog.Log("StoreCenter", " start date changed successfully");
-            answer = new StoreAnswer(StoreEnum.Success, "item " + productName + " discount End Date become " + endDate);
+            MarketLog.Log("StoreCenter", " Product exists");
+            MarketLog.Log("StoreCenter", "checking that the product has a discount");
+            Discount discount = stockListItem.Discount;
+            if (discount == null)
+            {
+                MarketLog.Log("StoreCenter", "discount does not exists");
+                throw new StoreException(DiscountStatus.DiscountNotFound, "there is no discount at this product");
+            }
             return discount;
         }
     }

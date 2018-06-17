@@ -100,10 +100,10 @@ namespace SadnaSrc.StoreCenter
                 discountsToRemvoe.AddLast(discount);
             return slave.answer;
         }
-        public MarketAnswer EditDiscount(string productName, string whatToEdit, string newValue)
+        public MarketAnswer EditDiscount(string product, string discountCode, bool isHidden, string startDate, string EndDate, string discountAmount, bool isPercentage)
         {
             EditDiscountSlave slave = new EditDiscountSlave(_storeName, _storeManager, storeDL);
-            slave.EditDiscount(productName, whatToEdit, newValue);
+            slave.EditDiscount(product, discountCode, isHidden, startDate, EndDate, discountAmount, isPercentage);
             return slave.answer;
         }
 

@@ -261,17 +261,17 @@ namespace MarketWeb.Controllers
 		}
 
 		public IActionResult EditDiscount(int systemId, string state, string store, string product,
-			string whatToEdit, string newValue)
+		     string discountCode, bool isHidden, string startDate, string endDate, string discountAmount, bool isPercentage)
 		{
 			var userService = EnterController.GetUserSession(systemId);
 			var storeManagementService = MarketYard.Instance.GetStoreManagementService(userService, store);
-			var answer = storeManagementService.EditDiscount(product, whatToEdit, newValue);
+		    var answer = storeManagementService.EditDiscount(product, null, isHidden, startDate, endDate, discountAmount, isPercentage);
 			if (answer.Status == Success)
 			{
 				return RedirectToAction("DeclareDiscountPolicy", new {systemId, state, message = answer.Answer, store, valid = true});
 			}
-
-			return RedirectToAction("EditDiscountPage", new {systemId, state, message = answer.Answer, store, product});
+            
+			return RedirectToAction("EditDiscountPage", new {systemId, state, message = answer.Answer ,store, product});
 		}
 
 		public IActionResult RemoveDiscount(int systemId, string state, string store, string product)

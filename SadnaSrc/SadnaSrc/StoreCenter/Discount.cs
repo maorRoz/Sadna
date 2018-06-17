@@ -9,7 +9,7 @@ namespace SadnaSrc.StoreCenter
 {
     public class Discount
     {
-        public string discountCode { get; }
+        public string discountCode { get; set; }
         public DiscountTypeEnum discountType { get; set; }
         public DateTime startDate { get; set; }
         public DateTime EndDate { get; set; }

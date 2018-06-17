@@ -90,7 +90,7 @@ namespace DbRobustnessTests
         [TestMethod]
         public void EditDiscountNoDBTest()
         {
-            answer = storeManagingService.EditDiscount("DeleteMy BOX","Start Date",new DateTime(2018,1,2).ToString("yyyy-MM-dd"));
+            answer = storeManagingService.EditDiscount("DeleteMy BOX",null,false,null,new DateTime(2018,1,2).ToString("yyyy-MM-dd"),null, false);
             Assert.AreEqual((int)StoreEnum.NoDB, answer.Status);
         }
 
