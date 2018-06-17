@@ -68,13 +68,6 @@ namespace StoreCenterTests.StoreCenterUnitTests
         }
 
         [TestMethod]
-        public void ProductNameExists()
-        {
-            slave.EditProduct("NEWPROD", "NEWPROD", "10", "desc");
-            Assert.AreEqual((int)StoreEnum.ProductNameNotAvlaiableInShop, slave.answer.Status);            
-        }
-
-        [TestMethod]
         public void BadPrice1()
         {
             slave.EditProduct("NEWPROD", "NEWPROD","0", "desc");

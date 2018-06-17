@@ -35,7 +35,7 @@ namespace SadnaSrc.StoreCenter
             }
             catch (StoreException exe)
             {
-                answer =  new StoreAnswer((StoreEnum)exe.Status, "Product couldn't have been updated!");
+                answer =  new StoreAnswer((StoreEnum)exe.Status, exe.GetErrorMessage());
             }
             catch (DataException e)
             {

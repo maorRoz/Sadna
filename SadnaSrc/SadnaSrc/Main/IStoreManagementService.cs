@@ -177,8 +177,6 @@ namespace SadnaSrc.Main
 	{
 		Success,
 		NoAuthority,
-		StoreNotExists,
-		ProductNotFound,
 		NoDB = 500
 	}
 

@@ -67,7 +67,7 @@ namespace BlackBox.StoreBlackBoxTests
 		[TestMethod]
 		public void SuccessUpdatingDescription()
 		{
-			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "bamba", "102020","nice snack ++");
+			MarketAnswer result2 = _storeManage1.EditProduct("bamba", "bamba", "90","nice snack ++");
 			Assert.AreEqual((int)StoreEnum.Success, result2.Status);
 			MarketAnswer stockAnswer = _storeBridge.ViewStoreStock("lokef");
 			string[] actualResult = stockAnswer.ReportList;
