@@ -1,53 +1,58 @@
-﻿<br/>
-<br/>
-<br/>
+﻿<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
 @{
-	ViewData["Title"] = "Edit Product Page";
+    ViewData["Title"] = "Edit Product Page";
 }
 <h2>@ViewData["Title"]</h2>
-<hr/>
+<hr />
 <div class="row top-space">
-	<div class="col-lg-10">
+    <div class="col-lg-10">
 
-		<div id="feedContainer" style="float: right;width:20%">
-			<br/>
-		</div>
+        <div id="feedContainer" style="float: right;width:20%">
+            <br />
+        </div>
 
-		<div style="float: left;width:30%">
-			<div id="alertContainer">
-				@if (Model.Message != null)
-				{
-					<div class='error'><span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span> 
-						@Model.Message 
-					</div>
-				}
-			</div>
-		    
+        <div style="float: left;width:30%">
+            <div id="alertContainer">
+                @if (Model.Message != null)
+                {
+                    <div class='error'>
+                        <span class='closebtn' onclick="this.parentElement.style.display = 'none';">&times;</span>
+                        @Model.Message
+                    </div>
+                }
+            </div>
 
-			@using (Html.BeginForm("EditDiscount", "StoreManagement", new { Model.SystemId,Model.State,Model.Message,Model.Store,Model.Product}))
-			{
-			    <fieldset>
-			        <label>Start Date:</label>
-			        <input type="text" class="form-control" id="start-date-entry" name="startDate"/>
-			        <br/>
-			        <label>End Date:</label>
-			        <input type="text" class="form-control" id="end-date-entry" name="endDate"/>
-			        <br/>
-			        <label>Disount Amount:</label>
-			        <input type="text" class="form-control" id="disc-amt-entry" name="discountAmount"/>
-			        <td>Percentage:</td>
-			        @Html.CheckBox("isPercentage")
-			        <br/>
 
-			        <input type="submit" class="btn btn-primary" value="Edit">
-			    </fieldset>
-			}
-		</div>
-	</div>
+            @using (Html.BeginForm("EditDiscount", "StoreManagement", new { Model.SystemId, Model.State, Model.Message, Model.Store, Model.Product }))
+            {
+                <fieldset>
+                    <label>Start Date:</label>
+                    <input type="text" class="form-control" id="start-date-entry" name="startDate" />
+                    <br />
+                    <label>End Date:</label>
+                    <input type="text" class="form-control" id="end-date-entry" name="endDate" />
+                    <br />
+                    <label>Disount Amount:</label>
+                    <input type="text" class="form-control" id="disc-amt-entry" name="discountAmount" />
+                    <td>Percentage:</td>
+                    @Html.CheckBox("isPercentage")
+                    <br />
+
+                    <input type="submit" class="btn btn-primary" value="Edit">
+                </fieldset>
+            }
+        </div>
+    </div>
 </div>
 
 @section Scripts{
-	<script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
+    <script data-main="scripts/main" src="https://rawgit.com/radu-matei/websocket-manager/master/src/WebSocketManager.Client.TS/dist/WebSocketManager.js"></script>
 }
 
 
